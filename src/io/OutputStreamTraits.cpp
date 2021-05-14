@@ -18,7 +18,7 @@
 
    
 */
-#include "OutputStreamTraits.h"
+#include "io/OutputStreamTraits.h"
 #include "IByteWriter.h"
 #include "IByteReaderWithPosition.h"
 

@@ -1,6 +1,6 @@
 #include "InputImagesAsStreamsTest.h"
 #include "TestsRunner.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "TestsRunner.h"
 #include "PDFWriter.h"
 #include "PDFPage.h"

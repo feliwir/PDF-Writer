@@ -20,7 +20,7 @@
 */
 #include "InputPFBDecodeStream.h"
 #include "Trace.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 
 using namespace PDFHummus;
 

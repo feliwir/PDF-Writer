@@ -20,7 +20,7 @@
 */
 #include "OpenTypeFileInput.h"
 #include "Trace.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 
 using namespace PDFHummus;
 

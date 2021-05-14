@@ -19,12 +19,12 @@
    
 */
 #include "ObjectsContext.h"
-#include "IOBasicTypes.h"
-#include "IByteWriterWithPosition.h"
+#include "io/IOBasicTypes.h"
+#include "io/IByteWriterWithPosition.h"
 #include "SafeBufferMacrosDefs.h"
 #include "DictionaryContext.h"
 #include "Trace.h"
-#include "OutputStreamTraits.h"
+#include "io/OutputStreamTraits.h"
 #include "PDFStream.h"
 #include "PDFParser.h"
 #include "PDFObjectCast.h"

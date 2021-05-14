@@ -26,7 +26,7 @@
 */
 
 #include "EStatusCode.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 
 
 typedef unsigned char BYTE;

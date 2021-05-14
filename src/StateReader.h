@@ -21,7 +21,7 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "ObjectsBasicTypes.h"
 #include "PDFParser.h"
 

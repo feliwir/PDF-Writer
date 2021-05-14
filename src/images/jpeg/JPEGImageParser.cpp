@@ -20,7 +20,7 @@
 */
 #include "JPEGImageParser.h"
 #include "JPEGImageInformation.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 
 #include <memory.h>
 

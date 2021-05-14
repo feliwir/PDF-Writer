@@ -19,13 +19,13 @@
    
 */
 #include "JPEGImageHandler.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "JPEGImageParser.h"
 #include "Trace.h"
 #include "EStatusCode.h"
 #include "PDFImageXObject.h"
 #include "PDFStream.h"
-#include "OutputStreamTraits.h"
+#include "io/OutputStreamTraits.h"
 #include "JPEGImageHandler.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"

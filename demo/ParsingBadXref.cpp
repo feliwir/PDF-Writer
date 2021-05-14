@@ -20,7 +20,7 @@ limitations under the License.
 */
 #include "ParsingBadXref.h"
 #include "PDFParser.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "EStatusCode.h"
 
 #include <iostream>

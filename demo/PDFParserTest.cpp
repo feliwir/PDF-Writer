@@ -20,7 +20,7 @@
 */
 #include "PDFParserTest.h"
 #include "PDFParser.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "PDFObject.h"
 #include "PDFDictionary.h"
 #include "PDFObjectCast.h"
@@ -28,8 +28,8 @@
 #include "PDFArray.h"
 #include "PDFDictionary.h"
 #include "PDFStreamInput.h"
-#include "OutputFile.h"
-#include "IByteWriterWithPosition.h"
+#include "io/OutputFile.h"
+#include "io/IByteWriterWithPosition.h"
 #include "PrimitiveObjectsWriter.h"
 
 #include <iostream>

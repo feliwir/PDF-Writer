@@ -26,11 +26,11 @@
 */
 
 #include "EPDFVersion.h"
-#include "OutputFile.h"
+#include "io/OutputFile.h"
 #include "DocumentContext.h"
 #include "ObjectsContext.h"
 #include "PDFRectangle.h"
-#include "TiffUsageParameters.h"
+#include "images/tiff/TiffUsageParameters.h"
 #include "PDFEmbedParameterTypes.h"
 #include "PDFParsingOptions.h"
 #include "EncryptionOptions.h"

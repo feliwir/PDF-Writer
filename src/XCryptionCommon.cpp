@@ -19,8 +19,8 @@ limitations under the License.
 
 */
 #include "XCryptionCommon.h"
-#include "RC4.h"
-#include "MD5Generator.h"
+#include "encryption/RC4.h"
+#include "encryption/MD5Generator.h"
 
 #include <algorithm>
 #include <stdint.h>

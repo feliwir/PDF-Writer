@@ -24,9 +24,9 @@
 #include "PDFRectangle.h"
 #include "PageContentContext.h"
 #include "TestsRunner.h"
-#include "OutputStreamTraits.h"
-#include "InputFile.h"
-#include "OutputFile.h"
+#include "io/OutputStreamTraits.h"
+#include "io/InputFile.h"
+#include "io/OutputFile.h"
 
 #include <iostream>
 

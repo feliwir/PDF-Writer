@@ -23,7 +23,7 @@
 #include "JpegLibTest.h"
 #include "TestsRunner.h"
 #include "Trace.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 
 #include "jpeglib.h"
 

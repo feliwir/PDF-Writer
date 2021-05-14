@@ -19,11 +19,11 @@
    
 */
 #include "PFBStreamTest.h"
-#include "InputFile.h"
-#include "OutputFile.h"
-#include "InputPFBDecodeStream.h"
-#include "OutputStreamTraits.h"
-#include "IByteWriterWithPosition.h"
+#include "io/InputFile.h"
+#include "io/OutputFile.h"
+#include "io/InputPFBDecodeStream.h"
+#include "io/OutputStreamTraits.h"
+#include "io/IByteWriterWithPosition.h"
 #include "TestsRunner.h"
 
 #include <iostream>

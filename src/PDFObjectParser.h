@@ -22,8 +22,8 @@
 
 #include "PDFParserTokenizer.h"
 #include "EStatusCode.h"
-#include "IOBasicTypes.h"
-#include "IReadPositionProvider.h"
+#include "io/IOBasicTypes.h"
+#include "io/IReadPositionProvider.h"
 
 #include <list>
 #include <string>

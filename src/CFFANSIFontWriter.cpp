@@ -21,7 +21,7 @@
 #include "CFFANSIFontWriter.h"
 #include "ANSIFontWriter.h"
 #include "DictionaryContext.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include "PrimitiveObjectsWriter.h"
 #include "PDFStream.h"
 #include "SafeBufferMacrosDefs.h"

@@ -19,8 +19,8 @@
    
 */
 #include "BufferedOutputStreamTest.h"
-#include "OutputBufferedStream.h"
-#include "OutputFileStream.h"
+#include "io/OutputBufferedStream.h"
+#include "io/OutputFileStream.h"
 
 #include <iostream>
 

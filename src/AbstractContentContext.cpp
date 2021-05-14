@@ -25,9 +25,9 @@
 #include "ProcsetResourcesConstants.h"
 #include "PDFUsedFont.h"
 #include "Trace.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include "SafeBufferMacrosDefs.h"
-#include "OutputStreamTraits.h"
+#include "io/OutputStreamTraits.h"
 #include "IContentContextListener.h"
 #include "DocumentContext.h"
 #include <ctype.h>

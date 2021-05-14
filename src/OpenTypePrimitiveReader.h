@@ -21,7 +21,7 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 
 class OpenTypePrimitiveReader
 {

@@ -22,9 +22,9 @@
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
 #include "Type1Input.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "CFFPrimitiveWriter.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include "MyStringBuf.h"
 
 

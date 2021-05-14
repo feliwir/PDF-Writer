@@ -19,7 +19,7 @@
    
 */
 #include "Type1ToType2Converter.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "Type1Input.h"
 #include "Trace.h"
 #include "CharStringType1Interpreter.h"

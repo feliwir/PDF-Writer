@@ -76,7 +76,7 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "TiffUsageParameters.h"
+#include "images/tiff/TiffUsageParameters.h"
 
 #include <string>
 #include <list>

@@ -1,14 +1,14 @@
 #include "CustomLogTest.h"
 #include "TestsRunner.h"
 #include "PDFWriter.h"
-#include "OutputFlateEncodeStream.h"
-#include "OutputFlateDecodeStream.h"
-#include "OutputStreamTraits.h"
-#include "OutputFile.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputFlateEncodeStream.h"
+#include "io/OutputFlateDecodeStream.h"
+#include "io/OutputStreamTraits.h"
+#include "io/OutputFile.h"
+#include "io/OutputStringBufferStream.h"
 #include "PDFPage.h"
 #include "Trace.h"
-#include "IOBasicTypes.h"
+#include "io/IOBasicTypes.h"
 
 #include <string>
 using namespace std;

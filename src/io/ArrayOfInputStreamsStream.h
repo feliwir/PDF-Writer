@@ -27,8 +27,6 @@
 class PDFArray;
 class PDFParser;
 
-
-
 class ArrayOfInputStreamsStream : public IByteReader
 {
 public:

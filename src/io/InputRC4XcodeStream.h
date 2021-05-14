@@ -20,7 +20,7 @@
 
 #include "EStatusCode.h"
 #include "IByteReader.h"
-#include "RC4.h"
+#include "encryption/RC4.h"
 
 #include <list>
 

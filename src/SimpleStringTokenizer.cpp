@@ -19,8 +19,8 @@
    
 */
 #include "SimpleStringTokenizer.h"
-#include "IByteReader.h"
-#include "OutputStringBufferStream.h"
+#include "io/IByteReader.h"
+#include "io/OutputStringBufferStream.h"
 
 using namespace PDFHummus;
 using namespace IOBasicTypes;

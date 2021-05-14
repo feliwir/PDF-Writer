@@ -20,7 +20,7 @@
 */
 #include "CharStringType2Flattener.h"
 #include "CFFFileInput.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "CharStringType2Interpreter.h"
 #include "Trace.h"
 

@@ -19,7 +19,7 @@
    
 */
 #include "FreeTypeType1Wrapper.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "Trace.h"
 
 

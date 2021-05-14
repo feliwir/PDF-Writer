@@ -18,7 +18,7 @@
 
    
 */
-#include "OutputBufferedStream.h"
+#include "io/OutputBufferedStream.h"
 
 #include <memory.h>
 

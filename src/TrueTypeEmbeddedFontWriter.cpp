@@ -24,8 +24,8 @@
 #include "DictionaryContext.h"
 #include "Trace.h"
 #include "PDFStream.h"
-#include "OutputStreamTraits.h"
-#include "InputStringBufferStream.h"
+#include "io/OutputStreamTraits.h"
+#include "io/InputStringBufferStream.h"
 #include "OpenTypeFileInput.h"
 #include "FSType.h"
 

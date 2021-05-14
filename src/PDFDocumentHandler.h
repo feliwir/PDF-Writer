@@ -23,7 +23,7 @@
 #include "PDFEmbedParameterTypes.h"
 #include "PDFParser.h"
 #include "PDFRectangle.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "ObjectsBasicTypes.h"
 #include "ETokenSeparator.h"
 #include "DocumentContextExtenderAdapter.h"

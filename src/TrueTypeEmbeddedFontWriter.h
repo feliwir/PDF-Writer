@@ -23,10 +23,10 @@
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
 #include "OpenTypeFileInput.h"
-#include "OutputStringBufferStream.h"
-#include "InputFile.h"
+#include "io/OutputStringBufferStream.h"
+#include "io/InputFile.h"
 #include "TrueTypePrimitiveWriter.h"
-#include "InputStringBufferStream.h"
+#include "io/InputStringBufferStream.h"
 #include "OpenTypePrimitiveReader.h"
 #include "MyStringBuf.h"
 

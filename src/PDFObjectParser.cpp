@@ -35,7 +35,7 @@
 #include "Trace.h"
 #include "BoxingBase.h"
 #include "PDFStream.h"
-#include "IByteReader.h"
+#include "io/IByteReader.h"
 #include "RefCountPtr.h"
 #include "PDFObjectCast.h"
 #include "IPDFParserExtender.h"

@@ -22,12 +22,12 @@
 
 #include "EStatusCode.h"
 #include "EPDFVersion.h"
-#include "IOBasicTypes.h"
+#include "io/IOBasicTypes.h"
 #include "TrailerInformation.h"
 #include "CatalogInformation.h"
-#include "JPEGImageHandler.h"
-#include "TIFFImageHandler.h"
-#include "TiffUsageParameters.h"
+#include "images/jpeg/JPEGImageHandler.h"
+#include "images/tiff/TIFFImageHandler.h"
+#include "images/tiff/TiffUsageParameters.h"
 #include "UsedFontsRepository.h"
 #include "PDFEmbedParameterTypes.h"
 #include "PDFDocumentHandler.h"
@@ -36,7 +36,7 @@
 #include "PDFParsingOptions.h"
 #include "EncryptionOptions.h"
 #include "EncryptionHelper.h"
-#include "PNGImageHandler.h"
+#include "images/png/PNGImageHandler.h"
 
 #include <string>
 #include <set>

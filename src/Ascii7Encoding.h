@@ -30,8 +30,5 @@ typedef std::pair<bool,std::string> BoolAndString;
 class Ascii7Encoding
 {
 public:
-	Ascii7Encoding(void);
-	~Ascii7Encoding(void);
-
 	BoolAndString Encode(const std::string& inString);
 };

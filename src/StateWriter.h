@@ -21,8 +21,8 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "OutputFile.h"
-#include "IOBasicTypes.h"
+#include "io/OutputFile.h"
+#include "io/IOBasicTypes.h"
 #include "ObjectsBasicTypes.h"
 
 #include <string>

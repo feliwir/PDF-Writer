@@ -20,7 +20,6 @@
 */
 #pragma once
 #include "ObjectsBasicTypes.h"
-#include "JPEGImageInformation.h"
 
 #include <string>
 #include <list>

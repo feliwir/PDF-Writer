@@ -20,8 +20,8 @@
 */
 #include "FreeTypeWrapper.h"
 #include "Trace.h"
-#include "InputFile.h"
-#include "IByteReaderWithPosition.h"
+#include "io/InputFile.h"
+#include "io/IByteReaderWithPosition.h"
 
 
 using namespace PDFHummus;

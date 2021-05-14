@@ -20,7 +20,7 @@
 */
 #include "StateWriter.h"
 #include "ObjectsContext.h"
-#include "IByteWriterWithPosition.h"
+#include "io/IByteWriterWithPosition.h"
 #include "DictionaryContext.h"
 #include "Trace.h"
 

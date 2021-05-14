@@ -1,5 +1,5 @@
 /*
-Source File : OutputRC4XcodeStream.h
+Source File : RC4.h
 
 
 Copyright 2016 Gal Kahana PDFWriter
@@ -19,27 +19,34 @@ limitations under the License.
 
 */
 #pragma once
-#include "IByteWriterWithPosition.h"
-#include "RC4.h"
 
+#include "io/IOBasicTypes.h"
 #include <list>
 
 typedef std::list<IOBasicTypes::Byte> ByteList;
 
-
-class OutputRC4XcodeStream : public IByteWriterWithPosition
+class RC4
 {
 public:
-	OutputRC4XcodeStream(void);
-	virtual ~OutputRC4XcodeStream(void);
+	RC4();
+	RC4(const ByteList& inKey);
+	RC4(const IOBasicTypes::Byte* inKey,IOBasicTypes::LongBufferSizeType inLength);
+	~RC4(void);
 
-	OutputRC4XcodeStream(IByteWriterWithPosition* inTargetStream, const ByteList& inEncryptionKey,bool inOwnsStream);
+	void Reset(const ByteList& inKey);
+	void Reset(const IOBasicTypes::Byte* inKey, IOBasicTypes::LongBufferSizeType inLength);
 
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer, IOBasicTypes::LongBufferSizeType inSize);
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+
+	IOBasicTypes::Byte DecodeNextByte(IOBasicTypes::Byte inByte);
+	IOBasicTypes::Byte GetNextEncodingByte();
 
 private:
-	bool mOwnsStream;
-	IByteWriterWithPosition* mTargetStream;
-	RC4 mRC4;
+
+	IOBasicTypes::Byte mBuffer[256];
+	int mI;
+	int mJ;
+
+	void Init(const IOBasicTypes::Byte* inKey, IOBasicTypes::LongBufferSizeType inLength);
+	void Swap(int a, int b);
+
 };

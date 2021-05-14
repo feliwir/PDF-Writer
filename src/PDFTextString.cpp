@@ -19,7 +19,7 @@
    
 */
 #include "PDFTextString.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include "PDFDocEncoding.h"
 #include "UnicodeString.h"
 #include <sstream>

@@ -20,13 +20,13 @@
 */
 #include "CFFEmbeddedFontWriter.h"
 #include "ObjectsContext.h"
-#include "InputStringBufferStream.h"
-#include "OutputStreamTraits.h"
+#include "io/InputStringBufferStream.h"
+#include "io/OutputStreamTraits.h"
 #include "PDFStream.h"
 #include "Trace.h"
 #include "FreeTypeFaceWrapper.h"
 #include "DictionaryContext.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "CharStringType2Flattener.h"
 #include "FSType.h"
 

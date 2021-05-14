@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "OutputAESEncodeStream.h"
-#include "MD5Generator.h"
+#include "io/OutputAESEncodeStream.h"
+#include "encryption/MD5Generator.h"
 #include "PDFDate.h"
 
 #include <string.h>

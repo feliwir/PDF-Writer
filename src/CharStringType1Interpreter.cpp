@@ -19,7 +19,7 @@
    
 */
 #include "CharStringType1Interpreter.h"
-#include "InputByteArrayStream.h"
+#include "io/InputByteArrayStream.h"
 #include "Trace.h"
 
 

@@ -20,10 +20,10 @@
  */
 #include "AppendingAndReading.h"
 #include "TestsRunner.h"
-#include "InputFile.h"
-#include "OutputFile.h"
-#include "IByteWriterWithPosition.h"
-#include "IByteReaderWithPosition.h"
+#include "io/InputFile.h"
+#include "io/OutputFile.h"
+#include "io/IByteWriterWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 
 #include <iostream>
 

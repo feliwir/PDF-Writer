@@ -20,7 +20,7 @@
 */
 #pragma once
 #include "EStatusCode.h"
-#include "InputPFBDecodeStream.h"
+#include "io/InputPFBDecodeStream.h"
 #include "IType1InterpreterImplementation.h"
 
 #include <string>

@@ -20,8 +20,8 @@
 */
 #include "PDFStream.h"
 #include "IObjectsContextExtender.h"
-#include "InputStringBufferStream.h"
-#include "OutputStreamTraits.h"
+#include "io/InputStringBufferStream.h"
+#include "io/OutputStreamTraits.h"
 #include "EncryptionHelper.h"
 
 PDFStream::PDFStream(bool inCompressStream,

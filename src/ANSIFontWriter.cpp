@@ -24,7 +24,7 @@
 #include "DictionaryContext.h"
 #include "Trace.h"
 #include "WinAnsiEncoding.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "PrimitiveObjectsWriter.h"
 #include "PDFStream.h"
 #include "SafeBufferMacrosDefs.h"

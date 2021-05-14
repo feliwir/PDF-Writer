@@ -19,17 +19,7 @@
    
 */
 #include "Ascii7Encoding.h"
-#include "OutputStringBufferStream.h"
-
-
-
-Ascii7Encoding::Ascii7Encoding(void)
-{
-}
-
-Ascii7Encoding::~Ascii7Encoding(void)
-{
-}
+#include "io/OutputStringBufferStream.h"
 
 BoolAndString Ascii7Encoding::Encode(const std::string& inString)
 {

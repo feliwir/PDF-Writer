@@ -20,7 +20,7 @@
 */
 #include "PrimitiveObjectsWriter.h"
 #include "SafeBufferMacrosDefs.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include <locale>
 #include <sstream>
 #include <iomanip>

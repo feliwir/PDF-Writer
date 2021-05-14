@@ -64,7 +64,7 @@
 
 */
 #include "MD5Generator.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include "SafeBufferMacrosDefs.h"
 
 #include <string.h>

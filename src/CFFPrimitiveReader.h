@@ -20,7 +20,7 @@
 */
 #pragma once
 #include "EStatusCode.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "DictOperand.h"
 
 class CFFPrimitiveReader

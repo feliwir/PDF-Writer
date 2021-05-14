@@ -24,10 +24,10 @@
 #include "ObjectsBasicTypes.h"
 #include "OpenTypeFileInput.h"
 #include "MyStringBuf.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "CFFPrimitiveWriter.h"
-#include "OutputStringBufferStream.h"
-#include "IOBasicTypes.h"
+#include "io/OutputStringBufferStream.h"
+#include "io/IOBasicTypes.h"
 
 #include <vector>
 #include <string>

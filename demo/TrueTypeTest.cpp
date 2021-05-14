@@ -20,7 +20,7 @@
 */
 #include "TrueTypeTest.h"
 #include "OpenTypeFileInput.h"
-#include "InputFile.h"
+#include "io/InputFile.h"
 #include "TestsRunner.h"
 
 #include <iostream>

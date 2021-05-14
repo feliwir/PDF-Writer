@@ -19,7 +19,7 @@
 
 */
 #include "PDFParser.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "PDFParserTokenizer.h"
 #include "Trace.h"
 #include "PDFInteger.h"
@@ -34,17 +34,17 @@
 #include "RefCountPtr.h"
 #include "PDFObjectCast.h"
 #include "PDFStreamInput.h"
-#include "InputLimitedStream.h"
-#include "InputFlateDecodeStream.h"
-#include "InputLZWDecodeStream.h"
-#include "InputStreamSkipperStream.h"
-#include "InputPredictorPNGOptimumStream.h"
-#include "InputPredictorTIFFSubStream.h"
-#include "InputAscii85DecodeStream.h"
-#include "InputAsciiHexDecodeStream.h"
+#include "io/InputLimitedStream.h"
+#include "io/InputFlateDecodeStream.h"
+#include "io/InputLZWDecodeStream.h"
+#include "io/InputStreamSkipperStream.h"
+#include "io/InputPredictorPNGOptimumStream.h"
+#include "io/InputPredictorTIFFSubStream.h"
+#include "io/InputAscii85DecodeStream.h"
+#include "io/InputAsciiHexDecodeStream.h"
 #include "IPDFParserExtender.h"
-#include "InputDCTDecodeStream.h"
-#include "ArrayOfInputStreamsStream.h"
+#include "io/InputDCTDecodeStream.h"
+#include "io/ArrayOfInputStreamsStream.h"
 
 #include  <algorithm>
 using namespace PDFHummus;

@@ -20,7 +20,7 @@
 */
 #pragma once
 #include "EStatusCode.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "DictOperand.h"
 
 using namespace IOBasicTypes;

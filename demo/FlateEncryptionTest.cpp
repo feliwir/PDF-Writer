@@ -20,13 +20,13 @@
 */
 #include "FlateEncryptionTest.h"
 
-#include "InputBufferedStream.h"
-#include "OutputBufferedStream.h"
-#include "InputFileStream.h"
-#include "OutputFileStream.h"
-#include "OutputFlateDecodeStream.h"
-#include "OutputFlateEncodeStream.h"
-#include "OutputStreamTraits.h"
+#include "io/InputBufferedStream.h"
+#include "io/OutputBufferedStream.h"
+#include "io/InputFileStream.h"
+#include "io/OutputFileStream.h"
+#include "io/OutputFlateDecodeStream.h"
+#include "io/OutputFlateEncodeStream.h"
+#include "io/OutputStreamTraits.h"
 
 #include <iostream>
 

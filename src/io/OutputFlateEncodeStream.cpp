@@ -18,7 +18,7 @@
 
    
 */
-#include "OutputFlateEncodeStream.h"
+#include "io/OutputFlateEncodeStream.h"
 #include "Trace.h"
 #include "zlib.h"
 

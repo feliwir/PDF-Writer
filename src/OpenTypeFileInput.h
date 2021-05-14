@@ -22,7 +22,7 @@
 
 #include "EStatusCode.h"
 #include "OpenTypePrimitiveReader.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "CFFFileInput.h"
 
 #include <string>

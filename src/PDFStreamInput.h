@@ -20,7 +20,7 @@
 */
 #pragma once
 #include "PDFObject.h"
-#include "IOBasicTypes.h"
+#include "io/IOBasicTypes.h"
 
 class PDFDictionary;
 

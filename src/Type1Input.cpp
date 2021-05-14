@@ -19,7 +19,7 @@
    
 */
 #include "Type1Input.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "BoxingBase.h"
 #include "PSBool.h"
 #include "StandardEncoding.h"

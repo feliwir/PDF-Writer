@@ -20,7 +20,7 @@
 */
 #include "Log.h"
 #include "SafeBufferMacrosDefs.h"
-#include "IByteWriterWithPosition.h"
+#include "io/IByteWriterWithPosition.h"
 #include <ctime>
 #include <stdio.h>
 #ifdef __MINGW32__

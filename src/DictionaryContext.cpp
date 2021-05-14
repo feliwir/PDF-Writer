@@ -21,7 +21,7 @@
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
 #include "Trace.h"
-#include "IByteWriterWithPosition.h"
+#include "io/IByteWriterWithPosition.h"
 
 
 using namespace PDFHummus;

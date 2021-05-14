@@ -18,7 +18,7 @@
 
    
 */
-#include "TiffUsageParameters.h"
+#include "images/tiff/TiffUsageParameters.h"
 
 const TIFFBiLevelBWColorTreatment& TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment()
 {

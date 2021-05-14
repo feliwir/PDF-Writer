@@ -18,7 +18,7 @@
 
    
 */
-#include "OutputFlateDecodeStream.h"
+#include "io/OutputFlateDecodeStream.h"
 #ifndef NO_TRACE
 #include "Trace.h"
 #endif

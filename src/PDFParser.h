@@ -22,12 +22,12 @@
 
 #include "EStatusCode.h"
 #include "PDFObjectParser.h"
-#include "IOBasicTypes.h"
+#include "io/IOBasicTypes.h"
 #include "ObjectsBasicTypes.h"
 #include "RefCountPtr.h"
 #include "PDFDictionary.h"
-#include "IByteReaderWithPosition.h"
-#include "AdapterIByteReaderWithPositionToIReadPositionProvider.h"
+#include "io/IByteReaderWithPosition.h"
+#include "io/AdapterIByteReaderWithPositionToIReadPositionProvider.h"
 #include "DecryptionHelper.h"
 #include "PDFParsingOptions.h"
 

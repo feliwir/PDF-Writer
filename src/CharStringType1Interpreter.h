@@ -21,7 +21,7 @@
 #pragma once
 #include "IType1InterpreterImplementation.h"
 #include "EStatusCode.h"
-#include "InputCharStringDecodeStream.h"
+#include "io/InputCharStringDecodeStream.h"
 
 class CharStringType1Interpreter
 {

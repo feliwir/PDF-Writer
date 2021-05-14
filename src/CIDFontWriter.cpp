@@ -24,7 +24,7 @@
 #include "FreeTypeFaceWrapper.h"
 #include "Trace.h"
 #include "PDFStream.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "SafeBufferMacrosDefs.h"
 #include "CFFDescendentFontWriter.h"
 #include "IDescendentFontWriter.h"

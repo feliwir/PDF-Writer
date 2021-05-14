@@ -41,7 +41,7 @@
 #include "ObjectsContext.h"
 #include "PDFStream.h"
 #include "DictionaryContext.h"
-#include "OutputStreamTraits.h"
+#include "io/OutputStreamTraits.h"
 
 #include <iostream>
 

@@ -78,7 +78,7 @@
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
 #include "PDFStream.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "PDFImageXObject.h"
 #include "DocumentContext.h"
 #include "ProcsetResourcesConstants.h"
@@ -86,7 +86,7 @@
 #include "PDFFormXObject.h"
 #include "SafeBufferMacrosDefs.h"
 #include "IDocumentContextExtender.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 
 
 #include <stdlib.h> 

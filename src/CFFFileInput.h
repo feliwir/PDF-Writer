@@ -21,7 +21,7 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "IByteReaderWithPosition.h"
+#include "io/IByteReaderWithPosition.h"
 #include "CFFPrimitiveReader.h"
 #include "IType2InterpreterImplementation.h"
 

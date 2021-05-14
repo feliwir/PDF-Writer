@@ -27,7 +27,7 @@
 	when encoding, it is made sure that all charachters that require escaping, get escaped.
 */
 
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 
 #include <string>
 #include <utility>

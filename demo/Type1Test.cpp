@@ -20,10 +20,10 @@
 */
 #include "Type1Test.h"
 #include "TestsRunner.h"
-#include "InputFile.h"
-#include "OutputFile.h"
+#include "io/InputFile.h"
+#include "io/OutputFile.h"
 #include "CharStringType1Tracer.h"
-#include "IByteWriterWithPosition.h"
+#include "io/IByteWriterWithPosition.h"
 #include "Type1Input.h"
 #include "PSBool.h"
 

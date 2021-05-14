@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include "OutputRC4XcodeStream.h"
+#include "io/OutputRC4XcodeStream.h"
 
 using namespace IOBasicTypes;
 

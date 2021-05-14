@@ -18,7 +18,7 @@
 
    
 */
-#include "ArrayOfInputStreamsStream.h"
+#include "io/ArrayOfInputStreamsStream.h"
 #include "PDFArray.h"
 #include "PDFParser.h"
 #include "PDFObjectCast.h"

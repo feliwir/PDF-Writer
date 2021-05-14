@@ -19,7 +19,7 @@
    
 */
 #include "OutputFileStreamTest.h"
-#include "OutputFileStream.h"
+#include "io/OutputFileStream.h"
 
 #include <iostream>
 

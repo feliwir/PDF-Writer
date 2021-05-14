@@ -31,9 +31,9 @@
 #include "XObjectContentContext.h"
 #include "PDFFormXObject.h"
 #include "PDFImageXObject.h"
-#include "OutputStringBufferStream.h"
-#include "InputStringBufferStream.h"
-#include "OutputStreamTraits.h"
+#include "io/OutputStringBufferStream.h"
+#include "io/InputStringBufferStream.h"
+#include "io/OutputStreamTraits.h"
 #include "SafeBufferMacrosDefs.h"
 #include "png.h"
 

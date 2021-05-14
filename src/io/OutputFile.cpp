@@ -18,9 +18,9 @@
 
    
 */
-#include "OutputFile.h"
-#include "OutputBufferedStream.h"
-#include "OutputFileStream.h"
+#include "io/OutputFile.h"
+#include "io/OutputBufferedStream.h"
+#include "io/OutputFileStream.h"
 #include "Trace.h"
 
 using namespace PDFHummus;

@@ -20,8 +20,8 @@
 */
 #pragma once
 
-#include "IOBasicTypes.h"
-#include "OutputFile.h"
+#include "io/IOBasicTypes.h"
+#include "io/OutputFile.h"
 
 #include <string>
 

@@ -19,10 +19,10 @@
    
 */
 #include "InputFlateDecodeTester.h"
-#include "InputFlateDecodeStream.h"
-#include "OutputFlateEncodeStream.h"
-#include "InputFile.h"
-#include "OutputFile.h"
+#include "io/InputFlateDecodeStream.h"
+#include "io/OutputFlateEncodeStream.h"
+#include "io/InputFile.h"
+#include "io/OutputFile.h"
 #include "TestsRunner.h"
 
 #include <iostream>

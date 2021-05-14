@@ -26,11 +26,11 @@
 */
 
 #include "EStatusCode.h"
-#include "IOBasicTypes.h"
+#include "io/IOBasicTypes.h"
 #include "ObjectsBasicTypes.h"
-#include "OutputFlateEncodeStream.h"
+#include "io/OutputFlateEncodeStream.h"
 #include "MyStringBuf.h"
-#include "OutputStringBufferStream.h"
+#include "io/OutputStringBufferStream.h"
 #include <sstream>
 
 

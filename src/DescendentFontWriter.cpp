@@ -24,7 +24,7 @@
 #include "Trace.h"
 #include "FontDescriptorWriter.h"
 #include "PDFStream.h"
-#include "IByteWriter.h"
+#include "io/IByteWriter.h"
 #include "DictionaryContext.h"
 
 #include FT_CID_H 
