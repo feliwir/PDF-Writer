@@ -2,8 +2,6 @@ add_executable(PDFWriterTestPlayground
 
 #sources
 AppendingAndReading.cpp
-AppendPagesTest.cpp
-AppendSpecialPagesTest.cpp
 BasicModification.cpp
 BoxingBaseTest.cpp
 BufferedOutputStreamTest.cpp
@@ -72,8 +70,6 @@ UnicodeTextUsage.cpp
 
 #headers
 AppendingAndReading.h
-AppendPagesTest.h
-AppendSpecialPagesTest.h
 BasicModification.h
 BoxingBaseTest.h
 BufferedOutputStreamTest.h
