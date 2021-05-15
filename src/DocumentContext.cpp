@@ -49,7 +49,7 @@
 #include "IFormEndWritingTask.h"
 #include "IPageEndWritingTask.h"
 #include "ITiledPatternEndWritingTask.h"
-#include "PDFPageInput.h"
+#include "objects/helpers/PDFPageInput.h"
 
 
 using namespace PDFHummus;

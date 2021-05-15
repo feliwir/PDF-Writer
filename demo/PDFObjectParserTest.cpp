@@ -27,7 +27,7 @@ limitations under the License.
 #include "objects/PDFObject.h"
 #include "objects/PDFLiteralString.h"
 #include "objects/PDFHexString.h"
-#include "ParsedPrimitiveHelper.h"
+#include "objects/helpers/ParsedPrimitiveHelper.h"
 #include "PDFTextString.h"
 
 #include <iostream>

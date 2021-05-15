@@ -46,7 +46,7 @@
 #include "io/InputStreamSkipperStream.h"
 #include "IResourceWritingTask.h"
 #include "IFormEndWritingTask.h"
-#include "PDFPageInput.h"
+#include "objects/helpers/PDFPageInput.h"
 #include "IndirectObjectsReferenceRegistry.h"
 #include "SimpleStringTokenizer.h"
 

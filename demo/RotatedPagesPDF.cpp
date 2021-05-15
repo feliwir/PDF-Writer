@@ -23,7 +23,7 @@
 #include "PDFWriter.h"
 #include "PDFPage.h"
 #include "PDFRectangle.h"
-#include "PDFPageInput.h"
+#include "objects/helpers/PDFPageInput.h"
 #include "TestsRunner.h"
 
 #include <iostream>

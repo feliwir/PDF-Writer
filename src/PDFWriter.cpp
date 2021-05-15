@@ -33,7 +33,7 @@
 #include "io/OutputStreamTraits.h"
 #include "objects/PDFBoolean.h"
 #include "objects/PDFInteger.h"
-#include "PDFPageInput.h"
+#include "objects/helpers/PDFPageInput.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 
 using namespace PDFHummus;

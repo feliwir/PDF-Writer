@@ -17,6 +17,11 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFReal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFStreamInput.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFSymbol.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/ParsedPrimitiveHelper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFArrayIterator.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFDictionaryIterator.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFPageInput.h
 )
 
 target_sources(PDFWriter PRIVATE
@@ -35,4 +40,9 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFReal.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFStreamInput.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFSymbol.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/ParsedPrimitiveHelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFArrayIterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFDictionaryIterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFPageInput.cpp
 )

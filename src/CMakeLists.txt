@@ -44,7 +44,6 @@ set(PDF_WRITER_SOURCE
     ObjectsContext.cpp
     PageContentContext.cpp
     PageTree.cpp
-    ParsedPrimitiveHelper.cpp
     PDFDate.cpp
     PDFFormXObject.cpp
     PDFTiledPattern.cpp
@@ -52,9 +51,6 @@ set(PDF_WRITER_SOURCE
     PDFImageXObject.cpp
     PDFModifiedPage.cpp
     PDFPage.cpp
-    PDFPageInput.cpp
-    PDFDictionaryIterator.cpp
-    PDFArrayIterator.cpp
     PDFRectangle.cpp
     PDFStream.cpp
     PDFTextString.cpp
@@ -125,7 +121,6 @@ set(PDF_WRITER_HEADERS
     ObjectsContextExtenderAdapter.h
     PageContentContext.h
     PageTree.h
-    ParsedPrimitiveHelper.h
     PDFDate.h
     PDFFormXObject.h
     PDFTiledPattern.h
@@ -133,9 +128,6 @@ set(PDF_WRITER_HEADERS
     PDFImageXObject.h
     PDFModifiedPage.h
     PDFPage.h
-    PDFPageInput.h
-    PDFDictionaryIterator.h
-    PDFArrayIterator.h
     PDFRectangle.h
     PDFStream.h
     PDFTextString.h

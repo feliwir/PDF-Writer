@@ -30,7 +30,7 @@ limitations under the License.
 #include "io/InputStringStream.h"
 #include "io/OutputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
-#include "ParsedPrimitiveHelper.h"
+#include "objects/helpers/ParsedPrimitiveHelper.h"
 #include "RefCountPtr.h"
 #include "io/OutputStringBufferStream.h"
 #include "io/InputRC4XcodeStream.h"
