@@ -19,9 +19,9 @@
    
 */
 #include "FontDescriptorWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "ObjectsContext.h"
-#include "EFontStretch.h"
+#include "text/freetype/EFontStretch.h"
 #include "IFontDescriptorHelper.h"
 #include "DictionaryContext.h"
 

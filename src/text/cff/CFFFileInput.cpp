@@ -21,7 +21,7 @@
 #include "CFFFileInput.h"
 #include "Trace.h"
 #include "CharStringType2Interpreter.h"
-#include "StandardEncoding.h"
+#include "encoding/StandardEncoding.h"
 
 
 using namespace PDFHummus;

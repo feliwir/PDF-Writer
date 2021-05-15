@@ -19,7 +19,7 @@
    
 */
 #include "DescendentFontWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "ObjectsContext.h"
 #include "Trace.h"
 #include "FontDescriptorWriter.h"

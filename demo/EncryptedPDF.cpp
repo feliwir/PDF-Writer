@@ -1,8 +1,8 @@
 #include "EncryptedPDF.h"
 #include "TestsRunner.h"
-#include "PDFParser.h"
+#include "parsing/PDFParser.h"
 #include "io/InputFile.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 #include "PDFWriter.h"
 #include <iostream>
 

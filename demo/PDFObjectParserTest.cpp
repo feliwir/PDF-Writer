@@ -19,14 +19,14 @@ limitations under the License.
 
 */
 #include "PDFObjectParserTest.h"
-#include "PDFParser.h"
-#include "PDFObjectParser.h"
+#include "parsing/PDFParser.h"
+#include "parsing/PDFObjectParser.h"
 #include "io/OutputFile.h"
 #include "io/IByteWriterWithPosition.h"
-#include "PDFObjectCast.h"
-#include "PDFObject.h"
-#include "PDFLiteralString.h"
-#include "PDFHexString.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFObject.h"
+#include "objects/PDFLiteralString.h"
+#include "objects/PDFHexString.h"
 #include "ParsedPrimitiveHelper.h"
 #include "PDFTextString.h"
 

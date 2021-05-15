@@ -20,15 +20,15 @@
  */
 
 #include "ParsedPrimitiveHelper.h"
-#include "PDFObject.h"
+#include "objects/PDFObject.h"
 #include "BoxingBase.h"
-#include "PDFReal.h"
-#include "PDFInteger.h"
-#include "PDFName.h"
-#include "PDFSymbol.h"
-#include "PDFLiteralString.h"
-#include "PDFHexString.h"
-#include "PDFBoolean.h"
+#include "objects/PDFReal.h"
+#include "objects/PDFInteger.h"
+#include "objects/PDFName.h"
+#include "objects/PDFSymbol.h"
+#include "objects/PDFLiteralString.h"
+#include "objects/PDFHexString.h"
+#include "objects/PDFBoolean.h"
 
 ParsedPrimitiveHelper::ParsedPrimitiveHelper(PDFObject* inObject)
 {

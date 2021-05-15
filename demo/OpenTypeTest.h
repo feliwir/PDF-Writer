@@ -20,7 +20,7 @@
 */
 #pragma once
 #include "ITestUnit.h"
-#include "CFFFileInput.h"
+#include "text/cff/CFFFileInput.h"
 
 class OpenTypeTest : public ITestUnit
 {

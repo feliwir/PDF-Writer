@@ -23,9 +23,9 @@ limitations under the License.
 #include "PDFWriter.h"
 #include "DocumentContext.h"
 #include "CatalogInformation.h"
-#include "PDFObjectCast.h"
-#include "PDFIndirectObjectReference.h"
-#include "PDFDocumentCopyingContext.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFIndirectObjectReference.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 #include "DictionaryContext.h"
 
 #include <iostream>

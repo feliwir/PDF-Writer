@@ -28,10 +28,10 @@
 
 #pragma once
 #include "PDFWriter.h"
-#include "PDFObjectCast.h"
-#include "PDFLiteralString.h"
-#include "PDFIndirectObjectReference.h"
-#include "PDFStreamInput.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFLiteralString.h"
+#include "objects/PDFIndirectObjectReference.h"
+#include "objects/PDFStreamInput.h"
 
 class PDFArrayIterator;
 //////////////////////////////////////////////////////////////////////////////

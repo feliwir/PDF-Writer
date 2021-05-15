@@ -19,14 +19,14 @@ limitations under the License.
 
 */
 #include "DecryptionHelper.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
-#include "PDFArray.h"
-#include "PDFObject.h"
-#include "PDFName.h"
-#include "PDFBoolean.h"
-#include "PDFStreamInput.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFArray.h"
+#include "objects/PDFObject.h"
+#include "objects/PDFName.h"
+#include "objects/PDFBoolean.h"
+#include "objects/PDFStreamInput.h"
 #include "io/InputStringStream.h"
 #include "io/OutputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
@@ -36,7 +36,7 @@ limitations under the License.
 #include "io/InputRC4XcodeStream.h"
 #include "io/InputAESDecodeStream.h"
 #include "Trace.h"
-#include "Deletable.h"
+#include "objects/Deletable.h"
 #include <memory>
 
 using namespace std;

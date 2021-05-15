@@ -25,7 +25,7 @@
 #include "XObjectContentContext.h"
 #include "PDFPage.h"
 #include "PDFFormXObject.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 
 #include <iostream>
 

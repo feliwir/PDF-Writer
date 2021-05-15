@@ -37,7 +37,7 @@
 #include "GraphicStateStack.h"
 #include "GlyphUnicodeMapping.h"
 #include "ObjectsBasicTypes.h"
-#include "PDFParsingOptions.h"
+#include "parsing/PDFParsingOptions.h"
 #include <string>
 #include <list>
 #include <set>

@@ -19,14 +19,14 @@
    
 */
 #include "TrueTypeEmbeddedFontWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
 #include "Trace.h"
 #include "PDFStream.h"
 #include "io/OutputStreamTraits.h"
 #include "io/InputStringBufferStream.h"
-#include "OpenTypeFileInput.h"
+#include "text/opentype/OpenTypeFileInput.h"
 #include "FSType.h"
 
 #include <sstream>

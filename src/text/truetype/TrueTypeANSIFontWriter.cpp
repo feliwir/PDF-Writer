@@ -24,7 +24,7 @@
 #include "ObjectsContext.h"
 #include "IndirectObjectsReferenceRegistry.h"
 #include "TrueTypeEmbeddedFontWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "Trace.h"
 
 #include <ft2build.h>

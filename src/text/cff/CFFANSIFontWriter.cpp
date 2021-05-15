@@ -26,9 +26,9 @@
 #include "PDFStream.h"
 #include "SafeBufferMacrosDefs.h"
 #include "ObjectsContext.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "CFFEmbeddedFontWriter.h"
-#include "Type1ToCFFEmbeddedFontWriter.h"
+#include "text/type1/Type1ToCFFEmbeddedFontWriter.h"
 #include "Trace.h"
 
 #include <ft2build.h>

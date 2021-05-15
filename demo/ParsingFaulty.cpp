@@ -19,7 +19,7 @@ limitations under the License.
 
 */
 #include "ParsingFaulty.h"
-#include "PDFParser.h"
+#include "parsing/PDFParser.h"
 #include "PDFPageInput.h"
 #include "io/InputFile.h"
 #include "EStatusCode.h"

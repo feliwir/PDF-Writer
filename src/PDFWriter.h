@@ -31,9 +31,9 @@
 #include "ObjectsContext.h"
 #include "PDFRectangle.h"
 #include "images/tiff/TiffUsageParameters.h"
-#include "PDFEmbedParameterTypes.h"
-#include "PDFParsingOptions.h"
-#include "EncryptionOptions.h"
+#include "parsing/PDFEmbedParameterTypes.h"
+#include "parsing/PDFParsingOptions.h"
+#include "encryption/EncryptionOptions.h"
 
 #include <string>
 #include <utility>

@@ -19,10 +19,10 @@
    
 */
 #include "io/ArrayOfInputStreamsStream.h"
-#include "PDFArray.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFStreamInput.h"
+#include "objects/PDFArray.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFStreamInput.h"
 
 using namespace IOBasicTypes;
 

@@ -19,13 +19,13 @@
    
 */
 #include "OpenTypeTest.h"
-#include "OpenTypeFileInput.h"
+#include "text/opentype/OpenTypeFileInput.h"
 #include "io/InputFile.h"
 #include "TestsRunner.h"
 
 #include "BoxingBase.h"
 #include "io/OutputFile.h"
-#include "CharStringType2Tracer.h"
+#include "text/cff/CharStringType2Tracer.h"
 #include "io/IByteWriterWithPosition.h"
 
 #include <iostream>

@@ -19,16 +19,16 @@
    
 */
 #include "WrittenFontTrueType.h"
-#include "WinAnsiEncoding.h"
-#include "TrueTypeANSIFontWriter.h"
+#include "encoding/WinAnsiEncoding.h"
+#include "text/truetype/TrueTypeANSIFontWriter.h"
 #include "Trace.h"
-#include "TrueTypeDescendentFontWriter.h"
+#include "text/truetype/TrueTypeDescendentFontWriter.h"
 #include "CIDFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
-#include "PDFObjectCast.h"
-#include "PDFParser.h"
-#include "PDFDictionary.h"
+#include "objects/PDFObjectCast.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFDictionary.h"
 
 using namespace PDFHummus;
 

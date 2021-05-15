@@ -22,9 +22,9 @@
 #include "TestsRunner.h"
 #include "io/InputFile.h"
 #include "io/OutputFile.h"
-#include "CharStringType1Tracer.h"
+#include "text/type1/CharStringType1Tracer.h"
 #include "io/IByteWriterWithPosition.h"
-#include "Type1Input.h"
+#include "text/type1/Type1Input.h"
 #include "PSBool.h"
 
 #include <iostream>

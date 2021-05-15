@@ -20,13 +20,13 @@
 */
 #include "PDFUsedFont.h"
 #include "IWrittenFont.h"
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
-#include "PDFIndirectObjectReference.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFIndirectObjectReference.h"
 
 #include FT_GLYPH_H
 

@@ -20,8 +20,8 @@
 */
 #include "FreeTypeInitializationTest.h"
 
-#include "FreeTypeFaceWrapper.h"
-#include "EFontStretch.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
+#include "text/freetype/EFontStretch.h"
 
 #include "Trace.h"
 #include "Singleton.h"

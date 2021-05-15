@@ -22,7 +22,7 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "OpenTypeFileInput.h"
+#include "text/opentype/OpenTypeFileInput.h"
 #include "MyStringBuf.h"
 #include "io/InputFile.h"
 #include "CFFPrimitiveWriter.h"

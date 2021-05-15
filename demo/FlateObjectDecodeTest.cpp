@@ -19,9 +19,9 @@ limitations under the License.
 
 */
 #include "FlateObjectDecodeTest.h"
-#include "PDFParser.h"
+#include "parsing/PDFParser.h"
 #include "io/InputFile.h"
-#include "PDFStreamInput.h"
+#include "objects/PDFStreamInput.h"
 #include "io/IByteReader.h"
 #include "EStatusCode.h"
 

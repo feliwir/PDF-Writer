@@ -20,8 +20,8 @@
 */
 #include "PDFTextString.h"
 #include "io/OutputStringBufferStream.h"
-#include "PDFDocEncoding.h"
-#include "UnicodeString.h"
+#include "encoding/PDFDocEncoding.h"
+#include "encoding/UnicodeString.h"
 #include <sstream>
 
 using namespace IOBasicTypes;

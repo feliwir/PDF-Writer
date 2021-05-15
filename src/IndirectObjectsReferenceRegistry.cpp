@@ -22,13 +22,13 @@
 #include "Trace.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
-#include "PDFArray.h"
-#include "PDFIndirectObjectReference.h"
-#include "PDFInteger.h"
-#include "PDFBoolean.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFArray.h"
+#include "objects/PDFIndirectObjectReference.h"
+#include "objects/PDFInteger.h"
+#include "objects/PDFBoolean.h"
 
 #include <list>
 

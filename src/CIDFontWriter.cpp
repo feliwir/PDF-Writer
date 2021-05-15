@@ -21,14 +21,14 @@
 #include "CIDFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "Trace.h"
 #include "PDFStream.h"
 #include "io/IByteWriter.h"
 #include "SafeBufferMacrosDefs.h"
-#include "CFFDescendentFontWriter.h"
+#include "text/cff/CFFDescendentFontWriter.h"
 #include "IDescendentFontWriter.h"
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

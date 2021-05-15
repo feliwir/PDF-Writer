@@ -29,13 +29,13 @@
 #include "images/tiff/TIFFImageHandler.h"
 #include "images/tiff/TiffUsageParameters.h"
 #include "UsedFontsRepository.h"
-#include "PDFEmbedParameterTypes.h"
-#include "PDFDocumentHandler.h"
+#include "parsing/PDFEmbedParameterTypes.h"
+#include "parsing/PDFDocumentHandler.h"
 #include "ObjectsBasicTypes.h"
 #include "EHummusImageType.h"
-#include "PDFParsingOptions.h"
-#include "EncryptionOptions.h"
-#include "EncryptionHelper.h"
+#include "parsing/PDFParsingOptions.h"
+#include "encryption/EncryptionOptions.h"
+#include "encryption/EncryptionHelper.h"
 #include "images/png/PNGImageHandler.h"
 
 #include <string>

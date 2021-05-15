@@ -21,7 +21,7 @@
 #pragma once
 #include "IFreeTypeFaceExtender.h"
 #include "PFMFileReader.h"
-#include "Type1Input.h"
+#include "text/type1/Type1Input.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

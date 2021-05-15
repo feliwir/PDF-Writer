@@ -20,17 +20,17 @@
 */
 #include "ANSIFontWriter.h"
 #include "ObjectsContext.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "DictionaryContext.h"
 #include "Trace.h"
-#include "WinAnsiEncoding.h"
+#include "encoding/WinAnsiEncoding.h"
 #include "io/IByteWriter.h"
 #include "PrimitiveObjectsWriter.h"
 #include "PDFStream.h"
 #include "SafeBufferMacrosDefs.h"
 #include "FontDescriptorWriter.h"
 #include "IANSIFontWriterHelper.h"
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

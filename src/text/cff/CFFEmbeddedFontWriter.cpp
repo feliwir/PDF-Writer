@@ -24,7 +24,7 @@
 #include "io/OutputStreamTraits.h"
 #include "PDFStream.h"
 #include "Trace.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "DictionaryContext.h"
 #include "io/IByteReaderWithPosition.h"
 #include "CharStringType2Flattener.h"

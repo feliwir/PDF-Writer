@@ -19,8 +19,8 @@
    
 */
 #include "StateReader.h"
-#include "PDFObjectCast.h"
-#include "PDFIndirectObjectReference.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFIndirectObjectReference.h"
 #include "Trace.h"
 
 using namespace PDFHummus;

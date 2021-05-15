@@ -25,10 +25,10 @@
 #include "io/IOBasicTypes.h"
 #include "ObjectsBasicTypes.h"
 #include "RefCountPtr.h"
-#include "PDFDictionary.h"
+#include "objects/PDFDictionary.h"
 #include "io/IByteReaderWithPosition.h"
 #include "io/AdapterIByteReaderWithPositionToIReadPositionProvider.h"
-#include "DecryptionHelper.h"
+#include "encryption/DecryptionHelper.h"
 #include "PDFParsingOptions.h"
 
 #include <map>

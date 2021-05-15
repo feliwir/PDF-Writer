@@ -22,12 +22,12 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "OpenTypeFileInput.h"
+#include "text/opentype/OpenTypeFileInput.h"
 #include "io/OutputStringBufferStream.h"
 #include "io/InputFile.h"
 #include "TrueTypePrimitiveWriter.h"
 #include "io/InputStringBufferStream.h"
-#include "OpenTypePrimitiveReader.h"
+#include "text/opentype/OpenTypePrimitiveReader.h"
 #include "MyStringBuf.h"
 
 #include <vector>

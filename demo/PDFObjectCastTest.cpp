@@ -19,10 +19,10 @@
    
 */
 #include "PDFObjectCastTest.h"
-#include "PDFObject.h"
-#include "PDFName.h"
-#include "PDFDictionary.h"
-#include "PDFObjectCast.h"
+#include "objects/PDFObject.h"
+#include "objects/PDFName.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFObjectCast.h"
 
 #include <iostream>
 

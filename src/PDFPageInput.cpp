@@ -20,10 +20,10 @@
  */
 
 #include "PDFPageInput.h"
-#include "PDFParser.h"
-#include "PDFArray.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFArray.h"
 #include "Trace.h"
-#include "PDFName.h"
+#include "objects/PDFName.h"
 #include "ParsedPrimitiveHelper.h"
 
 PDFPageInput::PDFPageInput(PDFParser* inParser,PDFObject* inPageObject):mPageObject(inPageObject)

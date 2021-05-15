@@ -20,7 +20,7 @@
 */
 #pragma once
 
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "ObjectsBasicTypes.h"
 #include "EStatusCode.h"
 #include "GlyphUnicodeMapping.h"

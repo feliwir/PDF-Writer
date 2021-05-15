@@ -21,7 +21,7 @@
 #include "PDFCopyingContextTest.h"
 #include "TestsRunner.h"
 #include "PDFWriter.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 
 #include <iostream>
 

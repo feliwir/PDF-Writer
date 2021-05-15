@@ -21,7 +21,7 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "CharStringDefinitions.h"
+#include "text/cff/CharStringDefinitions.h"
 
 class IType2InterpreterImplementation
 {

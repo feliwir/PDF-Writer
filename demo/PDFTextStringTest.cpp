@@ -20,7 +20,7 @@
 */
 #include "PDFTextStringTest.h"
 #include "PDFTextString.h"
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 
 #include <iostream>
 

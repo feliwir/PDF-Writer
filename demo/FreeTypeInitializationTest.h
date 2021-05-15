@@ -21,9 +21,7 @@
 #pragma once
 #include "TestsRunner.h"
 
-#include "FreeTypeWrapper.h"
-
-
+#include "text/freetype/FreeTypeWrapper.h"
 
 class FreeTypeInitializationTest: public ITestUnit
 {

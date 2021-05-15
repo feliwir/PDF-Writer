@@ -19,7 +19,7 @@ limitations under the License.
 
 */
 
-#include "EncryptionHelper.h"
+#include "encryption/EncryptionHelper.h"
 #include "io/OutputStringBufferStream.h"
 #include "io/InputStringStream.h"
 #include "io/OutputStreamTraits.h"
@@ -28,12 +28,12 @@ limitations under the License.
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
 #include "DecryptionHelper.h"
-#include "PDFParser.h"
-#include "PDFDictionary.h"
-#include "PDFObjectCast.h"
-#include "PDFLiteralString.h"
-#include "PDFInteger.h"
-#include "PDFBoolean.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFLiteralString.h"
+#include "objects/PDFInteger.h"
+#include "objects/PDFBoolean.h"
 
 #include <stdint.h>
 

@@ -20,17 +20,17 @@
 */
 #include "WrittenFontCFF.h"
 #include "Trace.h"
-#include "CFFANSIFontWriter.h"
+#include "text/cff/CFFANSIFontWriter.h"
 #include "CIDFontWriter.h"
-#include "CFFDescendentFontWriter.h"
+#include "text/cff/CFFDescendentFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
-#include "PDFArray.h"
-#include "PDFInteger.h"
-#include "PDFBoolean.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFArray.h"
+#include "objects/PDFInteger.h"
+#include "objects/PDFBoolean.h"
 
 using namespace PDFHummus;
 

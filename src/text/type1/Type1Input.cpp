@@ -22,7 +22,7 @@
 #include "io/IByteReaderWithPosition.h"
 #include "BoxingBase.h"
 #include "PSBool.h"
-#include "StandardEncoding.h"
+#include "encoding/StandardEncoding.h"
 #include "Trace.h"
 #include "CharStringType1Interpreter.h"
 #include <sstream>

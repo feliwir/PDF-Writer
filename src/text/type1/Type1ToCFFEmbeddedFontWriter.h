@@ -23,7 +23,7 @@
 #include "ObjectsBasicTypes.h"
 #include "Type1Input.h"
 #include "io/InputFile.h"
-#include "CFFPrimitiveWriter.h"
+#include "text/cff/CFFPrimitiveWriter.h"
 #include "io/OutputStringBufferStream.h"
 #include "MyStringBuf.h"
 

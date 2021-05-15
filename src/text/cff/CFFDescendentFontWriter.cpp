@@ -23,7 +23,7 @@
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
 #include "CFFEmbeddedFontWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "Trace.h"
 
 

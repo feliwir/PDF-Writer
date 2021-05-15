@@ -23,7 +23,7 @@
 #include "EStatusCode.h"
 #include "io/InputFile.h"
 #include "ObjectsBasicTypes.h"
-#include "PDFParser.h"
+#include "parsing/PDFParser.h"
 
 #include <string>
 

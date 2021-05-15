@@ -22,7 +22,7 @@
 #include "IObjectsContextExtender.h"
 #include "io/InputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
-#include "EncryptionHelper.h"
+#include "encryption/EncryptionHelper.h"
 
 PDFStream::PDFStream(bool inCompressStream,
 					 IByteWriterWithPosition* inOutputStream,

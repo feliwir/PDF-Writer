@@ -29,10 +29,10 @@
  */
 
 
-#include "PDFObjectCast.h"
+#include "objects/PDFObjectCast.h"
 #include "PDFRectangle.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
 
 #include <string>
 

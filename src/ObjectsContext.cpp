@@ -26,14 +26,14 @@
 #include "Trace.h"
 #include "io/OutputStreamTraits.h"
 #include "PDFStream.h"
-#include "PDFParser.h"
-#include "PDFObjectCast.h"
-#include "PDFDictionary.h"
-#include "PDFIndirectObjectReference.h"
-#include "PDFBoolean.h"
-#include "PDFLiteralString.h"
-#include "EncryptionHelper.h"
-#include "PDFObjectParser.h"
+#include "parsing/PDFParser.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFIndirectObjectReference.h"
+#include "objects/PDFBoolean.h"
+#include "objects/PDFLiteralString.h"
+#include "encryption/EncryptionHelper.h"
+#include "parsing/PDFObjectParser.h"
 
 using namespace PDFHummus;
 

@@ -24,7 +24,7 @@
 #include "PageContentContext.h"
 #include "PDFPage.h"
 #include "DocumentContextExtenderAdapter.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 
 #include <iostream>
 

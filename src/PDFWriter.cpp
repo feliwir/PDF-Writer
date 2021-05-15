@@ -26,15 +26,15 @@
 #include "StateReader.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
-#include "PDFDictionary.h"
-#include "PDFObjectCast.h"
-#include "PDFIndirectObjectReference.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFObjectCast.h"
+#include "objects/PDFIndirectObjectReference.h"
 #include "io/IByteWriterWithPosition.h"
 #include "io/OutputStreamTraits.h"
-#include "PDFBoolean.h"
-#include "PDFInteger.h"
+#include "objects/PDFBoolean.h"
+#include "objects/PDFInteger.h"
 #include "PDFPageInput.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 
 using namespace PDFHummus;
 

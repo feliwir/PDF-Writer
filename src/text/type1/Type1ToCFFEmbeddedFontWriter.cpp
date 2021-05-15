@@ -19,7 +19,7 @@
    
 */
 #include "Type1ToCFFEmbeddedFontWriter.h"
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "ObjectsContext.h"
 #include "DictionaryContext.h"
 #include "io/InputStringBufferStream.h"
@@ -28,7 +28,7 @@
 #include "Trace.h"
 #include "Type1ToType2Converter.h"
 #include "FSType.h"
-#include "StandardEncoding.h"
+#include "encoding/StandardEncoding.h"
 
 #include <algorithm>
 
