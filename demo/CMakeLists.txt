@@ -3,8 +3,6 @@ add_executable(PDFWriterTestPlayground
 #sources
 AppendingAndReading.cpp
 BasicModification.cpp
-BoxingBaseTest.cpp
-BufferedOutputStreamTest.cpp
 CustomLogTest.cpp
 DCTDecodeFilterTest.cpp
 DFontTest.cpp
@@ -64,15 +62,12 @@ Type1Test.cpp
 UppercaseSequanceTest.cpp
 WindowsPath.cpp
 PDFWriterTestPlayground.cpp
-CopyingAndMergingEmptyPages.cpp
 EncryptedPDF.cpp
 UnicodeTextUsage.cpp
 
 #headers
 AppendingAndReading.h
 BasicModification.h
-BoxingBaseTest.h
-BufferedOutputStreamTest.h
 CustomLogTest.h
 DCTDecodeFilterTest.h
 DFontTest.h
@@ -131,7 +126,6 @@ TrueTypeTest.h
 TTCTest.h
 Type1Test.h
 UppercaseSequanceTest.h
-CopyingAndMergingEmptyPages.h
 EncryptedPDF.h
 UnicodeTextUsage.h
 )

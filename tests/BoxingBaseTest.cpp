@@ -1,5 +1,5 @@
 /*
-   Source File : BoxingBaseTest.h
+   Source File : BoxingBaseTest.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,17 +18,36 @@
 
 
 */
-#pragma once
-#include "ITestUnit.h"
+#include "BoxingBase.h"
+#include "TestHelper.h"
+#include <gtest/gtest.h>
 
-class BoxingBaseTest : public ITestUnit
+#include <iostream>
+
+TEST(Patterns, BoxingBase)
 {
-  public:
-    BoxingBaseTest(void);
-    ~BoxingBaseTest(void);
+    // Assignment
+    Int a = 3;
+    a = 2;
+    EXPECT_EQ(a, 2);
 
-    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
+    // Initialization
+    Int b(2);
+    EXPECT_EQ(b, 2);
 
-  private:
-    PDFHummus::EStatusCode RunIntTest();
-};
+    // From string
+    Int c("2");
+    EXPECT_EQ(c, 2);
+
+    // From wide string
+    Int d(L"2");
+    EXPECT_EQ(d, 2);
+
+    // string write
+    Int e(2);
+    EXPECT_EQ(e.ToString(), "2");
+
+    // wide string write
+    Int f(2);
+    EXPECT_EQ(f.ToWString(), L"2");
+}

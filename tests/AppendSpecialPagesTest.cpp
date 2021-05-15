@@ -26,7 +26,7 @@
 
 using namespace PDFHummus;
 
-TEST(Basic, ApppendSpecialPages)
+TEST(PDFEmbedding, ApppendSpecialPages)
 {
     EStatusCode status;
     PDFWriter pdfWriter;
