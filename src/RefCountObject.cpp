@@ -20,12 +20,12 @@
 */
 #include "RefCountObject.h"
 
-RefCountObject::RefCountObject(void)
+RefCountObject::RefCountObject()
 {
     mRefCount = 1;
 }
 
-RefCountObject::~RefCountObject(void)
+RefCountObject::~RefCountObject()
 {
 }
 

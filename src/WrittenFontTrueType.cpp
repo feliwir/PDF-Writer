@@ -36,7 +36,7 @@ WrittenFontTrueType::WrittenFontTrueType(ObjectsContext *inObjectsContext) : Abs
 {
 }
 
-WrittenFontTrueType::~WrittenFontTrueType(void)
+WrittenFontTrueType::~WrittenFontTrueType()
 {
 }
 

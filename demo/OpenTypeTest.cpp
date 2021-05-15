@@ -32,11 +32,11 @@
 
 using namespace PDFHummus;
 
-OpenTypeTest::OpenTypeTest(void)
+OpenTypeTest::OpenTypeTest()
 {
 }
 
-OpenTypeTest::~OpenTypeTest(void)
+OpenTypeTest::~OpenTypeTest()
 {
 }
 

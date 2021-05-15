@@ -20,10 +20,10 @@
 */
 #include "PDFNull.h"
 
-PDFNull::PDFNull(void) : PDFObject(eType)
+PDFNull::PDFNull() : PDFObject(eType)
 {
 }
 
-PDFNull::~PDFNull(void)
+PDFNull::~PDFNull()
 {
 }

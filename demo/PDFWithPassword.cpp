@@ -30,11 +30,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFWithPassword::PDFWithPassword(void)
+PDFWithPassword::PDFWithPassword()
 {
 }
 
-PDFWithPassword::~PDFWithPassword(void)
+PDFWithPassword::~PDFWithPassword()
 {
 }
 
@@ -46,7 +46,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
         RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
                                inUseAES ? "PDFWithPasswordAESLog.txt" : "PDFWithPasswordRC4Log.txt"));
     EStatusCode status;
-    PDFPage *page = NULL;
+    PDFPage *page = nullptr;
 
     do
     {
@@ -89,7 +89,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
         }
 
         status = pdfWriter.WritePageAndRelease(page);
-        page = NULL;
+        page = nullptr;
 
         if (status != PDFHummus::eSuccess)
         {

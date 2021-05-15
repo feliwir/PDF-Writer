@@ -61,7 +61,7 @@ class PDFObjectParser
     void SetParserExtender(IPDFParserExtender *inParserExtender);
 
     // helper method for others who need to parse encoded pdf data
-    std::string DecodeHexString(const std::string inStringToDecode);
+    std::string DecodeHexString(const std::string& inStringToDecode);
 
     // External reading. use to temporarily get access to the internal stream, instead of reading objects with
     // ParseNewObject. when done mark with FinishExternalReading to commence reading

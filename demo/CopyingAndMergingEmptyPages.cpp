@@ -32,11 +32,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-CopyingAndMergingEmptyPages::CopyingAndMergingEmptyPages(void)
+CopyingAndMergingEmptyPages::CopyingAndMergingEmptyPages()
 {
 }
 
-CopyingAndMergingEmptyPages::~CopyingAndMergingEmptyPages(void)
+CopyingAndMergingEmptyPages::~CopyingAndMergingEmptyPages()
 {
 }
 
@@ -324,7 +324,7 @@ PDFHummus::EStatusCode CopyingAndMergingEmptyPages::MergeEmptyPageToForm(const T
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     do
     {

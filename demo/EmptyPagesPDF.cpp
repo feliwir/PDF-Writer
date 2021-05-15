@@ -29,11 +29,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-EmptyPagesPDF::EmptyPagesPDF(void)
+EmptyPagesPDF::EmptyPagesPDF()
 {
 }
 
-EmptyPagesPDF::~EmptyPagesPDF(void)
+EmptyPagesPDF::~EmptyPagesPDF()
 {
 }
 

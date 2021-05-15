@@ -20,12 +20,12 @@
 */
 #include "InfoDictionary.h"
 
-InfoDictionary::InfoDictionary(void)
+InfoDictionary::InfoDictionary()
 {
     Trapped = EInfoTrappedUnknown;
 }
 
-InfoDictionary::~InfoDictionary(void)
+InfoDictionary::~InfoDictionary()
 {
 }
 

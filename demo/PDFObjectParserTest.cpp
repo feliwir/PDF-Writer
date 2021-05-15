@@ -43,8 +43,8 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
     string::size_type mLen, mPos;
 
   public:
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize)
+    IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
+                                                  IOBasicTypes::LongBufferSizeType inBufferSize) override
     {
         const char *data = mInput.data();
         if (!NotEnded())
@@ -57,12 +57,12 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
         return size;
     }
 
-    virtual bool NotEnded()
+    bool NotEnded() override
     {
         return mPos < mLen;
     };
 
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition()
+    IOBasicTypes::LongFilePositionType GetCurrentPosition() override
     {
         return static_cast<IOBasicTypes::LongFilePositionType>(mPos);
     };
@@ -83,7 +83,7 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
     {
     }
 
-    virtual ~InputInterfaceToStream()
+    ~InputInterfaceToStream() override
     {
     }
 };

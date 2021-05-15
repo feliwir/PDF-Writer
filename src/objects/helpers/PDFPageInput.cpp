@@ -41,7 +41,7 @@ void PDFPageInput::AssertPageObjectValid()
     if (!typeObject || typeObject->GetValue() != "Page")
     {
         TRACE_LOG("PDFPageInput::AssertPageObjectValid, dictionar object provided is NOT a page object");
-        mPageObject = NULL;
+        mPageObject = nullptr;
     }
 }
 
@@ -168,11 +168,11 @@ PDFObject *PDFPageInput::QueryInheritedValue(PDFDictionary *inDictionary, const 
     {
         PDFObjectCastPtr<PDFDictionary> parent(mParser->QueryDictionaryObject(inDictionary, scParent));
         if (!parent)
-            return NULL;
+            return nullptr;
         return QueryInheritedValue(parent.GetPtr(), inName);
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 void PDFPageInput::SetPDFRectangleFromPDFArray(PDFArray *inPDFArray, PDFRectangle &outPDFRectangle)

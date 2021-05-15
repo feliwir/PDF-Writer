@@ -21,9 +21,9 @@
 
 using namespace IOBasicTypes;
 
-InputRC4XcodeStream::InputRC4XcodeStream() : mRC4()
+InputRC4XcodeStream::InputRC4XcodeStream()
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
 }
 
 InputRC4XcodeStream::InputRC4XcodeStream(IByteReader *inSourceReader, const ByteList &inKey) : mRC4(inKey)
@@ -31,7 +31,7 @@ InputRC4XcodeStream::InputRC4XcodeStream(IByteReader *inSourceReader, const Byte
     mSourceStream = inSourceReader;
 }
 
-InputRC4XcodeStream::~InputRC4XcodeStream(void)
+InputRC4XcodeStream::~InputRC4XcodeStream()
 {
     if (mSourceStream)
         delete mSourceStream;

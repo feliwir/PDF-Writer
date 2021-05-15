@@ -23,12 +23,12 @@
 
 using namespace PDFHummus;
 
-PDFDocumentCopyingContext::PDFDocumentCopyingContext(void)
+PDFDocumentCopyingContext::PDFDocumentCopyingContext()
 {
-    mDocumentContext = NULL;
+    mDocumentContext = nullptr;
 }
 
-PDFDocumentCopyingContext::~PDFDocumentCopyingContext(void)
+PDFDocumentCopyingContext::~PDFDocumentCopyingContext()
 {
     End();
 }
@@ -128,13 +128,13 @@ void PDFDocumentCopyingContext::End()
     if (mDocumentContext)
     {
         mDocumentContext->UnRegisterCopyingContext(this);
-        mDocumentContext = NULL;
+        mDocumentContext = nullptr;
     }
 }
 
 void PDFDocumentCopyingContext::ReleaseDocumentContextReference()
 {
-    mDocumentContext = NULL;
+    mDocumentContext = nullptr;
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentCopyingContext::CopyDirectObjectWithDeepCopy(PDFObject *inObject)

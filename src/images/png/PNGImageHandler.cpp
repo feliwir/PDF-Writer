@@ -45,13 +45,13 @@ using namespace std;
 
 typedef list<PDFImageXObject *> PDFImageXObjectList;
 
-PNGImageHandler::PNGImageHandler(void)
+PNGImageHandler::PNGImageHandler()
 {
-    mObjectsContext = NULL;
-    mDocumentContext = NULL;
+    mObjectsContext = nullptr;
+    mDocumentContext = nullptr;
 }
 
-PNGImageHandler::~PNGImageHandler(void)
+PNGImageHandler::~PNGImageHandler()
 {
 }
 
@@ -76,8 +76,8 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
                                            ObjectsContext *inObjectsContext)
 {
     PDFImageXObjectList listOfImages;
-    PDFImageXObject *imageXObject = NULL;
-    PDFStream *imageStream = NULL;
+    PDFImageXObject *imageXObject = nullptr;
+    PDFStream *imageStream = nullptr;
     EStatusCode status = eSuccess;
 
     do
@@ -151,7 +151,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             while (y-- > 0)
             {
                 // read (using "rectangle" method)
-                png_read_row(png_ptr, NULL, row);
+                png_read_row(png_ptr, nullptr, row);
                 // write. iterate per sample, splitting color components and alpha
                 for (png_uint_32 i = 0; i < transformed_width; ++i)
                 {
@@ -171,7 +171,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             while (y-- > 0)
             {
                 // read
-                png_read_row(png_ptr, row, NULL);
+                png_read_row(png_ptr, row, nullptr);
                 // write
                 writerStream->Write((IOBasicTypes::Byte *)(row), transformed_width * colorComponents);
             }
@@ -228,7 +228,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
     if (eFailure == status)
     {
         delete imageXObject;
-        imageXObject = NULL;
+        imageXObject = nullptr;
     }
     delete imageStream;
     return imageXObject;
@@ -239,7 +239,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
                                                        png_uint_32 transformed_height,
                                                        DocumentContext *inDocumentContext)
 {
-    PDFFormXObject *formXObject = NULL;
+    PDFFormXObject *formXObject = nullptr;
     do
     {
 
@@ -263,7 +263,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
             TRACE_LOG("PNGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
                       "form XObject for image");
             delete formXObject;
-            formXObject = NULL;
+            formXObject = nullptr;
             break;
         }
 
@@ -273,7 +273,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
 
 void ReadDataFromStream(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    if (png_ptr == NULL)
+    if (png_ptr == nullptr)
         return;
 
     IByteReaderWithPosition *reader = (IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
@@ -292,7 +292,7 @@ void HandlePngError(png_structp png_ptr, png_const_charp error_message)
     png_longjmp(png_ptr, 1);
 }
 
-void HandlePngWarning(png_structp png_ptr, png_const_charp warning_message)
+void HandlePngWarning(png_structp  /*png_ptr*/, png_const_charp warning_message)
 {
     if (warning_message)
         TRACE_LOG1("LibPNG Warning: %s", warning_message);
@@ -302,19 +302,19 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
                                               ObjectsContext *inObjectsContext, ObjectIDType inFormXObjectID)
 {
     // Start reading image to get dimension. we'll then create the form, and then the image
-    PDFFormXObject *formXObject = NULL;
-    PDFImageXObject *imageXObject = NULL;
+    PDFFormXObject *formXObject = nullptr;
+    PDFImageXObject *imageXObject = nullptr;
     PDFImageXObjectList listOfImages;
     EStatusCode status = eSuccess;
-    png_structp png_ptr = NULL;
-    png_infop info_ptr = NULL;
-    png_bytep row = NULL;
+    png_structp png_ptr = nullptr;
+    png_infop info_ptr = nullptr;
+    png_bytep row = nullptr;
 
     do
     {
         // init structs and prep
-        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, HandlePngError, HandlePngWarning);
-        if (png_ptr == NULL)
+        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, HandlePngError, HandlePngWarning);
+        if (png_ptr == nullptr)
         {
             break;
         }
@@ -330,13 +330,13 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
 
         // create info struct
         info_ptr = png_create_info_struct(png_ptr);
-        if (info_ptr == NULL)
+        if (info_ptr == nullptr)
         {
             png_error(png_ptr, "OOM allocating info structure");
         }
 
         // Gal: is this important?
-        png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, NULL, 0);
+        png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, nullptr, 0);
 
         // read info from png
         png_read_info(png_ptr, info_ptr);
@@ -377,7 +377,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
         // allocate reading info
         row = (png_bytep)malloc(transformed_rowbytes);
 
-        if (row == NULL)
+        if (row == nullptr)
             png_error(png_ptr, "OOM allocating row buffers");
 
         // K. time to start outputting something. do 1 for each pass, just in case we get
@@ -392,7 +392,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
             while (y-- > 0)
             {
                 // read (using "rectangle" method)
-                png_read_row(png_ptr, NULL, row);
+                png_read_row(png_ptr, nullptr, row);
             }
 
             --passes;
@@ -416,7 +416,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
         }
 
         // finish reading image...no longer needed
-        png_read_end(png_ptr, NULL);
+        png_read_end(png_ptr, nullptr);
 
         // now let's get to the form, which should just place the image and be done
         formXObject = CreateImageFormXObjectFromImageXObject(listOfImages, inFormXObjectID, transformed_width,
@@ -427,8 +427,8 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
         }
     } while (false);
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-    if (row != NULL)
+    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+    if (row != nullptr)
         free(row);
     PDFImageXObjectList::iterator it = listOfImages.begin();
     for (; it != listOfImages.end(); ++it)
@@ -437,7 +437,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
     if (status != eSuccess)
     {
         delete formXObject;
-        formXObject = NULL;
+        formXObject = nullptr;
     }
 
     return formXObject;
@@ -446,7 +446,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
 PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream,
                                                                 ObjectIDType inFormXObjectID)
 {
-    PDFFormXObject *imageFormXObject = NULL;
+    PDFFormXObject *imageFormXObject = nullptr;
 
     do
     {
@@ -474,15 +474,15 @@ PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(IByteReaderWithPosi
     // reading as is set by internal reader (meaning, post transformations)
 
     EStatusCode status = eSuccess;
-    png_structp png_ptr = NULL;
-    png_infop info_ptr = NULL;
+    png_structp png_ptr = nullptr;
+    png_infop info_ptr = nullptr;
     PNGImageHandler::PNGImageInfo data;
 
     do
     {
         // init structs and prep
-        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, HandlePngError, HandlePngWarning);
-        if (png_ptr == NULL)
+        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, HandlePngError, HandlePngWarning);
+        if (png_ptr == nullptr)
         {
             break;
         }
@@ -498,13 +498,13 @@ PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(IByteReaderWithPosi
 
         // create info struct
         info_ptr = png_create_info_struct(png_ptr);
-        if (info_ptr == NULL)
+        if (info_ptr == nullptr)
         {
             png_error(png_ptr, "OOM allocating info structure");
         }
 
         // Gal: is this important?
-        png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, NULL, 0);
+        png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, nullptr, 0);
 
         // read info from png
         png_read_info(png_ptr, info_ptr);
@@ -549,7 +549,7 @@ PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(IByteReaderWithPosi
 
     } while (false);
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
     return data;
 }
 

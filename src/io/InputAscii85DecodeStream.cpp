@@ -26,12 +26,12 @@
 
 using namespace IOBasicTypes;
 
-InputAscii85DecodeStream::InputAscii85DecodeStream(void)
+InputAscii85DecodeStream::InputAscii85DecodeStream()
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
 }
 
-InputAscii85DecodeStream::~InputAscii85DecodeStream(void)
+InputAscii85DecodeStream::~InputAscii85DecodeStream()
 {
     if (mSourceStream)
         delete mSourceStream;

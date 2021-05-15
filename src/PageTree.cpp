@@ -26,7 +26,7 @@ PageTree::PageTree(ObjectIDType inObjectID)
     mPageTreeID = inObjectID;
     mKidsIndex = 0;
     mIsLeafParent = true;
-    mParent = NULL;
+    mParent = nullptr;
 }
 
 PageTree::PageTree(IndirectObjectsReferenceRegistry &inObjectsRegistry)
@@ -34,10 +34,10 @@ PageTree::PageTree(IndirectObjectsReferenceRegistry &inObjectsRegistry)
     mPageTreeID = inObjectsRegistry.AllocateNewObjectID();
     mKidsIndex = 0;
     mIsLeafParent = true;
-    mParent = NULL;
+    mParent = nullptr;
 }
 
-PageTree::~PageTree(void)
+PageTree::~PageTree()
 {
     if (!mIsLeafParent)
     {
@@ -135,7 +135,7 @@ int PageTree::GetNodesCount()
 PageTree *PageTree::GetPageTreeChild(int i)
 {
     if (mIsLeafParent || mKidsIndex <= i)
-        return NULL;
+        return nullptr;
     else
         return mKidsNodes[i];
 }

@@ -29,11 +29,11 @@
 
 using namespace PDFHummus;
 
-HighLevelContentContext::HighLevelContentContext(void)
+HighLevelContentContext::HighLevelContentContext()
 {
 }
 
-HighLevelContentContext::~HighLevelContentContext(void)
+HighLevelContentContext::~HighLevelContentContext()
 {
 }
 

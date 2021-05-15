@@ -41,14 +41,14 @@
 
 using namespace PDFHummus;
 
-UsedFontsRepository::UsedFontsRepository(void)
+UsedFontsRepository::UsedFontsRepository()
 {
-    mInputFontsInformation = NULL;
-    mObjectsContext = NULL;
+    mInputFontsInformation = nullptr;
+    mObjectsContext = nullptr;
     mEmbedFonts = true;
 }
 
-UsedFontsRepository::~UsedFontsRepository(void)
+UsedFontsRepository::~UsedFontsRepository()
 {
     Reset();
 }
@@ -69,7 +69,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
     if (!mObjectsContext)
     {
         TRACE_LOG("UsedFontsRepository::GetFontForFile, exception, not objects context available");
-        return NULL;
+        return nullptr;
     }
 
     StringAndLongToPDFUsedFontMap::iterator it = mUsedFonts.find(StringAndLong(inFontFilePath, inFontIndex));
@@ -89,7 +89,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
         if (!face)
         {
             TRACE_LOG1("UsedFontsRepository::GetFontForFile, Failed to load font from %s", inFontFilePath.c_str());
-            PDFUsedFont *aNull = NULL;
+            PDFUsedFont *aNull = nullptr;
             it = mUsedFonts
                      .insert(
                          StringAndLongToPDFUsedFontMap::value_type(StringAndLong(inFontFilePath, inFontIndex), aNull))
@@ -105,7 +105,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
                 TRACE_LOG1("UsedFontsRepository::GetFontForFile, Unreckognized font format for font in %s",
                            inFontFilePath.c_str());
                 delete usedFont;
-                usedFont = NULL;
+                usedFont = nullptr;
             }
             it = mUsedFonts
                      .insert(StringAndLongToPDFUsedFontMap::value_type(StringAndLong(inFontFilePath, inFontIndex),
@@ -279,7 +279,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
             TRACE_LOG2("UsedFontsRepository::ReadState, Unreckognized font format for font in %s at index %ld",
                        filePath.c_str(), fontIndex);
             delete usedFont;
-            usedFont = NULL;
+            usedFont = nullptr;
             status = PDFHummus::eFailure;
             break;
         }
@@ -297,7 +297,7 @@ void UsedFontsRepository::Reset()
         delete (it->second);
     mUsedFonts.clear();
     delete mInputFontsInformation;
-    mInputFontsInformation = NULL;
+    mInputFontsInformation = nullptr;
     mOptionaMetricsFiles.clear();
     mEmbedFonts = true;
 }

@@ -30,11 +30,11 @@ using namespace PDFHummus;
 
 static const std::string scBufferedOutputStreamTest = "BufferedOutputStreamTest";
 
-BufferedOutputStreamTest::BufferedOutputStreamTest(void)
+BufferedOutputStreamTest::BufferedOutputStreamTest()
 {
 }
 
-BufferedOutputStreamTest::~BufferedOutputStreamTest(void)
+BufferedOutputStreamTest::~BufferedOutputStreamTest()
 {
 }
 

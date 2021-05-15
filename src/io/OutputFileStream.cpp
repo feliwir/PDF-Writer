@@ -24,12 +24,12 @@
 using namespace IOBasicTypes;
 using namespace PDFHummus;
 
-OutputFileStream::OutputFileStream(void)
+OutputFileStream::OutputFileStream()
 {
-    mStream = NULL;
+    mStream = nullptr;
 }
 
-OutputFileStream::~OutputFileStream(void)
+OutputFileStream::~OutputFileStream()
 {
     if (mStream)
         Close();
@@ -37,7 +37,7 @@ OutputFileStream::~OutputFileStream(void)
 
 OutputFileStream::OutputFileStream(const std::string &inFilePath, bool inAppend)
 {
-    mStream = NULL;
+    mStream = nullptr;
     Open(inFilePath, inAppend);
 }
 
@@ -58,7 +58,7 @@ EStatusCode OutputFileStream::Close()
 {
     EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess : PDFHummus::eFailure;
 
-    mStream = NULL;
+    mStream = nullptr;
     return result;
 }
 

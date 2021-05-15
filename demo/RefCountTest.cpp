@@ -27,11 +27,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-RefCountTest::RefCountTest(void)
+RefCountTest::RefCountTest()
 {
 }
 
-RefCountTest::~RefCountTest(void)
+RefCountTest::~RefCountTest()
 {
 }
 
@@ -46,7 +46,7 @@ class MyClass : public RefCountObject
         mID = inID;
         ++TotalObjectsCount;
     }
-    virtual ~MyClass()
+    ~MyClass() override
     {
         --TotalObjectsCount;
     }
@@ -62,7 +62,7 @@ class MyClass : public RefCountObject
 
 int MyClass::TotalObjectsCount = 0;
 
-EStatusCode RefCountTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode RefCountTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = PDFHummus::eSuccess;
 

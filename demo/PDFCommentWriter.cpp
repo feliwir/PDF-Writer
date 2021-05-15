@@ -13,7 +13,7 @@ PDFCommentWriter::PDFCommentWriter(PDFWriter *inPDFWriter)
     mPDFWriter = inPDFWriter;
 }
 
-PDFCommentWriter::~PDFCommentWriter(void)
+PDFCommentWriter::~PDFCommentWriter()
 {
 }
 
@@ -49,7 +49,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
     }
 
     // if has a referred comment, write it first
-    if (inComment->ReplyTo != NULL)
+    if (inComment->ReplyTo != nullptr)
     {
         EStatusCodeAndObjectIDType repliedtoResult = WriteCommentsTree(inComment->ReplyTo, inCommentsContext);
 
@@ -116,7 +116,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
         dictionaryContext->WriteKey("M");
         dictionaryContext->WriteLiteralStringValue(inComment->Time.ToString());
 
-        if (inComment->ReplyTo != NULL)
+        if (inComment->ReplyTo != nullptr)
         {
             // IRT
             dictionaryContext->WriteKey("IRT");

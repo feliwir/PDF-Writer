@@ -31,7 +31,7 @@ PDFPageMergingHelper::PDFPageMergingHelper(PDFPage *inPage)
     mPage = inPage;
 }
 
-PDFPageMergingHelper::~PDFPageMergingHelper(void)
+PDFPageMergingHelper::~PDFPageMergingHelper()
 {
 }
 

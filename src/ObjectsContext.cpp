@@ -37,15 +37,15 @@
 
 using namespace PDFHummus;
 
-ObjectsContext::ObjectsContext(void)
+ObjectsContext::ObjectsContext()
 {
-    mOutputStream = NULL;
+    mOutputStream = nullptr;
     mCompressStreams = true;
-    mExtender = NULL;
-    mEncryptionHelper = NULL;
+    mExtender = nullptr;
+    mEncryptionHelper = nullptr;
 }
 
-ObjectsContext::~ObjectsContext(void)
+ObjectsContext::~ObjectsContext()
 {
 }
 
@@ -403,7 +403,7 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
 
     // Write the stream header
     // Write Stream Dictionary (note that inStreamDictionary is optionally used)
-    DictionaryContext *streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    DictionaryContext *streamDictionaryContext = (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
     // Compression (if necessary)
     if (mCompressStreams)
@@ -412,7 +412,7 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
         streamDictionaryContext->WriteNameValue(scFlateDecode);
     }
 
-    PDFStream *result = NULL;
+    PDFStream *result = nullptr;
     if (!inForceDirectExtentObject)
     {
 
@@ -446,7 +446,7 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
 
     // Write the stream header
     // Write Stream Dictionary (note that inStreamDictionary is optionally used)
-    DictionaryContext *streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    DictionaryContext *streamDictionaryContext = (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
     // Length (write as an indirect object)
     streamDictionaryContext->WriteKey(scLength);
@@ -459,7 +459,7 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
     WriteKeyword(scStream);
 
     // now begin the stream itself
-    PDFStream *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, NULL);
+    PDFStream *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, nullptr);
 
     // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
     // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
@@ -600,10 +600,10 @@ EStatusCode ObjectsContext::ReadState(PDFParser *inStateReader, ObjectIDType inO
 
 void ObjectsContext::Cleanup()
 {
-    mOutputStream = NULL;
+    mOutputStream = nullptr;
     mCompressStreams = true;
-    mExtender = NULL;
-    mEncryptionHelper = NULL;
+    mExtender = nullptr;
+    mEncryptionHelper = nullptr;
 
     mSubsetFontsNamesSequance.Reset();
     mReferencesRegistry.Reset();

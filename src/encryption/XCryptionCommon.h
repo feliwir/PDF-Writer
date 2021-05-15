@@ -91,9 +91,9 @@ class XCryptionCommon
     ByteList algorithm3_5(unsigned int inRevision, unsigned int inLength, const ByteList &inUserPassword,
                           const ByteList &inO, long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData);
     bool algorithm3_6(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword, const ByteList &inO,
-                      long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList inU);
+                      long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList& inU);
     bool algorithm3_7(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword, const ByteList &inO,
-                      long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList inU);
+                      long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList& inU);
 
     bool IsUsingAES();
 

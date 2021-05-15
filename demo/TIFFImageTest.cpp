@@ -34,11 +34,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-TIFFImageTest::TIFFImageTest(void)
+TIFFImageTest::TIFFImageTest()
 {
 }
 
-TIFFImageTest::~TIFFImageTest(void)
+TIFFImageTest::~TIFFImageTest()
 {
 }
 
@@ -60,10 +60,11 @@ EStatusCode TIFFImageTest::Run(const TestConfiguration &inTestConfiguration)
         }
 
         for (int i = 1; i < 9 && status != PDFHummus::eFailure; ++i)
-            status = AddPageForTIFF(pdfWriter, (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+            status = AddPageForTIFF(pdfWriter, string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+
                                                                               "data/images/tiff/CCITT_")) +
-                                                Int(i).ToString() + ".TIF")
-                                                   .c_str());
+
+                                                Int(i).ToString() + ".TIF");
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
@@ -185,28 +186,29 @@ EStatusCode TIFFImageTest::Run(const TestConfiguration &inTestConfiguration)
 
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status = AddPageForTIFF(pdfWriter,
-                                    (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+                                    string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+
                                                                    "data/images/tiff/flower-minisblack-")) +
-                                     Int(i).ToString() + ".tif")
-                                        .c_str());
+
+                                     Int(i).ToString() + ".tif");
         if (status != PDFHummus::eSuccess)
             break;
 
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status =
-                AddPageForTIFF(pdfWriter, (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+                AddPageForTIFF(pdfWriter, string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+
                                                                          "data/images/tiff/flower-palette-")) +
-                                           Int(i).ToString() + ".tif")
-                                              .c_str());
+
+                                           Int(i).ToString() + ".tif");
         if (status != PDFHummus::eSuccess)
             break;
 
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status = AddPageForTIFF(pdfWriter,
-                                    (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+                                    string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
                                                                    "data/images/tiff/flower-rgb-contig-")) +
-                                     Int(i).ToString() + ".tif")
-                                        .c_str());
+                                     Int(i).ToString() + ".tif");
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -248,13 +250,13 @@ EStatusCode TIFFImageTest::AddPageForTIFF(PDFWriter &inpdfWriter, const string &
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page, for file" << inTiffFilePath.c_str() << "\n";
         }
 
-        PDFFormXObject *imageFormXObject = inpdfWriter.CreateFormXObjectFromTIFFFile(inTiffFilePath.c_str());
+        PDFFormXObject *imageFormXObject = inpdfWriter.CreateFormXObjectFromTIFFFile(inTiffFilePath);
         if (!imageFormXObject)
         {
             cout << "failed to create image form XObject from file, for file" << inTiffFilePath.c_str() << "\n";

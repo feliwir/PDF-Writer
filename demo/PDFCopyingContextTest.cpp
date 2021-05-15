@@ -28,11 +28,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFCopyingContextTest::PDFCopyingContextTest(void)
+PDFCopyingContextTest::PDFCopyingContextTest()
 {
 }
 
-PDFCopyingContextTest::~PDFCopyingContextTest(void)
+PDFCopyingContextTest::~PDFCopyingContextTest()
 {
 }
 
@@ -40,7 +40,7 @@ EStatusCode PDFCopyingContextTest::Run(const TestConfiguration &inTestConfigurat
 {
     EStatusCode status;
     PDFWriter pdfWriter;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     do
     {
@@ -90,7 +90,7 @@ EStatusCode PDFCopyingContextTest::Run(const TestConfiguration &inTestConfigurat
         copyingContext->End(); // delete will call End() as well...so can avoid
 
         delete copyingContext;
-        copyingContext = NULL;
+        copyingContext = nullptr;
 
         status = pdfWriter.EndPDF();
         if (status != PDFHummus::eSuccess)

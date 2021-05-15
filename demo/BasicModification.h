@@ -32,7 +32,7 @@ class BasicModification : public ITestUnit
 
   private:
     PDFHummus::EStatusCode TestBasicFileModification(const TestConfiguration &inTestConfiguration,
-                                                     string inSourceFileName);
+                                                     const string& inSourceFileName);
     PDFHummus::EStatusCode TestInPlaceFileModification(const TestConfiguration &inTestConfiguration,
-                                                       string inSourceFileName);
+                                                       const string& inSourceFileName);
 };

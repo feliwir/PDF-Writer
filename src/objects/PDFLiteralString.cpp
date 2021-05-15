@@ -25,7 +25,7 @@ PDFLiteralString::PDFLiteralString(const std::string &inValue) : PDFObject(eType
     mValue = inValue;
 }
 
-PDFLiteralString::~PDFLiteralString(void)
+PDFLiteralString::~PDFLiteralString()
 {
 }
 

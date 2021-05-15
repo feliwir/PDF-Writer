@@ -95,7 +95,7 @@ EStatusCode ModifyingExistingFileContent::Run(const TestConfiguration &inTestCon
 EStatusCode ModifyingExistingFileContent::TestPageSizeModification(PDFWriter *inPDFWriter)
 {
     EStatusCode status = eSuccess;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     do
     {
@@ -154,10 +154,10 @@ EStatusCode ModifyingExistingFileContent::TestPageSizeModification(PDFWriter *in
 EStatusCode ModifyingExistingFileContent::TestAddingComments(PDFWriter *inPDFWriter)
 {
     EStatusCode status = eSuccess;
-    PDFComment *aComment = NULL;
-    PDFComment *bComment = NULL;
-    PDFComment *cComment = NULL;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFComment *aComment = nullptr;
+    PDFComment *bComment = nullptr;
+    PDFComment *cComment = nullptr;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     do
     {

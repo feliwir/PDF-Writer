@@ -27,15 +27,15 @@
 using namespace std;
 using namespace PDFHummus;
 
-BoxingBaseTest::BoxingBaseTest(void)
+BoxingBaseTest::BoxingBaseTest()
 {
 }
 
-BoxingBaseTest::~BoxingBaseTest(void)
+BoxingBaseTest::~BoxingBaseTest()
 {
 }
 
-EStatusCode BoxingBaseTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode BoxingBaseTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = RunIntTest();
 

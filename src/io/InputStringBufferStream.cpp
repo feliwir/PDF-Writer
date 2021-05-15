@@ -31,7 +31,7 @@ void InputStringBufferStream::Assign(MyStringBuf *inBufferToReadFrom)
     mBufferToReadFrom = inBufferToReadFrom;
 }
 
-InputStringBufferStream::~InputStringBufferStream(void)
+InputStringBufferStream::~InputStringBufferStream()
 {
 }
 

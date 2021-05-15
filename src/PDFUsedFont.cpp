@@ -38,11 +38,11 @@ PDFUsedFont::PDFUsedFont(FT_Face inInputFace, const std::string &inFontFilePath,
     : mFaceWrapper(inInputFace, inFontFilePath, inAdditionalMetricsFontFilePath, inFontIndex)
 {
     mObjectsContext = inObjectsContext;
-    mWrittenFont = NULL;
+    mWrittenFont = nullptr;
     mEmbedFont = inEmbedFont;
 }
 
-PDFUsedFont::~PDFUsedFont(void)
+PDFUsedFont::~PDFUsedFont()
 {
     delete mWrittenFont;
 }
@@ -311,14 +311,14 @@ bool PDFUsedFont::EnumeratePaths(IOutlineEnumerator &target, const UIntList &inG
 {
     bool status = true;
     target.BeginEnum(inFontSize);
-    for (UIntList::const_iterator it = inGlyphsList.begin(); it != inGlyphsList.end(); ++it)
+    for (unsigned int it : inGlyphsList)
     {
-        status = mFaceWrapper.GetGlyphOutline(*it, target);
+        status = mFaceWrapper.GetGlyphOutline(it, target);
         if (!status)
             break;
 
         // Keep track of glyphs' advance
-        double adv = mFaceWrapper.GetGlyphWidth(*it);
+        double adv = mFaceWrapper.GetGlyphWidth(it);
         target.MoveBasepoint(adv * inFontSize / 1000.0, 0);
     }
     return status;

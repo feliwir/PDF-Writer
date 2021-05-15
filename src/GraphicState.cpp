@@ -24,9 +24,9 @@
 #define NULL 0
 #endif
 
-GraphicState::GraphicState(void)
+GraphicState::GraphicState()
 {
-    mFont = NULL;
+    mFont = nullptr;
     mFontSize = 0;
     mPlacedFontSize = 0;
 }
@@ -36,7 +36,7 @@ GraphicState::GraphicState(const GraphicState &inGraphicState)
     *this = inGraphicState;
 }
 
-GraphicState::~GraphicState(void)
+GraphicState::~GraphicState()
 {
 }
 

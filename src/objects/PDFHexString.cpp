@@ -25,7 +25,7 @@ PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFHexString::~PDFHexString(void)
+PDFHexString::~PDFHexString()
 {
 }
 

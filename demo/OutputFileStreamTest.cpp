@@ -29,11 +29,11 @@ using namespace PDFHummus;
 
 static const std::string scOutputFileStreamTest = "OutputFileStreamTest";
 
-OutputFileStreamTest::OutputFileStreamTest(void)
+OutputFileStreamTest::OutputFileStreamTest()
 {
 }
 
-OutputFileStreamTest::~OutputFileStreamTest(void)
+OutputFileStreamTest::~OutputFileStreamTest()
 {
 }
 

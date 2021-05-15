@@ -34,11 +34,11 @@ using namespace PDFHummus;
 
 typedef std::vector<ObjectIDType> ULongVector;
 
-PageOrderModification::PageOrderModification(void)
+PageOrderModification::PageOrderModification()
 {
 }
 
-PageOrderModification::~PageOrderModification(void)
+PageOrderModification::~PageOrderModification()
 {
 }
 

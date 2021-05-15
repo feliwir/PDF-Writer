@@ -36,11 +36,11 @@
 
 using namespace PDFHummus;
 
-CFFEmbeddedFontWriter::CFFEmbeddedFontWriter(void)
+CFFEmbeddedFontWriter::CFFEmbeddedFontWriter()
 {
 }
 
-CFFEmbeddedFontWriter::~CFFEmbeddedFontWriter(void)
+CFFEmbeddedFontWriter::~CFFEmbeddedFontWriter()
 {
 }
 
@@ -50,7 +50,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEmbeddedFont(
     FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs, const std::string &inFontFile3SubType,
     const std::string &inSubsetFontName, ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID)
 {
-    return WriteEmbeddedFont(inFontInfo, inSubsetGlyphIDs, inFontFile3SubType, inSubsetFontName, inObjectsContext, NULL,
+    return WriteEmbeddedFont(inFontInfo, inSubsetGlyphIDs, inFontFile3SubType, inSubsetFontName, inObjectsContext, nullptr,
                              outEmbeddedFontObjectID);
 }
 
@@ -782,7 +782,7 @@ void CFFEmbeddedFontWriter::DetermineFDArrayIndexes(const UIntVector &inSubsetGl
         outNewFontDictsIndexes.insert(FontDictInfoToByteMap::value_type(*itFontInfos, i));
 }
 
-EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector &inSubsetGlyphIDs,
+EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGlyphIDs*/,
                                                 const FontDictInfoToByteMap &inNewFontDictsIndexes)
 {
     // loop the glyphs IDs, for each get their respective dictionary. put them in a set.
@@ -792,7 +792,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector &inSubsetGlyphI
 
     FontDictInfoToLongFilePositionTypePairMap privateDictionaries;
     EStatusCode status = PDFHummus::eSuccess;
-    unsigned long *offsets = NULL;
+    unsigned long *offsets = nullptr;
 
     do
     {

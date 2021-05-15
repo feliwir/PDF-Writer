@@ -27,11 +27,11 @@
 
 using namespace PDFHummus;
 
-TrueTypeTest::TrueTypeTest(void)
+TrueTypeTest::TrueTypeTest()
 {
 }
 
-TrueTypeTest::~TrueTypeTest(void)
+TrueTypeTest::~TrueTypeTest()
 {
 }
 

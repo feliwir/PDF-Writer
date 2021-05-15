@@ -35,11 +35,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-ImagesAndFormsForwardReferenceTest::ImagesAndFormsForwardReferenceTest(void)
+ImagesAndFormsForwardReferenceTest::ImagesAndFormsForwardReferenceTest()
 {
 }
 
-ImagesAndFormsForwardReferenceTest::~ImagesAndFormsForwardReferenceTest(void)
+ImagesAndFormsForwardReferenceTest::~ImagesAndFormsForwardReferenceTest()
 {
 }
 
@@ -64,7 +64,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

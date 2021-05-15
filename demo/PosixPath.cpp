@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-PosixPath::PosixPath(void)
+PosixPath::PosixPath()
 {
     mIsAbsolute = false;
 }
@@ -12,7 +12,7 @@ PosixPath::PosixPath(const string &inPath)
     SetPathFromString(inPath);
 }
 
-PosixPath::~PosixPath(void)
+PosixPath::~PosixPath()
 {
 }
 
@@ -35,7 +35,7 @@ void PosixPath::SetPathFromString(const string &inPath)
     string newComponent;
     while (searchPosition < inPath.length())
     {
-        string::size_type findResult = inPath.find("/", searchPosition);
+        string::size_type findResult = inPath.find('/', searchPosition);
         if (findResult == inPath.npos)
             newComponent = inPath.substr(searchPosition, findResult);
         else

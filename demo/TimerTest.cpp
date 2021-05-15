@@ -26,11 +26,11 @@
 
 using namespace PDFHummus;
 
-TimerTest::TimerTest(void)
+TimerTest::TimerTest()
 {
 }
 
-TimerTest::~TimerTest(void)
+TimerTest::~TimerTest()
 {
 }
 

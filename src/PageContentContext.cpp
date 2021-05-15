@@ -34,10 +34,10 @@ PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentCon
 {
     mPageOfContext = inPageOfContext;
     mObjectsContext = inObjectsContext;
-    mCurrentStream = NULL;
+    mCurrentStream = nullptr;
 }
 
-PageContentContext::~PageContentContext(void)
+PageContentContext::~PageContentContext()
 {
 }
 
@@ -80,7 +80,7 @@ EStatusCode PageContentContext::FinalizeStreamWriteAndRelease()
     mObjectsContext->EndPDFStream(mCurrentStream);
 
     delete mCurrentStream;
-    mCurrentStream = NULL;
+    mCurrentStream = nullptr;
     return PDFHummus::eSuccess;
 }
 
@@ -107,12 +107,12 @@ class PageImageWritingTask : public IPageEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    virtual ~PageImageWritingTask()
+    ~PageImageWritingTask() override
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFPage *inPageObject, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext)
+    PDFHummus::EStatusCode Write(PDFPage * /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
+                                         PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

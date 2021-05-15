@@ -32,7 +32,7 @@ PrimitiveObjectsWriter::PrimitiveObjectsWriter(IByteWriter *inStreamForWriting)
     mStreamForWriting = inStreamForWriting;
 }
 
-PrimitiveObjectsWriter::~PrimitiveObjectsWriter(void)
+PrimitiveObjectsWriter::~PrimitiveObjectsWriter()
 {
 }
 
@@ -160,7 +160,7 @@ size_t PrimitiveObjectsWriter::DetermineDoubleTrimmedLength(const std::string &i
     size_t result = inString.length();
 
     // check that we got decimal dot. if not...use original length.
-    std::size_t found = inString.find(".");
+    std::size_t found = inString.find('.');
     if (found == std::string::npos)
         return result;
 

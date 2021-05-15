@@ -31,14 +31,14 @@ Trace &Trace::DefaultTrace()
     return default_trace;
 }
 
-Trace::Trace(void)
+Trace::Trace()
 {
-    mLog = NULL;
+    mLog = nullptr;
     mLogFilePath = "Log.txt";
     mShouldLog = false;
 }
 
-Trace::~Trace(void)
+Trace::~Trace()
 {
     delete mLog;
 }
@@ -48,11 +48,11 @@ void Trace::SetLogSettings(const std::string &inLogFilePath, bool inShouldLog, b
     mShouldLog = inShouldLog;
     mPlaceUTF8Bom = inPlaceUTF8Bom;
     mLogFilePath = inLogFilePath;
-    mLogStream = NULL;
-    if (mLog != NULL)
+    mLogStream = nullptr;
+    if (mLog != nullptr)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
         // if(mShouldLog)
         //	mLog = new Log(mLogFilePath,inPlaceUTF8Bom);
     }
@@ -63,10 +63,10 @@ void Trace::SetLogSettings(IByteWriter *inLogStream, bool inShouldLog)
     mShouldLog = inShouldLog;
     mLogStream = inLogStream;
     mPlaceUTF8Bom = false;
-    if (mLog != NULL)
+    if (mLog != nullptr)
     {
         delete mLog;
-        mLog = NULL;
+        mLog = nullptr;
         if (mShouldLog)
             mLog = new Log(mLogStream);
     }
@@ -76,7 +76,7 @@ void Trace::TraceToLog(const char *inFormat, ...)
 {
     if (mShouldLog)
     {
-        if (NULL == mLog)
+        if (nullptr == mLog)
         {
             if (mLogStream)
                 mLog = new Log(mLogStream);
@@ -98,7 +98,7 @@ void Trace::TraceToLog(const char *inFormat, va_list inList)
 {
     if (mShouldLog)
     {
-        if (NULL == mLog)
+        if (nullptr == mLog)
         {
             if (mLogStream)
                 mLog = new Log(mLogStream);

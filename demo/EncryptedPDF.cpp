@@ -9,11 +9,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-EncryptedPDFTester::EncryptedPDFTester(void)
+EncryptedPDFTester::EncryptedPDFTester()
 {
 }
 
-EncryptedPDFTester::~EncryptedPDFTester(void)
+EncryptedPDFTester::~EncryptedPDFTester()
 {
 }
 
@@ -22,7 +22,7 @@ EStatusCode EncryptedPDFTester::Run(const TestConfiguration &inTestConfiguration
     EStatusCode status = PDFHummus::eSuccess;
     InputFile pdfFile;
     PDFWriter pdfWriter;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     PDFParser parser;
 
@@ -62,7 +62,7 @@ EStatusCode EncryptedPDFTester::Run(const TestConfiguration &inTestConfiguration
         }
 
         delete copyingContext;
-        copyingContext = NULL;
+        copyingContext = nullptr;
 
         status = pdfWriter.EndPDF();
         if (status != PDFHummus::eSuccess)

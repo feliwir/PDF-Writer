@@ -278,11 +278,11 @@ static const char *scGlyphNames[256] = {".notdef",
                                         "thorn",
                                         "ydieresis"};
 
-WinAnsiEncoding::WinAnsiEncoding(void)
+WinAnsiEncoding::WinAnsiEncoding()
 {
 }
 
-WinAnsiEncoding::~WinAnsiEncoding(void)
+WinAnsiEncoding::~WinAnsiEncoding()
 {
 }
 

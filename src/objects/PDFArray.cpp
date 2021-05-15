@@ -20,11 +20,11 @@
 */
 #include "PDFArray.h"
 
-PDFArray::PDFArray(void) : PDFObject(eType)
+PDFArray::PDFArray() : PDFObject(eType)
 {
 }
 
-PDFArray::~PDFArray(void)
+PDFArray::~PDFArray()
 {
     PDFObjectVector::iterator it = mValues.begin();
 
@@ -47,7 +47,7 @@ PDFObject *PDFArray::QueryObject(unsigned long i)
 {
     if (mValues.size() <= i)
     {
-        return NULL;
+        return nullptr;
     }
     else
     {

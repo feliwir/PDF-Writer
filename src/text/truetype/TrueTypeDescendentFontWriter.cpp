@@ -27,19 +27,19 @@
 
 using namespace PDFHummus;
 
-TrueTypeDescendentFontWriter::TrueTypeDescendentFontWriter(void)
+TrueTypeDescendentFontWriter::TrueTypeDescendentFontWriter()
 {
 }
 
-TrueTypeDescendentFontWriter::~TrueTypeDescendentFontWriter(void)
+TrueTypeDescendentFontWriter::~TrueTypeDescendentFontWriter()
 {
 }
 
 static UIntVector GetOrderedKeys(const UIntAndGlyphEncodingInfoVector &inMap)
 {
     UIntVector result;
-    for (UIntAndGlyphEncodingInfoVector::const_iterator it = inMap.begin(); it != inMap.end(); ++it)
-        result.push_back(it->first);
+    for (const auto & it : inMap)
+        result.push_back(it.first);
     sort(result.begin(), result.end());
     return result;
 }
@@ -87,7 +87,7 @@ void TrueTypeDescendentFontWriter::WriteAdditionalKeys(DictionaryContext *inDesc
 
 static const std::string scFontFile2 = "FontFile2";
 void TrueTypeDescendentFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,
-                                                          ObjectsContext *inObjectsContext)
+                                                          ObjectsContext * /*inObjectsContext*/)
 {
     // write font reference only if there's what to write....
     if (mEmbeddedFontFileObjectID != 0)

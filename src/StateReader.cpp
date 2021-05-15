@@ -25,11 +25,11 @@
 
 using namespace PDFHummus;
 
-StateReader::StateReader(void)
+StateReader::StateReader()
 {
 }
 
-StateReader::~StateReader(void)
+StateReader::~StateReader()
 {
 }
 

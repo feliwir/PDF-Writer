@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-FileURL::FileURL(void)
+FileURL::FileURL()
 {
     mIsAbsolute = false;
 }
@@ -12,7 +12,7 @@ FileURL::FileURL(const string &inURL)
     SetURLFromString(inURL);
 }
 
-FileURL::~FileURL(void)
+FileURL::~FileURL()
 {
 }
 
@@ -35,7 +35,7 @@ void FileURL::SetURLFromString(const string &inURL)
     string newComponent;
     while (searchPosition < inURL.length())
     {
-        string::size_type findResult = inURL.find("/", searchPosition);
+        string::size_type findResult = inURL.find('/', searchPosition);
         if (findResult == inURL.npos)
             newComponent = inURL.substr(searchPosition, findResult);
         else

@@ -26,12 +26,12 @@
 
 using namespace IOBasicTypes;
 
-InputAsciiHexDecodeStream::InputAsciiHexDecodeStream(void)
+InputAsciiHexDecodeStream::InputAsciiHexDecodeStream()
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
 }
 
-InputAsciiHexDecodeStream::~InputAsciiHexDecodeStream(void)
+InputAsciiHexDecodeStream::~InputAsciiHexDecodeStream()
 {
     if (mSourceStream)
         delete mSourceStream;

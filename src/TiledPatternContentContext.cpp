@@ -33,7 +33,7 @@ TiledPatternContentContext::TiledPatternContentContext(PDFHummus::DocumentContex
     SetPDFStreamForWrite(mObjectOfContext->GetContentStream());
 }
 
-TiledPatternContentContext::~TiledPatternContentContext(void)
+TiledPatternContentContext::~TiledPatternContentContext()
 {
 }
 
@@ -54,12 +54,12 @@ class TiledPatternImageWritingTask : public ITiledPatternEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    virtual ~TiledPatternImageWritingTask()
+    ~TiledPatternImageWritingTask() override
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFTiledPattern *inFormXObject, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext)
+    PDFHummus::EStatusCode Write(PDFTiledPattern * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
+                                         PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

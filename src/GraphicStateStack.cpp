@@ -23,12 +23,12 @@
 
 using namespace PDFHummus;
 
-GraphicStateStack::GraphicStateStack(void)
+GraphicStateStack::GraphicStateStack()
 {
     mGraphicStateStack.push_back(GraphicState());
 }
 
-GraphicStateStack::~GraphicStateStack(void)
+GraphicStateStack::~GraphicStateStack()
 {
 }
 

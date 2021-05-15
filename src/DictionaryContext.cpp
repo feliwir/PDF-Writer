@@ -36,7 +36,7 @@ DictionaryContext::DictionaryContext(ObjectsContext *inObjectsContext, size_t in
     mObjectsContext->WriteKeyword(scStartDictionary);
 }
 
-DictionaryContext::~DictionaryContext(void)
+DictionaryContext::~DictionaryContext()
 {
     if (mIndentLevel > 0)
     {

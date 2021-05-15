@@ -27,12 +27,12 @@
 using namespace IOBasicTypes;
 using namespace PDFHummus;
 
-StateWriter::StateWriter(void)
+StateWriter::StateWriter()
 {
-    mObjectsContext = NULL;
+    mObjectsContext = nullptr;
 }
 
-StateWriter::~StateWriter(void)
+StateWriter::~StateWriter()
 {
     delete mObjectsContext;
 }

@@ -21,7 +21,7 @@
 #include "UppercaseSequance.h"
 #include "Trace.h"
 
-UppercaseSequance::UppercaseSequance(void)
+UppercaseSequance::UppercaseSequance()
 {
     mSequanceString = "AAAAAA";
 }
@@ -36,7 +36,7 @@ void UppercaseSequance::Reset()
     mSequanceString = "AAAAAA";
 }
 
-UppercaseSequance::~UppercaseSequance(void)
+UppercaseSequance::~UppercaseSequance()
 {
 }
 

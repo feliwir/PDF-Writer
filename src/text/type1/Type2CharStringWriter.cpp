@@ -28,7 +28,7 @@ Type2CharStringWriter::Type2CharStringWriter(IByteWriter *inTargetStream)
     mTargetStream = inTargetStream;
 }
 
-Type2CharStringWriter::~Type2CharStringWriter(void)
+Type2CharStringWriter::~Type2CharStringWriter()
 {
 }
 

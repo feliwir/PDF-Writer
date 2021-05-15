@@ -39,11 +39,11 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
     }
     else
     {
-        mEncryptionStream = NULL;
+        mEncryptionStream = nullptr;
     }
 
     mStreamLength = 0;
-    mStreamDictionaryContextForDirectExtentStream = NULL;
+    mStreamDictionaryContextForDirectExtentStream = nullptr;
 
     if (mCompressStream)
     {
@@ -81,7 +81,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
     }
     else
     {
-        mEncryptionStream = NULL;
+        mEncryptionStream = nullptr;
     }
 
     if (mCompressStream)
@@ -101,7 +101,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
         mWriteStream = mEncryptionStream ? mEncryptionStream : &mTemporaryOutputStream;
 }
 
-PDFStream::~PDFStream(void)
+PDFStream::~PDFStream()
 {
 }
 
@@ -114,17 +114,17 @@ void PDFStream::FinalizeStreamWrite()
 {
     if (mExtender && mExtender->OverridesStreamCompression() && mCompressStream)
         mExtender->FinalizeCompressedStreamWrite(mWriteStream);
-    mWriteStream = NULL;
+    mWriteStream = nullptr;
     if (mCompressStream)
         mFlateEncodingStream.Assign(
-            NULL); // this both finished encoding any left buffers and releases ownership from mFlateEncodingStream
+            nullptr); // this both finished encoding any left buffers and releases ownership from mFlateEncodingStream
 
     if (mEncryptionStream)
     {
         // safe to delete. encryption stream is not supposed to own the underlying stream in any case. make sure
         // to delete before measuring output, as flushing may occur at this point
         delete mEncryptionStream;
-        mEncryptionStream = NULL;
+        mEncryptionStream = nullptr;
     }
 
     // different endings, depending if direct stream writing or not
@@ -135,7 +135,7 @@ void PDFStream::FinalizeStreamWrite()
     else
     {
         mStreamLength = mOutputStream->GetCurrentPosition() - mStreamStartPosition;
-        mOutputStream = NULL;
+        mOutputStream = nullptr;
     }
 }
 
@@ -169,5 +169,5 @@ void PDFStream::FlushStreamContentForDirectExtentStream()
     streamCopier.CopyToOutputStream(&inputStreamForWrite);
 
     mTemporaryStream.str();
-    mOutputStream = NULL;
+    mOutputStream = nullptr;
 }

@@ -79,7 +79,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
             page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-            if (NULL == contentContext)
+            if (nullptr == contentContext)
             {
                 status = PDFHummus::eFailure;
                 cout << "failed to create content context for page\n";

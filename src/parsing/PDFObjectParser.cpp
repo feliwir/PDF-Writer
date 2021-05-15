@@ -45,15 +45,15 @@
 
 using namespace PDFHummus;
 
-PDFObjectParser::PDFObjectParser(void)
+PDFObjectParser::PDFObjectParser()
 {
-    mParserExtender = NULL;
-    mDecryptionHelper = NULL;
+    mParserExtender = nullptr;
+    mDecryptionHelper = nullptr;
     mOwnsStream = false;
-    mStream = NULL;
+    mStream = nullptr;
 }
 
-PDFObjectParser::~PDFObjectParser(void)
+PDFObjectParser::~PDFObjectParser()
 {
     if (mOwnsStream)
         delete mStream;
@@ -90,7 +90,7 @@ static const std::string scR = "R";
 static const std::string scStream = "stream";
 PDFObject *PDFObjectParser::ParseNewObject()
 {
-    PDFObject *pdfObject = NULL;
+    PDFObject *pdfObject = nullptr;
     std::string token;
 
     do
@@ -293,7 +293,7 @@ PDFObject *PDFObjectParser::ParseLiteralString(const std::string &inToken)
         TRACE_LOG1("PDFObjectParser::ParseLiteralString, exception in parsing literal string, no closing paranthesis, "
                    "Expression: %s",
                    inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return NULL;
+        return nullptr;
     }
 
     for (; i < inToken.size() - 1; ++it, ++i)
@@ -407,13 +407,13 @@ PDFObject *PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
         TRACE_LOG1("PDFObjectParser::ParseHexadecimalString, exception in parsing hexadecimal string, no closing "
                    "angle, Expression: %s",
                    inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return NULL;
+        return nullptr;
     }
 
     return new PDFHexString(MaybeDecryptString(DecodeHexString(inToken.substr(1, inToken.size() - 2))));
 }
 
-std::string PDFObjectParser::DecodeHexString(const std::string inStringToDecode)
+std::string PDFObjectParser::DecodeHexString(const std::string& inStringToDecode)
 {
     std::stringbuf stringBuffer;
     std::string content = inStringToDecode;
@@ -525,7 +525,7 @@ PDFObject *PDFObjectParser::ParseName(const std::string &inToken)
     if (PDFHummus::eSuccess == status)
         return new PDFName(stringBuffer.str());
     else
-        return NULL;
+        return nullptr;
 }
 
 static const char scPlus = '+';
@@ -625,7 +625,7 @@ PDFObject *PDFObjectParser::ParseArray()
         TRACE_LOG1("PDFObjectParser::ParseArray, failure to parse array, didn't find end of array or failure to parse "
                    "array member object. token = %s",
                    token.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -696,7 +696,7 @@ PDFObject *PDFObjectParser::ParseDictionary()
         TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse dictionary, didn't find end of array or failure "
                    "to parse dictionary member object. token = %s",
                    token.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return NULL;
+        return nullptr;
     }
 }
 

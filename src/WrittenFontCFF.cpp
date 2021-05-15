@@ -50,7 +50,7 @@ WrittenFontCFF::WrittenFontCFF(ObjectsContext *inObjectsContext, bool inIsCID, b
     mFontWillBeEmbedded = inFontWillBeEmbedded;
 }
 
-WrittenFontCFF::~WrittenFontCFF(void)
+WrittenFontCFF::~WrittenFontCFF()
 {
 }
 
@@ -152,7 +152,7 @@ void WrittenFontCFF::RemoveFromFreeList(unsigned char inAllocatedPosition)
     }
 }
 
-unsigned char WrittenFontCFF::AllocateFromFreeList(unsigned int inGlyph)
+unsigned char WrittenFontCFF::AllocateFromFreeList(unsigned int  /*inGlyph*/)
 {
     // just allocate the first available position
     UCharAndUCharList::iterator it = mFreeList.begin();
@@ -268,14 +268,14 @@ EStatusCode WrittenFontCFF::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
 
     writtenFontDictionary->WriteKey("mAssignedPositions");
     inStateWriter->StartArray();
-    for (int i = 0; i < 256; ++i)
-        inStateWriter->WriteInteger(mAssignedPositions[i]);
+    for (unsigned int mAssignedPosition : mAssignedPositions)
+        inStateWriter->WriteInteger(mAssignedPosition);
     inStateWriter->EndArray(eTokenSeparatorEndLine);
 
     writtenFontDictionary->WriteKey("mAssignedPositionsAvailable");
     inStateWriter->StartArray();
-    for (int i = 0; i < 256; ++i)
-        inStateWriter->WriteBoolean(mAssignedPositionsAvailable[i]);
+    for (bool i : mAssignedPositionsAvailable)
+        inStateWriter->WriteBoolean(i);
     inStateWriter->EndArray(eTokenSeparatorEndLine);
 
     writtenFontDictionary->WriteKey("mIsCID");

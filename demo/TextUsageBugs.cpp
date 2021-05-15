@@ -30,11 +30,11 @@
 
 using namespace PDFHummus;
 
-TextUsageBugs::TextUsageBugs(void)
+TextUsageBugs::TextUsageBugs()
 {
 }
 
-TextUsageBugs::~TextUsageBugs(void)
+TextUsageBugs::~TextUsageBugs()
 {
 }
 
@@ -163,7 +163,7 @@ EStatusCode TextUsageBugs::RunCNRSTest(const TestConfiguration &inTestConfigurat
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -250,7 +250,7 @@ EStatusCode TextUsageBugs::RunCNRS2SampleTest(const TestConfiguration &inTestCon
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -2365,7 +2365,7 @@ EStatusCode TextUsageBugs::RunCNRS2Test(const TestConfiguration &inTestConfigura
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

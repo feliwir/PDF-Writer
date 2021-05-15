@@ -26,7 +26,7 @@
 
 using namespace IOBasicTypes;
 
-PDFTextString::PDFTextString(void)
+PDFTextString::PDFTextString()
 {
 }
 
@@ -35,7 +35,7 @@ PDFTextString::PDFTextString(const std::string &inString)
     mTextString = inString;
 }
 
-PDFTextString::~PDFTextString(void)
+PDFTextString::~PDFTextString()
 {
 }
 

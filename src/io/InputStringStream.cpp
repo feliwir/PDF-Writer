@@ -34,7 +34,7 @@ InputStringStream::InputStringStream(const string &inString)
     mCurrentPosition = mStartPosition;
 }
 
-InputStringStream::~InputStringStream(void)
+InputStringStream::~InputStringStream()
 {
 }
 

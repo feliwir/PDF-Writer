@@ -29,19 +29,19 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFObjectCastTest::PDFObjectCastTest(void)
+PDFObjectCastTest::PDFObjectCastTest()
 {
 }
 
-PDFObjectCastTest::~PDFObjectCastTest(void)
+PDFObjectCastTest::~PDFObjectCastTest()
 {
 }
 
-EStatusCode PDFObjectCastTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode PDFObjectCastTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    PDFObjectCastPtr<PDFName> aNonName1(NULL);
+    PDFObjectCastPtr<PDFName> aNonName1(nullptr);
     if (!(!aNonName1))
     {
         cout << "Casting null to PDFName should provide NULL. fail\n";

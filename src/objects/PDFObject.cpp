@@ -39,7 +39,7 @@ PDFObject::PDFObject(int inType)
     mType = (EPDFObjectType)inType;
 }
 
-PDFObject::~PDFObject(void)
+PDFObject::~PDFObject()
 {
     StringToIDeletable::iterator it = mMetadata.begin();
     for (; it != mMetadata.end(); ++it)
@@ -67,7 +67,7 @@ IDeletable *PDFObject::GetMetadata(const std::string &inKey)
     StringToIDeletable::iterator it = mMetadata.find(inKey);
 
     if (it == mMetadata.end())
-        return NULL;
+        return nullptr;
     else
         return it->second;
 }
@@ -77,7 +77,7 @@ IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
     StringToIDeletable::iterator it = mMetadata.find(inKey);
 
     if (it == mMetadata.end())
-        return NULL;
+        return nullptr;
     else
     {
         IDeletable *result = it->second;

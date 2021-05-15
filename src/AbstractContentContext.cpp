@@ -232,7 +232,7 @@ AbstractContentContext::AbstractContentContext(PDFHummus::DocumentContext *inDoc
     mDocumentContext = inDocumentContext;
 }
 
-AbstractContentContext::~AbstractContentContext(void)
+AbstractContentContext::~AbstractContentContext()
 {
 }
 
@@ -985,11 +985,11 @@ class TjCommand : public ITextCommand
         mContext = inContext;
     }
 
-    virtual void WriteHexStringCommand(const std::string &inStringToWrite)
+    void WriteHexStringCommand(const std::string &inStringToWrite) override
     {
         mContext->TjHexLow(inStringToWrite);
     }
-    virtual void WriteLiteralStringCommand(const std::string &inStringToWrite)
+    void WriteLiteralStringCommand(const std::string &inStringToWrite) override
     {
         mContext->TjLow(inStringToWrite);
     }
@@ -1012,11 +1012,11 @@ class QuoteCommand : public ITextCommand
         mContext = inContext;
     }
 
-    virtual void WriteHexStringCommand(const std::string &inStringToWrite)
+    void WriteHexStringCommand(const std::string &inStringToWrite) override
     {
         mContext->QuoteHexLow(inStringToWrite);
     }
-    virtual void WriteLiteralStringCommand(const std::string &inStringToWrite)
+    void WriteLiteralStringCommand(const std::string &inStringToWrite) override
     {
         mContext->QuoteLow(inStringToWrite);
     }
@@ -1041,11 +1041,11 @@ class DoubleQuoteCommand : public ITextCommand
         mCharacterSpacing = inCharacterSpacing;
     }
 
-    virtual void WriteHexStringCommand(const std::string &inStringToWrite)
+    void WriteHexStringCommand(const std::string &inStringToWrite) override
     {
         mContext->DoubleQuoteHexLow(mWordSpacing, mCharacterSpacing, inStringToWrite);
     }
-    virtual void WriteLiteralStringCommand(const std::string &inStringToWrite)
+    void WriteLiteralStringCommand(const std::string &inStringToWrite) override
     {
         mContext->DoubleQuoteLow(mWordSpacing, mCharacterSpacing, inStringToWrite);
     }

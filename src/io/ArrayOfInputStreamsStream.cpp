@@ -30,11 +30,11 @@ ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(PDFArray *inArrayOfStreams,
 {
     mArray = inArrayOfStreams;
     mParser = inParser;
-    mCurrentStream = NULL;
+    mCurrentStream = nullptr;
     mCurrentIndex = 0;
 }
 
-ArrayOfInputStreamsStream::~ArrayOfInputStreamsStream(void)
+ArrayOfInputStreamsStream::~ArrayOfInputStreamsStream()
 {
     delete mCurrentStream;
 }
@@ -51,7 +51,7 @@ IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
         ++mCurrentIndex;
     }
     delete mCurrentStream;
-    mCurrentStream = NULL;
+    mCurrentStream = nullptr;
 
     // get next stream in array
     PDFObjectCastPtr<PDFStreamInput> aStream;

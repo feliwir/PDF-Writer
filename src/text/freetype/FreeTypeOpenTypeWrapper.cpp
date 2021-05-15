@@ -36,7 +36,7 @@ FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
     else
     {
         TRACE_LOG("FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper, Warning, Failed to retrieve postscript table");
-        mPostScriptTable = NULL;
+        mPostScriptTable = nullptr;
     }
 
     tableInfo = FT_Get_Sfnt_Table(inFace, ft_sfnt_os2);
@@ -46,7 +46,7 @@ FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
     }
     else
     {
-        mOS2Table = NULL;
+        mOS2Table = nullptr;
     }
 
     if (!mOS2Table) // don't need the pclt table if i have OS2 (OS2 FTW!!!1)
@@ -58,16 +58,16 @@ FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
         }
         else
         {
-            mPCLTTable = NULL;
+            mPCLTTable = nullptr;
         }
     }
     else
-        mPCLTTable = NULL;
+        mPCLTTable = nullptr;
 
     mFace = inFace;
 }
 
-FreeTypeOpenTypeWrapper::~FreeTypeOpenTypeWrapper(void)
+FreeTypeOpenTypeWrapper::~FreeTypeOpenTypeWrapper()
 {
 }
 
@@ -239,13 +239,13 @@ bool FreeTypeOpenTypeWrapper::HasPrivateEncoding()
     return false;
 }
 
-unsigned int FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long inChar)
+unsigned int FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long  /*inChar*/)
 {
     // emtpy implementation (always false at "GetPrivateEncoding")
     return 0;
 }
 
-std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(unsigned int inGlyphIndex)
+std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(unsigned int  /*inGlyphIndex*/)
 {
     // empty implementation (always false at "GetPrivateEncoding);
     return ".notdef";

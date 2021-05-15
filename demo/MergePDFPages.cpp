@@ -31,11 +31,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-MergePDFPages::MergePDFPages(void)
+MergePDFPages::MergePDFPages()
 {
 }
 
-MergePDFPages::~MergePDFPages(void)
+MergePDFPages::~MergePDFPages()
 {
 }
 
@@ -414,10 +414,10 @@ class MyPDFMergingHandler : public DocumentContextExtenderAdapter
         mPageIndex = 0;
     }
 
-    EStatusCode OnAfterMergePageFromPage(PDFPage *inTargetPage, PDFDictionary *inPageObjectDictionary,
-                                         ObjectsContext *inPDFWriterObjectContext,
-                                         DocumentContext *inPDFWriterDocumentContext,
-                                         PDFDocumentHandler *inPDFDocumentHandler)
+    EStatusCode OnAfterMergePageFromPage(PDFPage * /*inTargetPage*/, PDFDictionary * /*inPageObjectDictionary*/,
+                                         ObjectsContext * /*inPDFWriterObjectContext*/,
+                                         DocumentContext * /*inPDFWriterDocumentContext*/,
+                                         PDFDocumentHandler * /*inPDFDocumentHandler*/) override
     {
         // implementing the after merge for page event to include the required code between the two pages
 

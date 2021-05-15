@@ -31,11 +31,11 @@
 
 using namespace PDFHummus;
 
-DescendentFontWriter::DescendentFontWriter(void)
+DescendentFontWriter::DescendentFontWriter()
 {
 }
 
-DescendentFontWriter::~DescendentFontWriter(void)
+DescendentFontWriter::~DescendentFontWriter()
 {
 }
 
@@ -249,8 +249,8 @@ void DescendentFontWriter::WriteCIDSystemInfo(ObjectIDType inCIDSystemInfoObject
 static const std::string scCIDSet = "CIDSet";
 
 void DescendentFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
-                                        FreeTypeFaceWrapper *inFontInfo,
-                                        const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
+                                        FreeTypeFaceWrapper * /*inFontInfo*/,
+                                        const UIntAndGlyphEncodingInfoVector & /*inEncodedGlyphs*/)
 {
     // use this hook to Write the CIDSet key, and later write the CIDSet stream.
     // ignoring input values for now, assuming they are the same as the ones

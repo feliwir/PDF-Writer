@@ -37,13 +37,13 @@
 
 using namespace PDFHummus;
 
-JPEGImageHandler::JPEGImageHandler(void)
+JPEGImageHandler::JPEGImageHandler()
 {
-    mObjectsContext = NULL;
-    mDocumentContext = NULL;
+    mObjectsContext = nullptr;
+    mDocumentContext = nullptr;
 }
 
-JPEGImageHandler::~JPEGImageHandler(void)
+JPEGImageHandler::~JPEGImageHandler()
 {
 }
 
@@ -62,7 +62,7 @@ void JPEGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext,
 PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath,
                                                                  ObjectIDType inImageXObjectID)
 {
-    PDFImageXObject *imageXObject = NULL;
+    PDFImageXObject *imageXObject = nullptr;
 
     do
     {
@@ -108,7 +108,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
         TRACE_LOG1(
             "JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unable to open JPG file for reading, %s",
             inJPGFilePath.c_str());
-        return NULL;
+        return nullptr;
     }
 
     PDFImageXObject *imageXObject =
@@ -123,7 +123,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     IByteReaderWithPosition *inJPGImageStream, ObjectIDType inImageXObjectID,
     const JPEGImageInformation &inJPGImageInformation)
 {
-    PDFImageXObject *imageXObject = NULL;
+    PDFImageXObject *imageXObject = nullptr;
     EStatusCode status = PDFHummus::eSuccess;
 
     do
@@ -320,8 +320,8 @@ void JPEGImageHandler::RemoveDocumentContextExtender(IDocumentContextExtender *i
 PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath,
                                                                ObjectIDType inFormXObjectID)
 {
-    PDFImageXObject *imageXObject = NULL;
-    PDFFormXObject *imageFormXObject = NULL;
+    PDFImageXObject *imageXObject = nullptr;
+    PDFFormXObject *imageFormXObject = nullptr;
 
     do
     {
@@ -371,7 +371,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
 PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
     PDFImageXObject *inImageXObject, ObjectIDType inFormXObjectID, const JPEGImageInformation &inJPGImageInformation)
 {
-    PDFFormXObject *formXObject = NULL;
+    PDFFormXObject *formXObject = nullptr;
     do
     {
         if (!mObjectsContext)
@@ -398,7 +398,7 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
             TRACE_LOG("JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
                       "form XObject for image");
             delete formXObject;
-            formXObject = NULL;
+            formXObject = nullptr;
             break;
         }
 
@@ -487,7 +487,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::stri
     {
         TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGFile. Unexpected Error, mObjectsContext not initialized "
                   "with an objects context");
-        return NULL;
+        return nullptr;
     }
 
     return CreateImageXObjectFromJPGFile(inJPGFilePath,
@@ -500,7 +500,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
     {
         TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGFile. Unexpected Error, mObjectsContext not initialized "
                   "with an objects context");
-        return NULL;
+        return nullptr;
     }
 
     return CreateFormXObjectFromJPGFile(inJPGFilePath,
@@ -513,7 +513,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
     {
         TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mObjectsContext not "
                   "initialized with an objects context");
-        return NULL;
+        return nullptr;
     }
 
     return CreateImageXObjectFromJPGStream(inJPGStream,
@@ -523,7 +523,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
 PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
                                                                    ObjectIDType inImageXObjectID)
 {
-    PDFImageXObject *imageXObject = NULL;
+    PDFImageXObject *imageXObject = nullptr;
 
     do
     {
@@ -562,7 +562,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWith
     {
         TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGStream. Unexpected Error, mObjectsContext not initialized "
                   "with an objects context");
-        return NULL;
+        return nullptr;
     }
 
     return CreateFormXObjectFromJPGStream(inJPGStream,
@@ -572,8 +572,8 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWith
 PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
                                                                  ObjectIDType inFormXObjectID)
 {
-    PDFFormXObject *imageFormXObject = NULL;
-    PDFImageXObject *imageXObject = NULL;
+    PDFFormXObject *imageFormXObject = nullptr;
+    PDFImageXObject *imageXObject = nullptr;
 
     do
     {

@@ -33,7 +33,7 @@ XObjectContentContext::XObjectContentContext(PDFHummus::DocumentContext *inDocum
     SetPDFStreamForWrite(inFormXObject->GetContentStream());
 }
 
-XObjectContentContext::~XObjectContentContext(void)
+XObjectContentContext::~XObjectContentContext()
 {
 }
 
@@ -54,12 +54,12 @@ class FormImageWritingTask : public IFormEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    virtual ~FormImageWritingTask()
+    ~FormImageWritingTask() override
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFFormXObject *inFormXObject, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext)
+    PDFHummus::EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
+                                         PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

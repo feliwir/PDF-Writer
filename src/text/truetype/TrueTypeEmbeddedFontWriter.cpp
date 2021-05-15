@@ -34,11 +34,11 @@
 
 using namespace PDFHummus;
 
-TrueTypeEmbeddedFontWriter::TrueTypeEmbeddedFontWriter(void) : mFontFileReaderStream(NULL)
+TrueTypeEmbeddedFontWriter::TrueTypeEmbeddedFontWriter() : mFontFileReaderStream(nullptr)
 {
 }
 
-TrueTypeEmbeddedFontWriter::~TrueTypeEmbeddedFontWriter(void)
+TrueTypeEmbeddedFontWriter::~TrueTypeEmbeddedFontWriter()
 {
 }
 
@@ -102,7 +102,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
     const UIntVector &inSubsetGlyphIDs, bool &outNotEmbedded, MyStringBuf &outFontProgram)
 {
     EStatusCode status;
-    unsigned long *locaTable = NULL;
+    unsigned long *locaTable = nullptr;
 
     do
     {
@@ -313,7 +313,7 @@ bool TrueTypeEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UInt
     }
 
     glyfTableEntry = mTrueTypeInput.mGlyf[inGlyphID];
-    if (glyfTableEntry != NULL && glyfTableEntry->mComponentGlyphs.size() > 0)
+    if (glyfTableEntry != nullptr && glyfTableEntry->mComponentGlyphs.size() > 0)
     {
         isComposite = true;
         for (itComponentGlyphs = glyfTableEntry->mComponentGlyphs.begin();
@@ -612,7 +612,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteGlyf(const UIntVector &inSubsetGlyp
 
         for (unsigned short i = previousGlyphIndexEnd + 1; i <= glyphIndex; ++i)
             inLocaTable[i] = inLocaTable[previousGlyphIndexEnd];
-        if (mTrueTypeInput.mGlyf[glyphIndex] != NULL)
+        if (mTrueTypeInput.mGlyf[glyphIndex] != nullptr)
         {
             mTrueTypeFile.GetInputStream()->SetPosition(tableEntry->Offset + mTrueTypeInput.mLoca[glyphIndex]);
             streamCopier.CopyToOutputStream(mTrueTypeFile.GetInputStream(),

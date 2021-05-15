@@ -28,15 +28,15 @@
 
 using namespace IOBasicTypes;
 
-OutputFlateDecodeStream::OutputFlateDecodeStream(void)
+OutputFlateDecodeStream::OutputFlateDecodeStream()
 {
     mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
     mZLibState = new z_stream;
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mCurrentlyEncoding = false;
 }
 
-OutputFlateDecodeStream::~OutputFlateDecodeStream(void)
+OutputFlateDecodeStream::~OutputFlateDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -57,7 +57,7 @@ OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter *inTargetWriter, bo
 {
     mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
     mZLibState = new z_stream;
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mCurrentlyEncoding = false;
 
     Assign(inTargetWriter, inInitiallyOn);

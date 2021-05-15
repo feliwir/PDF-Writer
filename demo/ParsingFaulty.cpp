@@ -79,7 +79,7 @@ EStatusCode openPDFForNullPageTest(const string &path)
     }
 
     RefCountPtr<PDFDictionary> page = parser.ParsePage(33);
-    if (page != NULL)
+    if (page != nullptr)
     {
         status = eFailure;
         std::cout << "Page should be null at 33" << std::endl;

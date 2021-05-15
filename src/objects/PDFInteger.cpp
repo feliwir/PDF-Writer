@@ -25,7 +25,7 @@ PDFInteger::PDFInteger(long long inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFInteger::~PDFInteger(void)
+PDFInteger::~PDFInteger()
 {
 }
 

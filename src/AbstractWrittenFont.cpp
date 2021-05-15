@@ -37,11 +37,11 @@ using namespace PDFHummus;
 AbstractWrittenFont::AbstractWrittenFont(ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;
-    mCIDRepresentation = NULL;
-    mANSIRepresentation = NULL;
+    mCIDRepresentation = nullptr;
+    mANSIRepresentation = nullptr;
 }
 
-AbstractWrittenFont::~AbstractWrittenFont(void)
+AbstractWrittenFont::~AbstractWrittenFont()
 {
     delete mCIDRepresentation;
     delete mANSIRepresentation;
@@ -430,7 +430,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
         ReadWrittenFontState(inStateReader, cidRepresentationState.GetPtr(), mCIDRepresentation);
     }
     else
-        mCIDRepresentation = NULL;
+        mCIDRepresentation = nullptr;
 
     if (ansiRepresentationState.GetPtr())
     {
@@ -438,7 +438,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
         ReadWrittenFontState(inStateReader, ansiRepresentationState.GetPtr(), mANSIRepresentation);
     }
     else
-        mANSIRepresentation = NULL;
+        mANSIRepresentation = nullptr;
     return PDFHummus::eSuccess;
 }
 

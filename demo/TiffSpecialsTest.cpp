@@ -33,11 +33,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-TiffSpecialsTest::TiffSpecialsTest(void)
+TiffSpecialsTest::TiffSpecialsTest()
 {
 }
 
-TiffSpecialsTest::~TiffSpecialsTest(void)
+TiffSpecialsTest::~TiffSpecialsTest()
 {
 }
 
@@ -109,7 +109,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -176,7 +176,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -290,7 +290,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

@@ -30,16 +30,16 @@
 
 using namespace IOBasicTypes;
 
-InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(void)
+InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream()
 {
-    mSourceStream = NULL;
-    mBuffer = NULL;
-    mIndex = NULL;
+    mSourceStream = nullptr;
+    mBuffer = nullptr;
+    mIndex = nullptr;
     mBufferSize = 0;
-    mUpValues = NULL;
+    mUpValues = nullptr;
 }
 
-InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream(void)
+InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream()
 {
     delete[] mBuffer;
     delete[] mUpValues;
@@ -51,11 +51,11 @@ InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSo
                                                                IOBasicTypes::Byte inBitsPerComponent,
                                                                IOBasicTypes::LongBufferSizeType inColumns)
 {
-    mSourceStream = NULL;
-    mBuffer = NULL;
-    mIndex = NULL;
+    mSourceStream = nullptr;
+    mBuffer = nullptr;
+    mIndex = nullptr;
     mBufferSize = 0;
-    mUpValues = NULL;
+    mUpValues = nullptr;
 
     Assign(inSourceStream, inColors, inBitsPerComponent, inColumns);
 }

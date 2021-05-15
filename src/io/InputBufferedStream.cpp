@@ -22,12 +22,12 @@
 #include <algorithm>
 #include <memory.h>
 
-InputBufferedStream::InputBufferedStream(void)
+InputBufferedStream::InputBufferedStream()
 {
-    Initiate(NULL, DEFAULT_BUFFER_SIZE);
+    Initiate(nullptr, DEFAULT_BUFFER_SIZE);
 }
 
-InputBufferedStream::~InputBufferedStream(void)
+InputBufferedStream::~InputBufferedStream()
 {
     delete[] mBuffer;
     delete mSourceStream;
@@ -35,7 +35,7 @@ InputBufferedStream::~InputBufferedStream(void)
 
 InputBufferedStream::InputBufferedStream(IOBasicTypes::LongBufferSizeType inBufferSize)
 {
-    Initiate(NULL, inBufferSize);
+    Initiate(nullptr, inBufferSize);
 }
 
 InputBufferedStream::InputBufferedStream(IByteReaderWithPosition *inSourceReader,

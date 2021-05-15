@@ -34,7 +34,7 @@
 
 using namespace PDFHummus;
 
-IndirectObjectsReferenceRegistry::IndirectObjectsReferenceRegistry(void)
+IndirectObjectsReferenceRegistry::IndirectObjectsReferenceRegistry()
 {
     SetupInitialFreeObject();
 }
@@ -51,7 +51,7 @@ void IndirectObjectsReferenceRegistry::SetupInitialFreeObject()
     mObjectsWritesRegistry.push_back(singleFreeObjectInformation);
 }
 
-IndirectObjectsReferenceRegistry::~IndirectObjectsReferenceRegistry(void)
+IndirectObjectsReferenceRegistry::~IndirectObjectsReferenceRegistry()
 {
 }
 

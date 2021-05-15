@@ -29,11 +29,11 @@
 
 using namespace PDFHummus;
 
-Type1ToType2Converter::Type1ToType2Converter(void)
+Type1ToType2Converter::Type1ToType2Converter()
 {
 }
 
-Type1ToType2Converter::~Type1ToType2Converter(void)
+Type1ToType2Converter::~Type1ToType2Converter()
 {
 }
 

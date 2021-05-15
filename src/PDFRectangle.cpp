@@ -20,7 +20,7 @@
 */
 #include "PDFRectangle.h"
 
-PDFRectangle::PDFRectangle(void)
+PDFRectangle::PDFRectangle()
 {
     LowerLeftX = 0;
     LowerLeftY = 0;
@@ -28,7 +28,7 @@ PDFRectangle::PDFRectangle(void)
     UpperRightY = 0;
 }
 
-PDFRectangle::~PDFRectangle(void)
+PDFRectangle::~PDFRectangle()
 {
 }
 

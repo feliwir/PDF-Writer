@@ -27,7 +27,7 @@ InputCharStringDecodeStream::InputCharStringDecodeStream(IByteReader *inReadFrom
     Assign(inReadFrom, inLenIV);
 }
 
-InputCharStringDecodeStream::~InputCharStringDecodeStream(void)
+InputCharStringDecodeStream::~InputCharStringDecodeStream()
 {
 }
 

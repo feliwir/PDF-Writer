@@ -52,16 +52,16 @@
 
 using namespace PDFHummus;
 
-PDFDocumentHandler::PDFDocumentHandler(void)
+PDFDocumentHandler::PDFDocumentHandler()
 {
-    mObjectsContext = NULL;
-    mDocumentContext = NULL;
-    mWrittenPage = NULL;
-    mParser = NULL;
+    mObjectsContext = nullptr;
+    mDocumentContext = nullptr;
+    mWrittenPage = nullptr;
+    mParser = nullptr;
     mParserOwned = false;
 }
 
-PDFDocumentHandler::~PDFDocumentHandler(void)
+PDFDocumentHandler::~PDFDocumentHandler()
 {
     if (mParserOwned)
         delete mParser;
@@ -90,7 +90,7 @@ class PageEmbedInFormWithCropBox : public IPageEmbedInFormCommand
     }
 
     PDFFormXObject *CreatePDFFormXObjectForPage(PDFDocumentHandler *inDocumentHandler, unsigned long i,
-                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId)
+                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId) override
     {
         return inDocumentHandler->CreatePDFFormXObjectForPage(i, mCropBox, inTransformationMatrix, inPredefinedFormId);
     }
@@ -108,7 +108,7 @@ class PageEmbedInFormWithPageBox : public IPageEmbedInFormCommand
     }
 
     PDFFormXObject *CreatePDFFormXObjectForPage(PDFDocumentHandler *inDocumentHandler, unsigned long i,
-                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId)
+                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId) override
     {
         return inDocumentHandler->CreatePDFFormXObjectForPage(i, mPageBoxToUseAsFormBox, inTransformationMatrix,
                                                               inPredefinedFormId);
@@ -269,7 +269,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
         TRACE_LOG1("PDFDocumentHandler::CreatePDFFormXObjectForPage, unhexpected exception, page index does not denote "
                    "a page object. page index = %ld",
                    inPageIndex);
-        return NULL;
+        return nullptr;
     }
     else
         return CreatePDFFormXObjectForPage(pageObject.GetPtr(),
@@ -282,7 +282,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
                                                                 const double *inTransformationMatrix,
                                                                 ObjectIDType inPredefinedFormId)
 {
-    PDFFormXObject *result = NULL;
+    PDFFormXObject *result = nullptr;
     EStatusCode status = PDFHummus::eSuccess;
 
     IDocumentContextExtenderSet::iterator it = mExtenders.begin();
@@ -294,7 +294,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
                       "before writing page.");
     }
     if (status != PDFHummus::eSuccess)
-        return NULL;
+        return nullptr;
 
     do
     {
@@ -311,7 +311,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
             PDFHummus::eSuccess)
         {
             delete result;
-            result = NULL;
+            result = nullptr;
             break;
         }
 
@@ -324,13 +324,13 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
         if (mDocumentContext->EndFormXObjectNoRelease(result) != PDFHummus::eSuccess)
         {
             delete result;
-            result = NULL;
+            result = nullptr;
             break;
         }
 
     } while (false);
 
-    mWrittenPage = NULL;
+    mWrittenPage = nullptr;
     mDocumentContext->RemoveDocumentContextExtender(this);
 
     if (result)
@@ -346,7 +346,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
         if (status != PDFHummus::eSuccess)
         {
             delete result;
-            return NULL;
+            return nullptr;
         }
         else
             return result;
@@ -398,7 +398,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
         TRACE_LOG1("PDFDocumentHandler::CreatePDFFormXObjectForPage, unhexpected exception, page index does not denote "
                    "a page object. page index = %ld",
                    inPageIndex);
-        return NULL;
+        return nullptr;
     }
     else
         return CreatePDFFormXObjectForPage(pageObject.GetPtr(), inCropBox, inTransformationMatrix, inPredefinedFormId);
@@ -628,10 +628,10 @@ EStatusCode PDFDocumentHandler::CopyInDirectObject(ObjectIDType inSourceObjectID
         return status;
 }
 
-EStatusCode PDFDocumentHandler::OnResourcesWrite(ResourcesDictionary *inResources,
+EStatusCode PDFDocumentHandler::OnResourcesWrite(ResourcesDictionary * /*inResources*/,
                                                  DictionaryContext *inPageResourcesDictionaryContext,
-                                                 ObjectsContext *inPDFWriterObjectContext,
-                                                 DocumentContext *inPDFWriterDocumentContext)
+                                                 ObjectsContext * /*inPDFWriterObjectContext*/,
+                                                 DocumentContext * /*inPDFWriterDocumentContext*/)
 {
     // Writing resources dictionary. simply loop internal elements and copy. nicely enough, i can use read methods,
     // trusting that no new objects need be written
@@ -825,7 +825,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
 
     } while (false);
 
-    mWrittenPage = NULL;
+    mWrittenPage = nullptr;
     mDocumentContext->RemoveDocumentContextExtender(this);
 
     if (result.first == PDFHummus::eSuccess)
@@ -1188,7 +1188,7 @@ MapIterator<ObjectIDTypeToObjectIDTypeMap> PDFDocumentHandler::GetCopiedObjectsM
 void PDFDocumentHandler::StopCopyingContext()
 {
     mPDFFile.CloseFile();
-    mPDFStream = NULL;
+    mPDFStream = nullptr;
     // clearing the source to target mapping here. note that copying enjoyed sharing of objects between them
     mSourceToTarget.clear();
     if (mParserOwned)
@@ -1198,7 +1198,7 @@ void PDFDocumentHandler::StopCopyingContext()
             mParser->ResetParser();
             delete mParser;
         }
-        mParser = NULL;
+        mParser = nullptr;
         mParserOwned = false;
     }
 }
@@ -1770,7 +1770,7 @@ EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTa
     if (PDFHummus::eSuccess == status)
         status = traits.CopyToOutputStream(streamReader);
 
-    skipper.Assign(NULL);
+    skipper.Assign(nullptr);
     delete streamReader;
     return status;
 }
@@ -2035,7 +2035,7 @@ EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput *inStream, IObj
     MapIterator<PDFNameToPDFObjectMap> it(streamDictionary->GetIterator());
     EStatusCode status = PDFHummus::eSuccess;
     bool readingDecrypted = false;
-    IByteReader *streamReader = NULL;
+    IByteReader *streamReader = nullptr;
 
     /*
      *	To support unencrypted pdf output, mostly used for debugging, (and maybe i should put a general flag there),
@@ -2044,7 +2044,7 @@ EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput *inStream, IObj
     if (!mObjectsContext->IsCompressingStreams())
     {
         streamReader = mParser->StartReadingFromStream(inStream);
-        readingDecrypted = streamReader != NULL;
+        readingDecrypted = streamReader != nullptr;
     }
     if (!readingDecrypted)
     {
@@ -2158,11 +2158,11 @@ class ExtGStateCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "ExtGState";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddExtGStateMapping(inResourceToRegister);
     }
@@ -2179,11 +2179,11 @@ class ColorSpaceCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "ColorSpace";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddColorSpaceMapping(inResourceToRegister);
     }
@@ -2200,11 +2200,11 @@ class PatternCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "Pattern";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddPatternMapping(inResourceToRegister);
     }
@@ -2221,11 +2221,11 @@ class ShadingCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "Shading";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddShadingMapping(inResourceToRegister);
     }
@@ -2242,11 +2242,11 @@ class XObjectCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "XObject";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddXObjectMapping(inResourceToRegister);
     }
@@ -2263,11 +2263,11 @@ class FontCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "Font";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddFontMapping(inResourceToRegister);
     }
@@ -2284,11 +2284,11 @@ class PropertyCategoryServices : public ICategoryServicesCommand
     {
     }
 
-    virtual std::string GetResourcesCategoryName()
+    std::string GetResourcesCategoryName() override
     {
         return "Properties";
     }
-    virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister)
+    std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) override
     {
         return mTargetRersourcesDictionary.AddPropertyMapping(inResourceToRegister);
     }
@@ -2379,8 +2379,8 @@ class ResourceCopierTask : public IResourceWritingTask
         mResourceName = inResourceName;
     }
 
-    virtual EStatusCode Write(DictionaryContext *inResoruceCategoryContext, ObjectsContext *inObjectsContext,
-                              PDFHummus::DocumentContext *inDocumentContext)
+    EStatusCode Write(DictionaryContext *inResoruceCategoryContext, ObjectsContext * /*inObjectsContext*/,
+                              PDFHummus::DocumentContext * /*inDocumentContext*/) override
     {
         // write key
         inResoruceCategoryContext->WriteKey(mResourceName);
@@ -2521,12 +2521,12 @@ class ObjectsCopyingTask : public IFormEndWritingTask
         mObjectsToWrite = inObjectsToWrite;
     }
 
-    virtual ~ObjectsCopyingTask()
+    ~ObjectsCopyingTask() override
     {
     }
 
-    virtual EStatusCode Write(PDFFormXObject *inFormXObject, ObjectsContext *inObjectsContext,
-                              PDFHummus::DocumentContext *inDocumentContext)
+    EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
+                              PDFHummus::DocumentContext * /*inDocumentContext*/) override
     {
         return mCopier->CopyNewObjectsForDirectObject(mObjectsToWrite);
     }
@@ -2551,10 +2551,10 @@ PDFObject *PDFDocumentHandler::FindPageResources(PDFParser *inParser, PDFDiction
     else
     {
         PDFObjectCastPtr<PDFDictionary> parentDict(
-            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : NULL);
+            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
         if (!parentDict)
         {
-            return NULL;
+            return nullptr;
         }
         else
         {

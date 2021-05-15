@@ -40,17 +40,17 @@ limitations under the License.
 using namespace PDFHummus;
 using namespace std;
 
-EncryptionHelper::EncryptionHelper(void)
+EncryptionHelper::EncryptionHelper()
 {
     mIsDocumentEncrypted = false;
     mEncryptionPauseLevel = 0;
     mSupportsEncryption = true;
-    mXcryptAuthentication = NULL;
-    mXcryptStreams = NULL;
-    mXcryptStrings = NULL;
+    mXcryptAuthentication = nullptr;
+    mXcryptStreams = nullptr;
+    mXcryptStrings = nullptr;
 }
 
-EncryptionHelper::~EncryptionHelper(void)
+EncryptionHelper::~EncryptionHelper()
 {
     Release();
 }
@@ -243,7 +243,7 @@ static const string scStdCF = "StdCF";
 
 EStatusCode EncryptionHelper::Setup(bool inShouldEncrypt, double inPDFLevel, const string &inUserPassword,
                                     const string &inOwnerPassword, long long inUserProtectionOptionsFlag,
-                                    bool inEncryptMetadata, const string inFileIDPart1)
+                                    bool inEncryptMetadata, const string& inFileIDPart1)
 {
 
     if (!inShouldEncrypt)
@@ -344,11 +344,11 @@ EStatusCode EncryptionHelper::Setup(const DecryptionHelper &inDecryptionSource)
         mU = inDecryptionSource.GetU();
 
         // initialize xcryptors
-        mXcryptStreams = NULL;
+        mXcryptStreams = nullptr;
         // xcrypt to use for strings
-        mXcryptStrings = NULL;
+        mXcryptStrings = nullptr;
         // xcrypt to use for password authentication
-        mXcryptAuthentication = NULL;
+        mXcryptAuthentication = nullptr;
         StringToXCryptionCommonMap::const_iterator it = inDecryptionSource.GetXcrypts().begin();
         StringToXCryptionCommonMap::const_iterator itEnd = inDecryptionSource.GetXcrypts().end();
         for (; it != itEnd; ++it)

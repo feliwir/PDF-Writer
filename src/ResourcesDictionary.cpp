@@ -24,7 +24,7 @@
 
 typedef BoxingBaseWithRW<unsigned long> ULong;
 
-ResourcesDictionary::ResourcesDictionary(void)
+ResourcesDictionary::ResourcesDictionary()
 {
     mImageXObjectsCount = 0;
     mFormXObjectsCount = 0;
@@ -37,7 +37,7 @@ ResourcesDictionary::ResourcesDictionary(void)
     mShadingCount = 0;
 }
 
-ResourcesDictionary::~ResourcesDictionary(void)
+ResourcesDictionary::~ResourcesDictionary()
 {
 }
 

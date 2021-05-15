@@ -23,7 +23,7 @@
 
 InputByteArrayStream::InputByteArrayStream()
 {
-    mByteArray = NULL;
+    mByteArray = nullptr;
 }
 
 InputByteArrayStream::InputByteArrayStream(Byte *inByteArray, LongFilePositionType inArrayLength)
@@ -33,7 +33,7 @@ InputByteArrayStream::InputByteArrayStream(Byte *inByteArray, LongFilePositionTy
     mCurrentPosition = 0;
 }
 
-InputByteArrayStream::~InputByteArrayStream(void)
+InputByteArrayStream::~InputByteArrayStream()
 {
 }
 

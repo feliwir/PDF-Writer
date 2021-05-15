@@ -28,11 +28,11 @@
 
 using namespace PDFHummus;
 
-CFFDescendentFontWriter::CFFDescendentFontWriter(void)
+CFFDescendentFontWriter::CFFDescendentFontWriter()
 {
 }
 
-CFFDescendentFontWriter::~CFFDescendentFontWriter(void)
+CFFDescendentFontWriter::~CFFDescendentFontWriter()
 {
 }
 
@@ -79,10 +79,10 @@ EStatusCode CFFDescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID,
         // in the subset font and so their GID which MUST match the encoded char.
         // sort(encodedGlyphs.begin(), encodedGlyphs.end(), sEncodedGlypsSort);
 
-        for (UIntAndGlyphEncodingInfoVector::const_iterator it = encodedGlyphs.begin(); it != encodedGlyphs.end(); ++it)
+        for (const auto & encodedGlyph : encodedGlyphs)
         {
-            orderedGlyphs.push_back(it->first);
-            cidMapping.push_back(it->second.mEncodedCharacter);
+            orderedGlyphs.push_back(encodedGlyph.first);
+            cidMapping.push_back(encodedGlyph.second.mEncodedCharacter);
         }
         EStatusCode status =
             embeddedFontWriter.WriteEmbeddedFont(inFontInfo, orderedGlyphs, scCIDFontType0C, inFontName,
@@ -111,7 +111,7 @@ void CFFDescendentFontWriter::WriteAdditionalKeys(DictionaryContext *inDescenden
 
 static const std::string scFontFile3 = "FontFile3";
 void CFFDescendentFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,
-                                                     ObjectsContext *inObjectsContext)
+                                                     ObjectsContext * /*inObjectsContext*/)
 {
     // write font reference only if there's what to write....
     if (mEmbeddedFontFileObjectID != 0)

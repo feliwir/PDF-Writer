@@ -21,9 +21,9 @@
 #include "PDFPage.h"
 #include "Trace.h"
 
-PDFPage::PDFPage(void)
+PDFPage::PDFPage()
 {
-    mContentContext = NULL;
+    mContentContext = nullptr;
     mRotate.first = false;
     mTrimBox.first = false;
     mArtBox.first = false;
@@ -31,7 +31,7 @@ PDFPage::PDFPage(void)
     mBleedBox.first = false;
 }
 
-PDFPage::~PDFPage(void)
+PDFPage::~PDFPage()
 {
 }
 
@@ -88,7 +88,7 @@ PageContentContext *PDFPage::GetAssociatedContentContext()
 
 void PDFPage::DisassociateContentContext()
 {
-    mContentContext = NULL;
+    mContentContext = nullptr;
 }
 
 void PDFPage::AssociateContentContext(PageContentContext *inContentContext)

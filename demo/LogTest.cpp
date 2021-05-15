@@ -24,11 +24,11 @@
 
 using namespace PDFHummus;
 
-LogTest::LogTest(void)
+LogTest::LogTest()
 {
 }
 
-LogTest::~LogTest(void)
+LogTest::~LogTest()
 {
 }
 

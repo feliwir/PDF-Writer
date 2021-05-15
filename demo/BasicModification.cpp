@@ -32,7 +32,7 @@
 
 using namespace PDFHummus;
 
-BasicModification::BasicModification(void)
+BasicModification::BasicModification()
 {
 }
 
@@ -138,7 +138,7 @@ EStatusCode BasicModification::Run(const TestConfiguration &inTestConfiguration)
 }
 
 EStatusCode BasicModification::TestBasicFileModification(const TestConfiguration &inTestConfiguration,
-                                                         string inSourceFileName)
+                                                         const string& inSourceFileName)
 {
     PDFWriter pdfWriter;
     EStatusCode status = eSuccess;
@@ -163,7 +163,7 @@ EStatusCode BasicModification::TestBasicFileModification(const TestConfiguration
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -220,7 +220,7 @@ EStatusCode BasicModification::TestBasicFileModification(const TestConfiguration
 }
 
 EStatusCode BasicModification::TestInPlaceFileModification(const TestConfiguration &inTestConfiguration,
-                                                           string inSourceFileName)
+                                                           const string& inSourceFileName)
 {
     PDFWriter pdfWriter;
     EStatusCode status = eSuccess;
@@ -279,7 +279,7 @@ EStatusCode BasicModification::TestInPlaceFileModification(const TestConfigurati
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

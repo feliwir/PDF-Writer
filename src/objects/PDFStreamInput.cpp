@@ -29,7 +29,7 @@ PDFStreamInput::PDFStreamInput(PDFDictionary *inStreamDictionary, LongFilePositi
     mStreamContentStart = inStreamContentStart;
 }
 
-PDFStreamInput::~PDFStreamInput(void)
+PDFStreamInput::~PDFStreamInput()
 {
     mDictionary->Release();
 }

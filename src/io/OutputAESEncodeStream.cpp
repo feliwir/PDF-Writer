@@ -25,14 +25,14 @@ limitations under the License.
 
 using namespace IOBasicTypes;
 
-OutputAESEncodeStream::OutputAESEncodeStream(void)
+OutputAESEncodeStream::OutputAESEncodeStream()
 {
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mOwnsStream = false;
     mWroteIV = false;
 }
 
-OutputAESEncodeStream::~OutputAESEncodeStream(void)
+OutputAESEncodeStream::~OutputAESEncodeStream()
 {
     Flush();
     if (mEncryptionKey)

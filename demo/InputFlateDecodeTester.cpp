@@ -30,11 +30,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-InputFlateDecodeTester::InputFlateDecodeTester(void)
+InputFlateDecodeTester::InputFlateDecodeTester()
 {
 }
 
-InputFlateDecodeTester::~InputFlateDecodeTester(void)
+InputFlateDecodeTester::~InputFlateDecodeTester()
 {
 }
 
@@ -49,7 +49,7 @@ EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfigura
     outputFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "source.txt"));
     outputEncoder.Assign(outputFile.GetOutputStream());
     outputEncoder.Write((IOBasicTypes::Byte *)aString.c_str(), aString.size());
-    outputEncoder.Assign(NULL);
+    outputEncoder.Assign(nullptr);
     outputFile.CloseFile();
 
     InputFile inputFile;
@@ -73,7 +73,7 @@ EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfigura
         isSame = (*it) == buffer;
     }
 
-    inputDecoder.Assign(NULL);
+    inputDecoder.Assign(nullptr);
     inputFile.CloseFile();
 
     if (!isSame)

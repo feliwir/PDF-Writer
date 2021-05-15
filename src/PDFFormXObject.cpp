@@ -32,7 +32,7 @@ PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, Ob
     mContentContext = new XObjectContentContext(inDocumentContext, this);
 }
 
-PDFFormXObject::~PDFFormXObject(void)
+PDFFormXObject::~PDFFormXObject()
 {
     delete mContentStream;
     delete mContentContext;

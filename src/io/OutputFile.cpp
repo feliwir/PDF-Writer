@@ -25,13 +25,13 @@
 
 using namespace PDFHummus;
 
-OutputFile::OutputFile(void)
+OutputFile::OutputFile()
 {
-    mOutputStream = NULL;
-    mFileStream = NULL;
+    mOutputStream = nullptr;
+    mFileStream = nullptr;
 }
 
-OutputFile::~OutputFile(void)
+OutputFile::~OutputFile()
 {
     CloseFile();
 }
@@ -68,7 +68,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
 
 EStatusCode OutputFile::CloseFile()
 {
-    if (NULL == mOutputStream)
+    if (nullptr == mOutputStream)
     {
         return PDFHummus::eSuccess;
     }
@@ -78,8 +78,8 @@ EStatusCode OutputFile::CloseFile()
         EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
 
         delete mOutputStream; // will delete the referenced file stream as well
-        mOutputStream = NULL;
-        mFileStream = NULL;
+        mOutputStream = nullptr;
+        mFileStream = nullptr;
         return status;
     }
 }

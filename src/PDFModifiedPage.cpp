@@ -45,16 +45,16 @@ PDFModifiedPage::PDFModifiedPage(PDFWriter *inWriter, unsigned long inPageIndex,
 {
     mWriter = inWriter;
     mPageIndex = inPageIndex;
-    mCurrentContext = NULL;
+    mCurrentContext = nullptr;
     mEnsureContentEncapsulation = inEnsureContentEncapsulation;
     mIsDirty = false;
 }
 
-PDFModifiedPage::~PDFModifiedPage(void)
+PDFModifiedPage::~PDFModifiedPage()
 {
-    for (PDFFormXObjectVector::iterator it = mContenxts.begin(); it != mContenxts.end(); ++it)
+    for (auto & mContenxt : mContenxts)
     {
-        delete *it;
+        delete mContenxt;
     }
 }
 
@@ -66,7 +66,7 @@ AbstractContentContext *PDFModifiedPage::StartContentContext()
         if (!page)
         {
             TRACE_LOG("AbstractContentContext::PDFModifiedPage, null page object");
-            return NULL;
+            return nullptr;
         }
         PDFRectangle mediaBox = PDFPageInput(&mWriter->GetModifiedFileParser(), page).GetMediaBox();
         mCurrentContext = mWriter->StartFormXObject(mediaBox);
@@ -87,7 +87,7 @@ PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
         mIsDirty = true;
         EStatusCode status = mWriter->EndFormXObject(mCurrentContext);
         mContenxts.push_back(mCurrentContext);
-        mCurrentContext = NULL;
+        mCurrentContext = nullptr;
         return status;
     }
     else
@@ -96,7 +96,7 @@ PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
 
 AbstractContentContext *PDFModifiedPage::GetContentContext()
 {
-    return mCurrentContext ? mCurrentContext->GetContentContext() : NULL;
+    return mCurrentContext ? mCurrentContext->GetContentContext() : nullptr;
 }
 
 PDFHummus::EStatusCode PDFModifiedPage::AttachURLLinktoCurrentPage(const std::string &inURL,
@@ -135,10 +135,10 @@ PDFObject *PDFModifiedPage::findInheritedResources(PDFParser *inParser, PDFDicti
     else
     {
         PDFObjectCastPtr<PDFDictionary> parentDict(
-            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : NULL);
+            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
         if (!parentDict)
         {
-            return NULL;
+            return nullptr;
         }
         else
         {
@@ -279,7 +279,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
                 pageDictionaryObject->Exists("Parent")
                     ? copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject.GetPtr(),
                                                                                        "Parent")
-                    : NULL);
+                    : nullptr);
             if (!parentDict)
             {
                 formResourcesNames = WriteNewResourcesDictionary(objectContext);
@@ -487,5 +487,5 @@ PDFFormXObject *PDFModifiedPage::GetCurrentFormContext()
 
 ResourcesDictionary *PDFModifiedPage::GetCurrentResourcesDictionary()
 {
-    return mCurrentContext ? &(mCurrentContext->GetResourcesDictionary()) : NULL;
+    return mCurrentContext ? &(mCurrentContext->GetResourcesDictionary()) : nullptr;
 }

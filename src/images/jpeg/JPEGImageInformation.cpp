@@ -20,7 +20,7 @@
 */
 #include "JPEGImageInformation.h"
 
-JPEGImageInformation::JPEGImageInformation(void)
+JPEGImageInformation::JPEGImageInformation()
 {
 
     SamplesWidth = 0;

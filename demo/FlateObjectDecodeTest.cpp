@@ -32,11 +32,11 @@ limitations under the License.
 using namespace std;
 using namespace PDFHummus;
 
-EStatusCode decodeStream(const string sourcePath, const string targetPath);
+EStatusCode decodeStream(const string& sourcePath, const string& targetPath);
 
 #define BUF_SIZE 1024
 
-EStatusCode decodeStream(const string sourcePath, const string targetPath)
+EStatusCode decodeStream(const string& sourcePath, const string& targetPath)
 {
     PDFParser parser;
     InputFile pdfFile;
@@ -48,7 +48,7 @@ EStatusCode decodeStream(const string sourcePath, const string targetPath)
         {
             // Parse image object
             PDFObject *streamObj = parser.ParseNewObject(7);
-            if (streamObj != NULL && streamObj->GetType() == PDFObject::ePDFObjectStream)
+            if (streamObj != nullptr && streamObj->GetType() == PDFObject::ePDFObjectStream)
             {
                 PDFStreamInput *stream = ((PDFStreamInput *)streamObj);
                 IByteReader *reader = parser.StartReadingFromStream(stream);

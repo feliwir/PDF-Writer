@@ -47,11 +47,11 @@
 
 using namespace PDFHummus;
 
-DCTDecodeFilterTest::DCTDecodeFilterTest(void)
+DCTDecodeFilterTest::DCTDecodeFilterTest()
 {
 }
 
-DCTDecodeFilterTest::~DCTDecodeFilterTest(void)
+DCTDecodeFilterTest::~DCTDecodeFilterTest()
 {
 }
 
@@ -146,7 +146,7 @@ EStatusCode DCTDecodeFilterTest::CreateFileWithJPGImage(const TestConfiguration 
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

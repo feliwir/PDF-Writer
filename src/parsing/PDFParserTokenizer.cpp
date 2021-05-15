@@ -25,13 +25,13 @@
 using namespace PDFHummus;
 using namespace IOBasicTypes;
 
-PDFParserTokenizer::PDFParserTokenizer(void)
+PDFParserTokenizer::PDFParserTokenizer()
 {
-    mStream = NULL;
+    mStream = nullptr;
     ResetReadState();
 }
 
-PDFParserTokenizer::~PDFParserTokenizer(void)
+PDFParserTokenizer::~PDFParserTokenizer()
 {
 }
 

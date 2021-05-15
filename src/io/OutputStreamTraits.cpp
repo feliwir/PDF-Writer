@@ -29,7 +29,7 @@ OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
     mOutputStream = inOutputStream;
 }
 
-OutputStreamTraits::~OutputStreamTraits(void)
+OutputStreamTraits::~OutputStreamTraits()
 {
 }
 

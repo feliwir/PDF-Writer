@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-WindowsPath::WindowsPath(void)
+WindowsPath::WindowsPath()
 {
 }
 
@@ -11,7 +11,7 @@ WindowsPath::WindowsPath(const string &inPath)
     SetPathFromString(inPath);
 }
 
-WindowsPath::~WindowsPath(void)
+WindowsPath::~WindowsPath()
 {
 }
 
@@ -34,7 +34,7 @@ void WindowsPath::SetPathFromString(const string &inPath)
     string newComponent;
     while (searchPosition < inPath.length())
     {
-        string::size_type findResult = inPath.find("\\", searchPosition);
+        string::size_type findResult = inPath.find('\\', searchPosition);
         if (findResult == inPath.npos)
             newComponent = inPath.substr(searchPosition, findResult);
         else

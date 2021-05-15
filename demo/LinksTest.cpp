@@ -29,11 +29,11 @@
 #include <iostream>
 using namespace PDFHummus;
 
-LinksTest::LinksTest(void)
+LinksTest::LinksTest()
 {
 }
 
-LinksTest::~LinksTest(void)
+LinksTest::~LinksTest()
 {
 }
 
@@ -60,7 +60,7 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

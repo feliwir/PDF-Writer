@@ -42,7 +42,7 @@ using namespace std;
 using namespace PDFHummus;
 using namespace IOBasicTypes;
 
-DecryptionHelper::DecryptionHelper(void)
+DecryptionHelper::DecryptionHelper()
 {
     Reset();
 }
@@ -55,7 +55,7 @@ void DecryptionHelper::Release()
     mXcrypts.clear();
 }
 
-DecryptionHelper::~DecryptionHelper(void)
+DecryptionHelper::~DecryptionHelper()
 {
     Release();
 }
@@ -66,10 +66,10 @@ void DecryptionHelper::Reset()
     mFailedPasswordVerification = false;
     mDidSucceedOwnerPasswordVerification = false;
     mIsEncrypted = false;
-    mXcryptStreams = NULL;
-    mXcryptStrings = NULL;
-    mXcryptAuthentication = NULL;
-    mParser = NULL;
+    mXcryptStreams = nullptr;
+    mXcryptStrings = nullptr;
+    mXcryptAuthentication = nullptr;
+    mParser = nullptr;
     mDecryptionPauseLevel = 0;
     Release();
 }
@@ -87,7 +87,7 @@ XCryptionCommon *GetFilterForName(const StringToXCryptionCommonMap &inXcryptions
     StringToXCryptionCommonMap::const_iterator it = inXcryptions.find(inName);
 
     if (it == inXcryptions.end())
-        return NULL;
+        return nullptr;
     else
         return it->second;
 }
@@ -103,7 +103,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
     // setup encrypted flag through the existance of encryption dict
     PDFObjectCastPtr<PDFDictionary> encryptionDictionary(
         inParser->QueryDictionaryObject(inParser->GetTrailer(), "Encrypt"));
-    mIsEncrypted = encryptionDictionary.GetPtr() != NULL;
+    mIsEncrypted = encryptionDictionary.GetPtr() != nullptr;
 
     do
     {
@@ -366,7 +366,7 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(PDFStreamI
     // This will create a decryption filter for streams that dont have their own defined crypt filters. null for no
     // decryption filter
     if (!IsEncrypted() || !CanDecryptDocument() || HasCryptFilterDefinition(mParser, inStream) || !mXcryptStreams)
-        return NULL;
+        return nullptr;
 
     IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
     if (savedEcnryptionKey)
@@ -375,7 +375,7 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(PDFStreamI
                                       mXcryptStreams->IsUsingAES());
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(PDFStreamInput *inStream, IByteReader *inToWrapStream,
@@ -500,7 +500,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
 
 void DecryptionHelper::OnObjectEnd(PDFObject *inObject)
 {
-    if (inObject == NULL)
+    if (inObject == nullptr)
         return;
 
     // for streams, retain the encryption key with them, so i can later decrypt them when needed

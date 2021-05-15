@@ -111,7 +111,7 @@ std::string FreeTypeFaceWrapper::NotDefGlyphName()
 
 std::string FreeTypeFaceWrapper::GetExtension(const std::string &inFilePath)
 {
-    std::string::size_type dotPosition = inFilePath.rfind(".");
+    std::string::size_type dotPosition = inFilePath.rfind('.');
 
     if (inFilePath.npos == dotPosition || (inFilePath.size() - 1) == dotPosition)
         return "";
@@ -119,7 +119,7 @@ std::string FreeTypeFaceWrapper::GetExtension(const std::string &inFilePath)
         return inFilePath.substr(dotPosition + 1);
 }
 
-FreeTypeFaceWrapper::~FreeTypeFaceWrapper(void)
+FreeTypeFaceWrapper::~FreeTypeFaceWrapper()
 {
     if (mDoesOwn)
         DoneFace();
@@ -143,14 +143,14 @@ void FreeTypeFaceWrapper::SetupFormatSpecificExtender(
             mFormatParticularWrapper = new FreeTypeOpenTypeWrapper(mFace);
         else
         {
-            mFormatParticularWrapper = NULL;
+            mFormatParticularWrapper = nullptr;
             TRACE_LOG1("Failure in FreeTypeFaceWrapper::SetupFormatSpecificExtender, could not find format specific "
                        "implementation for %s",
                        fontFormat);
         }
     }
     else
-        mFormatParticularWrapper = NULL;
+        mFormatParticularWrapper = nullptr;
 }
 
 static const char *scEmpty = "";
@@ -187,9 +187,9 @@ FT_Error FreeTypeFaceWrapper::DoneFace()
     if (mFace)
     {
         FT_Error status = FT_Done_Face(mFace);
-        mFace = NULL;
+        mFace = nullptr;
         delete mFormatParticularWrapper;
-        mFormatParticularWrapper = NULL;
+        mFormatParticularWrapper = nullptr;
         return status;
     }
     else
@@ -298,30 +298,30 @@ EFontStretch FreeTypeFaceWrapper::StretchFromName()
     {
         if (mFace->style_name)
         {
-            if (strstr(mFace->style_name, "Semi Condensed") != NULL)
+            if (strstr(mFace->style_name, "Semi Condensed") != nullptr)
                 return eFontStretchSemiCondensed;
 
-            if (strstr(mFace->style_name, "Ultra Condensed") != NULL ||
-                strstr(mFace->style_name, "Extra Compressed") != NULL ||
-                strstr(mFace->style_name, "Ultra Compressed") != NULL)
+            if (strstr(mFace->style_name, "Ultra Condensed") != nullptr ||
+                strstr(mFace->style_name, "Extra Compressed") != nullptr ||
+                strstr(mFace->style_name, "Ultra Compressed") != nullptr)
                 return eFontStretchUltraCondensed;
 
-            if (strstr(mFace->style_name, "Extra Condensed") != NULL || strstr(mFace->style_name, "Compressed") != NULL)
+            if (strstr(mFace->style_name, "Extra Condensed") != nullptr || strstr(mFace->style_name, "Compressed") != nullptr)
                 return eFontStretchExtraCondensed;
 
-            if (strstr(mFace->style_name, "Condensed") != NULL)
+            if (strstr(mFace->style_name, "Condensed") != nullptr)
                 return eFontStretchCondensed;
 
-            if (strstr(mFace->style_name, "Semi Expanded") != NULL)
+            if (strstr(mFace->style_name, "Semi Expanded") != nullptr)
                 return eFontStretchSemiExpanded;
 
-            if (strstr(mFace->style_name, "Extra Expanded") != NULL)
+            if (strstr(mFace->style_name, "Extra Expanded") != nullptr)
                 return eFontStretchExtraExpanded;
 
-            if (strstr(mFace->style_name, "Ultra Expanded") != NULL)
+            if (strstr(mFace->style_name, "Ultra Expanded") != nullptr)
                 return eFontStretchUltraExpanded;
 
-            if (strstr(mFace->style_name, "Expanded") != NULL)
+            if (strstr(mFace->style_name, "Expanded") != nullptr)
                 return eFontStretchExpanded;
 
             return eFontStretchNormal;
@@ -352,32 +352,32 @@ FT_UShort FreeTypeFaceWrapper::WeightFromName()
     {
         if (mFace->style_name)
         {
-            if (strstr(mFace->style_name, "Thin") != NULL)
+            if (strstr(mFace->style_name, "Thin") != nullptr)
                 return 100;
 
-            if (strstr(mFace->style_name, "Black") != NULL || strstr(mFace->style_name, "Heavy") != NULL)
+            if (strstr(mFace->style_name, "Black") != nullptr || strstr(mFace->style_name, "Heavy") != nullptr)
                 return 900;
 
-            if (strstr(mFace->style_name, "Extra Light") != NULL || strstr(mFace->style_name, "Ultra Light") != NULL)
+            if (strstr(mFace->style_name, "Extra Light") != nullptr || strstr(mFace->style_name, "Ultra Light") != nullptr)
                 return 200;
 
-            if (strstr(mFace->style_name, "Regular") != NULL || strstr(mFace->style_name, "Normal") != NULL ||
-                strstr(mFace->style_name, "Demi Light") != NULL || strstr(mFace->style_name, "Semi Light") != NULL)
+            if (strstr(mFace->style_name, "Regular") != nullptr || strstr(mFace->style_name, "Normal") != nullptr ||
+                strstr(mFace->style_name, "Demi Light") != nullptr || strstr(mFace->style_name, "Semi Light") != nullptr)
                 return 400;
 
-            if (strstr(mFace->style_name, "Light") != NULL)
+            if (strstr(mFace->style_name, "Light") != nullptr)
                 return 300;
 
-            if (strstr(mFace->style_name, "Medium") != NULL)
+            if (strstr(mFace->style_name, "Medium") != nullptr)
                 return 500;
 
-            if (strstr(mFace->style_name, "Semi Bold") != NULL || strstr(mFace->style_name, "Demi Bold") != NULL)
+            if (strstr(mFace->style_name, "Semi Bold") != nullptr || strstr(mFace->style_name, "Demi Bold") != nullptr)
                 return 600;
 
-            if (strstr(mFace->style_name, "Extra Bold") != NULL || strstr(mFace->style_name, "Ultra Bold") != NULL)
+            if (strstr(mFace->style_name, "Extra Bold") != nullptr || strstr(mFace->style_name, "Ultra Bold") != nullptr)
                 return 800;
 
-            if (strstr(mFace->style_name, "Bold") != NULL)
+            if (strstr(mFace->style_name, "Bold") != nullptr)
                 return 700;
 
             return 400;
@@ -675,7 +675,7 @@ IWrittenFont *FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext *inObj
         }
         else
         {
-            result = NULL;
+            result = nullptr;
             TRACE_LOG1("Failure in FreeTypeFaceWrapper::CreateWrittenFontObject, could not find font writer "
                        "implementation for %s",
                        fontFormat);
@@ -683,7 +683,7 @@ IWrittenFont *FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext *inObj
         return result;
     }
     else
-        return NULL;
+        return nullptr;
 }
 
 const std::string &FreeTypeFaceWrapper::GetFontFilePath()

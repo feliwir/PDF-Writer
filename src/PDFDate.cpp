@@ -32,12 +32,12 @@
 #include <math.h>
 #include <stdlib.h>
 
-PDFDate::PDFDate(void)
+PDFDate::PDFDate()
 {
     SetTime(-1);
 }
 
-PDFDate::~PDFDate(void)
+PDFDate::~PDFDate()
 {
 }
 
@@ -67,7 +67,7 @@ bool PDFDate::IsNull()
 
 */
 
-static const std::string scEmpty = "";
+static const std::string scEmpty;
 std::string PDFDate::ToString()
 {
     if (IsNull())
@@ -196,7 +196,7 @@ void PDFDate::SetToCurrentTime()
     time_t localEpoch, gmEpoch;
 
     /*First get local epoch time*/
-    localEpoch = time(NULL);
+    localEpoch = time(nullptr);
 
     /* Using local time epoch get the GM Time */
     gmTime = gmtime(&localEpoch);

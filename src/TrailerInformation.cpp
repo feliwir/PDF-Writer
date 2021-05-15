@@ -20,12 +20,12 @@
 */
 #include "TrailerInformation.h"
 
-TrailerInformation::TrailerInformation(void)
+TrailerInformation::TrailerInformation()
 {
     mPrev = 0;
 }
 
-TrailerInformation::~TrailerInformation(void)
+TrailerInformation::~TrailerInformation()
 {
 }
 

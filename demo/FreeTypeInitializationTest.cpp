@@ -37,11 +37,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-FreeTypeInitializationTest::FreeTypeInitializationTest(void)
+FreeTypeInitializationTest::FreeTypeInitializationTest()
 {
 }
 
-FreeTypeInitializationTest::~FreeTypeInitializationTest(void)
+FreeTypeInitializationTest::~FreeTypeInitializationTest()
 {
 }
 
@@ -105,7 +105,7 @@ EStatusCode FreeTypeInitializationTest::ShowFaceProperties(FreeTypeWrapper &inFr
     return status;
 }
 
-EStatusCode FreeTypeInitializationTest::ShowGlobalFontProperties(FreeTypeWrapper &inFreeType, FT_Face inFace)
+EStatusCode FreeTypeInitializationTest::ShowGlobalFontProperties(FreeTypeWrapper & /*inFreeType*/, FT_Face inFace)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -120,7 +120,7 @@ EStatusCode FreeTypeInitializationTest::ShowGlobalFontProperties(FreeTypeWrapper
     if (FT_IS_SFNT(face))
     {
         FT_ULong length = 0;
-        if (FT_Load_Sfnt_Table(face, TTAG_CFF, 0, NULL, &length) == 0)
+        if (FT_Load_Sfnt_Table(face, TTAG_CFF, 0, nullptr, &length) == 0)
             cout << "CCF table found, length is " << length << "\n";
     }
 

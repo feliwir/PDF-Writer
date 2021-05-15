@@ -32,11 +32,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-ShutDownRestartTest::ShutDownRestartTest(void)
+ShutDownRestartTest::ShutDownRestartTest()
 {
 }
 
-ShutDownRestartTest::~ShutDownRestartTest(void)
+ShutDownRestartTest::~ShutDownRestartTest()
 {
 }
 
@@ -70,7 +70,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
             }
 
             PageContentContext *contentContext = pdfWriterA.StartPageContentContext(page);
-            if (NULL == contentContext)
+            if (nullptr == contentContext)
             {
                 status = PDFHummus::eFailure;
                 cout << "failed to create content context for page\n";
@@ -158,7 +158,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
             page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PageContentContext *pageContentContext = pdfWriterB.StartPageContentContext(page);
-            if (NULL == pageContentContext)
+            if (nullptr == pageContentContext)
             {
                 status = PDFHummus::eFailure;
                 cout << "failed to create content context for page\n";

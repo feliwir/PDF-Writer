@@ -25,15 +25,15 @@
 using namespace std;
 using namespace PDFHummus;
 
-UppercaseSequanceTest::UppercaseSequanceTest(void)
+UppercaseSequanceTest::UppercaseSequanceTest()
 {
 }
 
-UppercaseSequanceTest::~UppercaseSequanceTest(void)
+UppercaseSequanceTest::~UppercaseSequanceTest()
 {
 }
 
-EStatusCode UppercaseSequanceTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode UppercaseSequanceTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = PDFHummus::eSuccess;
     UppercaseSequance sequance;

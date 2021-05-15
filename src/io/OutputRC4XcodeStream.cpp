@@ -21,13 +21,13 @@ limitations under the License.
 
 using namespace IOBasicTypes;
 
-OutputRC4XcodeStream::OutputRC4XcodeStream(void)
+OutputRC4XcodeStream::OutputRC4XcodeStream()
 {
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mOwnsStream = false;
 }
 
-OutputRC4XcodeStream::~OutputRC4XcodeStream(void)
+OutputRC4XcodeStream::~OutputRC4XcodeStream()
 {
     if (mOwnsStream)
         delete mTargetStream;

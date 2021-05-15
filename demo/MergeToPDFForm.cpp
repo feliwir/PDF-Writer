@@ -32,11 +32,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-MergeToPDFForm::MergeToPDFForm(void)
+MergeToPDFForm::MergeToPDFForm()
 {
 }
 
-MergeToPDFForm::~MergeToPDFForm(void)
+MergeToPDFForm::~MergeToPDFForm()
 {
 }
 
@@ -44,7 +44,7 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     do
     {

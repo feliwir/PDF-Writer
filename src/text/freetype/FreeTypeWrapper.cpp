@@ -43,16 +43,16 @@ static const struct
 
 #include FT_ERRORS_H
 
-    FreeTypeWrapper::FreeTypeWrapper(void)
+    FreeTypeWrapper::FreeTypeWrapper()
 {
     if (FT_Init_FreeType(&mFreeType))
     {
         TRACE_LOG("FreeTypeWrapper::FreeTypeWrapper, unexpected failure. failed to initialize Free Type");
-        mFreeType = NULL;
+        mFreeType = nullptr;
     }
 }
 
-FreeTypeWrapper::~FreeTypeWrapper(void)
+FreeTypeWrapper::~FreeTypeWrapper()
 {
     FTFaceToFTStreamListMap::iterator it = mOpenStreams.begin();
     for (; it != mOpenStreams.end(); ++it)
@@ -78,7 +78,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
     {
         if (FillOpenFaceArgumentsForUTF8String(inFilePath, openFaceArguments) != PDFHummus::eSuccess)
         {
-            face = NULL;
+            face = nullptr;
             break;
         }
 
@@ -90,7 +90,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
                        inFontIndex);
             TRACE_LOG2("FreeTypeWrapper::NewFace, Free Type Error, Code = %d, Message = %s",
                        ft_errors[ftStatus].err_code, ft_errors[ftStatus].err_msg);
-            face = NULL;
+            face = nullptr;
         }
 
     } while (false);
@@ -105,12 +105,12 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
 EStatusCode FreeTypeWrapper::FillOpenFaceArgumentsForUTF8String(const std::string &inFilePath, FT_Open_Args &ioArgs)
 {
     ioArgs.flags = FT_OPEN_STREAM;
-    ioArgs.memory_base = NULL;
+    ioArgs.memory_base = nullptr;
     ioArgs.memory_size = 0;
-    ioArgs.pathname = NULL;
-    ioArgs.driver = NULL;
+    ioArgs.pathname = nullptr;
+    ioArgs.driver = nullptr;
     ioArgs.num_params = 0;
-    ioArgs.params = NULL;
+    ioArgs.params = nullptr;
     ioArgs.stream = CreateFTStreamForPath(inFilePath);
 
     if (ioArgs.stream)
@@ -155,7 +155,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, const std::strin
             if (FillOpenFaceArgumentsForUTF8String(inSecondaryFilePath, attachStreamArguments) != PDFHummus::eSuccess)
             {
                 DoneFace(face);
-                face = NULL;
+                face = nullptr;
                 break;
             }
 
@@ -166,7 +166,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, const std::strin
                 TRACE_LOG2("FreeTypeWrapper::NewFace, Free Type Error, Code = %d, Message = %s",
                            ft_errors[ftStatus].err_code, ft_errors[ftStatus].err_msg);
                 DoneFace(face);
-                face = NULL;
+                face = nullptr;
             }
         } while (false);
 
@@ -220,7 +220,7 @@ static unsigned long InputFileReadSeek(FT_Stream stream, unsigned long offset, u
 static void InputFileClose(FT_Stream stream)
 {
     delete (InputFile *)(stream->descriptor.pointer);
-    stream->descriptor.pointer = NULL;
+    stream->descriptor.pointer = nullptr;
 }
 
 FT_Stream FreeTypeWrapper::CreateFTStreamForPath(const std::string &inFilePath)
@@ -228,20 +228,20 @@ FT_Stream FreeTypeWrapper::CreateFTStreamForPath(const std::string &inFilePath)
     InputFile *inputFile = new InputFile;
 
     if (inputFile->OpenFile(inFilePath) != PDFHummus::eSuccess)
-        return NULL;
+        return nullptr;
 
     FT_Stream aStream = new FT_StreamRec();
 
-    aStream->base = NULL;
+    aStream->base = nullptr;
     aStream->size = (unsigned long)inputFile->GetFileSize();
     aStream->pos = 0;
     aStream->descriptor.pointer = inputFile;
-    aStream->pathname.pointer = NULL;
+    aStream->pathname.pointer = nullptr;
     aStream->read = InputFileReadSeek;
     aStream->close = InputFileClose;
-    aStream->memory = NULL;
-    aStream->cursor = NULL;
-    aStream->limit = NULL;
+    aStream->memory = nullptr;
+    aStream->cursor = nullptr;
+    aStream->limit = nullptr;
 
     return aStream;
 }

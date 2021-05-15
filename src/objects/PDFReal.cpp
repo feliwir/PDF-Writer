@@ -25,7 +25,7 @@ PDFReal::PDFReal(double inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFReal::~PDFReal(void)
+PDFReal::~PDFReal()
 {
 }
 

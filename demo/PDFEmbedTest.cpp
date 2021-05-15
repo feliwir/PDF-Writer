@@ -29,11 +29,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFEmbedTest::PDFEmbedTest(void)
+PDFEmbedTest::PDFEmbedTest()
 {
 }
 
-PDFEmbedTest::~PDFEmbedTest(void)
+PDFEmbedTest::~PDFEmbedTest()
 {
 }
 

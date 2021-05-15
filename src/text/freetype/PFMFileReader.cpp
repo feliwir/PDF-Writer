@@ -25,11 +25,11 @@
 
 using namespace PDFHummus;
 
-PFMFileReader::PFMFileReader(void)
+PFMFileReader::PFMFileReader()
 {
 }
 
-PFMFileReader::~PFMFileReader(void)
+PFMFileReader::~PFMFileReader()
 {
 }
 

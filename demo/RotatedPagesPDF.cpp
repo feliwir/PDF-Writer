@@ -31,11 +31,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-RotatedPagesPDF::RotatedPagesPDF(void)
+RotatedPagesPDF::RotatedPagesPDF()
 {
 }
 
-RotatedPagesPDF::~RotatedPagesPDF(void)
+RotatedPagesPDF::~RotatedPagesPDF()
 {
 }
 

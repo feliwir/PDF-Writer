@@ -24,11 +24,11 @@
 
 using namespace PDFHummus;
 
-UnicodeString::UnicodeString(void)
+UnicodeString::UnicodeString()
 {
 }
 
-UnicodeString::~UnicodeString(void)
+UnicodeString::~UnicodeString()
 {
 }
 

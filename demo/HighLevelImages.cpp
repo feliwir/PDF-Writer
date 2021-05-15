@@ -31,11 +31,11 @@
 
 using namespace PDFHummus;
 
-HighLevelImages::HighLevelImages(void)
+HighLevelImages::HighLevelImages()
 {
 }
 
-HighLevelImages::~HighLevelImages(void)
+HighLevelImages::~HighLevelImages()
 {
 }
 

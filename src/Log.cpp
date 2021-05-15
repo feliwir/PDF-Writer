@@ -45,7 +45,7 @@ Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
     FILE *logFile;
     bool exists;
     SAFE_FOPEN(logFile, inLogFilePath.c_str(), "r")
-    exists = (logFile != NULL);
+    exists = (logFile != nullptr);
     if (logFile)
         fclose(logFile);
 
@@ -72,7 +72,7 @@ Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
     }
     else
         mFilePath = inLogFilePath;
-    mLogStream = NULL;
+    mLogStream = nullptr;
     mLogMethod = STATIC_LogEntryToFile;
 }
 
@@ -84,7 +84,7 @@ Log::Log(IByteWriter *inLogStream)
     mLogMethod = STATIC_LogEntryToStream;
 }
 
-Log::~Log(void)
+Log::~Log()
 {
 }
 

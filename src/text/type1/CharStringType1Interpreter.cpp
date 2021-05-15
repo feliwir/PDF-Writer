@@ -24,11 +24,11 @@
 
 using namespace PDFHummus;
 
-CharStringType1Interpreter::CharStringType1Interpreter(void)
+CharStringType1Interpreter::CharStringType1Interpreter()
 {
 }
 
-CharStringType1Interpreter::~CharStringType1Interpreter(void)
+CharStringType1Interpreter::~CharStringType1Interpreter()
 {
 }
 
@@ -327,7 +327,7 @@ EStatusCode CharStringType1Interpreter::InterpretCallSubr()
     Type1CharString *aCharString = mImplementationHelper->GetSubr(mOperandStack.back());
     mOperandStack.pop_back();
 
-    if (aCharString != NULL)
+    if (aCharString != nullptr)
     {
         InputByteArrayStream byteArrayStream(aCharString->Code, aCharString->CodeLength);
         InputCharStringDecodeStream charStringStream(&byteArrayStream, mImplementationHelper->GetLenIV());

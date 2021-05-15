@@ -20,14 +20,14 @@
 */
 #include "InputStreamSkipperStream.h"
 
-InputStreamSkipperStream::InputStreamSkipperStream(void)
+InputStreamSkipperStream::InputStreamSkipperStream()
 {
-    mStream = NULL;
+    mStream = nullptr;
 }
 
-InputStreamSkipperStream::~InputStreamSkipperStream(void)
+InputStreamSkipperStream::~InputStreamSkipperStream()
 {
-    if (mStream != NULL)
+    if (mStream != nullptr)
         delete mStream;
 }
 

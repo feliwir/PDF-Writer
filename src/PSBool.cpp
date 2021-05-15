@@ -22,18 +22,12 @@
 
 void PSBoolReader::Read(const std::string &inReadFrom, bool &outValue)
 {
-    if (inReadFrom.compare("true") == 0)
-        outValue = true;
-    else
-        outValue = false;
+    outValue = inReadFrom.compare("true") == 0;
 }
 
 void PSBoolReader::Read(const std::wstring &inReadFrom, bool &outValue)
 {
-    if (inReadFrom.compare(L"true") == 0)
-        outValue = true;
-    else
-        outValue = false;
+    outValue = inReadFrom.compare(L"true") == 0;
 }
 
 void PSBoolWriter::Write(const bool &inValue, std::string &outWriteTo)

@@ -25,13 +25,13 @@
 using namespace PDFHummus;
 using namespace IOBasicTypes;
 
-SimpleStringTokenizer::SimpleStringTokenizer(void)
+SimpleStringTokenizer::SimpleStringTokenizer()
 {
-    mStream = NULL;
+    mStream = nullptr;
     ResetReadState();
 }
 
-SimpleStringTokenizer::~SimpleStringTokenizer(void)
+SimpleStringTokenizer::~SimpleStringTokenizer()
 {
 }
 

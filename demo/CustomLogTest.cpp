@@ -15,11 +15,11 @@ using namespace std;
 using namespace IOBasicTypes;
 using namespace PDFHummus;
 
-CustomLogTest::CustomLogTest(void)
+CustomLogTest::CustomLogTest()
 {
 }
 
-CustomLogTest::~CustomLogTest(void)
+CustomLogTest::~CustomLogTest()
 {
 }
 
@@ -80,7 +80,7 @@ EStatusCode CustomLogTest::Run(const TestConfiguration &inTestConfiguration)
         TRACE_LOG("PDF stream dumped");
 
         // now finalize trace compressed file
-        flateEncodeStream.Assign(NULL);
+        flateEncodeStream.Assign(nullptr);
         compressedLogFile.CloseFile();
 
         // Finish log
@@ -112,7 +112,7 @@ EStatusCode CustomLogTest::Run(const TestConfiguration &inTestConfiguration)
             break;
 
         compressedLogFileInput.CloseFile();
-        flateDecodeStream.Assign(NULL);
+        flateDecodeStream.Assign(nullptr);
         decryptedLogFile.CloseFile();
 
     } while (false);
@@ -120,8 +120,8 @@ EStatusCode CustomLogTest::Run(const TestConfiguration &inTestConfiguration)
     if (status != PDFHummus::eSuccess)
     {
         // cancel ownership of subsstreams
-        flateDecodeStream.Assign(NULL);
-        flateEncodeStream.Assign(NULL);
+        flateDecodeStream.Assign(nullptr);
+        flateEncodeStream.Assign(nullptr);
     }
 
     return status;

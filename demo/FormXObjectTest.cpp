@@ -32,11 +32,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-FormXObjectTest::FormXObjectTest(void)
+FormXObjectTest::FormXObjectTest()
 {
 }
 
-FormXObjectTest::~FormXObjectTest(void)
+FormXObjectTest::~FormXObjectTest()
 {
 }
 
@@ -59,7 +59,7 @@ EStatusCode FormXObjectTest::Run(const TestConfiguration &inTestConfiguration)
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -140,7 +140,7 @@ EStatusCode FormXObjectTest::Run(const TestConfiguration &inTestConfiguration)
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for 2nd page\n";

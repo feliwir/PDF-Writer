@@ -26,15 +26,15 @@
 
 using namespace IOBasicTypes;
 
-OutputFlateEncodeStream::OutputFlateEncodeStream(void)
+OutputFlateEncodeStream::OutputFlateEncodeStream()
 {
     mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
     mZLibState = new z_stream;
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mCurrentlyEncoding = false;
 }
 
-OutputFlateEncodeStream::~OutputFlateEncodeStream(void)
+OutputFlateEncodeStream::~OutputFlateEncodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -50,7 +50,7 @@ void OutputFlateEncodeStream::FinalizeEncoding()
     int deflateResult;
 
     mZLibState->avail_in = 0;
-    mZLibState->next_in = NULL;
+    mZLibState->next_in = nullptr;
 
     do
     {
@@ -85,7 +85,7 @@ OutputFlateEncodeStream::OutputFlateEncodeStream(IByteWriterWithPosition *inTarg
 {
     mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
     mZLibState = new z_stream;
-    mTargetStream = NULL;
+    mTargetStream = nullptr;
     mCurrentlyEncoding = false;
 
     Assign(inTargetWriter, inInitiallyOn);

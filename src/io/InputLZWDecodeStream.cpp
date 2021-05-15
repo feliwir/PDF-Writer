@@ -25,13 +25,13 @@
 
 InputLZWDecodeStream::InputLZWDecodeStream(int early)
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
     mCurrentlyEncoding = false;
     mEarly = early;
     inputBuf = 0;
 }
 
-InputLZWDecodeStream::~InputLZWDecodeStream(void)
+InputLZWDecodeStream::~InputLZWDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -46,7 +46,7 @@ void InputLZWDecodeStream::FinalizeEncoding()
 
 InputLZWDecodeStream::InputLZWDecodeStream(IByteReader *inSourceReader)
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
     mCurrentlyEncoding = false;
 
     Assign(inSourceReader);
@@ -68,7 +68,7 @@ void InputLZWDecodeStream::StartEncoding()
 }
 
 IOBasicTypes::LongBufferSizeType InputLZWDecodeStream::Read(IOBasicTypes::Byte *inBuffer,
-                                                            IOBasicTypes::LongBufferSizeType inBufferSize)
+                                                            IOBasicTypes::LongBufferSizeType  /*inBufferSize*/)
 {
     if (mCurrentlyEncoding)
     {

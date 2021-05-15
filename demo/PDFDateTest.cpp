@@ -27,15 +27,15 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFDateTest::PDFDateTest(void)
+PDFDateTest::PDFDateTest()
 {
 }
 
-PDFDateTest::~PDFDateTest(void)
+PDFDateTest::~PDFDateTest()
 {
 }
 
-EStatusCode PDFDateTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode PDFDateTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -103,7 +103,7 @@ EStatusCode PDFDateTest::Run(const TestConfiguration &inTestConfiguration)
 
     {
         // time structs
-        time_t time_local = time(NULL);
+        time_t time_local = time(nullptr);
         tm *my_utc_time = gmtime(&time_local);
         my_utc_time->tm_isdst = -1; // automatic dst
         time_t time_utc = mktime(my_utc_time);

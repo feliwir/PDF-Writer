@@ -29,11 +29,11 @@
 
 using namespace PDFHummus;
 
-JpegLibTest::JpegLibTest(void)
+JpegLibTest::JpegLibTest()
 {
 }
 
-JpegLibTest::~JpegLibTest(void)
+JpegLibTest::~JpegLibTest()
 {
 }
 
@@ -129,7 +129,7 @@ GLOBAL(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReader *
      * This makes it unsafe to use this manager and a different source
      * manager serially with the same JPEG object.  Caveat programmer.
      */
-    if (cinfo->src == NULL)
+    if (cinfo->src == nullptr)
     { /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_PERMANENT,
                                                                           sizeof(HummusSourceManager));
@@ -146,7 +146,7 @@ GLOBAL(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReader *
     src->pub.term_source = HummusNoOp;
     src->mReader = inSourceStream;
     src->pub.bytes_in_buffer = 0;    /* forces fill_input_buffer on first read */
-    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
 EStatusCode JpegLibTest::Run(const TestConfiguration &inTestConfiguration)

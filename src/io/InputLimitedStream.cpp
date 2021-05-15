@@ -24,14 +24,14 @@ using namespace IOBasicTypes;
 
 #include <algorithm>
 
-InputLimitedStream::InputLimitedStream(void)
+InputLimitedStream::InputLimitedStream()
 {
-    mStream = NULL;
+    mStream = nullptr;
     mMoreToRead = 0;
     mOwnsStream = false;
 }
 
-InputLimitedStream::~InputLimitedStream(void)
+InputLimitedStream::~InputLimitedStream()
 {
     if (mStream && mOwnsStream)
         delete mStream;

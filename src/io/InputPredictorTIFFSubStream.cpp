@@ -23,25 +23,25 @@
 
 using namespace IOBasicTypes;
 
-InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(void)
+InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
 {
-    mSourceStream = NULL;
-    mRowBuffer = NULL;
-    mReadColors = NULL;
+    mSourceStream = nullptr;
+    mRowBuffer = nullptr;
+    mReadColors = nullptr;
     mReadColorsCount = 0;
 }
 
 InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(IByteReader *inSourceStream, LongBufferSizeType inColors,
                                                          Byte inBitsPerComponent, LongBufferSizeType inColumns)
 {
-    mSourceStream = NULL;
-    mRowBuffer = NULL;
-    mReadColors = NULL;
+    mSourceStream = nullptr;
+    mRowBuffer = nullptr;
+    mReadColors = nullptr;
 
     Assign(inSourceStream, inColors, inBitsPerComponent, inColumns);
 }
 
-InputPredictorTIFFSubStream::~InputPredictorTIFFSubStream(void)
+InputPredictorTIFFSubStream::~InputPredictorTIFFSubStream()
 {
     delete mSourceStream;
     delete[] mRowBuffer;

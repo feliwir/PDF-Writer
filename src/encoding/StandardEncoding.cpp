@@ -278,11 +278,11 @@ static const char *scGlyphNames[256] = {".notdef",
                                         ".notdef",
                                         ".notdef"};
 
-StandardEncoding::StandardEncoding(void)
+StandardEncoding::StandardEncoding()
 {
 }
 
-StandardEncoding::~StandardEncoding(void)
+StandardEncoding::~StandardEncoding()
 {
 }
 

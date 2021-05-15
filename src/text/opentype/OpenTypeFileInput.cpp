@@ -24,17 +24,17 @@
 
 using namespace PDFHummus;
 
-OpenTypeFileInput::OpenTypeFileInput(void)
+OpenTypeFileInput::OpenTypeFileInput()
 {
     mHeaderOffset = 0;
     mTableOffset = 0;
-    mHMtx = NULL;
-    mName.mNameEntries = NULL;
-    mLoca = NULL;
-    mGlyf = NULL;
+    mHMtx = nullptr;
+    mName.mNameEntries = nullptr;
+    mLoca = nullptr;
+    mGlyf = nullptr;
 }
 
-OpenTypeFileInput::~OpenTypeFileInput(void)
+OpenTypeFileInput::~OpenTypeFileInput()
 {
     FreeTables();
 }
@@ -42,18 +42,18 @@ OpenTypeFileInput::~OpenTypeFileInput(void)
 void OpenTypeFileInput::FreeTables()
 {
     delete[] mHMtx;
-    mHMtx = NULL;
+    mHMtx = nullptr;
     if (mName.mNameEntries)
     {
         for (unsigned short i = 0; i < mName.mNameEntriesCount; ++i)
             delete[] mName.mNameEntries[i].String;
     }
     delete[] mName.mNameEntries;
-    mName.mNameEntries = NULL;
+    mName.mNameEntries = nullptr;
     delete[] mLoca;
-    mLoca = NULL;
+    mLoca = nullptr;
     delete[] mGlyf;
-    mGlyf = NULL;
+    mGlyf = nullptr;
 
     UShortToGlyphEntryMap::iterator it = mActualGlyphs.begin();
     for (; it != mActualGlyphs.end(); ++it)
@@ -178,8 +178,8 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueT
             mCVTExists = false;
             mFPGMExists = false;
             mPREPExists = false;
-            mGlyf = NULL;
-            mLoca = NULL;
+            mGlyf = nullptr;
+            mLoca = nullptr;
         }
     } while (false);
 
@@ -616,14 +616,14 @@ EStatusCode OpenTypeFileInput::ReadOS2()
     mPrimitivesReader.ReadSHORT(mOS2.StrikeoutSize);
     mPrimitivesReader.ReadSHORT(mOS2.StrikeoutPosition);
     mPrimitivesReader.ReadSHORT(mOS2.FamilyClass);
-    for (int i = 0; i < 10; ++i)
-        mPrimitivesReader.ReadBYTE(mOS2.Panose[i]);
+    for (unsigned char & i : mOS2.Panose)
+        mPrimitivesReader.ReadBYTE(i);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange1);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange2);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange3);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange4);
-    for (int i = 0; i < 4; ++i)
-        mPrimitivesReader.ReadCHAR(mOS2.AchVendID[i]);
+    for (char & i : mOS2.AchVendID)
+        mPrimitivesReader.ReadCHAR(i);
     mPrimitivesReader.ReadUSHORT(mOS2.FSSelection);
     mPrimitivesReader.ReadUSHORT(mOS2.FirstCharIndex);
     mPrimitivesReader.ReadUSHORT(mOS2.LastCharIndex);
@@ -730,7 +730,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
     {
         if (mLoca[i + 1] == mLoca[i])
         {
-            mGlyf[i] = NULL;
+            mGlyf[i] = nullptr;
         }
         else
         {
@@ -795,7 +795,7 @@ TableEntry *OpenTypeFileInput::GetTableEntry(const char *inTagName)
     ULongToTableEntryMap::iterator it = mTables.find(GetTag(inTagName));
 
     if (it == mTables.end())
-        return NULL;
+        return nullptr;
     else
         return &(it->second);
 }

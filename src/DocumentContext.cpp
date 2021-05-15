@@ -55,12 +55,12 @@ using namespace PDFHummus;
 
 DocumentContext::DocumentContext()
 {
-    mObjectsContext = NULL;
-    mParserExtender = NULL;
+    mObjectsContext = nullptr;
+    mParserExtender = nullptr;
     mModifiedDocumentIDExists = false;
 }
 
-DocumentContext::~DocumentContext(void)
+DocumentContext::~DocumentContext()
 {
     Cleanup();
 }
@@ -830,7 +830,7 @@ std::string DocumentContext::GenerateMD5IDForFile()
 
 bool DocumentContext::HasContentContext(PDFPage *inPage)
 {
-    return inPage->GetAssociatedContentContext() != NULL;
+    return inPage->GetAssociatedContentContext() != nullptr;
 }
 
 PageContentContext *DocumentContext::StartPageContentContext(PDFPage *inPage)
@@ -868,7 +868,7 @@ PDFTiledPattern *DocumentContext::StartTiledPattern(int inPaintType, int inTilin
                                                     const PDFRectangle &inBoundingBox, double inXStep, double inYStep,
                                                     ObjectIDType inObjectID, const double *inMatrix)
 {
-    PDFTiledPattern *aPatternObject = NULL;
+    PDFTiledPattern *aPatternObject = nullptr;
     do
     {
         mObjectsContext->StartNewIndirectObject(inObjectID);
@@ -945,7 +945,7 @@ static const std::string scTransparency = "Transparency";
 PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBoundingBox, ObjectIDType inFormXObjectID,
                                                   const double *inMatrix, const bool inUseTransparencyGroup)
 {
-    PDFFormXObject *aFormXObject = NULL;
+    PDFFormXObject *aFormXObject = nullptr;
     do
     {
         mObjectsContext->StartNewIndirectObject(inFormXObjectID);
@@ -1717,7 +1717,7 @@ ObjectReference DocumentContext::GetReferenceFromState(PDFDictionary *inDictiona
     return ObjectReference((ObjectIDType)(objectID->GetValue()), (unsigned long)generationNumber->GetValue());
 }
 
-void DocumentContext::ReadTrailerInfoState(PDFParser *inStateReader, PDFDictionary *inTrailerInfoState)
+void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/, PDFDictionary *inTrailerInfoState)
 {
     PDFObjectCastPtr<PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
@@ -1803,7 +1803,7 @@ void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader, PDFD
     if (mCatalogInformation.GetCurrentPageTreeNode())
     {
         delete mCatalogInformation.GetPageTreeRoot(mObjectsContext->GetInDirectObjectsRegistry());
-        mCatalogInformation.SetCurrentPageTreeNode(NULL);
+        mCatalogInformation.SetCurrentPageTreeNode(nullptr);
     }
 
     if (!pageTreeRootState) // no page nodes yet...
@@ -1870,7 +1870,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(const std::s
     if (context->Start(inFilePath, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
     {
         delete context;
-        return NULL;
+        return nullptr;
     }
     else
         return context;
@@ -2054,7 +2054,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(IByteReaderW
     if (context->Start(inPDFStream, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
     {
         delete context;
-        return NULL;
+        return nullptr;
     }
     else
         return context;
@@ -2181,15 +2181,15 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
         mRequiresVersionUpdate = inRequiredVersionUpdate;
         mPDFVersion = inPDFVersion;
     }
-    virtual ~ModifiedDocCatalogWriterExtension()
+    ~ModifiedDocCatalogWriterExtension() override
     {
     }
 
     // IDocumentContextExtender implementation
-    virtual PDFHummus::EStatusCode OnCatalogWrite(CatalogInformation *inCatalogInformation,
+    PDFHummus::EStatusCode OnCatalogWrite(CatalogInformation * /*inCatalogInformation*/,
                                                   DictionaryContext *inCatalogDictionaryContext,
-                                                  ObjectsContext *inPDFWriterObjectContext,
-                                                  PDFHummus::DocumentContext *inDocumentContext)
+                                                  ObjectsContext * /*inPDFWriterObjectContext*/,
+                                                  PDFHummus::DocumentContext * /*inDocumentContext*/) override
     {
 
         // update version
@@ -2383,7 +2383,7 @@ bool DocumentContext::DocumentHasNewPages()
 
     bool hasLeafs = false;
 
-    while (hasLeafs == false)
+    while (!hasLeafs)
     {
         hasLeafs = pageTreeRoot->IsLeafParent();
         if (pageTreeRoot->GetNodesCount() == 0)
@@ -2414,7 +2414,7 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     PageTree *newPagesTree = mCatalogInformation.GetPageTreeRoot(mObjectsContext->GetInDirectObjectsRegistry());
     newPagesTree->SetParent(root);
     long long newPagesCount = WritePageTree(newPagesTree);
-    newPagesTree->SetParent(NULL);
+    newPagesTree->SetParent(nullptr);
     delete root;
 
     // write modified old pages root
@@ -2522,7 +2522,7 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
     // Reuse original encryption dict for new modified trailer. for sake of simplicity (with trailer using ref for
     // encrypt), make it indirect if not already
     RefCountPtr<PDFObject> encrypt(inModifiedFileParser->GetTrailer()->QueryDirectObject("Encrypt"));
-    if (encrypt.GetPtr() == NULL)
+    if (encrypt.GetPtr() == nullptr)
         return;
 
     if (encrypt->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
@@ -2602,7 +2602,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(PDFParser *i
     if (context->Start(inPDFParser, this, mObjectsContext) != PDFHummus::eSuccess)
     {
         delete context;
-        return NULL;
+        return nullptr;
     }
     else
         return context;
@@ -2889,7 +2889,7 @@ static const Byte scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
 static const Byte scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
 PDFHummus::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPosition *inImageStream,
-                                                          unsigned long inImageIndex)
+                                                          unsigned long  /*inImageIndex*/)
 {
     // The types of images that are discovered here are those familiar to Hummus - JPG, TIFF and PDF.
     // PDF is recognized by starting with "%PDF"
@@ -3042,7 +3042,7 @@ EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, u
         singlePageRange.mType = PDFPageRange::eRangeTypeSpecific;
         singlePageRange.mSpecificRanges.push_back(ULongAndULong(inImageIndex, inImageIndex));
 
-        status = CreateFormXObjectsFromPDF(inImagePath, inParsingOptions, singlePageRange, ePDFPageBoxMediaBox, NULL,
+        status = CreateFormXObjectsFromPDF(inImagePath, inParsingOptions, singlePageRange, ePDFPageBoxMediaBox, nullptr,
                                            ObjectIDTypeList(), ObjectIDTypeList(1, inObjectID))
                      .first;
         break;

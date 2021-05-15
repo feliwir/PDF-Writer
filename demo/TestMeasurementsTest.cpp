@@ -29,11 +29,11 @@
 
 using namespace PDFHummus;
 
-TestMeasurementsTest::TestMeasurementsTest(void)
+TestMeasurementsTest::TestMeasurementsTest()
 {
 }
 
-TestMeasurementsTest::~TestMeasurementsTest(void)
+TestMeasurementsTest::~TestMeasurementsTest()
 {
 }
 

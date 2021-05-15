@@ -72,7 +72,7 @@
 using namespace IOBasicTypes;
 using namespace PDFHummus;
 
-MD5Generator::MD5Generator(void)
+MD5Generator::MD5Generator()
 {
     mIsFinalized = false;
 
@@ -87,7 +87,7 @@ MD5Generator::MD5Generator(void)
     mState[3] = 0x10325476;
 }
 
-MD5Generator::~MD5Generator(void)
+MD5Generator::~MD5Generator()
 {
 }
 
@@ -407,12 +407,12 @@ void MD5Generator::PrepareFinalStrings()
     char formattedHex[3];
     MD5FinalString.clear();
 
-    for (int i = 0; i < 16; i++)
+    for (unsigned char & i : mDigest)
     {
-        SAFE_SPRINTF_1(formattedHex, 3, "%02x", mDigest[i]);
+        SAFE_SPRINTF_1(formattedHex, 3, "%02x", i);
         stringHexStream.Write((const Byte *)formattedHex, 2);
-        MD5FinalString.push_back(mDigest[i]);
-        MD5FinalStringAsString.push_back((char)mDigest[i]);
+        MD5FinalString.push_back(i);
+        MD5FinalStringAsString.push_back((char)i);
     }
 
     MD5FinalHexString = stringHexStream.ToString();

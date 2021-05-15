@@ -21,11 +21,11 @@
 #include "TimersRegistry.h"
 #include "Trace.h"
 
-TimersRegistry::TimersRegistry(void)
+TimersRegistry::TimersRegistry()
 {
 }
 
-TimersRegistry::~TimersRegistry(void)
+TimersRegistry::~TimersRegistry()
 {
 }
 

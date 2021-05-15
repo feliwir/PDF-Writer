@@ -31,11 +31,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-PFBStreamTest::PFBStreamTest(void)
+PFBStreamTest::PFBStreamTest()
 {
 }
 
-PFBStreamTest::~PFBStreamTest(void)
+PFBStreamTest::~PFBStreamTest()
 {
 }
 
@@ -72,7 +72,7 @@ EStatusCode PFBStreamTest::Run(const TestConfiguration &inTestConfiguration)
         }
     } while (false);
 
-    decodeStream.Assign(NULL);
+    decodeStream.Assign(nullptr);
     pfbFile.CloseFile();
     decodedPFBFile.CloseFile();
 

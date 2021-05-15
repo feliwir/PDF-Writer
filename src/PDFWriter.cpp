@@ -44,7 +44,7 @@ const LogConfiguration &LogConfiguration::DefaultLogConfiguration()
     return default_log_configuration;
 }
 
-PDFWriter::PDFWriter(void)
+PDFWriter::PDFWriter()
 {
     // Gal: some trick, already set reference to objects context. this does not mean that the document context can start
     // doing something. this allows the creation of copying context before starting to write the PDF, so that already
@@ -53,7 +53,7 @@ PDFWriter::PDFWriter(void)
     mIsModified = false;
 }
 
-PDFWriter::~PDFWriter(void)
+PDFWriter::~PDFWriter()
 {
 }
 
@@ -284,7 +284,7 @@ PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGFile(const std::string &inPNG
     InputFile inputFile;
     if (inputFile.OpenFile(inPNGFilePath) != eSuccess)
     {
-        return NULL;
+        return nullptr;
     }
 
     return CreateFormXObjectFromPNGStream(inputFile.GetInputStream(), inFormXObjectId);
@@ -845,7 +845,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = NULL;
+    PDFDocumentCopyingContext *copyingContext = nullptr;
 
     /*
     How to recrypt an encrypted or plain PDF. In other words. create a new version that's decrypted, or encrypted with
@@ -894,7 +894,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
         }
 
         delete copyingContext;
-        copyingContext = NULL;
+        copyingContext = nullptr;
 
         // set new root object ID as this document root
         pdfWriter.GetDocumentContext().GetTrailerInformation().SetRoot(copyCatalogResult.second);

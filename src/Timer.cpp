@@ -20,13 +20,13 @@
 */
 #include "Timer.h"
 
-Timer::Timer(void)
+Timer::Timer()
 {
     mStartTime = 0;
     mTotal = 0;
 }
 
-Timer::~Timer(void)
+Timer::~Timer()
 {
 }
 

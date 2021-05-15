@@ -20,14 +20,14 @@
 */
 #include "CMYKRGBColor.h"
 
-CMYKRGBColor::CMYKRGBColor(void)
+CMYKRGBColor::CMYKRGBColor()
 {
     UseCMYK = false;
     RGBComponents[0] = RGBComponents[1] = RGBComponents[2] = 0;
     CMYKComponents[0] = CMYKComponents[1] = CMYKComponents[2] = CMYKComponents[3] = 0;
 }
 
-CMYKRGBColor::~CMYKRGBColor(void)
+CMYKRGBColor::~CMYKRGBColor()
 {
 }
 

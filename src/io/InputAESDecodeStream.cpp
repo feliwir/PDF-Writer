@@ -26,7 +26,7 @@ using namespace IOBasicTypes;
 
 InputAESDecodeStream::InputAESDecodeStream()
 {
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
 }
 
 InputAESDecodeStream::InputAESDecodeStream(IByteReader *inSourceReader, const ByteList &inKey)
@@ -34,7 +34,7 @@ InputAESDecodeStream::InputAESDecodeStream(IByteReader *inSourceReader, const By
     Assign(inSourceReader, inKey);
 }
 
-InputAESDecodeStream::~InputAESDecodeStream(void)
+InputAESDecodeStream::~InputAESDecodeStream()
 {
     if (mSourceStream)
         delete mSourceStream;

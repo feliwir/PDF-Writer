@@ -37,11 +37,11 @@
 
 using namespace PDFHummus;
 
-CIDFontWriter::CIDFontWriter(void)
+CIDFontWriter::CIDFontWriter()
 {
 }
 
-CIDFontWriter::~CIDFontWriter(void)
+CIDFontWriter::~CIDFontWriter()
 {
 }
 

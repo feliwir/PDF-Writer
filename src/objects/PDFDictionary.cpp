@@ -20,11 +20,11 @@
 */
 #include "PDFDictionary.h"
 
-PDFDictionary::PDFDictionary(void) : PDFObject(eType)
+PDFDictionary::PDFDictionary() : PDFObject(eType)
 {
 }
 
-PDFDictionary::~PDFDictionary(void)
+PDFDictionary::~PDFDictionary()
 {
     PDFNameToPDFObjectMap::iterator it = mValues.begin();
 
@@ -35,14 +35,14 @@ PDFDictionary::~PDFDictionary(void)
     }
 }
 
-PDFObject *PDFDictionary::QueryDirectObject(std::string inName)
+PDFObject *PDFDictionary::QueryDirectObject(const std::string& inName)
 {
     PDFName key(inName);
     PDFNameToPDFObjectMap::iterator it = mValues.find(&key);
 
     if (it == mValues.end())
     {
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -59,7 +59,7 @@ void PDFDictionary::Insert(PDFName *inKeyObject, PDFObject *inValueObject)
     mValues.insert(PDFNameToPDFObjectMap::value_type(inKeyObject, inValueObject));
 }
 
-bool PDFDictionary::Exists(std::string inName)
+bool PDFDictionary::Exists(const std::string& inName)
 {
     PDFName key(inName);
     return mValues.find(&key) != mValues.end();

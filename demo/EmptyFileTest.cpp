@@ -26,11 +26,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-EmptyFileTest::EmptyFileTest(void)
+EmptyFileTest::EmptyFileTest()
 {
 }
 
-EmptyFileTest::~EmptyFileTest(void)
+EmptyFileTest::~EmptyFileTest()
 {
 }
 

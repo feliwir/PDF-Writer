@@ -25,11 +25,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-TestsRunner::TestsRunner(void)
+TestsRunner::TestsRunner()
 {
 }
 
-TestsRunner::~TestsRunner(void)
+TestsRunner::~TestsRunner()
 {
     DeleteTests();
 }

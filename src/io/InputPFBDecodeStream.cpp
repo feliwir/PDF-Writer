@@ -24,14 +24,14 @@
 
 using namespace PDFHummus;
 
-InputPFBDecodeStream::InputPFBDecodeStream(void)
+InputPFBDecodeStream::InputPFBDecodeStream()
 {
-    mStreamToDecode = NULL;
-    mDecodeMethod = NULL;
+    mStreamToDecode = nullptr;
+    mDecodeMethod = nullptr;
     mInternalState = PDFHummus::eFailure;
 }
 
-InputPFBDecodeStream::~InputPFBDecodeStream(void)
+InputPFBDecodeStream::~InputPFBDecodeStream()
 {
     delete mStreamToDecode;
 }
@@ -60,7 +60,7 @@ void InputPFBDecodeStream::ResetReadStatus()
     mCurrentType = 0;
     mHasTokenBuffer = false;
     mFoundEOF = false;
-    mInternalState = (mStreamToDecode != NULL) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    mInternalState = (mStreamToDecode != nullptr) ? PDFHummus::eSuccess : PDFHummus::eFailure;
 }
 
 EStatusCode STATIC_NoDecodeRead(InputPFBDecodeStream *inThis, Byte &outByte)

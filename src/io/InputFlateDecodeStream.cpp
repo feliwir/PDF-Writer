@@ -23,15 +23,15 @@
 #include "Trace.h"
 #include "zlib.h"
 
-InputFlateDecodeStream::InputFlateDecodeStream(void)
+InputFlateDecodeStream::InputFlateDecodeStream()
 {
     mZLibState = new z_stream;
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
     mCurrentlyEncoding = false;
     mEndOfCompressionEoncountered = false;
 }
 
-InputFlateDecodeStream::~InputFlateDecodeStream(void)
+InputFlateDecodeStream::~InputFlateDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -50,7 +50,7 @@ void InputFlateDecodeStream::FinalizeEncoding()
 InputFlateDecodeStream::InputFlateDecodeStream(IByteReader *inSourceReader)
 {
     mZLibState = new z_stream;
-    mSourceStream = NULL;
+    mSourceStream = nullptr;
     mCurrentlyEncoding = false;
 
     Assign(inSourceReader);

@@ -278,11 +278,11 @@ static const char *scGlyphNames[256] = {".notdef",
                                         "thorn",
                                         "ydieresis"};
 
-PDFDocEncoding::PDFDocEncoding(void)
+PDFDocEncoding::PDFDocEncoding()
 {
 }
 
-PDFDocEncoding::~PDFDocEncoding(void)
+PDFDocEncoding::~PDFDocEncoding()
 {
 }
 

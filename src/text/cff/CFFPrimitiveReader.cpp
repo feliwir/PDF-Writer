@@ -28,7 +28,7 @@ CFFPrimitiveReader::CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile)
     SetStream(inCFFFile);
 }
 
-CFFPrimitiveReader::~CFFPrimitiveReader(void)
+CFFPrimitiveReader::~CFFPrimitiveReader()
 {
 }
 
@@ -293,9 +293,9 @@ EStatusCode CFFPrimitiveReader::ReadRealOperand(double &outValue, long &outRealV
         nibble[0] = (buffer >> 4) & 0xf;
         nibble[1] = buffer & 0xf;
 
-        for (int i = 0; i < 2; ++i)
+        for (unsigned char i : nibble)
         {
-            switch (nibble[i])
+            switch (i)
             {
             case 0xa:
                 hasFraction = true;
@@ -318,16 +318,16 @@ EStatusCode CFFPrimitiveReader::ReadRealOperand(double &outValue, long &outRealV
             default: // numbers
                 if (hasPositivePower || hasNegativePower)
                 {
-                    powerPart = powerPart * 10 + nibble[i];
+                    powerPart = powerPart * 10 + i;
                 }
                 else if (hasFraction)
                 {
-                    fractionPart = fractionPart * 10 + nibble[i];
+                    fractionPart = fractionPart * 10 + i;
                     fractionDecimal *= 10;
                     ++outRealValueFractalEnd;
                 }
                 else
-                    integerPart = integerPart * 10 + nibble[i];
+                    integerPart = integerPart * 10 + i;
             }
         }
     } while (notDone);

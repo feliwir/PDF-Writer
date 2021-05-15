@@ -45,7 +45,7 @@ class EncryptionHelper
     */
     PDFHummus::EStatusCode Setup(bool inShouldEncrypt, double inPDFLevel, const std::string &inUserPassword,
                                  const std::string &inOwnerPassword, long long inUserProtectionOptionsFlag,
-                                 bool inEncryptMetadata, const std::string inFileIDPart1);
+                                 bool inEncryptMetadata, const std::string& inFileIDPart1);
     // short one for setting up no ecnryption
     void SetupNoEncryption();
     // Setup with existing decryption helper. This can be used to setup encryption with another PDF existing setup, or

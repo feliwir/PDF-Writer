@@ -25,11 +25,11 @@
 #include "text/freetype/EFontStretch.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 
-FontDescriptorWriter::FontDescriptorWriter(void)
+FontDescriptorWriter::FontDescriptorWriter()
 {
 }
 
-FontDescriptorWriter::~FontDescriptorWriter(void)
+FontDescriptorWriter::~FontDescriptorWriter()
 {
 }
 

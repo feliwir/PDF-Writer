@@ -113,7 +113,7 @@ METHODDEF(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReade
      * This makes it unsafe to use this manager and a different source
      * manager serially with the same JPEG object.  Caveat programmer.
      */
-    if (cinfo->src == NULL)
+    if (cinfo->src == nullptr)
     { /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)(*cinfo->mem->alloc_small)((j_common_ptr)cinfo, JPOOL_PERMANENT,
                                                                           sizeof(HummusSourceManager));
@@ -130,12 +130,12 @@ METHODDEF(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReade
     src->pub.term_source = HummusNoOp;
     src->mReader = inSourceStream;
     src->pub.bytes_in_buffer = 0;    /* forces fill_input_buffer on first read */
-    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
-InputDCTDecodeStream::InputDCTDecodeStream(void)
+InputDCTDecodeStream::InputDCTDecodeStream()
 {
-    mStream = NULL;
+    mStream = nullptr;
     mIsDecoding = false;
     mIsHeaderRead = false;
     mCurrentSampleRow = 0;
@@ -143,7 +143,7 @@ InputDCTDecodeStream::InputDCTDecodeStream(void)
     mIndexInRow = 0;
 }
 
-InputDCTDecodeStream::~InputDCTDecodeStream(void)
+InputDCTDecodeStream::~InputDCTDecodeStream()
 {
     if (mIsDecoding)
         FinalizeDecoding();
@@ -155,13 +155,13 @@ void InputDCTDecodeStream::FinalizeDecoding()
 {
     jpeg_destroy_decompress(&mJPGState);
     mIsDecoding = false;
-    mSamplesBuffer = NULL;
+    mSamplesBuffer = nullptr;
     mIsHeaderRead = false;
 }
 
 InputDCTDecodeStream::InputDCTDecodeStream(IByteReader *inSourceReader)
 {
-    mStream = NULL;
+    mStream = nullptr;
     mIsDecoding = false;
     mIsHeaderRead = false;
 

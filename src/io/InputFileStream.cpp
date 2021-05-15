@@ -23,12 +23,12 @@
 
 using namespace PDFHummus;
 
-InputFileStream::InputFileStream(void)
+InputFileStream::InputFileStream()
 {
-    mStream = NULL;
+    mStream = nullptr;
 }
 
-InputFileStream::~InputFileStream(void)
+InputFileStream::~InputFileStream()
 {
     if (mStream)
         Close();
@@ -36,21 +36,21 @@ InputFileStream::~InputFileStream(void)
 
 InputFileStream::InputFileStream(const std::string &inFilePath)
 {
-    mStream = NULL;
+    mStream = nullptr;
     Open(inFilePath);
 }
 
 EStatusCode InputFileStream::Open(const std::string &inFilePath)
 {
     SAFE_FOPEN(mStream, inFilePath.c_str(), "rb");
-    return NULL == mStream ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return nullptr == mStream ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
 EStatusCode InputFileStream::Close()
 {
     EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess : PDFHummus::eFailure;
 
-    mStream = NULL;
+    mStream = nullptr;
     return result;
 }
 

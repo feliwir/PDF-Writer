@@ -32,11 +32,11 @@
 
 using namespace PDFHummus;
 
-TrueTypeANSIFontWriter::TrueTypeANSIFontWriter(void)
+TrueTypeANSIFontWriter::TrueTypeANSIFontWriter()
 {
 }
 
-TrueTypeANSIFontWriter::~TrueTypeANSIFontWriter(void)
+TrueTypeANSIFontWriter::~TrueTypeANSIFontWriter()
 {
 }
 
@@ -103,7 +103,7 @@ void TrueTypeANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext
 static const std::string scFontFile2 = "FontFile2";
 
 void TrueTypeANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,
-                                                    ObjectsContext *inObjectsContext)
+                                                    ObjectsContext * /*inObjectsContext*/)
 {
     // will be 0 in case embedding didn't occur due to font embedding restrictions
     if (mEmbeddedFontFileObjectID != 0)

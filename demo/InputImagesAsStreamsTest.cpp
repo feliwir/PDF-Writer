@@ -11,11 +11,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-InputImagesAsStreamsTest::InputImagesAsStreamsTest(void)
+InputImagesAsStreamsTest::InputImagesAsStreamsTest()
 {
 }
 
-InputImagesAsStreamsTest::~InputImagesAsStreamsTest(void)
+InputImagesAsStreamsTest::~InputImagesAsStreamsTest()
 {
 }
 
@@ -65,7 +65,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
         jpgImage.CloseFile();
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -117,7 +117,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
 
         tiffFile.CloseFile();
         pageContentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == pageContentContext)
+        if (nullptr == pageContentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page with TIFF image\n";

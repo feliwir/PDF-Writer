@@ -36,11 +36,11 @@
 
 using namespace PDFHummus;
 
-CFFANSIFontWriter::CFFANSIFontWriter(void)
+CFFANSIFontWriter::CFFANSIFontWriter()
 {
 }
 
-CFFANSIFontWriter::~CFFANSIFontWriter(void)
+CFFANSIFontWriter::~CFFANSIFontWriter()
 {
 }
 
@@ -122,7 +122,7 @@ static const std::string scCharSet = "CharSet";
 // static const Byte scLeftParanthesis[] = {'('};
 // static const Byte scRightParanthesis[] = {')'};
 
-void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
+void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext * /*inObjectsContext*/,
                                      FreeTypeFaceWrapper *inFontInfo,
                                      const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
 {
@@ -135,7 +135,7 @@ void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, Obj
     for (; it != inEncodedGlyphs.end(); ++it)
     {
         std::string glyphName = inFontInfo->GetGlyphName(it->first);
-        primitiveWriter.WriteName(glyphName.c_str(), eTokenSepratorNone);
+        primitiveWriter.WriteName(glyphName, eTokenSepratorNone);
     }
 
     // ChartSet
@@ -144,7 +144,7 @@ void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, Obj
 }
 
 static const std::string scFontFile3 = "FontFile3";
-void CFFANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext)
+void CFFANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext * /*inObjectsContext*/)
 {
     // write font reference only if there's what to write....
     if (mEmbeddedFontFileObjectID != 0)

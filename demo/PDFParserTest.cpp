@@ -36,11 +36,11 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFParserTest::PDFParserTest(void)
+PDFParserTest::PDFParserTest()
 {
 }
 
-PDFParserTest::~PDFParserTest(void)
+PDFParserTest::~PDFParserTest()
 {
 }
 

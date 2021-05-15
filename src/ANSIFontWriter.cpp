@@ -39,11 +39,11 @@
 
 using namespace PDFHummus;
 
-ANSIFontWriter::ANSIFontWriter(void)
+ANSIFontWriter::ANSIFontWriter()
 {
 }
 
-ANSIFontWriter::~ANSIFontWriter(void)
+ANSIFontWriter::~ANSIFontWriter()
 {
 }
 

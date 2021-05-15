@@ -70,7 +70,7 @@ void RC4::Init(const Byte *inKey, LongBufferSizeType inLength)
     mI = mJ = 0;
 }
 
-RC4::~RC4(void)
+RC4::~RC4()
 {
 }
 

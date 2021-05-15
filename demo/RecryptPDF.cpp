@@ -25,11 +25,11 @@
 
 #include <iostream>
 
-RecryptPDF::RecryptPDF(void)
+RecryptPDF::RecryptPDF()
 {
 }
 
-RecryptPDF::~RecryptPDF(void)
+RecryptPDF::~RecryptPDF()
 {
 }
 

@@ -29,14 +29,14 @@
 
 using namespace PDFHummus;
 
-Type1Input::Type1Input(void)
+Type1Input::Type1Input()
 {
     mSubrsCount = 0;
-    mSubrs = NULL;
-    mCurrentDependencies = NULL;
+    mSubrs = nullptr;
+    mCurrentDependencies = nullptr;
 }
 
-Type1Input::~Type1Input(void)
+Type1Input::~Type1Input()
 {
     FreeTables();
 }
@@ -46,7 +46,7 @@ void Type1Input::FreeTables()
     for (long i = 0; i < mSubrsCount; ++i)
         delete[] mSubrs[i].Code;
     delete[] mSubrs;
-    mSubrs = NULL;
+    mSubrs = nullptr;
     mSubrsCount = 0;
 
     StringToType1CharStringMap::iterator itCharStrings = mCharStrings.begin();
@@ -66,8 +66,8 @@ void Type1Input::Reset()
         mFontDictionary.FontMatrix[5] = 0;
     mFontDictionary.FontMatrix[0] = mFontDictionary.FontMatrix[3] = 0.001;
     mFontDictionary.UniqueID = -1;
-    for (int i = 0; i < 256; ++i)
-        mEncoding.mCustomEncoding[i].clear();
+    for (auto & i : mEncoding.mCustomEncoding)
+        i.clear();
     mReverseEncoding.clear();
     mFontDictionary.StrokeWidth = 1;
     mFontDictionary.FSTypeValid = false;
@@ -155,7 +155,7 @@ EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
 
     } while (false);
 
-    mPFBDecoder.Assign(NULL);
+    mPFBDecoder.Assign(nullptr);
     return status;
 }
 
@@ -635,7 +635,7 @@ EStatusCode Type1Input::ParseSubrs()
     mSubrsCount = Long(token.second);
     if (mSubrsCount == 0)
     {
-        mSubrs = NULL;
+        mSubrs = nullptr;
         return PDFHummus::eSuccess;
     }
     else
@@ -759,7 +759,7 @@ Type1CharString *Type1Input::GetGlyphCharString(Byte inCharStringIndex)
 
     StringToType1CharStringMap::iterator it = mCharStrings.find(characterName);
     if (it == mCharStrings.end())
-        return NULL;
+        return nullptr;
     else
         return &(it->second);
 }
@@ -768,7 +768,7 @@ Type1CharString *Type1Input::GetGlyphCharString(const std::string &inCharStringN
 {
     StringToType1CharStringMap::iterator it = mCharStrings.find(inCharStringName);
     if (it == mCharStrings.end())
-        return NULL;
+        return nullptr;
     else
         return &(it->second);
 }
@@ -787,7 +787,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(Byte inCharStringIndex
 
     mCurrentDependencies = &ioDependenciesInfo;
     EStatusCode status = interpreter.Intepret(*charString, this);
-    mCurrentDependencies = NULL;
+    mCurrentDependencies = nullptr;
     return status;
 }
 
@@ -805,7 +805,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(const std::string &inC
 
     mCurrentDependencies = &ioDependenciesInfo;
     EStatusCode status = interpreter.Intepret(it->second, this);
-    mCurrentDependencies = NULL;
+    mCurrentDependencies = nullptr;
     return status;
 }
 
@@ -818,7 +818,7 @@ Type1CharString *Type1Input::GetSubr(long inSubrIndex)
     {
         TRACE_LOG2("CharStringType1Tracer::GetLocalSubr exception, asked for %ld and there are only %ld count subrs",
                    inSubrIndex, mSubrsCount);
-        return NULL;
+        return nullptr;
     }
     else
         return mSubrs + inSubrIndex;

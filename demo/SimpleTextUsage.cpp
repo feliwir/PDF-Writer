@@ -29,11 +29,11 @@
 
 using namespace PDFHummus;
 
-SimpleTextUsage::SimpleTextUsage(void)
+SimpleTextUsage::SimpleTextUsage()
 {
 }
 
-SimpleTextUsage::~SimpleTextUsage(void)
+SimpleTextUsage::~SimpleTextUsage()
 {
 }
 
@@ -138,7 +138,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -241,7 +241,7 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -320,7 +320,7 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";
@@ -402,7 +402,7 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-        if (NULL == contentContext)
+        if (nullptr == contentContext)
         {
             status = PDFHummus::eFailure;
             cout << "failed to create content context for page\n";

@@ -34,12 +34,12 @@
 
 using namespace PDFHummus;
 
-Type1ToCFFEmbeddedFontWriter::Type1ToCFFEmbeddedFontWriter(void)
+Type1ToCFFEmbeddedFontWriter::Type1ToCFFEmbeddedFontWriter()
 {
-    mCharset = NULL;
+    mCharset = nullptr;
 }
 
-Type1ToCFFEmbeddedFontWriter::~Type1ToCFFEmbeddedFontWriter(void)
+Type1ToCFFEmbeddedFontWriter::~Type1ToCFFEmbeddedFontWriter()
 {
 }
 

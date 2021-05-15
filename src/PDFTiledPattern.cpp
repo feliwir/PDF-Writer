@@ -32,7 +32,7 @@ PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, 
     mContentContext = new TiledPatternContentContext(inDocumentContext, this);
 }
 
-PDFTiledPattern::~PDFTiledPattern(void)
+PDFTiledPattern::~PDFTiledPattern()
 {
     delete mContentStream;
     delete mContentContext;

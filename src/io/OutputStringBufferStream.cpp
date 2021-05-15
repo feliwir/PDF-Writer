@@ -22,13 +22,13 @@
 
 using namespace IOBasicTypes;
 
-OutputStringBufferStream::OutputStringBufferStream(void)
+OutputStringBufferStream::OutputStringBufferStream()
 {
     mBuffer = new MyStringBuf();
     mOwnsBuffer = true;
 }
 
-OutputStringBufferStream::~OutputStringBufferStream(void)
+OutputStringBufferStream::~OutputStringBufferStream()
 {
     if (mOwnsBuffer)
         delete mBuffer;

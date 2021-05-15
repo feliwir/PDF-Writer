@@ -58,7 +58,7 @@ class PDFDictionaryIterator
 
     PDFArrayIterator Array(std::string s);
 
-    bool WriteStreamToFile(InputFile &pdfFile, std::string s, std::string filePath);
+    bool WriteStreamToFile(InputFile &pdfFile, std::string s, const std::string& filePath);
 
   private:
     void SetDictRefPtr(PDFDictionary *dictonary)

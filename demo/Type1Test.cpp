@@ -31,11 +31,11 @@
 
 using namespace PDFHummus;
 
-Type1Test::Type1Test(void)
+Type1Test::Type1Test()
 {
 }
 
-Type1Test::~Type1Test(void)
+Type1Test::~Type1Test()
 {
 }
 

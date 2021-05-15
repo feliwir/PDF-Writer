@@ -34,11 +34,11 @@ using namespace std;
 using namespace IOBasicTypes;
 using namespace PDFHummus;
 
-FlateEncryptionTest::FlateEncryptionTest(void)
+FlateEncryptionTest::FlateEncryptionTest()
 {
 }
 
-FlateEncryptionTest::~FlateEncryptionTest(void)
+FlateEncryptionTest::~FlateEncryptionTest()
 {
 }
 

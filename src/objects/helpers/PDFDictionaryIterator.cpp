@@ -15,7 +15,7 @@ PDFArrayIterator PDFDictionaryIterator::Array(std::string s)
         return PDFArrayIterator(mParser);
 
     PDFObjectCastPtr<PDFArray> foundArray(mDictonary->QueryDirectObject(s));
-    if (foundArray != NULL)
+    if (foundArray != nullptr)
         return PDFArrayIterator(mParser, foundArray);
     return PDFArrayIterator(mParser);
 }
@@ -24,7 +24,7 @@ PDFDictionaryIterator PDFDictionaryIterator::Enter(std::string s)
 {
     if (!mDictonary)
         return PDFDictionaryIterator(mParser);
-    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(std::move(s)));
     if (!foundReference)
         return PDFDictionaryIterator(mParser);
 
@@ -39,17 +39,17 @@ std::string PDFDictionaryIterator::GetStrValue(std::string s)
 {
     if (!mDictonary)
         return std::string();
-    PDFObjectCastPtr<PDFLiteralString> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<PDFLiteralString> foundReference(mDictonary->QueryDirectObject(std::move(s)));
     if (!foundReference)
         return std::string();
     return foundReference->GetValue();
 }
 
-bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, std::string s, std::string filePath)
+bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, std::string s, const std::string& filePath)
 {
     if (!mDictonary)
         return false;
-    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(std::move(s)));
     if (!foundReference)
         return false;
 

@@ -26,11 +26,11 @@
 
 using namespace PDFHummus;
 
-JPEGImageParser::JPEGImageParser(void)
+JPEGImageParser::JPEGImageParser()
 {
 }
 
-JPEGImageParser::~JPEGImageParser(void)
+JPEGImageParser::~JPEGImageParser()
 {
 }
 

@@ -24,9 +24,9 @@
 
 using namespace IOBasicTypes;
 
-OutputBufferedStream::OutputBufferedStream(void)
+OutputBufferedStream::OutputBufferedStream()
 {
-    Initiate(NULL, DEFAULT_BUFFER_SIZE);
+    Initiate(nullptr, DEFAULT_BUFFER_SIZE);
 }
 
 void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)
@@ -37,7 +37,7 @@ void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, Lon
     mTargetStream = inTargetWriter;
 }
 
-OutputBufferedStream::~OutputBufferedStream(void)
+OutputBufferedStream::~OutputBufferedStream()
 {
     Flush();
     delete[] mBuffer;
@@ -46,7 +46,7 @@ OutputBufferedStream::~OutputBufferedStream(void)
 
 OutputBufferedStream::OutputBufferedStream(LongBufferSizeType inBufferSize)
 {
-    Initiate(NULL, inBufferSize);
+    Initiate(nullptr, inBufferSize);
 }
 
 OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)

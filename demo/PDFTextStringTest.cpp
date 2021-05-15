@@ -27,15 +27,15 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFTextStringTest::PDFTextStringTest(void)
+PDFTextStringTest::PDFTextStringTest()
 {
 }
 
-PDFTextStringTest::~PDFTextStringTest(void)
+PDFTextStringTest::~PDFTextStringTest()
 {
 }
 
-EStatusCode PDFTextStringTest::Run(const TestConfiguration &inTestConfiguration)
+EStatusCode PDFTextStringTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {
     EStatusCode status = PDFHummus::eSuccess;
 

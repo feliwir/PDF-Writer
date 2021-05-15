@@ -28,11 +28,11 @@
 
 using namespace PDFHummus;
 
-PageModifierTest::PageModifierTest(void)
+PageModifierTest::PageModifierTest()
 {
 }
 
-PageModifierTest::~PageModifierTest(void)
+PageModifierTest::~PageModifierTest()
 {
 }
 

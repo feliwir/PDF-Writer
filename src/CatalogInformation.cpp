@@ -22,12 +22,12 @@
 #include "IndirectObjectsReferenceRegistry.h"
 #include "PageTree.h"
 
-CatalogInformation::CatalogInformation(void)
+CatalogInformation::CatalogInformation()
 {
-    mCurrentPageTreeNode = NULL;
+    mCurrentPageTreeNode = nullptr;
 }
 
-CatalogInformation::~CatalogInformation(void)
+CatalogInformation::~CatalogInformation()
 {
     Reset();
 }
@@ -42,7 +42,7 @@ void CatalogInformation::Reset()
             resultPageTree = resultPageTree->GetParent();
         delete resultPageTree;
     }
-    mCurrentPageTreeNode = NULL;
+    mCurrentPageTreeNode = nullptr;
 }
 
 ObjectIDType CatalogInformation::AddPageToPageTree(ObjectIDType inPageID,
