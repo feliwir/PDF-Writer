@@ -49,7 +49,7 @@ EStatusCode PageModifierTest::Run(const TestConfiguration &inTestConfiguration)
 
         // open file for modification
         status = pdfWriter.ModifyPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("TestMaterials/XObjectContent.pdf")),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/XObjectContent.pdf")),
             ePDFVersion13,
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("XObjectContentModified.pdf")),
             LogConfiguration(
@@ -66,7 +66,7 @@ EStatusCode PageModifierTest::Run(const TestConfiguration &inTestConfiguration)
         AbstractContentContext *contentContext = modifiedPage.StartContentContext();
         AbstractContentContext::TextOptions opt(
             pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
             14, AbstractContentContext::eGray, 0);
 
         contentContext->WriteText(75, 805, "Test Text", opt);

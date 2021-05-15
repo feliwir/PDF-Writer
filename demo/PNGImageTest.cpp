@@ -81,7 +81,7 @@ EStatusCode RunImageTest(const TestConfiguration &inTestConfiguration, const str
         imageOptions.matrix[0] = imageOptions.matrix[3] = 0.5;
         pageContentContext->DrawImage(10, 200,
                                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                             "TestMaterials/images/png/" + inImageName + ".png"),
+                                                             "data/images/png/" + inImageName + ".png"),
                                       imageOptions);
 
         status = pdfWriter.EndPageContentContext(pageContentContext);

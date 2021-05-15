@@ -56,18 +56,18 @@ EStatusCode FreeTypeInitializationTest::Run(const TestConfiguration &inTestConfi
     do
     {
         status = ShowFaceProperties(
-            ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = ShowFaceProperties(
-            ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFB"),
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFM"));
+            ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFM"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = ShowFaceProperties(ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                      "TestMaterials/fonts/BrushScriptStd.otf"));
+                                                                      "data/fonts/BrushScriptStd.otf"));
         if (status != PDFHummus::eSuccess)
             break;
 

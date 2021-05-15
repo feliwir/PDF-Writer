@@ -61,7 +61,7 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         copyingContext = pdfWriter.CreatePDFCopyingContext(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/Linearized.pdf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Linearized.pdf"));
         if (status != PDFHummus::eSuccess)
             break;
 

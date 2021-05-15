@@ -71,12 +71,12 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
         // draw an image
         cxt->DrawImage(
             10, 100,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
         // place some text
         AbstractContentContext::TextOptions textOptions(
             pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
             14, AbstractContentContext::eGray, 0);
         cxt->WriteText(10, 50, "Hello", textOptions);
 

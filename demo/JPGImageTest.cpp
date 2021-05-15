@@ -84,7 +84,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
 
         // Create image xobject from
         PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
         if (!imageXObject)
         {
             cout << "failed to create image XObject from file\n";
@@ -110,7 +110,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
         }
 
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
         if (!formXObject)
         {
             cout << "failed to create form XObject from file\n";

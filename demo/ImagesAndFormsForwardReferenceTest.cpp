@@ -122,7 +122,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
 
         // Create image xobject
         PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"),
             imageXObjectID);
         if (!imageXObject)
         {
@@ -133,7 +133,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
 
         // now create form xobject
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"),
             formXObjectID);
         if (!formXObject)
         {
@@ -144,7 +144,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
 
 #ifndef PDFHUMMUS_NO_TIFF
         PDFFormXObject *tiffFormXObject = pdfWriter.CreateFormXObjectFromTIFFFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/jim___ah.tif"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___ah.tif"),
             tiffFormXObjectID);
         if (!tiffFormXObject)
         {

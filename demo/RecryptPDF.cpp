@@ -41,7 +41,7 @@ EStatusCode RecryptPDF::Run(const TestConfiguration &inTestConfiguration)
     {
         // recrypt a document with AES encryption, and remove it
         status = PDFWriter::RecryptPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/china.pdf"), "",
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/china.pdf"), "",
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "chinaWithoutEncryption.pdf"),
             LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
         if (status != PDFHummus::eSuccess)
@@ -52,7 +52,7 @@ EStatusCode RecryptPDF::Run(const TestConfiguration &inTestConfiguration)
 
         // recrypt an encrypted document with no password
         status = PDFWriter::RecryptPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/PDFWithPassword.pdf"), "user",
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/PDFWithPassword.pdf"), "user",
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "RecryptPDFWithPasswordToNothing.pdf"),
             LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
         if (status != PDFHummus::eSuccess)
@@ -63,7 +63,7 @@ EStatusCode RecryptPDF::Run(const TestConfiguration &inTestConfiguration)
 
         // recrypt an encrypted document with new password
         status = PDFWriter::RecryptPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/PDFWithPassword.pdf"), "user",
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/PDFWithPassword.pdf"), "user",
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "RecryptPDFWithPasswordToNewPassword.pdf"),
             LogConfiguration::DefaultLogConfiguration(),
             PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")));
@@ -75,7 +75,7 @@ EStatusCode RecryptPDF::Run(const TestConfiguration &inTestConfiguration)
 
         // recrypt a plain to document to one with password
         status = PDFWriter::RecryptPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/Original.pdf"), "",
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Original.pdf"), "",
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "RecryptPDFOriginalToPasswordProtected.pdf"),
             LogConfiguration::DefaultLogConfiguration(),
             PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")));
@@ -87,7 +87,7 @@ EStatusCode RecryptPDF::Run(const TestConfiguration &inTestConfiguration)
 
         // same, but forcing AES
         status = PDFWriter::RecryptPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/Original.pdf"), "",
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Original.pdf"), "",
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "RecryptPDFOriginalToPasswordProtectedAES.pdf"),
             LogConfiguration::DefaultLogConfiguration(),
             PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")), ePDFVersion16);

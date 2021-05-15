@@ -62,7 +62,7 @@ EStatusCode HighLevelContentContext::Run(const TestConfiguration &inTestConfigur
 
         AbstractContentContext::TextOptions textOptions(
             pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
             14, AbstractContentContext::eGray, 0);
         AbstractContentContext::GraphicOptions pathFillOptions(AbstractContentContext::eFill,
                                                                AbstractContentContext::eCMYK, 0xFF000000);

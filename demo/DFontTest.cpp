@@ -58,7 +58,7 @@ EStatusCode DFontTest::Run(const TestConfiguration &inTestConfiguration)
         for (int i = 0; i < 4 && eSuccess == status; ++i)
         {
             courierFonts[i] = pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/courier.dfont"), i);
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/courier.dfont"), i);
             if (!courierFonts[i])
             {
                 status = eFailure;

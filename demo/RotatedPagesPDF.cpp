@@ -61,7 +61,7 @@ EStatusCode RotatedPagesPDF::Run(const TestConfiguration &inTestConfiguration)
 
         AbstractContentContext::TextOptions textOptions(
             pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
             14, AbstractContentContext::eGray, 0);
 
         for (int i = 0; i < 6 && PDFHummus::eSuccess == status; ++i)

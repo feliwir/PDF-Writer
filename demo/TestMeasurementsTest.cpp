@@ -59,7 +59,7 @@ EStatusCode TestMeasurementsTest::Run(const TestConfiguration &inTestConfigurati
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
         PDFUsedFont *arialFont = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (!arialFont)
         {
             status = PDFHummus::eFailure;

@@ -57,7 +57,7 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFFormXObject *soundCloudLogo = pdfWriter.CreateFormXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (NULL == contentContext)
@@ -68,7 +68,7 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;

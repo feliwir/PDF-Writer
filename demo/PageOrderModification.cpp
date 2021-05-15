@@ -92,7 +92,7 @@ EStatusCode PageOrderModification::Run(const TestConfiguration &inTestConfigurat
 
         // open file for modification
         status = pdfWriter.ModifyPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("TestMaterials/XObjectContent.pdf")),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/XObjectContent.pdf")),
             ePDFVersion13,
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("XObjectContentOrderModified.pdf")),
             LogConfiguration(true, true,

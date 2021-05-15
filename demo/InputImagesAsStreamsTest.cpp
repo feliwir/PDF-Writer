@@ -45,11 +45,11 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
         InputFile jpgImage;
 
         status = jpgImage.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to open JPG image in"
-                 << "TestMaterials/images/otherStage.JPG"
+                 << "data/images/otherStage.JPG"
                  << "\n";
             break;
         }
@@ -99,11 +99,11 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
 
         InputFile tiffFile;
         status = tiffFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/FLAG_T24.TIF"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/FLAG_T24.TIF"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to open TIFF image in"
-                 << "TestMaterials/images/tiff/FLAG_T24.TIF"
+                 << "data/images/tiff/FLAG_T24.TIF"
                  << "\n";
             break;
         }
@@ -151,11 +151,11 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
         InputFile pdfFile;
 
         status =
-            pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/Original.pdf"));
+            pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Original.pdf"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to open PDF file in"
-                 << "TestMaterials/Original.pdf"
+                 << "data/Original.pdf"
                  << "\n";
             break;
         }

@@ -169,7 +169,7 @@ EStatusCode DCTDecodeFilterTest::CreateFileWithJPGImage(const TestConfiguration 
 
         // Create image xobject from
         PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/otherStage.JPG"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
         if (!imageXObject)
         {
             cout << "failed to create image XObject from file\n";

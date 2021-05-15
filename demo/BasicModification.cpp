@@ -146,7 +146,7 @@ EStatusCode BasicModification::TestBasicFileModification(const TestConfiguration
     {
         status = pdfWriter.ModifyPDF(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                   string("TestMaterials/") + inSourceFileName + string(".pdf")),
+                                   string("data/") + inSourceFileName + string(".pdf")),
             ePDFVersion13,
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
                                    string("Modified") + inSourceFileName + string(".pdf")),
@@ -171,7 +171,7 @@ EStatusCode BasicModification::TestBasicFileModification(const TestConfiguration
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/couri.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/couri.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -231,7 +231,7 @@ EStatusCode BasicModification::TestInPlaceFileModification(const TestConfigurati
             InputFile sourceFile;
 
             status = sourceFile.OpenFile(RelativeURLToLocalPath(
-                inTestConfiguration.mSampleFileBase, string("TestMaterials/") + inSourceFileName + string(".pdf")));
+                inTestConfiguration.mSampleFileBase, string("data/") + inSourceFileName + string(".pdf")));
             if (status != eSuccess)
             {
                 cout << "failed to open source PDF\n";
@@ -287,7 +287,7 @@ EStatusCode BasicModification::TestInPlaceFileModification(const TestConfigurati
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/couri.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/couri.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;

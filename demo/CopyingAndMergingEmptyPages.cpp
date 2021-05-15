@@ -226,7 +226,7 @@ PDFHummus::EStatusCode CopyingAndMergingEmptyPages::CreatePageFromEmptyPage(
 
         // append other pages
         result = pdfWriter.AppendPDFPagesFromPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/XObjectContent.pdf"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"),
             PDFPageRange());
         if (result.first != PDFHummus::eSuccess)
         {
@@ -264,7 +264,7 @@ PDFHummus::EStatusCode CopyingAndMergingEmptyPages::MergeEmptyPageToPage(const T
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;

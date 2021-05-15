@@ -64,7 +64,7 @@ EStatusCode TiffSpecialsTest::Run(const TestConfiguration &inTestConfiguration)
         {
             TIFFParameters.PageIndex = i;
             PDFFormXObject *imageFormXObject = pdfWriter.CreateFormXObjectFromTIFFFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/multipage.tif"),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/multipage.tif"),
                 TIFFParameters);
             if (!imageFormXObject)
             {
@@ -147,7 +147,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
                                                            PDFWriter &inpdfWriter)
 {
     string scJimBW =
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/jim___ah.tif");
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___ah.tif");
 
     EStatusCode status = PDFHummus::eSuccess;
     TIFFUsageParameters TIFFParameters;
@@ -223,7 +223,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
     TIFFUsageParameters TIFFParameters;
 
     string scWJim =
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/jim___cg.tif");
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___cg.tif");
 
     do
     {

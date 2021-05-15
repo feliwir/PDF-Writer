@@ -66,7 +66,7 @@ EStatusCode UnicodeTextUsage::Run(const TestConfiguration &inTestConfiguration)
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;

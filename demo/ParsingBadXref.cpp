@@ -62,7 +62,7 @@ EStatusCode openPDF(const string &path)
 EStatusCode ParsingBadXref::Run(const TestConfiguration &inTestConfiguration)
 {
     EStatusCode status =
-        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test_bad_xref.pdf"));
+        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test_bad_xref.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing test_bad_xref.pdf" << std::endl;

@@ -160,7 +160,7 @@ EStatusCode JpegLibTest::Run(const TestConfiguration &inTestConfiguration)
         InputFile aFile;
 
         aFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
         jpeg_error_mgr jerr;
 

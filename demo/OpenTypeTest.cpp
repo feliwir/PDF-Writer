@@ -78,7 +78,7 @@ EStatusCode OpenTypeTest::TestFont(const TestConfiguration &inTestConfiguration)
     do
     {
         status = otfFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/BrushScriptStd.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/BrushScriptStd.otf"));
 
         if (status != PDFHummus::eSuccess)
         {

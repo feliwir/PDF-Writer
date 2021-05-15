@@ -55,7 +55,7 @@ EStatusCode ModifyingExistingFileContent::Run(const TestConfiguration &inTestCon
 
         // open file for modification
         status = pdfWriter.ModifyPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("TestMaterials/AddedPage.pdf")),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/AddedPage.pdf")),
             ePDFVersion13,
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("ModifyingExistingFileContent.pdf")),
             LogConfiguration(true, true,

@@ -54,7 +54,7 @@ EStatusCode PDFParserTest::Run(const TestConfiguration &inTestConfiguration)
     do
     {
         status = pdfFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/XObjectContent.pdf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "unable to open file for reading. should be in TestMaterials/XObjectContent.pdf\n";

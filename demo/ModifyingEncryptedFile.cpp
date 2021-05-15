@@ -64,7 +64,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
             AbstractContentContext *contentContext = modifiedPage.StartContentContext();
             AbstractContentContext::TextOptions opt(
                 pdfWriter.GetFontForFile(
-                    RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf")),
+                    RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
                 14, AbstractContentContext::eGray, 0);
 
             contentContext->WriteText(10, 805, "new text on encrypted page!", opt);
@@ -88,7 +88,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
 
             contentContext->DrawImage(10, 300,
                                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                             "TestMaterials/images/soundcloud_logo.jpg"));
+                                                             "data/images/soundcloud_logo.jpg"));
 
             status = pdfWriter.EndPageContentContext(contentContext);
             if (status != PDFHummus::eSuccess)
@@ -126,7 +126,7 @@ EStatusCode ModifyingEncryptedFile::Run(const TestConfiguration &inTestConfigura
             PDFWriter pdfWriter;
             status = pdfWriter.ModifyPDF(
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                       string("TestMaterials/PDFWithPassword.pdf")),
+                                       string("data/PDFWithPassword.pdf")),
                 ePDFVersion13,
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
                                        string("PDFWithPasswordEcnryptedModified.pdf")),
@@ -145,7 +145,7 @@ EStatusCode ModifyingEncryptedFile::Run(const TestConfiguration &inTestConfigura
         {
             PDFWriter pdfWriter;
             status = pdfWriter.ModifyPDF(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("TestMaterials/china.pdf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/china.pdf")),
                 ePDFVersion13,
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("chinaEcnryptedModified.pdf")),
                 LogConfiguration(

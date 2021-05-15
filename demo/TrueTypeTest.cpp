@@ -43,7 +43,7 @@ EStatusCode TrueTypeTest::Run(const TestConfiguration &inTestConfiguration)
     do
     {
         status = ttfFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "cannot read arial font file\n";

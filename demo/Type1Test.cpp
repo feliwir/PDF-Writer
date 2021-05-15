@@ -48,7 +48,7 @@ EStatusCode Type1Test::Run(const TestConfiguration &inTestConfiguration)
     do
     {
         status = type1File.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFB"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "Failed to open Helvetica input file\n";

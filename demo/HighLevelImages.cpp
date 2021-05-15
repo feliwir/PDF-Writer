@@ -64,12 +64,12 @@ EStatusCode HighLevelImages::Run(const TestConfiguration &inTestConfiguration)
         // simple image placement
         cxt->DrawImage(
             10, 10,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
         cxt->DrawImage(
             10, 500,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/cramps.tif"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/cramps.tif"));
         cxt->DrawImage(0, 0,
-                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/XObjectContent.pdf"));
+                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"));
 
         status = pdfWriter.EndPageContentContext(cxt);
         if (status != eSuccess)
@@ -95,25 +95,25 @@ EStatusCode HighLevelImages::Run(const TestConfiguration &inTestConfiguration)
         opt1.imageIndex = 2;
         cxt->DrawImage(
             10, 10,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/multipage.tif"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/multipage.tif"),
             opt1);
         AbstractContentContext::ImageOptions opt2;
         opt2.transformationMethod = AbstractContentContext::eMatrix;
         opt2.matrix[0] = opt2.matrix[3] = 0.25;
         cxt->DrawImage(
             10, 10,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"),
             opt2);
         AbstractContentContext::ImageOptions opt3;
         opt3.transformationMethod = AbstractContentContext::eFit;
         opt3.boundingBoxHeight = 100;
         opt3.boundingBoxWidth = 100;
         cxt->DrawImage(0, 0,
-                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/XObjectContent.pdf"),
+                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"),
                        opt3);
         opt3.fitProportional = true;
         cxt->DrawImage(100, 100,
-                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/XObjectContent.pdf"),
+                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"),
                        opt3);
 
         // draw frames for soundcloud_logo.jpg and the 2 fitted version of XObjectContent.pdf
@@ -124,7 +124,7 @@ EStatusCode HighLevelImages::Run(const TestConfiguration &inTestConfiguration)
         cxt->DrawRectangle(100, 100, 100, 100, pathStrokeOptions);
 
         DoubleAndDoublePair jpgDimensions = pdfWriter.GetImageDimensions(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/soundcloud_logo.jpg"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
         cxt->DrawRectangle(10, 10, jpgDimensions.first / 4, jpgDimensions.second / 4, pathStrokeOptions);
 
         status = pdfWriter.EndPageContentContext(cxt);

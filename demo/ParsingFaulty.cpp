@@ -120,14 +120,14 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
         RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "parsingFaultyLog.txt"), true, true);
 
     EStatusCode status =
-        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test3.pdf"));
+        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test3.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing test3.pdf" << std::endl;
         return status;
     }
 
-    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test4.pdf"));
+    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test4.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing test4.pdf" << std::endl;
@@ -135,7 +135,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     }
 
     status =
-        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/kids-as-reference.pdf"));
+        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/kids-as-reference.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing kids-as-reference.pdf" << std::endl;
@@ -143,7 +143,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     }
 
     status = openPDFForNullPageTest(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/unexpected.kids.array.pdf"));
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/unexpected.kids.array.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing unexpected.kids.array.pdf" << std::endl;
@@ -151,7 +151,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     }
 
     status = openPDFForRotationTest(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/wrong.rotation.pdf"));
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/wrong.rotation.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing wrong.rotation.pdf" << std::endl;
@@ -159,7 +159,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     }
 
     status = openPDF(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/1.unfamiliar.entry.type.pdf"));
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/1.unfamiliar.entry.type.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing 1.unfamiliar.entry.type.pdf" << std::endl;
@@ -167,14 +167,14 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     }
 
     status = openPDF(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/2.unfamiliar.entry.type.pdf"));
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/2.unfamiliar.entry.type.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing 2.unfamiliar.entry.type.pdf" << std::endl;
         return status;
     }
 
-    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/nonZeroXref.pdf"));
+    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/nonZeroXref.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing nonZeroXref.pdf" << std::endl;

@@ -146,7 +146,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/BrushScriptStd.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/BrushScriptStd.otf"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -174,7 +174,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
         contentContext->k(0, 0, 0, 1);
 
         PDFUsedFont *fontK = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/KozGoPro-Regular.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/KozGoPro-Regular.otf"));
         if (!fontK)
         {
             status = PDFHummus::eFailure;
@@ -249,7 +249,7 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -328,8 +328,8 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFB"),
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFM"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFM"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -410,8 +410,8 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
         }
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFB"),
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFM"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"),
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFM"));
         if (!font)
         {
             status = PDFHummus::eFailure;

@@ -66,7 +66,7 @@ PDFHummus::EStatusCode TTCTest::Run(const TestConfiguration &inTestConfiguration
         }
 
         PDFUsedFont *fontLucidaGrande0 = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/LucidaGrande.ttc"), 0);
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/LucidaGrande.ttc"), 0);
         if (!fontLucidaGrande0)
         {
             status = PDFHummus::eFailure;
@@ -75,7 +75,7 @@ PDFHummus::EStatusCode TTCTest::Run(const TestConfiguration &inTestConfiguration
         }
 
         PDFUsedFont *fontLucidaGrande1 = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/LucidaGrande.ttc"), 1);
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/LucidaGrande.ttc"), 1);
         if (!fontLucidaGrande1)
         {
             status = PDFHummus::eFailure;

@@ -61,7 +61,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
             page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PDFUsedFont *font = pdfWriterA.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
             if (!font)
             {
                 status = PDFHummus::eFailure;

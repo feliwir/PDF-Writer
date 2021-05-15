@@ -94,7 +94,7 @@ FlateObjectDecodeTest::~FlateObjectDecodeTest()
 
 EStatusCode FlateObjectDecodeTest::Run(const TestConfiguration &inTestConfiguration)
 {
-    return decodeStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test2.pdf"),
+    return decodeStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test2.pdf"),
                         RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "image.data"));
 }
 

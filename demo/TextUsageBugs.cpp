@@ -107,7 +107,7 @@ EStatusCode TextUsageBugs::RunKoreanFontTest(const TestConfiguration &inTestConf
 
         AbstractContentContext::TextOptions textOptions(
             pdfWriter.GetFontForFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                            "TestMaterials/fonts/NotoSerifCJKkr-Regular.otf")),
+                                                            "data/fonts/NotoSerifCJKkr-Regular.otf")),
             14, AbstractContentContext::eGray, 0);
 
         cxt->WriteText(10, 200, "hello", textOptions);
@@ -170,7 +170,7 @@ EStatusCode TextUsageBugs::RunCNRSTest(const TestConfiguration &inTestConfigurat
             break;
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/texgyrepagella-math.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -257,7 +257,7 @@ EStatusCode TextUsageBugs::RunCNRS2SampleTest(const TestConfiguration &inTestCon
             break;
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/texgyrepagella-math.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
         if (!font)
         {
             status = PDFHummus::eFailure;
@@ -2372,7 +2372,7 @@ EStatusCode TextUsageBugs::RunCNRS2Test(const TestConfiguration &inTestConfigura
             break;
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/texgyrepagella-math.otf"));
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
         if (!font)
         {
             status = PDFHummus::eFailure;

@@ -39,16 +39,16 @@ TEST(Basic, AppendPages)
 
     EStatusCodeAndObjectIDTypeList result;
 
-    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "TestMaterials/Original.pdf"),
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Original.pdf"),
                                              PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "TestMaterials/XObjectContent.pdf"), PDFPageRange());
+        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "TestMaterials/BasicTIFFImagesTest.pdf"), PDFPageRange());
+        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     status = pdfWriter.EndPDF();

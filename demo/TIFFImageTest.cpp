@@ -61,132 +61,132 @@ EStatusCode TIFFImageTest::Run(const TestConfiguration &inTestConfiguration)
 
         for (int i = 1; i < 9 && status != PDFHummus::eFailure; ++i)
             status = AddPageForTIFF(pdfWriter, (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                              "TestMaterials/images/tiff/CCITT_")) +
+                                                                              "data/images/tiff/CCITT_")) +
                                                 Int(i).ToString() + ".TIF")
                                                    .c_str());
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/FLAG_T24.TIF"));
+                                                                  "data/images/tiff/FLAG_T24.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(
-            pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/images/tiff/G4.TIF"));
+            pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/G4.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/G4S.TIF"));
+                                                                  "data/images/tiff/G4S.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/G31D.TIF"));
+                                                                  "data/images/tiff/G31D.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/G31DS.TIF"));
+                                                                  "data/images/tiff/G31DS.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/G32D.TIF"));
+                                                                  "data/images/tiff/G32D.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/GMARBLES.TIF"));
+                                                                  "data/images/tiff/GMARBLES.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/MARBIBM.TIF"));
+                                                                  "data/images/tiff/MARBIBM.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/MARBLES.TIF"));
+                                                                  "data/images/tiff/MARBLES.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/XING_T24.TIF"));
+                                                                  "data/images/tiff/XING_T24.TIF"));
         if (status != PDFHummus::eSuccess)
             break;
 
         // tiled image
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/cramps-tile.tif"));
+                                                                  "data/images/tiff/cramps-tile.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/cramps.tif"));
+                                                                  "data/images/tiff/cramps.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         // Looks corrupted by the tool. on mine looks good
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/dscf0013.tif"));
+                                                                  "data/images/tiff/dscf0013.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         // Creates bad PDF by tool. on mine looks good
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/fax2d.tif"));
+                                                                  "data/images/tiff/fax2d.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/g3test.tif"));
+                                                                  "data/images/tiff/g3test.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/jello.tif"));
+                                                                  "data/images/tiff/jello.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/jim___ah.tif"));
+                                                                  "data/images/tiff/jim___ah.tif"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/jim___cg.tif"));
+                                                                  "data/images/tiff/jim___cg.tif"));
         if (status != PDFHummus::eSuccess)
             break;
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/jim___dg.tif"));
-        if (status != PDFHummus::eSuccess)
-            break;
-
-        status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/jim___gg.tif"));
+                                                                  "data/images/tiff/jim___dg.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/oxford.tif"));
+                                                                  "data/images/tiff/jim___gg.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/quad-lzw.tif"));
+                                                                  "data/images/tiff/oxford.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/quad-tile.tif"));
+                                                                  "data/images/tiff/quad-lzw.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/strike.tif"));
+                                                                  "data/images/tiff/quad-tile.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/ycbcr-cat.tif"));
+                                                                  "data/images/tiff/strike.tif"));
+        if (status != PDFHummus::eSuccess)
+            break;
+
+        status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+                                                                  "data/images/tiff/ycbcr-cat.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status = AddPageForTIFF(pdfWriter,
                                     (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                   "TestMaterials/images/tiff/flower-minisblack-")) +
+                                                                   "data/images/tiff/flower-minisblack-")) +
                                      Int(i).ToString() + ".tif")
                                         .c_str());
         if (status != PDFHummus::eSuccess)
@@ -195,7 +195,7 @@ EStatusCode TIFFImageTest::Run(const TestConfiguration &inTestConfiguration)
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status =
                 AddPageForTIFF(pdfWriter, (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                         "TestMaterials/images/tiff/flower-palette-")) +
+                                                                         "data/images/tiff/flower-palette-")) +
                                            Int(i).ToString() + ".tif")
                                               .c_str());
         if (status != PDFHummus::eSuccess)
@@ -204,26 +204,26 @@ EStatusCode TIFFImageTest::Run(const TestConfiguration &inTestConfiguration)
         for (int i = 2; i < 9 && status != PDFHummus::eFailure; i = i * 2)
             status = AddPageForTIFF(pdfWriter,
                                     (string(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                   "TestMaterials/images/tiff/flower-rgb-contig-")) +
+                                                                   "data/images/tiff/flower-rgb-contig-")) +
                                      Int(i).ToString() + ".tif")
                                         .c_str());
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                  "TestMaterials/images/tiff/flower-rgb-planar-8.tif"));
+                                                                  "data/images/tiff/flower-rgb-planar-8.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter,
                                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                       "TestMaterials/images/tiff/flower-separated-contig-8.tif"));
+                                                       "data/images/tiff/flower-separated-contig-8.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
         status = AddPageForTIFF(pdfWriter,
                                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                       "TestMaterials/images/tiff/flower-separated-planar-8.tif"));
+                                                       "data/images/tiff/flower-separated-planar-8.tif"));
         if (status != PDFHummus::eSuccess)
             break;
 
