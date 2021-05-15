@@ -16,25 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFLiteralString.h"
 
-PDFLiteralString::PDFLiteralString(const std::string& inValue):PDFObject(eType)
+PDFLiteralString::PDFLiteralString(const std::string &inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFLiteralString::~PDFLiteralString(void)
 {
 }
 
-const std::string& PDFLiteralString::GetValue() const
+const std::string &PDFLiteralString::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFLiteralString::operator std::string() const
 {
-	return mValue;
+    return mValue;
 }

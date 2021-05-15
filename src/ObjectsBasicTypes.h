@@ -16,21 +16,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-
 
 typedef unsigned long ObjectIDType;
 
 struct ObjectReference
 {
-    ObjectReference(){ObjectID=0;GenerationNumber=0;}
-    ObjectReference(ObjectIDType inObjectID){ObjectID = inObjectID;GenerationNumber =0;}
-    ObjectReference(ObjectIDType inObjectID,unsigned long inGenerationNumber)
-                            {ObjectID = inObjectID;GenerationNumber = inGenerationNumber;}
-    
+    ObjectReference()
+    {
+        ObjectID = 0;
+        GenerationNumber = 0;
+    }
+    ObjectReference(ObjectIDType inObjectID)
+    {
+        ObjectID = inObjectID;
+        GenerationNumber = 0;
+    }
+    ObjectReference(ObjectIDType inObjectID, unsigned long inGenerationNumber)
+    {
+        ObjectID = inObjectID;
+        GenerationNumber = inGenerationNumber;
+    }
+
     ObjectIDType ObjectID;
     unsigned long GenerationNumber;
-    
 };

@@ -16,19 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 
 #pragma once
 #include "ITestUnit.h"
 
-
 class HighLevelContentContext : public ITestUnit
 {
-public:
-	HighLevelContentContext(void);
-	virtual ~HighLevelContentContext(void);
+  public:
+    HighLevelContentContext(void);
+    virtual ~HighLevelContentContext(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
-
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

@@ -16,23 +16,23 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "TestsRunner.h"
 
 #include "text/freetype/FreeTypeWrapper.h"
 
-class FreeTypeInitializationTest: public ITestUnit
+class FreeTypeInitializationTest : public ITestUnit
 {
-public:
-	FreeTypeInitializationTest(void);
-	~FreeTypeInitializationTest(void);
+  public:
+    FreeTypeInitializationTest(void);
+    ~FreeTypeInitializationTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-
-private:
-	PDFHummus::EStatusCode ShowFaceProperties(FreeTypeWrapper& inFreeType,const string& inFontFilePath,const string& inSecondaryFontFilePath = "");
-	PDFHummus::EStatusCode ShowGlobalFontProperties(FreeTypeWrapper& inFreeType,FT_Face inFace);
+  private:
+    PDFHummus::EStatusCode ShowFaceProperties(FreeTypeWrapper &inFreeType, const string &inFontFilePath,
+                                              const string &inSecondaryFontFilePath = "");
+    PDFHummus::EStatusCode ShowGlobalFontProperties(FreeTypeWrapper &inFreeType, FT_Face inFace);
 };

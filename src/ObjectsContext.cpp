@@ -16,371 +16,378 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "ObjectsContext.h"
-#include "io/IOBasicTypes.h"
-#include "io/IByteWriterWithPosition.h"
-#include "SafeBufferMacrosDefs.h"
 #include "DictionaryContext.h"
-#include "Trace.h"
-#include "io/OutputStreamTraits.h"
 #include "PDFStream.h"
-#include "parsing/PDFParser.h"
-#include "objects/PDFObjectCast.h"
+#include "SafeBufferMacrosDefs.h"
+#include "Trace.h"
+#include "encryption/EncryptionHelper.h"
+#include "io/IByteWriterWithPosition.h"
+#include "io/IOBasicTypes.h"
+#include "io/OutputStreamTraits.h"
+#include "objects/PDFBoolean.h"
 #include "objects/PDFDictionary.h"
 #include "objects/PDFIndirectObjectReference.h"
-#include "objects/PDFBoolean.h"
 #include "objects/PDFLiteralString.h"
-#include "encryption/EncryptionHelper.h"
+#include "objects/PDFObjectCast.h"
 #include "parsing/PDFObjectParser.h"
+#include "parsing/PDFParser.h"
 
 using namespace PDFHummus;
 
 ObjectsContext::ObjectsContext(void)
 {
-	mOutputStream = NULL;
-	mCompressStreams = true;
-	mExtender = NULL;
-	mEncryptionHelper = NULL;
+    mOutputStream = NULL;
+    mCompressStreams = true;
+    mExtender = NULL;
+    mEncryptionHelper = NULL;
 }
 
 ObjectsContext::~ObjectsContext(void)
 {
 }
 
-
-
-
-void ObjectsContext::SetOutputStream(IByteWriterWithPosition* inOutputStream)
+void ObjectsContext::SetOutputStream(IByteWriterWithPosition *inOutputStream)
 {
-	mOutputStream = inOutputStream;
-	mPrimitiveWriter.SetStreamForWriting(inOutputStream);
+    mOutputStream = inOutputStream;
+    mPrimitiveWriter.SetStreamForWriting(inOutputStream);
 }
 
-void ObjectsContext::SetEncryptionHelper(EncryptionHelper* inEncryptionHelper) 
+void ObjectsContext::SetEncryptionHelper(EncryptionHelper *inEncryptionHelper)
 {
-	mEncryptionHelper = inEncryptionHelper;
+    mEncryptionHelper = inEncryptionHelper;
 }
 
-bool ObjectsContext::IsEncrypting() {
-	return mEncryptionHelper && mEncryptionHelper->IsEncrypting();
+bool ObjectsContext::IsEncrypting()
+{
+    return mEncryptionHelper && mEncryptionHelper->IsEncrypting();
 }
 
 static const IOBasicTypes::Byte scComment[1] = {'%'};
-void ObjectsContext::WriteComment(const std::string& inCommentText)
+void ObjectsContext::WriteComment(const std::string &inCommentText)
 {
-	mOutputStream->Write(scComment,1);
-	mOutputStream->Write((const IOBasicTypes::Byte *)inCommentText.c_str(),inCommentText.size());
-	EndLine();
+    mOutputStream->Write(scComment, 1);
+    mOutputStream->Write((const IOBasicTypes::Byte *)inCommentText.c_str(), inCommentText.size());
+    EndLine();
 }
 
-void ObjectsContext::WriteName(const std::string& inName,ETokenSeparator inSeparate)
+void ObjectsContext::WriteName(const std::string &inName, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteName(inName,inSeparate);
+    mPrimitiveWriter.WriteName(inName, inSeparate);
 }
 
-void ObjectsContext::WriteLiteralString(const std::string& inString,ETokenSeparator inSeparate)
+void ObjectsContext::WriteLiteralString(const std::string &inString, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteLiteralString(MaybeEncryptString(inString),inSeparate);
+    mPrimitiveWriter.WriteLiteralString(MaybeEncryptString(inString), inSeparate);
 }
 
-void ObjectsContext::WriteHexString(const std::string& inString,ETokenSeparator inSeparate)
+void ObjectsContext::WriteHexString(const std::string &inString, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteHexString(MaybeEncryptString(inString),inSeparate);
+    mPrimitiveWriter.WriteHexString(MaybeEncryptString(inString), inSeparate);
 }
 
-void ObjectsContext::WriteEncodedHexString(const std::string& inString, ETokenSeparator inSeparate) 
+void ObjectsContext::WriteEncodedHexString(const std::string &inString, ETokenSeparator inSeparate)
 {
-	if (IsEncrypting())
-	{
-		WriteHexString(DecodeHexString(inString), inSeparate);
-	}
-	else {
-		mPrimitiveWriter.WriteEncodedHexString(inString, inSeparate);
-	}
+    if (IsEncrypting())
+    {
+        WriteHexString(DecodeHexString(inString), inSeparate);
+    }
+    else
+    {
+        mPrimitiveWriter.WriteEncodedHexString(inString, inSeparate);
+    }
 }
 
-std::string ObjectsContext::MaybeEncryptString(const std::string& inString) {
-	if (IsEncrypting())
-		return mEncryptionHelper->EncryptString(inString);
-	else
-		return inString;
-}
-
-std::string ObjectsContext::DecodeHexString(const std::string& inString) {
-	PDFObjectParser objectParser;
-
-	return objectParser.DecodeHexString(inString);
-}
-
-
-void ObjectsContext::WriteIndirectObjectReference(const ObjectReference& inObjectReference,ETokenSeparator inSeparate)
+std::string ObjectsContext::MaybeEncryptString(const std::string &inString)
 {
-    WriteIndirectObjectReference(inObjectReference.ObjectID,inObjectReference.GenerationNumber,inSeparate);
+    if (IsEncrypting())
+        return mEncryptionHelper->EncryptString(inString);
+    else
+        return inString;
 }
 
-void ObjectsContext::WriteNewIndirectObjectReference(ObjectIDType indirectObjectID,ETokenSeparator inSeparate)
+std::string ObjectsContext::DecodeHexString(const std::string &inString)
 {
-    WriteIndirectObjectReference(indirectObjectID,0,inSeparate);
+    PDFObjectParser objectParser;
+
+    return objectParser.DecodeHexString(inString);
+}
+
+void ObjectsContext::WriteIndirectObjectReference(const ObjectReference &inObjectReference, ETokenSeparator inSeparate)
+{
+    WriteIndirectObjectReference(inObjectReference.ObjectID, inObjectReference.GenerationNumber, inSeparate);
+}
+
+void ObjectsContext::WriteNewIndirectObjectReference(ObjectIDType indirectObjectID, ETokenSeparator inSeparate)
+{
+    WriteIndirectObjectReference(indirectObjectID, 0, inSeparate);
 }
 
 static const IOBasicTypes::Byte scR[1] = {'R'};
-void ObjectsContext::WriteIndirectObjectReference(ObjectIDType inIndirectObjectID,unsigned long inGenerationNumber,ETokenSeparator inSeparate)
+void ObjectsContext::WriteIndirectObjectReference(ObjectIDType inIndirectObjectID, unsigned long inGenerationNumber,
+                                                  ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteInteger(inIndirectObjectID);
-	mPrimitiveWriter.WriteInteger(inGenerationNumber);
-	mOutputStream->Write(scR,1);
-	mPrimitiveWriter.WriteTokenSeparator(inSeparate);
+    mPrimitiveWriter.WriteInteger(inIndirectObjectID);
+    mPrimitiveWriter.WriteInteger(inGenerationNumber);
+    mOutputStream->Write(scR, 1);
+    mPrimitiveWriter.WriteTokenSeparator(inSeparate);
 }
 
-IByteWriterWithPosition* ObjectsContext::StartFreeContext()
+IByteWriterWithPosition *ObjectsContext::StartFreeContext()
 {
-	return mOutputStream;
+    return mOutputStream;
 }
 
 void ObjectsContext::EndFreeContext()
 {
-	// currently just a marker, do nothing. allegedly used to return to a "controlled" context
+    // currently just a marker, do nothing. allegedly used to return to a "controlled" context
 }
 
-LongFilePositionType ObjectsContext::GetCurrentPosition() {
-	if (!mOutputStream) // in case somebody gets smart and ask before the stream is set
-		return 0;
-
-	return mOutputStream->GetCurrentPosition();
-}
-
-
-static const IOBasicTypes::Byte scXref[] = {'x','r','e','f'};
-
-EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType& outWritePosition)
+LongFilePositionType ObjectsContext::GetCurrentPosition()
 {
-	EStatusCode status = PDFHummus::eSuccess;
-	outWritePosition = mOutputStream->GetCurrentPosition();
-	
-	// write xref keyword
-	mOutputStream->Write(scXref,4);
-	mPrimitiveWriter.EndLine();
+    if (!mOutputStream) // in case somebody gets smart and ask before the stream is set
+        return 0;
 
-    
+    return mOutputStream->GetCurrentPosition();
+}
+
+static const IOBasicTypes::Byte scXref[] = {'x', 'r', 'e', 'f'};
+
+EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType &outWritePosition)
+{
+    EStatusCode status = PDFHummus::eSuccess;
+    outWritePosition = mOutputStream->GetCurrentPosition();
+
+    // write xref keyword
+    mOutputStream->Write(scXref, 4);
+    mPrimitiveWriter.EndLine();
+
     ObjectIDType startID = 0;
     ObjectIDType firstIDNotInRange;
     ObjectIDType nextFreeObject = 0;
-    
+
     // write subsections
-    while((startID < mReferencesRegistry.GetObjectsCount()) && (PDFHummus::eSuccess == status))
+    while ((startID < mReferencesRegistry.GetObjectsCount()) && (PDFHummus::eSuccess == status))
     {
         firstIDNotInRange = startID;
-        
+
         // look for first ID that does not require update [for first version of PDF...it will be the end]
-        while(firstIDNotInRange < mReferencesRegistry.GetObjectsCount() &&
-                mReferencesRegistry.GetNthObjectReference(firstIDNotInRange).mIsDirty)
+        while (firstIDNotInRange < mReferencesRegistry.GetObjectsCount() &&
+               mReferencesRegistry.GetNthObjectReference(firstIDNotInRange).mIsDirty)
             ++firstIDNotInRange;
-        
-    
+
         // write section header
         mPrimitiveWriter.WriteInteger(startID);
-        mPrimitiveWriter.WriteInteger(firstIDNotInRange - startID,eTokenSeparatorEndLine);
-        
+        mPrimitiveWriter.WriteInteger(firstIDNotInRange - startID, eTokenSeparatorEndLine);
+
         // write used/free objects
         char entryBuffer[21];
-        
-        for(ObjectIDType i = startID; i < firstIDNotInRange && (PDFHummus::eSuccess == status);++i)
+
+        for (ObjectIDType i = startID; i < firstIDNotInRange && (PDFHummus::eSuccess == status); ++i)
         {
-            const ObjectWriteInformation& objectReference = mReferencesRegistry.GetNthObjectReference(i);
-            if(objectReference.mObjectReferenceType == ObjectWriteInformation::Used)
+            const ObjectWriteInformation &objectReference = mReferencesRegistry.GetNthObjectReference(i);
+            if (objectReference.mObjectReferenceType == ObjectWriteInformation::Used)
             {
                 // used object
-                
-                if(objectReference.mObjectWritten)
+
+                if (objectReference.mObjectWritten)
                 {
-                    SAFE_SPRINTF_2(entryBuffer,21,"%010lld %05ld n\r\n",objectReference.mWritePosition,objectReference.mGenerationNumber);
-                    mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer,20);
+                    SAFE_SPRINTF_2(entryBuffer, 21, "%010lld %05ld n\r\n", objectReference.mWritePosition,
+                                   objectReference.mGenerationNumber);
+                    mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer, 20);
                 }
                 else
                 {
                     // object not written. at this point this should not happen, and indicates a failure
                     status = PDFHummus::eFailure;
-                    TRACE_LOG1("ObjectsContext::WriteXrefTable, Unexpected Failure. Object of ID = %ld was not registered as written. probably means it was not written",i);
+                    TRACE_LOG1("ObjectsContext::WriteXrefTable, Unexpected Failure. Object of ID = %ld was not "
+                               "registered as written. probably means it was not written",
+                               i);
                 }
             }
-            else 
+            else
             {
                 // free object
-                
+
                 ++nextFreeObject;
                 // look for next dirty & free object, to be the next item of linked list
-                while(nextFreeObject < mReferencesRegistry.GetObjectsCount() &&
-                      (!mReferencesRegistry.GetNthObjectReference(nextFreeObject).mIsDirty ||
-                      mReferencesRegistry.GetNthObjectReference(nextFreeObject).mObjectReferenceType != ObjectWriteInformation::Free))
+                while (nextFreeObject < mReferencesRegistry.GetObjectsCount() &&
+                       (!mReferencesRegistry.GetNthObjectReference(nextFreeObject).mIsDirty ||
+                        mReferencesRegistry.GetNthObjectReference(nextFreeObject).mObjectReferenceType !=
+                            ObjectWriteInformation::Free))
                     ++nextFreeObject;
-                
+
                 // if reached end of list, then link back to head - 0
-                if(nextFreeObject == mReferencesRegistry.GetObjectsCount())
+                if (nextFreeObject == mReferencesRegistry.GetObjectsCount())
                     nextFreeObject = 0;
 
-                SAFE_SPRINTF_2(entryBuffer,21,"%010ld %05ld f\r\n",nextFreeObject,objectReference.mGenerationNumber);
-                mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer,20);
-                
+                SAFE_SPRINTF_2(entryBuffer, 21, "%010ld %05ld f\r\n", nextFreeObject,
+                               objectReference.mGenerationNumber);
+                mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer, 20);
             }
         }
-        
-        if(status != PDFHummus::eSuccess)
+
+        if (status != PDFHummus::eSuccess)
             break;
-        
+
         startID = firstIDNotInRange;
-        
+
         // now promote startID to the next object to update
-        while(startID < mReferencesRegistry.GetObjectsCount() &&
-              !mReferencesRegistry.GetNthObjectReference(startID).mIsDirty)
-            ++startID;        
+        while (startID < mReferencesRegistry.GetObjectsCount() &&
+               !mReferencesRegistry.GetNthObjectReference(startID).mIsDirty)
+            ++startID;
     }
-    
 
-	return status;
+    return status;
 }
 
-DictionaryContext* ObjectsContext::StartDictionary()
+DictionaryContext *ObjectsContext::StartDictionary()
 {
-	DictionaryContext* newDictionary = new DictionaryContext(this,mDictionaryStack.size());
+    DictionaryContext *newDictionary = new DictionaryContext(this, mDictionaryStack.size());
 
-	mDictionaryStack.push_back(newDictionary);
-	return newDictionary;
+    mDictionaryStack.push_back(newDictionary);
+    return newDictionary;
 }
 
-EStatusCode ObjectsContext::EndDictionary(DictionaryContext* ObjectsContext)
+EStatusCode ObjectsContext::EndDictionary(DictionaryContext *ObjectsContext)
 {
-	if(mDictionaryStack.size() > 0)
-	{
-		if(mDictionaryStack.back() == ObjectsContext)
-		{
-			delete mDictionaryStack.back();
-			mDictionaryStack.pop_back();
-			return PDFHummus::eSuccess;
-		}
-		else
-		{
-			TRACE_LOG("ObjectsContext::EndDictionary, nesting violation. Trying to close a dictionary while one of it's children is still open. First End the children");
-			return PDFHummus::eFailure;
-		}
-	}
-	else
-	{
-		TRACE_LOG("ObjectsContext::EndDictionary, stack underflow. Trying to end a dictionary when there's no open dictionaries");
-		return PDFHummus::eFailure;
-	}
+    if (mDictionaryStack.size() > 0)
+    {
+        if (mDictionaryStack.back() == ObjectsContext)
+        {
+            delete mDictionaryStack.back();
+            mDictionaryStack.pop_back();
+            return PDFHummus::eSuccess;
+        }
+        else
+        {
+            TRACE_LOG("ObjectsContext::EndDictionary, nesting violation. Trying to close a dictionary while one of "
+                      "it's children is still open. First End the children");
+            return PDFHummus::eFailure;
+        }
+    }
+    else
+    {
+        TRACE_LOG("ObjectsContext::EndDictionary, stack underflow. Trying to end a dictionary when there's no open "
+                  "dictionaries");
+        return PDFHummus::eFailure;
+    }
 }
 
-IndirectObjectsReferenceRegistry& ObjectsContext::GetInDirectObjectsRegistry()
+IndirectObjectsReferenceRegistry &ObjectsContext::GetInDirectObjectsRegistry()
 {
-	return mReferencesRegistry;
+    return mReferencesRegistry;
 }
-
 
 void ObjectsContext::EndLine()
 {
-	mPrimitiveWriter.EndLine();
+    mPrimitiveWriter.EndLine();
 }
 
 void ObjectsContext::WriteTokenSeparator(ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteTokenSeparator(inSeparate);
+    mPrimitiveWriter.WriteTokenSeparator(inSeparate);
 }
 
-void ObjectsContext::WriteKeyword(const std::string& inKeyword)
+void ObjectsContext::WriteKeyword(const std::string &inKeyword)
 {
-	mPrimitiveWriter.WriteKeyword(inKeyword);
+    mPrimitiveWriter.WriteKeyword(inKeyword);
 }
 
-void ObjectsContext::WriteInteger(long long inIntegerToken,ETokenSeparator inSeparate)
+void ObjectsContext::WriteInteger(long long inIntegerToken, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteInteger(inIntegerToken,inSeparate);
+    mPrimitiveWriter.WriteInteger(inIntegerToken, inSeparate);
 }
 
-void ObjectsContext::WriteDouble(double inDoubleToken,ETokenSeparator inSeparate)
+void ObjectsContext::WriteDouble(double inDoubleToken, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteDouble(inDoubleToken,inSeparate);
+    mPrimitiveWriter.WriteDouble(inDoubleToken, inSeparate);
 }
 
-void ObjectsContext::WriteBoolean(bool inBooleanToken,ETokenSeparator inSeparate)
+void ObjectsContext::WriteBoolean(bool inBooleanToken, ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteBoolean(inBooleanToken,inSeparate);
+    mPrimitiveWriter.WriteBoolean(inBooleanToken, inSeparate);
 }
 
 void ObjectsContext::WriteNull(ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.WriteNull(inSeparate);
+    mPrimitiveWriter.WriteNull(inSeparate);
 }
 
 static const std::string scObj = "obj";
 ObjectIDType ObjectsContext::StartNewIndirectObject()
 {
-	ObjectIDType newObjectID = mReferencesRegistry.AllocateNewObjectID();
-	mReferencesRegistry.MarkObjectAsWritten(newObjectID,mOutputStream->GetCurrentPosition());
-	mPrimitiveWriter.WriteInteger(newObjectID);
-	mPrimitiveWriter.WriteInteger(0);
-	mPrimitiveWriter.WriteKeyword(scObj);
+    ObjectIDType newObjectID = mReferencesRegistry.AllocateNewObjectID();
+    mReferencesRegistry.MarkObjectAsWritten(newObjectID, mOutputStream->GetCurrentPosition());
+    mPrimitiveWriter.WriteInteger(newObjectID);
+    mPrimitiveWriter.WriteInteger(0);
+    mPrimitiveWriter.WriteKeyword(scObj);
 
-	if(IsEncrypting()) {
-		mEncryptionHelper->OnObjectStart((long long)newObjectID, 0);
-	}
+    if (IsEncrypting())
+    {
+        mEncryptionHelper->OnObjectStart((long long)newObjectID, 0);
+    }
 
-	return newObjectID;
+    return newObjectID;
 }
 
 void ObjectsContext::StartNewIndirectObject(ObjectIDType inObjectID)
 {
-	mReferencesRegistry.MarkObjectAsWritten(inObjectID,mOutputStream->GetCurrentPosition());
-	mPrimitiveWriter.WriteInteger(inObjectID);
-	mPrimitiveWriter.WriteInteger(0);
-	mPrimitiveWriter.WriteKeyword(scObj);
+    mReferencesRegistry.MarkObjectAsWritten(inObjectID, mOutputStream->GetCurrentPosition());
+    mPrimitiveWriter.WriteInteger(inObjectID);
+    mPrimitiveWriter.WriteInteger(0);
+    mPrimitiveWriter.WriteKeyword(scObj);
 
-	if (IsEncrypting()) {
-		mEncryptionHelper->OnObjectStart((long long)inObjectID, 0);
-	}
+    if (IsEncrypting())
+    {
+        mEncryptionHelper->OnObjectStart((long long)inObjectID, 0);
+    }
 }
 
 void ObjectsContext::StartModifiedIndirectObject(ObjectIDType inObjectID)
 {
-	mReferencesRegistry.MarkObjectAsUpdated(inObjectID,mOutputStream->GetCurrentPosition());
-	mPrimitiveWriter.WriteInteger(inObjectID);
-	mPrimitiveWriter.WriteInteger(0);
-	mPrimitiveWriter.WriteKeyword(scObj);    
+    mReferencesRegistry.MarkObjectAsUpdated(inObjectID, mOutputStream->GetCurrentPosition());
+    mPrimitiveWriter.WriteInteger(inObjectID);
+    mPrimitiveWriter.WriteInteger(0);
+    mPrimitiveWriter.WriteKeyword(scObj);
 
-	if (IsEncrypting()) {
-		mEncryptionHelper->OnObjectStart((long long)inObjectID, 0);
-	}
+    if (IsEncrypting())
+    {
+        mEncryptionHelper->OnObjectStart((long long)inObjectID, 0);
+    }
 }
 
 static const std::string scEndObj = "endobj";
 void ObjectsContext::EndIndirectObject()
 {
-	mPrimitiveWriter.WriteKeyword(scEndObj);
+    mPrimitiveWriter.WriteKeyword(scEndObj);
 
-	if (IsEncrypting()) {
-		mEncryptionHelper->OnObjectEnd();
-	}
+    if (IsEncrypting())
+    {
+        mEncryptionHelper->OnObjectEnd();
+    }
 }
 
 void ObjectsContext::StartArray()
 {
-	mPrimitiveWriter.StartArray();
+    mPrimitiveWriter.StartArray();
 }
 
 void ObjectsContext::EndArray(ETokenSeparator inSeparate)
 {
-	mPrimitiveWriter.EndArray(inSeparate);
+    mPrimitiveWriter.EndArray(inSeparate);
 }
 
 void ObjectsContext::SetCompressStreams(bool inCompressStreams)
 {
-	mCompressStreams = inCompressStreams;
+    mCompressStreams = inCompressStreams;
 }
 
-bool ObjectsContext::IsCompressingStreams() 
+bool ObjectsContext::IsCompressingStreams()
 {
-	return mCompressStreams;
+    return mCompressStreams;
 }
 
 static const std::string scLength = "Length";
@@ -389,107 +396,106 @@ static const std::string scEndStream = "endstream";
 static const std::string scFilter = "Filter";
 static const std::string scFlateDecode = "FlateDecode";
 
-PDFStream* ObjectsContext::StartPDFStream(DictionaryContext* inStreamDictionary,bool inForceDirectExtentObject)
+PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary, bool inForceDirectExtentObject)
 {
-	// write stream header and allocate PDF stream.
-	// PDF stream will take care of maintaining state for the stream till writing is finished
+    // write stream header and allocate PDF stream.
+    // PDF stream will take care of maintaining state for the stream till writing is finished
 
-	// Write the stream header
-	// Write Stream Dictionary (note that inStreamDictionary is optionally used)
-	DictionaryContext* streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    // Write the stream header
+    // Write Stream Dictionary (note that inStreamDictionary is optionally used)
+    DictionaryContext *streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
-	// Compression (if necessary)
-	if(mCompressStreams)
-	{
-		streamDictionaryContext->WriteKey(scFilter);
-		streamDictionaryContext->WriteNameValue(scFlateDecode);
-	}
-
-	PDFStream* result = NULL;
-    if(!inForceDirectExtentObject)
+    // Compression (if necessary)
+    if (mCompressStreams)
     {
-    
+        streamDictionaryContext->WriteKey(scFilter);
+        streamDictionaryContext->WriteNameValue(scFlateDecode);
+    }
+
+    PDFStream *result = NULL;
+    if (!inForceDirectExtentObject)
+    {
+
         // Length (write as an indirect object)
         streamDictionaryContext->WriteKey(scLength);
         ObjectIDType lengthObjectID = mReferencesRegistry.AllocateNewObjectID();
         streamDictionaryContext->WriteNewObjectReferenceValue(lengthObjectID);
-            
 
         EndDictionary(streamDictionaryContext);
 
         // Write Stream Content
         WriteKeyword(scStream);
-        
-		result = new PDFStream(mCompressStreams,mOutputStream, mEncryptionHelper,lengthObjectID,mExtender);
+
+        result = new PDFStream(mCompressStreams, mOutputStream, mEncryptionHelper, lengthObjectID, mExtender);
     }
     else
-		result = new PDFStream(mCompressStreams,mOutputStream, mEncryptionHelper,streamDictionaryContext,mExtender);
+        result = new PDFStream(mCompressStreams, mOutputStream, mEncryptionHelper, streamDictionaryContext, mExtender);
 
-	// break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should be encrypted. hence - the stream itself is, but its contents do not re-encrypt
-	if (mEncryptionHelper)
-		mEncryptionHelper->PauseEncryption();
+    // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
+    // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
+    if (mEncryptionHelper)
+        mEncryptionHelper->PauseEncryption();
 
-	return result;
+    return result;
 }
 
-PDFStream* ObjectsContext::StartUnfilteredPDFStream(DictionaryContext* inStreamDictionary)
+PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamDictionary)
 {
-	// write stream header and allocate PDF stream.
-	// PDF stream will take care of maintaining state for the stream till writing is finished
+    // write stream header and allocate PDF stream.
+    // PDF stream will take care of maintaining state for the stream till writing is finished
 
-	// Write the stream header
-	// Write Stream Dictionary (note that inStreamDictionary is optionally used)
-	DictionaryContext* streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    // Write the stream header
+    // Write Stream Dictionary (note that inStreamDictionary is optionally used)
+    DictionaryContext *streamDictionaryContext = (NULL == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
-	// Length (write as an indirect object)
-	streamDictionaryContext->WriteKey(scLength);
-	ObjectIDType lengthObjectID = mReferencesRegistry.AllocateNewObjectID();
-	streamDictionaryContext->WriteNewObjectReferenceValue(lengthObjectID);
-		
-	EndDictionary(streamDictionaryContext);
+    // Length (write as an indirect object)
+    streamDictionaryContext->WriteKey(scLength);
+    ObjectIDType lengthObjectID = mReferencesRegistry.AllocateNewObjectID();
+    streamDictionaryContext->WriteNewObjectReferenceValue(lengthObjectID);
 
-	// Write Stream Content
-	WriteKeyword(scStream);
+    EndDictionary(streamDictionaryContext);
 
-	// now begin the stream itself
-	PDFStream* result = new PDFStream(false,mOutputStream, mEncryptionHelper,lengthObjectID,NULL);
+    // Write Stream Content
+    WriteKeyword(scStream);
 
-	// break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should be encrypted. hence - the stream itself is, but its contents do not re-encrypt
-	if(mEncryptionHelper)
-		mEncryptionHelper->PauseEncryption();
+    // now begin the stream itself
+    PDFStream *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, NULL);
 
-	return result;
+    // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
+    // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
+    if (mEncryptionHelper)
+        mEncryptionHelper->PauseEncryption();
+
+    return result;
 }
 
-void ObjectsContext::EndPDFStream(PDFStream* inStream)
+void ObjectsContext::EndPDFStream(PDFStream *inStream)
 {
-	// finalize the stream write to end stream context and calculate length
-	inStream->FinalizeStreamWrite();
+    // finalize the stream write to end stream context and calculate length
+    inStream->FinalizeStreamWrite();
 
-	// bring back encryption, if exists
-	if (mEncryptionHelper)
-		mEncryptionHelper->ReleaseEncryption();
+    // bring back encryption, if exists
+    if (mEncryptionHelper)
+        mEncryptionHelper->ReleaseEncryption();
 
-	if(inStream->GetExtentObjectID() == 0)
+    if (inStream->GetExtentObjectID() == 0)
     {
-        DictionaryContext* streamDictionaryContext = inStream->GetStreamDictionaryForDirectExtentStream();
-        
+        DictionaryContext *streamDictionaryContext = inStream->GetStreamDictionaryForDirectExtentStream();
+
         // Length (write as a direct object)
         streamDictionaryContext->WriteKey(scLength);
         streamDictionaryContext->WriteIntegerValue(inStream->GetLength());
-        
-        
+
         EndDictionary(streamDictionaryContext);
-        
+
         // Write Stream Content
         WriteKeyword(scStream);
-        
+
         inStream->FlushStreamContentForDirectExtentStream();
-        
+
         EndLine();
-		WriteKeyword(scEndStream);
+        WriteKeyword(scEndStream);
         EndIndirectObject();
-        
     }
     else
     {
@@ -498,159 +504,158 @@ void ObjectsContext::EndPDFStream(PDFStream* inStream)
         WritePDFStreamExtent(inStream);
     }
 }
- 
-	
+
 void ObjectsContext::WritePDFStreamEndWithoutExtent()
 {
-		EndLine(); // this one just to make sure
-		WriteKeyword(scEndStream);
+    EndLine(); // this one just to make sure
+    WriteKeyword(scEndStream);
 }
 
-void ObjectsContext::WritePDFStreamExtent(PDFStream* inStream)
+void ObjectsContext::WritePDFStreamExtent(PDFStream *inStream)
 {
-	StartNewIndirectObject(inStream->GetExtentObjectID());
-	WriteInteger(inStream->GetLength(),eTokenSeparatorEndLine);
-	EndIndirectObject();
+    StartNewIndirectObject(inStream->GetExtentObjectID());
+    WriteInteger(inStream->GetLength(), eTokenSeparatorEndLine);
+    EndIndirectObject();
 }
 
-void ObjectsContext::SetObjectsContextExtender(IObjectsContextExtender* inExtender)
+void ObjectsContext::SetObjectsContextExtender(IObjectsContextExtender *inExtender)
 {
-	mExtender = inExtender;
+    mExtender = inExtender;
 }
 
 std::string ObjectsContext::GenerateSubsetFontPrefix()
 {
-	return mSubsetFontsNamesSequance.GetNextValue();
+    return mSubsetFontsNamesSequance.GetNextValue();
 }
 
-EStatusCode ObjectsContext::WriteState(ObjectsContext* inStateWriter,ObjectIDType inObjectID)
+EStatusCode ObjectsContext::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
-	EStatusCode status;
-		
-	do
-	{
-		inStateWriter->StartNewIndirectObject(inObjectID);
+    EStatusCode status;
 
-		ObjectIDType referencesRegistryObjectID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
-		ObjectIDType subsetFontsNameSequanceID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
+    do
+    {
+        inStateWriter->StartNewIndirectObject(inObjectID);
 
-		DictionaryContext* objectsContextDict = inStateWriter->StartDictionary();
+        ObjectIDType referencesRegistryObjectID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
+        ObjectIDType subsetFontsNameSequanceID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
 
-		objectsContextDict->WriteKey("Type");
-		objectsContextDict->WriteNameValue("ObjectsContext");
+        DictionaryContext *objectsContextDict = inStateWriter->StartDictionary();
 
-		objectsContextDict->WriteKey("mReferencesRegistry");
-		objectsContextDict->WriteNewObjectReferenceValue(referencesRegistryObjectID);
+        objectsContextDict->WriteKey("Type");
+        objectsContextDict->WriteNameValue("ObjectsContext");
 
-		objectsContextDict->WriteKey("mCompressStreams");
-		objectsContextDict->WriteBooleanValue(mCompressStreams);
+        objectsContextDict->WriteKey("mReferencesRegistry");
+        objectsContextDict->WriteNewObjectReferenceValue(referencesRegistryObjectID);
 
-		objectsContextDict->WriteKey("mSubsetFontsNamesSequance");
-		objectsContextDict->WriteNewObjectReferenceValue(subsetFontsNameSequanceID);
+        objectsContextDict->WriteKey("mCompressStreams");
+        objectsContextDict->WriteBooleanValue(mCompressStreams);
 
-		inStateWriter->EndDictionary(objectsContextDict);
+        objectsContextDict->WriteKey("mSubsetFontsNamesSequance");
+        objectsContextDict->WriteNewObjectReferenceValue(subsetFontsNameSequanceID);
 
-		inStateWriter->EndIndirectObject();
+        inStateWriter->EndDictionary(objectsContextDict);
 
-		status = mReferencesRegistry.WriteState(inStateWriter,referencesRegistryObjectID);
-		if(status != PDFHummus::eSuccess)
-			break;
+        inStateWriter->EndIndirectObject();
 
-		// write subset fonts names sequance
-		inStateWriter->StartNewIndirectObject(subsetFontsNameSequanceID);
+        status = mReferencesRegistry.WriteState(inStateWriter, referencesRegistryObjectID);
+        if (status != PDFHummus::eSuccess)
+            break;
 
-		DictionaryContext* sequanceDict = inStateWriter->StartDictionary();
+        // write subset fonts names sequance
+        inStateWriter->StartNewIndirectObject(subsetFontsNameSequanceID);
 
-		sequanceDict->WriteKey("Type");
-		sequanceDict->WriteNameValue("UppercaseSequance");
+        DictionaryContext *sequanceDict = inStateWriter->StartDictionary();
 
+        sequanceDict->WriteKey("Type");
+        sequanceDict->WriteNameValue("UppercaseSequance");
 
-		sequanceDict->WriteKey("mSequanceString");
-		sequanceDict->WriteLiteralStringValue(mSubsetFontsNamesSequance.ToString());
+        sequanceDict->WriteKey("mSequanceString");
+        sequanceDict->WriteLiteralStringValue(mSubsetFontsNamesSequance.ToString());
 
-		inStateWriter->EndDictionary(sequanceDict);
+        inStateWriter->EndDictionary(sequanceDict);
 
-		inStateWriter->EndIndirectObject();		
-	}while(false);
+        inStateWriter->EndIndirectObject();
+    } while (false);
 
-	return status;
+    return status;
 }
 
-EStatusCode ObjectsContext::ReadState(PDFParser* inStateReader,ObjectIDType inObjectID)
+EStatusCode ObjectsContext::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-	PDFObjectCastPtr<PDFDictionary> objectsContext(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<PDFDictionary> objectsContext(inStateReader->ParseNewObject(inObjectID));
 
-	PDFObjectCastPtr<PDFBoolean> compressStreams(objectsContext->QueryDirectObject("mCompressStreams"));
-	mCompressStreams = compressStreams->GetValue();
+    PDFObjectCastPtr<PDFBoolean> compressStreams(objectsContext->QueryDirectObject("mCompressStreams"));
+    mCompressStreams = compressStreams->GetValue();
 
-	PDFObjectCastPtr<PDFDictionary> subsetFontsNamesSequance(inStateReader->QueryDictionaryObject(objectsContext.GetPtr(),"mSubsetFontsNamesSequance"));
-	PDFObjectCastPtr<PDFLiteralString> sequanceString(subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
-	mSubsetFontsNamesSequance.SetSequanceString(sequanceString->GetValue());
+    PDFObjectCastPtr<PDFDictionary> subsetFontsNamesSequance(
+        inStateReader->QueryDictionaryObject(objectsContext.GetPtr(), "mSubsetFontsNamesSequance"));
+    PDFObjectCastPtr<PDFLiteralString> sequanceString(subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
+    mSubsetFontsNamesSequance.SetSequanceString(sequanceString->GetValue());
 
-	PDFObjectCastPtr<PDFIndirectObjectReference> referencesObject(objectsContext->QueryDirectObject("mReferencesRegistry"));
+    PDFObjectCastPtr<PDFIndirectObjectReference> referencesObject(
+        objectsContext->QueryDirectObject("mReferencesRegistry"));
 
-	return mReferencesRegistry.ReadState(inStateReader,referencesObject->mObjectID);
-
+    return mReferencesRegistry.ReadState(inStateReader, referencesObject->mObjectID);
 }
 
 void ObjectsContext::Cleanup()
 {
-	mOutputStream = NULL;
-	mCompressStreams = true;
-	mExtender = NULL;
-	mEncryptionHelper = NULL;
+    mOutputStream = NULL;
+    mCompressStreams = true;
+    mExtender = NULL;
+    mEncryptionHelper = NULL;
 
-	mSubsetFontsNamesSequance.Reset();
-	mReferencesRegistry.Reset();
+    mSubsetFontsNamesSequance.Reset();
+    mReferencesRegistry.Reset();
 }
 
-void ObjectsContext::SetupModifiedFile(PDFParser* inModifiedFileParser)
+void ObjectsContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
 {
     mReferencesRegistry.SetupXrefFromModifiedFile(inModifiedFileParser);
 }
 
-EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext* inDictionaryContext)
+EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryContext)
 {
     // k. complement input dictionary with the relevant entries - W and Index
     // then continue with a regular stream, forced to have "length" as direct object
-    
+
     // write Index entry
     inDictionaryContext->WriteKey("Index");
     StartArray();
-    
+
     ObjectIDType startID = 0;
     ObjectIDType firstIDNotInRange;
- 
-    while(startID < mReferencesRegistry.GetObjectsCount())
+
+    while (startID < mReferencesRegistry.GetObjectsCount())
     {
         firstIDNotInRange = startID;
-        
+
         // look for first ID that does not require update [for first version of PDF...it will be the end]
-        while(firstIDNotInRange < mReferencesRegistry.GetObjectsCount() &&
-              mReferencesRegistry.GetNthObjectReference(firstIDNotInRange).mIsDirty)
+        while (firstIDNotInRange < mReferencesRegistry.GetObjectsCount() &&
+               mReferencesRegistry.GetNthObjectReference(firstIDNotInRange).mIsDirty)
             ++firstIDNotInRange;
-        
+
         // write section header
         mPrimitiveWriter.WriteInteger(startID);
         mPrimitiveWriter.WriteInteger(firstIDNotInRange - startID);
-        
+
         startID = firstIDNotInRange;
-        
+
         // now promote startID to the next object to update
-        while(startID < mReferencesRegistry.GetObjectsCount() &&
-              !mReferencesRegistry.GetNthObjectReference(startID).mIsDirty)
-            ++startID;        
+        while (startID < mReferencesRegistry.GetObjectsCount() &&
+               !mReferencesRegistry.GetNthObjectReference(startID).mIsDirty)
+            ++startID;
     }
-    
+
     EndArray();
     EndLine();
-    
+
     // write W entry, which is going to be 1 sizeof(long long) and sizeof(unsigned long), per the types i'm using
-    
+
     size_t typeSize = 1;
     size_t locationSize = sizeof(LongFilePositionType);
     size_t generationSize = sizeof(unsigned long);
-    
+
     inDictionaryContext->WriteKey("W");
     StartArray();
     WriteInteger(typeSize);
@@ -658,85 +663,86 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext* inDictionaryConte
     WriteInteger(generationSize);
     EndArray();
     EndLine();
-    
+
     // start the xref stream itself
-    PDFStream* aStream = StartPDFStream(inDictionaryContext,true);
-    
+    PDFStream *aStream = StartPDFStream(inDictionaryContext, true);
+
     // now write the table data itself
     EStatusCode status = eSuccess;
     ObjectIDType nextFreeObject = 0;
-    
-    do {
-    
-        for(ObjectIDType i = 0; i < mReferencesRegistry.GetObjectsCount() && eSuccess == status;++i)
-        {
-            if(!mReferencesRegistry.GetNthObjectReference(i).mIsDirty)
-                continue;
-     
-            const ObjectWriteInformation& objectReference = mReferencesRegistry.GetNthObjectReference(i);
 
-            if(objectReference.mObjectReferenceType == ObjectWriteInformation::Used)
+    do
+    {
+
+        for (ObjectIDType i = 0; i < mReferencesRegistry.GetObjectsCount() && eSuccess == status; ++i)
+        {
+            if (!mReferencesRegistry.GetNthObjectReference(i).mIsDirty)
+                continue;
+
+            const ObjectWriteInformation &objectReference = mReferencesRegistry.GetNthObjectReference(i);
+
+            if (objectReference.mObjectReferenceType == ObjectWriteInformation::Used)
             {
                 // used object
-                
-                if(objectReference.mObjectWritten)
+
+                if (objectReference.mObjectWritten)
                 {
-                    WriteXrefNumber(aStream->GetWriteStream(),1,typeSize);
-                    WriteXrefNumber(aStream->GetWriteStream(),objectReference.mWritePosition,locationSize);
-                    WriteXrefNumber(aStream->GetWriteStream(),objectReference.mGenerationNumber,generationSize);
+                    WriteXrefNumber(aStream->GetWriteStream(), 1, typeSize);
+                    WriteXrefNumber(aStream->GetWriteStream(), objectReference.mWritePosition, locationSize);
+                    WriteXrefNumber(aStream->GetWriteStream(), objectReference.mGenerationNumber, generationSize);
                 }
                 else
                 {
                     // object not written. at this point this should not happen, and indicates a failure
                     status = PDFHummus::eFailure;
-                    TRACE_LOG1("ObjectsContext::WriteXrefStream, Unexpected Failure. Object of ID = %ld was not registered as written. probably means it was not written",i);
+                    TRACE_LOG1("ObjectsContext::WriteXrefStream, Unexpected Failure. Object of ID = %ld was not "
+                               "registered as written. probably means it was not written",
+                               i);
                 }
             }
-            else 
+            else
             {
                 // free object
-                
+
                 ++nextFreeObject;
                 // look for next dirty & free object, to be the next item of linked list
-                while(nextFreeObject < mReferencesRegistry.GetObjectsCount() &&
-                      (!mReferencesRegistry.GetNthObjectReference(nextFreeObject).mIsDirty ||
-                       mReferencesRegistry.GetNthObjectReference(nextFreeObject).mObjectReferenceType != ObjectWriteInformation::Free))
+                while (nextFreeObject < mReferencesRegistry.GetObjectsCount() &&
+                       (!mReferencesRegistry.GetNthObjectReference(nextFreeObject).mIsDirty ||
+                        mReferencesRegistry.GetNthObjectReference(nextFreeObject).mObjectReferenceType !=
+                            ObjectWriteInformation::Free))
                     ++nextFreeObject;
-                
-                // if reached end of list, then link back to head - 0
-                if(nextFreeObject == mReferencesRegistry.GetObjectsCount())
-                    nextFreeObject = 0;
-     
-                WriteXrefNumber(aStream->GetWriteStream(),0,typeSize);
-                WriteXrefNumber(aStream->GetWriteStream(),nextFreeObject,locationSize);
-                WriteXrefNumber(aStream->GetWriteStream(),objectReference.mGenerationNumber,generationSize);
-                
-            }
 
+                // if reached end of list, then link back to head - 0
+                if (nextFreeObject == mReferencesRegistry.GetObjectsCount())
+                    nextFreeObject = 0;
+
+                WriteXrefNumber(aStream->GetWriteStream(), 0, typeSize);
+                WriteXrefNumber(aStream->GetWriteStream(), nextFreeObject, locationSize);
+                WriteXrefNumber(aStream->GetWriteStream(), objectReference.mGenerationNumber, generationSize);
+            }
         }
-        
-        if(status != eSuccess)
+
+        if (status != eSuccess)
             break;
-            
+
         // end the stream and g'bye
         EndPDFStream(aStream);
 
-    } 
-    while (false);
+    } while (false);
 
     return status;
 }
 
-void ObjectsContext::WriteXrefNumber(IByteWriter* inStream,LongFilePositionType inElement, size_t inElementSize)
+void ObjectsContext::WriteXrefNumber(IByteWriter *inStream, LongFilePositionType inElement, size_t inElementSize)
 {
     // xref numbers are written high order byte first (big endian)
-    Byte* buffer = new Byte[inElementSize];
-    
-    for(size_t i = inElementSize; i>0; --i)
+    Byte *buffer = new Byte[inElementSize];
+
+    for (size_t i = inElementSize; i > 0; --i)
     {
-        buffer[i-1] = (Byte)(inElement & 0xff);
+        buffer[i - 1] = (Byte)(inElement & 0xff);
         inElement = inElement >> 8;
     }
-    inStream->Write(buffer,inElementSize);
-	delete[] buffer;
+    inStream->Write(buffer, inElementSize);
+    delete[] buffer;
 }

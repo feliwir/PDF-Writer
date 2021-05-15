@@ -16,12 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "TrueTypeTest.h"
-#include "text/opentype/OpenTypeFileInput.h"
-#include "io/InputFile.h"
 #include "TestsRunner.h"
+#include "io/InputFile.h"
+#include "text/opentype/OpenTypeFileInput.h"
 
 #include <iostream>
 
@@ -35,31 +35,32 @@ TrueTypeTest::~TrueTypeTest(void)
 {
 }
 
-EStatusCode TrueTypeTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode TrueTypeTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status;
-	InputFile ttfFile;
+    EStatusCode status;
+    InputFile ttfFile;
 
-	do
-	{
-		status = ttfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TestMaterials/fonts/arial.ttf"));
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"cannot read arial font file\n";
-			break;
-		}
+    do
+    {
+        status = ttfFile.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "cannot read arial font file\n";
+            break;
+        }
 
-		OpenTypeFileInput trueTypeReader;
+        OpenTypeFileInput trueTypeReader;
 
-		status = trueTypeReader.ReadOpenTypeFile(ttfFile.GetInputStream(),0);
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"could not read true type file\n";
-			break;
-		}
-	}while(false);
+        status = trueTypeReader.ReadOpenTypeFile(ttfFile.GetInputStream(), 0);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "could not read true type file\n";
+            break;
+        }
+    } while (false);
 
-	return status;
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(TrueTypeTest,"TrueType")
+ADD_CATEGORIZED_TEST(TrueTypeTest, "TrueType")

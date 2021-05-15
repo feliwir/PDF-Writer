@@ -16,17 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
 #include "PDFRectangle.h"
 
-#include <string>
 #include <set>
-
-
+#include <string>
 
 typedef std::set<std::string> StringSet;
 
@@ -34,38 +32,36 @@ class ObjectsContext;
 
 class DictionaryContext
 {
-public:
-	DictionaryContext(ObjectsContext* inObjectsContext,size_t inIndentLevel);
-	~DictionaryContext(void);
+  public:
+    DictionaryContext(ObjectsContext *inObjectsContext, size_t inIndentLevel);
+    ~DictionaryContext(void);
 
-	PDFHummus::EStatusCode WriteKey(const std::string& inKey);
+    PDFHummus::EStatusCode WriteKey(const std::string &inKey);
 
-	// returns true if key already written, false if not
-	bool HasKey(const std::string& inKey);
+    // returns true if key already written, false if not
+    bool HasKey(const std::string &inKey);
 
-	void WriteIntegerValue(long long inValue);
-	void WriteLiteralStringValue(const std::string& inValue);
-	void WriteHexStringValue(const std::string& inValue);
-	void WriteNullValue();
-	void WriteNameValue(const std::string& inValue);
-	void WriteKeywordValue(const std::string& inValue);
-	void WriteObjectReferenceValue(const ObjectReference& inObjectReference);
-	void WriteObjectReferenceValue(ObjectIDType inObjectID,unsigned long inGenerationNumber);
+    void WriteIntegerValue(long long inValue);
+    void WriteLiteralStringValue(const std::string &inValue);
+    void WriteHexStringValue(const std::string &inValue);
+    void WriteNullValue();
+    void WriteNameValue(const std::string &inValue);
+    void WriteKeywordValue(const std::string &inValue);
+    void WriteObjectReferenceValue(const ObjectReference &inObjectReference);
+    void WriteObjectReferenceValue(ObjectIDType inObjectID, unsigned long inGenerationNumber);
     void WriteNewObjectReferenceValue(ObjectIDType inObjectID);
-	void WriteRectangleValue(const PDFRectangle& inRectangle);
-	void WriteDoubleValue(double inValue);
-	void WriteBooleanValue(bool inValue);
+    void WriteRectangleValue(const PDFRectangle &inRectangle);
+    void WriteDoubleValue(double inValue);
+    void WriteBooleanValue(bool inValue);
 
-	// use WriteIndents when you are not using the above methods
-	// for writing, but instead using either primitivewriter, or objectscontext to write directly
-	// and you would still like to have the indents (a current example [4/10/2010] would be when writing
-	// multiline arrays)
-	void WriteIndents();
-private:
+    // use WriteIndents when you are not using the above methods
+    // for writing, but instead using either primitivewriter, or objectscontext to write directly
+    // and you would still like to have the indents (a current example [4/10/2010] would be when writing
+    // multiline arrays)
+    void WriteIndents();
 
-	ObjectsContext* mObjectsContext;
-	StringSet mKeys;
-	size_t mIndentLevel;
-
-
+  private:
+    ObjectsContext *mObjectsContext;
+    StringSet mKeys;
+    size_t mIndentLevel;
 };

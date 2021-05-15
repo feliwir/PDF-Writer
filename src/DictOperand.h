@@ -16,28 +16,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-
 
 #include <list>
 #include <map>
 
-
-
 struct DictOperand
 {
-	bool IsInteger;
-	union
-	{
-		long IntegerValue;
-		double RealValue;
-	};
-	long RealValueFractalEnd; // this fellow is here for writing, due to double being terribly inexact.
+    bool IsInteger;
+    union {
+        long IntegerValue;
+        double RealValue;
+    };
+    long RealValueFractalEnd; // this fellow is here for writing, due to double being terribly inexact.
 };
 
 typedef std::list<DictOperand> DictOperandList;
 
 // that would actually be a dictionary
-typedef std::map<unsigned short,DictOperandList> UShortToDictOperandListMap;
+typedef std::map<unsigned short, DictOperandList> UShortToDictOperandListMap;

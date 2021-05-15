@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,8 +25,6 @@
 #include <string.h>
 
 #include <string>
-
-
 
 // good for tracing upto 5K wide chars messages
 
@@ -37,39 +35,36 @@ class IByteWriter;
 
 class Trace
 {
-public:
-	Trace();
-	~Trace(void);
+  public:
+    Trace();
+    ~Trace(void);
 
-	void SetLogSettings(const std::string& inLogFilePath,bool inShouldLog,bool inPlaceUTF8Bom);
-	void SetLogSettings(IByteWriter* inLogStream,bool inShouldLog);
+    void SetLogSettings(const std::string &inLogFilePath, bool inShouldLog, bool inPlaceUTF8Bom);
+    void SetLogSettings(IByteWriter *inLogStream, bool inShouldLog);
 
-	void TraceToLog(const char* inFormat,...);
-	void TraceToLog(const char* inFormat,va_list inList);
+    void TraceToLog(const char *inFormat, ...);
+    void TraceToLog(const char *inFormat, va_list inList);
 
-    static Trace& DefaultTrace();
+    static Trace &DefaultTrace();
 
-private:
-	char mBuffer[MAX_TRACE_SIZE];
-	Log* mLog;
+  private:
+    char mBuffer[MAX_TRACE_SIZE];
+    Log *mLog;
 
-	std::string mLogFilePath;
-	IByteWriter* mLogStream;
-	bool mShouldLog;
-	bool mPlaceUTF8Bom;
+    std::string mLogFilePath;
+    IByteWriter *mLogStream;
+    bool mShouldLog;
+    bool mPlaceUTF8Bom;
 
-	// use the log
-	// make it lock safe
+    // use the log
+    // make it lock safe
 };
-
 
 // short cuts for logging formats strings
 #define TRACE_LOG(FORMAT) Trace::DefaultTrace().TraceToLog(FORMAT)
-#define TRACE_LOG1(FORMAT,ARG1) Trace::DefaultTrace().TraceToLog(FORMAT,ARG1)
-#define TRACE_LOG2(FORMAT,ARG1,ARG2) Trace::DefaultTrace().TraceToLog(FORMAT,ARG1,ARG2)
-#define TRACE_LOG3(FORMAT,ARG1,ARG2,ARG3) Trace::DefaultTrace().TraceToLog(FORMAT,ARG1,ARG2,ARG3)
-#define TRACE_LOG4(FORMAT,ARG1,ARG2,ARG3,ARG4) Trace::DefaultTrace().TraceToLog(FORMAT,ARG1,ARG2,ARG3,ARG4)
-#define TRACE_LOG5(FORMAT,ARG1,ARG2,ARG3,ARG4,ARG5) Trace::DefaultTrace().TraceToLog(FORMAT,ARG1,ARG2,ARG3,ARG4,ARG5)
-
-
-
+#define TRACE_LOG1(FORMAT, ARG1) Trace::DefaultTrace().TraceToLog(FORMAT, ARG1)
+#define TRACE_LOG2(FORMAT, ARG1, ARG2) Trace::DefaultTrace().TraceToLog(FORMAT, ARG1, ARG2)
+#define TRACE_LOG3(FORMAT, ARG1, ARG2, ARG3) Trace::DefaultTrace().TraceToLog(FORMAT, ARG1, ARG2, ARG3)
+#define TRACE_LOG4(FORMAT, ARG1, ARG2, ARG3, ARG4) Trace::DefaultTrace().TraceToLog(FORMAT, ARG1, ARG2, ARG3, ARG4)
+#define TRACE_LOG5(FORMAT, ARG1, ARG2, ARG3, ARG4, ARG5)                                                               \
+    Trace::DefaultTrace().TraceToLog(FORMAT, ARG1, ARG2, ARG3, ARG4, ARG5)

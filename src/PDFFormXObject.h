@@ -16,17 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "ObjectsBasicTypes.h"
 #include "ResourcesDictionary.h"
 
-
 namespace PDFHummus
 {
-	class DocumentContext;
+class DocumentContext;
 };
 
 class PDFStream;
@@ -35,24 +34,22 @@ class ObjectsContext;
 
 class PDFFormXObject
 {
-public:
+  public:
+    PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
+                   PDFStream *inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID);
+    ~PDFFormXObject(void);
 
-	PDFFormXObject(PDFHummus::DocumentContext* inDocumentContext,ObjectIDType inFormXObjectID,PDFStream* inXObjectStream,ObjectIDType inFormXObjectResourcesDictionaryID);
-	~PDFFormXObject(void);
+    ObjectIDType GetObjectID();
+    ObjectIDType GetResourcesDictionaryObjectID();
 
-	ObjectIDType GetObjectID();
-	ObjectIDType GetResourcesDictionaryObjectID();
+    ResourcesDictionary &GetResourcesDictionary();
+    XObjectContentContext *GetContentContext();
+    PDFStream *GetContentStream();
 
-	ResourcesDictionary& GetResourcesDictionary();
-	XObjectContentContext* GetContentContext();
-	PDFStream* GetContentStream();
-
-	
-private:
-
-	ObjectIDType mXObjectID;
-	ObjectIDType mResourcesDictionaryID;
-	ResourcesDictionary mResources;
-	PDFStream* mContentStream;
-	XObjectContentContext* mContentContext;
+  private:
+    ObjectIDType mXObjectID;
+    ObjectIDType mResourcesDictionaryID;
+    ResourcesDictionary mResources;
+    PDFStream *mContentStream;
+    XObjectContentContext *mContentContext;
 };

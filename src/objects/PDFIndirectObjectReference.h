@@ -16,26 +16,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "PDFObject.h"
 #include "ObjectsBasicTypes.h"
+#include "PDFObject.h"
 
 class PDFIndirectObjectReference : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectIndirectObjectReference
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectIndirectObjectReference
-	};
+    PDFIndirectObjectReference(ObjectIDType inObjectID, unsigned long inVersion);
+    virtual ~PDFIndirectObjectReference(void);
 
-	PDFIndirectObjectReference(ObjectIDType inObjectID,unsigned long inVersion);
-	virtual ~PDFIndirectObjectReference(void);
-
-	ObjectIDType mObjectID;
-	unsigned long mVersion;
-
+    ObjectIDType mObjectID;
+    unsigned long mVersion;
 };

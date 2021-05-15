@@ -16,12 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFObjectCastTest.h"
-#include "objects/PDFObject.h"
-#include "objects/PDFName.h"
 #include "objects/PDFDictionary.h"
+#include "objects/PDFName.h"
+#include "objects/PDFObject.h"
 #include "objects/PDFObjectCast.h"
 
 #include <iostream>
@@ -37,39 +37,38 @@ PDFObjectCastTest::~PDFObjectCastTest(void)
 {
 }
 
-EStatusCode PDFObjectCastTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode PDFObjectCastTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = PDFHummus::eSuccess;
 
+    PDFObjectCastPtr<PDFName> aNonName1(NULL);
+    if (!(!aNonName1))
+    {
+        cout << "Casting null to PDFName should provide NULL. fail\n";
+        status = PDFHummus::eFailure;
+    }
 
-	PDFObjectCastPtr<PDFName> aNonName1(NULL);
-	if(!(!aNonName1))
-	{
-		cout<<"Casting null to PDFName should provide NULL. fail\n";
-		status = PDFHummus::eFailure;
-	}
+    PDFObjectCastPtr<PDFName> aNonName2(new PDFDictionary());
+    if (!(!aNonName2))
+    {
+        cout << "Casting PDFDictionary to PDFName should provide NULL. fail\n";
+        status = PDFHummus::eFailure;
+    }
 
-	PDFObjectCastPtr<PDFName> aNonName2(new PDFDictionary());
-	if(!(!aNonName2))
-	{
-		cout<<"Casting PDFDictionary to PDFName should provide NULL. fail\n";
-		status = PDFHummus::eFailure;
-	}
+    PDFObjectCastPtr<PDFName> aName3(new PDFName("aName"));
+    if ((!aName3))
+    {
+        cout << "Casting PDName to PDFName should provide PDFName. fail\n";
+        status = PDFHummus::eFailure;
+    }
 
-	PDFObjectCastPtr<PDFName> aName3(new PDFName("aName"));
-	if((!aName3))
-	{
-		cout<<"Casting PDName to PDFName should provide PDFName. fail\n";
-		status = PDFHummus::eFailure;
-	}
+    if (aName3->GetValue() != "aName")
+    {
+        cout << "should be aName, is " << aName3->GetValue().c_str() << "\n";
+        status = PDFHummus::eFailure;
+    }
 
-	if(aName3->GetValue() != "aName")
-	{
-		cout<<"should be aName, is "<<aName3->GetValue().c_str()<<"\n";
-		status = PDFHummus::eFailure;
-	}
-
-	return status;
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(PDFObjectCastTest,"PDFEmbedding")
+ADD_CATEGORIZED_TEST(PDFObjectCastTest, "PDFEmbedding")

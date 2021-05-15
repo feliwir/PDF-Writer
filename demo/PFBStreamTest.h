@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,9 +24,9 @@
 
 class PFBStreamTest : public ITestUnit
 {
-public:
-	PFBStreamTest(void);
-	~PFBStreamTest(void);
+  public:
+    PFBStreamTest(void);
+    ~PFBStreamTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

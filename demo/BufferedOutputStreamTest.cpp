@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "BufferedOutputStreamTest.h"
 #include "io/OutputBufferedStream.h"
@@ -38,16 +38,18 @@ BufferedOutputStreamTest::~BufferedOutputStreamTest(void)
 {
 }
 
-EStatusCode BufferedOutputStreamTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode BufferedOutputStreamTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	IByteWriter* stream = new OutputBufferedStream(new OutputFileStream(
-                            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"BufferedOutputStreamTest.txt")),2);
-	Byte buffer[5] = {'a','b','c','d','e'};
+    IByteWriter *stream =
+        new OutputBufferedStream(new OutputFileStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
+                                                                             "BufferedOutputStreamTest.txt")),
+                                 2);
+    Byte buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
-	stream->Write(buffer,5);
-	delete stream;
+    stream->Write(buffer, 5);
+    delete stream;
 
-	return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
-ADD_CATEGORIZED_TEST(BufferedOutputStreamTest,"IO")
+ADD_CATEGORIZED_TEST(BufferedOutputStreamTest, "IO")

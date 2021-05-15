@@ -16,19 +16,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFImageXObject.h"
 
 PDFImageXObject::PDFImageXObject(ObjectIDType inImageObjectID)
 {
-	mImageObjectID = inImageObjectID;
+    mImageObjectID = inImageObjectID;
 }
 
-PDFImageXObject::PDFImageXObject(ObjectIDType inImageObjectID,const std::string& inRequiredProcsetResourceName)
+PDFImageXObject::PDFImageXObject(ObjectIDType inImageObjectID, const std::string &inRequiredProcsetResourceName)
 {
-	mImageObjectID = inImageObjectID;
-	AddRequiredProcset(inRequiredProcsetResourceName);
+    mImageObjectID = inImageObjectID;
+    AddRequiredProcset(inRequiredProcsetResourceName);
 }
 
 PDFImageXObject::~PDFImageXObject(void)
@@ -37,15 +37,15 @@ PDFImageXObject::~PDFImageXObject(void)
 
 ObjectIDType PDFImageXObject::GetImageObjectID()
 {
-	return mImageObjectID;
+    return mImageObjectID;
 }
 
-const StringList& PDFImageXObject::GetRequiredProcsetResourceNames() const
+const StringList &PDFImageXObject::GetRequiredProcsetResourceNames() const
 {
-	return mRequiredProcsetResourceNames;
+    return mRequiredProcsetResourceNames;
 }
 
-void PDFImageXObject::AddRequiredProcset(const std::string& inRequiredProcsetResourceName)
+void PDFImageXObject::AddRequiredProcset(const std::string &inRequiredProcsetResourceName)
 {
-	mRequiredProcsetResourceNames.push_back(inRequiredProcsetResourceName);
+    mRequiredProcsetResourceNames.push_back(inRequiredProcsetResourceName);
 }

@@ -16,48 +16,49 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFTiledPattern.h"
+#include "ObjectsContext.h"
 #include "PDFStream.h"
 #include "TiledPatternContentContext.h"
-#include "ObjectsContext.h"
 
-PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext* inDocumentContext,ObjectIDType inObjectID, PDFStream* inStream, ObjectIDType inResourcesDictionaryID)
+PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
+                                 PDFStream *inStream, ObjectIDType inResourcesDictionaryID)
 {
-	mObjectID = inObjectID;
-	mResourcesDictionaryID = inResourcesDictionaryID;
-	mContentStream = inStream;
-	mContentContext = new TiledPatternContentContext(inDocumentContext, this);
+    mObjectID = inObjectID;
+    mResourcesDictionaryID = inResourcesDictionaryID;
+    mContentStream = inStream;
+    mContentContext = new TiledPatternContentContext(inDocumentContext, this);
 }
 
 PDFTiledPattern::~PDFTiledPattern(void)
 {
-	delete mContentStream;
-	delete mContentContext;
+    delete mContentStream;
+    delete mContentContext;
 }
 
 ObjectIDType PDFTiledPattern::GetObjectID()
 {
-	return mObjectID;
+    return mObjectID;
 }
 
 ObjectIDType PDFTiledPattern::GetResourcesDictionaryObjectID()
 {
-	return mResourcesDictionaryID;
+    return mResourcesDictionaryID;
 }
 
-ResourcesDictionary& PDFTiledPattern::GetResourcesDictionary()
+ResourcesDictionary &PDFTiledPattern::GetResourcesDictionary()
 {
-	return mResources;
+    return mResources;
 }
 
-PDFStream* PDFTiledPattern::GetContentStream()
+PDFStream *PDFTiledPattern::GetContentStream()
 {
-	return mContentStream;
+    return mContentStream;
 }
 
-TiledPatternContentContext* PDFTiledPattern::GetContentContext()
+TiledPatternContentContext *PDFTiledPattern::GetContentContext()
 {
-	return mContentContext;
+    return mContentContext;
 }

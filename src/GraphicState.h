@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -26,19 +26,16 @@ class PDFUsedFont;
 
 class GraphicState
 {
-public:
-	GraphicState(void);
-	GraphicState(const GraphicState& inGraphicState);
-	~GraphicState(void);
+  public:
+    GraphicState(void);
+    GraphicState(const GraphicState &inGraphicState);
+    ~GraphicState(void);
 
-	GraphicState& operator=(const GraphicState& inGraphicState);
+    GraphicState &operator=(const GraphicState &inGraphicState);
 
-	// current font properties
-	PDFUsedFont* mFont;
-	double mFontSize;
-	std::string mPlacedFontName;
-	double mPlacedFontSize;
-
-
-
+    // current font properties
+    PDFUsedFont *mFont;
+    double mFontSize;
+    std::string mPlacedFontName;
+    double mPlacedFontSize;
 };

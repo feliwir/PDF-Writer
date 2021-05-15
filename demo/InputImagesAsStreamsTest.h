@@ -3,9 +3,9 @@
 
 class InputImagesAsStreamsTest : public ITestUnit
 {
-public:
-	InputImagesAsStreamsTest(void);
-	~InputImagesAsStreamsTest(void);
+  public:
+    InputImagesAsStreamsTest(void);
+    ~InputImagesAsStreamsTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

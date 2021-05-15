@@ -16,44 +16,42 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
 
-#include <string>
 #include <stdio.h>
+#include <string>
 #ifdef __MINGW32__
 #include <share.h>
 #endif
 
-
 class InputFileStream : public IByteReaderWithPosition
 {
-public:
-	InputFileStream(void);
-	virtual ~InputFileStream(void);
+  public:
+    InputFileStream(void);
+    virtual ~InputFileStream(void);
 
-	// input file path is in UTF8
-	InputFileStream(const std::string& inFilePath);
+    // input file path is in UTF8
+    InputFileStream(const std::string &inFilePath);
 
-	// input file path is in UTF8
-	PDFHummus::EStatusCode Open(const std::string& inFilePath);
-	PDFHummus::EStatusCode Close();
+    // input file path is in UTF8
+    PDFHummus::EStatusCode Open(const std::string &inFilePath);
+    PDFHummus::EStatusCode Close();
 
-	// IByteReaderWithPosition implementation
-	virtual LongBufferSizeType Read(Byte* inBuffer,LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
-	virtual void Skip(LongBufferSizeType inSkipSize);
-	virtual void SetPosition(LongFilePositionType inOffsetFromStart);
-	virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
-	virtual LongFilePositionType GetCurrentPosition();
+    // IByteReaderWithPosition implementation
+    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
+    virtual void Skip(LongBufferSizeType inSkipSize);
+    virtual void SetPosition(LongFilePositionType inOffsetFromStart);
+    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
+    virtual LongFilePositionType GetCurrentPosition();
 
-	LongFilePositionType GetFileSize();
+    LongFilePositionType GetFileSize();
 
-private:
-
-	FILE* mStream;
+  private:
+    FILE *mStream;
 };

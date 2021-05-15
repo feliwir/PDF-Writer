@@ -1,14 +1,14 @@
 #include "CustomLogTest.h"
-#include "TestsRunner.h"
-#include "PDFWriter.h"
-#include "io/OutputFlateEncodeStream.h"
-#include "io/OutputFlateDecodeStream.h"
-#include "io/OutputStreamTraits.h"
-#include "io/OutputFile.h"
-#include "io/OutputStringBufferStream.h"
 #include "PDFPage.h"
+#include "PDFWriter.h"
+#include "TestsRunner.h"
 #include "Trace.h"
 #include "io/IOBasicTypes.h"
+#include "io/OutputFile.h"
+#include "io/OutputFlateDecodeStream.h"
+#include "io/OutputFlateEncodeStream.h"
+#include "io/OutputStreamTraits.h"
+#include "io/OutputStringBufferStream.h"
 
 #include <string>
 using namespace std;
@@ -23,107 +23,108 @@ CustomLogTest::~CustomLogTest(void)
 {
 }
 
-EStatusCode CustomLogTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode CustomLogTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	// Place log in a compressed stream, for a non-file PDF
-	EStatusCode status;
-	OutputFlateEncodeStream flateEncodeStream;
-	OutputFlateDecodeStream flateDecodeStream;
+    // Place log in a compressed stream, for a non-file PDF
+    EStatusCode status;
+    OutputFlateEncodeStream flateEncodeStream;
+    OutputFlateDecodeStream flateDecodeStream;
 
-	do
-	{
-		PDFWriter pdfWriter;
-		OutputFile compressedLogFile;
-		OutputStringBufferStream pdfStream;
-	
-		// setup log file with compression
-		status = compressedLogFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"CustomLogEncrypted.txt"));
-		if(status != PDFHummus::eSuccess)
-			break;
-		flateEncodeStream.Assign(compressedLogFile.GetOutputStream());
-		
-		// generate PDF
-		TRACE_LOG("Starting PDF File Writing");
-		status = pdfWriter.StartPDFForStream(&pdfStream,ePDFVersion13,LogConfiguration(true,&flateEncodeStream));
-		if(status != PDFHummus::eSuccess)
-			break;
-		TRACE_LOG("Now will add an empty page");
-		PDFPage* page = new PDFPage();
+    do
+    {
+        PDFWriter pdfWriter;
+        OutputFile compressedLogFile;
+        OutputStringBufferStream pdfStream;
 
-		page->SetMediaBox(PDFRectangle(0,0,400,400));
-		
-		status = pdfWriter.WritePageAndRelease(page);
-		if(status != PDFHummus::eSuccess)
-			break;
+        // setup log file with compression
+        status = compressedLogFile.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "CustomLogEncrypted.txt"));
+        if (status != PDFHummus::eSuccess)
+            break;
+        flateEncodeStream.Assign(compressedLogFile.GetOutputStream());
 
-		TRACE_LOG("Added page, now will close");
+        // generate PDF
+        TRACE_LOG("Starting PDF File Writing");
+        status = pdfWriter.StartPDFForStream(&pdfStream, ePDFVersion13, LogConfiguration(true, &flateEncodeStream));
+        if (status != PDFHummus::eSuccess)
+            break;
+        TRACE_LOG("Now will add an empty page");
+        PDFPage *page = new PDFPage();
 
-		status = pdfWriter.EndPDFForStream();
-		if(status != PDFHummus::eSuccess)
-			break;
+        page->SetMediaBox(PDFRectangle(0, 0, 400, 400));
 
-		// since log was started by starting PDF...the ending resets it. so let's now begin again
-		Singleton<Trace>::GetInstance()->SetLogSettings(&flateEncodeStream,true);
-		TRACE_LOG("Finished PDF!!!1");
+        status = pdfWriter.WritePageAndRelease(page);
+        if (status != PDFHummus::eSuccess)
+            break;
 
-		// dump PDF to a file, so we can review it
-		OutputFile pdfFile;
-		status = pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"DumpPDFFile.pdf"));
-		if(status != PDFHummus::eSuccess)
-			break;
+        TRACE_LOG("Added page, now will close");
 
-		string pdfString = pdfStream.ToString();
-		pdfFile.GetOutputStream()->Write((const Byte*)pdfString.c_str(),pdfString.size());
-		pdfFile.CloseFile();
+        status = pdfWriter.EndPDFForStream();
+        if (status != PDFHummus::eSuccess)
+            break;
 
-		TRACE_LOG("PDF stream dumped");
-		
-		// now finalize trace compressed file
-		flateEncodeStream.Assign(NULL);
-		compressedLogFile.CloseFile();
+        // since log was started by starting PDF...the ending resets it. so let's now begin again
+        Singleton<Trace>::GetInstance()->SetLogSettings(&flateEncodeStream, true);
+        TRACE_LOG("Finished PDF!!!1");
 
-		// Finish log
-		Singleton<Trace>::Reset();
+        // dump PDF to a file, so we can review it
+        OutputFile pdfFile;
+        status = pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "DumpPDFFile.pdf"));
+        if (status != PDFHummus::eSuccess)
+            break;
 
+        string pdfString = pdfStream.ToString();
+        pdfFile.GetOutputStream()->Write((const Byte *)pdfString.c_str(), pdfString.size());
+        pdfFile.CloseFile();
 
-		// now open a new file and decompress the log into it.
-		OutputFile decryptedLogFile;
+        TRACE_LOG("PDF stream dumped");
 
-		status = decryptedLogFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"CustomLogDecrypted.txt"));
-		if(status != PDFHummus::eSuccess)
-			break;
+        // now finalize trace compressed file
+        flateEncodeStream.Assign(NULL);
+        compressedLogFile.CloseFile();
 
+        // Finish log
+        Singleton<Trace>::Reset();
 
-		// place an initial bom (cause the compressed content is unicode)
-		unsigned short bom = (0xFE<<8) + 0xFF;
-		decryptedLogFile.GetOutputStream()->Write((const Byte*)&bom,2);	
+        // now open a new file and decompress the log into it.
+        OutputFile decryptedLogFile;
 
-		flateDecodeStream.Assign(decryptedLogFile.GetOutputStream());
-		OutputStreamTraits traits(&flateDecodeStream);
+        status = decryptedLogFile.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "CustomLogDecrypted.txt"));
+        if (status != PDFHummus::eSuccess)
+            break;
 
-		InputFile compressedLogFileInput;
-		status = compressedLogFileInput.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"CustomLogEncrypted.txt"));
-		if(status != PDFHummus::eSuccess)
-			break;
+        // place an initial bom (cause the compressed content is unicode)
+        unsigned short bom = (0xFE << 8) + 0xFF;
+        decryptedLogFile.GetOutputStream()->Write((const Byte *)&bom, 2);
 
-		status = traits.CopyToOutputStream(compressedLogFileInput.GetInputStream());
-		if(status != PDFHummus::eSuccess)
-			break;
+        flateDecodeStream.Assign(decryptedLogFile.GetOutputStream());
+        OutputStreamTraits traits(&flateDecodeStream);
 
-		compressedLogFileInput.CloseFile();
-		flateDecodeStream.Assign(NULL);
-		decryptedLogFile.CloseFile();
-		
-	}while(false);
+        InputFile compressedLogFileInput;
+        status = compressedLogFileInput.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "CustomLogEncrypted.txt"));
+        if (status != PDFHummus::eSuccess)
+            break;
 
-	if(status != PDFHummus::eSuccess)
-	{
-		// cancel ownership of subsstreams
-		flateDecodeStream.Assign(NULL);
-		flateEncodeStream.Assign(NULL);
-	}
+        status = traits.CopyToOutputStream(compressedLogFileInput.GetInputStream());
+        if (status != PDFHummus::eSuccess)
+            break;
 
-	return status;
+        compressedLogFileInput.CloseFile();
+        flateDecodeStream.Assign(NULL);
+        decryptedLogFile.CloseFile();
+
+    } while (false);
+
+    if (status != PDFHummus::eSuccess)
+    {
+        // cancel ownership of subsstreams
+        flateDecodeStream.Assign(NULL);
+        flateEncodeStream.Assign(NULL);
+    }
+
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(CustomLogTest,"CustomStreams")
+ADD_CATEGORIZED_TEST(CustomLogTest, "CustomStreams")

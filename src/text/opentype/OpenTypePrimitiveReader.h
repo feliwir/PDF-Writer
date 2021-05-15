@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,31 +25,30 @@
 
 class OpenTypePrimitiveReader
 {
-public:
-	OpenTypePrimitiveReader(IByteReaderWithPosition* inTrueTypeFile = NULL);
-	~OpenTypePrimitiveReader(void);
+  public:
+    OpenTypePrimitiveReader(IByteReaderWithPosition *inTrueTypeFile = NULL);
+    ~OpenTypePrimitiveReader(void);
 
-	void SetOpenTypeStream(IByteReaderWithPosition* inOpenTypeFile);
-	void SetOffset(LongFilePositionType inNewOffset);
-	void Skip(LongBufferSizeType inToSkip);
-	LongFilePositionType GetCurrentPosition();
-	PDFHummus::EStatusCode GetInternalState();
+    void SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile);
+    void SetOffset(LongFilePositionType inNewOffset);
+    void Skip(LongBufferSizeType inToSkip);
+    LongFilePositionType GetCurrentPosition();
+    PDFHummus::EStatusCode GetInternalState();
 
-	PDFHummus::EStatusCode ReadBYTE(unsigned char& outValue);
-	PDFHummus::EStatusCode ReadCHAR(char& outValue);
-	PDFHummus::EStatusCode ReadUSHORT(unsigned short& outValue);
-	PDFHummus::EStatusCode ReadSHORT(short& outValue);
-	PDFHummus::EStatusCode ReadULONG(unsigned long& outValue);
-	PDFHummus::EStatusCode ReadLONG(long& outValue);
-	PDFHummus::EStatusCode ReadLongDateTime(long long& outValue);
-	PDFHummus::EStatusCode ReadFixed(double& outValue);
-	PDFHummus::EStatusCode Read(Byte* inBuffer,LongBufferSizeType inBufferSize);
+    PDFHummus::EStatusCode ReadBYTE(unsigned char &outValue);
+    PDFHummus::EStatusCode ReadCHAR(char &outValue);
+    PDFHummus::EStatusCode ReadUSHORT(unsigned short &outValue);
+    PDFHummus::EStatusCode ReadSHORT(short &outValue);
+    PDFHummus::EStatusCode ReadULONG(unsigned long &outValue);
+    PDFHummus::EStatusCode ReadLONG(long &outValue);
+    PDFHummus::EStatusCode ReadLongDateTime(long long &outValue);
+    PDFHummus::EStatusCode ReadFixed(double &outValue);
+    PDFHummus::EStatusCode Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
 
-	IByteReaderWithPosition* GetReadStream();
-private:
+    IByteReaderWithPosition *GetReadStream();
 
-	IByteReaderWithPosition* mOpenTypeFile;
-	LongFilePositionType mInitialPosition;
-	PDFHummus::EStatusCode mInternalState;
-
+  private:
+    IByteReaderWithPosition *mOpenTypeFile;
+    LongFilePositionType mInitialPosition;
+    PDFHummus::EStatusCode mInternalState;
 };

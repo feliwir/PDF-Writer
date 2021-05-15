@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,39 +25,35 @@
 
 #include <string>
 
-
 using namespace IOBasicTypes;
 
 class Log;
 
-typedef void (*LogFileMethod)(Log* inThis,const Byte* inMessage, LongBufferSizeType inMessageSize);
+typedef void (*LogFileMethod)(Log *inThis, const Byte *inMessage, LongBufferSizeType inMessageSize);
 
 class IByteWriter;
 
 class Log
 {
-public:
+  public:
+    // log writes are in UTF8. so i'm asking here if you want a bom
+    Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom);
+    Log(IByteWriter *inLogStream);
+    ~Log(void);
 
-	// log writes are in UTF8. so i'm asking here if you want a bom
-	Log(const std::string& inLogFilePath,bool inPlaceUTF8Bom);
-	Log(IByteWriter* inLogStream);
-	~Log(void);
+    void LogEntry(const std::string &inMessage);
+    void LogEntry(const Byte *inMessage, LongBufferSizeType inMessageSize);
 
-	void LogEntry(const std::string& inMessage);
-	void LogEntry(const Byte* inMessage, LongBufferSizeType inMessageSize);
+    // don't use
+    void LogEntryToFile(const Byte *inMessage, LongBufferSizeType inMessageSize);
+    void LogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize);
 
+  private:
+    std::string mFilePath;
+    OutputFile mLogFile;
+    IByteWriter *mLogStream;
+    LogFileMethod mLogMethod;
 
-	// don't use
-	void LogEntryToFile(const Byte* inMessage, LongBufferSizeType inMessageSize);
-	void LogEntryToStream(const Byte* inMessage, LongBufferSizeType inMessageSize);
-
-private:
-
-	std::string mFilePath;
-	OutputFile mLogFile;
-	IByteWriter* mLogStream;
-	LogFileMethod mLogMethod;
-
-	std::string GetFormattedTimeString();
-	void WriteLogEntryToStream(const Byte* inMessage, LongBufferSizeType inMessageSize,IByteWriter* inStream);
+    std::string GetFormattedTimeString();
+    void WriteLogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize, IByteWriter *inStream);
 };

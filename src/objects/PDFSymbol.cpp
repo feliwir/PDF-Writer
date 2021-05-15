@@ -16,20 +16,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFSymbol.h"
 
-PDFSymbol::PDFSymbol(const std::string& inSymbol) : PDFObject(eType)
+PDFSymbol::PDFSymbol(const std::string &inSymbol) : PDFObject(eType)
 {
-	mValue = inSymbol;
+    mValue = inSymbol;
 }
 
 PDFSymbol::~PDFSymbol(void)
 {
 }
 
-const std::string& PDFSymbol::GetValue() const
+const std::string &PDFSymbol::GetValue() const
 {
-	return mValue;
+    return mValue;
 }

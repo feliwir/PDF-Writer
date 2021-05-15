@@ -16,64 +16,63 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
 
-#include <string>
 #include <list>
+#include <string>
 
-
-
-typedef std::pair<PDFHummus::EStatusCode,std::string> EStatusCodeAndString;
+typedef std::pair<PDFHummus::EStatusCode, std::string> EStatusCodeAndString;
 typedef std::list<unsigned long> ULongList;
 typedef std::list<unsigned short> UShortList;
-typedef std::pair<PDFHummus::EStatusCode,UShortList> EStatusCodeAndUShortList;
+typedef std::pair<PDFHummus::EStatusCode, UShortList> EStatusCodeAndUShortList;
 
 class UnicodeString
 {
-public:
-	UnicodeString(void);
-	UnicodeString(const UnicodeString& inOtherString);
-	UnicodeString(const ULongList& inOtherList);
-	~UnicodeString(void);
+  public:
+    UnicodeString(void);
+    UnicodeString(const UnicodeString &inOtherString);
+    UnicodeString(const ULongList &inOtherList);
+    ~UnicodeString(void);
 
-	UnicodeString& operator =(const UnicodeString& inOtherString);
-	UnicodeString& operator =(const ULongList& inOtherList);
+    UnicodeString &operator=(const UnicodeString &inOtherString);
+    UnicodeString &operator=(const ULongList &inOtherList);
 
-	bool operator==(const UnicodeString& inOtherString) const;
+    bool operator==(const UnicodeString &inOtherString) const;
 
-	PDFHummus::EStatusCode FromUTF8(const std::string& inString);
-	EStatusCodeAndString ToUTF8() const;
+    PDFHummus::EStatusCode FromUTF8(const std::string &inString);
+    EStatusCodeAndString ToUTF8() const;
 
-	// convert from UTF16 string, requires BOM
-	PDFHummus::EStatusCode FromUTF16(const std::string& inString);
-	PDFHummus::EStatusCode FromUTF16(const unsigned char* inString, unsigned long inLength);
+    // convert from UTF16 string, requires BOM
+    PDFHummus::EStatusCode FromUTF16(const std::string &inString);
+    PDFHummus::EStatusCode FromUTF16(const unsigned char *inString, unsigned long inLength);
 
-	// convert from UTF16BE, do not include BOM
-	PDFHummus::EStatusCode FromUTF16BE(const std::string& inString);
-	PDFHummus::EStatusCode FromUTF16BE(const unsigned char* inString, unsigned long inLength);
+    // convert from UTF16BE, do not include BOM
+    PDFHummus::EStatusCode FromUTF16BE(const std::string &inString);
+    PDFHummus::EStatusCode FromUTF16BE(const unsigned char *inString, unsigned long inLength);
 
-	// convert from UTF16LE do not include BOM
-	PDFHummus::EStatusCode FromUTF16LE(const std::string& inString);
-	PDFHummus::EStatusCode FromUTF16LE(const unsigned char* inString, unsigned long inLength);
+    // convert from UTF16LE do not include BOM
+    PDFHummus::EStatusCode FromUTF16LE(const std::string &inString);
+    PDFHummus::EStatusCode FromUTF16LE(const unsigned char *inString, unsigned long inLength);
 
-	// convert from unsigned shorts, does not require BOM, assuming that byte ordering is according to OS
-	PDFHummus::EStatusCode FromUTF16UShort(const unsigned short* inShorts, unsigned long inLength);
+    // convert from unsigned shorts, does not require BOM, assuming that byte ordering is according to OS
+    PDFHummus::EStatusCode FromUTF16UShort(const unsigned short *inShorts, unsigned long inLength);
 
-	// convert to UTF16 BE
-	EStatusCodeAndString ToUTF16BE(bool inPrependWithBom) const;
-	
-	// convert to UTF16 LE
-	EStatusCodeAndString ToUTF16LE(bool inPrependWithBom) const;
+    // convert to UTF16 BE
+    EStatusCodeAndString ToUTF16BE(bool inPrependWithBom) const;
 
-	// covnert to unsigned shorts. byte ordering according to OS. not placing BOM
-	EStatusCodeAndUShortList ToUTF16UShort() const;
+    // convert to UTF16 LE
+    EStatusCodeAndString ToUTF16LE(bool inPrependWithBom) const;
 
-	const ULongList& GetUnicodeList() const;
-	ULongList& GetUnicodeList();
-private:
-	ULongList mUnicodeCharacters;
+    // covnert to unsigned shorts. byte ordering according to OS. not placing BOM
+    EStatusCodeAndUShortList ToUTF16UShort() const;
+
+    const ULongList &GetUnicodeList() const;
+    ULongList &GetUnicodeList();
+
+  private:
+    ULongList mUnicodeCharacters;
 };

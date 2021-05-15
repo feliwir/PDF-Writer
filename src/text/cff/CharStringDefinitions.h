@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,26 +25,29 @@
 
 using namespace IOBasicTypes;
 
-
 struct IndexElement
 {
-	IndexElement() {mStartPosition=0; mEndPosition=0; mIndex=0;}
+    IndexElement()
+    {
+        mStartPosition = 0;
+        mEndPosition = 0;
+        mIndex = 0;
+    }
 
-	LongFilePositionType mStartPosition;
-	LongFilePositionType mEndPosition;
-	unsigned short mIndex;
+    LongFilePositionType mStartPosition;
+    LongFilePositionType mEndPosition;
+    unsigned short mIndex;
 };
 
 typedef IndexElement CharString;
 
 struct CharStringOperand
 {
-	bool IsInteger;
-	union
-	{
-		long IntegerValue;
-		double RealValue;
-	};
+    bool IsInteger;
+    union {
+        long IntegerValue;
+        double RealValue;
+    };
 };
 
 typedef std::list<CharStringOperand> CharStringOperandList;

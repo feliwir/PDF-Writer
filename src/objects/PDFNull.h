@@ -16,19 +16,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
 
 class PDFNull : public PDFObject
 {
-public:
-	enum EType
-	{
-		eType = ePDFObjectNull
-	};
+  public:
+    enum EType
+    {
+        eType = ePDFObjectNull
+    };
 
-	PDFNull(void);
-	virtual ~PDFNull(void);
+    PDFNull(void);
+    virtual ~PDFNull(void);
 };

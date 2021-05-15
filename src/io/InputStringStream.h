@@ -26,25 +26,23 @@ limitations under the License.
 
 class InputStringStream : public IByteReaderWithPosition
 {
-public:
-	InputStringStream();
-	InputStringStream(const std::string& inString);
-	~InputStringStream(void);
+  public:
+    InputStringStream();
+    InputStringStream(const std::string &inString);
+    ~InputStringStream(void);
 
-	void Assign(const std::string& inString);
+    void Assign(const std::string &inString);
 
-	// IByteReaderWithPosition implementation
-	virtual LongBufferSizeType Read(IOBasicTypes::Byte* inBuffer, LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
-	virtual void Skip(LongBufferSizeType inSkipSize);
-	virtual void SetPosition(LongFilePositionType inOffsetFromStart);
-	virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
-	virtual LongFilePositionType GetCurrentPosition();
+    // IByteReaderWithPosition implementation
+    virtual LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
+    virtual void Skip(LongBufferSizeType inSkipSize);
+    virtual void SetPosition(LongFilePositionType inOffsetFromStart);
+    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
+    virtual LongFilePositionType GetCurrentPosition();
 
-private:
-
-	std::string::const_iterator mStartPosition;
-	std::string::const_iterator mEndPosition;
-	std::string::const_iterator mCurrentPosition;
-
+  private:
+    std::string::const_iterator mStartPosition;
+    std::string::const_iterator mEndPosition;
+    std::string::const_iterator mCurrentPosition;
 };

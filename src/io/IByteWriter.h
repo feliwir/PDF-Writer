@@ -16,11 +16,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 /*
-	IByteWriter. interface for writing bytes
+    IByteWriter. interface for writing bytes
 
 
 */
@@ -28,11 +28,12 @@
 
 class IByteWriter
 {
-public:
-	virtual ~IByteWriter(void){};
+  public:
+    virtual ~IByteWriter(void){};
 
-	/*
-		Write inSize bytes of inBuffer, returning the number of written bytes
-	*/
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inSize) = 0;
+    /*
+        Write inSize bytes of inBuffer, returning the number of written bytes
+    */
+    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
+                                                   IOBasicTypes::LongBufferSizeType inSize) = 0;
 };

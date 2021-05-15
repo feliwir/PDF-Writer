@@ -16,60 +16,59 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-#include "IType1InterpreterImplementation.h"
 #include "EStatusCode.h"
+#include "IType1InterpreterImplementation.h"
 #include "io/InputCharStringDecodeStream.h"
 
 class CharStringType1Interpreter
 {
-public:
-	CharStringType1Interpreter(void);
-	~CharStringType1Interpreter(void);
+  public:
+    CharStringType1Interpreter(void);
+    ~CharStringType1Interpreter(void);
 
-	PDFHummus::EStatusCode Intepret(const Type1CharString& inCharStringToIntepret, IType1InterpreterImplementation* inImplementationHelper);
+    PDFHummus::EStatusCode Intepret(const Type1CharString &inCharStringToIntepret,
+                                    IType1InterpreterImplementation *inImplementationHelper);
 
-private:
+  private:
+    LongList mOperandStack;
+    IType1InterpreterImplementation *mImplementationHelper;
+    bool mGotEndChar;
+    LongList mPostScriptOperandStack;
 
-	LongList mOperandStack;
-	IType1InterpreterImplementation* mImplementationHelper;
-	bool mGotEndChar;
-	LongList mPostScriptOperandStack;
+    PDFHummus::EStatusCode ProcessCharString(InputCharStringDecodeStream *inCharStringToIntepret);
+    bool IsOperator(Byte inBuffer);
+    PDFHummus::EStatusCode InterpretOperator(Byte inBuffer, InputCharStringDecodeStream *inCharStringToIntepret,
+                                             bool &outGotEndExecutionCommand);
+    PDFHummus::EStatusCode InterpretNumber(Byte inBuffer, InputCharStringDecodeStream *inCharStringToIntepret);
+    void ClearStack();
+    PDFHummus::EStatusCode DefaultCallOtherSubr();
 
-	PDFHummus::EStatusCode ProcessCharString(InputCharStringDecodeStream* inCharStringToIntepret);
-	bool IsOperator(Byte inBuffer);
-	PDFHummus::EStatusCode InterpretOperator(Byte inBuffer,InputCharStringDecodeStream* inCharStringToIntepret,bool& outGotEndExecutionCommand);
-	PDFHummus::EStatusCode InterpretNumber(Byte inBuffer,InputCharStringDecodeStream* inCharStringToIntepret);
-	void ClearStack();
-	PDFHummus::EStatusCode DefaultCallOtherSubr();
-	
-	PDFHummus::EStatusCode InterpretHStem();
-	PDFHummus::EStatusCode InterpretVStem();
-	PDFHummus::EStatusCode InterpretVMoveto();
-	PDFHummus::EStatusCode InterpretRLineto();
-	PDFHummus::EStatusCode InterpretHLineto();
-	PDFHummus::EStatusCode InterpretVLineto();
-	PDFHummus::EStatusCode InterpretRRCurveto();
-	PDFHummus::EStatusCode InterpretClosePath();
-	PDFHummus::EStatusCode InterpretCallSubr();
-	PDFHummus::EStatusCode InterpretReturn();
-	PDFHummus::EStatusCode InterpretHsbw();
-	PDFHummus::EStatusCode InterpretEndChar();
-	PDFHummus::EStatusCode InterpretRMoveto();
-	PDFHummus::EStatusCode InterpretHMoveto();
-	PDFHummus::EStatusCode InterpretVHCurveto();
-	PDFHummus::EStatusCode InterpretHVCurveto();
-	PDFHummus::EStatusCode InterpretDotSection();
-	PDFHummus::EStatusCode InterpretVStem3();
-	PDFHummus::EStatusCode InterpretHStem3();
-	PDFHummus::EStatusCode InterpretSeac();
-	PDFHummus::EStatusCode InterpretSbw();
-	PDFHummus::EStatusCode InterpretDiv();
-	PDFHummus::EStatusCode InterpretCallOtherSubr();
-	PDFHummus::EStatusCode InterpretPop();
-	PDFHummus::EStatusCode InterpretSetCurrentPoint();
-
+    PDFHummus::EStatusCode InterpretHStem();
+    PDFHummus::EStatusCode InterpretVStem();
+    PDFHummus::EStatusCode InterpretVMoveto();
+    PDFHummus::EStatusCode InterpretRLineto();
+    PDFHummus::EStatusCode InterpretHLineto();
+    PDFHummus::EStatusCode InterpretVLineto();
+    PDFHummus::EStatusCode InterpretRRCurveto();
+    PDFHummus::EStatusCode InterpretClosePath();
+    PDFHummus::EStatusCode InterpretCallSubr();
+    PDFHummus::EStatusCode InterpretReturn();
+    PDFHummus::EStatusCode InterpretHsbw();
+    PDFHummus::EStatusCode InterpretEndChar();
+    PDFHummus::EStatusCode InterpretRMoveto();
+    PDFHummus::EStatusCode InterpretHMoveto();
+    PDFHummus::EStatusCode InterpretVHCurveto();
+    PDFHummus::EStatusCode InterpretHVCurveto();
+    PDFHummus::EStatusCode InterpretDotSection();
+    PDFHummus::EStatusCode InterpretVStem3();
+    PDFHummus::EStatusCode InterpretHStem3();
+    PDFHummus::EStatusCode InterpretSeac();
+    PDFHummus::EStatusCode InterpretSbw();
+    PDFHummus::EStatusCode InterpretDiv();
+    PDFHummus::EStatusCode InterpretCallOtherSubr();
+    PDFHummus::EStatusCode InterpretPop();
+    PDFHummus::EStatusCode InterpretSetCurrentPoint();
 };
-

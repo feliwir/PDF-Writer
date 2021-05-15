@@ -16,36 +16,32 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-#include "IByteReader.h"
 #include "EStatusCode.h"
- 
+#include "IByteReader.h"
 
 using namespace IOBasicTypes;
 
-
 class InputCharStringDecodeStream : public IByteReader
 {
-public:
-	InputCharStringDecodeStream(IByteReader* inReadFrom,unsigned long inLenIV=4);
-	~InputCharStringDecodeStream(void);
+  public:
+    InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV = 4);
+    ~InputCharStringDecodeStream(void);
 
-	void Assign(IByteReader* inReadFrom,unsigned long inLenIV=4);
+    void Assign(IByteReader *inReadFrom, unsigned long inLenIV = 4);
 
-	// IByteReader implementation
+    // IByteReader implementation
 
-	virtual LongBufferSizeType Read(Byte* inBuffer,LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
+    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
 
-private:
-	IByteReader* mReadFrom;
-	unsigned short mRandomizer;
+  private:
+    IByteReader *mReadFrom;
+    unsigned short mRandomizer;
 
-
-	void InitializeCharStringDecode(unsigned long inLenIV);
-	PDFHummus::EStatusCode ReadDecodedByte(Byte& outByte);
-	Byte DecodeByte(Byte inByteToDecode);
-
+    void InitializeCharStringDecode(unsigned long inLenIV);
+    PDFHummus::EStatusCode ReadDecodedByte(Byte &outByte);
+    Byte DecodeByte(Byte inByteToDecode);
 };

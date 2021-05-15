@@ -16,51 +16,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "io/OutputStreamTraits.h"
-#include "IByteWriter.h"
 #include "IByteReaderWithPosition.h"
+#include "IByteWriter.h"
 
 using namespace PDFHummus;
 
-OutputStreamTraits::OutputStreamTraits(IByteWriter* inOutputStream)
+OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
 {
-	mOutputStream = inOutputStream;
+    mOutputStream = inOutputStream;
 }
 
 OutputStreamTraits::~OutputStreamTraits(void)
 {
 }
 
-#define TENMEGS 10*1024*1024
-EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader* inInputStream)
+#define TENMEGS 10 * 1024 * 1024
+EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
 {
-	Byte* buffer = new Byte[TENMEGS];
-	LongBufferSizeType readBytes,writeBytes;
-	EStatusCode status = PDFHummus::eSuccess;
+    Byte *buffer = new Byte[TENMEGS];
+    LongBufferSizeType readBytes, writeBytes;
+    EStatusCode status = PDFHummus::eSuccess;
 
-	while(inInputStream->NotEnded() && PDFHummus::eSuccess == status)
-	{
-		readBytes = inInputStream->Read(buffer,TENMEGS);
-		writeBytes = mOutputStream->Write(buffer,readBytes);
-		status = (readBytes == writeBytes) ? PDFHummus::eSuccess:PDFHummus::eFailure;
-		if (readBytes == 0) {
-			break; // for whatever reason notEnded is not reached...dont want this to interfere
-		}
-	}
-	delete[] buffer;
-	return status;
+    while (inInputStream->NotEnded() && PDFHummus::eSuccess == status)
+    {
+        readBytes = inInputStream->Read(buffer, TENMEGS);
+        writeBytes = mOutputStream->Write(buffer, readBytes);
+        status = (readBytes == writeBytes) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+        if (readBytes == 0)
+        {
+            break; // for whatever reason notEnded is not reached...dont want this to interfere
+        }
+    }
+    delete[] buffer;
+    return status;
 }
 
-EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader* inInputStream,LongBufferSizeType inLength)
+EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, LongBufferSizeType inLength)
 {
-	Byte* buffer = new Byte[inLength];
-	LongBufferSizeType readBytes,writeBytes;
+    Byte *buffer = new Byte[inLength];
+    LongBufferSizeType readBytes, writeBytes;
 
-	readBytes = inInputStream->Read(buffer,inLength);
-	writeBytes = mOutputStream->Write(buffer,readBytes);
-	EStatusCode status = (readBytes == writeBytes) ? PDFHummus::eSuccess:PDFHummus::eFailure;
-	delete[] buffer;
-	return status;
+    readBytes = inInputStream->Read(buffer, inLength);
+    writeBytes = mOutputStream->Write(buffer, readBytes);
+    EStatusCode status = (readBytes == writeBytes) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    delete[] buffer;
+    return status;
 }

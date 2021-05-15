@@ -16,14 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFIndirectObjectReference.h"
 
-PDFIndirectObjectReference::PDFIndirectObjectReference(ObjectIDType inObjectID,unsigned long inVersion):PDFObject(eType)
+PDFIndirectObjectReference::PDFIndirectObjectReference(ObjectIDType inObjectID, unsigned long inVersion)
+    : PDFObject(eType)
 {
-	mObjectID = inObjectID;
-	mVersion = inVersion;
+    mObjectID = inObjectID;
+    mVersion = inVersion;
 }
 
 PDFIndirectObjectReference::~PDFIndirectObjectReference(void)

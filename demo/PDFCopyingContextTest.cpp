@@ -16,11 +16,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFCopyingContextTest.h"
-#include "TestsRunner.h"
 #include "PDFWriter.h"
+#include "TestsRunner.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 
 #include <iostream>
@@ -36,75 +36,73 @@ PDFCopyingContextTest::~PDFCopyingContextTest(void)
 {
 }
 
-EStatusCode PDFCopyingContextTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode PDFCopyingContextTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status;
-	PDFWriter pdfWriter;
-	PDFDocumentCopyingContext* copyingContext = NULL;
+    EStatusCode status;
+    PDFWriter pdfWriter;
+    PDFDocumentCopyingContext *copyingContext = NULL;
 
-	do
-	{
-		status = pdfWriter.StartPDF(
-                        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"PDFCopyingContextTest.pdf"),ePDFVersion13,
-                        LogConfiguration(true,true,
-                        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"PDFCopyingContextTest.txt")));
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed to start PDF\n";
-			break;
-		}	
+    do
+    {
+        status = pdfWriter.StartPDF(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "PDFCopyingContextTest.pdf"), ePDFVersion13,
+            LogConfiguration(true, true,
+                             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "PDFCopyingContextTest.txt")));
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed to start PDF\n";
+            break;
+        }
 
+        copyingContext = pdfWriter.CreatePDFCopyingContext(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/BasicTIFFImagesTest.pdf"));
+        if (!copyingContext)
+        {
+            cout << "failed to initialize copying context from BasicTIFFImagesTest\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
 
-		copyingContext = pdfWriter.CreatePDFCopyingContext(
-                        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TestMaterials/BasicTIFFImagesTest.pdf"));
-		if(!copyingContext)
-		{
-			cout<<"failed to initialize copying context from BasicTIFFImagesTest\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
+        EStatusCodeAndObjectIDType result = copyingContext->AppendPDFPageFromPDF(1);
+        if (result.first != PDFHummus::eSuccess)
+        {
+            cout << "failed to append page 1 from BasicTIFFImagesTest.pdf\n";
+            status = result.first;
+            break;
+        }
 
-		EStatusCodeAndObjectIDType result = copyingContext->AppendPDFPageFromPDF(1);
-		if(result.first != PDFHummus::eSuccess)
-		{
-			cout<<"failed to append page 1 from BasicTIFFImagesTest.pdf\n";
-			status = result.first;
-			break;
-		}
+        result = copyingContext->AppendPDFPageFromPDF(18);
+        if (result.first != PDFHummus::eSuccess)
+        {
+            cout << "failed to append page 18 from BasicTIFFImagesTest.pdf\n";
+            status = result.first;
+            break;
+        }
 
-		result = copyingContext->AppendPDFPageFromPDF(18);
-		if(result.first != PDFHummus::eSuccess)
-		{
-			cout<<"failed to append page 18 from BasicTIFFImagesTest.pdf\n";
-			status = result.first;
-			break;
-		}
+        result = copyingContext->AppendPDFPageFromPDF(4);
+        if (result.first != PDFHummus::eSuccess)
+        {
+            cout << "failed to append page 4 from BasicTIFFImagesTest.pdf\n";
+            status = result.first;
+            break;
+        }
 
-		result = copyingContext->AppendPDFPageFromPDF(4);
-		if(result.first != PDFHummus::eSuccess)
-		{
-			cout<<"failed to append page 4 from BasicTIFFImagesTest.pdf\n";
-			status = result.first;
-			break;
-		}
+        copyingContext->End(); // delete will call End() as well...so can avoid
 
-		copyingContext->End(); // delete will call End() as well...so can avoid
+        delete copyingContext;
+        copyingContext = NULL;
 
-		delete copyingContext;
-		copyingContext = NULL;
+        status = pdfWriter.EndPDF();
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed in end PDF\n";
+            break;
+        }
 
-		status = pdfWriter.EndPDF();
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed in end PDF\n";
-			break;
-		}
+    } while (false);
 
-	}while(false);
-
-	delete copyingContext;
-	return status;
-
+    delete copyingContext;
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(PDFCopyingContextTest,"PDFEmbedding")
+ADD_CATEGORIZED_TEST(PDFCopyingContextTest, "PDFEmbedding")

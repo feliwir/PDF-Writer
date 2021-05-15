@@ -16,19 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include <string>
 #include <utility>
 
-
-
-typedef std::pair<bool,std::string> BoolAndString;
+typedef std::pair<bool, std::string> BoolAndString;
 
 class Ascii7Encoding
 {
-public:
-	BoolAndString Encode(const std::string& inString);
+  public:
+    BoolAndString Encode(const std::string &inString);
 };

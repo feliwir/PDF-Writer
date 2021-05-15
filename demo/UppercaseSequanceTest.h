@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "TestsRunner.h"
 
-class UppercaseSequanceTest: public ITestUnit
+class UppercaseSequanceTest : public ITestUnit
 {
-public:
-	UppercaseSequanceTest(void);
-	~UppercaseSequanceTest(void);
+  public:
+    UppercaseSequanceTest(void);
+    ~UppercaseSequanceTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

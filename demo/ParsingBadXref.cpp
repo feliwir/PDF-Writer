@@ -19,51 +19,56 @@ limitations under the License.
 
 */
 #include "ParsingBadXref.h"
-#include "parsing/PDFParser.h"
-#include "io/InputFile.h"
 #include "EStatusCode.h"
+#include "io/InputFile.h"
+#include "parsing/PDFParser.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 using namespace std;
 using namespace PDFHummus;
 
-
-ParsingBadXref::ParsingBadXref() {
-
+ParsingBadXref::ParsingBadXref()
+{
 }
 
-ParsingBadXref::~ParsingBadXref() {
-
+ParsingBadXref::~ParsingBadXref()
+{
 }
 
-static EStatusCode openPDF(const string& path);
+static EStatusCode openPDF(const string &path);
 
-EStatusCode openPDF(const string& path) {
-	PDFParser parser;
-	InputFile pdfFile;
-	EStatusCode status = pdfFile.OpenFile(path);
-	if (status != eSuccess) {
-		std::cout << "Invalid path: " << path.c_str() << std::endl;
-		return status;
-	}
+EStatusCode openPDF(const string &path)
+{
+    PDFParser parser;
+    InputFile pdfFile;
+    EStatusCode status = pdfFile.OpenFile(path);
+    if (status != eSuccess)
+    {
+        std::cout << "Invalid path: " << path.c_str() << std::endl;
+        return status;
+    }
 
-	status = parser.StartPDFParsing(pdfFile.GetInputStream());
-	if (status != eSuccess) {
-		std::cout << "Failed at start parsing" << std::endl;
-	}
-	return status;
+    status = parser.StartPDFParsing(pdfFile.GetInputStream());
+    if (status != eSuccess)
+    {
+        std::cout << "Failed at start parsing" << std::endl;
+    }
+    return status;
 }
 
-EStatusCode ParsingBadXref::Run(const TestConfiguration& inTestConfiguration) {
-	EStatusCode status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test_bad_xref.pdf"));
-	if (status != eSuccess) {
-		std::cout << "Failed at start parsing test_bad_xref.pdf" << std::endl;
-		return status;
-	}
-	return status;
+EStatusCode ParsingBadXref::Run(const TestConfiguration &inTestConfiguration)
+{
+    EStatusCode status =
+        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/test_bad_xref.pdf"));
+    if (status != eSuccess)
+    {
+        std::cout << "Failed at start parsing test_bad_xref.pdf" << std::endl;
+        return status;
+    }
+    return status;
 }
 
 ADD_CATEGORIZED_TEST(ParsingBadXref, "Parsing")

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,10 +24,10 @@
 #include "ObjectsBasicTypes.h"
 #include "WrittenFontRepresentation.h"
 
+#include <list>
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
-#include <list>
 
 class FreeTypeFaceWrapper;
 class ObjectsContext;
@@ -35,42 +35,36 @@ class DictionaryContext;
 class IANSIFontWriterHelper;
 class IByteWriter;
 
-
-
-typedef std::pair<unsigned short,std::string>  UShortAndString;
+typedef std::pair<unsigned short, std::string> UShortAndString;
 typedef std::list<UShortAndString> UShortAndStringList;
 
 typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
 
-class ANSIFontWriter 
+class ANSIFontWriter
 {
-public:
-	ANSIFontWriter(void);
-	~ANSIFontWriter(void);
+  public:
+    ANSIFontWriter(void);
+    ~ANSIFontWriter(void);
 
+    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                     ObjectsContext *inObjectsContext, IANSIFontWriterHelper *inANSIFontWriterHelper,
+                                     const std::string &inWrittenFontName);
 
-	PDFHummus::EStatusCode WriteFont(	FreeTypeFaceWrapper& inFontInfo,
-							WrittenFontRepresentation* inFontOccurrence,
-							ObjectsContext* inObjectsContext,
-							IANSIFontWriterHelper* inANSIFontWriterHelper,
-							const std::string& inWrittenFontName);
+  private:
+    void CalculateCharacterEncodingArray();
+    void WriteWidths(DictionaryContext *inFontContext);
+    void CalculateDifferences();
+    void WriteEncoding(DictionaryContext *inFontContext);
+    void WriteEncodingDictionary();
+    void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
+    void WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter, const ULongVector &inUnicodeValues);
 
-private:
+    FreeTypeFaceWrapper *mFontInfo;
+    WrittenFontRepresentation *mFontOccurrence;
+    ObjectsContext *mObjectsContext;
 
-	void CalculateCharacterEncodingArray();
-	void WriteWidths(DictionaryContext* inFontContext);
-	void CalculateDifferences();
-	void WriteEncoding(DictionaryContext* inFontContext);
-	void WriteEncodingDictionary();
-	void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-	void WriteGlyphEntry(IByteWriter* inWriter,unsigned short inEncodedCharacter,const ULongVector& inUnicodeValues);
-
-	FreeTypeFaceWrapper* mFontInfo;
-	WrittenFontRepresentation* mFontOccurrence;
-	ObjectsContext* mObjectsContext;
-
-	UIntAndGlyphEncodingInfoVector mCharactersVector;
-	UShortAndStringList mDifferences;
-	ObjectIDType mEncodingDictionaryID;
+    UIntAndGlyphEncodingInfoVector mCharactersVector;
+    UShortAndStringList mDifferences;
+    ObjectIDType mEncodingDictionaryID;
 };

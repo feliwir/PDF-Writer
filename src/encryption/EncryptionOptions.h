@@ -24,31 +24,30 @@ limitations under the License.
 
 struct EncryptionOptions
 {
-	bool ShouldEncrypt;
-	std::string UserPassword;
-	long long UserProtectionOptionsFlag;
-	std::string OwnerPassword;
+    bool ShouldEncrypt;
+    std::string UserPassword;
+    long long UserProtectionOptionsFlag;
+    std::string OwnerPassword;
 
-	// for encryption scenarios
-	EncryptionOptions(const std::string& inUserPassword,
-					long long inUserProtectionOptionsFlag,
-					const std::string& inOwnerPassword) {
-		ShouldEncrypt = true;
-		UserPassword = inUserPassword;
-		UserProtectionOptionsFlag = inUserProtectionOptionsFlag;
-		OwnerPassword = inOwnerPassword;
-	}
+    // for encryption scenarios
+    EncryptionOptions(const std::string &inUserPassword, long long inUserProtectionOptionsFlag,
+                      const std::string &inOwnerPassword)
+    {
+        ShouldEncrypt = true;
+        UserPassword = inUserPassword;
+        UserProtectionOptionsFlag = inUserProtectionOptionsFlag;
+        OwnerPassword = inOwnerPassword;
+    }
 
-	// or if you feel like specifying in full (or provide false as first param to avoid encryption)
-	EncryptionOptions(bool inShouldEncrypt,
-					const std::string& inUserPassword,
-					long long inUserProtectionOptionsFlag,
-					const std::string& inOwnerPassword) {
-		ShouldEncrypt = inShouldEncrypt;
-		UserPassword = inUserPassword;
-		UserProtectionOptionsFlag = inUserProtectionOptionsFlag;
-		OwnerPassword = inOwnerPassword;
-	}
+    // or if you feel like specifying in full (or provide false as first param to avoid encryption)
+    EncryptionOptions(bool inShouldEncrypt, const std::string &inUserPassword, long long inUserProtectionOptionsFlag,
+                      const std::string &inOwnerPassword)
+    {
+        ShouldEncrypt = inShouldEncrypt;
+        UserPassword = inUserPassword;
+        UserProtectionOptionsFlag = inUserProtectionOptionsFlag;
+        OwnerPassword = inOwnerPassword;
+    }
 
-	static const EncryptionOptions& DefaultEncryptionOptions();
+    static const EncryptionOptions &DefaultEncryptionOptions();
 };

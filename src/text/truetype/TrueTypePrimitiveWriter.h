@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -29,24 +29,23 @@ class OutputStringBufferStream;
 
 class TrueTypePrimitiveWriter
 {
-public:
-	TrueTypePrimitiveWriter(OutputStringBufferStream* inTrueTypeFile = NULL);
-	~TrueTypePrimitiveWriter(void);
+  public:
+    TrueTypePrimitiveWriter(OutputStringBufferStream *inTrueTypeFile = NULL);
+    ~TrueTypePrimitiveWriter(void);
 
-	void SetOpenTypeStream(OutputStringBufferStream* inTrueTypeFile);
-	
-	PDFHummus::EStatusCode GetInternalState();
+    void SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile);
 
-	PDFHummus::EStatusCode WriteBYTE(Byte inValue);
-	PDFHummus::EStatusCode WriteULONG(unsigned long inValue);
-	PDFHummus::EStatusCode WriteUSHORT(unsigned short inValue);
-	PDFHummus::EStatusCode WriteSHORT(short inValue);
+    PDFHummus::EStatusCode GetInternalState();
 
-	PDFHummus::EStatusCode Pad(int inCount);
-	PDFHummus::EStatusCode PadTo4();
+    PDFHummus::EStatusCode WriteBYTE(Byte inValue);
+    PDFHummus::EStatusCode WriteULONG(unsigned long inValue);
+    PDFHummus::EStatusCode WriteUSHORT(unsigned short inValue);
+    PDFHummus::EStatusCode WriteSHORT(short inValue);
 
-private:
-	OutputStringBufferStream* mTrueTypeFile;
-	PDFHummus::EStatusCode mInternalState;
+    PDFHummus::EStatusCode Pad(int inCount);
+    PDFHummus::EStatusCode PadTo4();
 
+  private:
+    OutputStringBufferStream *mTrueTypeFile;
+    PDFHummus::EStatusCode mInternalState;
 };

@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFRectangle.h"
 
 PDFRectangle::PDFRectangle(void)
 {
-	LowerLeftX = 0;
-	LowerLeftY = 0;
-	UpperRightX = 0;
-	UpperRightY = 0;
+    LowerLeftX = 0;
+    LowerLeftY = 0;
+    UpperRightX = 0;
+    UpperRightY = 0;
 }
 
 PDFRectangle::~PDFRectangle(void)
@@ -34,32 +34,28 @@ PDFRectangle::~PDFRectangle(void)
 
 PDFRectangle::PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY)
 {
-	LowerLeftX = inLowerLeftX;
-	LowerLeftY = inLowerLeftY;
-	UpperRightX = inUpperRightX;
-	UpperRightY = inUpperRightY;
+    LowerLeftX = inLowerLeftX;
+    LowerLeftY = inLowerLeftY;
+    UpperRightX = inUpperRightX;
+    UpperRightY = inUpperRightY;
 }
 
-PDFRectangle::PDFRectangle(const PDFRectangle& inOther)
+PDFRectangle::PDFRectangle(const PDFRectangle &inOther)
 {
-	LowerLeftX = inOther.LowerLeftX;
-	LowerLeftY = inOther.LowerLeftY;
-	UpperRightX = inOther.UpperRightX;
-	UpperRightY = inOther.UpperRightY;
+    LowerLeftX = inOther.LowerLeftX;
+    LowerLeftY = inOther.LowerLeftY;
+    UpperRightX = inOther.UpperRightX;
+    UpperRightY = inOther.UpperRightY;
 }
 
-bool PDFRectangle::operator==(const PDFRectangle& inOther) const
+bool PDFRectangle::operator==(const PDFRectangle &inOther) const
 {
-    return  LowerLeftX == inOther.LowerLeftX &&
-            LowerLeftY == inOther.LowerLeftY &&
-            UpperRightX == inOther.UpperRightX &&
-            UpperRightY == inOther.UpperRightY;    
+    return LowerLeftX == inOther.LowerLeftX && LowerLeftY == inOther.LowerLeftY && UpperRightX == inOther.UpperRightX &&
+           UpperRightY == inOther.UpperRightY;
 }
 
-bool PDFRectangle::operator!=(const PDFRectangle& inOther) const
+bool PDFRectangle::operator!=(const PDFRectangle &inOther) const
 {
-    return  LowerLeftX != inOther.LowerLeftX ||
-            LowerLeftY != inOther.LowerLeftY ||
-            UpperRightX != inOther.UpperRightX ||
-            UpperRightY != inOther.UpperRightY;   
+    return LowerLeftX != inOther.LowerLeftX || LowerLeftY != inOther.LowerLeftY || UpperRightX != inOther.UpperRightX ||
+           UpperRightY != inOther.UpperRightY;
 }

@@ -16,79 +16,77 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputStreamSkipperStream.h"
 
 InputStreamSkipperStream::InputStreamSkipperStream(void)
 {
-	mStream = NULL;
+    mStream = NULL;
 }
 
 InputStreamSkipperStream::~InputStreamSkipperStream(void)
 {
-	if(mStream != NULL)
-		delete mStream;
+    if (mStream != NULL)
+        delete mStream;
 }
 
-InputStreamSkipperStream::InputStreamSkipperStream(IByteReader* inSourceStream)
+InputStreamSkipperStream::InputStreamSkipperStream(IByteReader *inSourceStream)
 {
-	Assign(inSourceStream);
+    Assign(inSourceStream);
 }
 
-
-void InputStreamSkipperStream::Assign(IByteReader* inSourceStream)
+void InputStreamSkipperStream::Assign(IByteReader *inSourceStream)
 {
-	mStream = inSourceStream;
-	mAmountRead = 0;
+    mStream = inSourceStream;
+    mAmountRead = 0;
 }
 
-IOBasicTypes::LongBufferSizeType InputStreamSkipperStream::Read(IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inBufferSize)
+IOBasicTypes::LongBufferSizeType InputStreamSkipperStream::Read(IOBasicTypes::Byte *inBuffer,
+                                                                IOBasicTypes::LongBufferSizeType inBufferSize)
 {
-	IOBasicTypes::LongBufferSizeType readThisTime = mStream->Read(inBuffer,inBufferSize);
-	mAmountRead+=readThisTime;
+    IOBasicTypes::LongBufferSizeType readThisTime = mStream->Read(inBuffer, inBufferSize);
+    mAmountRead += readThisTime;
 
-	return readThisTime;
+    return readThisTime;
 }
 
 bool InputStreamSkipperStream::NotEnded()
 {
-	return mStream ? mStream->NotEnded() : false;
+    return mStream ? mStream->NotEnded() : false;
 }
-
 
 bool InputStreamSkipperStream::CanSkipTo(IOBasicTypes::LongFilePositionType inPositionInStream)
 {
-	return mAmountRead <= inPositionInStream;
+    return mAmountRead <= inPositionInStream;
 }
 
 void InputStreamSkipperStream::SkipTo(IOBasicTypes::LongFilePositionType inPositionInStream)
 {
-	if(!CanSkipTo(inPositionInStream))
-		return;
+    if (!CanSkipTo(inPositionInStream))
+        return;
 
-	SkipBy(inPositionInStream-mAmountRead);
+    SkipBy(inPositionInStream - mAmountRead);
 }
 
 // will skip by, or hit EOF
 void InputStreamSkipperStream::SkipBy(IOBasicTypes::LongFilePositionType inAmountToSkipBy)
 {
-	IOBasicTypes::Byte buffer;
+    IOBasicTypes::Byte buffer;
 
-	while(NotEnded() && inAmountToSkipBy>0)
-	{
-		Read(&buffer,1);
-		--inAmountToSkipBy;
-	}
-
+    while (NotEnded() && inAmountToSkipBy > 0)
+    {
+        Read(&buffer, 1);
+        --inAmountToSkipBy;
+    }
 }
 
 void InputStreamSkipperStream::Reset()
 {
-	mAmountRead = 0;
+    mAmountRead = 0;
 }
 
 IOBasicTypes::LongFilePositionType InputStreamSkipperStream::GetCurrentPosition()
 {
-	return mAmountRead;
+    return mAmountRead;
 }

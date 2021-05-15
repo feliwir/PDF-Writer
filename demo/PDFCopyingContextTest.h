@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,9 +24,9 @@
 
 class PDFCopyingContextTest : public ITestUnit
 {
-public:
-	PDFCopyingContextTest(void);
-	virtual ~PDFCopyingContextTest(void);
+  public:
+    PDFCopyingContextTest(void);
+    virtual ~PDFCopyingContextTest(void);
 
-	PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

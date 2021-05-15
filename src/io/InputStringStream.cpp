@@ -27,55 +27,61 @@ InputStringStream::InputStringStream()
 {
 }
 
-InputStringStream::InputStringStream(const string& inString)
+InputStringStream::InputStringStream(const string &inString)
 {
-	mStartPosition = inString.begin();
-	mEndPosition = inString.end();
-	mCurrentPosition = mStartPosition;
+    mStartPosition = inString.begin();
+    mEndPosition = inString.end();
+    mCurrentPosition = mStartPosition;
 }
 
 InputStringStream::~InputStringStream(void)
 {
 }
 
-void InputStringStream::Assign(const string& inString)
+void InputStringStream::Assign(const string &inString)
 {
-	mStartPosition = inString.begin();
-	mEndPosition = inString.end();
-	mCurrentPosition = mStartPosition;
+    mStartPosition = inString.begin();
+    mEndPosition = inString.end();
+    mCurrentPosition = mStartPosition;
 }
 
-LongBufferSizeType InputStringStream::Read(Byte* inBuffer, LongBufferSizeType inBufferSize)
+LongBufferSizeType InputStringStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-	LongBufferSizeType amountRead = 0;
+    LongBufferSizeType amountRead = 0;
 
-	for (; amountRead < inBufferSize && mCurrentPosition != mEndPosition; ++amountRead, ++mCurrentPosition)
-		inBuffer[amountRead] = (Byte)*mCurrentPosition;
-	return amountRead;
+    for (; amountRead < inBufferSize && mCurrentPosition != mEndPosition; ++amountRead, ++mCurrentPosition)
+        inBuffer[amountRead] = (Byte)*mCurrentPosition;
+    return amountRead;
 }
 
 bool InputStringStream::NotEnded()
 {
-	return mCurrentPosition != mEndPosition;
-
+    return mCurrentPosition != mEndPosition;
 }
 
 void InputStringStream::Skip(LongBufferSizeType inSkipSize)
 {
-	mCurrentPosition = (inSkipSize > (LongBufferSizeType)(mEndPosition - mCurrentPosition)) ? mEndPosition : (mCurrentPosition + inSkipSize);;
+    mCurrentPosition = (inSkipSize > (LongBufferSizeType)(mEndPosition - mCurrentPosition))
+                           ? mEndPosition
+                           : (mCurrentPosition + inSkipSize);
+    ;
 }
 
 void InputStringStream::SetPosition(LongFilePositionType inOffsetFromStart)
 {
-	mCurrentPosition = inOffsetFromStart > (LongFilePositionType)(mEndPosition - mStartPosition) ? mEndPosition : (mStartPosition + (string::size_type)inOffsetFromStart);
+    mCurrentPosition = inOffsetFromStart > (LongFilePositionType)(mEndPosition - mStartPosition)
+                           ? mEndPosition
+                           : (mStartPosition + (string::size_type)inOffsetFromStart);
 }
 
 void InputStringStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
 {
-	mCurrentPosition = inOffsetFromEnd > (LongFilePositionType)(mEndPosition - mStartPosition) ? mStartPosition : (mStartPosition + (mEndPosition - mStartPosition - (string::size_type)inOffsetFromEnd));
+    mCurrentPosition = inOffsetFromEnd > (LongFilePositionType)(mEndPosition - mStartPosition)
+                           ? mStartPosition
+                           : (mStartPosition + (mEndPosition - mStartPosition - (string::size_type)inOffsetFromEnd));
 }
 
 LongFilePositionType InputStringStream::GetCurrentPosition()
 {
-	return mCurrentPosition - mStartPosition;
+    return mCurrentPosition - mStartPosition;
 }

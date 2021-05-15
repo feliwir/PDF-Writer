@@ -16,69 +16,69 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "TrailerInformation.h"
 
 TrailerInformation::TrailerInformation(void)
 {
-	mPrev = 0;
+    mPrev = 0;
 }
 
 TrailerInformation::~TrailerInformation(void)
 {
 }
 
-void TrailerInformation::SetInfoDictionaryReference(const ObjectReference& inInfoDictionaryReference)
+void TrailerInformation::SetInfoDictionaryReference(const ObjectReference &inInfoDictionaryReference)
 {
-	mInfoDictionaryReference = inInfoDictionaryReference;
+    mInfoDictionaryReference = inInfoDictionaryReference;
 }
 
 void TrailerInformation::SetPrev(LongFilePositionType inPrev)
 {
-	mPrev = inPrev;
+    mPrev = inPrev;
 }
 
-void TrailerInformation::SetRoot(const ObjectReference& inRootReference)
+void TrailerInformation::SetRoot(const ObjectReference &inRootReference)
 {
-	mRootReference = inRootReference;
+    mRootReference = inRootReference;
 }
 
-void TrailerInformation::SetEncrypt(const ObjectReference& inEncryptReference)
+void TrailerInformation::SetEncrypt(const ObjectReference &inEncryptReference)
 {
-	mEncryptReference = inEncryptReference;
+    mEncryptReference = inEncryptReference;
 }
 
 BoolAndLongFilePositionType TrailerInformation::GetPrev()
 {
-	return BoolAndLongFilePositionType(mPrev != 0,mPrev);
+    return BoolAndLongFilePositionType(mPrev != 0, mPrev);
 }
 
 BoolAndObjectReference TrailerInformation::GetRoot()
 {
-	return BoolAndObjectReference(mRootReference.ObjectID != 0, mRootReference);
+    return BoolAndObjectReference(mRootReference.ObjectID != 0, mRootReference);
 }
 
 BoolAndObjectReference TrailerInformation::GetEncrypt()
 {
-	return BoolAndObjectReference(mEncryptReference.ObjectID != 0, mEncryptReference);
+    return BoolAndObjectReference(mEncryptReference.ObjectID != 0, mEncryptReference);
 }
 
-InfoDictionary& TrailerInformation::GetInfo()
+InfoDictionary &TrailerInformation::GetInfo()
 {
-	return mInfoDictionary;
+    return mInfoDictionary;
 }
 
 BoolAndObjectReference TrailerInformation::GetInfoDictionaryReference()
 {
-	return BoolAndObjectReference(mInfoDictionaryReference.ObjectID != 0, mInfoDictionaryReference);
+    return BoolAndObjectReference(mInfoDictionaryReference.ObjectID != 0, mInfoDictionaryReference);
 }
 
 void TrailerInformation::Reset()
 {
-	mPrev = 0;
-	mRootReference.ObjectID = 0;
-	mEncryptReference.ObjectID = 0;
-	mInfoDictionaryReference.ObjectID = 0;
-	mInfoDictionary.Reset();
+    mPrev = 0;
+    mRootReference.ObjectID = 0;
+    mEncryptReference.ObjectID = 0;
+    mInfoDictionaryReference.ObjectID = 0;
+    mInfoDictionary.Reset();
 }

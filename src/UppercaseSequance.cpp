@@ -16,64 +16,61 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "UppercaseSequance.h"
 #include "Trace.h"
 
 UppercaseSequance::UppercaseSequance(void)
 {
-	mSequanceString = "AAAAAA";
+    mSequanceString = "AAAAAA";
 }
 
 UppercaseSequance::UppercaseSequance(std::string inSequanceString)
 {
-	mSequanceString = inSequanceString;
+    mSequanceString = inSequanceString;
 }
-
 
 void UppercaseSequance::Reset()
 {
-	mSequanceString = "AAAAAA";
+    mSequanceString = "AAAAAA";
 }
 
 UppercaseSequance::~UppercaseSequance(void)
 {
-	
 }
 
-const std::string& UppercaseSequance::GetNextValue()
+const std::string &UppercaseSequance::GetNextValue()
 {
-	int i = 5;
-	
-	while(true)
-	{
-		if(mSequanceString.at(i) < 'Z')
-		{
-			++mSequanceString.at(i);
-			break;
-		}
-		else
-		{
-			if(i == 0)
-			{
-				TRACE_LOG("UppercaseSequance::GetNextValue, oops, reached overflow");
-				break;
-			}
-			mSequanceString.at(i) = 'A';
-			--i;
-		}
-		
-	}
-	return mSequanceString;
+    int i = 5;
+
+    while (true)
+    {
+        if (mSequanceString.at(i) < 'Z')
+        {
+            ++mSequanceString.at(i);
+            break;
+        }
+        else
+        {
+            if (i == 0)
+            {
+                TRACE_LOG("UppercaseSequance::GetNextValue, oops, reached overflow");
+                break;
+            }
+            mSequanceString.at(i) = 'A';
+            --i;
+        }
+    }
+    return mSequanceString;
 }
 
-const std::string& UppercaseSequance::ToString()
+const std::string &UppercaseSequance::ToString()
 {
-	return mSequanceString;
+    return mSequanceString;
 }
 
-void UppercaseSequance::SetSequanceString(const std::string& inSequanceString)
+void UppercaseSequance::SetSequanceString(const std::string &inSequanceString)
 {
-	mSequanceString = inSequanceString;
+    mSequanceString = inSequanceString;
 }

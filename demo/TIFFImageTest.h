@@ -16,10 +16,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-
 
 #ifndef PDFHUMMUS_NO_TIFF
 
@@ -29,14 +28,14 @@ class PDFWriter;
 
 class TIFFImageTest : public ITestUnit
 {
-public:
-	TIFFImageTest(void);
-	virtual ~TIFFImageTest(void);
+  public:
+    TIFFImageTest(void);
+    virtual ~TIFFImageTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	PDFHummus::EStatusCode AddPageForTIFF(PDFWriter& inPDFWriter, const string& inTiffFilePath);
+  private:
+    PDFHummus::EStatusCode AddPageForTIFF(PDFWriter &inPDFWriter, const string &inTiffFilePath);
 };
 
 #endif

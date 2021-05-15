@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "AbstractContentContext.h"
@@ -25,15 +25,15 @@ class PDFFormXObject;
 
 class XObjectContentContext : public AbstractContentContext
 {
-public:
-	XObjectContentContext(PDFHummus::DocumentContext* inDocumentContext,PDFFormXObject* inFormXObject);
-	virtual ~XObjectContentContext(void);
+  public:
+    XObjectContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFFormXObject *inFormXObject);
+    virtual ~XObjectContentContext(void);
 
-private:
+  private:
+    // AbstractContentContext implementation
+    virtual ResourcesDictionary *GetResourcesDictionary();
+    virtual void ScheduleImageWrite(const std::string &inImagePath, unsigned long inImageIndex, ObjectIDType inObjectID,
+                                    const PDFParsingOptions &inParsingOptions);
 
-	// AbstractContentContext implementation
-	virtual ResourcesDictionary* GetResourcesDictionary();
-	virtual void ScheduleImageWrite(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID, const PDFParsingOptions& inParsingOptions);
-
-	PDFFormXObject* mPDFFormXObjectOfContext;
+    PDFFormXObject *mPDFFormXObjectOfContext;
 };

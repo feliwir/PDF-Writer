@@ -16,19 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 class FSType
 {
-public:
-	FSType(unsigned short inFSTypeValue) {mFSTypeValue = inFSTypeValue;}
+  public:
+    FSType(unsigned short inFSTypeValue)
+    {
+        mFSTypeValue = inFSTypeValue;
+    }
 
-	// using Adobe applications policy as published in FontPolicies.pdf [note that if multiple bits are set the least restrictive takes over]
-	// so there are just 3 options for not embedding
-	bool CanEmbed(){return (mFSTypeValue != 0x2) && (mFSTypeValue != 0x0200) && (mFSTypeValue != 0x0202);}
-private:
+    // using Adobe applications policy as published in FontPolicies.pdf [note that if multiple bits are set the least
+    // restrictive takes over] so there are just 3 options for not embedding
+    bool CanEmbed()
+    {
+        return (mFSTypeValue != 0x2) && (mFSTypeValue != 0x0200) && (mFSTypeValue != 0x0202);
+    }
 
-	unsigned short mFSTypeValue;
+  private:
+    unsigned short mFSTypeValue;
 };

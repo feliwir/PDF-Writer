@@ -16,19 +16,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class BoxingBaseTest : public ITestUnit
 {
-public:
-	BoxingBaseTest(void);
-	~BoxingBaseTest(void);
+  public:
+    BoxingBaseTest(void);
+    ~BoxingBaseTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	PDFHummus::EStatusCode RunIntTest();
+  private:
+    PDFHummus::EStatusCode RunIntTest();
 };

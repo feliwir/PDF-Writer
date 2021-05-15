@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "TestsRunner.h"
 
-class PDFTextStringTest: public ITestUnit
+class PDFTextStringTest : public ITestUnit
 {
-public:
-	PDFTextStringTest(void);
-	~PDFTextStringTest(void);
+  public:
+    PDFTextStringTest(void);
+    ~PDFTextStringTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

@@ -16,49 +16,44 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-#include "PDFObject.h"
-#include "PDFName.h"
 #include "MapIterator.h"
+#include "PDFName.h"
+#include "PDFObject.h"
 
 #include <map>
 
-
-
 struct PDFNameLess
 {
-	bool operator( ) (const PDFName* left, 
-						const PDFName* right ) const
-	{
-		return left->GetValue() < right->GetValue();
-	}
+    bool operator()(const PDFName *left, const PDFName *right) const
+    {
+        return left->GetValue() < right->GetValue();
+    }
 };
 
-typedef std::map<PDFName*,PDFObject*,PDFNameLess> PDFNameToPDFObjectMap;
+typedef std::map<PDFName *, PDFObject *, PDFNameLess> PDFNameToPDFObjectMap;
 
 class PDFDictionary : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectDictionary
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectDictionary
-	};
+    PDFDictionary(void);
+    virtual ~PDFDictionary(void);
 
-	PDFDictionary(void);
-	virtual ~PDFDictionary(void);
-
-	// AddRefs on both
-	void Insert(PDFName* inKeyObject, PDFObject* inValueObject);
+    // AddRefs on both
+    void Insert(PDFName *inKeyObject, PDFObject *inValueObject);
 
     bool Exists(std::string inName);
-	PDFObject* QueryDirectObject(std::string inName);
+    PDFObject *QueryDirectObject(std::string inName);
 
-	MapIterator<PDFNameToPDFObjectMap> GetIterator();
+    MapIterator<PDFNameToPDFObjectMap> GetIterator();
 
-private:
-
-	PDFNameToPDFObjectMap mValues;
+  private:
+    PDFNameToPDFObjectMap mValues;
 };

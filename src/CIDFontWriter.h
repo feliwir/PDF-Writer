@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
-#include "WrittenFontRepresentation.h"
 #include "ObjectsBasicTypes.h"
+#include "WrittenFontRepresentation.h"
 
 #include <utility>
 #include <vector>
@@ -33,34 +33,27 @@ class DictionaryContext;
 class IDescendentFontWriter;
 class IByteWriter;
 
-
-
 typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
 
 class CIDFontWriter
 {
-public:
-	CIDFontWriter(void);
-	virtual ~CIDFontWriter(void);
+  public:
+    CIDFontWriter(void);
+    virtual ~CIDFontWriter(void);
 
-	PDFHummus::EStatusCode WriteFont(	FreeTypeFaceWrapper& inFontInfo,
-							WrittenFontRepresentation* inFontOccurrence,
-							ObjectsContext* inObjectsContext,
-							IDescendentFontWriter* inDescendentFontWriter,
-							bool inEmbedFont);
+    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                     ObjectsContext *inObjectsContext, IDescendentFontWriter *inDescendentFontWriter,
+                                     bool inEmbedFont);
 
-private:
+  private:
+    FreeTypeFaceWrapper *mFontInfo;
+    WrittenFontRepresentation *mFontOccurrence;
+    ObjectsContext *mObjectsContext;
+    UIntAndGlyphEncodingInfoVector mCharactersVector;
 
-	FreeTypeFaceWrapper* mFontInfo;
-	WrittenFontRepresentation* mFontOccurrence;
-	ObjectsContext* mObjectsContext;
-	UIntAndGlyphEncodingInfoVector mCharactersVector;
-
-
-	void WriteEncoding(DictionaryContext* inFontContext);
-	void CalculateCharacterEncodingArray();
-	void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-	void WriteGlyphEntry(IByteWriter* inWriter,unsigned short inEncodedCharacter,const ULongVector& inUnicodeValues);
-
+    void WriteEncoding(DictionaryContext *inFontContext);
+    void CalculateCharacterEncodingArray();
+    void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
+    void WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter, const ULongVector &inUnicodeValues);
 };

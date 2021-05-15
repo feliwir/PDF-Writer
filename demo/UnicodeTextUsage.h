@@ -16,19 +16,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class UnicodeTextUsage : public ITestUnit
 {
-public:
-	UnicodeTextUsage(void);
-	virtual ~UnicodeTextUsage(void);
+  public:
+    UnicodeTextUsage(void);
+    virtual ~UnicodeTextUsage(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-
+  private:
 };

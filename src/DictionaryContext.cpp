@@ -16,131 +16,130 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
 #include "Trace.h"
 #include "io/IByteWriterWithPosition.h"
 
-
 using namespace PDFHummus;
 
 static const std::string scStartDictionary = "<<";
 static const std::string scEndDictionary = ">>";
 
-
-DictionaryContext::DictionaryContext(ObjectsContext* inObjectsContext,size_t inIndentLevel)
+DictionaryContext::DictionaryContext(ObjectsContext *inObjectsContext, size_t inIndentLevel)
 {
-	mObjectsContext = inObjectsContext;
-	mIndentLevel= inIndentLevel;
+    mObjectsContext = inObjectsContext;
+    mIndentLevel = inIndentLevel;
 
-	mObjectsContext->WriteKeyword(scStartDictionary);
+    mObjectsContext->WriteKeyword(scStartDictionary);
 }
 
 DictionaryContext::~DictionaryContext(void)
 {
-	if(mIndentLevel > 0)
-	{
-		--mIndentLevel; // the final end dictionary should be written with a lower indent, as a value of the container
-		WriteIndents();
-	}
-	mObjectsContext->WriteKeyword(scEndDictionary);
+    if (mIndentLevel > 0)
+    {
+        --mIndentLevel; // the final end dictionary should be written with a lower indent, as a value of the container
+        WriteIndents();
+    }
+    mObjectsContext->WriteKeyword(scEndDictionary);
 }
 
-EStatusCode DictionaryContext::WriteKey(const std::string& inKey)
+EStatusCode DictionaryContext::WriteKey(const std::string &inKey)
 {
-	if(mKeys.find(inKey) == mKeys.end())
-	{
-		WriteIndents();
-		mObjectsContext->WriteName(inKey);
-		mKeys.insert(inKey);
-		return PDFHummus::eSuccess;
-	}
-	else
-	{
-		TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same dictionary. key reused - %s",inKey.substr(0, MAX_TRACE_SIZE-200).c_str());
-		return PDFHummus::eFailure;
-	}
+    if (mKeys.find(inKey) == mKeys.end())
+    {
+        WriteIndents();
+        mObjectsContext->WriteName(inKey);
+        mKeys.insert(inKey);
+        return PDFHummus::eSuccess;
+    }
+    else
+    {
+        TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same "
+                   "dictionary. key reused - %s",
+                   inKey.substr(0, MAX_TRACE_SIZE - 200).c_str());
+        return PDFHummus::eFailure;
+    }
 }
 
-bool DictionaryContext::HasKey(const std::string& inKey) {
-	return mKeys.find(inKey) != mKeys.end();
+bool DictionaryContext::HasKey(const std::string &inKey)
+{
+    return mKeys.find(inKey) != mKeys.end();
 }
 
 static const Byte scTab[1] = {'\t'};
 void DictionaryContext::WriteIndents()
 {
-	IByteWriterWithPosition* outputStream = mObjectsContext->StartFreeContext();
-	for(size_t i=0;i<=mIndentLevel;++i)
-		outputStream->Write(scTab,1);
-	mObjectsContext->EndFreeContext();
+    IByteWriterWithPosition *outputStream = mObjectsContext->StartFreeContext();
+    for (size_t i = 0; i <= mIndentLevel; ++i)
+        outputStream->Write(scTab, 1);
+    mObjectsContext->EndFreeContext();
 }
 
 void DictionaryContext::WriteIntegerValue(long long inValue)
 {
-	mObjectsContext->WriteInteger(inValue,eTokenSeparatorEndLine);
+    mObjectsContext->WriteInteger(inValue, eTokenSeparatorEndLine);
 }
 
-void DictionaryContext::WriteObjectReferenceValue(const ObjectReference& inObjectReference)
+void DictionaryContext::WriteObjectReferenceValue(const ObjectReference &inObjectReference)
 {
-    WriteObjectReferenceValue(inObjectReference.ObjectID,inObjectReference.GenerationNumber);
+    WriteObjectReferenceValue(inObjectReference.ObjectID, inObjectReference.GenerationNumber);
 }
 
-void DictionaryContext::WriteObjectReferenceValue(ObjectIDType inObjectReference,unsigned long inGenerationNumber)
+void DictionaryContext::WriteObjectReferenceValue(ObjectIDType inObjectReference, unsigned long inGenerationNumber)
 {
-    mObjectsContext->WriteIndirectObjectReference(inObjectReference,inGenerationNumber,eTokenSeparatorEndLine);
+    mObjectsContext->WriteIndirectObjectReference(inObjectReference, inGenerationNumber, eTokenSeparatorEndLine);
 }
-
 
 void DictionaryContext::WriteNewObjectReferenceValue(ObjectIDType inObjectReference)
 {
-    WriteObjectReferenceValue(inObjectReference,0);
+    WriteObjectReferenceValue(inObjectReference, 0);
 }
 
-void DictionaryContext::WriteLiteralStringValue(const std::string& inValue)
+void DictionaryContext::WriteLiteralStringValue(const std::string &inValue)
 {
-	mObjectsContext->WriteLiteralString(inValue,eTokenSeparatorEndLine);
+    mObjectsContext->WriteLiteralString(inValue, eTokenSeparatorEndLine);
 }
 
-void DictionaryContext::WriteKeywordValue(const std::string& inValue)
+void DictionaryContext::WriteKeywordValue(const std::string &inValue)
 {
-	mObjectsContext->WriteKeyword(inValue);
+    mObjectsContext->WriteKeyword(inValue);
 }
 
-
-void DictionaryContext::WriteHexStringValue(const std::string& inValue)
+void DictionaryContext::WriteHexStringValue(const std::string &inValue)
 {
-	mObjectsContext->WriteHexString(inValue,eTokenSeparatorEndLine);
+    mObjectsContext->WriteHexString(inValue, eTokenSeparatorEndLine);
 }
 
 void DictionaryContext::WriteNullValue()
 {
-	mObjectsContext->WriteNull(eTokenSeparatorEndLine);
+    mObjectsContext->WriteNull(eTokenSeparatorEndLine);
 }
 
-void DictionaryContext::WriteNameValue(const std::string& inValue)
+void DictionaryContext::WriteNameValue(const std::string &inValue)
 {
-	mObjectsContext->WriteName(inValue,eTokenSeparatorEndLine);	
+    mObjectsContext->WriteName(inValue, eTokenSeparatorEndLine);
 }
 
-void DictionaryContext::WriteRectangleValue(const PDFRectangle& inRectangle)
+void DictionaryContext::WriteRectangleValue(const PDFRectangle &inRectangle)
 {
-	mObjectsContext->StartArray();
-	mObjectsContext->WriteDouble(inRectangle.LowerLeftX);
-	mObjectsContext->WriteDouble(inRectangle.LowerLeftY);
-	mObjectsContext->WriteDouble(inRectangle.UpperRightX);
-	mObjectsContext->WriteDouble(inRectangle.UpperRightY);
-	mObjectsContext->EndArray();
-	mObjectsContext->EndLine();
+    mObjectsContext->StartArray();
+    mObjectsContext->WriteDouble(inRectangle.LowerLeftX);
+    mObjectsContext->WriteDouble(inRectangle.LowerLeftY);
+    mObjectsContext->WriteDouble(inRectangle.UpperRightX);
+    mObjectsContext->WriteDouble(inRectangle.UpperRightY);
+    mObjectsContext->EndArray();
+    mObjectsContext->EndLine();
 }
 
 void DictionaryContext::WriteDoubleValue(double inValue)
 {
-	mObjectsContext->WriteDouble(inValue,eTokenSeparatorEndLine);	
+    mObjectsContext->WriteDouble(inValue, eTokenSeparatorEndLine);
 }
 
 void DictionaryContext::WriteBooleanValue(bool inValue)
 {
-	mObjectsContext->WriteBoolean(inValue,eTokenSeparatorEndLine);
+    mObjectsContext->WriteBoolean(inValue, eTokenSeparatorEndLine);
 }

@@ -23,8 +23,8 @@ limitations under the License.
 
 class FlateObjectDecodeTest : public ITestUnit
 {
-public:
-	FlateObjectDecodeTest();
-	virtual ~FlateObjectDecodeTest();
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+  public:
+    FlateObjectDecodeTest();
+    virtual ~FlateObjectDecodeTest();
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

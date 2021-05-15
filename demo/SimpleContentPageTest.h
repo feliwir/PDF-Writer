@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class SimpleContentPageTest : public ITestUnit
 {
-public:
-	SimpleContentPageTest(void);
-	~SimpleContentPageTest(void);
+  public:
+    SimpleContentPageTest(void);
+    ~SimpleContentPageTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

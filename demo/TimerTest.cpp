@@ -16,11 +16,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "TimerTest.h"
-#include "Trace.h"
 #include "TimersRegistry.h"
+#include "Trace.h"
 
 #include <time.h>
 
@@ -34,38 +34,39 @@ TimerTest::~TimerTest(void)
 {
 }
 
-EStatusCode TimerTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode TimerTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	Singleton<Trace>::GetInstance()->SetLogSettings(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"timersTrace.txt"),true,true);
+    Singleton<Trace>::GetInstance()->SetLogSettings(
+        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "timersTrace.txt"), true, true);
 
-	TimersRegistry timersRegistry;
+    TimersRegistry timersRegistry;
 
-	timersRegistry.StartMeasure("TimerA");
-	timersRegistry.StartMeasure("TimerB");
-	Sleep(5);
-	timersRegistry.StopMeasureAndAccumulate("TimerA");
-	timersRegistry.StopMeasureAndAccumulate("TimerB");
+    timersRegistry.StartMeasure("TimerA");
+    timersRegistry.StartMeasure("TimerB");
+    Sleep(5);
+    timersRegistry.StopMeasureAndAccumulate("TimerA");
+    timersRegistry.StopMeasureAndAccumulate("TimerB");
 
-	timersRegistry.StartMeasure("TimerC");
-	timersRegistry.StartMeasure("TimerB");
-	Sleep(5.80);
-	timersRegistry.StopMeasureAndAccumulate("TimerC");
-	timersRegistry.StopMeasureAndAccumulate("TimerB");
+    timersRegistry.StartMeasure("TimerC");
+    timersRegistry.StartMeasure("TimerB");
+    Sleep(5.80);
+    timersRegistry.StopMeasureAndAccumulate("TimerC");
+    timersRegistry.StopMeasureAndAccumulate("TimerB");
 
-	timersRegistry.TraceAndReleaseAll();
+    timersRegistry.TraceAndReleaseAll();
 
-	Singleton<Trace>::Reset();
+    Singleton<Trace>::Reset();
 
-	return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
 void TimerTest::Sleep(double inSeconds)
 {
-	clock_t wait = (clock_t)(inSeconds * CLOCKS_PER_SEC);
-	clock_t goal;
-	goal = wait + clock();
-	while(goal > clock())
-		;
+    clock_t wait = (clock_t)(inSeconds * CLOCKS_PER_SEC);
+    clock_t goal;
+    goal = wait + clock();
+    while (goal > clock())
+        ;
 }
 
-ADD_CATEGORIZED_TEST(TimerTest,"Basics")
+ADD_CATEGORIZED_TEST(TimerTest, "Basics")

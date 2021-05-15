@@ -16,31 +16,31 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFStreamInput.h"
 #include "PDFDictionary.h"
 #include "PDFName.h"
 
-PDFStreamInput::PDFStreamInput(PDFDictionary* inStreamDictionary,LongFilePositionType inStreamContentStart) : PDFObject(eType)
+PDFStreamInput::PDFStreamInput(PDFDictionary *inStreamDictionary, LongFilePositionType inStreamContentStart)
+    : PDFObject(eType)
 {
-	mDictionary = inStreamDictionary;
-	mStreamContentStart = inStreamContentStart;
+    mDictionary = inStreamDictionary;
+    mStreamContentStart = inStreamContentStart;
 }
 
 PDFStreamInput::~PDFStreamInput(void)
 {
-	mDictionary->Release();
+    mDictionary->Release();
 }
 
-PDFDictionary* PDFStreamInput::QueryStreamDictionary()
+PDFDictionary *PDFStreamInput::QueryStreamDictionary()
 {
-	mDictionary->AddRef();
-	return mDictionary;
+    mDictionary->AddRef();
+    return mDictionary;
 }
 
 LongFilePositionType PDFStreamInput::GetStreamContentStart()
 {
-	return mStreamContentStart;
+    return mStreamContentStart;
 }
-

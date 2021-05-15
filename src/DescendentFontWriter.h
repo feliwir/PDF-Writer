@@ -16,14 +16,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "EStatusCode.h"
-#include "WrittenFontRepresentation.h"
-#include "ObjectsBasicTypes.h"
-#include "IFontDescriptorHelper.h"
 #include "IDescendentFontWriter.h"
+#include "IFontDescriptorHelper.h"
+#include "ObjectsBasicTypes.h"
+#include "WrittenFontRepresentation.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -35,43 +35,35 @@ class FreeTypeFaceWrapper;
 class ObjectsContext;
 class DictionaryContext;
 
-
-
-
 typedef std::list<FT_Pos> FTPosList;
 
 class DescendentFontWriter : public IFontDescriptorHelper
 {
-public:
-	DescendentFontWriter(void);
-	~DescendentFontWriter(void);
+  public:
+    DescendentFontWriter(void);
+    ~DescendentFontWriter(void);
 
-	// the IDescendentFontWriter input pointer will implement the font specific differences
-	virtual PDFHummus::EStatusCode WriteFont(	ObjectIDType inDecendentObjectID, 
-									const std::string& inFontName,
-									FreeTypeFaceWrapper& inFontInfo,
-									const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs,
-									ObjectsContext* inObjectsContext,
-									IDescendentFontWriter* inDescendentFontWriterHelper);
+    // the IDescendentFontWriter input pointer will implement the font specific differences
+    virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
+                                             FreeTypeFaceWrapper &inFontInfo,
+                                             const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                                             ObjectsContext *inObjectsContext,
+                                             IDescendentFontWriter *inDescendentFontWriterHelper);
 
-	// IFontDescriptorHelper implementation [would probably evolve at some point to IDescriptorWriterHelper...
-	virtual void WriteCharSet(	DictionaryContext* inDescriptorContext,
-								ObjectsContext* inObjectsContext,
-								FreeTypeFaceWrapper* inFontInfo,
-								const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs);
-	virtual void WriteFontFileReference(DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext);
-private:
+    // IFontDescriptorHelper implementation [would probably evolve at some point to IDescriptorWriterHelper...
+    virtual void WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
+                              FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
+    virtual void WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext);
 
-	FreeTypeFaceWrapper* mFontInfo;
-	ObjectsContext* mObjectsContext;
-	ObjectIDType mCIDSetObjectID;
-	IDescendentFontWriter* mWriterHelper;
+  private:
+    FreeTypeFaceWrapper *mFontInfo;
+    ObjectsContext *mObjectsContext;
+    ObjectIDType mCIDSetObjectID;
+    IDescendentFontWriter *mWriterHelper;
 
-
-	void WriteWidths(	const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs,
-						DictionaryContext* inFontContext);
-	void WriteCIDSystemInfo(ObjectIDType inCIDSystemInfoObjectID);
-	void WriteWidthsItem(bool inAllWidthsSame,const FTPosList& inWidths,unsigned short inFirstCID, unsigned short inLastCID);
-	void WriteCIDSet(const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs);
+    void WriteWidths(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs, DictionaryContext *inFontContext);
+    void WriteCIDSystemInfo(ObjectIDType inCIDSystemInfoObjectID);
+    void WriteWidthsItem(bool inAllWidthsSame, const FTPosList &inWidths, unsigned short inFirstCID,
+                         unsigned short inLastCID);
+    void WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
 };

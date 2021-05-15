@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "TrueTypeANSIFontWriter.h"
 #include "ANSIFontWriter.h"
 #include "DictionaryContext.h"
-#include "ObjectsContext.h"
 #include "IndirectObjectsReferenceRegistry.h"
+#include "ObjectsContext.h"
+#include "Trace.h"
 #include "TrueTypeEmbeddedFontWriter.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
-#include "Trace.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -41,81 +41,75 @@ TrueTypeANSIFontWriter::~TrueTypeANSIFontWriter(void)
 }
 
 static const std::string scPlus = "+";
-EStatusCode TrueTypeANSIFontWriter::WriteFont(	FreeTypeFaceWrapper& inFontInfo,
-											WrittenFontRepresentation* inFontOccurrence,
-											ObjectsContext* inObjectsContext,
-											bool inEmbedFont)
+EStatusCode TrueTypeANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo,
+                                              WrittenFontRepresentation *inFontOccurrence,
+                                              ObjectsContext *inObjectsContext, bool inEmbedFont)
 {
-	std::string postscriptFontName = inFontInfo.GetPostscriptName();
-	if(postscriptFontName.length() == 0)
-	{
-		TRACE_LOG("TrueTypeANSIFontWriter::WriteFont, unexpected failure. no postscript font name for font");
-		return PDFHummus::eFailure;
-	}
-	std::string fontName;
+    std::string postscriptFontName = inFontInfo.GetPostscriptName();
+    if (postscriptFontName.length() == 0)
+    {
+        TRACE_LOG("TrueTypeANSIFontWriter::WriteFont, unexpected failure. no postscript font name for font");
+        return PDFHummus::eFailure;
+    }
+    std::string fontName;
 
-	// reset embedded font object ID (and flag...to whether it was actually embedded or not, which may 
-	// happen due to font embedding restrictions, or due to users choice)
-	mEmbeddedFontFileObjectID = 0;
+    // reset embedded font object ID (and flag...to whether it was actually embedded or not, which may
+    // happen due to font embedding restrictions, or due to users choice)
+    mEmbeddedFontFileObjectID = 0;
 
-	TrueTypeEmbeddedFontWriter embeddedFontWriter;
+    TrueTypeEmbeddedFontWriter embeddedFontWriter;
 
-	if (inEmbedFont)
-	{
-		fontName = inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName;
-		EStatusCode status = embeddedFontWriter.WriteEmbeddedFont(inFontInfo,
-																	inFontOccurrence->GetGlyphIDsAsOrderedVector(),
-																	inObjectsContext,
-																	mEmbeddedFontFileObjectID);
-		if (PDFHummus::eFailure == status)
-			return status;
-	}
-	else
-		fontName  = postscriptFontName;
+    if (inEmbedFont)
+    {
+        fontName = inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName;
+        EStatusCode status = embeddedFontWriter.WriteEmbeddedFont(
+            inFontInfo, inFontOccurrence->GetGlyphIDsAsOrderedVector(), inObjectsContext, mEmbeddedFontFileObjectID);
+        if (PDFHummus::eFailure == status)
+            return status;
+    }
+    else
+        fontName = postscriptFontName;
 
-	ANSIFontWriter fontWriter;
+    ANSIFontWriter fontWriter;
 
-	return fontWriter.WriteFont(inFontInfo, inFontOccurrence, inObjectsContext, this, fontName);
+    return fontWriter.WriteFont(inFontInfo, inFontOccurrence, inObjectsContext, this, fontName);
 }
 
 static const std::string scTrueType = "TrueType";
 
-void TrueTypeANSIFontWriter::WriteSubTypeValue(DictionaryContext* inDictionary)
+void TrueTypeANSIFontWriter::WriteSubTypeValue(DictionaryContext *inDictionary)
 {
-	inDictionary->WriteNameValue(scTrueType);
+    inDictionary->WriteNameValue(scTrueType);
 }
 
-IFontDescriptorHelper* TrueTypeANSIFontWriter::GetCharsetWriter()
+IFontDescriptorHelper *TrueTypeANSIFontWriter::GetCharsetWriter()
 {
-	// note that there's no charset writing for true types
-	return this;
+    // note that there's no charset writing for true types
+    return this;
 }
 
 bool TrueTypeANSIFontWriter::CanWriteDifferencesFromWinAnsi()
 {
-	return false;
+    return false;
 }
 
-
-void TrueTypeANSIFontWriter::WriteCharSet(	DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext,
-										FreeTypeFaceWrapper* inFontInfo,
-										const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs)
+void TrueTypeANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
+                                          FreeTypeFaceWrapper *inFontInfo,
+                                          const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
 {
-	// do nothing. no charset writing for true types
+    // do nothing. no charset writing for true types
 }
 
 static const std::string scFontFile2 = "FontFile2";
 
-void TrueTypeANSIFontWriter::WriteFontFileReference(	
-										DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext)
+void TrueTypeANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,
+                                                    ObjectsContext *inObjectsContext)
 {
-	// will be 0 in case embedding didn't occur due to font embedding restrictions
-	if(mEmbeddedFontFileObjectID != 0)
-	{
-		// FontFile2
-		inDescriptorContext->WriteKey(scFontFile2);
-		inDescriptorContext->WriteNewObjectReferenceValue(mEmbeddedFontFileObjectID);
-	}
+    // will be 0 in case embedding didn't occur due to font embedding restrictions
+    if (mEmbeddedFontFileObjectID != 0)
+    {
+        // FontFile2
+        inDescriptorContext->WriteKey(scFontFile2);
+        inDescriptorContext->WriteNewObjectReferenceValue(mEmbeddedFontFileObjectID);
+    }
 }

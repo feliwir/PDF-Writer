@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,17 +24,16 @@
 
 class PSBoolReader
 {
-public:
-	void Read(const std::string& inReadFrom,bool& outValue);
-	void Read(const std::wstring& inReadFrom,bool& outValue);
+  public:
+    void Read(const std::string &inReadFrom, bool &outValue);
+    void Read(const std::wstring &inReadFrom, bool &outValue);
 };
 
 class PSBoolWriter
 {
-public:
-	void Write(const bool& inValue,std::string& outWriteTo);
-	void Write(const bool& inValue,std::wstring& outWriteTo);
+  public:
+    void Write(const bool &inValue, std::string &outWriteTo);
+    void Write(const bool &inValue, std::wstring &outWriteTo);
 };
 
-typedef BoxingBaseWithRW<bool,PSBoolReader,PSBoolWriter> PSBool;
-
+typedef BoxingBaseWithRW<bool, PSBoolReader, PSBoolWriter> PSBool;

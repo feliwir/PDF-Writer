@@ -16,67 +16,67 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "CatalogInformation.h"
-#include "PageTree.h"
 #include "IndirectObjectsReferenceRegistry.h"
+#include "PageTree.h"
 
 CatalogInformation::CatalogInformation(void)
 {
-	mCurrentPageTreeNode = NULL;
+    mCurrentPageTreeNode = NULL;
 }
 
 CatalogInformation::~CatalogInformation(void)
 {
-	Reset();
+    Reset();
 }
 
 void CatalogInformation::Reset()
 {
-	if(mCurrentPageTreeNode)
-	{
-		// delete root
-		PageTree* resultPageTree = mCurrentPageTreeNode;
-		while(resultPageTree->GetParent())
-			resultPageTree = resultPageTree->GetParent();
-		delete resultPageTree;
-	}
-	mCurrentPageTreeNode = NULL;
+    if (mCurrentPageTreeNode)
+    {
+        // delete root
+        PageTree *resultPageTree = mCurrentPageTreeNode;
+        while (resultPageTree->GetParent())
+            resultPageTree = resultPageTree->GetParent();
+        delete resultPageTree;
+    }
+    mCurrentPageTreeNode = NULL;
 }
 
-ObjectIDType CatalogInformation::AddPageToPageTree(ObjectIDType inPageID,IndirectObjectsReferenceRegistry& inObjectsRegistry)
+ObjectIDType CatalogInformation::AddPageToPageTree(ObjectIDType inPageID,
+                                                   IndirectObjectsReferenceRegistry &inObjectsRegistry)
 {
-	if(!mCurrentPageTreeNode)
-		mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
+    if (!mCurrentPageTreeNode)
+        mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
 
-	mCurrentPageTreeNode = mCurrentPageTreeNode->AddNodeToTree(inPageID,inObjectsRegistry);
-	return mCurrentPageTreeNode->GetID();
+    mCurrentPageTreeNode = mCurrentPageTreeNode->AddNodeToTree(inPageID, inObjectsRegistry);
+    return mCurrentPageTreeNode->GetID();
 }
 
-
-PageTree* CatalogInformation::GetPageTreeRoot(IndirectObjectsReferenceRegistry& inObjectsRegistry)
+PageTree *CatalogInformation::GetPageTreeRoot(IndirectObjectsReferenceRegistry &inObjectsRegistry)
 {
-	if(mCurrentPageTreeNode)
-	{
-		PageTree* resultPageTree = mCurrentPageTreeNode;
-		while(resultPageTree->GetParent())
-			resultPageTree = resultPageTree->GetParent();
-		return resultPageTree;
-	}
-	else
-	{
-		mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
-		return mCurrentPageTreeNode;
-	}
+    if (mCurrentPageTreeNode)
+    {
+        PageTree *resultPageTree = mCurrentPageTreeNode;
+        while (resultPageTree->GetParent())
+            resultPageTree = resultPageTree->GetParent();
+        return resultPageTree;
+    }
+    else
+    {
+        mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
+        return mCurrentPageTreeNode;
+    }
 }
 
-PageTree* CatalogInformation::GetCurrentPageTreeNode()
+PageTree *CatalogInformation::GetCurrentPageTreeNode()
 {
-	return mCurrentPageTreeNode;
+    return mCurrentPageTreeNode;
 }
 
-void CatalogInformation::SetCurrentPageTreeNode(PageTree* inCurrentPageTreeNode)
+void CatalogInformation::SetCurrentPageTreeNode(PageTree *inCurrentPageTreeNode)
 {
-	mCurrentPageTreeNode = inCurrentPageTreeNode;
+    mCurrentPageTreeNode = inCurrentPageTreeNode;
 }

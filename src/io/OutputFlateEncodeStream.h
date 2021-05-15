@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "IByteWriterWithPosition.h"
@@ -26,29 +26,33 @@ typedef z_stream_s z_stream;
 
 class OutputFlateEncodeStream : public IByteWriterWithPosition
 {
-public:
-	OutputFlateEncodeStream(void);
-	virtual ~OutputFlateEncodeStream(void);
+  public:
+    OutputFlateEncodeStream(void);
+    virtual ~OutputFlateEncodeStream(void);
 
-	/* passing the target writer to OutputFlateEncodeStream makes it its owner. so if you don't want it to try and delete it on destructor - use Assign(NULL) */
-	OutputFlateEncodeStream(IByteWriterWithPosition* inTargetWriter, bool inInitiallyOn = true);
+    /* passing the target writer to OutputFlateEncodeStream makes it its owner. so if you don't want it to try and
+     * delete it on destructor - use Assign(NULL) */
+    OutputFlateEncodeStream(IByteWriterWithPosition *inTargetWriter, bool inInitiallyOn = true);
 
-	// Assing makes OutputFlateEncodeStream the owner of inWriter, so if you don't want the class to delete it upon destructions - use Assign(NULL)
-	void Assign(IByteWriterWithPosition* inWriter,bool inInitiallyOn = true);
+    // Assing makes OutputFlateEncodeStream the owner of inWriter, so if you don't want the class to delete it upon
+    // destructions - use Assign(NULL)
+    void Assign(IByteWriterWithPosition *inWriter, bool inInitiallyOn = true);
 
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inSize);
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
+                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
 
-	void TurnOnEncoding();
-	void TurnOffEncoding();
+    void TurnOnEncoding();
+    void TurnOffEncoding();
 
-private:
-	IOBasicTypes::Byte* mBuffer;
-	IByteWriterWithPosition* mTargetStream;
-	bool mCurrentlyEncoding;
-	z_stream* mZLibState;
+  private:
+    IOBasicTypes::Byte *mBuffer;
+    IByteWriterWithPosition *mTargetStream;
+    bool mCurrentlyEncoding;
+    z_stream *mZLibState;
 
-	void FinalizeEncoding();
-	void StartEncoding();
-	IOBasicTypes::LongBufferSizeType EncodeBufferAndWrite(const IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inSize);
+    void FinalizeEncoding();
+    void StartEncoding();
+    IOBasicTypes::LongBufferSizeType EncodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
+                                                          IOBasicTypes::LongBufferSizeType inSize);
 };

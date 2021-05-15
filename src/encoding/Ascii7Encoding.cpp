@@ -16,28 +16,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "Ascii7Encoding.h"
 #include "io/OutputStringBufferStream.h"
 
-BoolAndString Ascii7Encoding::Encode(const std::string& inString)
+BoolAndString Ascii7Encoding::Encode(const std::string &inString)
 {
-	OutputStringBufferStream asciiString;
-	bool encodingGood = true;
-	IOBasicTypes::Byte buffer;
-	std::string::const_iterator it = inString.begin();
+    OutputStringBufferStream asciiString;
+    bool encodingGood = true;
+    IOBasicTypes::Byte buffer;
+    std::string::const_iterator it = inString.begin();
 
-	for(;it != inString.end() && encodingGood;++it)
-	{
-		if(((IOBasicTypes::Byte)*it) <= 127)
-		{
-			buffer = (char)*it;
-			asciiString.Write(&buffer,1);
-		}
-		else
-			encodingGood = false;
-	}
+    for (; it != inString.end() && encodingGood; ++it)
+    {
+        if (((IOBasicTypes::Byte)*it) <= 127)
+        {
+            buffer = (char)*it;
+            asciiString.Write(&buffer, 1);
+        }
+        else
+            encodingGood = false;
+    }
 
-	return BoolAndString(encodingGood,asciiString.ToString());
+    return BoolAndString(encodingGood, asciiString.ToString());
 }

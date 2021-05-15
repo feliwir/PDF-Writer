@@ -16,17 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "ObjectsBasicTypes.h"
 #include "ResourcesDictionary.h"
 
-
 namespace PDFHummus
 {
-	class DocumentContext;
+class DocumentContext;
 };
 
 class PDFStream;
@@ -35,24 +34,22 @@ class ObjectsContext;
 
 class PDFTiledPattern
 {
-public:
+  public:
+    PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID, PDFStream *inStream,
+                    ObjectIDType inResourcesDictionaryID);
+    ~PDFTiledPattern(void);
 
-	PDFTiledPattern(PDFHummus::DocumentContext* inDocumentContext,ObjectIDType inObjectID,PDFStream* inStream,ObjectIDType inResourcesDictionaryID);
-	~PDFTiledPattern(void);
+    ObjectIDType GetObjectID();
+    ObjectIDType GetResourcesDictionaryObjectID();
 
-	ObjectIDType GetObjectID();
-	ObjectIDType GetResourcesDictionaryObjectID();
+    ResourcesDictionary &GetResourcesDictionary();
+    TiledPatternContentContext *GetContentContext();
+    PDFStream *GetContentStream();
 
-	ResourcesDictionary& GetResourcesDictionary();
-	TiledPatternContentContext* GetContentContext();
-	PDFStream* GetContentStream();
-
-	
-private:
-
-	ObjectIDType mObjectID;
-	ObjectIDType mResourcesDictionaryID;
-	ResourcesDictionary mResources;
-	PDFStream* mContentStream;
-	TiledPatternContentContext* mContentContext;
+  private:
+    ObjectIDType mObjectID;
+    ObjectIDType mResourcesDictionaryID;
+    ResourcesDictionary mResources;
+    PDFStream *mContentStream;
+    TiledPatternContentContext *mContentContext;
 };

@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "RefCountObject.h"
 
 RefCountObject::RefCountObject(void)
 {
-	mRefCount = 1;
+    mRefCount = 1;
 }
 
 RefCountObject::~RefCountObject(void)
@@ -31,14 +31,14 @@ RefCountObject::~RefCountObject(void)
 
 void RefCountObject::AddRef()
 {
-	++mRefCount;
+    ++mRefCount;
 }
 
 void RefCountObject::Release()
 {
-	if(0 == mRefCount)
-		return; // exception
-	--mRefCount;
-	if(0 == mRefCount)
-		delete this;
+    if (0 == mRefCount)
+        return; // exception
+    --mRefCount;
+    if (0 == mRefCount)
+        delete this;
 }

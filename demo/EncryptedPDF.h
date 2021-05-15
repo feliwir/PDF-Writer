@@ -23,9 +23,9 @@ limitations under the License.
 
 class EncryptedPDFTester : public ITestUnit
 {
-public:
-	EncryptedPDFTester(void);
-	virtual ~EncryptedPDFTester(void);
+  public:
+    EncryptedPDFTester(void);
+    virtual ~EncryptedPDFTester(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

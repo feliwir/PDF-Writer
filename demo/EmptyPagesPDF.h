@@ -16,17 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class EmptyPagesPDF : public ITestUnit
 {
-public:
-	EmptyPagesPDF(void);
-	~EmptyPagesPDF(void);
+  public:
+    EmptyPagesPDF(void);
+    ~EmptyPagesPDF(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
-
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

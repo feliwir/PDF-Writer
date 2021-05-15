@@ -16,40 +16,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PSBool.h"
 
-
-
-void PSBoolReader::Read(const std::string& inReadFrom,bool& outValue)
+void PSBoolReader::Read(const std::string &inReadFrom, bool &outValue)
 {
-	if(inReadFrom.compare("true") == 0)
-		outValue = true;
-	else
-		outValue = false;
+    if (inReadFrom.compare("true") == 0)
+        outValue = true;
+    else
+        outValue = false;
 }
 
-void PSBoolReader::Read(const std::wstring& inReadFrom,bool& outValue)
+void PSBoolReader::Read(const std::wstring &inReadFrom, bool &outValue)
 {
-	if(inReadFrom.compare(L"true") == 0)
-		outValue = true;
-	else
-		outValue = false;
+    if (inReadFrom.compare(L"true") == 0)
+        outValue = true;
+    else
+        outValue = false;
 }
 
-void PSBoolWriter::Write(const bool& inValue,std::string& outWriteTo)
+void PSBoolWriter::Write(const bool &inValue, std::string &outWriteTo)
 {
-	if(inValue)
-		outWriteTo = "true";
-	else
-		outWriteTo = "false";
+    if (inValue)
+        outWriteTo = "true";
+    else
+        outWriteTo = "false";
 }
 
-void PSBoolWriter::Write(const bool& inValue,std::wstring& outWriteTo)
+void PSBoolWriter::Write(const bool &inValue, std::wstring &outWriteTo)
 {
-	if(inValue)
-		outWriteTo = L"true";
-	else
-		outWriteTo = L"false";
+    if (inValue)
+        outWriteTo = L"true";
+    else
+        outWriteTo = L"false";
 }

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,25 +24,21 @@
 
 #include <string>
 
-
-
 class PDFHexString : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectHexString
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectHexString
-	};
+    // Value is the hex charactes string
+    PDFHexString(const std::string &inValue);
+    virtual ~PDFHexString(void);
 
-	// Value is the hex charactes string
-	PDFHexString(const std::string& inValue);
-	virtual ~PDFHexString(void);
+    const std::string &GetValue() const;
+    operator std::string() const;
 
-	const std::string& GetValue() const;
-	operator std::string() const;
-
-private:
-	std::string mValue;
-
+  private:
+    std::string mValue;
 };

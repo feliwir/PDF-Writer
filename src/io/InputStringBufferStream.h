@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -26,26 +26,22 @@
 #include <sstream>
 #include <string>
 
-
-
 class InputStringBufferStream : public IByteReaderWithPosition
 {
-public:
-	InputStringBufferStream(MyStringBuf* inBufferToReadFrom);
-	~InputStringBufferStream(void);
+  public:
+    InputStringBufferStream(MyStringBuf *inBufferToReadFrom);
+    ~InputStringBufferStream(void);
 
-	void Assign(MyStringBuf* inBufferToReadFrom);
+    void Assign(MyStringBuf *inBufferToReadFrom);
 
-	// IByteReaderWithPosition implementation
-	virtual LongBufferSizeType Read(Byte* inBuffer,LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
-	virtual void Skip(LongBufferSizeType inSkipSize);
-	virtual void SetPosition(LongFilePositionType inOffsetFromStart);
-	virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
-	virtual LongFilePositionType GetCurrentPosition();
+    // IByteReaderWithPosition implementation
+    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
+    virtual void Skip(LongBufferSizeType inSkipSize);
+    virtual void SetPosition(LongFilePositionType inOffsetFromStart);
+    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
+    virtual LongFilePositionType GetCurrentPosition();
 
-private:
-	MyStringBuf* mBufferToReadFrom;
-
-
+  private:
+    MyStringBuf *mBufferToReadFrom;
 };

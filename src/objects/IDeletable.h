@@ -1,6 +1,7 @@
 #pragma once
 
-class IDeletable {
-    public: 
-        virtual void DeleteMe() = 0;
+class IDeletable
+{
+  public:
+    virtual void DeleteMe() = 0;
 };

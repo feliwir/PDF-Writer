@@ -16,17 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "io/IOBasicTypes.h"
 
-
 class StandardEncoding
 {
-public:
-	StandardEncoding(void);
-	~StandardEncoding(void);
+  public:
+    StandardEncoding(void);
+    ~StandardEncoding(void);
 
-	const char* GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
+    const char *GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
 };

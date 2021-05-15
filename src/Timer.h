@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,17 +24,17 @@
 
 class Timer
 {
-public:
-	Timer(void);
-	~Timer(void);
+  public:
+    Timer(void);
+    ~Timer(void);
 
-	void Reset();
-	void StartMeasure();
-	void StopMeasureAndAccumulate();
+    void Reset();
+    void StartMeasure();
+    void StopMeasureAndAccumulate();
 
-	double GetTotalMiliSeconds();
-private:
-	clock_t mStartTime;
-	double mTotal;
+    double GetTotalMiliSeconds();
 
+  private:
+    clock_t mStartTime;
+    double mTotal;
 };

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -29,16 +29,18 @@ class PDFFormXObject;
 
 class TiffSpecialsTest : public ITestUnit
 {
-public:
-	TiffSpecialsTest(void);
-	virtual ~TiffSpecialsTest(void);
+  public:
+    TiffSpecialsTest(void);
+    virtual ~TiffSpecialsTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	PDFHummus::EStatusCode CreatePageForImageAndRelease(PDFWriter& inPDFWriter,PDFFormXObject* inImageObject);
-	PDFHummus::EStatusCode CreateBlackAndWhiteMaskImage(const TestConfiguration& inTestConfiguration,PDFWriter& inPDFWriter);
-	PDFHummus::EStatusCode CreateBiLevelGrayScales(const TestConfiguration& inTestConfiguration,PDFWriter& inPDFWriter);
+  private:
+    PDFHummus::EStatusCode CreatePageForImageAndRelease(PDFWriter &inPDFWriter, PDFFormXObject *inImageObject);
+    PDFHummus::EStatusCode CreateBlackAndWhiteMaskImage(const TestConfiguration &inTestConfiguration,
+                                                        PDFWriter &inPDFWriter);
+    PDFHummus::EStatusCode CreateBiLevelGrayScales(const TestConfiguration &inTestConfiguration,
+                                                   PDFWriter &inPDFWriter);
 };
 
 #endif

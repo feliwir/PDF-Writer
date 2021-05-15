@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "UppercaseSequanceTest.h"
 #include "UppercaseSequance.h"
@@ -33,55 +33,54 @@ UppercaseSequanceTest::~UppercaseSequanceTest(void)
 {
 }
 
-EStatusCode UppercaseSequanceTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode UppercaseSequanceTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status = PDFHummus::eSuccess;
-	UppercaseSequance sequance;
+    EStatusCode status = PDFHummus::eSuccess;
+    UppercaseSequance sequance;
 
-	do
-	{
-		string value = sequance.GetNextValue();
-		if(value != "AAAAAB")
-		{
-			cout<<"Failed in single increase. value is  "<<value.c_str()<<". should be AAAAAB\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
-		else
-		{
-			cout<<"Success in single increase\n";
-		}
-	
-		for(int i=0;i<25;++i)
-			value = sequance.GetNextValue();
-		if(value != "AAAABA")
-		{
-			cout<<"Failed in 24 increase. value is  "<<value.c_str()<<". should be AAAABA\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
-		else
-		{
-			cout<<"Success in 24 increase\n";
-		}
+    do
+    {
+        string value = sequance.GetNextValue();
+        if (value != "AAAAAB")
+        {
+            cout << "Failed in single increase. value is  " << value.c_str() << ". should be AAAAAB\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
+        else
+        {
+            cout << "Success in single increase\n";
+        }
 
-		for(int j=0;j < 26*25; ++j)
-			value = sequance.GetNextValue();
-		if(value != "AAABAA")
-		{
-			cout<<"Failed in 26*25 increase. value is  "<<value.c_str()<<". should be AAABAA\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
-		else
-		{
-			cout<<"Success in 26*25 increase\n";
-		}
-	
-	}while(false);
+        for (int i = 0; i < 25; ++i)
+            value = sequance.GetNextValue();
+        if (value != "AAAABA")
+        {
+            cout << "Failed in 24 increase. value is  " << value.c_str() << ". should be AAAABA\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
+        else
+        {
+            cout << "Success in 24 increase\n";
+        }
 
-	return status;
+        for (int j = 0; j < 26 * 25; ++j)
+            value = sequance.GetNextValue();
+        if (value != "AAABAA")
+        {
+            cout << "Failed in 26*25 increase. value is  " << value.c_str() << ". should be AAABAA\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
+        else
+        {
+            cout << "Success in 26*25 increase\n";
+        }
+
+    } while (false);
+
+    return status;
 }
 
-
-ADD_CATEGORIZED_TEST(UppercaseSequanceTest,"ObjectContext")
+ADD_CATEGORIZED_TEST(UppercaseSequanceTest, "ObjectContext")

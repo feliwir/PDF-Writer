@@ -16,25 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFName.h"
 
-PDFName::PDFName(const std::string& inValue) : PDFObject(eType)
+PDFName::PDFName(const std::string &inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFName::~PDFName(void)
 {
 }
 
-const std::string& PDFName::GetValue() const
+const std::string &PDFName::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFName::operator std::string() const
 {
-	return mValue;
+    return mValue;
 }

@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 
 #include "EStatusCode.h"
 #include "PDFRectangle.h"
-#include <vector>
 #include <string>
+#include <vector>
 
 class AbstractContentContext;
 class PDFWriter;
@@ -34,42 +34,40 @@ class ResourcesDictionary;
 class PDFParser;
 class PDFObject;
 
-typedef std::vector<PDFFormXObject*> PDFFormXObjectVector;
+typedef std::vector<PDFFormXObject *> PDFFormXObjectVector;
 
 #pragma once
 class PDFModifiedPage
 {
-public:
-	PDFModifiedPage(PDFWriter* inWriter,unsigned long inPageIndex,bool inEnsureContentEncapsulation = false);
-	~PDFModifiedPage(void);
+  public:
+    PDFModifiedPage(PDFWriter *inWriter, unsigned long inPageIndex, bool inEnsureContentEncapsulation = false);
+    ~PDFModifiedPage(void);
 
-	AbstractContentContext* StartContentContext();
-	PDFHummus::EStatusCode PauseContentContext();
-	PDFHummus::EStatusCode EndContentContext();
-	AbstractContentContext* GetContentContext();
+    AbstractContentContext *StartContentContext();
+    PDFHummus::EStatusCode PauseContentContext();
+    PDFHummus::EStatusCode EndContentContext();
+    AbstractContentContext *GetContentContext();
 
+    PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
-	PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string& inURL, const PDFRectangle& inLinkClickArea);
+    PDFHummus::EStatusCode WritePage();
 
-	PDFHummus::EStatusCode WritePage();
+    // advanced
+    ResourcesDictionary *GetCurrentResourcesDictionary();
+    PDFFormXObject *GetCurrentFormContext();
 
+  private:
+    PDFWriter *mWriter;
+    unsigned long mPageIndex;
+    bool mEnsureContentEncapsulation;
+    PDFFormXObject *mCurrentContext;
+    PDFFormXObjectVector mContenxts;
+    bool mIsDirty;
 
-	// advanced
-	ResourcesDictionary* GetCurrentResourcesDictionary();
-	PDFFormXObject* GetCurrentFormContext();
-private:
-
-	PDFWriter* mWriter;
-	unsigned long mPageIndex;
-	bool mEnsureContentEncapsulation;
-	PDFFormXObject* mCurrentContext;
-	PDFFormXObjectVector mContenxts;
-	bool mIsDirty;
-
-	std::vector<std::string> WriteModifiedResourcesDict(PDFParser* inParser,PDFDictionary* inResourcesDictionary,ObjectsContext& inObjectContext,PDFDocumentCopyingContext* inCopyingContext);
-	unsigned char GetDifferentChar(unsigned char);
-	std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext& inObjectContext);
-	PDFObject* findInheritedResources(PDFParser* inParser,PDFDictionary* inDictionary);
-
+    std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser, PDFDictionary *inResourcesDictionary,
+                                                        ObjectsContext &inObjectContext,
+                                                        PDFDocumentCopyingContext *inCopyingContext);
+    unsigned char GetDifferentChar(unsigned char);
+    std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
+    PDFObject *findInheritedResources(PDFParser *inParser, PDFDictionary *inDictionary);
 };
-

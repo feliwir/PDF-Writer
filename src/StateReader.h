@@ -16,33 +16,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/InputFile.h"
 #include "ObjectsBasicTypes.h"
+#include "io/InputFile.h"
 #include "parsing/PDFParser.h"
 
 #include <string>
 
-
-
 class StateReader
 {
-public:
-	StateReader(void);
-	~StateReader(void);
+  public:
+    StateReader(void);
+    ~StateReader(void);
 
-	PDFHummus::EStatusCode Start(const std::string& inStateFilePath);
-	PDFParser* GetObjectsReader();
-	ObjectIDType GetRootObjectID();
-	void Finish();
+    PDFHummus::EStatusCode Start(const std::string &inStateFilePath);
+    PDFParser *GetObjectsReader();
+    ObjectIDType GetRootObjectID();
+    void Finish();
 
-private:
-
-	PDFParser mParser;
-	InputFile mInputFile;
-	ObjectIDType mRootObject;
+  private:
+    PDFParser mParser;
+    InputFile mInputFile;
+    ObjectIDType mRootObject;
 };

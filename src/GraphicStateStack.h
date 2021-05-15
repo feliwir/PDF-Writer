@@ -16,30 +16,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "GraphicState.h"
 #include "EStatusCode.h"
+#include "GraphicState.h"
 #include <list>
 
 typedef std::list<GraphicState> GraphicStateList;
 
 class GraphicStateStack
 {
-public:
-	GraphicStateStack(void);
-	~GraphicStateStack(void);
+  public:
+    GraphicStateStack(void);
+    ~GraphicStateStack(void);
 
-	// push one level. following a "gsave" command, normally. new state copies old state variables
-	void Push();
+    // push one level. following a "gsave" command, normally. new state copies old state variables
+    void Push();
 
-	// pop one level. following a "grestore" command. returns error if stack is underflow.
-	PDFHummus::EStatusCode Pop();
+    // pop one level. following a "grestore" command. returns error if stack is underflow.
+    PDFHummus::EStatusCode Pop();
 
-	GraphicState& GetCurrentState();
+    GraphicState &GetCurrentState();
 
-private:
-	GraphicStateList mGraphicStateStack;
+  private:
+    GraphicStateList mGraphicStateStack;
 };

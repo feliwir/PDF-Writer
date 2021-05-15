@@ -16,52 +16,47 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "io/IOBasicTypes.h"
 #include "EStatusCode.h"
+#include "io/IOBasicTypes.h"
 
-#include <utility>
 #include <string>
-
-
+#include <utility>
 
 class IByteReader;
 
-typedef std::pair<bool,std::string> BoolAndString;
-
+typedef std::pair<bool, std::string> BoolAndString;
 
 class SimpleStringTokenizer
 {
-public:
-	SimpleStringTokenizer(void);
-	~SimpleStringTokenizer(void);
+  public:
+    SimpleStringTokenizer(void);
+    ~SimpleStringTokenizer(void);
 
+    void SetReadStream(IByteReader *inSourceStream);
+    BoolAndString GetNextToken();
+    void ResetReadState();
+    void ResetReadState(const SimpleStringTokenizer &inExternalTokenizer);
+    IOBasicTypes::LongFilePositionType GetRecentTokenPosition();
+    IOBasicTypes::LongFilePositionType GetReadBufferSize();
 
-	void SetReadStream(IByteReader* inSourceStream);
-	BoolAndString GetNextToken();
-	void ResetReadState();
-	void ResetReadState(const SimpleStringTokenizer& inExternalTokenizer);
-	IOBasicTypes::LongFilePositionType GetRecentTokenPosition();
-	IOBasicTypes::LongFilePositionType GetReadBufferSize();
-private:
+  private:
+    IByteReader *mStream;
+    bool mHasTokenBuffer;
+    IOBasicTypes::Byte mTokenBuffer;
+    IOBasicTypes::LongFilePositionType mStreamPositionTracker;
+    IOBasicTypes::LongFilePositionType mRecentTokenPosition;
 
-	IByteReader* mStream;
-	bool mHasTokenBuffer;
-	IOBasicTypes::Byte mTokenBuffer;
-	IOBasicTypes::LongFilePositionType mStreamPositionTracker;
-	IOBasicTypes::LongFilePositionType mRecentTokenPosition;
+    void SkipTillToken();
 
+    // failure in GetNextByteForToken actually marks a true read failure, if you checked end of file before calling
+    // it...
+    PDFHummus::EStatusCode GetNextByteForToken(IOBasicTypes::Byte &outByte);
 
-	void SkipTillToken();
-
-	// failure in GetNextByteForToken actually marks a true read failure, if you checked end of file before calling it...
-	PDFHummus::EStatusCode GetNextByteForToken(IOBasicTypes::Byte& outByte);
-
-	bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
-	void SaveTokenBuffer(IOBasicTypes::Byte inToSave);
-	bool IsPDFEntityBreaker(IOBasicTypes::Byte inCharacter);
-
+    bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
+    void SaveTokenBuffer(IOBasicTypes::Byte inToSave);
+    bool IsPDFEntityBreaker(IOBasicTypes::Byte inCharacter);
 };

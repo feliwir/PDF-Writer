@@ -16,30 +16,26 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
 
 #include <string>
 
-
-
 class PDFSymbol : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectSymbol
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectSymbol
-	};
+    PDFSymbol(const std::string &inSymbol);
+    virtual ~PDFSymbol(void);
 
-	PDFSymbol(const std::string& inSymbol);
-	virtual ~PDFSymbol(void);
+    const std::string &GetValue() const;
 
-	const std::string& GetValue() const;
-
-private:
-
-	std::string mValue;
+  private:
+    std::string mValue;
 };

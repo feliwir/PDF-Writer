@@ -16,27 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class MergePDFPages : public ITestUnit
 {
-public:
-	MergePDFPages(void);
-	~MergePDFPages(void);
+  public:
+    MergePDFPages(void);
+    ~MergePDFPages(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-
-	PDFHummus::EStatusCode TestOnlyMerge(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode TestPrefixGraphicsMerge(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode TestSuffixGraphicsMerge(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode TestBothGraphicsMerge(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode MergeTwoPageInSeparatePhases(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode MergeTwoPageWithEvents(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode MergePagesUsingCopyingContext(const TestConfiguration& inTestConfiguration);
-
+  private:
+    PDFHummus::EStatusCode TestOnlyMerge(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode TestPrefixGraphicsMerge(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode TestSuffixGraphicsMerge(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode TestBothGraphicsMerge(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode MergeTwoPageInSeparatePhases(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode MergeTwoPageWithEvents(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode MergePagesUsingCopyingContext(const TestConfiguration &inTestConfiguration);
 };

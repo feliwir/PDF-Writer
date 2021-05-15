@@ -23,8 +23,8 @@ limitations under the License.
 
 class ParsingFaulty : public ITestUnit
 {
-public:
-	ParsingFaulty();
-	virtual ~ParsingFaulty();
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+  public:
+    ParsingFaulty();
+    virtual ~ParsingFaulty();
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

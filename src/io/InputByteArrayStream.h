@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,25 +24,23 @@
 
 class InputByteArrayStream : public IByteReaderWithPosition
 {
-public:
-	InputByteArrayStream();
-	InputByteArrayStream(IOBasicTypes::Byte* inByteArray,LongFilePositionType inArrayLength);
-	~InputByteArrayStream(void);
+  public:
+    InputByteArrayStream();
+    InputByteArrayStream(IOBasicTypes::Byte *inByteArray, LongFilePositionType inArrayLength);
+    ~InputByteArrayStream(void);
 
-	void Assign(IOBasicTypes::Byte* inByteArray,LongFilePositionType inArrayLength);
+    void Assign(IOBasicTypes::Byte *inByteArray, LongFilePositionType inArrayLength);
 
-	// IByteReaderWithPosition implementation
-	virtual LongBufferSizeType Read(IOBasicTypes::Byte* inBuffer,LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
-	virtual void Skip(LongBufferSizeType inSkipSize);
-	virtual void SetPosition(LongFilePositionType inOffsetFromStart);
-	virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
-	virtual LongFilePositionType GetCurrentPosition();
+    // IByteReaderWithPosition implementation
+    virtual LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
+    virtual void Skip(LongBufferSizeType inSkipSize);
+    virtual void SetPosition(LongFilePositionType inOffsetFromStart);
+    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
+    virtual LongFilePositionType GetCurrentPosition();
 
-private:
-
-	IOBasicTypes::Byte* mByteArray;
-	LongFilePositionType mArrayLength;
-	LongFilePositionType mCurrentPosition;
-
+  private:
+    IOBasicTypes::Byte *mByteArray;
+    LongFilePositionType mArrayLength;
+    LongFilePositionType mCurrentPosition;
 };

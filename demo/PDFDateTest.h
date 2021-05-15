@@ -16,19 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFDate.h"
 #include "TestsRunner.h"
 
-
-class PDFDateTest: public ITestUnit
+class PDFDateTest : public ITestUnit
 {
-public:
-	PDFDateTest(void);
-	~PDFDateTest(void);
+  public:
+    PDFDateTest(void);
+    ~PDFDateTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
-

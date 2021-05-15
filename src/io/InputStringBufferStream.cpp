@@ -16,52 +16,51 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputStringBufferStream.h"
 #include "SafeBufferMacrosDefs.h"
 
-InputStringBufferStream::InputStringBufferStream(MyStringBuf* inBufferToReadFrom)
+InputStringBufferStream::InputStringBufferStream(MyStringBuf *inBufferToReadFrom)
 {
-	mBufferToReadFrom = inBufferToReadFrom;
+    mBufferToReadFrom = inBufferToReadFrom;
 }
 
-void InputStringBufferStream::Assign(MyStringBuf* inBufferToReadFrom)
+void InputStringBufferStream::Assign(MyStringBuf *inBufferToReadFrom)
 {
-	mBufferToReadFrom = inBufferToReadFrom;
+    mBufferToReadFrom = inBufferToReadFrom;
 }
 
 InputStringBufferStream::~InputStringBufferStream(void)
 {
 }
 
-LongBufferSizeType InputStringBufferStream::Read(Byte* inBuffer,LongBufferSizeType inBufferSize)
+LongBufferSizeType InputStringBufferStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-	return (LongBufferSizeType)mBufferToReadFrom->SAFE_SGETN((char*)inBuffer,inBufferSize,inBufferSize);
+    return (LongBufferSizeType)mBufferToReadFrom->SAFE_SGETN((char *)inBuffer, inBufferSize, inBufferSize);
 }
 
 bool InputStringBufferStream::NotEnded()
 {
-	return mBufferToReadFrom->in_avail() != 0;
+    return mBufferToReadFrom->in_avail() != 0;
 }
 
 void InputStringBufferStream::Skip(LongBufferSizeType inSkipSize)
 {
-	mBufferToReadFrom->pubseekoff(inSkipSize,std::ios_base::cur);
+    mBufferToReadFrom->pubseekoff(inSkipSize, std::ios_base::cur);
 }
 
 void InputStringBufferStream::SetPosition(LongFilePositionType inOffsetFromStart)
 {
-	mBufferToReadFrom->pubseekoff((long)inOffsetFromStart,std::ios_base::beg);
+    mBufferToReadFrom->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }
 
 void InputStringBufferStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
 {
-	mBufferToReadFrom->pubseekoff((long)inOffsetFromEnd,std::ios_base::end);
+    mBufferToReadFrom->pubseekoff((long)inOffsetFromEnd, std::ios_base::end);
 }
-
 
 LongFilePositionType InputStringBufferStream::GetCurrentPosition()
 {
-	return mBufferToReadFrom->GetCurrentReadPosition();
+    return mBufferToReadFrom->GetCurrentReadPosition();
 }

@@ -16,10 +16,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
-
 
 #include "ITestUnit.h"
 
@@ -31,9 +30,9 @@ struct PDFCreationSettings;
 
 class RecryptPDF : public ITestUnit
 {
-public:
-	RecryptPDF(void);
-	virtual ~RecryptPDF(void);
+  public:
+    RecryptPDF(void);
+    virtual ~RecryptPDF(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

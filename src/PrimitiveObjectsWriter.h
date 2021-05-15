@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,40 +24,38 @@
 #include <string.h>
 #include <string>
 
-
-
 class IByteWriter;
 
 class PrimitiveObjectsWriter
 {
-public:
-	PrimitiveObjectsWriter(IByteWriter* inStreamForWriting = NULL);
-	~PrimitiveObjectsWriter(void);
+  public:
+    PrimitiveObjectsWriter(IByteWriter *inStreamForWriting = NULL);
+    ~PrimitiveObjectsWriter(void);
 
-	void SetStreamForWriting(IByteWriter* inStreamForWriting);
+    void SetStreamForWriting(IByteWriter *inStreamForWriting);
 
-	// Token Writing
-	void WriteTokenSeparator(ETokenSeparator inSeparate);
-	void EndLine();
+    // Token Writing
+    void WriteTokenSeparator(ETokenSeparator inSeparate);
+    void EndLine();
 
-	void WriteKeyword(const std::string& inKeyword);
-	void WriteName(const std::string& inName,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteInteger(long long inIntegerToken,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteUnsafeLiteralString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteLiteralString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteHexString(const std::string& inString,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteEncodedHexString(const std::string& inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteDouble(double inDoubleToken,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteBoolean(bool inBoolean,ETokenSeparator inSeparate = eTokenSeparatorSpace);
-	void WriteNull(ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteKeyword(const std::string &inKeyword);
+    void WriteName(const std::string &inName, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteInteger(long long inIntegerToken, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteUnsafeLiteralString(const std::string &inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteLiteralString(const std::string &inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteHexString(const std::string &inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteEncodedHexString(const std::string &inString, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteDouble(double inDoubleToken, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteBoolean(bool inBoolean, ETokenSeparator inSeparate = eTokenSeparatorSpace);
+    void WriteNull(ETokenSeparator inSeparate = eTokenSeparatorSpace);
 
-	void StartArray();
-	void EndArray(ETokenSeparator inSeparate = eTokenSepratorNone);
-    
-    IByteWriter* GetWritingStream();
+    void StartArray();
+    void EndArray(ETokenSeparator inSeparate = eTokenSepratorNone);
 
-private:
-	IByteWriter* mStreamForWriting;
+    IByteWriter *GetWritingStream();
 
-	size_t DetermineDoubleTrimmedLength(const std::string& inString);
+  private:
+    IByteWriter *mStreamForWriting;
+
+    size_t DetermineDoubleTrimmedLength(const std::string &inString);
 };

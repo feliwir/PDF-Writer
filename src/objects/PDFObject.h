@@ -16,23 +16,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "RefCountObject.h"
 
-#include <string>
 #include <map>
+#include <string>
 
 class IDeletable;
 
-typedef std::map<std::string, IDeletable*> StringToIDeletable;
+typedef std::map<std::string, IDeletable *> StringToIDeletable;
 
 class PDFObject : public RefCountObject
 {
-public:
-    
+  public:
     enum EPDFObjectType
     {
         ePDFObjectBoolean,
@@ -47,27 +46,27 @@ public:
         ePDFObjectIndirectObjectReference,
         ePDFObjectStream,
         ePDFObjectSymbol // symbol is parallel to unkown. mostly be a keyword, or simply a mistake in the file
-    };    
-    
-	PDFObject(EPDFObjectType inType); 
-	PDFObject(int inType); 
-	virtual ~PDFObject(void);
+    };
 
-	EPDFObjectType GetType();
-    
-    static const char* scPDFObjectTypeLabel(int index);
+    PDFObject(EPDFObjectType inType);
+    PDFObject(int inType);
+    virtual ~PDFObject(void);
 
-	/*
-		metadata will automatically be deleted when object is released
-	*/
-	void SetMetadata(const std::string& inKey,IDeletable* inValue); // will automatically delete old data in the same key
-	IDeletable* GetMetadata(const std::string& inKey);
-	// Detach will only remove the pointer from metadata map, Delete will also delete the inValue pointer
-	IDeletable* DetachMetadata(const std::string& inKey);
-	void DeleteMetadata(const std::string& inKey);
+    EPDFObjectType GetType();
 
+    static const char *scPDFObjectTypeLabel(int index);
 
-private:
-	EPDFObjectType mType;
-	StringToIDeletable mMetadata;
+    /*
+        metadata will automatically be deleted when object is released
+    */
+    void SetMetadata(const std::string &inKey,
+                     IDeletable *inValue); // will automatically delete old data in the same key
+    IDeletable *GetMetadata(const std::string &inKey);
+    // Detach will only remove the pointer from metadata map, Delete will also delete the inValue pointer
+    IDeletable *DetachMetadata(const std::string &inKey);
+    void DeleteMetadata(const std::string &inKey);
+
+  private:
+    EPDFObjectType mType;
+    StringToIDeletable mMetadata;
 };

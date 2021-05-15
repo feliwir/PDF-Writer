@@ -16,17 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "TestsRunner.h"
 
-class LogTest: public ITestUnit
+class LogTest : public ITestUnit
 {
-public:
-	LogTest(void);
-	~LogTest(void);
+  public:
+    LogTest(void);
+    ~LogTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

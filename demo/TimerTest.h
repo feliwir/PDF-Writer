@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,12 +24,12 @@
 
 class TimerTest : public ITestUnit
 {
-public:
-	TimerTest(void);
-	~TimerTest(void);
+  public:
+    TimerTest(void);
+    ~TimerTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	void Sleep(double inSeconds);
+  private:
+    void Sleep(double inSeconds);
 };

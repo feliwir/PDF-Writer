@@ -16,24 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PageContentContext.h"
-#include "PDFPage.h"
+#include "DocumentContext.h"
+#include "IPageEndWritingTask.h"
 #include "ObjectsContext.h"
+#include "PDFPage.h"
 #include "PDFStream.h"
 #include "Trace.h"
-#include "IPageEndWritingTask.h"
-#include "DocumentContext.h"
 
 using namespace PDFHummus;
 
-
-PageContentContext::PageContentContext(PDFHummus::DocumentContext* inDocumentContext,PDFPage* inPageOfContext,ObjectsContext* inObjectsContext):AbstractContentContext(inDocumentContext)
+PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage *inPageOfContext,
+                                       ObjectsContext *inObjectsContext)
+    : AbstractContentContext(inDocumentContext)
 {
-	mPageOfContext = inPageOfContext;
-	mObjectsContext = inObjectsContext;
-	mCurrentStream = NULL;
+    mPageOfContext = inPageOfContext;
+    mObjectsContext = inObjectsContext;
+    mCurrentStream = NULL;
 }
 
 PageContentContext::~PageContentContext(void)
@@ -42,83 +43,90 @@ PageContentContext::~PageContentContext(void)
 
 void PageContentContext::StartAStreamIfRequired()
 {
-	if(!mCurrentStream)
-	{
-		StartContentStreamDefinition();
-		mCurrentStream = mObjectsContext->StartPDFStream();
-		SetPDFStreamForWrite(mCurrentStream);
-	}
+    if (!mCurrentStream)
+    {
+        StartContentStreamDefinition();
+        mCurrentStream = mObjectsContext->StartPDFStream();
+        SetPDFStreamForWrite(mCurrentStream);
+    }
 }
 
 void PageContentContext::StartContentStreamDefinition()
 {
-	ObjectIDType streamObjectID = mObjectsContext->StartNewIndirectObject();
-	mPageOfContext->AddContentStreamReference(streamObjectID);
+    ObjectIDType streamObjectID = mObjectsContext->StartNewIndirectObject();
+    mPageOfContext->AddContentStreamReference(streamObjectID);
 }
 
-ResourcesDictionary* PageContentContext::GetResourcesDictionary()
+ResourcesDictionary *PageContentContext::GetResourcesDictionary()
 {
-	return &(mPageOfContext->GetResourcesDictionary());
+    return &(mPageOfContext->GetResourcesDictionary());
 }
 
 EStatusCode PageContentContext::FinalizeCurrentStream()
 {
-	if(mCurrentStream)
-		return FinalizeStreamWriteAndRelease();
-	else
-		return PDFHummus::eSuccess;
+    if (mCurrentStream)
+        return FinalizeStreamWriteAndRelease();
+    else
+        return PDFHummus::eSuccess;
 }
 
-PDFPage* PageContentContext::GetAssociatedPage()
+PDFPage *PageContentContext::GetAssociatedPage()
 {
-	return mPageOfContext;
+    return mPageOfContext;
 }
 
 EStatusCode PageContentContext::FinalizeStreamWriteAndRelease()
 {
-	mObjectsContext->EndPDFStream(mCurrentStream);
+    mObjectsContext->EndPDFStream(mCurrentStream);
 
-	delete mCurrentStream;
-	mCurrentStream = NULL;
-	return PDFHummus::eSuccess;
+    delete mCurrentStream;
+    mCurrentStream = NULL;
+    return PDFHummus::eSuccess;
 }
 
-PDFStream* PageContentContext::GetCurrentPageContentStream()
+PDFStream *PageContentContext::GetCurrentPageContentStream()
 {
-	StartAStreamIfRequired();
-	return mCurrentStream;	
+    StartAStreamIfRequired();
+    return mCurrentStream;
 }
 
 void PageContentContext::RenewStreamConnection()
 {
-	StartAStreamIfRequired();
+    StartAStreamIfRequired();
 }
 
 class PageImageWritingTask : public IPageEndWritingTask
 {
-public:
-    PageImageWritingTask(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID,const PDFParsingOptions& inPDFParsingOptions)
-    {mImagePath = inImagePath;mImageIndex = inImageIndex;mObjectID = inObjectID;mPDFParsingOptions = inPDFParsingOptions;}
-    
-    virtual ~PageImageWritingTask(){}
-    
-    virtual PDFHummus::EStatusCode Write(PDFPage* inPageObject,
-                                         ObjectsContext* inObjectsContext,
-                                         PDFHummus::DocumentContext* inDocumentContext)
+  public:
+    PageImageWritingTask(const std::string &inImagePath, unsigned long inImageIndex, ObjectIDType inObjectID,
+                         const PDFParsingOptions &inPDFParsingOptions)
     {
-        return inDocumentContext->WriteFormForImage(mImagePath,mImageIndex,mObjectID,mPDFParsingOptions);
+        mImagePath = inImagePath;
+        mImageIndex = inImageIndex;
+        mObjectID = inObjectID;
+        mPDFParsingOptions = inPDFParsingOptions;
     }
-    
-private:
+
+    virtual ~PageImageWritingTask()
+    {
+    }
+
+    virtual PDFHummus::EStatusCode Write(PDFPage *inPageObject, ObjectsContext *inObjectsContext,
+                                         PDFHummus::DocumentContext *inDocumentContext)
+    {
+        return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
+    }
+
+  private:
     std::string mImagePath;
     unsigned long mImageIndex;
     ObjectIDType mObjectID;
-	PDFParsingOptions mPDFParsingOptions;
+    PDFParsingOptions mPDFParsingOptions;
 };
 
-void PageContentContext::ScheduleImageWrite(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID, const PDFParsingOptions& inParsingOptions)
+void PageContentContext::ScheduleImageWrite(const std::string &inImagePath, unsigned long inImageIndex,
+                                            ObjectIDType inObjectID, const PDFParsingOptions &inParsingOptions)
 {
-    mDocumentContext->RegisterPageEndWritingTask(GetAssociatedPage(),
-                                                 new PageImageWritingTask(inImagePath,inImageIndex,inObjectID,inParsingOptions));
-
+    mDocumentContext->RegisterPageEndWritingTask(
+        GetAssociatedPage(), new PageImageWritingTask(inImagePath, inImageIndex, inObjectID, inParsingOptions));
 }

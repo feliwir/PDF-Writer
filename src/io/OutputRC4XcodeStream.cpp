@@ -21,48 +21,48 @@ limitations under the License.
 
 using namespace IOBasicTypes;
 
-
-OutputRC4XcodeStream::OutputRC4XcodeStream(void) 
+OutputRC4XcodeStream::OutputRC4XcodeStream(void)
 {
-	mTargetStream = NULL;
-	mOwnsStream = false;
+    mTargetStream = NULL;
+    mOwnsStream = false;
 }
 
-OutputRC4XcodeStream::~OutputRC4XcodeStream(void) 
+OutputRC4XcodeStream::~OutputRC4XcodeStream(void)
 {
-	if (mOwnsStream)
-		delete mTargetStream;
+    if (mOwnsStream)
+        delete mTargetStream;
 }
 
-OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition* inTargetStream, const ByteList& inEncryptionKey, bool inOwnsStream):mRC4(inEncryptionKey) 
+OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey,
+                                           bool inOwnsStream)
+    : mRC4(inEncryptionKey)
 {
-	mTargetStream = inTargetStream;
-	mOwnsStream = inOwnsStream;
+    mTargetStream = inTargetStream;
+    mOwnsStream = inOwnsStream;
 }
 
-LongBufferSizeType OutputRC4XcodeStream::Write(const Byte* inBuffer, LongBufferSizeType inSize)
+LongBufferSizeType OutputRC4XcodeStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
-	if (!mTargetStream)
-		return 0;
+    if (!mTargetStream)
+        return 0;
 
-	LongBufferSizeType mCurrentIndex = 0;
-	Byte buffer;
+    LongBufferSizeType mCurrentIndex = 0;
+    Byte buffer;
 
-	while (mCurrentIndex < inSize)
-	{
-		buffer = mRC4.DecodeNextByte(inBuffer[mCurrentIndex]);
-		mTargetStream->Write(&buffer, 1);
-		++mCurrentIndex;
-	}
+    while (mCurrentIndex < inSize)
+    {
+        buffer = mRC4.DecodeNextByte(inBuffer[mCurrentIndex]);
+        mTargetStream->Write(&buffer, 1);
+        ++mCurrentIndex;
+    }
 
-	return mCurrentIndex;
+    return mCurrentIndex;
 }
 
 LongFilePositionType OutputRC4XcodeStream::GetCurrentPosition()
 {
-	if (!mTargetStream)
-		return 0;
+    if (!mTargetStream)
+        return 0;
 
-	return mTargetStream->GetCurrentPosition();
-
+    return mTargetStream->GetCurrentPosition();
 }

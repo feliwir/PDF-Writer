@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "LogTest.h"
 #include "Log.h"
@@ -32,24 +32,23 @@ LogTest::~LogTest(void)
 {
 }
 
-EStatusCode LogTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode LogTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	Log log(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"logTest.txt"),true);
+    Log log(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "logTest.txt"), true);
 
-	log.LogEntry("testing wide string input");
+    log.LogEntry("testing wide string input");
 
-	const char* aString = "testing Byte input";
+    const char *aString = "testing Byte input";
 
-	log.LogEntry((const Byte*)aString,strlen(aString));
+    log.LogEntry((const Byte *)aString, strlen(aString));
 
+    Trace trace;
 
-	Trace trace;
+    trace.SetLogSettings(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "traceTest.txt"), true, true);
+    trace.TraceToLog("Tracing number %d %d", 10, 20);
+    trace.TraceToLog("Tracing some other items %s 0x%x", "hello", 20);
 
-	trace.SetLogSettings(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"traceTest.txt"),true,true);
-	trace.TraceToLog("Tracing number %d %d",10,20);
-	trace.TraceToLog("Tracing some other items %s 0x%x","hello",20);
-
-	return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
-ADD_CATEGORIZED_TEST(LogTest,"IO")
+ADD_CATEGORIZED_TEST(LogTest, "IO")

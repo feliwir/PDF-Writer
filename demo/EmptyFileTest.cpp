@@ -16,17 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "EmptyFileTest.h"
 #include "PDFWriter.h"
-
 
 #include <iostream>
 
 using namespace std;
 using namespace PDFHummus;
-
 
 EmptyFileTest::EmptyFileTest(void)
 {
@@ -36,29 +34,31 @@ EmptyFileTest::~EmptyFileTest(void)
 {
 }
 
-EStatusCode EmptyFileTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode EmptyFileTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	PDFWriter pdfWriter;
-	LogConfiguration logConfiguration(true,true,RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"EmptyFileLog.txt"));
-	EStatusCode status; 
+    PDFWriter pdfWriter;
+    LogConfiguration logConfiguration(true, true,
+                                      RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "EmptyFileLog.txt"));
+    EStatusCode status;
 
-	do
-	{
-		status = pdfWriter.StartPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"test.txt"),ePDFVersion13,logConfiguration);
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed to start PDF\n";
-			break;
-		}	
-		
-		status = pdfWriter.EndPDF();
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed in end PDF\n";
-			break;
-		}
-	}while(false);
-	return status;
+    do
+    {
+        status = pdfWriter.StartPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "test.txt"),
+                                    ePDFVersion13, logConfiguration);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed to start PDF\n";
+            break;
+        }
+
+        status = pdfWriter.EndPDF();
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed in end PDF\n";
+            break;
+        }
+    } while (false);
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(EmptyFileTest,"PDF")
+ADD_CATEGORIZED_TEST(EmptyFileTest, "PDF")

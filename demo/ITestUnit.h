@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,17 +25,17 @@
 
 class TestConfiguration
 {
-public:
-    FileURL mSampleFileBase;  
+  public:
+    FileURL mSampleFileBase;
 };
 
 class ITestUnit
 {
 
-public:
-	
-	virtual ~ITestUnit(){}
+  public:
+    virtual ~ITestUnit()
+    {
+    }
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration) = 0;
-
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration) = 0;
 };

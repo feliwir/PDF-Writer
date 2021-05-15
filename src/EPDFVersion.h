@@ -16,25 +16,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 enum EPDFVersion
 {
-	ePDFVersionUndefined = 0,
-	ePDFVersion10 = 10,
-	ePDFVersion11 = 11,
-	ePDFVersion12 = 12,
-	ePDFVersion13 = 13,
-	ePDFVersion14 = 14,
-	ePDFVersion15 = 15,
-	ePDFVersion16 = 16,
-	ePDFVersion17 = 17,
-	ePDFVersionMax = ePDFVersion17,
-	ePDFVersionExtended = ePDFVersionMax + 1
+    ePDFVersionUndefined = 0,
+    ePDFVersion10 = 10,
+    ePDFVersion11 = 11,
+    ePDFVersion12 = 12,
+    ePDFVersion13 = 13,
+    ePDFVersion14 = 14,
+    ePDFVersion15 = 15,
+    ePDFVersion16 = 16,
+    ePDFVersion17 = 17,
+    ePDFVersionMax = ePDFVersion17,
+    ePDFVersionExtended = ePDFVersionMax + 1
 };
-
-
-
-

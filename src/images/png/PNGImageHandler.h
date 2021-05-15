@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -31,7 +31,7 @@ class IByteReaderWithPosition;
 
 namespace PDFHummus
 {
-	class DocumentContext;
+class DocumentContext;
 }
 
 using namespace PDFHummus;
@@ -40,30 +40,26 @@ typedef std::pair<double, double> DoubleAndDoublePair;
 
 class PNGImageHandler
 {
-public:
-	struct PNGImageInfo
-	{
-		DoubleAndDoublePair dimensions;
-		int colorComponents;
-		bool hasAlpha;
-	};
+  public:
+    struct PNGImageInfo
+    {
+        DoubleAndDoublePair dimensions;
+        int colorComponents;
+        bool hasAlpha;
+    };
 
+    PNGImageHandler();
+    ~PNGImageHandler(void);
 
+    PDFFormXObject *CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream, ObjectIDType inFormXObjectID);
 
-	PNGImageHandler();
-	~PNGImageHandler(void);
+    void SetOperationsContexts(PDFHummus::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
 
-	PDFFormXObject* CreateFormXObjectFromPNGStream(IByteReaderWithPosition* inPNGStream, ObjectIDType inFormXObjectID);
+    DoubleAndDoublePair ReadImageDimensions(IByteReaderWithPosition *inPNGStream);
+    PNGImageInfo ReadImageInfo(IByteReaderWithPosition *inPNGStream);
 
-	void SetOperationsContexts(PDFHummus::DocumentContext* inDocumentContext,ObjectsContext* inObjectsContext);
-
-
-	DoubleAndDoublePair ReadImageDimensions(IByteReaderWithPosition* inPNGStream);
-	PNGImageInfo ReadImageInfo(IByteReaderWithPosition* inPNGStream);
-
-
-private:
-	ObjectsContext* mObjectsContext;
-	PDFHummus::DocumentContext* mDocumentContext;
+  private:
+    ObjectsContext *mObjectsContext;
+    PDFHummus::DocumentContext *mDocumentContext;
 };
 #endif

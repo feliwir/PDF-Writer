@@ -16,22 +16,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "text/freetype/FreeTypeFaceWrapper.h"
-#include "ObjectsBasicTypes.h"
 #include "EStatusCode.h"
 #include "GlyphUnicodeMapping.h"
-#include <string>
+#include "ObjectsBasicTypes.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include <list>
 #include <map>
+#include <string>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
-
 
 typedef std::list<unsigned short> UShortList;
 typedef std::list<UShortList> UShortListList;
@@ -45,102 +43,97 @@ class PDFParser;
 
 class PDFUsedFont
 {
-public:
+  public:
+    struct TextMeasures
+    {
+        double xMin;
+        double yMin;
+        double xMax;
+        double yMax;
+        double width;
+        double height;
+    };
 
-	struct TextMeasures
-	{
-		double xMin;
-		double yMin;
-		double xMax;
-		double yMax;
-		double width;
-		double height;
-	};
+    class IOutlineEnumerator : private FreeTypeFaceWrapper::IOutlineEnumerator
+    {
+        friend class PDFUsedFont;
 
-	class IOutlineEnumerator : private FreeTypeFaceWrapper::IOutlineEnumerator {
-		friend class PDFUsedFont;
-	public:
-		IOutlineEnumerator(double base_x, double base_y);
-		virtual ~IOutlineEnumerator(){};
+      public:
+        IOutlineEnumerator(double base_x, double base_y);
+        virtual ~IOutlineEnumerator(){};
 
-	protected:
-		virtual bool Moveto(double x, double y)=0;
-		virtual bool Lineto(double x, double y)=0;
-		virtual bool Curveto(double x1, double y1, double x2, double y2, double x3, double y3)=0;
-		virtual bool Closepath()=0;
+      protected:
+        virtual bool Moveto(double x, double y) = 0;
+        virtual bool Lineto(double x, double y) = 0;
+        virtual bool Curveto(double x1, double y1, double x2, double y2, double x3, double y3) = 0;
+        virtual bool Closepath() = 0;
 
-	private:
-		void BeginEnum(double scale);
-		void MoveBasepoint(double dx, double dy);
+      private:
+        void BeginEnum(double scale);
+        void MoveBasepoint(double dx, double dy);
 
-		virtual bool Moveto(FT_Short x, FT_Short y);
-		virtual bool Lineto(FT_Short x, FT_Short y);
-		virtual bool Curveto(FT_Short x1, FT_Short y1, FT_Short x2, FT_Short y2, FT_Short x3, FT_Short y3);
-		virtual bool Close();
+        virtual bool Moveto(FT_Short x, FT_Short y);
+        virtual bool Lineto(FT_Short x, FT_Short y);
+        virtual bool Curveto(FT_Short x1, FT_Short y1, FT_Short x2, FT_Short y2, FT_Short x3, FT_Short y3);
+        virtual bool Close();
 
-		double mBase_x, mBase_y;
-		double mFontScale;
-	};
+        double mBase_x, mBase_y;
+        double mFontScale;
+    };
 
-	PDFUsedFont(FT_Face inInputFace,
-				const std::string& inFontFilePath,
-				const std::string& inAdditionalMetricsFontFilePath,
-                long inFontIndex,
-				ObjectsContext* inObjectsContext,
-				bool inEmbedFont);
-	virtual ~PDFUsedFont(void);
+    PDFUsedFont(FT_Face inInputFace, const std::string &inFontFilePath,
+                const std::string &inAdditionalMetricsFontFilePath, long inFontIndex, ObjectsContext *inObjectsContext,
+                bool inEmbedFont);
+    virtual ~PDFUsedFont(void);
 
-	bool IsValid();
+    bool IsValid();
 
-	// a String in the following two implementations is represented here by a list of glyphs, with each mapped to the matching
-	// unicode values. to move from a wide string to such a structure, use other class methods
+    // a String in the following two implementations is represented here by a list of glyphs, with each mapped to the
+    // matching unicode values. to move from a wide string to such a structure, use other class methods
 
-	/*
-		This function does the work of encoding a text string to a matching font instance name, and an encoded array
-		of characters. the encoded array is a list of short values (double byte for CID, one byte for regular), and an extra
-		boolean value indicates whether they are CID or regular.
-	*/
-	PDFHummus::EStatusCode EncodeStringForShowing(const GlyphUnicodeMappingList& inText,
-										ObjectIDType &outFontObjectToUse,
-										UShortList& outCharactersToUse,
-										bool& outTreatCharactersAsCID);
+    /*
+        This function does the work of encoding a text string to a matching font instance name, and an encoded array
+        of characters. the encoded array is a list of short values (double byte for CID, one byte for regular), and an
+       extra boolean value indicates whether they are CID or regular.
+    */
+    PDFHummus::EStatusCode EncodeStringForShowing(const GlyphUnicodeMappingList &inText,
+                                                  ObjectIDType &outFontObjectToUse, UShortList &outCharactersToUse,
+                                                  bool &outTreatCharactersAsCID);
 
-	// encode all strings. make sure that they will use the same font.
-	PDFHummus::EStatusCode EncodeStringsForShowing(const GlyphUnicodeMappingListList& inText,
-										ObjectIDType &outFontObjectToUse,
-										UShortListList& outCharactersToUse,
-										bool& outTreatCharactersAsCID);
+    // encode all strings. make sure that they will use the same font.
+    PDFHummus::EStatusCode EncodeStringsForShowing(const GlyphUnicodeMappingListList &inText,
+                                                   ObjectIDType &outFontObjectToUse, UShortListList &outCharactersToUse,
+                                                   bool &outTreatCharactersAsCID);
 
-	PDFHummus::EStatusCode WriteFontDefinition();
+    PDFHummus::EStatusCode WriteFontDefinition();
 
-	// use this method to translate text to glyphs and unicode mapping, to be later used for EncodeStringForShowing
-	PDFHummus::EStatusCode TranslateStringToGlyphs(const std::string& inText,GlyphUnicodeMappingList& outGlyphsUnicodeMapping);
+    // use this method to translate text to glyphs and unicode mapping, to be later used for EncodeStringForShowing
+    PDFHummus::EStatusCode TranslateStringToGlyphs(const std::string &inText,
+                                                   GlyphUnicodeMappingList &outGlyphsUnicodeMapping);
 
-	PDFHummus::EStatusCode WriteState(ObjectsContext* inStateWriter,ObjectIDType inObjectID);
-	PDFHummus::EStatusCode ReadState(PDFParser* inStateReader,ObjectIDType inObjectID);
-    
-    FreeTypeFaceWrapper* GetFreeTypeFont();
+    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
-	// text measurements, either pass unicode text or glyphs list
-	PDFUsedFont::TextMeasures CalculateTextDimensions(const std::string& inText,long inFontSize=1);
-	PDFUsedFont::TextMeasures CalculateTextDimensions(const UIntList& inGlyphsList,long inFontSize=1);
-	double CalculateTextAdvance(const std::string& inText,double inFontSize=1);
-	double CalculateTextAdvance(const UIntList& inGlyphsList,double inFontSize=1);
+    FreeTypeFaceWrapper *GetFreeTypeFont();
 
-	// character path enumeration, pass unicode text or glyph list
-	bool EnumeratePaths(IOutlineEnumerator& target, const std::string& inText,double inFontSize=1);
-	bool EnumeratePaths(IOutlineEnumerator& target, const UIntList& inGlyphsList,double inFontSize=1);
+    // text measurements, either pass unicode text or glyphs list
+    PDFUsedFont::TextMeasures CalculateTextDimensions(const std::string &inText, long inFontSize = 1);
+    PDFUsedFont::TextMeasures CalculateTextDimensions(const UIntList &inGlyphsList, long inFontSize = 1);
+    double CalculateTextAdvance(const std::string &inText, double inFontSize = 1);
+    double CalculateTextAdvance(const UIntList &inGlyphsList, double inFontSize = 1);
 
-protected:
-	void GetUnicodeGlyphs(const std::string& inText, UIntList& glyphs);
+    // character path enumeration, pass unicode text or glyph list
+    bool EnumeratePaths(IOutlineEnumerator &target, const std::string &inText, double inFontSize = 1);
+    bool EnumeratePaths(IOutlineEnumerator &target, const UIntList &inGlyphsList, double inFontSize = 1);
 
-private:
-	static const unsigned int AdvanceCacheLimit = 200;
-	FreeTypeFaceWrapper mFaceWrapper;
-    IWrittenFont* mWrittenFont;
-	ObjectsContext* mObjectsContext;
-	std::map<unsigned int, FT_Pos> mAdvanceCache;
-	bool mEmbedFont;
+  protected:
+    void GetUnicodeGlyphs(const std::string &inText, UIntList &glyphs);
 
-
+  private:
+    static const unsigned int AdvanceCacheLimit = 200;
+    FreeTypeFaceWrapper mFaceWrapper;
+    IWrittenFont *mWrittenFont;
+    ObjectsContext *mObjectsContext;
+    std::map<unsigned int, FT_Pos> mAdvanceCache;
+    bool mEmbedFont;
 };

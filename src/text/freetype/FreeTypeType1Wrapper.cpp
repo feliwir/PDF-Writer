@@ -16,51 +16,49 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "FreeTypeType1Wrapper.h"
-#include "io/InputFile.h"
 #include "Trace.h"
+#include "io/InputFile.h"
 
-
-
-FreeTypeType1Wrapper::FreeTypeType1Wrapper(FT_Face inFace,const std::string& inFontFilePath,const std::string& inPFMFilePath)
+FreeTypeType1Wrapper::FreeTypeType1Wrapper(FT_Face inFace, const std::string &inFontFilePath,
+                                           const std::string &inPFMFilePath)
 {
-	if(FT_Get_PS_Font_Info(inFace,&mPSFontInfo) != 0)
-	{
-		TRACE_LOG("Unexpected failure in FreeTypeType1Wrapper::FreeTypeType1Wrapper. could not retrieve PS font info");
-		mPSavailable = false; // this is obviousy an exception
-	}
-	else
-		mPSavailable = true; 
+    if (FT_Get_PS_Font_Info(inFace, &mPSFontInfo) != 0)
+    {
+        TRACE_LOG("Unexpected failure in FreeTypeType1Wrapper::FreeTypeType1Wrapper. could not retrieve PS font info");
+        mPSavailable = false; // this is obviousy an exception
+    }
+    else
+        mPSavailable = true;
 
+    if (FT_Get_PS_Font_Private(inFace, &mPrivateInfo) != 0)
+    {
+        TRACE_LOG("Unexpected failure in FreeTypeType1Wrapper::FreeTypeType1Wrapper. could not retrieve PS private "
+                  "font info");
+        mPSPrivateAvailable = false; // this is obviousy an exception
+    }
+    else
+        mPSPrivateAvailable = true;
 
-	if(FT_Get_PS_Font_Private(inFace,&mPrivateInfo) != 0)
-	{
-		TRACE_LOG("Unexpected failure in FreeTypeType1Wrapper::FreeTypeType1Wrapper. could not retrieve PS private font info");
-		mPSPrivateAvailable = false; // this is obviousy an exception
-	}
-	else
-		mPSPrivateAvailable = true;
-    
     T1_EncodingType encodingType;
-    FT_Get_PS_Font_Value(inFace, PS_DICT_ENCODING_TYPE, 0, (void*)&encodingType, sizeof(encodingType));
+    FT_Get_PS_Font_Value(inFace, PS_DICT_ENCODING_TYPE, 0, (void *)&encodingType, sizeof(encodingType));
     mIsCustomEncoding = encodingType == T1_ENCODING_TYPE_ARRAY;
 
-	mPFMFileInfoRelevant = 
-		(inPFMFilePath.size() != 0 && mPFMReader.Read(inPFMFilePath) != PDFHummus::eFailure);
-    
+    mPFMFileInfoRelevant = (inPFMFilePath.size() != 0 && mPFMReader.Read(inPFMFilePath) != PDFHummus::eFailure);
+
     // parse type 1 input file (my own parsing), to get extra info about encoding
-    if(inFontFilePath.size() != 0)
+    if (inFontFilePath.size() != 0)
     {
         InputFile type1File;
-    
+
         type1File.OpenFile(inFontFilePath);
         mType1File.ReadType1File(type1File.GetInputStream());
-    
+
         type1File.CloseFile();
     }
-    
+
     mFace = inFace;
 }
 
@@ -70,62 +68,61 @@ FreeTypeType1Wrapper::~FreeTypeType1Wrapper(void)
 
 double FreeTypeType1Wrapper::GetItalicAngle()
 {
-	return mPSavailable ? (double)mPSFontInfo.italic_angle : 0;
+    return mPSavailable ? (double)mPSFontInfo.italic_angle : 0;
 }
 
 BoolAndFTShort FreeTypeType1Wrapper::GetCapHeight()
 {
-	if(mPFMFileInfoRelevant)
-		return BoolAndFTShort(true,mPFMReader.ExtendedFontMetrics.CapHeight);
-	else
-		return BoolAndFTShort(false,0);
+    if (mPFMFileInfoRelevant)
+        return BoolAndFTShort(true, mPFMReader.ExtendedFontMetrics.CapHeight);
+    else
+        return BoolAndFTShort(false, 0);
 }
 
 BoolAndFTShort FreeTypeType1Wrapper::GetxHeight()
 {
-	if(mPFMFileInfoRelevant)
-		return BoolAndFTShort(true,mPFMReader.ExtendedFontMetrics.XHeight);
-	else
-		return BoolAndFTShort(false,0);
+    if (mPFMFileInfoRelevant)
+        return BoolAndFTShort(true, mPFMReader.ExtendedFontMetrics.XHeight);
+    else
+        return BoolAndFTShort(false, 0);
 }
 
 FT_UShort FreeTypeType1Wrapper::GetStemV()
 {
-	// StemV of PDF matches the StdWV of type 1...so piece of cake here
-	return mPSPrivateAvailable ? mPrivateInfo.standard_width[0]:0;
+    // StemV of PDF matches the StdWV of type 1...so piece of cake here
+    return mPSPrivateAvailable ? mPrivateInfo.standard_width[0] : 0;
 }
 
 EFontStretch FreeTypeType1Wrapper::GetFontStretch()
 {
-	return eFontStretchUknown;
+    return eFontStretchUknown;
 }
 
 FT_UShort FreeTypeType1Wrapper::GetFontWeight()
 {
-	// ahhh. using the weight factor is as good as analyzing the name...whatever. so just return the default value
-	return 1000;
+    // ahhh. using the weight factor is as good as analyzing the name...whatever. so just return the default value
+    return 1000;
 }
 
 bool FreeTypeType1Wrapper::HasSerifs()
 {
-	if(mPFMFileInfoRelevant)
-		return (mPFMReader.Header.PitchAndFamily & 16) != 0;
-	else
-		return false;
-
+    if (mPFMFileInfoRelevant)
+        return (mPFMReader.Header.PitchAndFamily & 16) != 0;
+    else
+        return false;
 }
 
 bool FreeTypeType1Wrapper::IsScript()
 {
-	if(mPFMFileInfoRelevant)
-		return (mPFMReader.Header.PitchAndFamily & 64) != 0;
-	else
-		return false;	
+    if (mPFMFileInfoRelevant)
+        return (mPFMReader.Header.PitchAndFamily & 64) != 0;
+    else
+        return false;
 }
 
 bool FreeTypeType1Wrapper::IsForceBold()
 {
-	return mPSPrivateAvailable ? (1 == mPrivateInfo.force_bold) : false;
+    return mPSPrivateAvailable ? (1 == mPrivateInfo.force_bold) : false;
 }
 
 bool FreeTypeType1Wrapper::HasPrivateEncoding()
@@ -138,7 +135,6 @@ unsigned int FreeTypeType1Wrapper::GetGlyphForUnicodeChar(unsigned long inChar)
     return (unsigned int)inChar; // will run only if custom encoding, in which case input value should be output value
 }
 
-
 std::string FreeTypeType1Wrapper::GetPrivateGlyphName(unsigned int inGlyphIndex)
 {
     return mType1File.GetGlyphCharStringName(inGlyphIndex);
@@ -146,11 +142,11 @@ std::string FreeTypeType1Wrapper::GetPrivateGlyphName(unsigned int inGlyphIndex)
 
 unsigned int FreeTypeType1Wrapper::GetFreeTypeGlyphIndexFromEncodingGlyphIndex(unsigned int inGlyphIndex)
 {
-    return FT_Get_Name_Index(mFace,(FT_String*)(GetPrivateGlyphName(inGlyphIndex).c_str()));
+    return FT_Get_Name_Index(mFace, (FT_String *)(GetPrivateGlyphName(inGlyphIndex).c_str()));
 }
 
 std::string FreeTypeType1Wrapper::GetPostscriptNameNonStandard()
 {
-	// only way to go for type1 is standard...so return empty
-	return std::string();
+    // only way to go for type1 is standard...so return empty
+    return std::string();
 }

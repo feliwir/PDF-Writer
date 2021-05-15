@@ -16,54 +16,51 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
 
-#include <string>
 #include <map>
+#include <string>
 #include <utility>
-
-
 
 class FreeTypeWrapper;
 class PDFUsedFont;
 class ObjectsContext;
 class PDFParser;
 
-typedef std::pair<std::string,long> StringAndLong;
-typedef std::map<StringAndLong,PDFUsedFont*> StringAndLongToPDFUsedFontMap;
-typedef std::map<std::string,std::string> StringToStringMap;
+typedef std::pair<std::string, long> StringAndLong;
+typedef std::map<StringAndLong, PDFUsedFont *> StringAndLongToPDFUsedFontMap;
+typedef std::map<std::string, std::string> StringToStringMap;
 
 class UsedFontsRepository
 {
-public:
-	UsedFontsRepository(void);
-	~UsedFontsRepository(void);
+  public:
+    UsedFontsRepository(void);
+    ~UsedFontsRepository(void);
 
-	void SetObjectsContext(ObjectsContext* inObjectsContext);
-	void SetEmbedFonts(bool inEmbedFonts);
+    void SetObjectsContext(ObjectsContext *inObjectsContext);
+    void SetEmbedFonts(bool inEmbedFonts);
 
+    PDFUsedFont *GetFontForFile(const std::string &inFontFilePath, long inFontIndex);
+    // second overload is for type 1, when an additional metrics file is available
+    PDFUsedFont *GetFontForFile(const std::string &inFontFilePath, const std::string &inOptionalMetricsFile,
+                                long inFontIndex);
 
-	PDFUsedFont* GetFontForFile(const std::string& inFontFilePath,long inFontIndex);
-	// second overload is for type 1, when an additional metrics file is available
-	PDFUsedFont* GetFontForFile(const std::string& inFontFilePath,const std::string& inOptionalMetricsFile,long inFontIndex);
+    PDFHummus::EStatusCode WriteUsedFontsDefinitions();
 
-	PDFHummus::EStatusCode WriteUsedFontsDefinitions();
+    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
-	PDFHummus::EStatusCode WriteState(ObjectsContext* inStateWriter,ObjectIDType inObjectID);
-	PDFHummus::EStatusCode ReadState(PDFParser* inStateReader,ObjectIDType inObjectID);
+    void Reset();
 
-	void Reset();
-
-private:
-
-	ObjectsContext* mObjectsContext;
-	FreeTypeWrapper* mInputFontsInformation;
-	StringAndLongToPDFUsedFontMap mUsedFonts;
-	StringToStringMap mOptionaMetricsFiles;
-	bool mEmbedFonts;
+  private:
+    ObjectsContext *mObjectsContext;
+    FreeTypeWrapper *mInputFontsInformation;
+    StringAndLongToPDFUsedFontMap mUsedFonts;
+    StringToStringMap mOptionaMetricsFiles;
+    bool mEmbedFonts;
 };

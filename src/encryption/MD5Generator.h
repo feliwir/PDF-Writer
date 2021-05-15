@@ -16,22 +16,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
  Additional Copyright Information:
 
  Gal Kahana 8/5/2010. my code is completely copied/adapted from this:
 
- MD5.CC - source code for the C++/object oriented translation and 
+ MD5.CC - source code for the C++/object oriented translation and
           modification of MD5.
 
- Translation and modification (c) 1995 by Mordechai T. Abzug 
+ Translation and modification (c) 1995 by Mordechai T. Abzug
 
- This translation/ modification is provided "as is," without express or 
+ This translation/ modification is provided "as is," without express or
  implied warranty of any kind.
 
- The translator/ modifier does not claim (1) that MD5 will do what you think 
- it does; (2) that this translation/ modification is accurate; or (3) that 
- this software is "merchantible."  (Language for this disclaimer partially 
+ The translator/ modifier does not claim (1) that MD5 will do what you think
+ it does; (2) that this translation/ modification is accurate; or (3) that
+ this software is "merchantible."  (Language for this disclaimer partially
  copied from the disclaimer below).
 
  the code is based on:
@@ -70,58 +70,55 @@
 #include <list>
 #include <string>
 
-
 typedef std::list<IOBasicTypes::Byte> ByteList;
 
 class MD5Generator
 {
-public:
-	MD5Generator(void);
-	~MD5Generator(void);
+  public:
+    MD5Generator(void);
+    ~MD5Generator(void);
 
-	PDFHummus::EStatusCode Accumulate(const std::string& inString);
-	PDFHummus::EStatusCode Accumulate(const ByteList& inString);
-	PDFHummus::EStatusCode Accumulate(const IOBasicTypes::Byte* inArray, IOBasicTypes::LongBufferSizeType inLength);
+    PDFHummus::EStatusCode Accumulate(const std::string &inString);
+    PDFHummus::EStatusCode Accumulate(const ByteList &inString);
+    PDFHummus::EStatusCode Accumulate(const IOBasicTypes::Byte *inArray, IOBasicTypes::LongBufferSizeType inLength);
 
-	const ByteList& ToString();
-	const std::string& ToStringAsString();
-	const std::string& ToHexString();
+    const ByteList &ToString();
+    const std::string &ToStringAsString();
+    const std::string &ToHexString();
 
-private:
+  private:
+    typedef unsigned int uint4;
+    typedef unsigned short int uint2;
+    typedef unsigned char uint1;
+    std::string MD5FinalHexString;
+    ByteList MD5FinalString;
+    std::string MD5FinalStringAsString;
 
-	typedef unsigned       int uint4; 
-	typedef unsigned short int uint2; 
-	typedef unsigned      char uint1; 
-	std::string MD5FinalHexString;
-	ByteList MD5FinalString;
-	std::string MD5FinalStringAsString;
+    uint4 mState[4];
+    uint4 mCount[2];   // number of *bits*, mod 2^64
+    uint1 mBuffer[64]; // input buffer
+    uint1 mDigest[16];
+    bool mIsFinalized;
 
-	uint4 mState[4];
-	uint4 mCount[2];     // number of *bits*, mod 2^64
-	uint1 mBuffer[64];   // input buffer
-	uint1 mDigest[16];
-	bool mIsFinalized;
+    void _Accumulate(const uint1 *inBlock, unsigned long inBlockSize);
 
-	void _Accumulate(const uint1* inBlock,unsigned long inBlockSize);
+    void Transform(const uint1 *inBuffer); // does the real update work.  Note
+                                           // that length is implied to be 64.
 
-	void Transform(const uint1 *inBuffer);  // does the real update work.  Note 
-                                   // that length is implied to be 64.
+    void Decode(const uint1 *inInput, uint4 inInputLen, uint4 *outOutput);
 
-	void Decode (const uint1 *inInput, uint4 inInputLen,uint4 *outOutput);
+    unsigned int RotateLeft(uint4 x, uint4 n);
+    unsigned int F(uint4 x, uint4 y, uint4 z);
+    unsigned int G(uint4 x, uint4 y, uint4 z);
+    unsigned int H(uint4 x, uint4 y, uint4 z);
+    unsigned int I(uint4 x, uint4 y, uint4 z);
+    void FF(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
+    void GG(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
+    void HH(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
+    void II(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
+    void Encode(uint1 *output, uint4 *input, uint4 len);
+    void Finalize();
+    void PrepareFinalStrings();
 
-	unsigned int RotateLeft(uint4 x, uint4 n);
-	unsigned int F(uint4 x, uint4 y, uint4 z);
-	unsigned int G(uint4 x, uint4 y, uint4 z);
-	unsigned int H(uint4 x, uint4 y, uint4 z);
-	unsigned int I(uint4 x, uint4 y, uint4 z);
-	void FF(uint4& a, uint4 b, uint4 c, uint4 d, uint4 x, uint4  s, uint4 ac);
-	void GG(uint4& a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
-	void HH(uint4& a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
-	void II(uint4& a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
-	void Encode(uint1 *output, uint4 *input, uint4 len);
-	void Finalize();
-	void PrepareFinalStrings();
-
-	static const uint1 PADDING[64];
-
+    static const uint1 PADDING[64];
 };

@@ -16,12 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "StateReader.h"
-#include "objects/PDFObjectCast.h"
-#include "objects/PDFIndirectObjectReference.h"
 #include "Trace.h"
+#include "objects/PDFIndirectObjectReference.h"
+#include "objects/PDFObjectCast.h"
 
 using namespace PDFHummus;
 
@@ -33,40 +33,39 @@ StateReader::~StateReader(void)
 {
 }
 
-EStatusCode StateReader::Start(const std::string& inStateFilePath)
+EStatusCode StateReader::Start(const std::string &inStateFilePath)
 {
-	// open the new file...
-	if(mInputFile.OpenFile(inStateFilePath) != PDFHummus::eSuccess)
-	{
-		TRACE_LOG1("StateReader::Start, can't open file for state reading in %s",inStateFilePath.c_str());
-		return PDFHummus::eFailure;
-	}
-	
-	if(mParser.StartStateFileParsing(mInputFile.GetInputStream()) != PDFHummus::eSuccess)
-	{
-		TRACE_LOG("StateReader::Start, unable to start parsing for the state reader file");
-		return PDFHummus::eFailure;
-	}
+    // open the new file...
+    if (mInputFile.OpenFile(inStateFilePath) != PDFHummus::eSuccess)
+    {
+        TRACE_LOG1("StateReader::Start, can't open file for state reading in %s", inStateFilePath.c_str());
+        return PDFHummus::eFailure;
+    }
 
-	// set the root object
-	PDFObjectCastPtr<PDFIndirectObjectReference> rootObject(mParser.GetTrailer()->QueryDirectObject("Root"));
-	mRootObject = rootObject->mObjectID;
+    if (mParser.StartStateFileParsing(mInputFile.GetInputStream()) != PDFHummus::eSuccess)
+    {
+        TRACE_LOG("StateReader::Start, unable to start parsing for the state reader file");
+        return PDFHummus::eFailure;
+    }
 
-	return PDFHummus::eSuccess;
+    // set the root object
+    PDFObjectCastPtr<PDFIndirectObjectReference> rootObject(mParser.GetTrailer()->QueryDirectObject("Root"));
+    mRootObject = rootObject->mObjectID;
+
+    return PDFHummus::eSuccess;
 }
 
-PDFParser* StateReader::GetObjectsReader()
+PDFParser *StateReader::GetObjectsReader()
 {
-	return &mParser;
-
+    return &mParser;
 }
 
 ObjectIDType StateReader::GetRootObjectID()
 {
-	return mRootObject;
+    return mRootObject;
 }
 
 void StateReader::Finish()
 {
-	mParser.ResetParser();
+    mParser.ResetParser();
 }

@@ -16,25 +16,36 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "IReadPositionProvider.h"
 #include "IByteReaderWithPosition.h"
+#include "IReadPositionProvider.h"
 
 class AdapterIByteReaderWithPositionToIReadPositionProvider : public IReadPositionProvider
 {
-public:
-	AdapterIByteReaderWithPositionToIReadPositionProvider(){mStream = NULL;}
-	AdapterIByteReaderWithPositionToIReadPositionProvider(IByteReaderWithPosition* inStream){mStream = inStream;}
-	
-	void Assign(IByteReaderWithPosition* inStream){mStream = inStream;}
+  public:
+    AdapterIByteReaderWithPositionToIReadPositionProvider()
+    {
+        mStream = NULL;
+    }
+    AdapterIByteReaderWithPositionToIReadPositionProvider(IByteReaderWithPosition *inStream)
+    {
+        mStream = inStream;
+    }
 
-	// IReadPositionProvider implementation
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition(){return mStream->GetCurrentPosition();};
+    void Assign(IByteReaderWithPosition *inStream)
+    {
+        mStream = inStream;
+    }
 
-private:
-	IByteReaderWithPosition* mStream;
-	
+    // IReadPositionProvider implementation
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition()
+    {
+        return mStream->GetCurrentPosition();
+    };
+
+  private:
+    IByteReaderWithPosition *mStream;
 };

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "GraphicState.h"
 
@@ -26,26 +26,25 @@
 
 GraphicState::GraphicState(void)
 {
-	mFont = NULL;
-	mFontSize = 0;
-	mPlacedFontSize = 0;
+    mFont = NULL;
+    mFontSize = 0;
+    mPlacedFontSize = 0;
 }
 
-GraphicState::GraphicState(const GraphicState& inGraphicState)
+GraphicState::GraphicState(const GraphicState &inGraphicState)
 {
-	*this = inGraphicState;
+    *this = inGraphicState;
 }
 
 GraphicState::~GraphicState(void)
 {
 }
 
-GraphicState& GraphicState::operator=(const GraphicState& inGraphicState)
+GraphicState &GraphicState::operator=(const GraphicState &inGraphicState)
 {
-	mFont = inGraphicState.mFont;
-	mFontSize = inGraphicState.mFontSize;
-	mPlacedFontName = inGraphicState.mPlacedFontName;
+    mFont = inGraphicState.mFont;
+    mFontSize = inGraphicState.mFontSize;
+    mPlacedFontName = inGraphicState.mPlacedFontName;
     mPlacedFontSize = inGraphicState.mPlacedFontSize;
-	return *this;
-
+    return *this;
 }

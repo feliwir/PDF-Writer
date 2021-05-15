@@ -16,56 +16,50 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ContainerIterator.h"
 
 /*
-	Generic template for maps single-self-contained iterator.
-	useful for external loops. instead of providing two iterators (map.begin and map.end)
-	provide a single iterator.
-	usage:
+    Generic template for maps single-self-contained iterator.
+    useful for external loops. instead of providing two iterators (map.begin and map.end)
+    provide a single iterator.
+    usage:
 
-	MapIterator<MyMapType> mapIterator(myMapOfMapType);
+    MapIterator<MyMapType> mapIterator(myMapOfMapType);
 
-	while(mapIterator.MoveNext())
-	{
-		// do something with m.GetKey() and m.GetValue(), which point to the current iterated key and value
-	}
+    while(mapIterator.MoveNext())
+    {
+        // do something with m.GetKey() and m.GetValue(), which point to the current iterated key and value
+    }
 */
 
-template <class T>
-class MapIterator : public ContainerIterator<T>
+template <class T> class MapIterator : public ContainerIterator<T>
 {
-public:
+  public:
+    MapIterator(T &inMap);
+    MapIterator(const MapIterator<T> &inOtherIterator);
 
-	MapIterator(T& inMap);
-	MapIterator(const MapIterator<T>& inOtherIterator);
-
-	typename T::key_type GetKey();
-	typename T::mapped_type GetValue();
-
+    typename T::key_type GetKey();
+    typename T::mapped_type GetValue();
 };
 
-template <class T>
-MapIterator<T>::MapIterator(T& inMap):ContainerIterator<T>(inMap)
+template <class T> MapIterator<T>::MapIterator(T &inMap) : ContainerIterator<T>(inMap)
 {
 }
 
 template <class T>
-MapIterator<T>::MapIterator(const MapIterator<T>& inOtherIterator):ContainerIterator<T>(inOtherIterator)
+MapIterator<T>::MapIterator(const MapIterator<T> &inOtherIterator) : ContainerIterator<T>(inOtherIterator)
 {
 }
 
-template <class T>
-typename T::key_type MapIterator<T>::GetKey()
+template <class T> typename T::key_type MapIterator<T>::GetKey()
 {
-	return this->mCurrentPosition->first;
+    return this->mCurrentPosition->first;
 }
 
-template <class T>
-typename T::mapped_type MapIterator<T>::GetValue()
+template <class T> typename T::mapped_type MapIterator<T>::GetValue()
 {
-	return this->mCurrentPosition->second;
+    return this->mCurrentPosition->second;
 }

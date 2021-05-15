@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,39 +24,35 @@
 #define NULL 0
 #endif
 
-template <class T> 
-class Singleton
+template <class T> class Singleton
 {
-public:
-	static T* GetInstance();
-	static void Reset();
-	// same as reset (trying to work with different versions usage here)
-	static void Release();
-private:
-	Singleton();
-	static T* mInstance;
+  public:
+    static T *GetInstance();
+    static void Reset();
+    // same as reset (trying to work with different versions usage here)
+    static void Release();
+
+  private:
+    Singleton();
+    static T *mInstance;
 };
 
-template <class T>
-T* Singleton<T>::mInstance = 0;
+template <class T> T *Singleton<T>::mInstance = 0;
 
-template <class T>
-T* Singleton<T>::GetInstance()
+template <class T> T *Singleton<T>::GetInstance()
 {
-	if(!mInstance)
-		mInstance = new T();	
-	return mInstance;
+    if (!mInstance)
+        mInstance = new T();
+    return mInstance;
 }
 
-template <class T>
-void Singleton<T>::Reset()
+template <class T> void Singleton<T>::Reset()
 {
-	delete mInstance;
-	mInstance = NULL;
+    delete mInstance;
+    mInstance = NULL;
 }
 
-template <class T>
-void Singleton<T>::Release()
+template <class T> void Singleton<T>::Release()
 {
-	Reset();
+    Reset();
 }

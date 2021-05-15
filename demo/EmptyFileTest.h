@@ -16,16 +16,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "TestsRunner.h"
 
 class EmptyFileTest : public ITestUnit
 {
-public:
-	EmptyFileTest(void);
-	~EmptyFileTest(void);
+  public:
+    EmptyFileTest(void);
+    ~EmptyFileTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

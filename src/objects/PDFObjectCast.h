@@ -16,52 +16,48 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "RefCountPtr.h"
 #include "PDFObject.h"
+#include "RefCountPtr.h"
 
 /*
-	This small template function is only intended to be used for automatic casting of retrieved PDFObjects to their respective actual
-	objects...and not for anything else.
-*/ 
+    This small template function is only intended to be used for automatic casting of retrieved PDFObjects to their
+   respective actual objects...and not for anything else.
+*/
 
-template <class T>
-T* PDFObjectCast(PDFObject* inOriginal)
+template <class T> T *PDFObjectCast(PDFObject *inOriginal)
 {
-	if(!inOriginal)
-		return NULL;
+    if (!inOriginal)
+        return NULL;
 
-	if(inOriginal->GetType() == (PDFObject::EPDFObjectType)T::eType)
-	{
-		return (T*)inOriginal;
-	}
-	else
-	{
-		inOriginal->Release();
-		return NULL;
-	}
+    if (inOriginal->GetType() == (PDFObject::EPDFObjectType)T::eType)
+    {
+        return (T *)inOriginal;
+    }
+    else
+    {
+        inOriginal->Release();
+        return NULL;
+    }
 }
 
-template <class T>
-class PDFObjectCastPtr : public RefCountPtr<T>
+template <class T> class PDFObjectCastPtr : public RefCountPtr<T>
 {
-public:
-	PDFObjectCastPtr():RefCountPtr<T>()
-	{
-	}
+  public:
+    PDFObjectCastPtr() : RefCountPtr<T>()
+    {
+    }
 
-	PDFObjectCastPtr(PDFObject* inPDFObject): RefCountPtr<T>(PDFObjectCast<T>(inPDFObject))
-	{
-	}
+    PDFObjectCastPtr(PDFObject *inPDFObject) : RefCountPtr<T>(PDFObjectCast<T>(inPDFObject))
+    {
+    }
 
-	PDFObjectCastPtr<T>&  operator =(PDFObject* inValue)
-	{
-		RefCountPtr<T>::operator =(PDFObjectCast<T>(inValue));
-		return *this;
-	}
+    PDFObjectCastPtr<T> &operator=(PDFObject *inValue)
+    {
+        RefCountPtr<T>::operator=(PDFObjectCast<T>(inValue));
+        return *this;
+    }
 };
-
-

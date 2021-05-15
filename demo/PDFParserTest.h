@@ -16,13 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "TestsRunner.h"
 #include "ObjectsBasicTypes.h"
-
+#include "TestsRunner.h"
 
 #include <set>
 
@@ -34,16 +33,15 @@ typedef set<ObjectIDType> ObjectIDTypeSet;
 
 class PDFParserTest : public ITestUnit
 {
-public:
-	PDFParserTest(void);
-	virtual ~PDFParserTest(void);
+  public:
+    PDFParserTest(void);
+    virtual ~PDFParserTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
+  private:
+    PDFHummus::EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWriter *inOutput);
 
-	PDFHummus::EStatusCode IterateObjectTypes(PDFObject* inObject,PDFParser& inParser,IByteWriter* inOutput);
-
-	int mTabLevel;
-	ObjectIDTypeSet mIteratedObjectIDs;
+    int mTabLevel;
+    ObjectIDTypeSet mIteratedObjectIDs;
 };

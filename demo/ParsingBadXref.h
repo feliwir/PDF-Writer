@@ -23,8 +23,8 @@ limitations under the License.
 
 class ParsingBadXref : public ITestUnit
 {
-public:
-	ParsingBadXref();
-	virtual ~ParsingBadXref();
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+  public:
+    ParsingBadXref();
+    virtual ~ParsingBadXref();
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

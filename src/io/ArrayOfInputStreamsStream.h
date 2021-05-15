@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -29,20 +29,20 @@ class PDFParser;
 
 class ArrayOfInputStreamsStream : public IByteReader
 {
-public:
-	ArrayOfInputStreamsStream(PDFArray* inArrayOfStreams,PDFParser* inParser);
-	virtual ~ArrayOfInputStreamsStream(void);
+  public:
+    ArrayOfInputStreamsStream(PDFArray *inArrayOfStreams, PDFParser *inParser);
+    virtual ~ArrayOfInputStreamsStream(void);
 
-	// IByteReader implementation
-	virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte* inBuffer, IOBasicTypes::LongBufferSizeType inBufferSize);
-	virtual bool NotEnded();
+    // IByteReader implementation
+    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
+                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual bool NotEnded();
 
-private:
-	IByteReader* GetActiveStream();
+  private:
+    IByteReader *GetActiveStream();
 
-	IByteReader* mCurrentStream;
-	PDFParser* mParser;
-	RefCountPtr<PDFArray> mArray;
-	unsigned long mCurrentIndex;
+    IByteReader *mCurrentStream;
+    PDFParser *mParser;
+    RefCountPtr<PDFArray> mArray;
+    unsigned long mCurrentIndex;
 };
-

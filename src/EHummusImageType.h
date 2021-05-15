@@ -22,12 +22,12 @@ limitations under the License.
 namespace PDFHummus
 {
 
-	enum EHummusImageType
-	{
-		eUndefined,
-		ePDF,
-		eJPG,
-		eTIFF,
-		ePNG
-	};
+enum EHummusImageType
+{
+    eUndefined,
+    ePDF,
+    eJPG,
+    eTIFF,
+    ePNG
+};
 }

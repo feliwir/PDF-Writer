@@ -16,48 +16,49 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFFormXObject.h"
+#include "ObjectsContext.h"
 #include "PDFStream.h"
 #include "XObjectContentContext.h"
-#include "ObjectsContext.h"
 
-PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext* inDocumentContext,ObjectIDType inFormXObjectID,PDFStream* inXObjectStream,ObjectIDType inFormXObjectResourcesDictionaryID)
+PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
+                               PDFStream *inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID)
 {
-	mXObjectID = inFormXObjectID;
-	mResourcesDictionaryID = inFormXObjectResourcesDictionaryID;
-	mContentStream = inXObjectStream;
-	mContentContext = new XObjectContentContext(inDocumentContext,this);	
+    mXObjectID = inFormXObjectID;
+    mResourcesDictionaryID = inFormXObjectResourcesDictionaryID;
+    mContentStream = inXObjectStream;
+    mContentContext = new XObjectContentContext(inDocumentContext, this);
 }
 
 PDFFormXObject::~PDFFormXObject(void)
 {
-	delete mContentStream;
-	delete mContentContext;
+    delete mContentStream;
+    delete mContentContext;
 }
 
 ObjectIDType PDFFormXObject::GetObjectID()
 {
-	return mXObjectID;
+    return mXObjectID;
 }
 
 ObjectIDType PDFFormXObject::GetResourcesDictionaryObjectID()
 {
-	return mResourcesDictionaryID;
+    return mResourcesDictionaryID;
 }
 
-ResourcesDictionary& PDFFormXObject::GetResourcesDictionary()
+ResourcesDictionary &PDFFormXObject::GetResourcesDictionary()
 {
-	return mResources;
+    return mResources;
 }
 
-PDFStream* PDFFormXObject::GetContentStream()
+PDFStream *PDFFormXObject::GetContentStream()
 {
-	return mContentStream;
+    return mContentStream;
 }
 
-XObjectContentContext* PDFFormXObject::GetContentContext()
+XObjectContentContext *PDFFormXObject::GetContentContext()
 {
-	return mContentContext;
+    return mContentContext;
 }

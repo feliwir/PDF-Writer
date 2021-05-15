@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,13 +24,13 @@
 
 class IReadPositionProvider
 {
-public:
+  public:
+    virtual ~IReadPositionProvider()
+    {
+    }
 
-	virtual ~IReadPositionProvider(){}
-
-	/*
-		Get the current read position
-	*/
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
-
+    /*
+        Get the current read position
+    */
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
 };

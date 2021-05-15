@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
@@ -25,17 +25,15 @@ class CFFFileInput;
 
 class SimpleTextUsage : public ITestUnit
 {
-public:
-	SimpleTextUsage(void);
-	virtual ~SimpleTextUsage(void);
+  public:
+    SimpleTextUsage(void);
+    virtual ~SimpleTextUsage(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-
-	PDFHummus::EStatusCode RunCFFTest(const TestConfiguration& inTestConfiguration,bool inEmbedFonts);
-	PDFHummus::EStatusCode RunTrueTypeTest(const TestConfiguration& inTestConfiguration, bool inEmbedFonts);
-	PDFHummus::EStatusCode RunType1Test(const TestConfiguration& inTestConfiguration, bool inEmbedFonts);
-	PDFHummus::EStatusCode RunNoTextTest(const TestConfiguration& inTestConfiguration, bool inEmbedFonts);
-
+  private:
+    PDFHummus::EStatusCode RunCFFTest(const TestConfiguration &inTestConfiguration, bool inEmbedFonts);
+    PDFHummus::EStatusCode RunTrueTypeTest(const TestConfiguration &inTestConfiguration, bool inEmbedFonts);
+    PDFHummus::EStatusCode RunType1Test(const TestConfiguration &inTestConfiguration, bool inEmbedFonts);
+    PDFHummus::EStatusCode RunNoTextTest(const TestConfiguration &inTestConfiguration, bool inEmbedFonts);
 };

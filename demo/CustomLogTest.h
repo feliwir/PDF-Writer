@@ -3,9 +3,9 @@
 
 class CustomLogTest : public ITestUnit
 {
-public:
-	CustomLogTest(void);
-	~CustomLogTest(void);
+  public:
+    CustomLogTest(void);
+    ~CustomLogTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

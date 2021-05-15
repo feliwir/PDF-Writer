@@ -16,15 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 /*
-	Representing a PDF text string. In accordance with PDF specifications 1.7, section 3.8.1 of text string. 
-	encodes a double byte Unicode text to a PDF text string, 
-	either using PDFDocEncoded or UTF-16BE encoded string with a leading byte order marker. 
-	if possible, the string is encoded using PDFDocEncoded. otherwise UTF16BE is used.
-	when encoding, it is made sure that all charachters that require escaping, get escaped.
+    Representing a PDF text string. In accordance with PDF specifications 1.7, section 3.8.1 of text string.
+    encodes a double byte Unicode text to a PDF text string,
+    either using PDFDocEncoded or UTF-16BE encoded string with a leading byte order marker.
+    if possible, the string is encoded using PDFDocEncoded. otherwise UTF16BE is used.
+    when encoding, it is made sure that all charachters that require escaping, get escaped.
 */
 
 #include "io/OutputStringBufferStream.h"
@@ -32,40 +32,36 @@
 #include <string>
 #include <utility>
 
-
-
-typedef std::pair<bool,IOBasicTypes::Byte> ConvertToPDFDocEncodingResult;
+typedef std::pair<bool, IOBasicTypes::Byte> ConvertToPDFDocEncodingResult;
 
 class PDFTextString
 {
-public:
-	
-	PDFTextString();
-	PDFTextString(const std::string& inString); // initialize from an encoded string
-	~PDFTextString(void);
+  public:
+    PDFTextString();
+    PDFTextString(const std::string &inString); // initialize from an encoded string
+    ~PDFTextString(void);
 
+    PDFTextString &FromUTF8(
+        const std::string &inString); // will try first to convert to PDFDocEncoded, and if unable, to UTF16BE
 
-	PDFTextString& FromUTF8(const std::string& inString); // will try first to convert to PDFDocEncoded, and if unable, to UTF16BE
+    bool IsEmpty() const;
+    const std::string &ToString() const; // string representation of the PDFTextString, to be used for writing
+    std::string ToUTF8String() const;
 
-	bool IsEmpty() const;
-	const std::string& ToString() const; // string representation of the PDFTextString, to be used for writing
-	std::string ToUTF8String() const;
+    bool operator==(const PDFTextString &inString) const; // equality check is string equality based
+    PDFTextString &operator=(const PDFTextString &inString);
 
-	bool operator==(const PDFTextString& inString) const; //equality check is string equality based
-	PDFTextString& operator=(const PDFTextString& inString);
+    // set from encoded string
+    PDFTextString &operator=(const std::string &inString);
 
-	// set from encoded string
-	PDFTextString& operator=(const std::string& inString);
+    static const PDFTextString &Empty();
 
-	static const PDFTextString& Empty();
+  private:
+    std::string mTextString;
 
-private:
-
-	std::string mTextString;
-
-	void ConvertFromUTF8(const std::string& inStringToConvert);
-	bool ConvertUTF8ToPDFDocEncoding(const std::string& inStringToConvert,OutputStringBufferStream& refResult);
-	void ConvertUTF8ToUTF16BE(const std::string& inStringToConvert,OutputStringBufferStream& refResult);
-	std::string ToUTF8FromUTF16BE() const;
-	std::string ToUTF8FromPDFDocEncoding() const;
+    void ConvertFromUTF8(const std::string &inStringToConvert);
+    bool ConvertUTF8ToPDFDocEncoding(const std::string &inStringToConvert, OutputStringBufferStream &refResult);
+    void ConvertUTF8ToUTF16BE(const std::string &inStringToConvert, OutputStringBufferStream &refResult);
+    std::string ToUTF8FromUTF16BE() const;
+    std::string ToUTF8FromPDFDocEncoding() const;
 };

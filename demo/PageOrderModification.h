@@ -25,11 +25,9 @@ limitations under the License.
 
 class PageOrderModification : public ITestUnit
 {
-public:
-	PageOrderModification(void);
-	virtual ~PageOrderModification(void);
+  public:
+    PageOrderModification(void);
+    virtual ~PageOrderModification(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
-
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
-

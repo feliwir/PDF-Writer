@@ -16,124 +16,122 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "Type2CharStringWriter.h"
 #include "io/IByteWriter.h"
 
 using namespace PDFHummus;
 
-Type2CharStringWriter::Type2CharStringWriter(IByteWriter* inTargetStream)
+Type2CharStringWriter::Type2CharStringWriter(IByteWriter *inTargetStream)
 {
-	mTargetStream = inTargetStream;
+    mTargetStream = inTargetStream;
 }
 
 Type2CharStringWriter::~Type2CharStringWriter(void)
 {
 }
 
-void Type2CharStringWriter::Assign(IByteWriter* inTargetStream)
+void Type2CharStringWriter::Assign(IByteWriter *inTargetStream)
 {
-	mTargetStream = inTargetStream;
+    mTargetStream = inTargetStream;
 }
 
-EStatusCode Type2CharStringWriter::WriteHintMask(unsigned long inMask,unsigned long inMaskSize)
+EStatusCode Type2CharStringWriter::WriteHintMask(unsigned long inMask, unsigned long inMaskSize)
 {
-	unsigned long maskByteSize = inMaskSize/8 + (inMaskSize % 8 != 0 ? 1:0);	
-	
-	EStatusCode status = WriteOperator(19);
-	if(status != PDFHummus::eSuccess)
-		return status;
+    unsigned long maskByteSize = inMaskSize / 8 + (inMaskSize % 8 != 0 ? 1 : 0);
 
-	return WriteMaskBytes(inMask,maskByteSize);
+    EStatusCode status = WriteOperator(19);
+    if (status != PDFHummus::eSuccess)
+        return status;
+
+    return WriteMaskBytes(inMask, maskByteSize);
 }
 
-EStatusCode Type2CharStringWriter::WriteMaskBytes(unsigned long inMask,unsigned long inMaskByteSize)
+EStatusCode Type2CharStringWriter::WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize)
 {
-	EStatusCode status;
+    EStatusCode status;
 
-	if(inMaskByteSize > 1)
-	{
-		status = WriteMaskBytes(inMask >> 1,inMaskByteSize - 1);
-		if(status != PDFHummus::eSuccess)
-			return status;
-	}
-	return WriteByte((Byte)(inMask & 0xff));
+    if (inMaskByteSize > 1)
+    {
+        status = WriteMaskBytes(inMask >> 1, inMaskByteSize - 1);
+        if (status != PDFHummus::eSuccess)
+            return status;
+    }
+    return WriteByte((Byte)(inMask & 0xff));
 }
 
 EStatusCode Type2CharStringWriter::WriteByte(Byte inValue)
 {
-	return (mTargetStream->Write(&inValue,1) == 1 ? PDFHummus::eSuccess:PDFHummus::eFailure);
+    return (mTargetStream->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
 }
 
 EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
 {
-	long value = inOperand;
+    long value = inOperand;
 
-	if(-107 <= value && value <= 107)
-	{
-		return WriteByte((Byte)(value + 139));
-	}
-	else if(108 <= value && value <= 1131)
-	{
-		Byte byte0,byte1;
+    if (-107 <= value && value <= 107)
+    {
+        return WriteByte((Byte)(value + 139));
+    }
+    else if (108 <= value && value <= 1131)
+    {
+        Byte byte0, byte1;
 
-		value-=108;
-		byte0 = ((value >> 8) & 0xff) + 247;
-		byte1 = value & 0xff;
+        value -= 108;
+        byte0 = ((value >> 8) & 0xff) + 247;
+        byte1 = value & 0xff;
 
-		if(WriteByte(byte0) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
+        if (WriteByte(byte0) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
 
-		if(WriteByte(byte1) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
-		return PDFHummus::eSuccess;
-	}
-	else if(-1131 <= value && value <= -108)
-	{
-		Byte byte0,byte1;
+        if (WriteByte(byte1) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
+        return PDFHummus::eSuccess;
+    }
+    else if (-1131 <= value && value <= -108)
+    {
+        Byte byte0, byte1;
 
-		value = -(value + 108);
+        value = -(value + 108);
 
-		byte0 = ((value >> 8) & 0xff) + 251;
-		byte1 = value & 0xff;
+        byte0 = ((value >> 8) & 0xff) + 251;
+        byte1 = value & 0xff;
 
-		if(WriteByte(byte0) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
+        if (WriteByte(byte0) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
 
-		if(WriteByte(byte1) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
-		return PDFHummus::eSuccess;
-	}
-	else if(-32768 <= value && value<= 32767)
-	{
-		Byte byte1,byte2;
+        if (WriteByte(byte1) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
+        return PDFHummus::eSuccess;
+    }
+    else if (-32768 <= value && value <= 32767)
+    {
+        Byte byte1, byte2;
 
-		byte1 = (value >> 8) & 0xff;
-		byte2 = value & 0xff;
+        byte1 = (value >> 8) & 0xff;
+        byte2 = value & 0xff;
 
-		if(WriteByte(28) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
+        if (WriteByte(28) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
 
-		if(WriteByte(byte1) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
+        if (WriteByte(byte1) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
 
-		if(WriteByte(byte2) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
-		return PDFHummus::eSuccess;
-	}
-	else
+        if (WriteByte(byte2) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
+        return PDFHummus::eSuccess;
+    }
+    else
         return PDFHummus::eFailure;
-    
 }
 
 EStatusCode Type2CharStringWriter::WriteOperator(unsigned short inOperatorCode)
 {
-	if((inOperatorCode & 0xff00) == 0x0c00)
-	{
-		if(WriteByte(0x0c) != PDFHummus::eSuccess)
-			return PDFHummus::eFailure;
-	}
-	return WriteByte(Byte(inOperatorCode & 0x00ff));
+    if ((inOperatorCode & 0xff00) == 0x0c00)
+    {
+        if (WriteByte(0x0c) != PDFHummus::eSuccess)
+            return PDFHummus::eFailure;
+    }
+    return WriteByte(Byte(inOperatorCode & 0x00ff));
 }
-

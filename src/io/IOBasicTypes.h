@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,7 +25,7 @@
 namespace IOBasicTypes
 {
 
-	typedef unsigned char Byte;
-    typedef size_t LongBufferSizeType;
-	typedef long long LongFilePositionType;
-}
+typedef unsigned char Byte;
+typedef size_t LongBufferSizeType;
+typedef long long LongFilePositionType;
+} // namespace IOBasicTypes

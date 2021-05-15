@@ -24,10 +24,15 @@ limitations under the License.
 
 struct PDFParsingOptions
 {
-	std::string Password;
+    std::string Password;
 
-	PDFParsingOptions() {}
-	PDFParsingOptions(std::string inPassword) { Password = inPassword; }
+    PDFParsingOptions()
+    {
+    }
+    PDFParsingOptions(std::string inPassword)
+    {
+        Password = inPassword;
+    }
 
-	static const PDFParsingOptions& DefaultPDFParsingOptions();
+    static const PDFParsingOptions &DefaultPDFParsingOptions();
 };

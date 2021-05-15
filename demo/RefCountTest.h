@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,9 +24,9 @@
 
 class RefCountTest : public ITestUnit
 {
-public:
-	RefCountTest(void);
-	virtual ~RefCountTest(void);
+  public:
+    RefCountTest(void);
+    virtual ~RefCountTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

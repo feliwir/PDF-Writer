@@ -27,26 +27,23 @@ typedef std::list<IOBasicTypes::Byte> ByteList;
 
 class RC4
 {
-public:
-	RC4();
-	RC4(const ByteList& inKey);
-	RC4(const IOBasicTypes::Byte* inKey,IOBasicTypes::LongBufferSizeType inLength);
-	~RC4(void);
+  public:
+    RC4();
+    RC4(const ByteList &inKey);
+    RC4(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
+    ~RC4(void);
 
-	void Reset(const ByteList& inKey);
-	void Reset(const IOBasicTypes::Byte* inKey, IOBasicTypes::LongBufferSizeType inLength);
+    void Reset(const ByteList &inKey);
+    void Reset(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
 
+    IOBasicTypes::Byte DecodeNextByte(IOBasicTypes::Byte inByte);
+    IOBasicTypes::Byte GetNextEncodingByte();
 
-	IOBasicTypes::Byte DecodeNextByte(IOBasicTypes::Byte inByte);
-	IOBasicTypes::Byte GetNextEncodingByte();
+  private:
+    IOBasicTypes::Byte mBuffer[256];
+    int mI;
+    int mJ;
 
-private:
-
-	IOBasicTypes::Byte mBuffer[256];
-	int mI;
-	int mJ;
-
-	void Init(const IOBasicTypes::Byte* inKey, IOBasicTypes::LongBufferSizeType inLength);
-	void Swap(int a, int b);
-
+    void Init(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
+    void Swap(int a, int b);
 };

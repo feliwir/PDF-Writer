@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFReal.h"
 
-PDFReal::PDFReal(double inValue):PDFObject(eType)
+PDFReal::PDFReal(double inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFReal::~PDFReal(void)
@@ -31,10 +31,10 @@ PDFReal::~PDFReal(void)
 
 double PDFReal::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFReal::operator double() const
 {
-	return mValue;
+    return mValue;
 }

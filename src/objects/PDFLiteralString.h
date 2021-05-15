@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,25 +24,21 @@
 
 #include <string>
 
-
-
 class PDFLiteralString : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectLiteralString
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectLiteralString
-	};
+    // Value is the interpreted string (no enclosing paranthesis and escaped sequances as the result values)
+    PDFLiteralString(const std::string &inValue);
+    virtual ~PDFLiteralString(void);
 
-	// Value is the interpreted string (no enclosing paranthesis and escaped sequances as the result values)
-	PDFLiteralString(const std::string& inValue);
-	virtual ~PDFLiteralString(void);
+    const std::string &GetValue() const;
+    operator std::string() const;
 
-	const std::string& GetValue() const;
-	operator std::string() const;
-
-private:
-	std::string mValue;
-
+  private:
+    std::string mValue;
 };

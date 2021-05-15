@@ -16,12 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 /*
-	IByteWriterWithPosition.
-	extension of IByteWriter that also allows for retrieving the current position
+    IByteWriterWithPosition.
+    extension of IByteWriter that also allows for retrieving the current position
 
 */
 
@@ -29,8 +29,8 @@
 
 class IByteWriterWithPosition : public IByteWriter
 {
-public:
-	virtual ~IByteWriterWithPosition(void){};
+  public:
+    virtual ~IByteWriterWithPosition(void){};
 
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
 };

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,15 +24,13 @@
 
 #include "ITestUnit.h"
 
-
 class HighLevelImages : public ITestUnit
 {
-public:
-	HighLevelImages(void);
-	virtual ~HighLevelImages(void);
+  public:
+    HighLevelImages(void);
+    virtual ~HighLevelImages(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
-
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
 
 #endif

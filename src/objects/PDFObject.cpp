@@ -16,86 +16,79 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFObject.h"
 #include "IDeletable.h"
 
-const char* PDFObject::scPDFObjectTypeLabel(int index) 
+const char *PDFObject::scPDFObjectTypeLabel(int index)
 {
-	static const char* labels[] =
-	{
-		"Boolean",
-		"LiteralString",
-		"HexString",
-		"Null",
-		"Name",
-		"Integer",
-		"Real",
-		"Array",
-		"Dictionary",
-		"IndirectObjectReference",
-		"Stream",
-		"Symbol"
-	};
-	return labels[index];
+    static const char *labels[] = {"Boolean", "LiteralString", "HexString", "Null",       "Name",
+                                   "Integer", "Real",          "Array",     "Dictionary", "IndirectObjectReference",
+                                   "Stream",  "Symbol"};
+    return labels[index];
 };
 
 PDFObject::PDFObject(EPDFObjectType inType)
 {
-	mType = inType;
+    mType = inType;
 }
 
 PDFObject::PDFObject(int inType)
 {
-	mType = (EPDFObjectType)inType;
+    mType = (EPDFObjectType)inType;
 }
-
 
 PDFObject::~PDFObject(void)
 {
-	StringToIDeletable::iterator it = mMetadata.begin();
-	for (; it != mMetadata.end(); ++it) {
-		it->second->DeleteMe();
-	}
-	mMetadata.clear();
+    StringToIDeletable::iterator it = mMetadata.begin();
+    for (; it != mMetadata.end(); ++it)
+    {
+        it->second->DeleteMe();
+    }
+    mMetadata.clear();
 }
 
 PDFObject::EPDFObjectType PDFObject::GetType()
 {
-	return mType;
+    return mType;
 }
 
-void PDFObject::SetMetadata(const std::string& inKey, IDeletable* inValue) {
-	// delete old metadata
-	DeleteMetadata(inKey);
+void PDFObject::SetMetadata(const std::string &inKey, IDeletable *inValue)
+{
+    // delete old metadata
+    DeleteMetadata(inKey);
 
-	mMetadata.insert(StringToIDeletable::value_type(inKey, inValue));
+    mMetadata.insert(StringToIDeletable::value_type(inKey, inValue));
 }
 
-IDeletable* PDFObject::GetMetadata(const std::string& inKey) {
-	StringToIDeletable::iterator it = mMetadata.find(inKey);
-	
-	if (it == mMetadata.end()) 
-		return NULL;
-	else 
-		return it->second;
+IDeletable *PDFObject::GetMetadata(const std::string &inKey)
+{
+    StringToIDeletable::iterator it = mMetadata.find(inKey);
+
+    if (it == mMetadata.end())
+        return NULL;
+    else
+        return it->second;
 }
 
-IDeletable* PDFObject::DetachMetadata(const std::string& inKey) {
-	StringToIDeletable::iterator it = mMetadata.find(inKey);
+IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
+{
+    StringToIDeletable::iterator it = mMetadata.find(inKey);
 
-	if (it == mMetadata.end())
-		return NULL;
-	else {
-		IDeletable* result = it->second;
-		mMetadata.erase(it);
-		return result;
-	}
+    if (it == mMetadata.end())
+        return NULL;
+    else
+    {
+        IDeletable *result = it->second;
+        mMetadata.erase(it);
+        return result;
+    }
 }
 
-void PDFObject::DeleteMetadata(const std::string& inKey) {
-	IDeletable* result = DetachMetadata(inKey);
-	if(result)
-		result->DeleteMe();
+void PDFObject::DeleteMetadata(const std::string &inKey)
+{
+    IDeletable *result = DetachMetadata(inKey);
+    if (result)
+        result->DeleteMe();
 }

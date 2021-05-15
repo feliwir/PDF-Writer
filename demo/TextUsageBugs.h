@@ -16,24 +16,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
 
 class TextUsageBugs : public ITestUnit
 {
-public:
-	TextUsageBugs(void);
-	virtual ~TextUsageBugs(void);
+  public:
+    TextUsageBugs(void);
+    virtual ~TextUsageBugs(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-
-	PDFHummus::EStatusCode RunCNRSTest(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode RunCNRS2SampleTest(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode RunCNRS2Test(const TestConfiguration& inTestConfiguration);
-	PDFHummus::EStatusCode RunKoreanFontTest(const TestConfiguration& inTestConfiguration);
-
+  private:
+    PDFHummus::EStatusCode RunCNRSTest(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode RunCNRS2SampleTest(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode RunCNRS2Test(const TestConfiguration &inTestConfiguration);
+    PDFHummus::EStatusCode RunKoreanFontTest(const TestConfiguration &inTestConfiguration);
 };

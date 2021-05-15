@@ -16,14 +16,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "TestMeasurementsTest.h"
-#include "PDFWriter.h"
-#include "TestsRunner.h"
 #include "PDFPage.h"
-#include "PageContentContext.h"
 #include "PDFUsedFont.h"
+#include "PDFWriter.h"
+#include "PageContentContext.h"
+#include "TestsRunner.h"
 
 #include <iostream>
 
@@ -33,93 +33,84 @@ TestMeasurementsTest::TestMeasurementsTest(void)
 {
 }
 
-
 TestMeasurementsTest::~TestMeasurementsTest(void)
 {
 }
 
-EStatusCode TestMeasurementsTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode TestMeasurementsTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status = eSuccess;
-	PDFWriter pdfWriter;
+    EStatusCode status = eSuccess;
+    PDFWriter pdfWriter;
 
-	do
-	{
-		status = pdfWriter.StartPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TextMeasurementsTest.pdf"),
-                                    ePDFVersion13,
-                                    LogConfiguration(true,true,
-                                                     RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TextMeasurementsTest.log")));
-		if(status != eSuccess)
-		{
-			cout<<"Failed to start file\n";
-			break;
-		}
+    do
+    {
+        status = pdfWriter.StartPDF(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TextMeasurementsTest.pdf"), ePDFVersion13,
+            LogConfiguration(true, true,
+                             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TextMeasurementsTest.log")));
+        if (status != eSuccess)
+        {
+            cout << "Failed to start file\n";
+            break;
+        }
 
-		PDFPage* page = new PDFPage();
-		page->SetMediaBox(PDFRectangle(0,0,595,842));
-		
-		PageContentContext* cxt = pdfWriter.StartPageContentContext(page);
-		PDFUsedFont* arialFont = pdfWriter.GetFontForFile(
-                                                     RelativeURLToLocalPath(
-                                                                            inTestConfiguration.mSampleFileBase,
-                                                                            "TestMaterials/fonts/arial.ttf"));
-		if(!arialFont)
-		{
-			status = PDFHummus::eFailure;
-			cout<<"Failed to create font for arial font\n";
-			break;
-		}
+        PDFPage *page = new PDFPage();
+        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-		AbstractContentContext::GraphicOptions pathStrokeOptions(AbstractContentContext::eStroke,
-																AbstractContentContext::eRGB,
-																AbstractContentContext::ColorValueForName("DarkMagenta"),
-																4);
-		AbstractContentContext::TextOptions textOptions(arialFont,
-														14,
-														AbstractContentContext::eGray,
-														0);
+        PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
+        PDFUsedFont *arialFont = pdfWriter.GetFontForFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/arial.ttf"));
+        if (!arialFont)
+        {
+            status = PDFHummus::eFailure;
+            cout << "Failed to create font for arial font\n";
+            break;
+        }
 
-		PDFUsedFont::TextMeasures textDimensions = arialFont->CalculateTextDimensions("Hello World",14);
+        AbstractContentContext::GraphicOptions pathStrokeOptions(
+            AbstractContentContext::eStroke, AbstractContentContext::eRGB,
+            AbstractContentContext::ColorValueForName("DarkMagenta"), 4);
+        AbstractContentContext::TextOptions textOptions(arialFont, 14, AbstractContentContext::eGray, 0);
 
-		cxt->WriteText(10,100,"Hello World",textOptions);
-		DoubleAndDoublePairList pathPoints;
-		pathPoints.push_back(DoubleAndDoublePair(10+textDimensions.xMin,98+textDimensions.yMin));
-		pathPoints.push_back(DoubleAndDoublePair(10+textDimensions.xMax,98+textDimensions.yMin));
-		cxt->DrawPath(pathPoints,pathStrokeOptions);
-		pathPoints.clear();
-		pathPoints.push_back(DoubleAndDoublePair(10+textDimensions.xMin,102+textDimensions.yMax));
-		pathPoints.push_back(DoubleAndDoublePair(10+textDimensions.xMax,102+textDimensions.yMax));
-		cxt->DrawPath(pathPoints,pathStrokeOptions);
+        PDFUsedFont::TextMeasures textDimensions = arialFont->CalculateTextDimensions("Hello World", 14);
 
-		status = pdfWriter.EndPageContentContext(cxt);
-		if(status != eSuccess)
-		{
-			status = PDFHummus::eFailure;
-			cout<<"Failed to end content context\n";
-			break;
-		}
+        cxt->WriteText(10, 100, "Hello World", textOptions);
+        DoubleAndDoublePairList pathPoints;
+        pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMin, 98 + textDimensions.yMin));
+        pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMax, 98 + textDimensions.yMin));
+        cxt->DrawPath(pathPoints, pathStrokeOptions);
+        pathPoints.clear();
+        pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMin, 102 + textDimensions.yMax));
+        pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMax, 102 + textDimensions.yMax));
+        cxt->DrawPath(pathPoints, pathStrokeOptions);
 
-		status = pdfWriter.WritePageAndRelease(page);
-		if(status != eSuccess)
-		{
-			status = PDFHummus::eFailure;
-			cout<<"Failed to write page\n";
-			break;
-		}
+        status = pdfWriter.EndPageContentContext(cxt);
+        if (status != eSuccess)
+        {
+            status = PDFHummus::eFailure;
+            cout << "Failed to end content context\n";
+            break;
+        }
 
+        status = pdfWriter.WritePageAndRelease(page);
+        if (status != eSuccess)
+        {
+            status = PDFHummus::eFailure;
+            cout << "Failed to write page\n";
+            break;
+        }
 
-		status = pdfWriter.EndPDF();
-		if(status != eSuccess)
-		{
-			status = PDFHummus::eFailure;
-			cout<<"Failed to end pdf\n";
-			break;
-		}
+        status = pdfWriter.EndPDF();
+        if (status != eSuccess)
+        {
+            status = PDFHummus::eFailure;
+            cout << "Failed to end pdf\n";
+            break;
+        }
 
-	}while(false);
+    } while (false);
 
-
-	return status;
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(TestMeasurementsTest,"Text")
+ADD_CATEGORIZED_TEST(TestMeasurementsTest, "Text")

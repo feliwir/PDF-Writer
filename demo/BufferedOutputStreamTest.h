@@ -16,19 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "TestsRunner.h"
 
-class BufferedOutputStreamTest: public ITestUnit
+class BufferedOutputStreamTest : public ITestUnit
 {
-public:
-	BufferedOutputStreamTest(void);
-	virtual ~BufferedOutputStreamTest(void);
+  public:
+    BufferedOutputStreamTest(void);
+    virtual ~BufferedOutputStreamTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
-
-

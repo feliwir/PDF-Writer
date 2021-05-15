@@ -16,20 +16,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "ObjectsBasicTypes.h"
 #include "PDFRectangle.h"
-#include "SingleValueContainerIterator.h"
 #include "ResourcesDictionary.h"
+#include "SingleValueContainerIterator.h"
 
 #include <list>
 #include <utility>
 
-typedef std::pair<bool,PDFRectangle> BoolAndPDFRectangle;
-typedef std::pair<bool,int> BoolAndInt;
+typedef std::pair<bool, PDFRectangle> BoolAndPDFRectangle;
+typedef std::pair<bool, int> BoolAndInt;
 
 class PageContentContext;
 
@@ -37,59 +37,58 @@ typedef std::list<ObjectIDType> ObjectIDTypeList;
 
 class PDFPage
 {
-public:
-	PDFPage(void);
-	~PDFPage(void);
+  public:
+    PDFPage(void);
+    ~PDFPage(void);
 
-	void SetMediaBox(const PDFRectangle& inMediaBox);
-	const PDFRectangle& GetMediaBox() const;
-    
-	// sets page rotation factor (optional, must be multiple of 90)
-	void SetRotate( int inRotate );
+    void SetMediaBox(const PDFRectangle &inMediaBox);
+    const PDFRectangle &GetMediaBox() const;
+
+    // sets page rotation factor (optional, must be multiple of 90)
+    void SetRotate(int inRotate);
     // returns indicator for wheather rotation was set, and its value
-	const BoolAndInt& GetRotate() const;
-    
+    const BoolAndInt &GetRotate() const;
+
     // crop box, defaults to MediaBox
     // bleed box, defaults to crop box
     // trim box, defaults to crop box
     // art box, default to crop box
 
-	void SetCropBox(const PDFRectangle& inCropBox);
+    void SetCropBox(const PDFRectangle &inCropBox);
     // returns indicator for wheather crop was set, and its value
-	const BoolAndPDFRectangle& GetCropBox() const;
+    const BoolAndPDFRectangle &GetCropBox() const;
 
-	void SetBleedBox(const PDFRectangle& inBleedBox);
+    void SetBleedBox(const PDFRectangle &inBleedBox);
     // returns indicator for wheather crop was set, and its value
-	const BoolAndPDFRectangle& GetBleedBox() const;
-    
-	void SetTrimBox(const PDFRectangle& inTrimBox);
+    const BoolAndPDFRectangle &GetBleedBox() const;
+
+    void SetTrimBox(const PDFRectangle &inTrimBox);
     // returns indicator for wheather crop was set, and its value
-	const BoolAndPDFRectangle& GetTrimBox() const;
+    const BoolAndPDFRectangle &GetTrimBox() const;
 
-	void SetArtBox(const PDFRectangle& inArtBox);
+    void SetArtBox(const PDFRectangle &inArtBox);
     // returns indicator for wheather crop was set, and its value
-	const BoolAndPDFRectangle& GetArtBox() const;
-    
-	ResourcesDictionary& GetResourcesDictionary();
+    const BoolAndPDFRectangle &GetArtBox() const;
 
-	void AddContentStreamReference(ObjectIDType inStreamReference);
-	ObjectIDType GetContentStreamsCount();
-	SingleValueContainerIterator<ObjectIDTypeList> GetContentStreamReferencesIterator();
+    ResourcesDictionary &GetResourcesDictionary();
 
-	// extensibility, direct access to the content context used for this page..
-	PageContentContext* GetAssociatedContentContext();
-	void DisassociateContentContext();
-	void AssociateContentContext(PageContentContext* inContentContext);
+    void AddContentStreamReference(ObjectIDType inStreamReference);
+    ObjectIDType GetContentStreamsCount();
+    SingleValueContainerIterator<ObjectIDTypeList> GetContentStreamReferencesIterator();
 
-private:
-	PDFRectangle mMediaBox;
-	BoolAndInt mRotate;
+    // extensibility, direct access to the content context used for this page..
+    PageContentContext *GetAssociatedContentContext();
+    void DisassociateContentContext();
+    void AssociateContentContext(PageContentContext *inContentContext);
+
+  private:
+    PDFRectangle mMediaBox;
+    BoolAndInt mRotate;
     BoolAndPDFRectangle mTrimBox;
     BoolAndPDFRectangle mArtBox;
     BoolAndPDFRectangle mCropBox;
     BoolAndPDFRectangle mBleedBox;
-	ObjectIDTypeList mContentStreamReferences;
-	ResourcesDictionary mResources;
-	PageContentContext* mContentContext;
-
+    ObjectIDTypeList mContentStreamReferences;
+    ResourcesDictionary mResources;
+    PageContentContext *mContentContext;
 };

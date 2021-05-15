@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -28,33 +28,25 @@ class FreeTypeFaceWrapper;
 struct WrittenFontRepresentation;
 class ObjectsContext;
 
-
 class CFFANSIFontWriter : public IANSIFontWriterHelper, IFontDescriptorHelper
 {
-public:
-	CFFANSIFontWriter(void);
-	~CFFANSIFontWriter(void);
+  public:
+    CFFANSIFontWriter(void);
+    ~CFFANSIFontWriter(void);
 
+    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                     ObjectsContext *inObjectsContext, bool inEmbedFont);
 
-	PDFHummus::EStatusCode WriteFont(	FreeTypeFaceWrapper& inFontInfo,
-							WrittenFontRepresentation* inFontOccurrence,
-							ObjectsContext* inObjectsContext,
-							bool inEmbedFont);
+    // IANSIFontWriterHelper implementation
+    virtual void WriteSubTypeValue(DictionaryContext *inDictionary);
+    virtual IFontDescriptorHelper *GetCharsetWriter();
+    virtual bool CanWriteDifferencesFromWinAnsi();
 
-	// IANSIFontWriterHelper implementation
-	virtual void WriteSubTypeValue(DictionaryContext* inDictionary);
-	virtual IFontDescriptorHelper* GetCharsetWriter();
-	virtual bool CanWriteDifferencesFromWinAnsi();
+    // IFontDescriptorHelper implementation
+    virtual void WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
+                              FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
+    virtual void WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext);
 
-	// IFontDescriptorHelper implementation
-	virtual void WriteCharSet(	DictionaryContext* inDescriptorContext,
-								ObjectsContext* inObjectsContext,
-								FreeTypeFaceWrapper* inFontInfo,
-								const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs);
-	virtual void WriteFontFileReference(DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext);
-
-private:
-
-	ObjectIDType mEmbeddedFontFileObjectID;
+  private:
+    ObjectIDType mEmbeddedFontFileObjectID;
 };

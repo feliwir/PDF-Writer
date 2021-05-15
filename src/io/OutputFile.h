@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -27,21 +27,20 @@ class IByteWriterWithPosition;
 class OutputBufferedStream;
 class OutputFileStream;
 
-
-
 class OutputFile
 {
-public:
-	OutputFile(void);
-	~OutputFile(void);
+  public:
+    OutputFile(void);
+    ~OutputFile(void);
 
-	PDFHummus::EStatusCode OpenFile(const std::string& inFilePath, bool inAppend = false);
-	PDFHummus::EStatusCode CloseFile();
+    PDFHummus::EStatusCode OpenFile(const std::string &inFilePath, bool inAppend = false);
+    PDFHummus::EStatusCode CloseFile();
 
-	IByteWriterWithPosition* GetOutputStream(); // returns buffered output stream
-	const std::string& GetFilePath();
-private:
-	std::string mFilePath;
-	OutputBufferedStream* mOutputStream;
-	OutputFileStream* mFileStream;
+    IByteWriterWithPosition *GetOutputStream(); // returns buffered output stream
+    const std::string &GetFilePath();
+
+  private:
+    std::string mFilePath;
+    OutputBufferedStream *mOutputStream;
+    OutputFileStream *mFileStream;
 };

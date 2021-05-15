@@ -11,7 +11,8 @@
     parser.StartPDFParsing(pdfFile.GetInputStream());
 
     PDFDictionaryIterator it(parser, parser.GetTrailer());
-    PDFArrayIterator it2 = it.Enter("Root").Enter("Names").Enter("EmbeddedFiles").Array("Kids").DictAt(0).Array("Names");
+    PDFArrayIterator it2 =
+   it.Enter("Root").Enter("Names").Enter("EmbeddedFiles").Array("Kids").DictAt(0).Array("Names");
 
     for(int i = 1; i < it2.GetLength(); i += 2)
     {
@@ -28,9 +29,9 @@
 
 #pragma once
 #include "PDFWriter.h"
-#include "objects/PDFObjectCast.h"
-#include "objects/PDFLiteralString.h"
 #include "objects/PDFIndirectObjectReference.h"
+#include "objects/PDFLiteralString.h"
+#include "objects/PDFObjectCast.h"
 #include "objects/PDFStreamInput.h"
 
 class PDFArrayIterator;
@@ -39,25 +40,19 @@ class PDFArrayIterator;
 
 class PDFDictionaryIterator
 {
-public:
-    PDFDictionaryIterator(PDFParser &parser) :  mDictonary(NULL),mParser(parser)
+  public:
+    PDFDictionaryIterator(PDFParser &parser) : mDictonary(NULL), mParser(parser)
     {
     }
 
-    PDFDictionaryIterator(PDFParser &parser, PDFObjectCastPtr<PDFDictionary> &inDict) :
-                        mDictonary(inDict.GetPtr()),
-                        mDictonaryRefPtr(inDict),
-                        mParser(parser)
+    PDFDictionaryIterator(PDFParser &parser, PDFObjectCastPtr<PDFDictionary> &inDict)
+        : mDictonary(inDict.GetPtr()), mDictonaryRefPtr(inDict), mParser(parser)
     {
     }
-    PDFDictionaryIterator(PDFParser &parser, PDFDictionary *inDict) :
-                        mDictonary(inDict),
-                        mParser(parser)
+    PDFDictionaryIterator(PDFParser &parser, PDFDictionary *inDict) : mDictonary(inDict), mParser(parser)
     {
     }
     std::string GetStrValue(std::string s);
-
-
 
     PDFDictionaryIterator Enter(std::string s);
 
@@ -65,13 +60,13 @@ public:
 
     bool WriteStreamToFile(InputFile &pdfFile, std::string s, std::string filePath);
 
-private:
-    void SetDictRefPtr(PDFDictionary  *dictonary)
+  private:
+    void SetDictRefPtr(PDFDictionary *dictonary)
     {
-        mDictonary = dictonary; 
+        mDictonary = dictonary;
         mDictonaryRefPtr = dictonary;
     }
-    PDFDictionary                  *mDictonary;
+    PDFDictionary *mDictonary;
     PDFObjectCastPtr<PDFDictionary> mDictonaryRefPtr;
     PDFParser &mParser;
 };

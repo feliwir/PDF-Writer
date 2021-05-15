@@ -16,27 +16,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "images/tiff/TiffUsageParameters.h"
 
-const TIFFBiLevelBWColorTreatment& TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment()
+const TIFFBiLevelBWColorTreatment &TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment()
 {
-	static TIFFBiLevelBWColorTreatment default_tiff_bilevel_bwcolor_treatment(false, CMYKRGBColor::CMYKBlack());
-	return default_tiff_bilevel_bwcolor_treatment;
+    static TIFFBiLevelBWColorTreatment default_tiff_bilevel_bwcolor_treatment(false, CMYKRGBColor::CMYKBlack());
+    return default_tiff_bilevel_bwcolor_treatment;
 }
 
-const TIFFBiLevelGrayscaleColorTreatment& TIFFBiLevelGrayscaleColorTreatment::DefaultTIFFBiLevelGrayscaleColorTreatment()
+const TIFFBiLevelGrayscaleColorTreatment &TIFFBiLevelGrayscaleColorTreatment::
+    DefaultTIFFBiLevelGrayscaleColorTreatment()
 {
-	static TIFFBiLevelGrayscaleColorTreatment default_tiff_bilevel_grayscale_treatment(false, CMYKRGBColor::CMYKBlack(), CMYKRGBColor::CMYKWhite());
-	return default_tiff_bilevel_grayscale_treatment;
-
+    static TIFFBiLevelGrayscaleColorTreatment default_tiff_bilevel_grayscale_treatment(false, CMYKRGBColor::CMYKBlack(),
+                                                                                       CMYKRGBColor::CMYKWhite());
+    return default_tiff_bilevel_grayscale_treatment;
 }
 
-const TIFFUsageParameters& TIFFUsageParameters::DefaultTIFFUsageParameters()
+const TIFFUsageParameters &TIFFUsageParameters::DefaultTIFFUsageParameters()
 {
-	static TIFFUsageParameters default_tiff_usage_parameters(0,
-		TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment(),
-		TIFFBiLevelGrayscaleColorTreatment::DefaultTIFFBiLevelGrayscaleColorTreatment());
-	return default_tiff_usage_parameters;
+    static TIFFUsageParameters default_tiff_usage_parameters(
+        0, TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment(),
+        TIFFBiLevelGrayscaleColorTreatment::DefaultTIFFBiLevelGrayscaleColorTreatment());
+    return default_tiff_usage_parameters;
 }

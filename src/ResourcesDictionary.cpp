@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "ResourcesDictionary.h"
 #include "BoxingBase.h"
@@ -30,353 +30,345 @@ ResourcesDictionary::ResourcesDictionary(void)
     mFormXObjectsCount = 0;
     mGenericXObjectsCount = 0;
     mExtGStatesCount = 0;
-	mFontsCount = 0;
+    mFontsCount = 0;
     mColorSpacesCount = 0;
     mPatternsCount = 0;
     mPropertiesCount = 0;
     mShadingCount = 0;
-
 }
 
 ResourcesDictionary::~ResourcesDictionary(void)
 {
 }
 
-void ResourcesDictionary::AddProcsetResource(const std::string& inResourceName)
+void ResourcesDictionary::AddProcsetResource(const std::string &inResourceName)
 {
-	if(mProcsets.find(inResourceName) == mProcsets.end())
-		mProcsets.insert(inResourceName);
+    if (mProcsets.find(inResourceName) == mProcsets.end())
+        mProcsets.insert(inResourceName);
 }
 
 SingleValueContainerIterator<StringSet> ResourcesDictionary::GetProcesetsIterator()
 {
-	return SingleValueContainerIterator<StringSet>(mProcsets);
+    return SingleValueContainerIterator<StringSet>(mProcsets);
 }
 
 static const std::string scFM = "Fm";
 std::string ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID)
 {
-    if(inFormXObjectID == 0)
+    if (inFormXObjectID == 0)
     {
-        std::string newName = scFM + ULong(mFormXObjectsCount+1).ToString();
+        std::string newName = scFM + ULong(mFormXObjectsCount + 1).ToString();
         ++mFormXObjectsCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mXObjects.find(inFormXObjectID);
-        
-        if(it == mXObjects.end())
+
+        if (it == mXObjects.end())
         {
-            std::string newName = scFM + ULong(mFormXObjectsCount+1).ToString();
+            std::string newName = scFM + ULong(mFormXObjectsCount + 1).ToString();
             ++mFormXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID,newName)).first;
+            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID, newName)).first;
         }
         return it->second;
     }
 }
 
-void ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID,const std::string& inFormXObjectName)
+void ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID, const std::string &inFormXObjectName)
 {
-	ObjectIDTypeToStringMap::iterator it = mXObjects.find(inFormXObjectID);
+    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inFormXObjectID);
 
-	if(it == mXObjects.end())
-		mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID,inFormXObjectName));
-	else
-		it->second = inFormXObjectName;
+    if (it == mXObjects.end())
+        mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID, inFormXObjectName));
+    else
+        it->second = inFormXObjectName;
 }
 
 static const std::string scIM = "Im";
-std::string ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject* inImageXObject)
+std::string ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject *inImageXObject)
 {
-	ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
+    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
 
-	if(it == mXObjects.end())
-	{
-		std::string newName = scIM + ULong(mImageXObjectsCount+1).ToString();
+    if (it == mXObjects.end())
+    {
+        std::string newName = scIM + ULong(mImageXObjectsCount + 1).ToString();
         ++mImageXObjectsCount;
-		AddImageXObjectMappingWithName(inImageXObject,newName);
-		return newName;
-	}
-	else
-	{
-		return it->second;
-	}
+        AddImageXObjectMappingWithName(inImageXObject, newName);
+        return newName;
+    }
+    else
+    {
+        return it->second;
+    }
 }
 
-void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject* inImageXObject, const std::string& inImageXObjectName)
+void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject *inImageXObject,
+                                                         const std::string &inImageXObjectName)
 {
-	mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObject->GetImageObjectID(),inImageXObjectName));
-	
-	StringList::const_iterator it = inImageXObject->GetRequiredProcsetResourceNames().begin();
-	for(; it != inImageXObject->GetRequiredProcsetResourceNames().end();++it)
-	{
-		if(it->size() > 0)
-			AddProcsetResource(*it);
-	}
+    mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObject->GetImageObjectID(), inImageXObjectName));
+
+    StringList::const_iterator it = inImageXObject->GetRequiredProcsetResourceNames().begin();
+    for (; it != inImageXObject->GetRequiredProcsetResourceNames().end(); ++it)
+    {
+        if (it->size() > 0)
+            AddProcsetResource(*it);
+    }
 }
 
-
-void ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject* inImageXObject, const std::string& inImageXObjectName)
+void ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject *inImageXObject, const std::string &inImageXObjectName)
 {
-	ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
+    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
 
-	if(it == mXObjects.end())
-		AddImageXObjectMappingWithName(inImageXObject,inImageXObjectName);
-	else
-		it->second = inImageXObjectName;
+    if (it == mXObjects.end())
+        AddImageXObjectMappingWithName(inImageXObject, inImageXObjectName);
+    else
+        it->second = inImageXObjectName;
 }
 
 static const std::string scGS = "GS";
 std::string ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID)
 {
-    if(inExtGStateID == 0)
+    if (inExtGStateID == 0)
     {
-        std::string newName = scGS + ULong(mExtGStatesCount+1).ToString();
+        std::string newName = scGS + ULong(mExtGStatesCount + 1).ToString();
         ++mExtGStatesCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mXObjects.find(inExtGStateID);
-        
-        if(it == mXObjects.end())
+
+        if (it == mXObjects.end())
         {
-            std::string newName = scGS + ULong(mExtGStatesCount+1).ToString();
+            std::string newName = scGS + ULong(mExtGStatesCount + 1).ToString();
             ++mExtGStatesCount;
-            it = mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID,newName)).first;
+            it = mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID, newName)).first;
         }
         return it->second;
     }
 }
 
-void ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string& inExtGStateName)
+void ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string &inExtGStateName)
 {
-	ObjectIDTypeToStringMap::iterator it = mExtGStates.find(inExtGStateID);
+    ObjectIDTypeToStringMap::iterator it = mExtGStates.find(inExtGStateID);
 
-	if(it == mExtGStates.end())
-		mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID,inExtGStateName));
-	else
-		it->second = inExtGStateName;
+    if (it == mExtGStates.end())
+        mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID, inExtGStateName));
+    else
+        it->second = inExtGStateName;
 }
-
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetExtGStatesIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mExtGStates);
+    return MapIterator<ObjectIDTypeToStringMap>(mExtGStates);
 }
 
 std::string ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObjectID)
 {
-    if(inImageXObjectID == 0)
+    if (inImageXObjectID == 0)
     {
-        std::string newName = scIM + ULong(mImageXObjectsCount+1).ToString();
+        std::string newName = scIM + ULong(mImageXObjectsCount + 1).ToString();
         ++mImageXObjectsCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObjectID);
-        
-        if(it == mXObjects.end())
+
+        if (it == mXObjects.end())
         {
-            std::string newName = scIM + ULong(mImageXObjectsCount+1).ToString();
+            std::string newName = scIM + ULong(mImageXObjectsCount + 1).ToString();
             ++mImageXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID,newName)).first;
+            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID, newName)).first;
         }
         return it->second;
     }
 }
 
-void ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string& inImageXObjectName)
+void ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string &inImageXObjectName)
 {
-	ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObjectID);
+    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObjectID);
 
-	if(it == mXObjects.end())
-		mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID,inImageXObjectName));
-	else
-		it->second = inImageXObjectName;
+    if (it == mXObjects.end())
+        mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID, inImageXObjectName));
+    else
+        it->second = inImageXObjectName;
 }
 
 static const std::string scFN = "FN";
 std::string ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID)
 {
-    if(inFontObjectID == 0)
+    if (inFontObjectID == 0)
     {
-        std::string newName = scFN + ULong(mFontsCount+1).ToString();
+        std::string newName = scFN + ULong(mFontsCount + 1).ToString();
         ++mFontsCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mFonts.find(inFontObjectID);
-        
-        if(it == mFonts.end())
+
+        if (it == mFonts.end())
         {
-            std::string newName = scFN + ULong(mFontsCount+1).ToString();
+            std::string newName = scFN + ULong(mFontsCount + 1).ToString();
             ++mFontsCount;
-            it = mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID,newName)).first;
+            it = mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID, newName)).first;
         }
         return it->second;
     }
 }
 
-void ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID,const std::string& inFontObjectName)
+void ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID, const std::string &inFontObjectName)
 {
-	ObjectIDTypeToStringMap::iterator it = mFonts.find(inFontObjectID);
+    ObjectIDTypeToStringMap::iterator it = mFonts.find(inFontObjectID);
 
-	if(it == mFonts.end())
-		mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID,inFontObjectName));
-	else
-		it->second = inFontObjectName;
+    if (it == mFonts.end())
+        mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID, inFontObjectName));
+    else
+        it->second = inFontObjectName;
 }
-
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetFontsIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mFonts);
+    return MapIterator<ObjectIDTypeToStringMap>(mFonts);
 }
 
 // Color space
 static const std::string scCS = "CS";
 std::string ResourcesDictionary::AddColorSpaceMapping(ObjectIDType inColorspaceID)
 {
-    if(inColorspaceID == 0)
+    if (inColorspaceID == 0)
     {
-        std::string newName = scCS + ULong(mColorSpacesCount+1).ToString();
+        std::string newName = scCS + ULong(mColorSpacesCount + 1).ToString();
         ++mColorSpacesCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mColorSpaces.find(inColorspaceID);
-        
-        if(it == mColorSpaces.end())
+
+        if (it == mColorSpaces.end())
         {
-            std::string newName = scCS + ULong(mColorSpacesCount+1).ToString();
+            std::string newName = scCS + ULong(mColorSpacesCount + 1).ToString();
             ++mColorSpacesCount;
-            it = mColorSpaces.insert(ObjectIDTypeToStringMap::value_type(inColorspaceID,newName)).first;
+            it = mColorSpaces.insert(ObjectIDTypeToStringMap::value_type(inColorspaceID, newName)).first;
         }
         return it->second;
     }
 }
 
-
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetColorSpacesIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mColorSpaces);
+    return MapIterator<ObjectIDTypeToStringMap>(mColorSpaces);
 }
 
 // Patterns
 static const std::string scPT = "PT";
 std::string ResourcesDictionary::AddPatternMapping(ObjectIDType inPatternID)
 {
-    if(inPatternID == 0)
+    if (inPatternID == 0)
     {
-        std::string newName = scPT + ULong(mPatternsCount+1).ToString();
+        std::string newName = scPT + ULong(mPatternsCount + 1).ToString();
         ++mPatternsCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mPatterns.find(inPatternID);
-        
-        if(it == mPatterns.end())
+
+        if (it == mPatterns.end())
         {
-            std::string newName = scPT + ULong(mPatternsCount+1).ToString();
+            std::string newName = scPT + ULong(mPatternsCount + 1).ToString();
             ++mPatternsCount;
-            it = mPatterns.insert(ObjectIDTypeToStringMap::value_type(inPatternID,newName)).first;
+            it = mPatterns.insert(ObjectIDTypeToStringMap::value_type(inPatternID, newName)).first;
         }
         return it->second;
     }
 }
 
-
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetPatternsIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mPatterns);
+    return MapIterator<ObjectIDTypeToStringMap>(mPatterns);
 }
-
 
 // Properties
 static const std::string scPP = "PP";
 std::string ResourcesDictionary::AddPropertyMapping(ObjectIDType inPropertyID)
 {
-    if(inPropertyID == 0)
+    if (inPropertyID == 0)
     {
-        std::string newName = scPP + ULong(mPropertiesCount+1).ToString();
+        std::string newName = scPP + ULong(mPropertiesCount + 1).ToString();
         ++mPropertiesCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mProperties.find(inPropertyID);
-        
-        if(it == mProperties.end())
+
+        if (it == mProperties.end())
         {
-            std::string newName = scPP + ULong(mPropertiesCount+1).ToString();
+            std::string newName = scPP + ULong(mPropertiesCount + 1).ToString();
             ++mPropertiesCount;
-            it = mProperties.insert(ObjectIDTypeToStringMap::value_type(inPropertyID,newName)).first;
+            it = mProperties.insert(ObjectIDTypeToStringMap::value_type(inPropertyID, newName)).first;
         }
         return it->second;
     }
 }
 
-
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetPropertiesIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mProperties);
+    return MapIterator<ObjectIDTypeToStringMap>(mProperties);
 }
 
 // Generic XObjects
 static const std::string scXO = "XO";
 std::string ResourcesDictionary::AddXObjectMapping(ObjectIDType inXObjectID)
 {
-    if(inXObjectID == 0)
+    if (inXObjectID == 0)
     {
-        std::string newName = scXO + ULong(mGenericXObjectsCount+1).ToString();
+        std::string newName = scXO + ULong(mGenericXObjectsCount + 1).ToString();
         ++mGenericXObjectsCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mXObjects.find(inXObjectID);
-        
-        if(it == mXObjects.end())
+
+        if (it == mXObjects.end())
         {
-            std::string newName = scXO + ULong(mGenericXObjectsCount+1).ToString();
+            std::string newName = scXO + ULong(mGenericXObjectsCount + 1).ToString();
             ++mGenericXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inXObjectID,newName)).first;
+            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inXObjectID, newName)).first;
         }
         return it->second;
     }
 }
 
-
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetXObjectsIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mXObjects);
+    return MapIterator<ObjectIDTypeToStringMap>(mXObjects);
 }
 
 // Shading
 static const std::string scSH = "SH";
 std::string ResourcesDictionary::AddShadingMapping(ObjectIDType inShadingID)
 {
-    if(inShadingID == 0)
+    if (inShadingID == 0)
     {
-        std::string newName = scSH + ULong(mShadingCount+1).ToString();
+        std::string newName = scSH + ULong(mShadingCount + 1).ToString();
         ++mShadingCount;
         return newName;
     }
-    else 
+    else
     {
         ObjectIDTypeToStringMap::iterator it = mShading.find(inShadingID);
-        
-        if(it == mShading.end())
+
+        if (it == mShading.end())
         {
-            std::string newName = scSH + ULong(mShadingCount+1).ToString();
+            std::string newName = scSH + ULong(mShadingCount + 1).ToString();
             ++mShadingCount;
-            it = mShading.insert(ObjectIDTypeToStringMap::value_type(inShadingID,newName)).first;
+            it = mShading.insert(ObjectIDTypeToStringMap::value_type(inShadingID, newName)).first;
         }
         return it->second;
     }
@@ -384,5 +376,5 @@ std::string ResourcesDictionary::AddShadingMapping(ObjectIDType inShadingID)
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetShadingsIterator()
 {
-	return MapIterator<ObjectIDTypeToStringMap>(mShading);
+    return MapIterator<ObjectIDTypeToStringMap>(mShading);
 }

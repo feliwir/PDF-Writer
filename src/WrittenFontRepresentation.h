@@ -16,60 +16,69 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "ObjectsBasicTypes.h"
 
-#include <map>
 #include <algorithm>
+#include <map>
 #include <vector>
-
-
 
 typedef std::vector<unsigned long> ULongVector;
 
 struct GlyphEncodingInfo
 {
-	unsigned short mEncodedCharacter;
-	ULongVector mUnicodeCharacters;
+    unsigned short mEncodedCharacter;
+    ULongVector mUnicodeCharacters;
 
-	GlyphEncodingInfo(){}
+    GlyphEncodingInfo()
+    {
+    }
 
-	GlyphEncodingInfo(unsigned short inEncodedCharacter,unsigned long inUnicodeCharacter)
-	{mEncodedCharacter = inEncodedCharacter; mUnicodeCharacters.push_back(inUnicodeCharacter);}
-		
-	GlyphEncodingInfo(unsigned short inEncodedCharacter,ULongVector inUnicodeCharacters)
-	{mEncodedCharacter = inEncodedCharacter; mUnicodeCharacters = inUnicodeCharacters;}
+    GlyphEncodingInfo(unsigned short inEncodedCharacter, unsigned long inUnicodeCharacter)
+    {
+        mEncodedCharacter = inEncodedCharacter;
+        mUnicodeCharacters.push_back(inUnicodeCharacter);
+    }
+
+    GlyphEncodingInfo(unsigned short inEncodedCharacter, ULongVector inUnicodeCharacters)
+    {
+        mEncodedCharacter = inEncodedCharacter;
+        mUnicodeCharacters = inUnicodeCharacters;
+    }
 };
 
 typedef std::map<unsigned int, GlyphEncodingInfo> UIntToGlyphEncodingInfoMap;
 typedef std::vector<unsigned int> UIntVector;
 
-static UIntVector GetOrderedKeys(const UIntToGlyphEncodingInfoMap& inMap)
+static UIntVector GetOrderedKeys(const UIntToGlyphEncodingInfoMap &inMap)
 {
-	UIntVector result;
-	for(UIntToGlyphEncodingInfoMap::const_iterator it = inMap.begin(); it != inMap.end(); ++it)
-		result.push_back(it->first);
-	sort(result.begin(),result.end());
-	return result;
+    UIntVector result;
+    for (UIntToGlyphEncodingInfoMap::const_iterator it = inMap.begin(); it != inMap.end(); ++it)
+        result.push_back(it->first);
+    sort(result.begin(), result.end());
+    return result;
 }
 
-
 struct WrittenFontRepresentation
-{	
-	WrittenFontRepresentation(){mWrittenObjectID = 0;}
+{
+    WrittenFontRepresentation()
+    {
+        mWrittenObjectID = 0;
+    }
 
-	UIntToGlyphEncodingInfoMap mGlyphIDToEncodedChar;
-	ObjectIDType mWrittenObjectID;
+    UIntToGlyphEncodingInfoMap mGlyphIDToEncodedChar;
+    ObjectIDType mWrittenObjectID;
 
-	bool isEmpty() {
-		return mGlyphIDToEncodedChar.empty();
-	}
+    bool isEmpty()
+    {
+        return mGlyphIDToEncodedChar.empty();
+    }
 
-	UIntVector GetGlyphIDsAsOrderedVector() 
-		{
-			return GetOrderedKeys(mGlyphIDToEncodedChar);
-		}
+    UIntVector GetGlyphIDsAsOrderedVector()
+    {
+        return GetOrderedKeys(mGlyphIDToEncodedChar);
+    }
 };

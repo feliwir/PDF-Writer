@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "io/OutputFlateDecodeStream.h"
 #ifndef NO_TRACE
@@ -24,145 +24,146 @@
 #endif
 #include "zlib.h"
 
-#define BUFFER_SIZE 256*1024
+#define BUFFER_SIZE 256 * 1024
 
 using namespace IOBasicTypes;
 
 OutputFlateDecodeStream::OutputFlateDecodeStream(void)
 {
-	mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
-	mZLibState = new z_stream;
-	mTargetStream = NULL;
-	mCurrentlyEncoding = false;
+    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mZLibState = new z_stream;
+    mTargetStream = NULL;
+    mCurrentlyEncoding = false;
 }
 
 OutputFlateDecodeStream::~OutputFlateDecodeStream(void)
 {
-	if(mCurrentlyEncoding)
-		FinalizeEncoding();
-	if(mTargetStream)
-		delete mTargetStream;
-	delete[] mBuffer;
-	delete mZLibState;
+    if (mCurrentlyEncoding)
+        FinalizeEncoding();
+    if (mTargetStream)
+        delete mTargetStream;
+    delete[] mBuffer;
+    delete mZLibState;
 }
 
 void OutputFlateDecodeStream::FinalizeEncoding()
 {
-	// no need for flushing here, there's no notion of Z_FINISH. so just end the library work
-	inflateEnd(mZLibState);
-	mCurrentlyEncoding = false;
+    // no need for flushing here, there's no notion of Z_FINISH. so just end the library work
+    inflateEnd(mZLibState);
+    mCurrentlyEncoding = false;
 }
 
-OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter* inTargetWriter, bool inInitiallyOn)
+OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter *inTargetWriter, bool inInitiallyOn)
 {
-	mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
-	mZLibState = new z_stream;
-	mTargetStream = NULL;
-	mCurrentlyEncoding = false;
+    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mZLibState = new z_stream;
+    mTargetStream = NULL;
+    mCurrentlyEncoding = false;
 
-	Assign(inTargetWriter,inInitiallyOn);
+    Assign(inTargetWriter, inInitiallyOn);
 }
 
 void OutputFlateDecodeStream::StartEncoding()
 {
-	mZLibState->zalloc = Z_NULL;
+    mZLibState->zalloc = Z_NULL;
     mZLibState->zfree = Z_NULL;
     mZLibState->opaque = Z_NULL;
-	mZLibState->avail_in = 0;
-	mZLibState->next_in = Z_NULL;
+    mZLibState->avail_in = 0;
+    mZLibState->next_in = Z_NULL;
 
     int inflateStatus = inflateInit(mZLibState);
 #ifndef NO_TRACE
     if (inflateStatus != Z_OK)
-		TRACE_LOG1("OutputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate library. status code = %d",inflateStatus);
-	else
-		mCurrentlyEncoding = true;
+        TRACE_LOG1("OutputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate library. status "
+                   "code = %d",
+                   inflateStatus);
+    else
+        mCurrentlyEncoding = true;
 #else
     if (Z_OK == inflateStatus)
-		mCurrentlyEncoding = true;
+        mCurrentlyEncoding = true;
 
 #endif
 }
 
-
-void OutputFlateDecodeStream::Assign(IByteWriter* inWriter,bool inInitiallyOn)
-{	
-	mTargetStream = inWriter;
-	if(inInitiallyOn && mTargetStream)
-		StartEncoding();
-
-}
-
-
-LongBufferSizeType OutputFlateDecodeStream::Write(const IOBasicTypes::Byte* inBuffer,LongBufferSizeType inSize)
+void OutputFlateDecodeStream::Assign(IByteWriter *inWriter, bool inInitiallyOn)
 {
-	if(mCurrentlyEncoding)
-		return DecodeBufferAndWrite(inBuffer,inSize);
-	else if(mTargetStream)
-		return mTargetStream->Write(inBuffer,inSize);
-	else
-		return 0;
+    mTargetStream = inWriter;
+    if (inInitiallyOn && mTargetStream)
+        StartEncoding();
 }
 
-LongBufferSizeType OutputFlateDecodeStream::DecodeBufferAndWrite(const IOBasicTypes::Byte* inBuffer,LongBufferSizeType inSize)
+LongBufferSizeType OutputFlateDecodeStream::Write(const IOBasicTypes::Byte *inBuffer, LongBufferSizeType inSize)
 {
-	if(0 == inSize)
-		return 0; // inflate kinda touchy about getting 0 lengths
+    if (mCurrentlyEncoding)
+        return DecodeBufferAndWrite(inBuffer, inSize);
+    else if (mTargetStream)
+        return mTargetStream->Write(inBuffer, inSize);
+    else
+        return 0;
+}
 
-	int inflateResult;
+LongBufferSizeType OutputFlateDecodeStream::DecodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
+                                                                 LongBufferSizeType inSize)
+{
+    if (0 == inSize)
+        return 0; // inflate kinda touchy about getting 0 lengths
 
-	mZLibState->avail_in = (uInt)inSize; // hmm, caveat here...should take care of this sometime.
-	mZLibState->next_in = (Bytef*)inBuffer;
+    int inflateResult;
 
-	do
-	{
-		mZLibState->avail_out = BUFFER_SIZE;
-		mZLibState->next_out = mBuffer;
-		inflateResult = inflate(mZLibState,Z_NO_FLUSH);
-		if(Z_STREAM_ERROR == inflateResult ||
-		   Z_NEED_DICT == inflateResult ||
-		   Z_DATA_ERROR == inflateResult ||
-		   Z_MEM_ERROR == inflateResult)
-		{
+    mZLibState->avail_in = (uInt)inSize; // hmm, caveat here...should take care of this sometime.
+    mZLibState->next_in = (Bytef *)inBuffer;
+
+    do
+    {
+        mZLibState->avail_out = BUFFER_SIZE;
+        mZLibState->next_out = mBuffer;
+        inflateResult = inflate(mZLibState, Z_NO_FLUSH);
+        if (Z_STREAM_ERROR == inflateResult || Z_NEED_DICT == inflateResult || Z_DATA_ERROR == inflateResult ||
+            Z_MEM_ERROR == inflateResult)
+        {
 #ifndef NO_TRACE
-			TRACE_LOG1("OutputFlateDecodeStream::DecodeBufferAndWrite, failed to write zlib information. returned error code = %d",inflateResult);
+            TRACE_LOG1("OutputFlateDecodeStream::DecodeBufferAndWrite, failed to write zlib information. returned "
+                       "error code = %d",
+                       inflateResult);
 #endif
-			inflateEnd(mZLibState);
-			break;
-		}
-		else
-		{
-			LongBufferSizeType writtenBytes;
-			writtenBytes = mTargetStream->Write(mBuffer,BUFFER_SIZE-mZLibState->avail_out);
-			if(writtenBytes != BUFFER_SIZE-mZLibState->avail_out)
-			{
+            inflateEnd(mZLibState);
+            break;
+        }
+        else
+        {
+            LongBufferSizeType writtenBytes;
+            writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
+            if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
+            {
 #ifndef NO_TRACE
-				TRACE_LOG2("OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib bytes to underlying stream. supposed to write %lld, wrote %lld",
-								BUFFER_SIZE-mZLibState->avail_out,writtenBytes);
+                TRACE_LOG2("OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib "
+                           "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                           BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
 #endif
-				inflateEnd(mZLibState);
-				inflateResult = Z_STREAM_ERROR;
-				mCurrentlyEncoding = false;
-				break;
-			}
-		}
-	}while(mZLibState->avail_out == 0); // waiting for either no more writes
+                inflateEnd(mZLibState);
+                inflateResult = Z_STREAM_ERROR;
+                mCurrentlyEncoding = false;
+                break;
+            }
+        }
+    } while (mZLibState->avail_out == 0); // waiting for either no more writes
 
-	// should be that at the last buffer we'll get here a nice Z_STREAM_END
-	if(Z_OK == inflateResult || Z_STREAM_END == inflateResult)
-		return inSize;
-	else
-		return 0;
+    // should be that at the last buffer we'll get here a nice Z_STREAM_END
+    if (Z_OK == inflateResult || Z_STREAM_END == inflateResult)
+        return inSize;
+    else
+        return 0;
 }
 
 void OutputFlateDecodeStream::TurnOnEncoding()
 {
-	if(!mCurrentlyEncoding)
-		StartEncoding();
+    if (!mCurrentlyEncoding)
+        StartEncoding();
 }
 
 void OutputFlateDecodeStream::TurnOffEncoding()
 {
-	if(mCurrentlyEncoding)
-		FinalizeEncoding();
+    if (mCurrentlyEncoding)
+        FinalizeEncoding();
 }

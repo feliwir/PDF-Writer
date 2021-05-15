@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "io/OutputFileStream.h"
 #include "SafeBufferMacrosDefs.h"
@@ -26,51 +26,50 @@ using namespace PDFHummus;
 
 OutputFileStream::OutputFileStream(void)
 {
-	mStream = NULL;
+    mStream = NULL;
 }
 
 OutputFileStream::~OutputFileStream(void)
 {
-	if(mStream)
-		Close();
+    if (mStream)
+        Close();
 }
 
-
-OutputFileStream::OutputFileStream(const std::string& inFilePath,bool inAppend)
+OutputFileStream::OutputFileStream(const std::string &inFilePath, bool inAppend)
 {
-	mStream = NULL;
-	Open(inFilePath,inAppend);
+    mStream = NULL;
+    Open(inFilePath, inAppend);
 }
 
-EStatusCode OutputFileStream::Open(const std::string& inFilePath,bool inAppend)
+EStatusCode OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
 {
-	SAFE_FOPEN(mStream,inFilePath.c_str(),inAppend ? "ab":"wb")
+    SAFE_FOPEN(mStream, inFilePath.c_str(), inAppend ? "ab" : "wb")
 
-	if(!mStream)
-		return PDFHummus::eFailure;
+    if (!mStream)
+        return PDFHummus::eFailure;
 
-	// seek to end, so position reading gets the correct file position, even before first write
-	SAFE_FSEEK64(mStream,0,SEEK_END);
+    // seek to end, so position reading gets the correct file position, even before first write
+    SAFE_FSEEK64(mStream, 0, SEEK_END);
 
-	return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 };
 
 EStatusCode OutputFileStream::Close()
 {
-	EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess:PDFHummus::eFailure;
+    EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess : PDFHummus::eFailure;
 
-	mStream = NULL;
-	return result;
+    mStream = NULL;
+    return result;
 }
 
-LongBufferSizeType OutputFileStream::Write(const Byte* inBuffer,LongBufferSizeType inSize)
+LongBufferSizeType OutputFileStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
 
-	LongBufferSizeType writtenItems = mStream ? fwrite(static_cast<const void*>(inBuffer),1,inSize,mStream):0;
-	return writtenItems;
+    LongBufferSizeType writtenItems = mStream ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
+    return writtenItems;
 }
 
 LongFilePositionType OutputFileStream::GetCurrentPosition()
 {
-	return mStream ? SAFE_FTELL64(mStream):0;
+    return mStream ? SAFE_FTELL64(mStream) : 0;
 }

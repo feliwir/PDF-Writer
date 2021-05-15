@@ -25,21 +25,15 @@ class PDFObjectParser;
 
 class PDFObjectParserTestLogHelper;
 
-
 class PDFObjectParserTest : public ITestUnit
 {
-public:
-	PDFObjectParserTest();
-	virtual ~PDFObjectParserTest();
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+  public:
+    PDFObjectParserTest();
+    virtual ~PDFObjectParserTest();
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-
-private:
-	PDFHummus::EStatusCode ParseCommentedTokens(PDFObjectParser* objectParser, PDFObjectParserTestLogHelper* log);
-	PDFHummus::EStatusCode ParseHexStringTokens(PDFObjectParser* objectParser, PDFObjectParserTestLogHelper* log);
-	PDFHummus::EStatusCode ParseLiteralStringTokens(PDFObjectParser* objectParser, PDFObjectParserTestLogHelper* log);
-	
-	
-	
+  private:
+    PDFHummus::EStatusCode ParseCommentedTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log);
+    PDFHummus::EStatusCode ParseHexStringTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log);
+    PDFHummus::EStatusCode ParseLiteralStringTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log);
 };
-

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "AbstractContentContext.h"
@@ -25,15 +25,15 @@ class PDFTiledPattern;
 
 class TiledPatternContentContext : public AbstractContentContext
 {
-public:
-	TiledPatternContentContext(PDFHummus::DocumentContext* inDocumentContext, PDFTiledPattern* inObject);
-	virtual ~TiledPatternContentContext(void);
+  public:
+    TiledPatternContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFTiledPattern *inObject);
+    virtual ~TiledPatternContentContext(void);
 
-private:
+  private:
+    // AbstractContentContext implementation
+    virtual ResourcesDictionary *GetResourcesDictionary();
+    virtual void ScheduleImageWrite(const std::string &inImagePath, unsigned long inImageIndex, ObjectIDType inObjectID,
+                                    const PDFParsingOptions &inParsingOptions);
 
-	// AbstractContentContext implementation
-	virtual ResourcesDictionary* GetResourcesDictionary();
-	virtual void ScheduleImageWrite(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID, const PDFParsingOptions& inParsingOptions);
-
-	PDFTiledPattern* mObjectOfContext;
+    PDFTiledPattern *mObjectOfContext;
 };

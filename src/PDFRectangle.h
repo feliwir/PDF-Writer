@@ -16,25 +16,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 class PDFRectangle
 {
-public:
-	PDFRectangle(void);
-	~PDFRectangle(void);
+  public:
+    PDFRectangle(void);
+    ~PDFRectangle(void);
 
-	PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY);
-	PDFRectangle(const PDFRectangle& inOther);
-    
-    bool operator==(const PDFRectangle& inOther) const;
-    bool operator!=(const PDFRectangle& inOther) const;
-    
-	double LowerLeftX;
-	double LowerLeftY;
-	double UpperRightX;
-	double UpperRightY;
+    PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY);
+    PDFRectangle(const PDFRectangle &inOther);
 
+    bool operator==(const PDFRectangle &inOther) const;
+    bool operator!=(const PDFRectangle &inOther) const;
+
+    double LowerLeftX;
+    double LowerLeftY;
+    double UpperRightX;
+    double UpperRightY;
 };

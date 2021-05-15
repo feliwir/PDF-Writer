@@ -16,32 +16,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
 
 #include <string>
 
-
-
 class PDFName : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectName
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectName
-	};
+    // value must be the already interpreted name - no initial slash, and all special charachters (with # definition)
+    // interpreted
+    PDFName(const std::string &inValue);
+    virtual ~PDFName(void);
 
-	// value must be the already interpreted name - no initial slash, and all special charachters (with # definition) interpreted
-	PDFName(const std::string& inValue);
-	virtual ~PDFName(void);
+    const std::string &GetValue() const;
+    operator std::string() const;
 
-	const std::string& GetValue() const;
-	operator std::string() const;
-
-private:
-
-	std::string mValue;
+  private:
+    std::string mValue;
 };

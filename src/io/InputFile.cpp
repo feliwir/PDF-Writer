@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputFile.h"
 #include "InputBufferedStream.h"
@@ -27,79 +27,80 @@ using namespace PDFHummus;
 
 InputFile::InputFile(void)
 {
-	mInputStream = NULL;
-	mFileStream = NULL;
+    mInputStream = NULL;
+    mFileStream = NULL;
 }
 
 InputFile::~InputFile(void)
 {
-	CloseFile();
+    CloseFile();
 }
 
-EStatusCode InputFile::OpenFile(const std::string& inFilePath)
+EStatusCode InputFile::OpenFile(const std::string &inFilePath)
 {
-	EStatusCode status;
-	do
-	{
-		status = CloseFile();
-		if(status != PDFHummus::eSuccess)
-		{
-			TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",mFilePath.c_str());
-			break;
-		}
-	
-		InputFileStream* inputFileStream = new InputFileStream();
-		status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
-		if(status != PDFHummus::eSuccess)
-		{
-			TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s",inFilePath.c_str());
-			delete inputFileStream;
-			break;
-		}
+    EStatusCode status;
+    do
+    {
+        status = CloseFile();
+        if (status != PDFHummus::eSuccess)
+        {
+            TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
+                       mFilePath.c_str());
+            break;
+        }
 
-		mInputStream = new InputBufferedStream(inputFileStream);
-		mFileStream = inputFileStream;
-		mFilePath = inFilePath;
-	} while(false);
-	return status;
+        InputFileStream *inputFileStream = new InputFileStream();
+        status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
+        if (status != PDFHummus::eSuccess)
+        {
+            TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s",
+                       inFilePath.c_str());
+            delete inputFileStream;
+            break;
+        }
+
+        mInputStream = new InputBufferedStream(inputFileStream);
+        mFileStream = inputFileStream;
+        mFilePath = inFilePath;
+    } while (false);
+    return status;
 }
 
 EStatusCode InputFile::CloseFile()
 {
-	if(NULL == mInputStream)
-	{
-		return PDFHummus::eSuccess;
-	}
-	else
-	{
-		EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
+    if (NULL == mInputStream)
+    {
+        return PDFHummus::eSuccess;
+    }
+    else
+    {
+        EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
 
-		delete mInputStream; // will delete the referenced file stream as well
-		mInputStream = NULL;
-		mFileStream = NULL;
-		return status;
-	}
+        delete mInputStream; // will delete the referenced file stream as well
+        mInputStream = NULL;
+        mFileStream = NULL;
+        return status;
+    }
 }
 
-
-IByteReaderWithPosition* InputFile::GetInputStream()
+IByteReaderWithPosition *InputFile::GetInputStream()
 {
-	return mInputStream;
+    return mInputStream;
 }
 
-const std::string& InputFile::GetFilePath()
+const std::string &InputFile::GetFilePath()
 {
-	return mFilePath;
+    return mFilePath;
 }
 
 LongFilePositionType InputFile::GetFileSize()
 {
-	if(mInputStream)
-	{
-		InputFileStream* inputFileStream = (InputFileStream*)mInputStream->GetSourceStream();
+    if (mInputStream)
+    {
+        InputFileStream *inputFileStream = (InputFileStream *)mInputStream->GetSourceStream();
 
-		return inputFileStream->GetFileSize();
-	}
-	else
-		return 0;
+        return inputFileStream->GetFileSize();
+    }
+    else
+        return 0;
 }

@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,32 +25,32 @@
 
 class InputAscii85DecodeStream : public IByteReader
 {
-public:
-	InputAscii85DecodeStream(void);
-	~InputAscii85DecodeStream(void);
+  public:
+    InputAscii85DecodeStream(void);
+    ~InputAscii85DecodeStream(void);
 
-	// Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
-	InputAscii85DecodeStream(IByteReader* inSourceReader);
+    // Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
+    InputAscii85DecodeStream(IByteReader *inSourceReader);
 
-	// Assigning passes ownership of the input stream to the decoder stream. 
-	// if you don't care for that, then after finishing with the decode, Assign(NULL).
-	void Assign(IByteReader* inSourceReader);
+    // Assigning passes ownership of the input stream to the decoder stream.
+    // if you don't care for that, then after finishing with the decode, Assign(NULL).
+    void Assign(IByteReader *inSourceReader);
 
-	// IByteReader implementation. note that "inBufferSize" determines how many
-	// bytes will be placed in the Buffer...not how many are actually read from the underlying
-	// encoded stream. got it?!
-	virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inBufferSize);
+    // IByteReader implementation. note that "inBufferSize" determines how many
+    // bytes will be placed in the Buffer...not how many are actually read from the underlying
+    // encoded stream. got it?!
+    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
+                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
 
-	virtual bool NotEnded();
+    virtual bool NotEnded();
 
-private:
-	IByteReader* mSourceStream;
+  private:
+    IByteReader *mSourceStream;
 
-	bool mHitEnd;
-	IOBasicTypes::Byte mBuffer[4];
-	int mReadBufferSize;
-	int mReadBufferIndex;
+    bool mHitEnd;
+    IOBasicTypes::Byte mBuffer[4];
+    int mReadBufferSize;
+    int mReadBufferIndex;
 
-	void ReadNextBuffer();
-
+    void ReadNextBuffer();
 };

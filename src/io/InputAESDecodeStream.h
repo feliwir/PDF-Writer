@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -30,40 +30,38 @@ typedef std::list<IOBasicTypes::Byte> ByteList;
 
 class InputAESDecodeStream : public IByteReader
 {
-public:
-	InputAESDecodeStream(void);
-	~InputAESDecodeStream(void);
+  public:
+    InputAESDecodeStream(void);
+    ~InputAESDecodeStream(void);
 
-	// Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
-	InputAESDecodeStream(IByteReader* inSourceReader, const ByteList& inKey);
+    // Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
+    InputAESDecodeStream(IByteReader *inSourceReader, const ByteList &inKey);
 
-	// Assigning passes ownership of the input stream to the decoder stream. 
-	// if you don't care for that, then after finishing with the decode, Assign(NULL).
-	void Assign(IByteReader* inSourceReader, const ByteList& inKey = ByteList());
+    // Assigning passes ownership of the input stream to the decoder stream.
+    // if you don't care for that, then after finishing with the decode, Assign(NULL).
+    void Assign(IByteReader *inSourceReader, const ByteList &inKey = ByteList());
 
-	// IByteReader implementation. note that "inBufferSize" determines how many
-	// bytes will be placed in the Buffer...not how many are actually read from the underlying
-	// encoded stream. got it?!
-	virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte* inBuffer, IOBasicTypes::LongBufferSizeType inBufferSize);
+    // IByteReader implementation. note that "inBufferSize" determines how many
+    // bytes will be placed in the Buffer...not how many are actually read from the underlying
+    // encoded stream. got it?!
+    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
+                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
 
-	virtual bool NotEnded();
+    virtual bool NotEnded();
 
-private:
+  private:
+    // inEncryptionKey in array form, for aes
+    unsigned char *mKey;
+    std::size_t mKeyLength;
+    unsigned char mIV[AES_BLOCK_SIZE];
+    unsigned char mIn[AES_BLOCK_SIZE];
+    unsigned char mInNext[AES_BLOCK_SIZE];
+    unsigned char mOut[AES_BLOCK_SIZE];
+    unsigned char *mOutIndex;
+    unsigned char mReadBlockSize;
+    bool mIsIvInit;
+    bool mHitEnd;
 
-	// inEncryptionKey in array form, for aes
-	unsigned char* mKey;
-	std::size_t  mKeyLength;
-	unsigned char mIV[AES_BLOCK_SIZE];
-	unsigned char mIn[AES_BLOCK_SIZE];
-	unsigned char mInNext[AES_BLOCK_SIZE];
-	unsigned char mOut[AES_BLOCK_SIZE];
-	unsigned char *mOutIndex;
-	unsigned char mReadBlockSize;
-	bool mIsIvInit;
-	bool mHitEnd;
-
-
-	IByteReader *mSourceStream;
-	AESdecrypt mDecrypt;
-
+    IByteReader *mSourceStream;
+    AESdecrypt mDecrypt;
 };

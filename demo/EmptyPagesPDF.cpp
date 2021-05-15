@@ -16,12 +16,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "EmptyPagesPDF.h"
-#include "PDFWriter.h"
 #include "PDFPage.h"
 #include "PDFRectangle.h"
+#include "PDFWriter.h"
 #include "TestsRunner.h"
 
 #include <iostream>
@@ -37,42 +37,42 @@ EmptyPagesPDF::~EmptyPagesPDF(void)
 {
 }
 
-EStatusCode EmptyPagesPDF::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode EmptyPagesPDF::Run(const TestConfiguration &inTestConfiguration)
 {
-	PDFWriter pdfWriter;
-	LogConfiguration logConfiguration(true,true,RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"EmptyPagesLog.txt"));
-	EStatusCode status; 
+    PDFWriter pdfWriter;
+    LogConfiguration logConfiguration(true, true,
+                                      RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "EmptyPagesLog.txt"));
+    EStatusCode status;
 
-	do
-	{
-		status = pdfWriter.StartPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"EmptyPages.pdf"),ePDFVersion13,logConfiguration);
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed to start PDF\n";
-			break;
-		}	
+    do
+    {
+        status = pdfWriter.StartPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "EmptyPages.pdf"),
+                                    ePDFVersion13, logConfiguration);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed to start PDF\n";
+            break;
+        }
 
+        PDFPage *page = new PDFPage();
+        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-		PDFPage* page = new PDFPage();
-		page->SetMediaBox(PDFRectangle(0,0,595,842));
+        for (int i = 0; i < 4 && PDFHummus::eSuccess == status; ++i)
+        {
+            status = pdfWriter.WritePage(page);
+            if (status != PDFHummus::eSuccess)
+                cout << "failed to write page " << i << "\n";
+        }
+        delete page;
 
-		for(int i=0;i<4 && PDFHummus::eSuccess == status;++i)
-		{
-			status = pdfWriter.WritePage(page);
-			if(status != PDFHummus::eSuccess)
-				cout<<"failed to write page "<<i<<"\n";
-		}
-		delete page;		
-
-		status = pdfWriter.EndPDF();
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"failed in end PDF\n";
-			break;
-		}
-	}while(false);
-	return status;
+        status = pdfWriter.EndPDF();
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "failed in end PDF\n";
+            break;
+        }
+    } while (false);
+    return status;
 }
 
-
-ADD_CATEGORIZED_TEST(EmptyPagesPDF,"PDF")
+ADD_CATEGORIZED_TEST(EmptyPagesPDF, "PDF")

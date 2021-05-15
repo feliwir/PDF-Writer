@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,10 +24,8 @@
 #include "WrittenFontRepresentation.h"
 
 #include <string>
-#include <vector>
 #include <utility>
-
-
+#include <vector>
 
 typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
@@ -38,20 +36,15 @@ class IFontDescriptorHelper;
 
 class FontDescriptorWriter
 {
-public:
-	FontDescriptorWriter(void);
-	~FontDescriptorWriter(void);
+  public:
+    FontDescriptorWriter(void);
+    ~FontDescriptorWriter(void);
 
-	void WriteFontDescriptor(	ObjectIDType inFontDescriptorObjectID,
-								const std::string& inFontPostscriptName,
-								FreeTypeFaceWrapper* inFontInfo,
-								const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs,
-								ObjectsContext* inObjectsContext,
-								IFontDescriptorHelper* inDescriptorHelper);
+    void WriteFontDescriptor(ObjectIDType inFontDescriptorObjectID, const std::string &inFontPostscriptName,
+                             FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                             ObjectsContext *inObjectsContext, IFontDescriptorHelper *inDescriptorHelper);
 
-private:
-	unsigned int CalculateFlags(FreeTypeFaceWrapper* inFontInfo,
-								const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs);
-	bool IsSymbolic(FreeTypeFaceWrapper* inFontInfo,
-					const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs);
+  private:
+    unsigned int CalculateFlags(FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
+    bool IsSymbolic(FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
 };

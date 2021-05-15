@@ -16,17 +16,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "OpenTypeTest.h"
-#include "text/opentype/OpenTypeFileInput.h"
-#include "io/InputFile.h"
 #include "TestsRunner.h"
+#include "io/InputFile.h"
+#include "text/opentype/OpenTypeFileInput.h"
 
 #include "BoxingBase.h"
+#include "io/IByteWriterWithPosition.h"
 #include "io/OutputFile.h"
 #include "text/cff/CharStringType2Tracer.h"
-#include "io/IByteWriterWithPosition.h"
 
 #include <iostream>
 
@@ -40,67 +40,68 @@ OpenTypeTest::~OpenTypeTest(void)
 {
 }
 
-EStatusCode OpenTypeTest::SaveCharstringCode(const TestConfiguration& inTestConfiguration,unsigned short inFontIndex,unsigned short inGlyphIndex,CFFFileInput* inCFFFileInput)
+EStatusCode OpenTypeTest::SaveCharstringCode(const TestConfiguration &inTestConfiguration, unsigned short inFontIndex,
+                                             unsigned short inGlyphIndex, CFFFileInput *inCFFFileInput)
 {
-	OutputFile glyphFile;
+    OutputFile glyphFile;
 
-	EStatusCode status = glyphFile.OpenFile(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-            string("glyphCFF")  + Long(inFontIndex).ToString() + "_" + inCFFFileInput->GetGlyphName(0,inGlyphIndex) + ".txt"));
+    EStatusCode status = glyphFile.OpenFile(RelativeURLToLocalPath(
+        inTestConfiguration.mSampleFileBase, string("glyphCFF") + Long(inFontIndex).ToString() + "_" +
+                                                 inCFFFileInput->GetGlyphName(0, inGlyphIndex) + ".txt"));
 
-	do
-	{
-		if(status != PDFHummus::eSuccess)
-			break;
-		
-		CharStringType2Tracer tracer;
+    do
+    {
+        if (status != PDFHummus::eSuccess)
+            break;
 
-		status = tracer.TraceGlyphProgram(inFontIndex,inGlyphIndex,inCFFFileInput,glyphFile.GetOutputStream());
+        CharStringType2Tracer tracer;
 
-	}while(false);
+        status = tracer.TraceGlyphProgram(inFontIndex, inGlyphIndex, inCFFFileInput, glyphFile.GetOutputStream());
 
-	glyphFile.CloseFile();
+    } while (false);
 
-	return status;
+    glyphFile.CloseFile();
+
+    return status;
 }
 
-EStatusCode OpenTypeTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode OpenTypeTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	return TestFont(inTestConfiguration);
+    return TestFont(inTestConfiguration);
 }
 
-EStatusCode OpenTypeTest::TestFont(const TestConfiguration& inTestConfiguration)
+EStatusCode OpenTypeTest::TestFont(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status;
-	InputFile otfFile;
+    EStatusCode status;
+    InputFile otfFile;
 
-	do
-	{
-		status = otfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TestMaterials/fonts/BrushScriptStd.otf"));
+    do
+    {
+        status = otfFile.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/BrushScriptStd.otf"));
 
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"cannot read bursh script font file\n";
-			break;
-		}
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "cannot read bursh script font file\n";
+            break;
+        }
 
+        OpenTypeFileInput openTypeReader;
 
-		OpenTypeFileInput openTypeReader;
+        status = openTypeReader.ReadOpenTypeFile(otfFile.GetInputStream(), 0);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "could not read open type file\n";
+            break;
+        }
 
-		status = openTypeReader.ReadOpenTypeFile(otfFile.GetInputStream(),0);
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"could not read open type file\n";
-			break;
-		}
+        // show just abcd and notdef
 
-		// show just abcd and notdef
-
-		status = SaveCharstringCode(inTestConfiguration,0,0,&openTypeReader.mCFF);
-		for(unsigned short i=66; i < 70 && PDFHummus::eSuccess == status; ++i)
-			status = SaveCharstringCode(inTestConfiguration,0,i,&openTypeReader.mCFF);
-	}while(false);
-	return status;
+        status = SaveCharstringCode(inTestConfiguration, 0, 0, &openTypeReader.mCFF);
+        for (unsigned short i = 66; i < 70 && PDFHummus::eSuccess == status; ++i)
+            status = SaveCharstringCode(inTestConfiguration, 0, i, &openTypeReader.mCFF);
+    } while (false);
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(OpenTypeTest,"OpenType")
+ADD_CATEGORIZED_TEST(OpenTypeTest, "OpenType")

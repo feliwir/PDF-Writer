@@ -16,31 +16,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "IDescendentFontWriter.h"
 
-class TrueTypeDescendentFontWriter: public IDescendentFontWriter
+class TrueTypeDescendentFontWriter : public IDescendentFontWriter
 {
-public:
-	TrueTypeDescendentFontWriter(void);
-	~TrueTypeDescendentFontWriter(void);
+  public:
+    TrueTypeDescendentFontWriter(void);
+    ~TrueTypeDescendentFontWriter(void);
 
-	// IDescendentFontWriter implementation [used also as helper for the DescendentFontWriter]
-	virtual PDFHummus::EStatusCode WriteFont(	ObjectIDType inDecendentObjectID, 
-									const std::string& inFontName,
-									FreeTypeFaceWrapper& inFontInfo,
-									const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs,
-									ObjectsContext* inObjectsContext,
-									bool inEmbedFont);
-	virtual void WriteSubTypeValue(DictionaryContext* inDescendentFontContext);
-	virtual void WriteAdditionalKeys(DictionaryContext* inDescendentFontContext);
-	virtual void WriteFontFileReference(DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext);
+    // IDescendentFontWriter implementation [used also as helper for the DescendentFontWriter]
+    virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
+                                             FreeTypeFaceWrapper &inFontInfo,
+                                             const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                                             ObjectsContext *inObjectsContext, bool inEmbedFont);
+    virtual void WriteSubTypeValue(DictionaryContext *inDescendentFontContext);
+    virtual void WriteAdditionalKeys(DictionaryContext *inDescendentFontContext);
+    virtual void WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext);
 
-private:
-
-	ObjectIDType mEmbeddedFontFileObjectID;
+  private:
+    ObjectIDType mEmbeddedFontFileObjectID;
 };

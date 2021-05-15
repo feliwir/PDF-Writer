@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -30,15 +30,13 @@ using namespace IOBasicTypes;
 
 class OutputStreamTraits
 {
-public:
-	OutputStreamTraits(IByteWriter* inOutputStream);
-	~OutputStreamTraits(void);
+  public:
+    OutputStreamTraits(IByteWriter *inOutputStream);
+    ~OutputStreamTraits(void);
 
+    PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream);
+    PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream, LongBufferSizeType inLength);
 
-	PDFHummus::EStatusCode CopyToOutputStream(IByteReader* inInputStream);	
-	PDFHummus::EStatusCode CopyToOutputStream(IByteReader* inInputStream,LongBufferSizeType inLength);	
-
-private:
-
-	IByteWriter* mOutputStream;
+  private:
+    IByteWriter *mOutputStream;
 };

@@ -16,58 +16,64 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "XObjectContentContext.h"
-#include "PDFFormXObject.h"
-#include "IFormEndWritingTask.h"
 #include "DocumentContext.h"
+#include "IFormEndWritingTask.h"
+#include "PDFFormXObject.h"
 
 using namespace PDFHummus;
 
-XObjectContentContext::XObjectContentContext(PDFHummus::DocumentContext* inDocumentContext,PDFFormXObject* inFormXObject):AbstractContentContext(inDocumentContext)
+XObjectContentContext::XObjectContentContext(PDFHummus::DocumentContext *inDocumentContext,
+                                             PDFFormXObject *inFormXObject)
+    : AbstractContentContext(inDocumentContext)
 {
-	mPDFFormXObjectOfContext = inFormXObject;
-	SetPDFStreamForWrite(inFormXObject->GetContentStream());
+    mPDFFormXObjectOfContext = inFormXObject;
+    SetPDFStreamForWrite(inFormXObject->GetContentStream());
 }
 
 XObjectContentContext::~XObjectContentContext(void)
 {
 }
 
-ResourcesDictionary* XObjectContentContext::GetResourcesDictionary()
+ResourcesDictionary *XObjectContentContext::GetResourcesDictionary()
 {
-	return &(mPDFFormXObjectOfContext->GetResourcesDictionary());
+    return &(mPDFFormXObjectOfContext->GetResourcesDictionary());
 }
 
 class FormImageWritingTask : public IFormEndWritingTask
- {
- public:
- FormImageWritingTask(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID, const PDFParsingOptions& inPDFParsingOptions)
- {
-	 mImagePath = inImagePath; mImageIndex = inImageIndex; mObjectID = inObjectID; mPDFParsingOptions = inPDFParsingOptions;
- }
- 
- virtual ~FormImageWritingTask(){}
- 
-     virtual PDFHummus::EStatusCode Write(PDFFormXObject* inFormXObject,
-                                        ObjectsContext* inObjectsContext,
-                                        PDFHummus::DocumentContext* inDocumentContext)
-     {
-         return inDocumentContext->WriteFormForImage(mImagePath,mImageIndex,mObjectID, mPDFParsingOptions);
-     }
- 
- private:
-     std::string mImagePath;
-     unsigned long mImageIndex;
-     ObjectIDType mObjectID;
-	 PDFParsingOptions mPDFParsingOptions;
+{
+  public:
+    FormImageWritingTask(const std::string &inImagePath, unsigned long inImageIndex, ObjectIDType inObjectID,
+                         const PDFParsingOptions &inPDFParsingOptions)
+    {
+        mImagePath = inImagePath;
+        mImageIndex = inImageIndex;
+        mObjectID = inObjectID;
+        mPDFParsingOptions = inPDFParsingOptions;
+    }
+
+    virtual ~FormImageWritingTask()
+    {
+    }
+
+    virtual PDFHummus::EStatusCode Write(PDFFormXObject *inFormXObject, ObjectsContext *inObjectsContext,
+                                         PDFHummus::DocumentContext *inDocumentContext)
+    {
+        return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
+    }
+
+  private:
+    std::string mImagePath;
+    unsigned long mImageIndex;
+    ObjectIDType mObjectID;
+    PDFParsingOptions mPDFParsingOptions;
 };
 
-void XObjectContentContext::ScheduleImageWrite(const std::string& inImagePath,unsigned long inImageIndex,ObjectIDType inObjectID, const PDFParsingOptions& inParsingOptions)
+void XObjectContentContext::ScheduleImageWrite(const std::string &inImagePath, unsigned long inImageIndex,
+                                               ObjectIDType inObjectID, const PDFParsingOptions &inParsingOptions)
 {
     mDocumentContext->RegisterFormEndWritingTask(
-                                                   mPDFFormXObjectOfContext,
-                                                   new FormImageWritingTask(inImagePath,inImageIndex,inObjectID,inParsingOptions));
-
+        mPDFFormXObjectOfContext, new FormImageWritingTask(inImagePath, inImageIndex, inObjectID, inParsingOptions));
 }

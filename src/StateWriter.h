@@ -16,40 +16,36 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/OutputFile.h"
-#include "io/IOBasicTypes.h"
 #include "ObjectsBasicTypes.h"
+#include "io/IOBasicTypes.h"
+#include "io/OutputFile.h"
 
 #include <string>
-
-
 
 class ObjectsContext;
 
 class StateWriter
 {
-public:
-	StateWriter(void);
-	virtual ~StateWriter(void);
+  public:
+    StateWriter(void);
+    virtual ~StateWriter(void);
 
-	PDFHummus::EStatusCode Start(const std::string& inStateFilePath);
-	ObjectsContext* GetObjectsWriter();
-	void SetRootObject(ObjectIDType inRootObjectID);
-	PDFHummus::EStatusCode Finish();
+    PDFHummus::EStatusCode Start(const std::string &inStateFilePath);
+    ObjectsContext *GetObjectsWriter();
+    void SetRootObject(ObjectIDType inRootObjectID);
+    PDFHummus::EStatusCode Finish();
 
-private:
+  private:
+    ObjectsContext *mObjectsContext;
+    OutputFile mOutputFile;
+    ObjectIDType mRootObject;
 
-	ObjectsContext* mObjectsContext;
-	OutputFile mOutputFile;
-	ObjectIDType mRootObject;
-
-	void WriteTrailerDictionary();
-	void WriteXrefReference(IOBasicTypes::LongFilePositionType inXrefTablePosition);
-	void WriteFinalEOF();
-
+    void WriteTrailerDictionary();
+    void WriteXrefReference(IOBasicTypes::LongFilePositionType inXrefTablePosition);
+    void WriteFinalEOF();
 };

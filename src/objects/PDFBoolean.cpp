@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFBoolean.h"
 
-PDFBoolean::PDFBoolean(bool inValue):PDFObject(eType)
+PDFBoolean::PDFBoolean(bool inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFBoolean::~PDFBoolean(void)
@@ -31,10 +31,10 @@ PDFBoolean::~PDFBoolean(void)
 
 bool PDFBoolean::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFBoolean::operator bool() const
 {
-	return mValue;
+    return mValue;
 }

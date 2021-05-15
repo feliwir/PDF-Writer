@@ -16,18 +16,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include <string.h>
 #include "ITestUnit.h"
+#include <string.h>
 
-class ImagesAndFormsForwardReferenceTest: public ITestUnit
+class ImagesAndFormsForwardReferenceTest : public ITestUnit
 {
-public:
-	ImagesAndFormsForwardReferenceTest(void);
-	virtual ~ImagesAndFormsForwardReferenceTest(void);
+  public:
+    ImagesAndFormsForwardReferenceTest(void);
+    virtual ~ImagesAndFormsForwardReferenceTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

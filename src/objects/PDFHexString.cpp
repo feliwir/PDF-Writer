@@ -16,25 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFHexString.h"
 
-PDFHexString::PDFHexString(const std::string& inValue):PDFObject(eType)
+PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFHexString::~PDFHexString(void)
 {
 }
 
-const std::string& PDFHexString::GetValue() const
+const std::string &PDFHexString::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFHexString::operator std::string() const
 {
-	return mValue;
+    return mValue;
 }

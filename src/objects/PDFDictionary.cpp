@@ -16,57 +16,56 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFDictionary.h"
 
 PDFDictionary::PDFDictionary(void) : PDFObject(eType)
-{ 
+{
 }
 
 PDFDictionary::~PDFDictionary(void)
 {
-	PDFNameToPDFObjectMap::iterator	it = mValues.begin();
+    PDFNameToPDFObjectMap::iterator it = mValues.begin();
 
-	for(; it != mValues.end(); ++it)
-	{
-		it->first->Release();
-		it->second->Release();
-	}
+    for (; it != mValues.end(); ++it)
+    {
+        it->first->Release();
+        it->second->Release();
+    }
 }
 
-PDFObject* PDFDictionary::QueryDirectObject(std::string inName)
+PDFObject *PDFDictionary::QueryDirectObject(std::string inName)
 {
-	PDFName key(inName);
-	PDFNameToPDFObjectMap::iterator it = mValues.find(&key);
+    PDFName key(inName);
+    PDFNameToPDFObjectMap::iterator it = mValues.find(&key);
 
-	if(it == mValues.end())
-	{
-		return NULL;
-	}
-	else
-	{
-		it->second->AddRef();
-		return it->second;
-	}
+    if (it == mValues.end())
+    {
+        return NULL;
+    }
+    else
+    {
+        it->second->AddRef();
+        return it->second;
+    }
 }
 
-void PDFDictionary::Insert(PDFName* inKeyObject, PDFObject* inValueObject)
+void PDFDictionary::Insert(PDFName *inKeyObject, PDFObject *inValueObject)
 {
-	inKeyObject->AddRef();
-	inValueObject->AddRef();
+    inKeyObject->AddRef();
+    inValueObject->AddRef();
 
-	mValues.insert(PDFNameToPDFObjectMap::value_type(inKeyObject,inValueObject));
+    mValues.insert(PDFNameToPDFObjectMap::value_type(inKeyObject, inValueObject));
 }
-
 
 bool PDFDictionary::Exists(std::string inName)
 {
-	PDFName key(inName);
-	return mValues.find(&key) != mValues.end();
+    PDFName key(inName);
+    return mValues.find(&key) != mValues.end();
 }
 
 MapIterator<PDFNameToPDFObjectMap> PDFDictionary::GetIterator()
 {
-	return MapIterator<PDFNameToPDFObjectMap>(mValues);
+    return MapIterator<PDFNameToPDFObjectMap>(mValues);
 }

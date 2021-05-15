@@ -16,18 +16,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include <string.h>
 #include "TestsRunner.h"
+#include <string.h>
 
 class FlateEncryptionTest : public ITestUnit
 {
-public:
-	FlateEncryptionTest(void);
-	virtual ~FlateEncryptionTest(void);
+  public:
+    FlateEncryptionTest(void);
+    virtual ~FlateEncryptionTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };

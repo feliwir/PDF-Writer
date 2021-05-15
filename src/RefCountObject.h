@@ -16,20 +16,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 class RefCountObject
 {
-public:
-	RefCountObject(void); // Constructor automatically initiates the first Ref Count
-	virtual ~RefCountObject(void);
+  public:
+    RefCountObject(void); // Constructor automatically initiates the first Ref Count
+    virtual ~RefCountObject(void);
 
-	void AddRef();
-	void Release();
+    void AddRef();
+    void Release();
 
-private:
-
-	unsigned long mRefCount;
+  private:
+    unsigned long mRefCount;
 };

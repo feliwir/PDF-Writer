@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -26,11 +26,11 @@
 
 class PNGImageTest : public ITestUnit
 {
-public:
-	PNGImageTest(void);
-	virtual ~PNGImageTest(void);
+  public:
+    PNGImageTest(void);
+    virtual ~PNGImageTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
 
 #endif

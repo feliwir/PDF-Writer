@@ -16,15 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 namespace PDFHummus
 {
-	enum EStatusCode
-	{
-		eFailure = -1,
-		eSuccess = 0
-	};
+enum EStatusCode
+{
+    eFailure = -1,
+    eSuccess = 0
+};
 }

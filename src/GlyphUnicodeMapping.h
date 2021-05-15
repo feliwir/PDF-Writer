@@ -16,38 +16,38 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include <vector>
 #include <list>
-
-
+#include <vector>
 
 typedef std::vector<unsigned long> ULongVector;
 
 struct GlyphUnicodeMapping
 {
-	GlyphUnicodeMapping(){}
+    GlyphUnicodeMapping()
+    {
+    }
 
-	GlyphUnicodeMapping(unsigned short inGlyphCode,unsigned long inUnicodeValue)
-	{
-		mGlyphCode = inGlyphCode;
-		mUnicodeValues.push_back(inUnicodeValue);
-	}
-	
-	GlyphUnicodeMapping(unsigned short inGlyphCode,ULongVector inUnicodeValues)
-	{
-		mGlyphCode = inGlyphCode;
-		mUnicodeValues = inUnicodeValues;
-	}
+    GlyphUnicodeMapping(unsigned short inGlyphCode, unsigned long inUnicodeValue)
+    {
+        mGlyphCode = inGlyphCode;
+        mUnicodeValues.push_back(inUnicodeValue);
+    }
 
-	// and ordered list of the unicode values that this glyph represents
-	ULongVector mUnicodeValues;
+    GlyphUnicodeMapping(unsigned short inGlyphCode, ULongVector inUnicodeValues)
+    {
+        mGlyphCode = inGlyphCode;
+        mUnicodeValues = inUnicodeValues;
+    }
 
-	// glyph code
-	unsigned short mGlyphCode;	
+    // and ordered list of the unicode values that this glyph represents
+    ULongVector mUnicodeValues;
+
+    // glyph code
+    unsigned short mGlyphCode;
 };
 
 typedef std::list<GlyphUnicodeMapping> GlyphUnicodeMappingList;

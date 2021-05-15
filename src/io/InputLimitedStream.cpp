@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputLimitedStream.h"
 
@@ -26,39 +26,39 @@ using namespace IOBasicTypes;
 
 InputLimitedStream::InputLimitedStream(void)
 {
-	mStream = NULL;
-	mMoreToRead = 0;
-	mOwnsStream = false;
+    mStream = NULL;
+    mMoreToRead = 0;
+    mOwnsStream = false;
 }
 
 InputLimitedStream::~InputLimitedStream(void)
 {
-	if(mStream && mOwnsStream)
-		delete mStream;
+    if (mStream && mOwnsStream)
+        delete mStream;
 }
 
-InputLimitedStream::InputLimitedStream(IByteReader* inSourceStream,LongFilePositionType inReadLimit,bool inOwnsStream)
+InputLimitedStream::InputLimitedStream(IByteReader *inSourceStream, LongFilePositionType inReadLimit, bool inOwnsStream)
 {
-	Assign(inSourceStream,inReadLimit,inOwnsStream);
+    Assign(inSourceStream, inReadLimit, inOwnsStream);
 }
 
-
-void InputLimitedStream::Assign(IByteReader* inSourceStream,LongFilePositionType inReadLimit,bool inOwnsStream)
+void InputLimitedStream::Assign(IByteReader *inSourceStream, LongFilePositionType inReadLimit, bool inOwnsStream)
 {
-	mStream = inSourceStream;
-	mMoreToRead = inReadLimit;
-	mOwnsStream = inOwnsStream;
+    mStream = inSourceStream;
+    mMoreToRead = inReadLimit;
+    mOwnsStream = inOwnsStream;
 }
 
-LongBufferSizeType InputLimitedStream::Read(Byte* inBuffer,LongBufferSizeType inBufferSize)
+LongBufferSizeType InputLimitedStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-	LongBufferSizeType readBytes = mStream->Read(inBuffer,(LongBufferSizeType)std::min<LongFilePositionType>((LongFilePositionType)inBufferSize,mMoreToRead));
+    LongBufferSizeType readBytes = mStream->Read(
+        inBuffer, (LongBufferSizeType)std::min<LongFilePositionType>((LongFilePositionType)inBufferSize, mMoreToRead));
 
-	mMoreToRead -= readBytes;
-	return readBytes;
+    mMoreToRead -= readBytes;
+    return readBytes;
 }
 
 bool InputLimitedStream::NotEnded()
 {
-	return mStream->NotEnded() && mMoreToRead > 0;
+    return mStream->NotEnded() && mMoreToRead > 0;
 }

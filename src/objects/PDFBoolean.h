@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,20 +24,18 @@
 
 class PDFBoolean : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectBoolean
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectBoolean
-	};
+    PDFBoolean(bool inValue);
+    virtual ~PDFBoolean(void);
 
-	PDFBoolean(bool inValue);
-	virtual ~PDFBoolean(void);
+    bool GetValue() const;
+    operator bool() const;
 
-	bool GetValue() const;
-	operator bool() const;
-
-
-private:
-	bool mValue;
+  private:
+    bool mValue;
 };

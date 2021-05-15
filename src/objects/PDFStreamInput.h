@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
@@ -28,21 +28,21 @@ using namespace IOBasicTypes;
 
 class PDFStreamInput : public PDFObject
 {
-public:
-	enum EType
-	{
-		eType = ePDFObjectStream
-	};
+  public:
+    enum EType
+    {
+        eType = ePDFObjectStream
+    };
 
-	PDFStreamInput(PDFDictionary* inStreamDictionary,LongFilePositionType inStreamContentStart);
-	virtual ~PDFStreamInput(void);
+    PDFStreamInput(PDFDictionary *inStreamDictionary, LongFilePositionType inStreamContentStart);
+    virtual ~PDFStreamInput(void);
 
-	// These two calls AddRef on both objects
-	PDFDictionary* QueryStreamDictionary();
+    // These two calls AddRef on both objects
+    PDFDictionary *QueryStreamDictionary();
 
-	LongFilePositionType GetStreamContentStart();
+    LongFilePositionType GetStreamContentStart();
 
-private:
-	PDFDictionary* mDictionary;
-	LongFilePositionType mStreamContentStart;
+  private:
+    PDFDictionary *mDictionary;
+    LongFilePositionType mStreamContentStart;
 };

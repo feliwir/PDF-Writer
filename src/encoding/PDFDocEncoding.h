@@ -16,24 +16,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "io/IOBasicTypes.h"
 #include <utility>
 
-
-
-typedef std::pair<bool,IOBasicTypes::Byte> BoolAndByte;
+typedef std::pair<bool, IOBasicTypes::Byte> BoolAndByte;
 
 class PDFDocEncoding
 {
-public:
-	PDFDocEncoding(void);
-	~PDFDocEncoding(void);
+  public:
+    PDFDocEncoding(void);
+    ~PDFDocEncoding(void);
 
-	BoolAndByte Encode(unsigned long inUnicodeCharacter);
-	unsigned long Decode(IOBasicTypes::Byte inEncodedCharacter);
-	const char* GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
+    BoolAndByte Encode(unsigned long inUnicodeCharacter);
+    unsigned long Decode(IOBasicTypes::Byte inEncodedCharacter);
+    const char *GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
 };

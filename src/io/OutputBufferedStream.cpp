@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "io/OutputBufferedStream.h"
 
@@ -26,86 +26,85 @@ using namespace IOBasicTypes;
 
 OutputBufferedStream::OutputBufferedStream(void)
 {
-	Initiate(NULL,DEFAULT_BUFFER_SIZE);
+    Initiate(NULL, DEFAULT_BUFFER_SIZE);
 }
 
-void OutputBufferedStream::Initiate(IByteWriterWithPosition* inTargetWriter,LongBufferSizeType inBufferSize)
+void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)
 {
-	mBufferSize = inBufferSize;
-	mBuffer = new Byte[mBufferSize];
-	mCurrentBufferIndex = mBuffer;
-	mTargetStream = inTargetWriter;
+    mBufferSize = inBufferSize;
+    mBuffer = new Byte[mBufferSize];
+    mCurrentBufferIndex = mBuffer;
+    mTargetStream = inTargetWriter;
 }
 
 OutputBufferedStream::~OutputBufferedStream(void)
 {
-	Flush();
-	delete[] mBuffer;
-	delete mTargetStream;
+    Flush();
+    delete[] mBuffer;
+    delete mTargetStream;
 }
 
 OutputBufferedStream::OutputBufferedStream(LongBufferSizeType inBufferSize)
 {
-	Initiate(NULL,inBufferSize);
+    Initiate(NULL, inBufferSize);
 }
 
-OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition* inTargetWriter,LongBufferSizeType inBufferSize)
+OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)
 {
-	Initiate(inTargetWriter,inBufferSize);
+    Initiate(inTargetWriter, inBufferSize);
 }
 
-void OutputBufferedStream::Assign(IByteWriterWithPosition* inWriter)
+void OutputBufferedStream::Assign(IByteWriterWithPosition *inWriter)
 {
-	Flush();
-	mTargetStream = inWriter;
+    Flush();
+    mTargetStream = inWriter;
 }
 
-LongBufferSizeType OutputBufferedStream::Write(const Byte* inBuffer,LongBufferSizeType inSize)
+LongBufferSizeType OutputBufferedStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
-	if(mTargetStream)
-	{
-		LongBufferSizeType bytesWritten;
+    if (mTargetStream)
+    {
+        LongBufferSizeType bytesWritten;
 
-		// if content to write fits in the buffer write to buffer
-		if(inSize <= mBufferSize - (mCurrentBufferIndex - mBuffer))
-		{
-			if(inSize > 0)
-			{
-				memcpy(mCurrentBufferIndex,inBuffer,inSize);
-				mCurrentBufferIndex+=inSize;
-			}
-			bytesWritten = inSize;
-		}
-		else
-		{
-			// if not, flush the buffer. if now won't fit in the buffer write directly to underlying stream
-			// all but what size will fit in the buffer - then write to buffer what leftover will fit in.
-			LongBufferSizeType bytesToWriteToBuffer = inSize % mBufferSize;
-			Flush();
+        // if content to write fits in the buffer write to buffer
+        if (inSize <= mBufferSize - (mCurrentBufferIndex - mBuffer))
+        {
+            if (inSize > 0)
+            {
+                memcpy(mCurrentBufferIndex, inBuffer, inSize);
+                mCurrentBufferIndex += inSize;
+            }
+            bytesWritten = inSize;
+        }
+        else
+        {
+            // if not, flush the buffer. if now won't fit in the buffer write directly to underlying stream
+            // all but what size will fit in the buffer - then write to buffer what leftover will fit in.
+            LongBufferSizeType bytesToWriteToBuffer = inSize % mBufferSize;
+            Flush();
 
-			bytesWritten = mTargetStream->Write(inBuffer,inSize-bytesToWriteToBuffer);
-			if((inSize-bytesToWriteToBuffer == bytesWritten) && bytesToWriteToBuffer > 0) // all well, continue
-			{
-				memcpy(mCurrentBufferIndex,inBuffer+(inSize-bytesToWriteToBuffer),bytesToWriteToBuffer);
-				mCurrentBufferIndex+=bytesToWriteToBuffer;
-				bytesWritten+=bytesToWriteToBuffer;
-			}
-		}
-		return bytesWritten;
-	}
-	else
-		return 0;
+            bytesWritten = mTargetStream->Write(inBuffer, inSize - bytesToWriteToBuffer);
+            if ((inSize - bytesToWriteToBuffer == bytesWritten) && bytesToWriteToBuffer > 0) // all well, continue
+            {
+                memcpy(mCurrentBufferIndex, inBuffer + (inSize - bytesToWriteToBuffer), bytesToWriteToBuffer);
+                mCurrentBufferIndex += bytesToWriteToBuffer;
+                bytesWritten += bytesToWriteToBuffer;
+            }
+        }
+        return bytesWritten;
+    }
+    else
+        return 0;
 }
-
 
 void OutputBufferedStream::Flush()
 {
-	if(mTargetStream && mCurrentBufferIndex != mBuffer)
-		mTargetStream->Write(mBuffer,mCurrentBufferIndex - mBuffer);
-	mCurrentBufferIndex = mBuffer;
+    if (mTargetStream && mCurrentBufferIndex != mBuffer)
+        mTargetStream->Write(mBuffer, mCurrentBufferIndex - mBuffer);
+    mCurrentBufferIndex = mBuffer;
 }
 
 LongFilePositionType OutputBufferedStream::GetCurrentPosition()
 {
-	return mTargetStream ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer):0;
+    return mTargetStream ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer) : 0;
 }

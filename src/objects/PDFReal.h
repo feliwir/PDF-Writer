@@ -16,26 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
 
 class PDFReal : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectReal
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectReal
-	};
+    PDFReal(double inValue);
+    virtual ~PDFReal(void);
 
-	PDFReal(double inValue);
-	virtual ~PDFReal(void);
+    double GetValue() const;
+    operator double() const;
 
-	double GetValue() const;
-	operator double() const;
-
-private:
-	double mValue;
+  private:
+    double mValue;
 };

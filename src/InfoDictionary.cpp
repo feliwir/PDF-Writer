@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InfoDictionary.h"
 
 InfoDictionary::InfoDictionary(void)
 {
-	Trapped = EInfoTrappedUnknown;
+    Trapped = EInfoTrappedUnknown;
 }
 
 InfoDictionary::~InfoDictionary(void)
@@ -31,66 +31,56 @@ InfoDictionary::~InfoDictionary(void)
 
 bool InfoDictionary::IsEmpty()
 {
-	return 
-		Title.IsEmpty() &&
-		Author.IsEmpty() &&
-		Subject.IsEmpty() &&
-		Keywords.IsEmpty() &&
-		Creator.IsEmpty() &&
-		Producer.IsEmpty() &&
-		CreationDate.IsNull() &&
-		ModDate.IsNull() &&
-		EInfoTrappedUnknown == Trapped &&
-		mAdditionalInfoEntries.empty();
-
+    return Title.IsEmpty() && Author.IsEmpty() && Subject.IsEmpty() && Keywords.IsEmpty() && Creator.IsEmpty() &&
+           Producer.IsEmpty() && CreationDate.IsNull() && ModDate.IsNull() && EInfoTrappedUnknown == Trapped &&
+           mAdditionalInfoEntries.empty();
 }
 
 void InfoDictionary::Reset()
 {
-	mAdditionalInfoEntries.clear();
-	Trapped = EInfoTrappedUnknown;
-	Title = PDFTextString::Empty();
-	Author = PDFTextString::Empty();
-	Subject = PDFTextString::Empty();
-	Keywords = PDFTextString::Empty();
-	Creator = PDFTextString::Empty();
-	Producer = PDFTextString::Empty();
-	CreationDate.SetTime(-1);
-	ModDate.SetTime(-1);
+    mAdditionalInfoEntries.clear();
+    Trapped = EInfoTrappedUnknown;
+    Title = PDFTextString::Empty();
+    Author = PDFTextString::Empty();
+    Subject = PDFTextString::Empty();
+    Keywords = PDFTextString::Empty();
+    Creator = PDFTextString::Empty();
+    Producer = PDFTextString::Empty();
+    CreationDate.SetTime(-1);
+    ModDate.SetTime(-1);
 }
 
-void InfoDictionary::AddAdditionalInfoEntry(const std::string& inKey,
-											const PDFTextString& inValue)
+void InfoDictionary::AddAdditionalInfoEntry(const std::string &inKey, const PDFTextString &inValue)
 {
-	if(mAdditionalInfoEntries.find(inKey) != mAdditionalInfoEntries.end())
-		mAdditionalInfoEntries[inKey] = inValue;
-	else
-		mAdditionalInfoEntries.insert(StringToPDFTextString::value_type(inKey,inValue));
+    if (mAdditionalInfoEntries.find(inKey) != mAdditionalInfoEntries.end())
+        mAdditionalInfoEntries[inKey] = inValue;
+    else
+        mAdditionalInfoEntries.insert(StringToPDFTextString::value_type(inKey, inValue));
 }
 
-void InfoDictionary::RemoveAdditionalInfoEntry(const std::string& inKey)
+void InfoDictionary::RemoveAdditionalInfoEntry(const std::string &inKey)
 {
-	StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
-	if(it != mAdditionalInfoEntries.end())
-		mAdditionalInfoEntries.erase(it);
+    StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
+    if (it != mAdditionalInfoEntries.end())
+        mAdditionalInfoEntries.erase(it);
 }
 
 void InfoDictionary::ClearAdditionalInfoEntries()
 {
-	mAdditionalInfoEntries.clear();
+    mAdditionalInfoEntries.clear();
 }
 
-PDFTextString InfoDictionary::GetAdditionalInfoEntry(const std::string& inKey)
+PDFTextString InfoDictionary::GetAdditionalInfoEntry(const std::string &inKey)
 {
-	StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
+    StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
 
-	if(it == mAdditionalInfoEntries.end())
-		return PDFTextString::Empty();
-	else
-		return it->second;
+    if (it == mAdditionalInfoEntries.end())
+        return PDFTextString::Empty();
+    else
+        return it->second;
 }
 
 MapIterator<StringToPDFTextString> InfoDictionary::GetAdditionaEntriesIterator()
 {
-	return MapIterator<StringToPDFTextString>(mAdditionalInfoEntries);
+    return MapIterator<StringToPDFTextString>(mAdditionalInfoEntries);
 }

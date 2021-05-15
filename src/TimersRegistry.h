@@ -16,36 +16,34 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "Timer.h"
 
-#include <string>
 #include <map>
+#include <string>
 
-
-
-typedef std::map<std::string,Timer> StringToTimerMap;
+typedef std::map<std::string, Timer> StringToTimerMap;
 
 class TimersRegistry
 {
-public:
-	TimersRegistry(void);
-	~TimersRegistry(void);
+  public:
+    TimersRegistry(void);
+    ~TimersRegistry(void);
 
-	void StartMeasure(const std::string& inTimerName);
-	void StopMeasureAndAccumulate(const std::string& inTimerName);
+    void StartMeasure(const std::string &inTimerName);
+    void StopMeasureAndAccumulate(const std::string &inTimerName);
 
-	double GetTotalMiliSeconds(const std::string& inTimerName);
+    double GetTotalMiliSeconds(const std::string &inTimerName);
 
-	Timer& GetTimer(const std::string& inTimerName);
+    Timer &GetTimer(const std::string &inTimerName);
 
-	void ReleaseAll();
-	void TraceAll();
-	void TraceAndReleaseAll();
+    void ReleaseAll();
+    void TraceAll();
+    void TraceAndReleaseAll();
 
-private:
-	StringToTimerMap mTimers;
+  private:
+    StringToTimerMap mTimers;
 };

@@ -16,72 +16,72 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputByteArrayStream.h"
 #include <memory.h>
 
 InputByteArrayStream::InputByteArrayStream()
 {
-	mByteArray = NULL;
+    mByteArray = NULL;
 }
 
-InputByteArrayStream::InputByteArrayStream(Byte* inByteArray,LongFilePositionType inArrayLength)
+InputByteArrayStream::InputByteArrayStream(Byte *inByteArray, LongFilePositionType inArrayLength)
 {
-	mByteArray = inByteArray;
-	mArrayLength = inArrayLength;
-	mCurrentPosition = 0;
+    mByteArray = inByteArray;
+    mArrayLength = inArrayLength;
+    mCurrentPosition = 0;
 }
 
 InputByteArrayStream::~InputByteArrayStream(void)
 {
 }
 
-void InputByteArrayStream::Assign(IOBasicTypes::Byte* inByteArray,IOBasicTypes::LongFilePositionType inArrayLength)
+void InputByteArrayStream::Assign(IOBasicTypes::Byte *inByteArray, IOBasicTypes::LongFilePositionType inArrayLength)
 {
-	mByteArray = inByteArray;
-	mArrayLength = inArrayLength;
-	mCurrentPosition = 0;
+    mByteArray = inByteArray;
+    mArrayLength = inArrayLength;
+    mCurrentPosition = 0;
 }
 
-LongBufferSizeType InputByteArrayStream::Read(IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inBufferSize)
+LongBufferSizeType InputByteArrayStream::Read(IOBasicTypes::Byte *inBuffer,
+                                              IOBasicTypes::LongBufferSizeType inBufferSize)
 {
-	if(!mByteArray)
-		return 0;
+    if (!mByteArray)
+        return 0;
 
-	LongBufferSizeType amountToRead = 
-		inBufferSize < (LongBufferSizeType)(mArrayLength-mCurrentPosition) ? 
-		inBufferSize : 
-		(LongBufferSizeType)(mArrayLength-mCurrentPosition);
+    LongBufferSizeType amountToRead = inBufferSize < (LongBufferSizeType)(mArrayLength - mCurrentPosition)
+                                          ? inBufferSize
+                                          : (LongBufferSizeType)(mArrayLength - mCurrentPosition);
 
-	if(amountToRead>0)
-		memcpy(inBuffer,mByteArray+mCurrentPosition,amountToRead);
-	mCurrentPosition+= amountToRead;
-	return amountToRead;
+    if (amountToRead > 0)
+        memcpy(inBuffer, mByteArray + mCurrentPosition, amountToRead);
+    mCurrentPosition += amountToRead;
+    return amountToRead;
 }
 
 bool InputByteArrayStream::NotEnded()
 {
-	return mByteArray && mCurrentPosition < mArrayLength;
-
+    return mByteArray && mCurrentPosition < mArrayLength;
 }
 
 void InputByteArrayStream::Skip(LongBufferSizeType inSkipSize)
 {
-	mCurrentPosition+= inSkipSize < (LongBufferSizeType)mArrayLength-mCurrentPosition ? inSkipSize : mArrayLength-mCurrentPosition;
+    mCurrentPosition +=
+        inSkipSize < (LongBufferSizeType)mArrayLength - mCurrentPosition ? inSkipSize : mArrayLength - mCurrentPosition;
 }
 
 void InputByteArrayStream::SetPosition(LongFilePositionType inOffsetFromStart)
 {
-	mCurrentPosition = inOffsetFromStart > mArrayLength ? mArrayLength:inOffsetFromStart;
+    mCurrentPosition = inOffsetFromStart > mArrayLength ? mArrayLength : inOffsetFromStart;
 }
 
 void InputByteArrayStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
 {
-	mCurrentPosition = inOffsetFromEnd > mArrayLength ? 0:(mArrayLength-inOffsetFromEnd);
+    mCurrentPosition = inOffsetFromEnd > mArrayLength ? 0 : (mArrayLength - inOffsetFromEnd);
 }
 
 LongFilePositionType InputByteArrayStream::GetCurrentPosition()
 {
-	return mCurrentPosition;
+    return mCurrentPosition;
 }

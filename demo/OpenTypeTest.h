@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
@@ -24,14 +24,14 @@
 
 class OpenTypeTest : public ITestUnit
 {
-public:
-	OpenTypeTest(void);
-	~OpenTypeTest(void);
+  public:
+    OpenTypeTest(void);
+    ~OpenTypeTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	PDFHummus::EStatusCode SaveCharstringCode(const TestConfiguration& inTestConfiguration,unsigned short inFontIndex,unsigned short inGlyphIndex,CFFFileInput* inCFFFileInput);
-	PDFHummus::EStatusCode TestFont(const TestConfiguration& inTestConfiguration);
-
+  private:
+    PDFHummus::EStatusCode SaveCharstringCode(const TestConfiguration &inTestConfiguration, unsigned short inFontIndex,
+                                              unsigned short inGlyphIndex, CFFFileInput *inCFFFileInput);
+    PDFHummus::EStatusCode TestFont(const TestConfiguration &inTestConfiguration);
 };

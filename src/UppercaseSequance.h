@@ -16,31 +16,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include <string>
 
-
 class UppercaseSequance
 {
-public:
-	UppercaseSequance(void);
-	~UppercaseSequance(void);
+  public:
+    UppercaseSequance(void);
+    ~UppercaseSequance(void);
 
-	UppercaseSequance(std::string inSequanceString);
+    UppercaseSequance(std::string inSequanceString);
 
-	// returns the string after the increase
-	const std::string& GetNextValue();
+    // returns the string after the increase
+    const std::string &GetNextValue();
 
-	// get the current value
-	const std::string& ToString();
-	void SetSequanceString(const std::string& inSequanceString);
+    // get the current value
+    const std::string &ToString();
+    void SetSequanceString(const std::string &inSequanceString);
 
-	// reset to beginning value
-	void Reset();
-private:
-	std::string mSequanceString;
+    // reset to beginning value
+    void Reset();
 
+  private:
+    std::string mSequanceString;
 };

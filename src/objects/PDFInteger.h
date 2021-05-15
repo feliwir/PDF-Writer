@@ -16,26 +16,25 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "PDFObject.h"
 
 class PDFInteger : public PDFObject
 {
-public:
+  public:
+    enum EType
+    {
+        eType = ePDFObjectInteger
+    };
 
-	enum EType
-	{
-		eType = ePDFObjectInteger
-	};
+    PDFInteger(long long inValue);
+    virtual ~PDFInteger(void);
 
-	PDFInteger(long long inValue);
-	virtual ~PDFInteger(void);
+    long long GetValue() const;
+    operator long long() const;
 
-	long long GetValue() const;
-	operator long long() const;
-
-private:
-	long long mValue;
+  private:
+    long long mValue;
 };

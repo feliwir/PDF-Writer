@@ -16,12 +16,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-template <typename T>
-static bool betweenIncluding(T inTest,T inLowerBound,T inHigherBound)
+template <typename T> static bool betweenIncluding(T inTest, T inLowerBound, T inHigherBound)
 {
-	return inTest>= inLowerBound && inTest<=inHigherBound;
+    return inTest >= inLowerBound && inTest <= inHigherBound;
 }

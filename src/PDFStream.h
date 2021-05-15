@@ -16,26 +16,24 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 /*
-	PDFStream objects represents a stream in the PDF.
-	due to @#$@$ Length key in stream dictionary, stream writing in the library is a two step matter.
-	first use PDFStream to write the stream content, then write the Stream to the PDF using ObjectContext WriteStream
+    PDFStream objects represents a stream in the PDF.
+    due to @#$@$ Length key in stream dictionary, stream writing in the library is a two step matter.
+    first use PDFStream to write the stream content, then write the Stream to the PDF using ObjectContext WriteStream
 */
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
-#include "ObjectsBasicTypes.h"
-#include "io/OutputFlateEncodeStream.h"
 #include "MyStringBuf.h"
+#include "ObjectsBasicTypes.h"
+#include "io/IOBasicTypes.h"
+#include "io/OutputFlateEncodeStream.h"
 #include "io/OutputStringBufferStream.h"
 #include <sstream>
 
-
 using namespace IOBasicTypes;
-
 
 class IByteWriterWithPosition;
 class IObjectsContextExtender;
@@ -44,51 +42,45 @@ class EncryptionHelper;
 
 class PDFStream
 {
-public:
-	PDFStream(
-		bool inCompressStream,
-		IByteWriterWithPosition* inOutputStream,
-		EncryptionHelper* inEncryptionHelper,
-		ObjectIDType inExtentObjectID,
-		IObjectsContextExtender* inObjectsContextExtender);
-    
-    PDFStream(
-        bool inCompressStream,
-        IByteWriterWithPosition* inOutputStream,
-		EncryptionHelper* inEncryptionHelper,
-		DictionaryContext* inStreamDictionaryContextForDirectExtentStream,
-        IObjectsContextExtender* inObjectsContextExtender);
-    
-    
-	~PDFStream(void);
+  public:
+    PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStream, EncryptionHelper *inEncryptionHelper,
+              ObjectIDType inExtentObjectID, IObjectsContextExtender *inObjectsContextExtender);
 
-	// Get the output stream of the PDFStream, make sure to use only before calling FinalizeStreamWrite, after which it becomes invalid
-	IByteWriter* GetWriteStream();
+    PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStream, EncryptionHelper *inEncryptionHelper,
+              DictionaryContext *inStreamDictionaryContextForDirectExtentStream,
+              IObjectsContextExtender *inObjectsContextExtender);
 
-	// when done with writing to the stream call FinalizeWriteStream to get all writing resources released and calculate the stream extent. For streams where extent writing is direct object, there is still 
-    // a call needed later, to FlushStreamContentForDirectExtentStream() to actually write it.
-	void FinalizeStreamWrite();
+    ~PDFStream(void);
 
-	bool IsStreamCompressed();
-	ObjectIDType GetExtentObjectID();
+    // Get the output stream of the PDFStream, make sure to use only before calling FinalizeStreamWrite, after which it
+    // becomes invalid
+    IByteWriter *GetWriteStream();
 
-	LongFilePositionType GetLength(); // get the stream extent
-    
+    // when done with writing to the stream call FinalizeWriteStream to get all writing resources released and calculate
+    // the stream extent. For streams where extent writing is direct object, there is still a call needed later, to
+    // FlushStreamContentForDirectExtentStream() to actually write it.
+    void FinalizeStreamWrite();
+
+    bool IsStreamCompressed();
+    ObjectIDType GetExtentObjectID();
+
+    LongFilePositionType GetLength(); // get the stream extent
+
     // direct extent specific
-    DictionaryContext* GetStreamDictionaryForDirectExtentStream();
+    DictionaryContext *GetStreamDictionaryForDirectExtentStream();
     void FlushStreamContentForDirectExtentStream();
 
-private:
-	bool mCompressStream;
-	OutputFlateEncodeStream mFlateEncodingStream;
-	IByteWriterWithPosition* mOutputStream;
-	IByteWriterWithPosition* mEncryptionStream;
-	ObjectIDType mExtendObjectID;
-	LongFilePositionType mStreamLength;
-	LongFilePositionType mStreamStartPosition;
-	IByteWriter* mWriteStream;
-	IObjectsContextExtender* mExtender;
+  private:
+    bool mCompressStream;
+    OutputFlateEncodeStream mFlateEncodingStream;
+    IByteWriterWithPosition *mOutputStream;
+    IByteWriterWithPosition *mEncryptionStream;
+    ObjectIDType mExtendObjectID;
+    LongFilePositionType mStreamLength;
+    LongFilePositionType mStreamStartPosition;
+    IByteWriter *mWriteStream;
+    IObjectsContextExtender *mExtender;
     MyStringBuf mTemporaryStream;
     OutputStringBufferStream mTemporaryOutputStream;
-    DictionaryContext* mStreamDictionaryContextForDirectExtentStream;
+    DictionaryContext *mStreamDictionaryContextForDirectExtentStream;
 };

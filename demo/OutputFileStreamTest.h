@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,10 +24,9 @@
 
 class OutputFileStreamTest : public ITestUnit
 {
-public:
-	OutputFileStreamTest(void);
-	virtual ~OutputFileStreamTest(void);
+  public:
+    OutputFileStreamTest(void);
+    virtual ~OutputFileStreamTest(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 };
-

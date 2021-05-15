@@ -16,106 +16,98 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "SingleValueContainerIterator.h"
 #include "MapIterator.h"
 #include "ObjectsBasicTypes.h"
+#include "SingleValueContainerIterator.h"
 
-#include <set>
 #include <map>
+#include <set>
 #include <string>
 
-
-
 typedef std::set<std::string> StringSet;
-typedef std::map<ObjectIDType,std::string> ObjectIDTypeToStringMap;
+typedef std::map<ObjectIDType, std::string> ObjectIDTypeToStringMap;
 
 class PDFImageXObject;
 
 class ResourcesDictionary
 {
-public:
-	ResourcesDictionary(void);
-	virtual ~ResourcesDictionary(void);
+  public:
+    ResourcesDictionary(void);
+    virtual ~ResourcesDictionary(void);
 
-	void AddProcsetResource(const std::string& inResourceName);
-	SingleValueContainerIterator<StringSet> GetProcesetsIterator();
+    void AddProcsetResource(const std::string &inResourceName);
+    SingleValueContainerIterator<StringSet> GetProcesetsIterator();
 
-	// ExtGStates. 
-	std::string AddExtGStateMapping(ObjectIDType inExtGStateID);
-	void AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string& inExtGStateName);
-	MapIterator<ObjectIDTypeToStringMap> GetExtGStatesIterator();
+    // ExtGStates.
+    std::string AddExtGStateMapping(ObjectIDType inExtGStateID);
+    void AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string &inExtGStateName);
+    MapIterator<ObjectIDTypeToStringMap> GetExtGStatesIterator();
 
+    // Fonts.
+    std::string AddFontMapping(ObjectIDType inFontObjectID);
+    void AddFontMapping(ObjectIDType inFontObjectID, const std::string &inFontObjectName);
+    MapIterator<ObjectIDTypeToStringMap> GetFontsIterator();
 
-	// Fonts.
-	std::string AddFontMapping(ObjectIDType inFontObjectID);
-	void AddFontMapping(ObjectIDType inFontObjectID,const std::string& inFontObjectName);
-	MapIterator<ObjectIDTypeToStringMap> GetFontsIterator();
+    // Color space
+    std::string AddColorSpaceMapping(ObjectIDType inColorspaceID);
+    MapIterator<ObjectIDTypeToStringMap> GetColorSpacesIterator();
 
+    // Patterns
+    std::string AddPatternMapping(ObjectIDType inPatternID);
+    MapIterator<ObjectIDTypeToStringMap> GetPatternsIterator();
 
-	// Color space
-	std::string AddColorSpaceMapping(ObjectIDType inColorspaceID);
-	MapIterator<ObjectIDTypeToStringMap> GetColorSpacesIterator();
+    // Properties
+    std::string AddPropertyMapping(ObjectIDType inPropertyID);
+    MapIterator<ObjectIDTypeToStringMap> GetPropertiesIterator();
 
-	// Patterns
-	std::string AddPatternMapping(ObjectIDType inPatternID);
-	MapIterator<ObjectIDTypeToStringMap> GetPatternsIterator();
+    // XObjects
+    std::string AddXObjectMapping(ObjectIDType inXObjectID);
+    MapIterator<ObjectIDTypeToStringMap> GetXObjectsIterator();
 
-	// Properties
-	std::string AddPropertyMapping(ObjectIDType inPropertyID);
-	MapIterator<ObjectIDTypeToStringMap> GetPropertiesIterator();
-	
+    // Use AddFormXObjectMapping to use a form XObject in a content stream [page or xobject].
+    // AddFromXObjectMapping(inFormXObjectID) returns a string name that you can use for 'Do' calls
+    std::string AddFormXObjectMapping(ObjectIDType inFormXObjectID);
+    // AddFormXObjectMapping(inFormXObjectID,inFormXObjectName) should be used when the mechanism
+    // for determining XObject names is external to ResourcesDictionary. it is highly recommended
+    // that if One overload is used, it is used any time the particular resource dictionary is handled - this will avoid
+    // collisions in naming between the internal and external mechanism.
+    void AddFormXObjectMapping(ObjectIDType inFormXObjectID, const std::string &inFormXObjectName);
 
-	// XObjects
-	std::string AddXObjectMapping(ObjectIDType inXObjectID);
-	MapIterator<ObjectIDTypeToStringMap> GetXObjectsIterator();
+    // images. same idea as forms. note that image define resources that should
+    // be added to the container resources dictionary
+    std::string AddImageXObjectMapping(PDFImageXObject *inImageXObject);
+    void AddImageXObjectMapping(PDFImageXObject *inImageXObject, const std::string &inImageXObjectName);
 
-	// Use AddFormXObjectMapping to use a form XObject in a content stream [page or xobject].
-	// AddFromXObjectMapping(inFormXObjectID) returns a string name that you can use for 'Do' calls
-	std::string AddFormXObjectMapping(ObjectIDType inFormXObjectID);
-	// AddFormXObjectMapping(inFormXObjectID,inFormXObjectName) should be used when the mechanism
-	// for determining XObject names is external to ResourcesDictionary. it is highly recommended
-	// that if One overload is used, it is used any time the particular resource dictionary is handled - this will avoid
-	// collisions in naming between the internal and external mechanism.
-	void AddFormXObjectMapping(ObjectIDType inFormXObjectID,const std::string& inFormXObjectName);
-    
-	// images. same idea as forms. note that image define resources that should
-	// be added to the container resources dictionary
-	std::string AddImageXObjectMapping(PDFImageXObject* inImageXObject);
-	void AddImageXObjectMapping(PDFImageXObject* inImageXObject, const std::string& inImageXObjectName);
-    
-	// images registration without the automatic addition of image resources to the container resources dictionary
-	std::string AddImageXObjectMapping(ObjectIDType inImageXObjectID);
-	void AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string& inImageXObjectName);
-    
-	// Shading
-	std::string AddShadingMapping(ObjectIDType inShadingID);
-	MapIterator<ObjectIDTypeToStringMap> GetShadingsIterator();
+    // images registration without the automatic addition of image resources to the container resources dictionary
+    std::string AddImageXObjectMapping(ObjectIDType inImageXObjectID);
+    void AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string &inImageXObjectName);
 
-private:
+    // Shading
+    std::string AddShadingMapping(ObjectIDType inShadingID);
+    MapIterator<ObjectIDTypeToStringMap> GetShadingsIterator();
 
-	StringSet mProcsets;
+  private:
+    StringSet mProcsets;
     unsigned long mFormXObjectsCount;
     unsigned long mImageXObjectsCount;
     unsigned long mGenericXObjectsCount;
-	ObjectIDTypeToStringMap mExtGStates;
+    ObjectIDTypeToStringMap mExtGStates;
     unsigned long mExtGStatesCount;
-	ObjectIDTypeToStringMap mFonts;
-	unsigned long mFontsCount;
-	ObjectIDTypeToStringMap mColorSpaces;
+    ObjectIDTypeToStringMap mFonts;
+    unsigned long mFontsCount;
+    ObjectIDTypeToStringMap mColorSpaces;
     unsigned long mColorSpacesCount;
-	ObjectIDTypeToStringMap mPatterns;
+    ObjectIDTypeToStringMap mPatterns;
     unsigned long mPatternsCount;
-	ObjectIDTypeToStringMap mProperties;
+    ObjectIDTypeToStringMap mProperties;
     unsigned long mPropertiesCount;
-	ObjectIDTypeToStringMap mXObjects;
-	ObjectIDTypeToStringMap mShading;
+    ObjectIDTypeToStringMap mXObjects;
+    ObjectIDTypeToStringMap mShading;
     unsigned long mShadingCount;
 
-	void AddImageXObjectMappingWithName(PDFImageXObject* inImageXObject, const std::string& inImageXObjectName);
-
+    void AddImageXObjectMappingWithName(PDFImageXObject *inImageXObject, const std::string &inImageXObjectName);
 };
-

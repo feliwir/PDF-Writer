@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -27,24 +27,22 @@
 class InputBufferedStream;
 class InputFileStream;
 
-
-
 class InputFile
 {
-public:
-	InputFile(void);
-	~InputFile(void);
+  public:
+    InputFile(void);
+    ~InputFile(void);
 
-	PDFHummus::EStatusCode OpenFile(const std::string& inFilePath);
-	PDFHummus::EStatusCode CloseFile();
+    PDFHummus::EStatusCode OpenFile(const std::string &inFilePath);
+    PDFHummus::EStatusCode CloseFile();
 
-	IByteReaderWithPosition* GetInputStream(); // returns buffered input stream
-	const std::string& GetFilePath();
-	
-	LongFilePositionType GetFileSize();
+    IByteReaderWithPosition *GetInputStream(); // returns buffered input stream
+    const std::string &GetFilePath();
 
-private:
-	std::string mFilePath;
-	InputBufferedStream* mInputStream;
-	InputFileStream* mFileStream;
+    LongFilePositionType GetFileSize();
+
+  private:
+    std::string mFilePath;
+    InputBufferedStream *mInputStream;
+    InputFileStream *mFileStream;
 };

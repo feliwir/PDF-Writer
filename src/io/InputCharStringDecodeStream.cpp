@@ -16,28 +16,26 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "InputCharStringDecodeStream.h"
 
 using namespace PDFHummus;
 
-
-InputCharStringDecodeStream::InputCharStringDecodeStream(IByteReader* inReadFrom,unsigned long inLenIV)
+InputCharStringDecodeStream::InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV)
 {
-	Assign(inReadFrom,inLenIV);
+    Assign(inReadFrom, inLenIV);
 }
 
 InputCharStringDecodeStream::~InputCharStringDecodeStream(void)
 {
 }
 
-void InputCharStringDecodeStream::Assign(IByteReader* inReadFrom,unsigned long inLenIV)
+void InputCharStringDecodeStream::Assign(IByteReader *inReadFrom, unsigned long inLenIV)
 {
-	mReadFrom = inReadFrom;
-	InitializeCharStringDecode(inLenIV);
+    mReadFrom = inReadFrom;
+    InitializeCharStringDecode(inLenIV);
 }
-
 
 static const int CONSTANT_1 = 52845;
 static const int CONSTANT_2 = 22719;
@@ -46,48 +44,46 @@ static const int RANDOMIZER_MODULU_VAL = 65536;
 
 void InputCharStringDecodeStream::InitializeCharStringDecode(unsigned long inLenIV)
 {
-	Byte dummyByte;
+    Byte dummyByte;
 
-	mRandomizer = RANDOMIZER_INIT;
+    mRandomizer = RANDOMIZER_INIT;
 
-	for(unsigned long i=0;i<inLenIV;++i)
-		ReadDecodedByte(dummyByte);
+    for (unsigned long i = 0; i < inLenIV; ++i)
+        ReadDecodedByte(dummyByte);
 }
 
-EStatusCode InputCharStringDecodeStream::ReadDecodedByte(Byte& outByte)
+EStatusCode InputCharStringDecodeStream::ReadDecodedByte(Byte &outByte)
 {
-	Byte buffer;
-	
-	if(mReadFrom->Read(&buffer,1) != 1)
-		return PDFHummus::eFailure;
+    Byte buffer;
 
-	outByte = DecodeByte(buffer);
-	return PDFHummus::eSuccess;
+    if (mReadFrom->Read(&buffer, 1) != 1)
+        return PDFHummus::eFailure;
+
+    outByte = DecodeByte(buffer);
+    return PDFHummus::eSuccess;
 }
 
 Byte InputCharStringDecodeStream::DecodeByte(Byte inByteToDecode)
 {
-	Byte result = (Byte)(inByteToDecode ^ (mRandomizer >> 8));
-	mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer)* CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
-	return result;
+    Byte result = (Byte)(inByteToDecode ^ (mRandomizer >> 8));
+    mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
+    return result;
 }
 
-LongBufferSizeType InputCharStringDecodeStream::Read(Byte* inBuffer,LongBufferSizeType inBufferSize)
+LongBufferSizeType InputCharStringDecodeStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-	LongBufferSizeType bufferIndex = 0;
-	EStatusCode status = PDFHummus::eSuccess;
+    LongBufferSizeType bufferIndex = 0;
+    EStatusCode status = PDFHummus::eSuccess;
 
-	while(NotEnded() && inBufferSize > bufferIndex && PDFHummus::eSuccess == status)
-	{
-		status = ReadDecodedByte(inBuffer[bufferIndex]);
-		++bufferIndex;
-	}
-	return bufferIndex;	
+    while (NotEnded() && inBufferSize > bufferIndex && PDFHummus::eSuccess == status)
+    {
+        status = ReadDecodedByte(inBuffer[bufferIndex]);
+        ++bufferIndex;
+    }
+    return bufferIndex;
 }
 
 bool InputCharStringDecodeStream::NotEnded()
 {
-	return mReadFrom->NotEnded();
+    return mReadFrom->NotEnded();
 }
-
-

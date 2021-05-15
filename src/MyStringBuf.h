@@ -16,22 +16,30 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include <sstream>
 
-
-
 class MyStringBuf : public std::stringbuf
 {
-public:
+  public:
+    std::stringbuf::pos_type GetCurrentReadPosition()
+    {
+        return gptr() - eback();
+    }
+    std::stringbuf::pos_type GetCurrentWritePosition()
+    {
+        return pptr() - pbase();
+    }
 
-	std::stringbuf::pos_type GetCurrentReadPosition() {return gptr()-eback();}
-	std::stringbuf::pos_type GetCurrentWritePosition() {return pptr()-pbase();}
-	
-	std::stringbuf::pos_type GetReadSize() {return egptr()-eback();}
-	std::stringbuf::pos_type GetWriteSize() {return epptr()-pbase();}
-
+    std::stringbuf::pos_type GetReadSize()
+    {
+        return egptr() - eback();
+    }
+    std::stringbuf::pos_type GetWriteSize()
+    {
+        return epptr() - pbase();
+    }
 };

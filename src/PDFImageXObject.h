@@ -16,30 +16,29 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ObjectsBasicTypes.h"
 
-#include <string>
 #include <list>
+#include <string>
 
 typedef std::list<std::string> StringList;
 
 class PDFImageXObject
 {
-public:
-	PDFImageXObject(ObjectIDType inImageObjectID);
-	PDFImageXObject(ObjectIDType inImageObjectID,const std::string& inRequiredProcsetResourceName);
-	~PDFImageXObject(void);
+  public:
+    PDFImageXObject(ObjectIDType inImageObjectID);
+    PDFImageXObject(ObjectIDType inImageObjectID, const std::string &inRequiredProcsetResourceName);
+    ~PDFImageXObject(void);
 
-	ObjectIDType GetImageObjectID();
-	const StringList& GetRequiredProcsetResourceNames() const;
+    ObjectIDType GetImageObjectID();
+    const StringList &GetRequiredProcsetResourceNames() const;
 
-	void AddRequiredProcset(const std::string& inRequiredProcsetResourceName);
+    void AddRequiredProcset(const std::string &inRequiredProcsetResourceName);
 
-private:
-
-	ObjectIDType mImageObjectID;
-	StringList mRequiredProcsetResourceNames;
+  private:
+    ObjectIDType mImageObjectID;
+    StringList mRequiredProcsetResourceNames;
 };

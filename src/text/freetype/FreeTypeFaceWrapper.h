@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -26,18 +26,16 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <utility>
 #include <list>
 #include <string>
+#include <utility>
 #include <vector>
 
 class IFreeTypeFaceExtender;
 class IWrittenFont;
 class ObjectsContext;
 
-
-
-typedef std::pair<bool,FT_Short> BoolAndFTShort;
+typedef std::pair<bool, FT_Short> BoolAndFTShort;
 typedef std::list<unsigned int> UIntList;
 typedef std::list<UIntList> UIntListList;
 typedef std::list<std::string> StringList;
@@ -46,143 +44,146 @@ typedef std::list<ULongList> ULongListList;
 
 class FreeTypeFaceWrapper
 {
-public:
-	class IOutlineEnumerator;
+  public:
+    class IOutlineEnumerator;
 
-	// first overload - all but type ones. the file path is just given for storage (later queries may want it)
-	FreeTypeFaceWrapper(FT_Face inFace,const std::string& inFontFilePath,long inFontIndex,bool inDoOwn = true);
+    // first overload - all but type ones. the file path is just given for storage (later queries may want it)
+    FreeTypeFaceWrapper(FT_Face inFace, const std::string &inFontFilePath, long inFontIndex, bool inDoOwn = true);
 
-	// second overload - type 1, to allow passing pfm file path. do not bother
-	// if you don't have a PFM file. no i don't care about the godamn AFM file. just the PFM.
-	// if you don't have a PFM i'll manage. again - i don't need the @#$@#$ AFM file. 
-	// you see. i need to know if the font is serif, script 'n such. AFM - even if there
-	// does not have that kind of info. so @#$@#$ off.
-	// for any case, i'll check the file extension, and only do something about it if it has a pfm extension
-	FreeTypeFaceWrapper(FT_Face inFace,const std::string& inFontFilePath,const std::string& inPFMFilePath,long inFontIndex,bool inDoOwn = true);
-	~FreeTypeFaceWrapper(void);
+    // second overload - type 1, to allow passing pfm file path. do not bother
+    // if you don't have a PFM file. no i don't care about the godamn AFM file. just the PFM.
+    // if you don't have a PFM i'll manage. again - i don't need the @#$@#$ AFM file.
+    // you see. i need to know if the font is serif, script 'n such. AFM - even if there
+    // does not have that kind of info. so @#$@#$ off.
+    // for any case, i'll check the file extension, and only do something about it if it has a pfm extension
+    FreeTypeFaceWrapper(FT_Face inFace, const std::string &inFontFilePath, const std::string &inPFMFilePath,
+                        long inFontIndex, bool inDoOwn = true);
+    ~FreeTypeFaceWrapper(void);
 
-	FT_Error DoneFace();
+    FT_Error DoneFace();
 
-	FT_Face operator->();
-	operator FT_Face();
+    FT_Face operator->();
+    operator FT_Face();
 
-	bool IsValid();
+    bool IsValid();
 
-	PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongList& inUnicodeCharacters,UIntList& outGlyphs);
-	PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongListList& inUnicodeCharacters,UIntListList& outGlyphs);
+    PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongList &inUnicodeCharacters, UIntList &outGlyphs);
+    PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongListList &inUnicodeCharacters, UIntListList &outGlyphs);
 
-	std::string GetPostscriptName();
-	double GetItalicAngle();
-	BoolAndFTShort GetCapHeight(); // aligned to pdf metrics
-	BoolAndFTShort GetxHeight(); // aligned to pdf metrics
-	FT_UShort GetStemV(); // aligned to pdf metrics
-	EFontStretch GetFontStretch();
-	FT_UShort GetFontWeight();
-	// these would be flags for the font as a whole. if subsetting, match to the character set
-	unsigned int GetFontFlags();
-	const char* GetTypeString();
-	std::string GetGlyphName(unsigned int inGlyphIndex, bool safe= false);
+    std::string GetPostscriptName();
+    double GetItalicAngle();
+    BoolAndFTShort GetCapHeight(); // aligned to pdf metrics
+    BoolAndFTShort GetxHeight();   // aligned to pdf metrics
+    FT_UShort GetStemV();          // aligned to pdf metrics
+    EFontStretch GetFontStretch();
+    FT_UShort GetFontWeight();
+    // these would be flags for the font as a whole. if subsetting, match to the character set
+    unsigned int GetFontFlags();
+    const char *GetTypeString();
+    std::string GetGlyphName(unsigned int inGlyphIndex, bool safe = false);
     FT_Pos GetGlyphWidth(unsigned int inGlyphIndex);
-	bool GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator& inEnumerator);
+    bool GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator &inEnumerator);
 
-	// Create the written font object, matching to write this font in the best way.
-	IWrittenFont* CreateWrittenFontObject(ObjectsContext* inObjectsContext, bool inFontIsToBeEmbedded);
+    // Create the written font object, matching to write this font in the best way.
+    IWrittenFont *CreateWrittenFontObject(ObjectsContext *inObjectsContext, bool inFontIsToBeEmbedded);
 
+    // flags determining values
+    bool IsFixedPitch();
+    bool IsSerif();
+    bool IsScript();
+    bool IsItalic();
+    bool IsForceBold();
 
-	// flags determining values
-	bool IsFixedPitch();
-	bool IsSerif();
-	bool IsScript();
-	bool IsItalic();
-	bool IsForceBold();
+    // will be used externally to determine if font is symbolic or not
+    bool IsCharachterCodeAdobeStandard(FT_ULong inCharacterCode);
 
-	// will be used externally to determine if font is symbolic or not
-	bool IsCharachterCodeAdobeStandard(FT_ULong inCharacterCode);
-
-	const std::string& GetFontFilePath();
+    const std::string &GetFontFilePath();
     long GetFontIndex();
 
-
-	// use this method to align measurements from (remember the dreaded point per EM!!!).
-	// all measurements in this class are already aligned...so no need to align them
-	FT_Short GetInPDFMeasurements(FT_Short inFontMeasurement);
-	FT_UShort GetInPDFMeasurements(FT_UShort inFontMeasurement);
-	FT_Pos GetInPDFMeasurements(FT_Pos inFontMeasurement);
+    // use this method to align measurements from (remember the dreaded point per EM!!!).
+    // all measurements in this class are already aligned...so no need to align them
+    FT_Short GetInPDFMeasurements(FT_Short inFontMeasurement);
+    FT_UShort GetInPDFMeasurements(FT_UShort inFontMeasurement);
+    FT_Pos GetInPDFMeasurements(FT_Pos inFontMeasurement);
 
     // translate to freetype glyph index. this may not always be the input, as in the case
     // of type 3 fonts with private encoding. so what actually gets in is the glyph index
     // according to hummus
     unsigned int GetGlyphIndexInFreeTypeIndexes(unsigned int inGlyphIndex);
 
-	// load glyph, use the freetype load glyph, but add some extra flags that are common to 
-	// Hummus requirements, which is SPEED SPEED. as i don't normally need rendering
-	// hinting and scaling is always removed. inFlags are added on top of the default flags
-	FT_Error LoadGlyph(FT_UInt inGlyphIndex, FT_Int32 inFlags = 0);
+    // load glyph, use the freetype load glyph, but add some extra flags that are common to
+    // Hummus requirements, which is SPEED SPEED. as i don't normally need rendering
+    // hinting and scaling is always removed. inFlags are added on top of the default flags
+    FT_Error LoadGlyph(FT_UInt inGlyphIndex, FT_Int32 inFlags = 0);
 
-private:
-
-	FT_Face mFace;
-	IFreeTypeFaceExtender* mFormatParticularWrapper;
-	bool mHaslowercase;
-	std::string mFontFilePath;
+  private:
+    FT_Face mFace;
+    IFreeTypeFaceExtender *mFormatParticularWrapper;
+    bool mHaslowercase;
+    std::string mFontFilePath;
     long mFontIndex;
     std::string mNotDefGlyphName;
-	bool mGlyphIsLoaded;
-	unsigned int mCurrentGlyph;
-	bool mDoesOwn;
-	bool mUsePUACodes;
+    bool mGlyphIsLoaded;
+    unsigned int mCurrentGlyph;
+    bool mDoesOwn;
+    bool mUsePUACodes;
 
-	BoolAndFTShort GetCapHeightInternal(); 
-	BoolAndFTShort GetxHeightInternal(); 
-	FT_UShort GetStemVInternal(); 
+    BoolAndFTShort GetCapHeightInternal();
+    BoolAndFTShort GetxHeightInternal();
+    FT_UShort GetStemVInternal();
 
+    std::string GetExtension(const std::string &inFilePath);
+    void SetupFormatSpecificExtender(const std::string &inFilePath, const std::string &inPFMFilePath);
+    BoolAndFTShort CapHeightFromHHeight();
+    BoolAndFTShort XHeightFromLowerXHeight();
+    BoolAndFTShort GetYBearingForUnicodeChar(unsigned short unicodeCharCode);
+    EFontStretch StretchFromName();
+    FT_UShort WeightFromName();
+    bool IsSymbolic();
+    bool IsDefiningCharsNotInAdobeStandardLatin();
+    std::string NotDefGlyphName();
 
-	std::string GetExtension(const std::string& inFilePath);
-	void SetupFormatSpecificExtender(const std::string& inFilePath, const std::string& inPFMFilePath);
-	BoolAndFTShort CapHeightFromHHeight();
-	BoolAndFTShort XHeightFromLowerXHeight();
-	BoolAndFTShort GetYBearingForUnicodeChar(unsigned short unicodeCharCode);
-	EFontStretch StretchFromName();
-	FT_UShort WeightFromName();
-	bool IsSymbolic();
-	bool IsDefiningCharsNotInAdobeStandardLatin();
-	std::string NotDefGlyphName();
+    void SelectDefaultEncoding();
 
-	void SelectDefaultEncoding();
+  public:
+    class IOutlineEnumerator
+    {
+      public:
+        IOutlineEnumerator()
+        {
+            mUPM = 0;
+        }
+        virtual ~IOutlineEnumerator(){};
 
-public:
-	class IOutlineEnumerator {
-	public:
-		IOutlineEnumerator(){ mUPM = 0; }
-		virtual ~IOutlineEnumerator(){};
+        inline FT_Short UPM() const
+        {
+            return mUPM;
+        } // typically 1000 or 2048
 
-		inline FT_Short UPM() const { return mUPM; } //typically 1000 or 2048
+      protected:
+        // in font em units relative to UPM
+        virtual bool Moveto(FT_Short x, FT_Short y) = 0; // ret false to abort
+        virtual bool Lineto(FT_Short x, FT_Short y) = 0;
+        virtual bool Curveto(FT_Short x1, FT_Short y1, FT_Short x2, FT_Short y2, FT_Short x3, FT_Short y3) = 0;
+        virtual bool Close() = 0;
 
-	protected:
-		//in font em units relative to UPM
-		virtual bool Moveto(FT_Short x, FT_Short y) =0; //ret false to abort
-		virtual bool Lineto(FT_Short x, FT_Short y) =0;
-		virtual bool Curveto(FT_Short x1, FT_Short y1, FT_Short x2, FT_Short y2, FT_Short x3, FT_Short y3) =0;
-		virtual bool Close() =0;
+      private:
+        friend bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator &inEnumerator);
+        static int outline_moveto(const FT_Vector *to, void *closure);
+        static int outline_lineto(const FT_Vector *to, void *closure);
+        static int outline_conicto(const FT_Vector *control, const FT_Vector *to, void *closure);
+        static int outline_cubicto(const FT_Vector *control1, const FT_Vector *control2, const FT_Vector *to,
+                                   void *closure);
 
-	private:
-		friend bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator& inEnumerator);
-		static int outline_moveto(const FT_Vector* to, void *closure);
-		static int outline_lineto(const FT_Vector* to, void *closure);
-		static int outline_conicto(const FT_Vector *control, const FT_Vector *to, void *closure);
-		static int outline_cubicto(const FT_Vector *control1, const FT_Vector *control2, const FT_Vector *to, void *closure);
+        void FTBegin(FT_UShort upm);
+        inline bool FTMoveto(const FT_Vector *to); // rets true if ok
+        inline bool FTLineto(const FT_Vector *to);
+        inline bool FTConicto(const FT_Vector *control, const FT_Vector *to);
+        inline bool FTCubicto(const FT_Vector *control1, const FT_Vector *control2, const FT_Vector *to);
+        void FTEnd();
 
-		void FTBegin(FT_UShort upm);
-		inline bool FTMoveto(const FT_Vector *to); //rets true if ok
-		inline bool FTLineto(const FT_Vector *to);
-		inline bool FTConicto(const FT_Vector *control, const FT_Vector *to);
-		inline bool FTCubicto(const FT_Vector *control1, const FT_Vector *control2, const FT_Vector *to);
-		void FTEnd();
-
-		FT_UShort mUPM; //units per EM
-		bool mToLastValid;
-		FT_Vector mToLast;
-	};
+        FT_UShort mUPM; // units per EM
+        bool mToLastValid;
+        FT_Vector mToLast;
+    };
 };
-
-

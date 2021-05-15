@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "FlateEncryptionTest.h"
 
 #include "io/InputBufferedStream.h"
-#include "io/OutputBufferedStream.h"
 #include "io/InputFileStream.h"
+#include "io/OutputBufferedStream.h"
 #include "io/OutputFileStream.h"
 #include "io/OutputFlateDecodeStream.h"
 #include "io/OutputFlateEncodeStream.h"
@@ -42,63 +42,64 @@ FlateEncryptionTest::~FlateEncryptionTest(void)
 {
 }
 
-EStatusCode FlateEncryptionTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode FlateEncryptionTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status;
+    EStatusCode status;
 
-	do
-	{
-		// Create encrypted copy of the message
-		string aString = "encryptedMessage";
+    do
+    {
+        // Create encrypted copy of the message
+        string aString = "encryptedMessage";
 
-		IByteWriter* encoderStream = new OutputFlateEncodeStream(new OutputBufferedStream(new OutputFileStream(
-                                        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"encrypted.txt"))));
+        IByteWriter *encoderStream = new OutputFlateEncodeStream(new OutputBufferedStream(
+            new OutputFileStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "encrypted.txt"))));
 
-		LongBufferSizeType writtenSize = encoderStream->Write((const IOBasicTypes::Byte*)aString.c_str(),aString.length());
-		delete encoderStream;
-		if(writtenSize != aString.length())
-		{
-			cout<<"Failed to write all message to output\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
+        LongBufferSizeType writtenSize =
+            encoderStream->Write((const IOBasicTypes::Byte *)aString.c_str(), aString.length());
+        delete encoderStream;
+        if (writtenSize != aString.length())
+        {
+            cout << "Failed to write all message to output\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
 
-		IByteReader* encoderReaderStream = new InputBufferedStream(new InputFileStream(
-                                          RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"encrypted.txt")));
-		IByteWriter* decoderWriterStream = new OutputFlateDecodeStream(new OutputBufferedStream(new OutputFileStream(
-                                          RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"decrypted.txt")))); 
+        IByteReader *encoderReaderStream = new InputBufferedStream(
+            new InputFileStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "encrypted.txt")));
+        IByteWriter *decoderWriterStream = new OutputFlateDecodeStream(new OutputBufferedStream(
+            new OutputFileStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "decrypted.txt"))));
 
-		OutputStreamTraits outputTraits(decoderWriterStream);
-		status = outputTraits.CopyToOutputStream(encoderReaderStream);
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"Failed to copy to decrypted output\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
+        OutputStreamTraits outputTraits(decoderWriterStream);
+        status = outputTraits.CopyToOutputStream(encoderReaderStream);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "Failed to copy to decrypted output\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
 
-		delete encoderReaderStream;
-		delete decoderWriterStream;
+        delete encoderReaderStream;
+        delete decoderWriterStream;
 
-		// now read again decrypted and compare to original message
-		IByteReader* decoderReaderStream = new InputBufferedStream(new InputFileStream(
-                                          RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"decrypted.txt")));
-		char buffer[256];
+        // now read again decrypted and compare to original message
+        IByteReader *decoderReaderStream = new InputBufferedStream(
+            new InputFileStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "decrypted.txt")));
+        char buffer[256];
 
-		LongBufferSizeType readSize = decoderReaderStream->Read((IOBasicTypes::Byte*)buffer,255);
-		buffer[readSize] = 0;
+        LongBufferSizeType readSize = decoderReaderStream->Read((IOBasicTypes::Byte *)buffer, 255);
+        buffer[readSize] = 0;
 
-		delete decoderReaderStream;
+        delete decoderReaderStream;
 
-		if(strcmp(aString.c_str(),buffer) != 0)
-		{
-			cout<<"decrypted content is different from encrypted content\n";
-			status = PDFHummus::eFailure;
-			break;
-		}
-	}while(false);
+        if (strcmp(aString.c_str(), buffer) != 0)
+        {
+            cout << "decrypted content is different from encrypted content\n";
+            status = PDFHummus::eFailure;
+            break;
+        }
+    } while (false);
 
-	return status;
+    return status;
 }
 
-ADD_CATEGORIZED_TEST(FlateEncryptionTest,"IO")
+ADD_CATEGORIZED_TEST(FlateEncryptionTest, "IO")

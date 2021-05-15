@@ -16,55 +16,52 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
-#include "PDFTextString.h"
-#include "PDFDate.h"
 #include "MapIterator.h"
-#include <string>
+#include "PDFDate.h"
+#include "PDFTextString.h"
 #include <map>
+#include <string>
 
-typedef std::map<std::string,PDFTextString> StringToPDFTextString;
+typedef std::map<std::string, PDFTextString> StringToPDFTextString;
 
 enum EInfoTrapped
 {
-	EInfoTrappedTrue,
-	EInfoTrappedFalse,
-	EInfoTrappedUnknown
+    EInfoTrappedTrue,
+    EInfoTrappedFalse,
+    EInfoTrappedUnknown
 };
 
 class InfoDictionary
 {
-public:
-	InfoDictionary(void);
-	~InfoDictionary(void);
+  public:
+    InfoDictionary(void);
+    ~InfoDictionary(void);
 
-	PDFTextString Title;
-	PDFTextString Author;
-	PDFTextString Subject;
-	PDFTextString Keywords;
-	PDFTextString Creator;
-	PDFTextString Producer;
-	PDFDate CreationDate;
-	PDFDate ModDate;
-	EInfoTrapped Trapped;
+    PDFTextString Title;
+    PDFTextString Author;
+    PDFTextString Subject;
+    PDFTextString Keywords;
+    PDFTextString Creator;
+    PDFTextString Producer;
+    PDFDate CreationDate;
+    PDFDate ModDate;
+    EInfoTrapped Trapped;
 
-	void AddAdditionalInfoEntry(const std::string& inKey,
-								const PDFTextString& inValue);
-	void RemoveAdditionalInfoEntry(const std::string& inKey);
-	void ClearAdditionalInfoEntries();
-	PDFTextString GetAdditionalInfoEntry(const std::string& inKey);
+    void AddAdditionalInfoEntry(const std::string &inKey, const PDFTextString &inValue);
+    void RemoveAdditionalInfoEntry(const std::string &inKey);
+    void ClearAdditionalInfoEntries();
+    PDFTextString GetAdditionalInfoEntry(const std::string &inKey);
 
-	MapIterator<StringToPDFTextString> GetAdditionaEntriesIterator();
+    MapIterator<StringToPDFTextString> GetAdditionaEntriesIterator();
 
+    bool IsEmpty();
 
-	bool IsEmpty();
+    void Reset();
 
-	void Reset();
-private:
-
-	StringToPDFTextString mAdditionalInfoEntries;
+  private:
+    StringToPDFTextString mAdditionalInfoEntries;
 };
-

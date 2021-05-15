@@ -16,41 +16,39 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
 #include "EStatusCode.h"
 #include "IByteWriterWithPosition.h"
 
-#include <string>
 #include <stdio.h>
+#include <string>
 #ifdef __MINGW32__
 #include <share.h>
 #endif
 
-
-
 class OutputFileStream : public IByteWriterWithPosition
 {
-public:
-	OutputFileStream(void);
-	virtual ~OutputFileStream(void);
+  public:
+    OutputFileStream(void);
+    virtual ~OutputFileStream(void);
 
-	// input file path is in UTF8
-	OutputFileStream(const std::string& inFilePath,bool inAppend = false);
+    // input file path is in UTF8
+    OutputFileStream(const std::string &inFilePath, bool inAppend = false);
 
-	// input file path is in UTF8
-	PDFHummus::EStatusCode Open(const std::string& inFilePath,bool inAppend = false);
-	PDFHummus::EStatusCode Close();
+    // input file path is in UTF8
+    PDFHummus::EStatusCode Open(const std::string &inFilePath, bool inAppend = false);
+    PDFHummus::EStatusCode Close();
 
-	// IByteWriter implementation
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer,IOBasicTypes::LongBufferSizeType inSize);
+    // IByteWriter implementation
+    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
+                                                   IOBasicTypes::LongBufferSizeType inSize);
 
-	// IByteWriterWithPosition implementation
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    // IByteWriterWithPosition implementation
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
 
-private:
-
-	FILE* mStream;
+  private:
+    FILE *mStream;
 };

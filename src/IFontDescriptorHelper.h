@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,8 +24,6 @@
 
 #include <utility>
 #include <vector>
-
-
 
 class DictionaryContext;
 class ObjectsContext;
@@ -37,14 +35,10 @@ typedef std::vector<unsigned int> UIntVector;
 
 class IFontDescriptorHelper
 {
-public:
+  public:
+    virtual void WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,
+                              FreeTypeFaceWrapper *inFontInfo,
+                              const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs) = 0;
 
-	virtual void WriteCharSet(	DictionaryContext* inDescriptorContext,
-								ObjectsContext* inObjectsContext,
-								FreeTypeFaceWrapper* inFontInfo,
-								const UIntAndGlyphEncodingInfoVector& inEncodedGlyphs) =0;
-
-
-	virtual void WriteFontFileReference(DictionaryContext* inDescriptorContext,
-										ObjectsContext* inObjectsContext) =0;
+    virtual void WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext) = 0;
 };

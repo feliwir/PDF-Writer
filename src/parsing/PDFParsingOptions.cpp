@@ -20,7 +20,8 @@ limitations under the License.
 */
 #include "PDFParsingOptions.h"
 
-const PDFParsingOptions& PDFParsingOptions::DefaultPDFParsingOptions(){
-	static PDFParsingOptions pdf_parsing_options("");
-	return pdf_parsing_options;
+const PDFParsingOptions &PDFParsingOptions::DefaultPDFParsingOptions()
+{
+    static PDFParsingOptions pdf_parsing_options("");
+    return pdf_parsing_options;
 }

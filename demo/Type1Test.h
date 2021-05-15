@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "ITestUnit.h"
@@ -34,21 +34,21 @@ class Type1Input;
 
 class Type1Test : public ITestUnit
 {
-public:
-	Type1Test(void);
-	~Type1Test(void);
+  public:
+    Type1Test(void);
+    ~Type1Test(void);
 
-	virtual PDFHummus::EStatusCode Run(const TestConfiguration& inTestConfiguration);
+    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
 
-private:
-	PDFHummus::EStatusCode SaveCharstringCode(const TestConfiguration& inTestConfiguration,const string& inCharStringName,Type1Input* inType1Input);
-	PDFHummus::EStatusCode ShowDependencies(const string& inCharStringName,Type1Input* inType1Input);
+  private:
+    PDFHummus::EStatusCode SaveCharstringCode(const TestConfiguration &inTestConfiguration,
+                                              const string &inCharStringName, Type1Input *inType1Input);
+    PDFHummus::EStatusCode ShowDependencies(const string &inCharStringName, Type1Input *inType1Input);
 
-	void ShowFontDictionary(const Type1FontDictionary& inFontDictionary);
-	void ShowFontInfoDictionary(const Type1FontInfoDictionary& inFontInfoDictionary);
-	void ShowPrivateInfoDictionary(const Type1PrivateDictionary& inPrivateDictionary);
-	void ShowDoubleArray(const double inDoubleArray[],int inSize);
-	void ShowIntVector(const vector<int>& inVector);
-	void ShowDoubleVector(const vector<double>& inVector);
-
+    void ShowFontDictionary(const Type1FontDictionary &inFontDictionary);
+    void ShowFontInfoDictionary(const Type1FontInfoDictionary &inFontInfoDictionary);
+    void ShowPrivateInfoDictionary(const Type1PrivateDictionary &inPrivateDictionary);
+    void ShowDoubleArray(const double inDoubleArray[], int inSize);
+    void ShowIntVector(const vector<int> &inVector);
+    void ShowDoubleVector(const vector<double> &inVector);
 };

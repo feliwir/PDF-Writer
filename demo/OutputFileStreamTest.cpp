@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "OutputFileStreamTest.h"
 #include "io/OutputFileStream.h"
@@ -29,7 +29,6 @@ using namespace PDFHummus;
 
 static const std::string scOutputFileStreamTest = "OutputFileStreamTest";
 
-
 OutputFileStreamTest::OutputFileStreamTest(void)
 {
 }
@@ -38,16 +37,15 @@ OutputFileStreamTest::~OutputFileStreamTest(void)
 {
 }
 
-EStatusCode OutputFileStreamTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode OutputFileStreamTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	OutputFileStream stream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"OutputFileStreamTest.txt"));
-	Byte buffer[5] = {'a','b','c','d','e'};
+    OutputFileStream stream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "OutputFileStreamTest.txt"));
+    Byte buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
-	stream.Write(buffer,5);
-	stream.Close();
+    stream.Write(buffer, 5);
+    stream.Close();
 
-	return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
-ADD_CATEGORIZED_TEST(OutputFileStreamTest,"IO")
-
+ADD_CATEGORIZED_TEST(OutputFileStreamTest, "IO")

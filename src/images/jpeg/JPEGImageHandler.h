@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -24,11 +24,9 @@
 #include "ObjectsBasicTypes.h"
 
 #include <map>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-
-
 
 class ObjectsContext;
 class PDFImageXObject;
@@ -38,60 +36,64 @@ class IByteReaderWithPosition;
 
 namespace PDFHummus
 {
-	class DocumentContext;
+class DocumentContext;
 }
 
 using namespace PDFHummus;
 
-
-typedef std::map<std::string,JPEGImageInformation> StringToJPEGImageInformationMap;
-typedef std::pair<bool,JPEGImageInformation> BoolAndJPEGImageInformation;
-typedef std::pair<double,double> DoubleAndDoublePair;
-typedef std::set<IDocumentContextExtender*> IDocumentContextExtenderSet;
-
+typedef std::map<std::string, JPEGImageInformation> StringToJPEGImageInformationMap;
+typedef std::pair<bool, JPEGImageInformation> BoolAndJPEGImageInformation;
+typedef std::pair<double, double> DoubleAndDoublePair;
+typedef std::set<IDocumentContextExtender *> IDocumentContextExtenderSet;
 
 class JPEGImageHandler
 {
-public:
-	JPEGImageHandler();
-	~JPEGImageHandler(void);
+  public:
+    JPEGImageHandler();
+    ~JPEGImageHandler(void);
 
-	// use this for retrieving image information for JPEG (useful for deciphering JPG dimensions tags)
-	BoolAndJPEGImageInformation RetrieveImageInformation(const std::string& inJPGFilePath);
-	BoolAndJPEGImageInformation RetrieveImageInformation(IByteReaderWithPosition* inJPGStream);
+    // use this for retrieving image information for JPEG (useful for deciphering JPG dimensions tags)
+    BoolAndJPEGImageInformation RetrieveImageInformation(const std::string &inJPGFilePath);
+    BoolAndJPEGImageInformation RetrieveImageInformation(IByteReaderWithPosition *inJPGStream);
 
-	// DocumentContext::CreateImageXObjectFromJPGFile are equivelent
-	PDFImageXObject* CreateImageXObjectFromJPGFile(const std::string& inJPGFilePath);
-	PDFImageXObject* CreateImageXObjectFromJPGStream(IByteReaderWithPosition* inJPGStream);
-	PDFImageXObject* CreateImageXObjectFromJPGFile(const std::string& inJPGFilePath,ObjectIDType inImageXObjectID);
-	PDFImageXObject* CreateImageXObjectFromJPGStream(IByteReaderWithPosition* inJPGStream,ObjectIDType inImageXObjectID);
-	
-	// will return form XObject, which will include the xobject at it's size
-	PDFFormXObject* CreateFormXObjectFromJPGFile(const std::string& inJPGFilePath);
-	PDFFormXObject* CreateFormXObjectFromJPGStream(IByteReaderWithPosition* inJPGStream);
-	PDFFormXObject* CreateFormXObjectFromJPGFile(const std::string& inJPGFilePath,ObjectIDType inFormXObjectID);
-	PDFFormXObject* CreateFormXObjectFromJPGStream(IByteReaderWithPosition* inJPGStream,ObjectIDType inFormXObjectID);
+    // DocumentContext::CreateImageXObjectFromJPGFile are equivelent
+    PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath);
+    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
+    PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inImageXObjectID);
+    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+                                                     ObjectIDType inImageXObjectID);
 
-	void SetOperationsContexts(PDFHummus::DocumentContext* inDocumentContext,ObjectsContext* inObjectsContext);
-	void AddDocumentContextExtender(IDocumentContextExtender* inExtender);
-	void RemoveDocumentContextExtender(IDocumentContextExtender* inExtender);
+    // will return form XObject, which will include the xobject at it's size
+    PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
+    PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inFormXObjectID);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream, ObjectIDType inFormXObjectID);
 
-	void Reset();
+    void SetOperationsContexts(PDFHummus::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
+    void AddDocumentContextExtender(IDocumentContextExtender *inExtender);
+    void RemoveDocumentContextExtender(IDocumentContextExtender *inExtender);
+
+    void Reset();
 
     // use the top RetrieveImageInformation to get a JPEGImageInformation, and then get to here to get the dimensions
     // that PDFHummus will use if asked to place "as is"
-    DoubleAndDoublePair GetImageDimensions(const JPEGImageInformation& inJPGImageInformation);
-	int GetColorComponents(const JPEGImageInformation& inJPGImageInformation);
+    DoubleAndDoublePair GetImageDimensions(const JPEGImageInformation &inJPGImageInformation);
+    int GetColorComponents(const JPEGImageInformation &inJPGImageInformation);
 
-private:
-	JPEGImageInformation mNullInformation;
-	StringToJPEGImageInformationMap mImagesInformationMap;
-	ObjectsContext* mObjectsContext;
-	PDFHummus::DocumentContext* mDocumentContext;
-	IDocumentContextExtenderSet mExtenders;
+  private:
+    JPEGImageInformation mNullInformation;
+    StringToJPEGImageInformationMap mImagesInformationMap;
+    ObjectsContext *mObjectsContext;
+    PDFHummus::DocumentContext *mDocumentContext;
+    IDocumentContextExtenderSet mExtenders;
 
-	PDFImageXObject* CreateAndWriteImageXObjectFromJPGInformation(const std::string& inJPGFilePath,ObjectIDType inImageXObjectID, const JPEGImageInformation& inJPGImageInformation);
-	PDFImageXObject* CreateAndWriteImageXObjectFromJPGInformation(IByteReaderWithPosition* inJPGImageStream,ObjectIDType inImageXObjectID, const JPEGImageInformation& inJPGImageInformation);
-	PDFFormXObject* CreateImageFormXObjectFromImageXObject(PDFImageXObject* inImageXObject,ObjectIDType inFormXObjectID, const JPEGImageInformation& inJPGImageInformation);
-
+    PDFImageXObject *CreateAndWriteImageXObjectFromJPGInformation(const std::string &inJPGFilePath,
+                                                                  ObjectIDType inImageXObjectID,
+                                                                  const JPEGImageInformation &inJPGImageInformation);
+    PDFImageXObject *CreateAndWriteImageXObjectFromJPGInformation(IByteReaderWithPosition *inJPGImageStream,
+                                                                  ObjectIDType inImageXObjectID,
+                                                                  const JPEGImageInformation &inJPGImageInformation);
+    PDFFormXObject *CreateImageFormXObjectFromImageXObject(PDFImageXObject *inImageXObject,
+                                                           ObjectIDType inFormXObjectID,
+                                                           const JPEGImageInformation &inJPGImageInformation);
 };

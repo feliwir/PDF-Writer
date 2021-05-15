@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "EStatusCode.h"
@@ -28,21 +28,19 @@ class IByteWriter;
 
 class Type2CharStringWriter
 {
-public:
-	Type2CharStringWriter(IByteWriter* inTargetStream);
-	~Type2CharStringWriter(void);
+  public:
+    Type2CharStringWriter(IByteWriter *inTargetStream);
+    ~Type2CharStringWriter(void);
 
-	void Assign(IByteWriter* inTargetStream);
+    void Assign(IByteWriter *inTargetStream);
 
-	PDFHummus::EStatusCode WriteHintMask(unsigned long inMask,unsigned long inMaskSize);
-	PDFHummus::EStatusCode WriteIntegerOperand(long inOperand);
-	PDFHummus::EStatusCode WriteOperator(unsigned short inOperatorCode);
+    PDFHummus::EStatusCode WriteHintMask(unsigned long inMask, unsigned long inMaskSize);
+    PDFHummus::EStatusCode WriteIntegerOperand(long inOperand);
+    PDFHummus::EStatusCode WriteOperator(unsigned short inOperatorCode);
 
+  private:
+    IByteWriter *mTargetStream;
 
-private:
-
-	IByteWriter* mTargetStream;
-
-	PDFHummus::EStatusCode WriteMaskBytes(unsigned long inMask,unsigned long inMaskByteSize);
-	PDFHummus::EStatusCode WriteByte(Byte inValue);
+    PDFHummus::EStatusCode WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize);
+    PDFHummus::EStatusCode WriteByte(Byte inValue);
 };

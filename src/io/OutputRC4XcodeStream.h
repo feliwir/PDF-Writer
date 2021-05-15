@@ -26,20 +26,20 @@ limitations under the License.
 
 typedef std::list<IOBasicTypes::Byte> ByteList;
 
-
 class OutputRC4XcodeStream : public IByteWriterWithPosition
 {
-public:
-	OutputRC4XcodeStream(void);
-	virtual ~OutputRC4XcodeStream(void);
+  public:
+    OutputRC4XcodeStream(void);
+    virtual ~OutputRC4XcodeStream(void);
 
-	OutputRC4XcodeStream(IByteWriterWithPosition* inTargetStream, const ByteList& inEncryptionKey,bool inOwnsStream);
+    OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey, bool inOwnsStream);
 
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer, IOBasicTypes::LongBufferSizeType inSize);
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
+                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
 
-private:
-	bool mOwnsStream;
-	IByteWriterWithPosition* mTargetStream;
-	RC4 mRC4;
+  private:
+    bool mOwnsStream;
+    IByteWriterWithPosition *mTargetStream;
+    RC4 mRC4;
 };

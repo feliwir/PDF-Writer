@@ -16,13 +16,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PDFInteger.h"
 
-PDFInteger::PDFInteger(long long inValue):PDFObject(eType)
+PDFInteger::PDFInteger(long long inValue) : PDFObject(eType)
 {
-	mValue = inValue;
+    mValue = inValue;
 }
 
 PDFInteger::~PDFInteger(void)
@@ -31,11 +31,10 @@ PDFInteger::~PDFInteger(void)
 
 long long PDFInteger::GetValue() const
 {
-	return mValue;
+    return mValue;
 }
 
 PDFInteger::operator long long() const
 {
-	return mValue;
+    return mValue;
 }
-

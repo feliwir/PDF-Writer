@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "io/OutputStringBufferStream.h"
 
@@ -24,63 +24,62 @@ using namespace IOBasicTypes;
 
 OutputStringBufferStream::OutputStringBufferStream(void)
 {
-	mBuffer = new MyStringBuf();
-	mOwnsBuffer = true;
+    mBuffer = new MyStringBuf();
+    mOwnsBuffer = true;
 }
 
 OutputStringBufferStream::~OutputStringBufferStream(void)
 {
-	if(mOwnsBuffer)
-		delete mBuffer;
+    if (mOwnsBuffer)
+        delete mBuffer;
 }
 
-OutputStringBufferStream::OutputStringBufferStream(MyStringBuf* inControlledBuffer)
+OutputStringBufferStream::OutputStringBufferStream(MyStringBuf *inControlledBuffer)
 {
-	mBuffer = inControlledBuffer;
-	mOwnsBuffer = false;
+    mBuffer = inControlledBuffer;
+    mOwnsBuffer = false;
 }
 
-void OutputStringBufferStream::Assign(MyStringBuf* inControlledBuffer)
+void OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
 {
-	if(inControlledBuffer)
-	{
-		if(mOwnsBuffer)
-			delete mBuffer;
-		mBuffer = inControlledBuffer;
-		mOwnsBuffer = false;
-	}
-	else // passing null will cause the stream to get to a state of self writing (so as to never leave this stream in a vulnarable position)s
-	{
-		mBuffer = new MyStringBuf();
-		mOwnsBuffer = true;
-	}
-
+    if (inControlledBuffer)
+    {
+        if (mOwnsBuffer)
+            delete mBuffer;
+        mBuffer = inControlledBuffer;
+        mOwnsBuffer = false;
+    }
+    else // passing null will cause the stream to get to a state of self writing (so as to never leave this stream in a
+         // vulnarable position)s
+    {
+        mBuffer = new MyStringBuf();
+        mOwnsBuffer = true;
+    }
 }
 
-
-LongBufferSizeType OutputStringBufferStream::Write(const Byte* inBuffer,LongBufferSizeType inSize)
+LongBufferSizeType OutputStringBufferStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
-	return (LongBufferSizeType)mBuffer->sputn((const char*)inBuffer,inSize);
+    return (LongBufferSizeType)mBuffer->sputn((const char *)inBuffer, inSize);
 }
 
 LongFilePositionType OutputStringBufferStream::GetCurrentPosition()
 {
-	return mBuffer->GetCurrentWritePosition();
+    return mBuffer->GetCurrentWritePosition();
 }
 
 std::string OutputStringBufferStream::ToString() const
 {
-	return mBuffer->str();
+    return mBuffer->str();
 }
 
 static const std::string scEmpty;
 
 void OutputStringBufferStream::Reset()
 {
-	mBuffer->str(scEmpty);
+    mBuffer->str(scEmpty);
 }
 
 void OutputStringBufferStream::SetPosition(LongFilePositionType inOffsetFromStart)
 {
-	mBuffer->pubseekoff((long)inOffsetFromStart,std::ios_base::beg);
+    mBuffer->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }

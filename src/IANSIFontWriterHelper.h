@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 
@@ -25,18 +25,22 @@ class IFontDescriptorHelper;
 
 class IANSIFontWriterHelper
 {
-public:
-	virtual ~IANSIFontWriterHelper(){}
+  public:
+    virtual ~IANSIFontWriterHelper()
+    {
+    }
 
-	// write the sub type value (only, key is already written at this point) for the particular font into the dictionary.
-	virtual void WriteSubTypeValue(DictionaryContext* inDictionary) = 0;
+    // write the sub type value (only, key is already written at this point) for the particular font into the
+    // dictionary.
+    virtual void WriteSubTypeValue(DictionaryContext *inDictionary) = 0;
 
-	// Get the relevant CharSet entry writer for the descriptor writing. 
-	// always return something - even if doing nothing
-	virtual IFontDescriptorHelper* GetCharsetWriter() = 0;
+    // Get the relevant CharSet entry writer for the descriptor writing.
+    // always return something - even if doing nothing
+    virtual IFontDescriptorHelper *GetCharsetWriter() = 0;
 
-	// Flag for possibility of having differences from win ansi.
-	// basically true type can't, and others - type 1 and CFF can. true type has the pacularty
-	// of not having dependable glyph names, but using index always...so can't have ansi if there are differences anyways
-	virtual bool CanWriteDifferencesFromWinAnsi() = 0;
+    // Flag for possibility of having differences from win ansi.
+    // basically true type can't, and others - type 1 and CFF can. true type has the pacularty
+    // of not having dependable glyph names, but using index always...so can't have ansi if there are differences
+    // anyways
+    virtual bool CanWriteDifferencesFromWinAnsi() = 0;
 };

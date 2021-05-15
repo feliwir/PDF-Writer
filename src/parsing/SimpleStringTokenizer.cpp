@@ -16,7 +16,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "SimpleStringTokenizer.h"
 #include "io/IByteReader.h"
@@ -27,164 +27,163 @@ using namespace IOBasicTypes;
 
 SimpleStringTokenizer::SimpleStringTokenizer(void)
 {
-	mStream = NULL;
-	ResetReadState();
+    mStream = NULL;
+    ResetReadState();
 }
 
 SimpleStringTokenizer::~SimpleStringTokenizer(void)
 {
 }
 
-void SimpleStringTokenizer::SetReadStream(IByteReader* inSourceStream)
+void SimpleStringTokenizer::SetReadStream(IByteReader *inSourceStream)
 {
-	mStream = inSourceStream;
-	ResetReadState();
+    mStream = inSourceStream;
+    ResetReadState();
 }
 
 void SimpleStringTokenizer::ResetReadState()
 {
-	mHasTokenBuffer = false;
-	mStreamPositionTracker = 0;
-	mRecentTokenPosition = 0;
+    mHasTokenBuffer = false;
+    mStreamPositionTracker = 0;
+    mRecentTokenPosition = 0;
 }
 
-
-void SimpleStringTokenizer::ResetReadState(const SimpleStringTokenizer& inExternalTokenizer)
+void SimpleStringTokenizer::ResetReadState(const SimpleStringTokenizer &inExternalTokenizer)
 {
-	mTokenBuffer = inExternalTokenizer.mTokenBuffer;
-	mHasTokenBuffer = inExternalTokenizer.mHasTokenBuffer;
-	mStreamPositionTracker = inExternalTokenizer.mStreamPositionTracker;
-	mRecentTokenPosition = inExternalTokenizer.mRecentTokenPosition;
+    mTokenBuffer = inExternalTokenizer.mTokenBuffer;
+    mHasTokenBuffer = inExternalTokenizer.mHasTokenBuffer;
+    mStreamPositionTracker = inExternalTokenizer.mStreamPositionTracker;
+    mRecentTokenPosition = inExternalTokenizer.mRecentTokenPosition;
 }
 
-//static const Byte scBackSlash[] = {'\\'};
+// static const Byte scBackSlash[] = {'\\'};
 static const std::string scStream = "stream";
-//static const char scCR = '\r';
-//static const char scLF = '\n';
+// static const char scCR = '\r';
+// static const char scLF = '\n';
 BoolAndString SimpleStringTokenizer::GetNextToken()
 {
-	BoolAndString result;
-	Byte buffer;
-	OutputStringBufferStream tokenBuffer;
-	
-	if(!mStream || (!mStream->NotEnded() && !mHasTokenBuffer))
-	{
-		result.first = false;
-		return result;
-	}
+    BoolAndString result;
+    Byte buffer;
+    OutputStringBufferStream tokenBuffer;
 
-	do
-	{
-		SkipTillToken();
-		if(!mStream->NotEnded())
-		{
-			result.first = false;
-			break;
-		}
+    if (!mStream || (!mStream->NotEnded() && !mHasTokenBuffer))
+    {
+        result.first = false;
+        return result;
+    }
 
-		// before reading the first byte save the token position, for external queries
-		mRecentTokenPosition = mStreamPositionTracker;
+    do
+    {
+        SkipTillToken();
+        if (!mStream->NotEnded())
+        {
+            result.first = false;
+            break;
+        }
 
-		// get the first byte of the token
-		if(GetNextByteForToken(buffer) != PDFHummus::eSuccess)
-		{
-			result.first = false;
-			break;
-		}
-		tokenBuffer.Write(&buffer,1);
+        // before reading the first byte save the token position, for external queries
+        mRecentTokenPosition = mStreamPositionTracker;
 
-		result.first = true; // will only be changed to false in case of read error
+        // get the first byte of the token
+        if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+        {
+            result.first = false;
+            break;
+        }
+        tokenBuffer.Write(&buffer, 1);
 
-		while(mStream->NotEnded())
-		{
-			if(GetNextByteForToken(buffer) != PDFHummus::eSuccess)
-			{	
-				result.first = false;
-				break;
-			}
-			if(IsPDFWhiteSpace(buffer))
-			{
-				break;
-			}
-			else if(IsPDFEntityBreaker(buffer))
-			{
-				SaveTokenBuffer(buffer); // for a non-space breaker, save the token for next token read
-				break;
-			}
-			else
-				tokenBuffer.Write(&buffer,1);
-		}
-		result.second = tokenBuffer.ToString();
-	}while(false);
+        result.first = true; // will only be changed to false in case of read error
 
-	return result;
+        while (mStream->NotEnded())
+        {
+            if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+            {
+                result.first = false;
+                break;
+            }
+            if (IsPDFWhiteSpace(buffer))
+            {
+                break;
+            }
+            else if (IsPDFEntityBreaker(buffer))
+            {
+                SaveTokenBuffer(buffer); // for a non-space breaker, save the token for next token read
+                break;
+            }
+            else
+                tokenBuffer.Write(&buffer, 1);
+        }
+        result.second = tokenBuffer.ToString();
+    } while (false);
+
+    return result;
 }
 
 void SimpleStringTokenizer::SkipTillToken()
 {
-	Byte buffer = 0;
+    Byte buffer = 0;
 
-	if(!mStream)
-		return;
+    if (!mStream)
+        return;
 
-	// skip till hitting first non space, or segment end
-	while(mStream->NotEnded())
-	{
-		if(GetNextByteForToken(buffer) != PDFHummus::eSuccess)
-			break;
+    // skip till hitting first non space, or segment end
+    while (mStream->NotEnded())
+    {
+        if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+            break;
 
-		if(!IsPDFWhiteSpace(buffer))
-		{
-			SaveTokenBuffer(buffer);
-			break;
-		}
-	}
+        if (!IsPDFWhiteSpace(buffer))
+        {
+            SaveTokenBuffer(buffer);
+            break;
+        }
+    }
 }
 
-EStatusCode SimpleStringTokenizer::GetNextByteForToken(Byte& outByte)
+EStatusCode SimpleStringTokenizer::GetNextByteForToken(Byte &outByte)
 {
-	++mStreamPositionTracker; // advance position tracker, because we are reading the next byte.
-	if(mHasTokenBuffer)
-	{
-		outByte = mTokenBuffer;
-		mHasTokenBuffer = false;
-		return PDFHummus::eSuccess;
-	}
-	else
-		return (mStream->Read(&outByte,1) != 1) ? PDFHummus::eFailure:PDFHummus::eSuccess;
+    ++mStreamPositionTracker; // advance position tracker, because we are reading the next byte.
+    if (mHasTokenBuffer)
+    {
+        outByte = mTokenBuffer;
+        mHasTokenBuffer = false;
+        return PDFHummus::eSuccess;
+    }
+    else
+        return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
-static const Byte scWhiteSpaces[] = {0,0x9,0xA,0xC,0xD,0x20};
+static const Byte scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
 bool SimpleStringTokenizer::IsPDFWhiteSpace(Byte inCharacter)
 {
-	bool isWhiteSpace = false;
-	for(int i=0; i < 6 && !isWhiteSpace; ++i)
-		isWhiteSpace =  (scWhiteSpaces[i] == inCharacter);
-	return isWhiteSpace;
+    bool isWhiteSpace = false;
+    for (int i = 0; i < 6 && !isWhiteSpace; ++i)
+        isWhiteSpace = (scWhiteSpaces[i] == inCharacter);
+    return isWhiteSpace;
 }
 
 void SimpleStringTokenizer::SaveTokenBuffer(Byte inToSave)
 {
-	mHasTokenBuffer = true;
-	mTokenBuffer = inToSave;
-	--mStreamPositionTracker; // decreasing position trakcer, because it is as if the byte is put back in the stream
+    mHasTokenBuffer = true;
+    mTokenBuffer = inToSave;
+    --mStreamPositionTracker; // decreasing position trakcer, because it is as if the byte is put back in the stream
 }
 
 IOBasicTypes::LongFilePositionType SimpleStringTokenizer::GetReadBufferSize()
 {
-	return mHasTokenBuffer ? 1 : 0;
+    return mHasTokenBuffer ? 1 : 0;
 }
 
-static const Byte scEntityBreakers[] = {'(',')','<','>',']','[','{','}','/','%'};
+static const Byte scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
 bool SimpleStringTokenizer::IsPDFEntityBreaker(Byte inCharacter)
 {
-	bool isEntityBreak = false;
-	for(int i=0; i < 10 && !isEntityBreak; ++i)
-		isEntityBreak =  (scEntityBreakers[i] == inCharacter);
-	return isEntityBreak;
+    bool isEntityBreak = false;
+    for (int i = 0; i < 10 && !isEntityBreak; ++i)
+        isEntityBreak = (scEntityBreakers[i] == inCharacter);
+    return isEntityBreak;
 }
 
 LongFilePositionType SimpleStringTokenizer::GetRecentTokenPosition()
 {
-	return mRecentTokenPosition;
+    return mRecentTokenPosition;
 }

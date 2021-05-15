@@ -16,15 +16,15 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #include "PFBStreamTest.h"
-#include "io/InputFile.h"
-#include "io/OutputFile.h"
-#include "io/InputPFBDecodeStream.h"
-#include "io/OutputStreamTraits.h"
-#include "io/IByteWriterWithPosition.h"
 #include "TestsRunner.h"
+#include "io/IByteWriterWithPosition.h"
+#include "io/InputFile.h"
+#include "io/InputPFBDecodeStream.h"
+#include "io/OutputFile.h"
+#include "io/OutputStreamTraits.h"
 
 #include <iostream>
 
@@ -39,45 +39,44 @@ PFBStreamTest::~PFBStreamTest(void)
 {
 }
 
-EStatusCode PFBStreamTest::Run(const TestConfiguration& inTestConfiguration)
+EStatusCode PFBStreamTest::Run(const TestConfiguration &inTestConfiguration)
 {
-	EStatusCode status;
-	InputFile pfbFile;
-	OutputFile decodedPFBFile;
-	InputPFBDecodeStream decodeStream;
+    EStatusCode status;
+    InputFile pfbFile;
+    OutputFile decodedPFBFile;
+    InputPFBDecodeStream decodeStream;
 
-	do
-	{
-		pfbFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"TestMaterials/fonts/HLB_____.PFB"));
+    do
+    {
+        pfbFile.OpenFile(
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "TestMaterials/fonts/HLB_____.PFB"));
 
-		decodedPFBFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,"decodedPFBFile.txt"));
+        decodedPFBFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "decodedPFBFile.txt"));
 
+        status = decodeStream.Assign(pfbFile.GetInputStream());
 
-		status = decodeStream.Assign(pfbFile.GetInputStream());
-		
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"Failed to assign pfb input stream";
-			break;
-		}
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "Failed to assign pfb input stream";
+            break;
+        }
 
-		OutputStreamTraits traits(decodedPFBFile.GetOutputStream());
+        OutputStreamTraits traits(decodedPFBFile.GetOutputStream());
 
-		status = traits.CopyToOutputStream(&decodeStream);
+        status = traits.CopyToOutputStream(&decodeStream);
 
-		if(status != PDFHummus::eSuccess)
-		{
-			cout<<"Failed to decode pfb stream";
-			break;
-		}
-	}while(false);
+        if (status != PDFHummus::eSuccess)
+        {
+            cout << "Failed to decode pfb stream";
+            break;
+        }
+    } while (false);
 
-	decodeStream.Assign(NULL);
-	pfbFile.CloseFile();
-	decodedPFBFile.CloseFile();
+    decodeStream.Assign(NULL);
+    pfbFile.CloseFile();
+    decodedPFBFile.CloseFile();
 
-	return status;
+    return status;
 }
 
-
-ADD_CATEGORIZED_TEST(PFBStreamTest,"Type1")
+ADD_CATEGORIZED_TEST(PFBStreamTest, "Type1")

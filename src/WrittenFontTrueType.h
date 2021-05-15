@@ -16,32 +16,27 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   
+
 */
 #pragma once
 #include "AbstractWrittenFont.h"
 
 class WrittenFontTrueType : public AbstractWrittenFont
 {
-public:
-	WrittenFontTrueType(ObjectsContext* inObjectsContext);
-	~WrittenFontTrueType(void);
+  public:
+    WrittenFontTrueType(ObjectsContext *inObjectsContext);
+    ~WrittenFontTrueType(void);
 
-	virtual PDFHummus::EStatusCode WriteFontDefinition(FreeTypeFaceWrapper& inFontInfo,bool inEmbedFont);
+    virtual PDFHummus::EStatusCode WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo, bool inEmbedFont);
 
-	virtual PDFHummus::EStatusCode WriteState(ObjectsContext* inStateWriter,ObjectIDType inObjectId);
-	virtual PDFHummus::EStatusCode ReadState(PDFParser* inStateReader,ObjectIDType inObjectID);
+    virtual PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectId);
+    virtual PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
+  private:
+    virtual bool AddToANSIRepresentation(const GlyphUnicodeMappingList &inGlyphsList, UShortList &outEncodedCharacters);
 
-private:
-	virtual bool AddToANSIRepresentation(	const GlyphUnicodeMappingList& inGlyphsList,
-											UShortList& outEncodedCharacters);
+    virtual bool AddToANSIRepresentation(const GlyphUnicodeMappingListList &inGlyphsList,
+                                         UShortListList &outEncodedCharacters);
 
-	virtual bool AddToANSIRepresentation(
-											const GlyphUnicodeMappingListList& inGlyphsList,
-											UShortListList& outEncodedCharacters);
-
-
-	virtual unsigned short EncodeCIDGlyph(unsigned int inGlyphId);
-
+    virtual unsigned short EncodeCIDGlyph(unsigned int inGlyphId);
 };

@@ -26,34 +26,33 @@ limitations under the License.
 
 typedef std::list<IOBasicTypes::Byte> ByteList;
 
-
 class OutputAESEncodeStream : public IByteWriterWithPosition
 {
-public:
-	OutputAESEncodeStream(void);
-	virtual ~OutputAESEncodeStream(void);
+  public:
+    OutputAESEncodeStream(void);
+    virtual ~OutputAESEncodeStream(void);
 
-	OutputAESEncodeStream(IByteWriterWithPosition* inTargetStream, const ByteList& inEncryptionKey, bool inOwnsStream);
+    OutputAESEncodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey, bool inOwnsStream);
 
-	virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte* inBuffer, IOBasicTypes::LongBufferSizeType inSize);
-	virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
+                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
 
-private:
-	bool mOwnsStream;
-	IByteWriterWithPosition* mTargetStream;
+  private:
+    bool mOwnsStream;
+    IByteWriterWithPosition *mTargetStream;
 
-	bool mWroteIV;
+    bool mWroteIV;
 
+    // inEncryptionKey in array form, for aes
+    unsigned char *mEncryptionKey;
+    std::size_t mEncryptionKeyLength;
+    unsigned char mIV[AES_BLOCK_SIZE];
+    unsigned char mIn[AES_BLOCK_SIZE];
+    unsigned char mOut[AES_BLOCK_SIZE];
+    unsigned char *mInIndex;
 
-	// inEncryptionKey in array form, for aes
-	unsigned char* mEncryptionKey;
-	std::size_t  mEncryptionKeyLength;
-	unsigned char mIV[AES_BLOCK_SIZE];
-	unsigned char mIn[AES_BLOCK_SIZE];
-	unsigned char mOut[AES_BLOCK_SIZE];
-	unsigned char *mInIndex;
+    AESencrypt mEncrypt;
 
-	AESencrypt mEncrypt;
-
-	void Flush();
+    void Flush();
 };
