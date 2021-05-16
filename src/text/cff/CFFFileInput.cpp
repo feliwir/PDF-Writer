@@ -641,7 +641,7 @@ EStatusCode CFFFileInput::ReadHeader()
 
 EStatusCode CFFFileInput::ReadIndexHeader(unsigned long **outOffsets, unsigned short &outItemsCount)
 {
-    Byte offSizeForIndex;
+    uint8_t offSizeForIndex;
 
     EStatusCode status = mPrimitivesReader.ReadCard16(outItemsCount);
     if (status != PDFHummus::eSuccess)
@@ -674,7 +674,7 @@ EStatusCode CFFFileInput::ReadNameIndex()
 
     unsigned long *offsets;
     EStatusCode status = ReadIndexHeader(&offsets, mFontsCount);
-    Byte *buffer;
+    uint8_t *buffer;
 
     do
     {
@@ -686,7 +686,7 @@ EStatusCode CFFFileInput::ReadNameIndex()
 
         for (unsigned long i = 0; i < mFontsCount; ++i)
         {
-            buffer = new Byte[offsets[i + 1] - offsets[i]];
+            buffer = new uint8_t[offsets[i + 1] - offsets[i]];
             mPrimitivesReader.Read(buffer, offsets[i + 1] - offsets[i]);
             std::string aName((char *)buffer, offsets[i + 1] - offsets[i]);
             mName.push_back(aName);
@@ -746,12 +746,12 @@ EStatusCode CFFFileInput::ReadTopDictIndex()
 
 EStatusCode CFFFileInput::ReadDict(unsigned long inReadAmount, UShortToDictOperandListMap &outDict)
 {
-    LongFilePositionType dictStartPosition = mPrimitivesReader.GetCurrentPosition();
+    long long dictStartPosition = mPrimitivesReader.GetCurrentPosition();
     DictOperandList operands;
     EStatusCode status = PDFHummus::eSuccess;
     unsigned short anOperator;
     DictOperand anOperand;
-    Byte aBuffer;
+    uint8_t aBuffer;
 
     while (PDFHummus::eSuccess == status &&
            (mPrimitivesReader.GetCurrentPosition() - dictStartPosition < (long long)inReadAmount))
@@ -806,7 +806,7 @@ EStatusCode CFFFileInput::ReadStringIndex()
         for (i = 0; i < mStringsCount && (PDFHummus::eSuccess == status); ++i)
         {
             mStrings[i] = new char[offsets[i + 1] - offsets[i] + 1];
-            status = mPrimitivesReader.Read((Byte *)mStrings[i], offsets[i + 1] - offsets[i]);
+            status = mPrimitivesReader.Read((uint8_t *)mStrings[i], offsets[i + 1] - offsets[i]);
             if (status != PDFHummus::eSuccess)
                 break;
             mStrings[i][offsets[i + 1] - offsets[i]] = 0;
@@ -870,7 +870,7 @@ EStatusCode CFFFileInput::ReadSubrsFromIndex(unsigned short &outSubrsCount, Char
         // just taking a snapshot of positions here
         *outSubrsIndex = new CharString[outSubrsCount];
 
-        LongFilePositionType dataStartPosition = mPrimitivesReader.GetCurrentPosition();
+        long long dataStartPosition = mPrimitivesReader.GetCurrentPosition();
 
         for (unsigned long i = 0; i < outSubrsCount; ++i)
         {
@@ -898,8 +898,8 @@ EStatusCode CFFFileInput::ReadCharStrings()
 
     for (unsigned long i = 0; i < mFontsCount && (PDFHummus::eSuccess == status); ++i)
     {
-        LongFilePositionType charStringsPosition = GetCharStringsPosition(i);
-        mCharStrings[i].mCharStringsType = (Byte)GetCharStringType(i);
+        long long charStringsPosition = GetCharStringsPosition(i);
+        mCharStrings[i].mCharStringsType = (uint8_t)GetCharStringType(i);
         if (0 == charStringsPosition)
         {
             mCharStrings[i].mCharStringsCount = 0;
@@ -919,7 +919,7 @@ EStatusCode CFFFileInput::ReadCharStrings()
 }
 
 static const unsigned short scCharStringsKey = 17;
-LongFilePositionType CFFFileInput::GetCharStringsPosition(unsigned short inFontIndex)
+long long CFFFileInput::GetCharStringsPosition(unsigned short inFontIndex)
 {
     return GetSingleIntegerValue(inFontIndex, scCharStringsKey, 0);
 }
@@ -975,9 +975,8 @@ EStatusCode CFFFileInput::ReadPrivateDict(const UShortToDictOperandListMap &inRe
     }
     else
     {
-        outPrivateDict->mPrivateDictStart = (LongFilePositionType)it->second.back().IntegerValue;
-        outPrivateDict->mPrivateDictEnd =
-            (LongFilePositionType)(it->second.back().IntegerValue + it->second.front().IntegerValue);
+        outPrivateDict->mPrivateDictStart = (long long)it->second.back().IntegerValue;
+        outPrivateDict->mPrivateDictEnd = (long long)(it->second.back().IntegerValue + it->second.front().IntegerValue);
 
         mPrimitivesReader.SetOffset(it->second.back().IntegerValue);
         status = ReadDict(it->second.front().IntegerValue, outPrivateDict->mPrivateDict);
@@ -991,7 +990,7 @@ EStatusCode CFFFileInput::ReadLocalSubrs()
     EStatusCode status = PDFHummus::eSuccess;
 
     for (unsigned long i = 0; i < mFontsCount && (PDFHummus::eSuccess == status); ++i)
-        status = ReadLocalSubrsForPrivateDict(mPrivateDicts + i, (Byte)GetCharStringType(i));
+        status = ReadLocalSubrsForPrivateDict(mPrivateDicts + i, (uint8_t)GetCharStringType(i));
 
     if (status != PDFHummus::eSuccess)
         return status;
@@ -1000,10 +999,10 @@ EStatusCode CFFFileInput::ReadLocalSubrs()
 }
 
 static const unsigned short scSubrs = 19;
-EStatusCode CFFFileInput::ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivateDict, Byte inCharStringType)
+EStatusCode CFFFileInput::ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivateDict, uint8_t inCharStringType)
 {
     EStatusCode status = PDFHummus::eSuccess;
-    LongFilePositionType subrsPosition = GetSingleIntegerValueFromDict(inPrivateDict->mPrivateDict, scSubrs, 0);
+    long long subrsPosition = GetSingleIntegerValueFromDict(inPrivateDict->mPrivateDict, scSubrs, 0);
 
     if (0 == subrsPosition)
     {
@@ -1031,7 +1030,7 @@ EStatusCode CFFFileInput::ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivat
     return status;
 }
 
-typedef std::map<LongFilePositionType, CharSetInfo *> LongFilePositionTypeToCharSetInfoMap;
+typedef std::map<long long, CharSetInfo *> LongFilePositionTypeToCharSetInfoMap;
 
 static const unsigned short scROS = 0xC1E;
 EStatusCode CFFFileInput::ReadCharsets()
@@ -1043,7 +1042,7 @@ EStatusCode CFFFileInput::ReadCharsets()
 
     for (unsigned long i = 0; i < mFontsCount && (PDFHummus::eSuccess == status); ++i)
     {
-        LongFilePositionType charsetPosition = GetCharsetPosition(i);
+        long long charsetPosition = GetCharsetPosition(i);
         it = offsetToIndex.find(charsetPosition);
         if (it == offsetToIndex.end())
         {
@@ -1061,7 +1060,7 @@ EStatusCode CFFFileInput::ReadCharsets()
             }
             else
             {
-                Byte charsetFormat;
+                uint8_t charsetFormat;
                 charSet->mType = eCharSetCustom;
                 mPrimitivesReader.SetOffset(charsetPosition);
                 mPrimitivesReader.ReadCard8(charsetFormat);
@@ -1085,7 +1084,7 @@ EStatusCode CFFFileInput::ReadCharsets()
         return mPrimitivesReader.GetInternalState();
 }
 
-typedef std::map<LongFilePositionType, EncodingsInfo *> LongFilePositionTypeToEncodingsInfoMap;
+typedef std::map<long long, EncodingsInfo *> LongFilePositionTypeToEncodingsInfoMap;
 
 EStatusCode CFFFileInput::ReadEncodings()
 {
@@ -1096,7 +1095,7 @@ EStatusCode CFFFileInput::ReadEncodings()
 
     for (unsigned long i = 0; i < mFontsCount && (PDFHummus::eSuccess == status); ++i)
     {
-        LongFilePositionType encodingPosition = GetEncodingPosition(i);
+        long long encodingPosition = GetEncodingPosition(i);
         it = offsetToEncoding.find(encodingPosition);
         if (it == offsetToEncoding.end())
         {
@@ -1115,7 +1114,7 @@ EStatusCode CFFFileInput::ReadEncodings()
         return mPrimitivesReader.GetInternalState();
 }
 
-void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType inEncodingPosition)
+void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, long long inEncodingPosition)
 {
     if (inEncodingPosition <= 1)
     {
@@ -1125,7 +1124,7 @@ void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType 
     else
     {
         inEncoding->mType = eEncodingCustom;
-        Byte encodingFormat = 0;
+        uint8_t encodingFormat = 0;
         inEncoding->mEncodingStart = inEncodingPosition;
         mPrimitivesReader.SetOffset(inEncodingPosition);
         mPrimitivesReader.ReadCard8(encodingFormat);
@@ -1135,38 +1134,38 @@ void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType 
             mPrimitivesReader.ReadCard8(inEncoding->mEncodingsCount);
             if (inEncoding->mEncodingsCount > 0)
             {
-                inEncoding->mEncoding = new Byte[inEncoding->mEncodingsCount];
-                for (Byte i = 0; i < inEncoding->mEncodingsCount; ++i)
+                inEncoding->mEncoding = new uint8_t[inEncoding->mEncodingsCount];
+                for (uint8_t i = 0; i < inEncoding->mEncodingsCount; ++i)
                     mPrimitivesReader.ReadCard8(inEncoding->mEncoding[i]);
             }
         }
         else // format = 1
         {
-            Byte rangesCount = 0;
+            uint8_t rangesCount = 0;
             mPrimitivesReader.ReadCard8(rangesCount);
             if (rangesCount > 0)
             {
-                Byte firstCode;
-                Byte left;
+                uint8_t firstCode;
+                uint8_t left;
 
                 inEncoding->mEncodingsCount = 0;
                 // get the encoding count (yap, reading twice here)
-                for (Byte i = 0; i < rangesCount; ++i)
+                for (uint8_t i = 0; i < rangesCount; ++i)
                 {
                     mPrimitivesReader.ReadCard8(firstCode);
                     mPrimitivesReader.ReadCard8(left);
                     inEncoding->mEncodingsCount += left;
                 }
-                inEncoding->mEncoding = new Byte[inEncoding->mEncodingsCount];
+                inEncoding->mEncoding = new uint8_t[inEncoding->mEncodingsCount];
                 mPrimitivesReader.SetOffset(inEncodingPosition + 2); // reset encoding to beginning of range reading
 
                 // now read the encoding array
-                Byte encodingIndex = 0;
-                for (Byte i = 0; i < rangesCount; ++i)
+                uint8_t encodingIndex = 0;
+                for (uint8_t i = 0; i < rangesCount; ++i)
                 {
                     mPrimitivesReader.ReadCard8(firstCode);
                     mPrimitivesReader.ReadCard8(left);
-                    for (Byte j = 0; j < left; ++j)
+                    for (uint8_t j = 0; j < left; ++j)
                         inEncoding->mEncoding[encodingIndex + j] = firstCode + j;
                     encodingIndex += left;
                 }
@@ -1176,13 +1175,13 @@ void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType 
         {
             mPrimitivesReader.SetOffset(inEncoding->mEncodingEnd); // set position to end of encoding, and start of
                                                                    // supplamental, so that can read their count
-            Byte supplamentalsCount = 0;
+            uint8_t supplamentalsCount = 0;
             mPrimitivesReader.ReadCard8(supplamentalsCount);
             if (supplamentalsCount > 0)
             {
-                Byte encoding;
+                uint8_t encoding;
                 unsigned short SID;
-                for (Byte i = 0; i < supplamentalsCount; ++i)
+                for (uint8_t i = 0; i < supplamentalsCount; ++i)
                 {
                     mPrimitivesReader.ReadCard8(encoding);
                     mPrimitivesReader.ReadCard16(SID);
@@ -1247,7 +1246,7 @@ EStatusCode CFFFileInput::ReadFormat1Charset(bool inIsCID, UShortToCharStringMap
     (*inSIDArray)[0] = 0;
     unsigned long glyphIndex = 1;
     unsigned short sid;
-    Byte left;
+    uint8_t left;
 
     if (inIsCID)
     {
@@ -1315,15 +1314,15 @@ EStatusCode CFFFileInput::ReadFormat2Charset(bool inIsCID, UShortToCharStringMap
 }
 
 static const unsigned short scCharset = 15;
-LongFilePositionType CFFFileInput::GetCharsetPosition(unsigned short inFontIndex)
+long long CFFFileInput::GetCharsetPosition(unsigned short inFontIndex)
 {
-    return (LongFilePositionType)GetSingleIntegerValue(inFontIndex, scCharset, 0);
+    return (long long)GetSingleIntegerValue(inFontIndex, scCharset, 0);
 }
 
 static const unsigned short scEncoding = 16;
-LongFilePositionType CFFFileInput::GetEncodingPosition(unsigned short inFontIndex)
+long long CFFFileInput::GetEncodingPosition(unsigned short inFontIndex)
 {
-    return (LongFilePositionType)GetSingleIntegerValue(inFontIndex, scEncoding, 0);
+    return (long long)GetSingleIntegerValue(inFontIndex, scEncoding, 0);
 }
 
 EStatusCode CFFFileInput::CalculateDependenciesForCharIndex(unsigned short inFontIndex,
@@ -1406,8 +1405,8 @@ CharString *CFFFileInput::GetGlyphCharString(unsigned short inFontIndex, unsigne
     return mCharStrings[inFontIndex].mCharStringsIndex + inCharStringIndex;
 }
 
-EStatusCode CFFFileInput::ReadCharString(LongFilePositionType inCharStringStart, LongFilePositionType inCharStringEnd,
-                                         Byte **outCharString)
+EStatusCode CFFFileInput::ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                         uint8_t **outCharString)
 {
     EStatusCode status = PDFHummus::eSuccess;
     mPrimitivesReader.SetOffset(inCharStringStart);
@@ -1415,9 +1414,9 @@ EStatusCode CFFFileInput::ReadCharString(LongFilePositionType inCharStringStart,
 
     do
     {
-        *outCharString = new Byte[(LongBufferSizeType)(inCharStringEnd - inCharStringStart)];
+        *outCharString = new uint8_t[(size_t)(inCharStringEnd - inCharStringStart)];
 
-        status = mPrimitivesReader.Read(*outCharString, (LongBufferSizeType)(inCharStringEnd - inCharStringStart));
+        status = mPrimitivesReader.Read(*outCharString, (size_t)(inCharStringEnd - inCharStringStart));
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -1482,11 +1481,11 @@ EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandLis
                                    // charachter codes of off StandardEncoding
     {
         auto it = inOperandList.rbegin();
-        Byte characterCode1, characterCode2;
+        uint8_t characterCode1, characterCode2;
 
-        characterCode1 = it->IsInteger ? (Byte)it->IntegerValue : (Byte)it->RealValue;
+        characterCode1 = it->IsInteger ? (uint8_t)it->IntegerValue : (uint8_t)it->RealValue;
         ++it;
-        characterCode2 = it->IsInteger ? (Byte)it->IntegerValue : (Byte)it->RealValue;
+        characterCode2 = it->IsInteger ? (uint8_t)it->IntegerValue : (uint8_t)it->RealValue;
 
         CharString *character1 = GetCharacterFromStandardEncoding(characterCode1);
         CharString *character2 = GetCharacterFromStandardEncoding(characterCode2);
@@ -1504,7 +1503,7 @@ EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandLis
     return PDFHummus::eSuccess;
 }
 
-CharString *CFFFileInput::GetCharacterFromStandardEncoding(Byte inCharacterCode)
+CharString *CFFFileInput::GetCharacterFromStandardEncoding(uint8_t inCharacterCode)
 {
     StandardEncoding standardEncoding;
     const char *glyphName = standardEncoding.GetEncodedGlyphName(inCharacterCode);
@@ -1552,7 +1551,7 @@ EStatusCode CFFFileInput::ReadCIDInformation()
 
 EStatusCode CFFFileInput::ReadFDArray(unsigned short inFontIndex)
 {
-    LongFilePositionType fdArrayLocation = GetFDArrayPosition(inFontIndex);
+    long long fdArrayLocation = GetFDArrayPosition(inFontIndex);
 
     // supposed to get here only for CIDs. and they must have an FDArray...so if it doesn't - fail
     if (0 == fdArrayLocation)
@@ -1595,7 +1594,7 @@ EStatusCode CFFFileInput::ReadFDArray(unsigned short inFontIndex)
                                      &(mTopDictIndex[inFontIndex].mFDArray[i].mPrivateDict));
             if (PDFHummus::eSuccess == status)
                 status = ReadLocalSubrsForPrivateDict(&(mTopDictIndex[inFontIndex].mFDArray[i].mPrivateDict),
-                                                      (Byte)GetCharStringType(inFontIndex));
+                                                      (uint8_t)GetCharStringType(inFontIndex));
         }
 
     } while (false);
@@ -1608,17 +1607,17 @@ EStatusCode CFFFileInput::ReadFDArray(unsigned short inFontIndex)
 }
 
 static const unsigned short scFDArray = 0xC24;
-LongFilePositionType CFFFileInput::GetFDArrayPosition(unsigned short inFontIndex)
+long long CFFFileInput::GetFDArrayPosition(unsigned short inFontIndex)
 {
     return GetSingleIntegerValue(inFontIndex, scFDArray, 0);
 }
 
 EStatusCode CFFFileInput::ReadFDSelect(unsigned short inFontIndex)
 {
-    LongFilePositionType fdSelectLocation = GetFDSelectPosition(inFontIndex);
+    long long fdSelectLocation = GetFDSelectPosition(inFontIndex);
     unsigned short glyphCount = mCharStrings[inFontIndex].mCharStringsCount;
     EStatusCode status = PDFHummus::eSuccess;
-    Byte format;
+    uint8_t format;
 
     // supposed to get here only for CIDs. and they must have an FDSelect...so if it doesn't - fail
     if (0 == fdSelectLocation)
@@ -1630,7 +1629,7 @@ EStatusCode CFFFileInput::ReadFDSelect(unsigned short inFontIndex)
     mPrimitivesReader.ReadCard8(format);
     if (0 == format)
     {
-        Byte fdIndex;
+        uint8_t fdIndex;
 
         for (unsigned long i = 0; i < glyphCount && PDFHummus::eSuccess == status; ++i)
         {
@@ -1644,7 +1643,7 @@ EStatusCode CFFFileInput::ReadFDSelect(unsigned short inFontIndex)
         unsigned short rangesCount;
         unsigned short firstGlyphIndex;
         unsigned short nextRangeGlyphIndex;
-        Byte fdIndex;
+        uint8_t fdIndex;
 
         status = mPrimitivesReader.ReadCard16(rangesCount);
         if (status != PDFHummus::eFailure)
@@ -1670,7 +1669,7 @@ EStatusCode CFFFileInput::ReadFDSelect(unsigned short inFontIndex)
 }
 
 static const unsigned short scFDSelect = 0xC25;
-LongFilePositionType CFFFileInput::GetFDSelectPosition(unsigned short inFontIndex)
+long long CFFFileInput::GetFDSelectPosition(unsigned short inFontIndex)
 {
     return GetSingleIntegerValue(inFontIndex, scFDSelect, 0);
 }
@@ -1834,8 +1833,8 @@ EStatusCode CFFFileInput::ReadCharStrings(unsigned short inFontIndex)
     mCharStrings = new CharStrings[mFontsCount];
     EStatusCode status = PDFHummus::eSuccess;
 
-    LongFilePositionType charStringsPosition = GetCharStringsPosition(inFontIndex);
-    mCharStrings[inFontIndex].mCharStringsType = (Byte)GetCharStringType(inFontIndex);
+    long long charStringsPosition = GetCharStringsPosition(inFontIndex);
+    mCharStrings[inFontIndex].mCharStringsType = (uint8_t)GetCharStringType(inFontIndex);
     if (charStringsPosition != 0)
     {
         mPrimitivesReader.SetOffset(charStringsPosition);
@@ -1864,7 +1863,7 @@ EStatusCode CFFFileInput::ReadPrivateDicts(unsigned short inFontIndex)
 EStatusCode CFFFileInput::ReadLocalSubrs(unsigned short inFontIndex)
 {
     // read just the localsubrs of the font private dict
-    return ReadLocalSubrsForPrivateDict(mPrivateDicts + inFontIndex, (Byte)GetCharStringType(inFontIndex));
+    return ReadLocalSubrsForPrivateDict(mPrivateDicts + inFontIndex, (uint8_t)GetCharStringType(inFontIndex));
 }
 
 EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
@@ -1872,7 +1871,7 @@ EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
     // read all charsets
     EStatusCode status = PDFHummus::eSuccess;
 
-    LongFilePositionType charsetPosition = GetCharsetPosition(inFontIndex);
+    long long charsetPosition = GetCharsetPosition(inFontIndex);
     auto *charSet = new CharSetInfo();
     bool isCID = mTopDictIndex[inFontIndex].mTopDict.find(scROS) != mTopDictIndex[inFontIndex].mTopDict.end();
     if (charsetPosition <= 2)
@@ -1886,7 +1885,7 @@ EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
     }
     else
     {
-        Byte charsetFormat;
+        uint8_t charsetFormat;
         charSet->mType = eCharSetCustom;
         mPrimitivesReader.SetOffset(charsetPosition);
         mPrimitivesReader.ReadCard8(charsetFormat);
@@ -1910,7 +1909,7 @@ EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
 EStatusCode CFFFileInput::ReadEncodings(unsigned short inFontIndex)
 {
     // read all encodings positions
-    LongFilePositionType encodingPosition = GetEncodingPosition(inFontIndex);
+    long long encodingPosition = GetEncodingPosition(inFontIndex);
     auto *encoding = new EncodingsInfo();
 
     ReadEncoding(encoding, encodingPosition);
@@ -1997,7 +1996,7 @@ unsigned short CFFFileInput::GetGlyphSID(unsigned short inFontIndex, unsigned sh
             else
             {
                 // SID 0 is omitted for the default charsets
-                sid = scDefaultCharsets[(Byte)mTopDictIndex[inFontIndex].mCharSet->mType][inGlyphIndex - 1];
+                sid = scDefaultCharsets[(uint8_t)mTopDictIndex[inFontIndex].mCharSet->mType][inGlyphIndex - 1];
             }
         }
         return sid;

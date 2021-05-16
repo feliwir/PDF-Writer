@@ -30,9 +30,9 @@ class OpenTypePrimitiveReader
     ~OpenTypePrimitiveReader(void);
 
     void SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile);
-    void SetOffset(LongFilePositionType inNewOffset);
-    void Skip(LongBufferSizeType inToSkip);
-    LongFilePositionType GetCurrentPosition();
+    void SetOffset(long long inNewOffset);
+    void Skip(size_t inToSkip);
+    long long GetCurrentPosition();
     PDFHummus::EStatusCode GetInternalState();
 
     PDFHummus::EStatusCode ReadBYTE(unsigned char &outValue);
@@ -43,12 +43,12 @@ class OpenTypePrimitiveReader
     PDFHummus::EStatusCode ReadLONG(long &outValue);
     PDFHummus::EStatusCode ReadLongDateTime(long long &outValue);
     PDFHummus::EStatusCode ReadFixed(double &outValue);
-    PDFHummus::EStatusCode Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    PDFHummus::EStatusCode Read(uint8_t *inBuffer, size_t inBufferSize);
 
     IByteReaderWithPosition *GetReadStream();
 
   private:
     IByteReaderWithPosition *mOpenTypeFile;
-    LongFilePositionType mInitialPosition;
+    long long mInitialPosition;
     PDFHummus::EStatusCode mInternalState;
 };

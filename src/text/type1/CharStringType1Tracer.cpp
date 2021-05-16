@@ -34,7 +34,8 @@ CharStringType1Tracer::~CharStringType1Tracer()
 }
 
 /*
-EStatusCode CharStringType1Tracer::TraceGlyphProgram(Byte inGlyphIndex, Type1Input* inType1Input, IByteWriter* inWriter)
+EStatusCode CharStringType1Tracer::TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input* inType1Input, IByteWriter*
+inWriter)
 {
     CharStringType1Interpreter interpreter;
 

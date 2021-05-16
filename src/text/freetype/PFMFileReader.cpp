@@ -106,7 +106,7 @@ EStatusCode PFMFileReader::ReadHeader()
 
 EStatusCode PFMFileReader::ReadByte(BYTE &outByte)
 {
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
 
     if (mInternalReadStatus != PDFHummus::eFailure)
     {
@@ -120,7 +120,7 @@ EStatusCode PFMFileReader::ReadByte(BYTE &outByte)
 
 EStatusCode PFMFileReader::ReadWord(WORD &outWord)
 {
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
     outWord = 0;
 
     if (mInternalReadStatus != PDFHummus::eFailure)
@@ -147,7 +147,7 @@ EStatusCode PFMFileReader::ReadWord(WORD &outWord)
 
 EStatusCode PFMFileReader::ReadDWord(DWORD &outDWORD)
 {
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
     outDWORD = 0;
 
     if (mInternalReadStatus != PDFHummus::eFailure)

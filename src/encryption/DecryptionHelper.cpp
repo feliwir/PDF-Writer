@@ -40,7 +40,6 @@ limitations under the License.
 
 using namespace std;
 using namespace PDFHummus;
-using namespace IOBasicTypes;
 
 DecryptionHelper::DecryptionHelper()
 {

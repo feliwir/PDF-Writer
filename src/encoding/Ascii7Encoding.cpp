@@ -25,12 +25,12 @@ BoolAndString Ascii7Encoding::Encode(const std::string &inString)
 {
     OutputStringBufferStream asciiString;
     bool encodingGood = true;
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
     std::string::const_iterator it = inString.begin();
 
     for (; it != inString.end() && encodingGood; ++it)
     {
-        if (((IOBasicTypes::Byte)*it) <= 127)
+        if (((uint8_t)*it) <= 127)
         {
             buffer = (char)*it;
             asciiString.Write(&buffer, 1);

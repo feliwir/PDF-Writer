@@ -68,8 +68,8 @@ EStatusCode CharStringType2Tracer::TraceGlyphProgram(unsigned short inFontIndex,
     return status;
 }
 
-EStatusCode CharStringType2Tracer::ReadCharString(LongFilePositionType inCharStringStart,
-                                                  LongFilePositionType inCharStringEnd, Byte **outCharString)
+EStatusCode CharStringType2Tracer::ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                                  uint8_t **outCharString)
 {
     return mHelper->ReadCharString(inCharStringStart, inCharStringEnd, outCharString);
 }
@@ -152,7 +152,7 @@ EStatusCode CharStringType2Tracer::Type2Hstemhm(const CharStringOperandList &inO
     return PDFHummus::eSuccess;
 }
 
-EStatusCode CharStringType2Tracer::Type2Hintmask(const CharStringOperandList &inOperandList, Byte *inProgramCounter)
+EStatusCode CharStringType2Tracer::Type2Hintmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter)
 {
     mStemsCount += (unsigned short)(inOperandList.size() / 2);
 
@@ -161,23 +161,23 @@ EStatusCode CharStringType2Tracer::Type2Hintmask(const CharStringOperandList &in
     return PDFHummus::eSuccess;
 }
 
-void CharStringType2Tracer::WriteStemMask(Byte *inProgramCounter)
+void CharStringType2Tracer::WriteStemMask(uint8_t *inProgramCounter)
 {
     unsigned short maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
     char buffer[3];
 
-    mWriter->Write((const Byte *)"(0x", 1);
+    mWriter->Write((const uint8_t *)"(0x", 1);
     for (unsigned short i = 0; i < maskSize; ++i)
     {
         SAFE_SPRINTF_1(buffer, 3, "%X", inProgramCounter[i]);
-        mWriter->Write((const Byte *)buffer, 2);
+        mWriter->Write((const uint8_t *)buffer, 2);
     }
 
-    mWriter->Write((const Byte *)")", 1);
+    mWriter->Write((const uint8_t *)")", 1);
 }
 
 EStatusCode CharStringType2Tracer::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/,
-                                                 Byte *inProgramCounter)
+                                                 uint8_t *inProgramCounter)
 {
     WriteStemMask(inProgramCounter);
     mPrimitiveWriter.WriteKeyword("cntrmask");

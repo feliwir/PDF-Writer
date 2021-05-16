@@ -293,7 +293,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
     (void)rdata_len; // suppress compilation warning
     // verify that the header is composed as expected
     {
-        Byte head[16], head2[16];
+        uint8_t head[16], head2[16];
 
         mPrimitivesReader.SetOffset(mHeaderOffset);
 
@@ -317,7 +317,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
         mPrimitivesReader.SetOffset(map_pos);
 
-        // head2[15] = (Byte)(head[15]+1); // make it be different
+        // head2[15] = (uint8_t)(head[15]+1); // make it be different
 
         for (unsigned short i = 0; i < 16 && status == eSuccess; i++)
             status = mPrimitivesReader.ReadBYTE(head2[i]);
@@ -446,11 +446,11 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 unsigned long OpenTypeFileInput::GetTag(const char *inTagName)
 
 {
-    Byte buffer[4];
+    uint8_t buffer[4];
     unsigned short i = 0;
 
     for (; i < strlen(inTagName); ++i)
-        buffer[i] = (Byte)inTagName[i];
+        buffer[i] = (uint8_t)inTagName[i];
     for (; i < 4; ++i)
         buffer[i] = 0x20;
 
@@ -678,7 +678,7 @@ EStatusCode OpenTypeFileInput::ReadName()
     {
         mName.mNameEntries[i].String = new char[mName.mNameEntries[i].Length];
         mPrimitivesReader.SetOffset(it->second.Offset + stringOffset + mName.mNameEntries[i].Offset);
-        mPrimitivesReader.Read((Byte *)(mName.mNameEntries[i].String), mName.mNameEntries[i].Length);
+        mPrimitivesReader.Read((uint8_t *)(mName.mNameEntries[i].String), mName.mNameEntries[i].Length);
     }
 
     return mPrimitivesReader.GetInternalState();

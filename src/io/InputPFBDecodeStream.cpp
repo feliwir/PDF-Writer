@@ -63,12 +63,12 @@ void InputPFBDecodeStream::ResetReadStatus()
     mInternalState = (mStreamToDecode != nullptr) ? PDFHummus::eSuccess : PDFHummus::eFailure;
 }
 
-EStatusCode STATIC_NoDecodeRead(InputPFBDecodeStream *inThis, Byte &outByte)
+EStatusCode STATIC_NoDecodeRead(InputPFBDecodeStream *inThis, uint8_t &outByte)
 {
     return inThis->ReadRegularByte(outByte);
 }
 
-EStatusCode InputPFBDecodeStream::ReadRegularByte(Byte &outByte)
+EStatusCode InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
 {
     if (mInSegmentReadIndex >= mSegmentSize)
     {
@@ -84,7 +84,7 @@ EStatusCode InputPFBDecodeStream::ReadRegularByte(Byte &outByte)
 EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
 {
     EStatusCode status = PDFHummus::eSuccess;
-    Byte buffer;
+    uint8_t buffer;
     bool requireSegmentReread = false;
 
     do
@@ -166,7 +166,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
 
 EStatusCode InputPFBDecodeStream::StoreSegmentLength()
 {
-    Byte byte1, byte2, byte3, byte4;
+    uint8_t byte1, byte2, byte3, byte4;
 
     if (mStreamToDecode->Read(&byte1, 1) != 1)
         return PDFHummus::eFailure;
@@ -185,7 +185,7 @@ EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
 {
     int zeroesCount = 512;
     EStatusCode status = PDFHummus::eSuccess;
-    Byte buffer = 0;
+    uint8_t buffer = 0;
 
     // skip 0's
     while (zeroesCount > 0 && PDFHummus::eSuccess == status)
@@ -209,8 +209,8 @@ EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
     return status;
 }
 
-static const Byte scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
-bool InputPFBDecodeStream::IsPostScriptWhiteSpace(Byte inCharacter)
+static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
+bool InputPFBDecodeStream::IsPostScriptWhiteSpace(uint8_t inCharacter)
 {
     bool isWhiteSpace = false;
     for (int i = 0; i < 6 && !isWhiteSpace; ++i)
@@ -218,8 +218,8 @@ bool InputPFBDecodeStream::IsPostScriptWhiteSpace(Byte inCharacter)
     return isWhiteSpace;
 }
 
-static const Byte scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
-bool InputPFBDecodeStream::IsPostScriptEntityBreaker(Byte inCharacter)
+static const uint8_t scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
+bool InputPFBDecodeStream::IsPostScriptEntityBreaker(uint8_t inCharacter)
 {
     bool isEntityBreak = false;
     for (int i = 0; i < 10 && !isEntityBreak; ++i)
@@ -227,11 +227,11 @@ bool InputPFBDecodeStream::IsPostScriptEntityBreaker(Byte inCharacter)
     return isEntityBreak;
 }
 
-static const Byte scBackSlash[] = {'\\'};
+static const uint8_t scBackSlash[] = {'\\'};
 BoolAndString InputPFBDecodeStream::GetNextToken()
 {
     BoolAndString result;
-    Byte buffer;
+    uint8_t buffer;
     OutputStringBufferStream tokenBuffer;
 
     if (mInternalState != PDFHummus::eSuccess)
@@ -460,7 +460,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
     return result;
 }
 
-EStatusCode InputPFBDecodeStream::GetNextByteForToken(Byte &outByte)
+EStatusCode InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
 {
     if (mHasTokenBuffer)
     {
@@ -472,7 +472,7 @@ EStatusCode InputPFBDecodeStream::GetNextByteForToken(Byte &outByte)
         return mDecodeMethod(this, outByte);
 }
 
-void InputPFBDecodeStream::SaveTokenBuffer(Byte inToSave)
+void InputPFBDecodeStream::SaveTokenBuffer(uint8_t inToSave)
 {
     mHasTokenBuffer = true;
     mTokenBuffer = inToSave;
@@ -485,7 +485,7 @@ bool InputPFBDecodeStream::IsSegmentNotEnded()
 
 void InputPFBDecodeStream::SkipTillToken()
 {
-    Byte buffer = 0;
+    uint8_t buffer = 0;
 
     if (mInternalState != PDFHummus::eSuccess || !NotEnded())
         return;
@@ -504,7 +504,7 @@ void InputPFBDecodeStream::SkipTillToken()
     }
 }
 
-EStatusCode STATIC_DecodeRead(InputPFBDecodeStream *inThis, Byte &outByte)
+EStatusCode STATIC_DecodeRead(InputPFBDecodeStream *inThis, uint8_t &outByte)
 {
     return inThis->ReadDecodedByte(outByte);
 }
@@ -516,7 +516,7 @@ static const int RANDOMIZER_MODULU_VAL = 65536;
 
 EStatusCode InputPFBDecodeStream::InitializeBinaryDecode()
 {
-    Byte dummyByte;
+    uint8_t dummyByte;
     EStatusCode status = PDFHummus::eSuccess;
 
     mDecodeMethod = STATIC_DecodeRead;
@@ -528,9 +528,9 @@ EStatusCode InputPFBDecodeStream::InitializeBinaryDecode()
     return status;
 }
 
-EStatusCode InputPFBDecodeStream::ReadDecodedByte(Byte &outByte)
+EStatusCode InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
 {
-    Byte buffer;
+    uint8_t buffer;
 
     if (mInSegmentReadIndex >= mSegmentSize)
     {
@@ -547,16 +547,16 @@ EStatusCode InputPFBDecodeStream::ReadDecodedByte(Byte &outByte)
     }
 }
 
-Byte InputPFBDecodeStream::DecodeByte(Byte inByteToDecode)
+uint8_t InputPFBDecodeStream::DecodeByte(uint8_t inByteToDecode)
 {
-    Byte result = (Byte)(inByteToDecode ^ (mRandomizer >> 8));
+    uint8_t result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
     mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
     return result;
 }
 
-LongBufferSizeType InputPFBDecodeStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType bufferIndex = 0;
+    size_t bufferIndex = 0;
 
     if (mHasTokenBuffer && inBufferSize > 0)
     {

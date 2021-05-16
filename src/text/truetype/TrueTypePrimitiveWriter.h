@@ -21,9 +21,8 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
-
-using namespace IOBasicTypes;
+#include <stdint.h>
+#include <stdio.h>
 
 class OutputStringBufferStream;
 
@@ -37,7 +36,7 @@ class TrueTypePrimitiveWriter
 
     PDFHummus::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode WriteBYTE(Byte inValue);
+    PDFHummus::EStatusCode WriteBYTE(uint8_t inValue);
     PDFHummus::EStatusCode WriteULONG(unsigned long inValue);
     PDFHummus::EStatusCode WriteUSHORT(unsigned short inValue);
     PDFHummus::EStatusCode WriteSHORT(short inValue);

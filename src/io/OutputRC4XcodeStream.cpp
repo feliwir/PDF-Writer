@@ -19,8 +19,6 @@ limitations under the License.
 
 #include "io/OutputRC4XcodeStream.h"
 
-using namespace IOBasicTypes;
-
 OutputRC4XcodeStream::OutputRC4XcodeStream()
 {
     mTargetStream = nullptr;
@@ -41,13 +39,13 @@ OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStre
     mOwnsStream = inOwnsStream;
 }
 
-LongBufferSizeType OutputRC4XcodeStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputRC4XcodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream == nullptr)
         return 0;
 
-    LongBufferSizeType mCurrentIndex = 0;
-    Byte buffer;
+    size_t mCurrentIndex = 0;
+    uint8_t buffer;
 
     while (mCurrentIndex < inSize)
     {
@@ -59,7 +57,7 @@ LongBufferSizeType OutputRC4XcodeStream::Write(const Byte *inBuffer, LongBufferS
     return mCurrentIndex;
 }
 
-LongFilePositionType OutputRC4XcodeStream::GetCurrentPosition()
+long long OutputRC4XcodeStream::GetCurrentPosition()
 {
     if (mTargetStream == nullptr)
         return 0;

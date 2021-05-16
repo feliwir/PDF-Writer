@@ -21,7 +21,6 @@ limitations under the License.
 #include "InputStringStream.h"
 
 using namespace std;
-using namespace IOBasicTypes;
 
 InputStringStream::InputStringStream()
 {
@@ -45,12 +44,12 @@ void InputStringStream::Assign(const string &inString)
     mCurrentPosition = mStartPosition;
 }
 
-LongBufferSizeType InputStringStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputStringStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType amountRead = 0;
+    size_t amountRead = 0;
 
     for (; amountRead < inBufferSize && mCurrentPosition != mEndPosition; ++amountRead, ++mCurrentPosition)
-        inBuffer[amountRead] = (Byte)*mCurrentPosition;
+        inBuffer[amountRead] = (uint8_t)*mCurrentPosition;
     return amountRead;
 }
 
@@ -59,29 +58,28 @@ bool InputStringStream::NotEnded()
     return mCurrentPosition != mEndPosition;
 }
 
-void InputStringStream::Skip(LongBufferSizeType inSkipSize)
+void InputStringStream::Skip(size_t inSkipSize)
 {
-    mCurrentPosition = (inSkipSize > (LongBufferSizeType)(mEndPosition - mCurrentPosition))
-                           ? mEndPosition
-                           : (mCurrentPosition + inSkipSize);
+    mCurrentPosition =
+        (inSkipSize > (size_t)(mEndPosition - mCurrentPosition)) ? mEndPosition : (mCurrentPosition + inSkipSize);
     ;
 }
 
-void InputStringStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void InputStringStream::SetPosition(long long inOffsetFromStart)
 {
-    mCurrentPosition = inOffsetFromStart > (LongFilePositionType)(mEndPosition - mStartPosition)
+    mCurrentPosition = inOffsetFromStart > (long long)(mEndPosition - mStartPosition)
                            ? mEndPosition
                            : (mStartPosition + (string::size_type)inOffsetFromStart);
 }
 
-void InputStringStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
+void InputStringStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
-    mCurrentPosition = inOffsetFromEnd > (LongFilePositionType)(mEndPosition - mStartPosition)
+    mCurrentPosition = inOffsetFromEnd > (long long)(mEndPosition - mStartPosition)
                            ? mStartPosition
                            : (mStartPosition + (mEndPosition - mStartPosition - (string::size_type)inOffsetFromEnd));
 }
 
-LongFilePositionType InputStringStream::GetCurrentPosition()
+long long InputStringStream::GetCurrentPosition()
 {
     return mCurrentPosition - mStartPosition;
 }

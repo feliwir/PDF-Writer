@@ -66,13 +66,13 @@ bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, const std::str
     if (streamReader == nullptr)
         return false;
 
-    Byte buffer[0xffff];
+    uint8_t buffer[0xffff];
     if (streamReader != nullptr)
     {
         pdfFile.GetInputStream()->SetPosition(foundStreamInput->GetStreamContentStart());
         while (streamReader->NotEnded())
         {
-            LongBufferSizeType readAmount = streamReader->Read(buffer, sizeof(buffer));
+            size_t readAmount = streamReader->Read(buffer, sizeof(buffer));
             myFile.write((const char *)buffer, readAmount);
         }
     }

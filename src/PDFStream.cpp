@@ -140,7 +140,7 @@ void PDFStream::FinalizeStreamWrite()
     }
 }
 
-LongFilePositionType PDFStream::GetLength()
+long long PDFStream::GetLength()
 {
     return mStreamLength;
 }

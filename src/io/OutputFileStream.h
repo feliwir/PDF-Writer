@@ -43,11 +43,10 @@ class OutputFileStream : public IByteWriterWithPosition
     PDFHummus::EStatusCode Close();
 
     // IByteWriter implementation
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual long long GetCurrentPosition();
 
   private:
     FILE *mStream;

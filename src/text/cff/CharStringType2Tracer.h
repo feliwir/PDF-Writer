@@ -37,8 +37,8 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
                                              CFFFileInput *inCFFFileInput, IByteWriter *inWriter);
 
     // IType2InterpreterImplementation implementation
-    virtual PDFHummus::EStatusCode ReadCharString(LongFilePositionType inCharStringStart,
-                                                  LongFilePositionType inCharStringEnd, Byte **outCharString);
+    virtual PDFHummus::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                                  uint8_t **outCharString);
     virtual PDFHummus::EStatusCode Type2InterpretNumber(const CharStringOperand &inOperand);
     virtual PDFHummus::EStatusCode Type2Hstem(const CharStringOperandList &inOperandList);
     virtual PDFHummus::EStatusCode Type2Vstem(const CharStringOperandList &inOperandList);
@@ -50,8 +50,8 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     virtual PDFHummus::EStatusCode Type2Return(const CharStringOperandList &inOperandList);
     virtual PDFHummus::EStatusCode Type2Endchar(const CharStringOperandList &inOperandList);
     virtual PDFHummus::EStatusCode Type2Hstemhm(const CharStringOperandList &inOperandList);
-    virtual PDFHummus::EStatusCode Type2Hintmask(const CharStringOperandList &inOperandList, Byte *inProgramCounter);
-    virtual PDFHummus::EStatusCode Type2Cntrmask(const CharStringOperandList &inOperandList, Byte *inProgramCounter);
+    virtual PDFHummus::EStatusCode Type2Hintmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter);
+    virtual PDFHummus::EStatusCode Type2Cntrmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter);
     virtual PDFHummus::EStatusCode Type2Rmoveto(const CharStringOperandList &inOperandList);
     virtual PDFHummus::EStatusCode Type2Hmoveto(const CharStringOperandList &inOperandList);
     virtual PDFHummus::EStatusCode Type2Vstemhm(const CharStringOperandList &inOperandList);
@@ -94,5 +94,5 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     PrimitiveObjectsWriter mPrimitiveWriter;
     unsigned short mStemsCount;
 
-    void WriteStemMask(Byte *inProgramCounter);
+    void WriteStemMask(uint8_t *inProgramCounter);
 };

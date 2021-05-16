@@ -66,11 +66,12 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
 #include <list>
+#include <stdint.h>
+#include <stdio.h>
 #include <string>
 
-typedef std::list<IOBasicTypes::Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 
 class MD5Generator
 {
@@ -80,7 +81,7 @@ class MD5Generator
 
     PDFHummus::EStatusCode Accumulate(const std::string &inString);
     PDFHummus::EStatusCode Accumulate(const ByteList &inString);
-    PDFHummus::EStatusCode Accumulate(const IOBasicTypes::Byte *inArray, IOBasicTypes::LongBufferSizeType inLength);
+    PDFHummus::EStatusCode Accumulate(const uint8_t *inArray, size_t inLength);
 
     const ByteList &ToString();
     const std::string &ToStringAsString();

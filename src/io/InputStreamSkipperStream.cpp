@@ -42,10 +42,9 @@ void InputStreamSkipperStream::Assign(IByteReader *inSourceStream)
     mAmountRead = 0;
 }
 
-IOBasicTypes::LongBufferSizeType InputStreamSkipperStream::Read(IOBasicTypes::Byte *inBuffer,
-                                                                IOBasicTypes::LongBufferSizeType inBufferSize)
+size_t InputStreamSkipperStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    IOBasicTypes::LongBufferSizeType readThisTime = mStream->Read(inBuffer, inBufferSize);
+    size_t readThisTime = mStream->Read(inBuffer, inBufferSize);
     mAmountRead += readThisTime;
 
     return readThisTime;
@@ -56,12 +55,12 @@ bool InputStreamSkipperStream::NotEnded()
     return mStream != nullptr ? mStream->NotEnded() : false;
 }
 
-bool InputStreamSkipperStream::CanSkipTo(IOBasicTypes::LongFilePositionType inPositionInStream)
+bool InputStreamSkipperStream::CanSkipTo(long long inPositionInStream)
 {
     return mAmountRead <= inPositionInStream;
 }
 
-void InputStreamSkipperStream::SkipTo(IOBasicTypes::LongFilePositionType inPositionInStream)
+void InputStreamSkipperStream::SkipTo(long long inPositionInStream)
 {
     if (!CanSkipTo(inPositionInStream))
         return;
@@ -70,9 +69,9 @@ void InputStreamSkipperStream::SkipTo(IOBasicTypes::LongFilePositionType inPosit
 }
 
 // will skip by, or hit EOF
-void InputStreamSkipperStream::SkipBy(IOBasicTypes::LongFilePositionType inAmountToSkipBy)
+void InputStreamSkipperStream::SkipBy(long long inAmountToSkipBy)
 {
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
 
     while (NotEnded() && inAmountToSkipBy > 0)
     {
@@ -86,7 +85,7 @@ void InputStreamSkipperStream::Reset()
     mAmountRead = 0;
 }
 
-IOBasicTypes::LongFilePositionType InputStreamSkipperStream::GetCurrentPosition()
+long long InputStreamSkipperStream::GetCurrentPosition()
 {
     return mAmountRead;
 }

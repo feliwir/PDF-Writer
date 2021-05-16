@@ -19,7 +19,8 @@
 
 */
 #pragma once
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class StandardEncoding
 {
@@ -27,5 +28,5 @@ class StandardEncoding
     StandardEncoding(void);
     ~StandardEncoding(void);
 
-    const char *GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
+    const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };

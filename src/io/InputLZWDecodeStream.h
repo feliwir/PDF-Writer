@@ -39,8 +39,7 @@ class InputLZWDecodeStream : public IByteReader
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
     // encoded stream. got it?!
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
@@ -57,16 +56,16 @@ class InputLZWDecodeStream : public IByteReader
     { // decoding table
         int length;
         int head;
-        IOBasicTypes::Byte tail;
+        uint8_t tail;
     } table[4097];
-    int nextCode;                    // next code to be used
-    int nextBits;                    // number of bits in next code word
-    int prevCode;                    // previous code used in stream
-    int newChar;                     // next char to be added to table
-    IOBasicTypes::Byte seqBuf[4097]; // buffer for current sequence
-    int seqLength;                   // length of current sequence
-    int seqIndex;                    // index into current sequence
-    bool first;                      // first code after a table clear
+    int nextCode;         // next code to be used
+    int nextBits;         // number of bits in next code word
+    int prevCode;         // previous code used in stream
+    int newChar;          // next char to be added to table
+    uint8_t seqBuf[4097]; // buffer for current sequence
+    int seqLength;        // length of current sequence
+    int seqIndex;         // index into current sequence
+    bool first;           // first code after a table clear
 
     bool ProcessNextCode();
     void ClearTable();

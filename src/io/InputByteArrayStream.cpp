@@ -26,7 +26,7 @@ InputByteArrayStream::InputByteArrayStream()
     mByteArray = nullptr;
 }
 
-InputByteArrayStream::InputByteArrayStream(Byte *inByteArray, LongFilePositionType inArrayLength)
+InputByteArrayStream::InputByteArrayStream(uint8_t *inByteArray, long long inArrayLength)
 {
     mByteArray = inByteArray;
     mArrayLength = inArrayLength;
@@ -37,22 +37,21 @@ InputByteArrayStream::~InputByteArrayStream()
 {
 }
 
-void InputByteArrayStream::Assign(IOBasicTypes::Byte *inByteArray, IOBasicTypes::LongFilePositionType inArrayLength)
+void InputByteArrayStream::Assign(uint8_t *inByteArray, long long inArrayLength)
 {
     mByteArray = inByteArray;
     mArrayLength = inArrayLength;
     mCurrentPosition = 0;
 }
 
-LongBufferSizeType InputByteArrayStream::Read(IOBasicTypes::Byte *inBuffer,
-                                              IOBasicTypes::LongBufferSizeType inBufferSize)
+size_t InputByteArrayStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mByteArray == nullptr)
         return 0;
 
-    LongBufferSizeType amountToRead = inBufferSize < (LongBufferSizeType)(mArrayLength - mCurrentPosition)
-                                          ? inBufferSize
-                                          : (LongBufferSizeType)(mArrayLength - mCurrentPosition);
+    size_t amountToRead = inBufferSize < (size_t)(mArrayLength - mCurrentPosition)
+                              ? inBufferSize
+                              : (size_t)(mArrayLength - mCurrentPosition);
 
     if (amountToRead > 0)
         memcpy(inBuffer, mByteArray + mCurrentPosition, amountToRead);
@@ -65,23 +64,23 @@ bool InputByteArrayStream::NotEnded()
     return (mByteArray != nullptr) && mCurrentPosition < mArrayLength;
 }
 
-void InputByteArrayStream::Skip(LongBufferSizeType inSkipSize)
+void InputByteArrayStream::Skip(size_t inSkipSize)
 {
     mCurrentPosition +=
-        inSkipSize < (LongBufferSizeType)mArrayLength - mCurrentPosition ? inSkipSize : mArrayLength - mCurrentPosition;
+        inSkipSize < (size_t)mArrayLength - mCurrentPosition ? inSkipSize : mArrayLength - mCurrentPosition;
 }
 
-void InputByteArrayStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void InputByteArrayStream::SetPosition(long long inOffsetFromStart)
 {
     mCurrentPosition = inOffsetFromStart > mArrayLength ? mArrayLength : inOffsetFromStart;
 }
 
-void InputByteArrayStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
+void InputByteArrayStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     mCurrentPosition = inOffsetFromEnd > mArrayLength ? 0 : (mArrayLength - inOffsetFromEnd);
 }
 
-LongFilePositionType InputByteArrayStream::GetCurrentPosition()
+long long InputByteArrayStream::GetCurrentPosition()
 {
     return mCurrentPosition;
 }

@@ -21,13 +21,12 @@
 #pragma once
 #include "InfoDictionary.h"
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <utility>
 
-using namespace IOBasicTypes;
-
-typedef std::pair<bool, LongFilePositionType> BoolAndLongFilePositionType;
+typedef std::pair<bool, long long> BoolAndLongFilePositionType;
 typedef std::pair<bool, ObjectReference> BoolAndObjectReference;
 
 class TrailerInformation
@@ -36,7 +35,7 @@ class TrailerInformation
     TrailerInformation(void);
     ~TrailerInformation(void);
 
-    void SetPrev(LongFilePositionType inPrev);
+    void SetPrev(long long inPrev);
     void SetRoot(const ObjectReference &inRootReference);
     void SetEncrypt(const ObjectReference &inEncryptReference);
     void SetInfoDictionaryReference(const ObjectReference &inInfoDictionaryReference);
@@ -53,7 +52,7 @@ class TrailerInformation
     void Reset();
 
   private:
-    LongFilePositionType mPrev;
+    long long mPrev;
 
     ObjectReference mRootReference;
     ObjectReference mEncryptReference;

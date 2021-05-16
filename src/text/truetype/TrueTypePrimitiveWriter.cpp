@@ -43,7 +43,7 @@ EStatusCode TrueTypePrimitiveWriter::GetInternalState()
     return mInternalState;
 }
 
-EStatusCode TrueTypePrimitiveWriter::WriteBYTE(Byte inValue)
+EStatusCode TrueTypePrimitiveWriter::WriteBYTE(uint8_t inValue)
 {
     if (PDFHummus::eFailure == mInternalState)
         return PDFHummus::eFailure;
@@ -57,10 +57,10 @@ EStatusCode TrueTypePrimitiveWriter::WriteBYTE(Byte inValue)
 
 EStatusCode TrueTypePrimitiveWriter::WriteULONG(unsigned long inValue)
 {
-    Byte byte1 = (inValue >> 24) & 0xff;
-    Byte byte2 = (inValue >> 16) & 0xff;
-    Byte byte3 = (inValue >> 8) & 0xff;
-    Byte byte4 = inValue & 0xff;
+    uint8_t byte1 = (inValue >> 24) & 0xff;
+    uint8_t byte2 = (inValue >> 16) & 0xff;
+    uint8_t byte3 = (inValue >> 8) & 0xff;
+    uint8_t byte4 = inValue & 0xff;
 
     if (WriteBYTE(byte1) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -79,8 +79,8 @@ EStatusCode TrueTypePrimitiveWriter::WriteULONG(unsigned long inValue)
 
 EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(unsigned short inValue)
 {
-    Byte byte1 = (inValue >> 8) & 0xff;
-    Byte byte2 = inValue & 0xff;
+    uint8_t byte1 = (inValue >> 8) & 0xff;
+    uint8_t byte2 = inValue & 0xff;
 
     if (WriteBYTE(byte1) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;

@@ -25,7 +25,6 @@
 
 #ifndef PDFHUMMUS_NO_DCT
 
-using namespace IOBasicTypes;
 using namespace PDFHummus;
 
 class HummusJPGException
@@ -61,7 +60,7 @@ METHODDEF(boolean) HummusFillInputBuffer(j_decompress_ptr cinfo)
     auto *src = (HummusSourceManager *)cinfo->src;
     size_t nbytes;
 
-    nbytes = src->mReader->Read((Byte *)(src->buffer), INPUT_BUF_SIZE);
+    nbytes = src->mReader->Read((uint8_t *)(src->buffer), INPUT_BUF_SIZE);
 
     if (nbytes <= 0)
     {
@@ -219,7 +218,7 @@ EStatusCode InputDCTDecodeStream::StartRead()
     return status;
 }
 
-LongBufferSizeType InputDCTDecodeStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputDCTDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (!mIsDecoding)
         return 0;
@@ -230,15 +229,14 @@ LongBufferSizeType InputDCTDecodeStream::Read(Byte *inBuffer, LongBufferSizeType
             return 0;
     }
 
-    Byte *indexInBuffer = inBuffer;
+    uint8_t *indexInBuffer = inBuffer;
 
     // fill buffer with what remains from samples buffer
     indexInBuffer = CopySamplesArrayToBuffer(inBuffer, inBufferSize);
 
     // if not satisfied, loop by reading more samples, and filling the buffer.
     // if while reading for samples encountered end of filter, stop
-    while (((LongBufferSizeType)(indexInBuffer - inBuffer) < inBufferSize) &&
-           (mJPGState.output_scanline < mJPGState.output_height))
+    while (((size_t)(indexInBuffer - inBuffer) < inBufferSize) && (mJPGState.output_scanline < mJPGState.output_height))
     {
         try
         {
@@ -256,12 +254,12 @@ LongBufferSizeType InputDCTDecodeStream::Read(Byte *inBuffer, LongBufferSizeType
     return indexInBuffer - inBuffer;
 }
 
-Byte *InputDCTDecodeStream::CopySamplesArrayToBuffer(Byte *inBuffer, LongBufferSizeType inBufferSize)
+uint8_t *InputDCTDecodeStream::CopySamplesArrayToBuffer(uint8_t *inBuffer, size_t inBufferSize)
 {
-    Byte *indexInBuffer = inBuffer;
-    LongBufferSizeType row_stride = mJPGState.output_width * mJPGState.output_components;
+    uint8_t *indexInBuffer = inBuffer;
+    size_t row_stride = mJPGState.output_width * mJPGState.output_components;
 
-    while (mCurrentSampleRow < mTotalSampleRows && ((LongBufferSizeType)(indexInBuffer - inBuffer)) < inBufferSize)
+    while (mCurrentSampleRow < mTotalSampleRows && ((size_t)(indexInBuffer - inBuffer)) < inBufferSize)
     {
         if ((inBufferSize - (indexInBuffer - inBuffer)) < (row_stride - mIndexInRow))
         {

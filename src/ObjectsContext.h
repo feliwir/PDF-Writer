@@ -51,7 +51,7 @@ class ObjectsContext
     void SetEncryptionHelper(EncryptionHelper *inEncryptionHelper);
 
     // pre 1.5 xref writing
-    PDFHummus::EStatusCode WriteXrefTable(LongFilePositionType &outWritePosition);
+    PDFHummus::EStatusCode WriteXrefTable(long long &outWritePosition);
     // post 1.5 xref writing (only used now for modified files)
     PDFHummus::EStatusCode WriteXrefStream(DictionaryContext *inDictionaryContext);
 
@@ -60,7 +60,7 @@ class ObjectsContext
     void EndFreeContext();
 
     // Get current output stream position
-    LongFilePositionType GetCurrentPosition();
+    long long GetCurrentPosition();
 
     // Get objects management object
     IndirectObjectsReferenceRegistry &GetInDirectObjectsRegistry();
@@ -150,7 +150,7 @@ class ObjectsContext
 
     void WritePDFStreamEndWithoutExtent();
     void WritePDFStreamExtent(PDFStream *inStream);
-    void WriteXrefNumber(IByteWriter *inStream, LongFilePositionType inElement, size_t inElementSize);
+    void WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize);
     bool IsEncrypting();
     std::string MaybeEncryptString(const std::string &inString);
     std::string DecodeHexString(const std::string &inString);

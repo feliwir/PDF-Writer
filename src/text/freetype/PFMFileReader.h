@@ -56,8 +56,8 @@ struct PFMHeader
     WORD MaxWidth;
     BYTE FirstChar;
     BYTE LastChar;
-    Byte DefaultChar;
-    Byte BreakChar;
+    uint8_t DefaultChar;
+    uint8_t BreakChar;
     WORD WidthBytes;
     DWORD Device;
     DWORD Face;

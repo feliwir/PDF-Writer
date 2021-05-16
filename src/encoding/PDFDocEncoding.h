@@ -20,10 +20,11 @@
 */
 #pragma once
 
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 #include <utility>
 
-typedef std::pair<bool, IOBasicTypes::Byte> BoolAndByte;
+typedef std::pair<bool, uint8_t> BoolAndByte;
 
 class PDFDocEncoding
 {
@@ -32,6 +33,6 @@ class PDFDocEncoding
     ~PDFDocEncoding(void);
 
     BoolAndByte Encode(unsigned long inUnicodeCharacter);
-    unsigned long Decode(IOBasicTypes::Byte inEncodedCharacter);
-    const char *GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter);
+    unsigned long Decode(uint8_t inEncodedCharacter);
+    const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };

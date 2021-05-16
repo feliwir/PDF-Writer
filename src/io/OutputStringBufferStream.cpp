@@ -20,8 +20,6 @@
 */
 #include "io/OutputStringBufferStream.h"
 
-using namespace IOBasicTypes;
-
 OutputStringBufferStream::OutputStringBufferStream()
 {
     mBuffer = new MyStringBuf();
@@ -57,12 +55,12 @@ void OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
     }
 }
 
-LongBufferSizeType OutputStringBufferStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputStringBufferStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
-    return (LongBufferSizeType)mBuffer->sputn((const char *)inBuffer, inSize);
+    return (size_t)mBuffer->sputn((const char *)inBuffer, inSize);
 }
 
-LongFilePositionType OutputStringBufferStream::GetCurrentPosition()
+long long OutputStringBufferStream::GetCurrentPosition()
 {
     return mBuffer->GetCurrentWritePosition();
 }
@@ -79,7 +77,7 @@ void OutputStringBufferStream::Reset()
     mBuffer->str(scEmpty);
 }
 
-void OutputStringBufferStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void OutputStringBufferStream::SetPosition(long long inOffsetFromStart)
 {
     mBuffer->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }

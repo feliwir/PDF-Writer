@@ -267,7 +267,7 @@ void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inE
     mObjectsContext->StartNewIndirectObject(mCIDSetObjectID);
     PDFStream *pdfStream = mObjectsContext->StartPDFStream();
     IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
-    Byte buffer;
+    uint8_t buffer;
     auto it = inEncodedGlyphs.begin();
     unsigned int upperLimit = inEncodedGlyphs.back().first;
 

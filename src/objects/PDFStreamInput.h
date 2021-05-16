@@ -20,11 +20,10 @@
 */
 #pragma once
 #include "PDFObject.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class PDFDictionary;
-
-using namespace IOBasicTypes;
 
 class PDFStreamInput : public PDFObject
 {
@@ -34,15 +33,15 @@ class PDFStreamInput : public PDFObject
         eType = ePDFObjectStream
     };
 
-    PDFStreamInput(PDFDictionary *inStreamDictionary, LongFilePositionType inStreamContentStart);
+    PDFStreamInput(PDFDictionary *inStreamDictionary, long long inStreamContentStart);
     virtual ~PDFStreamInput(void);
 
     // These two calls AddRef on both objects
     PDFDictionary *QueryStreamDictionary();
 
-    LongFilePositionType GetStreamContentStart();
+    long long GetStreamContentStart();
 
   private:
     PDFDictionary *mDictionary;
-    LongFilePositionType mStreamContentStart;
+    long long mStreamContentStart;
 };

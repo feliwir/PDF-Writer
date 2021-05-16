@@ -215,14 +215,14 @@ EStatusCode PDFParser::ParseEOFLine()
     return foundEOF ? PDFHummus::eSuccess : PDFHummus::eFailure;
 }
 
-LongBufferSizeType PDFParser::GetCurrentPositionFromEnd()
+size_t PDFParser::GetCurrentPositionFromEnd()
 {
     return mLastReadPositionFromEnd - (mCurrentBufferIndex - mLinesBuffer);
 }
 
 bool PDFParser::GoBackTillToken()
 {
-    Byte buffer;
+    uint8_t buffer;
     bool foundToken = false;
 
     while (ReadBack(buffer))
@@ -238,7 +238,7 @@ bool PDFParser::GoBackTillToken()
 
 bool PDFParser::GoBackTillNonToken()
 {
-    Byte buffer;
+    uint8_t buffer;
     bool foundNonToken = false;
 
     while (ReadBack(buffer))
@@ -252,8 +252,8 @@ bool PDFParser::GoBackTillNonToken()
     return foundNonToken;
 }
 
-static const Byte scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
-bool PDFParser::IsPDFWhiteSpace(Byte inCharacter)
+static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
+bool PDFParser::IsPDFWhiteSpace(uint8_t inCharacter)
 {
     bool isWhiteSpace = false;
     for (int i = 0; i < 6 && !isWhiteSpace; ++i)
@@ -265,7 +265,7 @@ static const char scCR = '\r';
 static const char scLN = '\n';
 void PDFParser::GoBackTillLineStart()
 {
-    Byte buffer;
+    uint8_t buffer;
 
     while (ReadBack(buffer))
     {
@@ -274,7 +274,7 @@ void PDFParser::GoBackTillLineStart()
     }
 }
 
-bool PDFParser::ReadBack(Byte &outValue)
+bool PDFParser::ReadBack(uint8_t &outValue)
 {
     if (IsBeginOfFile())
         return false;
@@ -308,10 +308,10 @@ bool PDFParser::ReadNextBufferFromEnd()
     else
     {
         mStream->SetPositionFromEnd(mLastReadPositionFromEnd); // last known position that worked.
-        LongFilePositionType positionBefore = mStream->GetCurrentPosition();
+        long long positionBefore = mStream->GetCurrentPosition();
         mStream->SetPositionFromEnd(mLastReadPositionFromEnd + LINE_BUFFER_SIZE); // try earlier one
-        LongFilePositionType positionAfter = mStream->GetCurrentPosition();
-        LongBufferSizeType readAmount = positionBefore - positionAfter; // check if got to start by testing position
+        long long positionAfter = mStream->GetCurrentPosition();
+        size_t readAmount = positionBefore - positionAfter; // check if got to start by testing position
         if (readAmount != 0)
             readAmount = mStream->Read(mLinesBuffer, readAmount);
         mEncounteredFileStart = readAmount < LINE_BUFFER_SIZE;
@@ -357,7 +357,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 
         if (anObject->GetType() == PDFObject::ePDFObjectInteger)
         {
-            mLastXrefPosition = (LongFilePositionType)((PDFInteger *)anObject.GetPtr())->GetValue();
+            mLastXrefPosition = (long long)((PDFInteger *)anObject.GetPtr())->GetValue();
 
             // find and read startxref keyword
             if (!GoBackTillToken())
@@ -542,11 +542,11 @@ EStatusCode PDFParser::InitializeXref()
 
 typedef BoxingBaseWithRW<ObjectIDType> ObjectIDTypeBox;
 typedef BoxingBaseWithRW<unsigned long> ULong;
-typedef BoxingBaseWithRW<LongFilePositionType> LongFilePositionTypeBox;
+typedef BoxingBaseWithRW<long long> LongFilePositionTypeBox;
 
 static const std::string scXref = "xref";
 EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                              LongFilePositionType inXrefPosition, bool inIsFirstXref,
+                                              long long inXrefPosition, bool inIsFirstXref,
                                               XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     // K. cross ref starts at  xref position
@@ -556,7 +556,7 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
     BoolAndString token;
     EStatusCode status = PDFHummus::eSuccess;
     ObjectIDType firstNonSectionObject;
-    Byte entry[20];
+    uint8_t entry[20];
 
     *outExtendedTable = nullptr;
 
@@ -652,7 +652,7 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
     return status;
 }
 
-EStatusCode PDFParser::ReadNextXrefEntry(Byte inBuffer[20])
+EStatusCode PDFParser::ReadNextXrefEntry(uint8_t inBuffer[20])
 {
     EStatusCode status = eSuccess;
 
@@ -1097,7 +1097,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
     return status;
 }
 
-EStatusCode PDFParser::ParsePreviousFileDirectory(LongFilePositionType inXrefPosition, XrefEntryInput *inXrefTable,
+EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
                                                   ObjectIDType inXrefSize, PDFDictionary **outTrailer,
                                                   XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
@@ -1381,7 +1381,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
 }
 
 EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                               LongFilePositionType inXrefPosition, XrefEntryInput **outExtendedTable,
+                                               long long inXrefPosition, XrefEntryInput **outExtendedTable,
                                                ObjectIDType *outExtendedTableSize)
 {
     EStatusCode status = PDFHummus::eSuccess;
@@ -1590,7 +1590,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
     return status;
 }
 
-void PDFParser::MovePositionInStream(LongFilePositionType inPosition)
+void PDFParser::MovePositionInStream(long long inPosition)
 {
     mStream->SetPosition(inPosition);
     mObjectParser.ResetReadState();
@@ -1649,7 +1649,7 @@ EStatusCode PDFParser::ReadXrefStreamSegment(XrefEntryInput *inXrefTable, Object
 EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue)
 {
     outValue = 0;
-    Byte buffer;
+    uint8_t buffer;
     EStatusCode status = PDFHummus::eSuccess;
 
     for (int i = 0; i < inEntrySize && PDFHummus::eSuccess == status; ++i)
@@ -1664,7 +1664,7 @@ EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySi
 EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue)
 {
     outValue = 0;
-    Byte buffer;
+    uint8_t buffer;
     EStatusCode status = PDFHummus::eSuccess;
 
     for (int i = 0; i < inEntrySize && PDFHummus::eSuccess == status; ++i)
@@ -1770,9 +1770,8 @@ PDFObject *PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
         // GetCurrentPosition to see if parsed some]
         if (mXrefTable[inObjectId].mRivision != 0 || skipperStream.GetCurrentPosition() == 0)
         {
-            LongFilePositionType objectPositionInStream =
-                objectStreamHeader[mXrefTable[inObjectId].mRivision].mObjectOffset +
-                firstStreamObjectPosition->GetValue();
+            long long objectPositionInStream = objectStreamHeader[mXrefTable[inObjectId].mRivision].mObjectOffset +
+                                               firstStreamObjectPosition->GetValue();
             skipperStream.SkipTo(objectPositionInStream);
             mObjectParser.ResetReadState();
         }
@@ -2011,13 +2010,10 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
             PDFObjectCastPtr<PDFInteger> columns(QueryDictionaryObject(inDecodeParams, "Columns"));
             PDFObjectCastPtr<PDFInteger> colors(QueryDictionaryObject(inDecodeParams, "Colors"));
             PDFObjectCastPtr<PDFInteger> bitsPerComponent(QueryDictionaryObject(inDecodeParams, "BitsPerComponent"));
-            LongBufferSizeType columnsValue =
-                columns.GetPtr() != nullptr ? (IOBasicTypes::LongBufferSizeType)columns->GetValue() : 1;
-            LongBufferSizeType colorsValue =
-                colors.GetPtr() != nullptr ? (IOBasicTypes::LongBufferSizeType)colors->GetValue() : 1;
-            LongBufferSizeType bitsPerComponentValue =
-                bitsPerComponent.GetPtr() != nullptr ? (IOBasicTypes::LongBufferSizeType)bitsPerComponent->GetValue()
-                                                     : 8;
+            size_t columnsValue = columns.GetPtr() != nullptr ? (size_t)columns->GetValue() : 1;
+            size_t colorsValue = colors.GetPtr() != nullptr ? (size_t)colors->GetValue() : 1;
+            size_t bitsPerComponentValue =
+                bitsPerComponent.GetPtr() != nullptr ? (size_t)bitsPerComponent->GetValue() : 8;
 
             switch (predictor->GetValue())
             {
@@ -2230,7 +2226,7 @@ XrefEntryInput *PDFParser::GetXrefEntry(ObjectIDType inObjectID)
     return (inObjectID < mXrefSize) ? mXrefTable + inObjectID : nullptr;
 }
 
-LongFilePositionType PDFParser::GetXrefPosition()
+long long PDFParser::GetXrefPosition()
 {
     return mLastXrefPosition;
 }

@@ -24,8 +24,6 @@
 #include "objects/PDFStreamInput.h"
 #include "parsing/PDFParser.h"
 
-using namespace IOBasicTypes;
-
 ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(PDFArray *inArrayOfStreams, PDFParser *inParser)
 {
     mArray = inArrayOfStreams;
@@ -76,12 +74,12 @@ IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
     return mCurrentStream;
 }
 
-LongBufferSizeType ArrayOfInputStreamsStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t ArrayOfInputStreamsStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (!NotEnded())
         return 0;
 
-    LongBufferSizeType readAmount = 0;
+    size_t readAmount = 0;
 
     while (NotEnded() && readAmount < inBufferSize)
     {

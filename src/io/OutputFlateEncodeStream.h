@@ -38,21 +38,19 @@ class OutputFlateEncodeStream : public IByteWriterWithPosition
     // destructions - use Assign(NULL)
     void Assign(IByteWriterWithPosition *inWriter, bool inInitiallyOn = true);
 
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
+    virtual long long GetCurrentPosition();
 
     void TurnOnEncoding();
     void TurnOffEncoding();
 
   private:
-    IOBasicTypes::Byte *mBuffer;
+    uint8_t *mBuffer;
     IByteWriterWithPosition *mTargetStream;
     bool mCurrentlyEncoding;
     z_stream *mZLibState;
 
     void FinalizeEncoding();
     void StartEncoding();
-    IOBasicTypes::LongBufferSizeType EncodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
-                                                          IOBasicTypes::LongBufferSizeType inSize);
+    size_t EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize);
 };

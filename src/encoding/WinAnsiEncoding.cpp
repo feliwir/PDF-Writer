@@ -389,7 +389,7 @@ BoolAndByte WinAnsiEncoding::Encode(unsigned long inUnicodeCharacter)
     return result;
 }
 
-const char *WinAnsiEncoding::GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter)
+const char *WinAnsiEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }

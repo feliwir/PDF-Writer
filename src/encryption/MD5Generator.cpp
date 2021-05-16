@@ -69,7 +69,6 @@
 
 #include <string.h>
 
-using namespace IOBasicTypes;
 using namespace PDFHummus;
 
 MD5Generator::MD5Generator()
@@ -96,7 +95,7 @@ EStatusCode MD5Generator::Accumulate(const std::string &inString)
     if (mIsFinalized)
         return PDFHummus::eFailure;
 
-    _Accumulate((const Byte *)inString.c_str(), (unsigned long)inString.length());
+    _Accumulate((const uint8_t *)inString.c_str(), (unsigned long)inString.length());
     return PDFHummus::eSuccess;
 }
 
@@ -105,8 +104,8 @@ EStatusCode MD5Generator::Accumulate(const ByteList &inString)
     if (mIsFinalized)
         return PDFHummus::eFailure;
 
-    Byte *buffer = new Byte[inString.size()];
-    Byte *itBuffer = buffer;
+    uint8_t *buffer = new uint8_t[inString.size()];
+    uint8_t *itBuffer = buffer;
     auto it = inString.begin();
     for (; it != inString.end(); ++it, ++itBuffer)
         *itBuffer = *it;
@@ -116,7 +115,7 @@ EStatusCode MD5Generator::Accumulate(const ByteList &inString)
     return PDFHummus::eSuccess;
 }
 
-EStatusCode MD5Generator::Accumulate(const Byte *inArray, LongBufferSizeType inLength)
+EStatusCode MD5Generator::Accumulate(const uint8_t *inArray, size_t inLength)
 {
     if (mIsFinalized)
         return PDFHummus::eFailure;
@@ -410,7 +409,7 @@ void MD5Generator::PrepareFinalStrings()
     for (unsigned char &i : mDigest)
     {
         SAFE_SPRINTF_1(formattedHex, 3, "%02x", i);
-        stringHexStream.Write((const Byte *)formattedHex, 2);
+        stringHexStream.Write((const uint8_t *)formattedHex, 2);
         MD5FinalString.push_back(i);
         MD5FinalStringAsString.push_back((char)i);
     }

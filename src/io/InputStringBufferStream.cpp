@@ -35,9 +35,9 @@ InputStringBufferStream::~InputStringBufferStream()
 {
 }
 
-LongBufferSizeType InputStringBufferStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputStringBufferStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    return (LongBufferSizeType)mBufferToReadFrom->SAFE_SGETN((char *)inBuffer, inBufferSize, inBufferSize);
+    return (size_t)mBufferToReadFrom->SAFE_SGETN((char *)inBuffer, inBufferSize, inBufferSize);
 }
 
 bool InputStringBufferStream::NotEnded()
@@ -45,22 +45,22 @@ bool InputStringBufferStream::NotEnded()
     return mBufferToReadFrom->in_avail() != 0;
 }
 
-void InputStringBufferStream::Skip(LongBufferSizeType inSkipSize)
+void InputStringBufferStream::Skip(size_t inSkipSize)
 {
     mBufferToReadFrom->pubseekoff(inSkipSize, std::ios_base::cur);
 }
 
-void InputStringBufferStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void InputStringBufferStream::SetPosition(long long inOffsetFromStart)
 {
     mBufferToReadFrom->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }
 
-void InputStringBufferStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
+void InputStringBufferStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     mBufferToReadFrom->pubseekoff((long)inOffsetFromEnd, std::ios_base::end);
 }
 
-LongFilePositionType InputStringBufferStream::GetCurrentPosition()
+long long InputStringBufferStream::GetCurrentPosition()
 {
     return mBufferToReadFrom->GetCurrentReadPosition();
 }

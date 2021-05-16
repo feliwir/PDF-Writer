@@ -24,11 +24,9 @@
 
 #define BUFFER_SIZE 256 * 1024
 
-using namespace IOBasicTypes;
-
 OutputFlateEncodeStream::OutputFlateEncodeStream()
 {
-    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
     mTargetStream = nullptr;
     mCurrentlyEncoding = false;
@@ -66,7 +64,7 @@ void OutputFlateEncodeStream::FinalizeEncoding()
         }
         else
         {
-            LongBufferSizeType writtenBytes;
+            size_t writtenBytes;
             writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
             if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
             {
@@ -83,7 +81,7 @@ void OutputFlateEncodeStream::FinalizeEncoding()
 
 OutputFlateEncodeStream::OutputFlateEncodeStream(IByteWriterWithPosition *inTargetWriter, bool inInitiallyOn)
 {
-    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
     mTargetStream = nullptr;
     mCurrentlyEncoding = false;
@@ -115,7 +113,7 @@ void OutputFlateEncodeStream::Assign(IByteWriterWithPosition *inWriter, bool inI
         StartEncoding();
 }
 
-LongBufferSizeType OutputFlateEncodeStream::Write(const IOBasicTypes::Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputFlateEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return EncodeBufferAndWrite(inBuffer, inSize);
@@ -125,8 +123,7 @@ LongBufferSizeType OutputFlateEncodeStream::Write(const IOBasicTypes::Byte *inBu
         return 0;
 }
 
-LongBufferSizeType OutputFlateEncodeStream::EncodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
-                                                                 LongBufferSizeType inSize)
+size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
 {
     int deflateResult;
 
@@ -147,7 +144,7 @@ LongBufferSizeType OutputFlateEncodeStream::EncodeBufferAndWrite(const IOBasicTy
         }
         else
         {
-            LongBufferSizeType writtenBytes;
+            size_t writtenBytes;
             writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
             if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
             {
@@ -168,7 +165,7 @@ LongBufferSizeType OutputFlateEncodeStream::EncodeBufferAndWrite(const IOBasicTy
         return 0;
 }
 
-LongFilePositionType OutputFlateEncodeStream::GetCurrentPosition()
+long long OutputFlateEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();

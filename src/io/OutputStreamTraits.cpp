@@ -36,8 +36,8 @@ OutputStreamTraits::~OutputStreamTraits()
 #define TENMEGS 10 * 1024 * 1024
 EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
 {
-    Byte *buffer = new Byte[TENMEGS];
-    LongBufferSizeType readBytes, writeBytes;
+    uint8_t *buffer = new uint8_t[TENMEGS];
+    size_t readBytes, writeBytes;
     EStatusCode status = PDFHummus::eSuccess;
 
     while (inInputStream->NotEnded() && PDFHummus::eSuccess == status)
@@ -54,10 +54,10 @@ EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
     return status;
 }
 
-EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, LongBufferSizeType inLength)
+EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, size_t inLength)
 {
-    Byte *buffer = new Byte[inLength];
-    LongBufferSizeType readBytes, writeBytes;
+    uint8_t *buffer = new uint8_t[inLength];
+    size_t readBytes, writeBytes;
 
     readBytes = inInputStream->Read(buffer, inLength);
     writeBytes = mOutputStream->Write(buffer, readBytes);

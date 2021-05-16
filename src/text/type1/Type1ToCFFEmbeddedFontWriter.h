@@ -33,8 +33,6 @@
 #include <utility>
 #include <vector>
 
-using namespace IOBasicTypes;
-
 typedef std::vector<unsigned int> UIntVector;
 typedef std::set<unsigned int> UIntSet;
 typedef std::vector<std::string> StringVector;
@@ -65,16 +63,16 @@ class Type1ToCFFEmbeddedFontWriter
     unsigned short *mCharset;
 
     // placeholders positions
-    LongFilePositionType mCharsetPlaceHolderPosition;
-    LongFilePositionType mEncodingPlaceHolderPosition;
-    LongFilePositionType mCharstringsPlaceHolderPosition;
-    LongFilePositionType mPrivatePlaceHolderPosition;
+    long long mCharsetPlaceHolderPosition;
+    long long mEncodingPlaceHolderPosition;
+    long long mCharstringsPlaceHolderPosition;
+    long long mPrivatePlaceHolderPosition;
 
-    LongFilePositionType mEncodingPosition;
-    LongFilePositionType mCharsetPosition;
-    LongFilePositionType mCharStringPosition;
-    LongFilePositionType mPrivateSize;
-    LongFilePositionType mPrivatePosition;
+    long long mEncodingPosition;
+    long long mCharsetPosition;
+    long long mCharStringPosition;
+    long long mPrivateSize;
+    long long mPrivatePosition;
 
     PDFHummus::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                            const std::string &inSubsetFontName, bool &outNotEmbedded,
@@ -84,7 +82,7 @@ class Type1ToCFFEmbeddedFontWriter
                                               bool &outFoundComponents);
     PDFHummus::EStatusCode WriteCFFHeader();
     PDFHummus::EStatusCode WriteName(const std::string &inSubsetFontName);
-    Byte GetMostCompressedOffsetSize(unsigned long inOffset);
+    uint8_t GetMostCompressedOffsetSize(unsigned long inOffset);
     PDFHummus::EStatusCode WriteTopIndex();
     PDFHummus::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
     unsigned short AddStringToStringsArray(const std::string &inString);

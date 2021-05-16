@@ -23,7 +23,6 @@
 #include "io/OutputStringBufferStream.h"
 
 using namespace PDFHummus;
-using namespace IOBasicTypes;
 
 SimpleStringTokenizer::SimpleStringTokenizer()
 {
@@ -56,14 +55,14 @@ void SimpleStringTokenizer::ResetReadState(const SimpleStringTokenizer &inExtern
     mRecentTokenPosition = inExternalTokenizer.mRecentTokenPosition;
 }
 
-// static const Byte scBackSlash[] = {'\\'};
+// static const uint8_t scBackSlash[] = {'\\'};
 static const std::string scStream = "stream";
 // static const char scCR = '\r';
 // static const char scLF = '\n';
 BoolAndString SimpleStringTokenizer::GetNextToken()
 {
     BoolAndString result;
-    Byte buffer;
+    uint8_t buffer;
     OutputStringBufferStream tokenBuffer;
 
     if ((mStream == nullptr) || (!mStream->NotEnded() && !mHasTokenBuffer))
@@ -121,7 +120,7 @@ BoolAndString SimpleStringTokenizer::GetNextToken()
 
 void SimpleStringTokenizer::SkipTillToken()
 {
-    Byte buffer = 0;
+    uint8_t buffer = 0;
 
     if (mStream == nullptr)
         return;
@@ -140,7 +139,7 @@ void SimpleStringTokenizer::SkipTillToken()
     }
 }
 
-EStatusCode SimpleStringTokenizer::GetNextByteForToken(Byte &outByte)
+EStatusCode SimpleStringTokenizer::GetNextByteForToken(uint8_t &outByte)
 {
     ++mStreamPositionTracker; // advance position tracker, because we are reading the next byte.
     if (mHasTokenBuffer)
@@ -153,8 +152,8 @@ EStatusCode SimpleStringTokenizer::GetNextByteForToken(Byte &outByte)
         return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
-static const Byte scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
-bool SimpleStringTokenizer::IsPDFWhiteSpace(Byte inCharacter)
+static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
+bool SimpleStringTokenizer::IsPDFWhiteSpace(uint8_t inCharacter)
 {
     bool isWhiteSpace = false;
     for (int i = 0; i < 6 && !isWhiteSpace; ++i)
@@ -162,20 +161,20 @@ bool SimpleStringTokenizer::IsPDFWhiteSpace(Byte inCharacter)
     return isWhiteSpace;
 }
 
-void SimpleStringTokenizer::SaveTokenBuffer(Byte inToSave)
+void SimpleStringTokenizer::SaveTokenBuffer(uint8_t inToSave)
 {
     mHasTokenBuffer = true;
     mTokenBuffer = inToSave;
     --mStreamPositionTracker; // decreasing position trakcer, because it is as if the byte is put back in the stream
 }
 
-IOBasicTypes::LongFilePositionType SimpleStringTokenizer::GetReadBufferSize()
+long long SimpleStringTokenizer::GetReadBufferSize()
 {
     return mHasTokenBuffer ? 1 : 0;
 }
 
-static const Byte scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
-bool SimpleStringTokenizer::IsPDFEntityBreaker(Byte inCharacter)
+static const uint8_t scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
+bool SimpleStringTokenizer::IsPDFEntityBreaker(uint8_t inCharacter)
 {
     bool isEntityBreak = false;
     for (int i = 0; i < 10 && !isEntityBreak; ++i)
@@ -183,7 +182,7 @@ bool SimpleStringTokenizer::IsPDFEntityBreaker(Byte inCharacter)
     return isEntityBreak;
 }
 
-LongFilePositionType SimpleStringTokenizer::GetRecentTokenPosition()
+long long SimpleStringTokenizer::GetRecentTokenPosition()
 {
     return mRecentTokenPosition;
 }

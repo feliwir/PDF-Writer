@@ -39,7 +39,7 @@ class InputFile
     IByteReaderWithPosition *GetInputStream(); // returns buffered input stream
     const std::string &GetFilePath();
 
-    LongFilePositionType GetFileSize();
+    long long GetFileSize();
 
   private:
     std::string mFilePath;

@@ -24,8 +24,6 @@
 #include "io/OutputStringBufferStream.h"
 #include <sstream>
 
-using namespace IOBasicTypes;
-
 PDFTextString::PDFTextString()
 {
 }
@@ -124,7 +122,7 @@ PDFTextString &PDFTextString::operator=(const std::string &inString)
 
 std::string PDFTextString::ToUTF8String() const
 {
-    if (mTextString.size() >= 2 && (Byte)mTextString.at(0) == 0xFE && (Byte)mTextString.at(1) == 0xFF)
+    if (mTextString.size() >= 2 && (uint8_t)mTextString.at(0) == 0xFE && (uint8_t)mTextString.at(1) == 0xFF)
         return ToUTF8FromUTF16BE();
     else
         return ToUTF8FromPDFDocEncoding();

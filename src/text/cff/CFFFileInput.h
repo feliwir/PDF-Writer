@@ -36,10 +36,10 @@
 
 struct CFFHeader
 {
-    Byte major;
-    Byte minor;
-    Byte hdrSize;
-    Byte offSize;
+    uint8_t major;
+    uint8_t minor;
+    uint8_t hdrSize;
+    uint8_t offSize;
 };
 
 typedef std::list<std::string> StringList;
@@ -60,7 +60,7 @@ struct CharStrings
         mCharStringsCount = 0;
     }
 
-    Byte mCharStringsType;
+    uint8_t mCharStringsType;
     unsigned short mCharStringsCount;
     CharStringsIndex mCharStringsIndex;
 };
@@ -96,10 +96,10 @@ enum EEncodingType
     eEncodingCustom
 };
 
-typedef std::list<Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 typedef std::map<unsigned short, ByteList> UShortToByteList;
 
-typedef std::pair<Byte, unsigned short> ByteAndUShort;
+typedef std::pair<uint8_t, unsigned short> ByteAndUShort;
 
 struct EncodingsInfo
 {
@@ -108,12 +108,12 @@ struct EncodingsInfo
         mEncoding = NULL;
     }
 
-    LongFilePositionType mEncodingStart;
-    LongFilePositionType mEncodingEnd;
+    long long mEncodingStart;
+    long long mEncodingEnd;
 
     EEncodingType mType;
-    Byte mEncodingsCount;
-    Byte *mEncoding;
+    uint8_t mEncodingsCount;
+    uint8_t *mEncoding;
     UShortToByteList mSupplements;
 };
 
@@ -126,18 +126,18 @@ struct PrivateDictInfo
         mLocalSubrs = NULL;
     }
 
-    LongFilePositionType mPrivateDictStart;
-    LongFilePositionType mPrivateDictEnd;
+    long long mPrivateDictStart;
+    long long mPrivateDictEnd;
     UShortToDictOperandListMap mPrivateDict;
     CharStrings *mLocalSubrs;
 };
 
-typedef std::map<LongFilePositionType, CharStrings *> LongFilePositionTypeToCharStringsMap;
+typedef std::map<long long, CharStrings *> LongFilePositionTypeToCharStringsMap;
 
 struct FontDictInfo
 {
-    LongFilePositionType mFontDictStart;
-    LongFilePositionType mFontDictEnd;
+    long long mFontDictStart;
+    long long mFontDictEnd;
     UShortToDictOperandListMap mFontDict;
     PrivateDictInfo mPrivateDict;
 };
@@ -221,8 +221,8 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     void Reset();
 
     // IType2InterpreterImplementation overrides
-    virtual PDFHummus::EStatusCode ReadCharString(LongFilePositionType inCharStringStart,
-                                                  LongFilePositionType inCharStringEnd, Byte **outCharString);
+    virtual PDFHummus::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                                  uint8_t **outCharString);
     virtual CharString *GetLocalSubr(long inSubrIndex);
     virtual CharString *GetGlobalSubr(long inSubrIndex);
     virtual PDFHummus::EStatusCode Type2Endchar(const CharStringOperandList &inOperandList);
@@ -231,7 +231,7 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
 
     // mCFFOffset should be added to any position here when referring to the beginning if the file containing this
     // segment. for instance, cff could be part of an OTF file definition, in which case the position is not 0.
-    LongFilePositionType mCFFOffset;
+    long long mCFFOffset;
 
     CFFHeader mHeader;
     unsigned short mFontsCount;
@@ -239,8 +239,8 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     TopDictInfo *mTopDictIndex; // count is same as fonts count
     char **mStrings;
     unsigned short mStringsCount;
-    LongFilePositionType mStringIndexPosition;
-    LongFilePositionType mGlobalSubrsPosition;
+    long long mStringIndexPosition;
+    long long mGlobalSubrsPosition;
     PrivateDictInfo *mPrivateDicts; // private dicts are the same as fonts count. refers to the topdict related private
                                     // dics, not to the FontDicts scenarios in CID.
 
@@ -255,8 +255,8 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
 
     CFFPrimitiveReader mPrimitivesReader;
     StringToUShort mNameToIndex;
-    LongFilePositionType mNameIndexPosition;
-    LongFilePositionType mTopDictIndexPosition;
+    long long mNameIndexPosition;
+    long long mTopDictIndexPosition;
     CharPToUShortMap mStringToSID;
 
     // for dependencies calculations using glyph interpretations. state.
@@ -277,15 +277,15 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     PDFHummus::EStatusCode ReadCharsets();
     PDFHummus::EStatusCode ReadEncodings();
     void FreeData();
-    LongFilePositionType GetCharStringsPosition(unsigned short inFontIndex);
+    long long GetCharStringsPosition(unsigned short inFontIndex);
     long GetSingleIntegerValue(unsigned short inFontIndex, unsigned short inKey, long inDefault);
     PDFHummus::EStatusCode ReadSubrsFromIndex(unsigned short &outSubrsCount, CharStringsIndex *outSubrsIndex);
     long GetCharStringType(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadPrivateDicts();
     PDFHummus::EStatusCode ReadLocalSubrs();
     long GetSingleIntegerValueFromDict(const UShortToDictOperandListMap &inDict, unsigned short inKey, long inDefault);
-    LongFilePositionType GetCharsetPosition(unsigned short inFontIndex);
-    LongFilePositionType GetEncodingPosition(unsigned short inFontIndex);
+    long long GetCharsetPosition(unsigned short inFontIndex);
+    long long GetEncodingPosition(unsigned short inFontIndex);
     unsigned short GetBiasedIndex(unsigned short inSubroutineCollectionSize, long inSubroutineIndex);
     PDFHummus::EStatusCode ReadFormat0Charset(bool inIsCID, UShortToCharStringMap &ioCharMap,
                                               unsigned short **inSIDArray, const CharStrings &inCharStrings);
@@ -295,22 +295,22 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
                                               unsigned short **inSIDArray, const CharStrings &inCharStrings);
     void SetupSIDToGlyphMapWithStandard(const unsigned short *inStandardCharSet, unsigned short inStandardCharSetLength,
                                         UShortToCharStringMap &ioCharMap, const CharStrings &inCharStrings);
-    CharString *GetCharacterFromStandardEncoding(Byte inCharacterCode);
+    CharString *GetCharacterFromStandardEncoding(uint8_t inCharacterCode);
     PDFHummus::EStatusCode ReadCIDInformation();
     PDFHummus::EStatusCode ReadFDArray(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadFDSelect(unsigned short inFontIndex);
-    LongFilePositionType GetFDArrayPosition(unsigned short inFontIndex);
+    long long GetFDArrayPosition(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadPrivateDict(const UShortToDictOperandListMap &inReferencingDict,
                                            PrivateDictInfo *outPrivateDict);
-    PDFHummus::EStatusCode ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivateDict, Byte inCharStringType);
-    LongFilePositionType GetFDSelectPosition(unsigned short inFontIndex);
+    PDFHummus::EStatusCode ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivateDict, uint8_t inCharStringType);
+    long long GetFDSelectPosition(unsigned short inFontIndex);
     BoolAndUShort GetIndexForFontName(const std::string &inFontName);
     PDFHummus::EStatusCode ReadTopDictIndex(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadCharStrings(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadPrivateDicts(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadLocalSubrs(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadCharsets(unsigned short inFontIndex);
-    void ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType inEncodingPosition);
+    void ReadEncoding(EncodingsInfo *inEncoding, long long inEncodingPosition);
     PDFHummus::EStatusCode ReadEncodings(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadCIDInformation(unsigned short inFontIndex);
     PDFHummus::EStatusCode ReadCFFFileByIndexOrName(IByteReaderWithPosition *inCFFFile, const std::string &inFontName,

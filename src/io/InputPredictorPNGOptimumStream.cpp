@@ -28,8 +28,6 @@
    byte in the line holds the algo - even if the whole stream is declared as a single algo.
 */
 
-using namespace IOBasicTypes;
-
 InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream()
 {
     mSourceStream = nullptr;
@@ -46,10 +44,8 @@ InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream()
     delete mSourceStream;
 }
 
-InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSourceStream,
-                                                               IOBasicTypes::LongBufferSizeType inColors,
-                                                               IOBasicTypes::Byte inBitsPerComponent,
-                                                               IOBasicTypes::LongBufferSizeType inColumns)
+InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSourceStream, size_t inColors,
+                                                               uint8_t inBitsPerComponent, size_t inColumns)
 {
     mSourceStream = nullptr;
     mBuffer = nullptr;
@@ -60,12 +56,12 @@ InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSo
     Assign(inSourceStream, inColors, inBitsPerComponent, inColumns);
 }
 
-LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputPredictorPNGOptimumStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType readBytes = 0;
+    size_t readBytes = 0;
 
     // exhaust what's in the buffer currently
-    while (mBufferSize > (LongBufferSizeType)(mIndex - mBuffer) && readBytes < inBufferSize)
+    while (mBufferSize > (size_t)(mIndex - mBuffer) && readBytes < inBufferSize)
     {
         DecodeNextByte(inBuffer[readBytes]);
         ++readBytes;
@@ -75,7 +71,7 @@ LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte *inBuffer, LongBuff
     while (readBytes < inBufferSize && mSourceStream->NotEnded())
     {
         memcpy(mUpValues, mBuffer, mBufferSize);
-        LongBufferSizeType readFromSource = mSourceStream->Read(mBuffer, mBufferSize);
+        size_t readFromSource = mSourceStream->Read(mBuffer, mBufferSize);
         if (readFromSource == 0)
         {
             break; // a belated end. must be flate
@@ -89,7 +85,7 @@ LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte *inBuffer, LongBuff
         *mBuffer = 0;         // so i can use this as "left" value...we don't care about this one...it's just a tag
         mIndex = mBuffer + 1; // skip the first tag
 
-        while (mBufferSize > (LongBufferSizeType)(mIndex - mBuffer) && readBytes < inBufferSize)
+        while (mBufferSize > (size_t)(mIndex - mBuffer) && readBytes < inBufferSize)
         {
             DecodeNextByte(inBuffer[readBytes]);
             ++readBytes;
@@ -100,10 +96,10 @@ LongBufferSizeType InputPredictorPNGOptimumStream::Read(Byte *inBuffer, LongBuff
 
 bool InputPredictorPNGOptimumStream::NotEnded()
 {
-    return mSourceStream->NotEnded() || (LongBufferSizeType)(mIndex - mBuffer) < mBufferSize;
+    return mSourceStream->NotEnded() || (size_t)(mIndex - mBuffer) < mBufferSize;
 }
 
-void InputPredictorPNGOptimumStream::DecodeNextByte(Byte &outDecodedByte)
+void InputPredictorPNGOptimumStream::DecodeNextByte(uint8_t &outDecodedByte)
 {
     // decoding function is determined by mFunctionType
     switch (mFunctionType)
@@ -112,19 +108,19 @@ void InputPredictorPNGOptimumStream::DecodeNextByte(Byte &outDecodedByte)
         outDecodedByte = *mIndex;
         break;
     case 1:
-        outDecodedByte = (Byte)((char)*(mIndex - mBytesPerPixel) + (char)*mIndex);
+        outDecodedByte = (uint8_t)((char)*(mIndex - mBytesPerPixel) + (char)*mIndex);
         break;
     case 2:
-        outDecodedByte = (Byte)((char)mUpValues[mIndex - mBuffer] + (char)*mIndex);
+        outDecodedByte = (uint8_t)((char)mUpValues[mIndex - mBuffer] + (char)*mIndex);
         break;
     case 3:
         outDecodedByte =
-            (Byte)((char)mBuffer[mIndex - mBuffer - 1] / 2 + (char)mUpValues[mIndex - mBuffer] / 2 + (char)*mIndex);
+            (uint8_t)((char)mBuffer[mIndex - mBuffer - 1] / 2 + (char)mUpValues[mIndex - mBuffer] / 2 + (char)*mIndex);
         break;
     case 4:
-        outDecodedByte = (Byte)(PaethPredictor(mBuffer[mIndex - mBuffer - 1], mUpValues[mIndex - mBuffer],
-                                               mUpValues[mIndex - mBuffer - 1]) +
-                                (char)*mIndex);
+        outDecodedByte = (uint8_t)(PaethPredictor(mBuffer[mIndex - mBuffer - 1], mUpValues[mIndex - mBuffer],
+                                                  mUpValues[mIndex - mBuffer - 1]) +
+                                   (char)*mIndex);
         break;
     }
 
@@ -133,9 +129,8 @@ void InputPredictorPNGOptimumStream::DecodeNextByte(Byte &outDecodedByte)
     ++mIndex;
 }
 
-void InputPredictorPNGOptimumStream::Assign(IByteReader *inSourceStream, IOBasicTypes::LongBufferSizeType inColors,
-                                            IOBasicTypes::Byte inBitsPerComponent,
-                                            IOBasicTypes::LongBufferSizeType inColumns)
+void InputPredictorPNGOptimumStream::Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
+                                            size_t inColumns)
 {
     mSourceStream = inSourceStream;
 
@@ -144,9 +139,9 @@ void InputPredictorPNGOptimumStream::Assign(IByteReader *inSourceStream, IOBasic
     mBytesPerPixel = inColors * inBitsPerComponent / 8;
     // Rows may contain empty bits at end
     mBufferSize = (inColumns * inColors * inBitsPerComponent + 7) / 8 + 1;
-    mBuffer = new Byte[mBufferSize];
+    mBuffer = new uint8_t[mBufferSize];
     memset(mBuffer, 0, mBufferSize);
-    mUpValues = new Byte[mBufferSize];
+    mUpValues = new uint8_t[mBufferSize];
     memset(mUpValues, 0, mBufferSize); // that's less important
     mIndex = mBuffer + mBufferSize;
     mFunctionType = 0;

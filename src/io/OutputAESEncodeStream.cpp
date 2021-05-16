@@ -23,8 +23,6 @@ limitations under the License.
 
 #include <string.h>
 
-using namespace IOBasicTypes;
-
 OutputAESEncodeStream::OutputAESEncodeStream()
 {
     mTargetStream = nullptr;
@@ -64,7 +62,7 @@ OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetSt
     mWroteIV = false;
 }
 
-LongFilePositionType OutputAESEncodeStream::GetCurrentPosition()
+long long OutputAESEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
@@ -72,8 +70,7 @@ LongFilePositionType OutputAESEncodeStream::GetCurrentPosition()
         return 0;
 }
 
-LongBufferSizeType OutputAESEncodeStream::Write(const IOBasicTypes::Byte *inBuffer,
-                                                IOBasicTypes::LongBufferSizeType inSize)
+size_t OutputAESEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream == nullptr)
         return 0;
@@ -97,7 +94,7 @@ LongBufferSizeType OutputAESEncodeStream::Write(const IOBasicTypes::Byte *inBuff
 
     // input and existing buffer sizes smaller than block size, so just copy and return
 
-    IOBasicTypes::LongBufferSizeType left = inSize;
+    size_t left = inSize;
 
     while (left > 0)
     {
@@ -111,7 +108,7 @@ LongBufferSizeType OutputAESEncodeStream::Write(const IOBasicTypes::Byte *inBuff
         else
         {
             // otherwise, enough to fill block. fill, encode and continue
-            IOBasicTypes::LongBufferSizeType remainder = AES_BLOCK_SIZE - (mInIndex - mIn);
+            size_t remainder = AES_BLOCK_SIZE - (mInIndex - mIn);
             memcpy(mInIndex, inBuffer + inSize - left, remainder);
 
             // encrypt

@@ -21,15 +21,14 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <list>
 
-using namespace IOBasicTypes;
-
 struct Type1CharString
 {
-    Byte *Code;
+    uint8_t *Code;
     int CodeLength;
 };
 

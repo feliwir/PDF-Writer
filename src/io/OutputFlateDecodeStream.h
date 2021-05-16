@@ -38,20 +38,18 @@ class OutputFlateDecodeStream : public IByteWriter
     // destructions - use Assign(NULL)
     void Assign(IByteWriter *inWriter, bool inInitiallyOn = true);
 
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     void TurnOnEncoding();
     void TurnOffEncoding();
 
   private:
-    IOBasicTypes::Byte *mBuffer;
+    uint8_t *mBuffer;
     IByteWriter *mTargetStream;
     bool mCurrentlyEncoding;
     z_stream *mZLibState;
 
     void FinalizeEncoding();
     void StartEncoding();
-    IOBasicTypes::LongBufferSizeType DecodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
-                                                          IOBasicTypes::LongBufferSizeType inSize);
+    size_t DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize);
 };

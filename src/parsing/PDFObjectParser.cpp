@@ -282,7 +282,7 @@ static const char scRightParanthesis = ')';
 PDFObject *PDFObjectParser::ParseLiteralString(const std::string &inToken)
 {
     std::stringbuf stringBuffer;
-    Byte buffer;
+    uint8_t buffer;
     std::string::const_iterator it = inToken.begin();
     size_t i = 1;
     ++it; // skip first paranthesis
@@ -419,7 +419,7 @@ std::string PDFObjectParser::DecodeHexString(const std::string &inStringToDecode
     std::string content = inStringToDecode;
 
     std::string::const_iterator it = content.begin();
-    BoolAndByte buffer(false, 0); // bool part = 'is first char in buffer?', Byte part = 'the first hex-decoded char'
+    BoolAndByte buffer(false, 0); // bool part = 'is first char in buffer?', uint8_t part = 'the first hex-decoded char'
     for (; it != content.end(); ++it)
     {
         BoolAndByte parse = GetHexValue(*it);
@@ -427,7 +427,7 @@ std::string PDFObjectParser::DecodeHexString(const std::string &inStringToDecode
         {
             if (buffer.first)
             {
-                Byte hexbyte = (buffer.second << 4) | parse.second;
+                uint8_t hexbyte = (buffer.second << 4) | parse.second;
                 buffer.first = false;
                 stringBuffer.sputn((const char *)&hexbyte, 1);
             }
@@ -442,7 +442,7 @@ std::string PDFObjectParser::DecodeHexString(const std::string &inStringToDecode
     // pad with ending 0
     if (buffer.first)
     {
-        Byte hexbyte = buffer.second << 4;
+        uint8_t hexbyte = buffer.second << 4;
         stringBuffer.sputn((const char *)&hexbyte, 1);
     }
 
@@ -471,7 +471,7 @@ PDFObject *PDFObjectParser::ParseName(const std::string &inToken)
     EStatusCode status = PDFHummus::eSuccess;
     std::stringbuf stringBuffer;
     BoolAndByte hexResult;
-    Byte buffer;
+    uint8_t buffer;
     std::string::const_iterator it = inToken.begin();
     ++it; // skip initial slash
 
@@ -706,7 +706,7 @@ bool PDFObjectParser::IsComment(const std::string &inToken)
     return inToken.at(0) == scCommentStart;
 }
 
-BoolAndByte PDFObjectParser::GetHexValue(Byte inValue)
+BoolAndByte PDFObjectParser::GetHexValue(uint8_t inValue)
 {
     if ('0' <= inValue && inValue <= '9')
         return BoolAndByte(true, inValue - '0');

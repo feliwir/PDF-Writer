@@ -119,8 +119,8 @@ bool CFFANSIFontWriter::CanWriteDifferencesFromWinAnsi()
 }
 
 static const std::string scCharSet = "CharSet";
-// static const Byte scLeftParanthesis[] = {'('};
-// static const Byte scRightParanthesis[] = {')'};
+// static const uint8_t scLeftParanthesis[] = {'('};
+// static const uint8_t scRightParanthesis[] = {')'};
 
 void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext * /*inObjectsContext*/,
                                      FreeTypeFaceWrapper *inFontInfo,

@@ -24,22 +24,21 @@
 #include "EStatusCode.h"
 #include "MyStringBuf.h"
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
 #include "io/InputFile.h"
 #include "io/OutputStringBufferStream.h"
 #include "text/opentype/OpenTypeFileInput.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
 
-using namespace IOBasicTypes;
-
 typedef std::vector<unsigned int> UIntVector;
 typedef std::set<unsigned int> UIntSet;
 typedef std::vector<unsigned short> UShortVector;
-typedef std::map<FontDictInfo *, Byte> FontDictInfoToByteMap;
+typedef std::map<FontDictInfo *, uint8_t> FontDictInfoToByteMap;
 
 class FreeTypeFaceWrapper;
 class ObjectsContext;
@@ -82,20 +81,20 @@ class CFFEmbeddedFontWriter
     std::string mOptionalEmbeddedPostscript;
 
     // placeholders positions
-    LongFilePositionType mCharsetPlaceHolderPosition;
-    LongFilePositionType mEncodingPlaceHolderPosition;
-    LongFilePositionType mCharstringsPlaceHolderPosition;
-    LongFilePositionType mPrivatePlaceHolderPosition;
-    LongFilePositionType mFDArrayPlaceHolderPosition;
-    LongFilePositionType mFDSelectPlaceHolderPosition;
+    long long mCharsetPlaceHolderPosition;
+    long long mEncodingPlaceHolderPosition;
+    long long mCharstringsPlaceHolderPosition;
+    long long mPrivatePlaceHolderPosition;
+    long long mFDArrayPlaceHolderPosition;
+    long long mFDSelectPlaceHolderPosition;
 
-    LongFilePositionType mEncodingPosition;
-    LongFilePositionType mCharsetPosition;
-    LongFilePositionType mCharStringPosition;
-    LongFilePositionType mPrivatePosition;
-    LongFilePositionType mPrivateSize;
-    LongFilePositionType mFDArrayPosition;
-    LongFilePositionType mFDSelectPosition;
+    long long mEncodingPosition;
+    long long mCharsetPosition;
+    long long mCharStringPosition;
+    long long mPrivatePosition;
+    long long mPrivateSize;
+    long long mFDArrayPosition;
+    long long mFDSelectPosition;
 
     PDFHummus::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                            UShortVector *inCIDMapping, const std::string &inSubsetFontName,
@@ -105,7 +104,7 @@ class CFFEmbeddedFontWriter
     PDFHummus::EStatusCode WriteCFFHeader();
     PDFHummus::EStatusCode WriteName(const std::string &inSubsetFontName);
     PDFHummus::EStatusCode WriteTopIndex();
-    Byte GetMostCompressedOffsetSize(unsigned long inOffset);
+    uint8_t GetMostCompressedOffsetSize(unsigned long inOffset);
     PDFHummus::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
     PDFHummus::EStatusCode WriteStringIndex();
     PDFHummus::EStatusCode WriteGlobalSubrsIndex();
@@ -119,8 +118,7 @@ class CFFEmbeddedFontWriter
     PDFHummus::EStatusCode WriteFDSelect(const UIntVector &inSubsetGlyphIDs,
                                          const FontDictInfoToByteMap &inNewFontDictsIndexes);
     PDFHummus::EStatusCode WritePrivateDictionaryBody(const PrivateDictInfo &inPrivateDictionary,
-                                                      LongFilePositionType &outWriteSize,
-                                                      LongFilePositionType &outWritePosition);
+                                                      long long &outWriteSize, long long &outWritePosition);
     PDFHummus::EStatusCode UpdateIndexesAtTopDict();
 
     void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs, FontDictInfoToByteMap &outNewFontDictsIndexes);

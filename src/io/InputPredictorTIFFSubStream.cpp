@@ -21,8 +21,6 @@
 #include "InputPredictorTIFFSubStream.h"
 #include "Trace.h"
 
-using namespace IOBasicTypes;
-
 InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
 {
     mSourceStream = nullptr;
@@ -31,8 +29,8 @@ InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
     mReadColorsCount = 0;
 }
 
-InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(IByteReader *inSourceStream, LongBufferSizeType inColors,
-                                                         Byte inBitsPerComponent, LongBufferSizeType inColumns)
+InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(IByteReader *inSourceStream, size_t inColors,
+                                                         uint8_t inBitsPerComponent, size_t inColumns)
 {
     mSourceStream = nullptr;
     mRowBuffer = nullptr;
@@ -48,12 +46,12 @@ InputPredictorTIFFSubStream::~InputPredictorTIFFSubStream()
     delete[] mReadColors;
 }
 
-LongBufferSizeType InputPredictorTIFFSubStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputPredictorTIFFSubStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType readBytes = 0;
+    size_t readBytes = 0;
 
     // exhaust what's in the buffer currently
-    while (mReadColorsCount > (LongBufferSizeType)(mReadColorsIndex - mReadColors) && readBytes < inBufferSize)
+    while (mReadColorsCount > (size_t)(mReadColorsIndex - mReadColors) && readBytes < inBufferSize)
     {
         ReadByteFromColorsArray(inBuffer[readBytes]);
         ++readBytes;
@@ -72,7 +70,7 @@ LongBufferSizeType InputPredictorTIFFSubStream::Read(Byte *inBuffer, LongBufferS
         }
         DecodeBufferToColors();
 
-        while (mReadColorsCount > (LongBufferSizeType)(mReadColorsIndex - mReadColors) && readBytes < inBufferSize)
+        while (mReadColorsCount > (size_t)(mReadColorsIndex - mReadColors) && readBytes < inBufferSize)
         {
             ReadByteFromColorsArray(inBuffer[readBytes]);
             ++readBytes;
@@ -83,11 +81,11 @@ LongBufferSizeType InputPredictorTIFFSubStream::Read(Byte *inBuffer, LongBufferS
 
 bool InputPredictorTIFFSubStream::NotEnded()
 {
-    return mSourceStream->NotEnded() || (LongBufferSizeType)(mReadColorsIndex - mReadColors) < mReadColorsCount;
+    return mSourceStream->NotEnded() || (size_t)(mReadColorsIndex - mReadColors) < mReadColorsCount;
 }
 
-void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, LongBufferSizeType inColors,
-                                         Byte inBitsPerComponent, LongBufferSizeType inColumns)
+void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
+                                         size_t inColumns)
 {
     mSourceStream = inSourceStream;
     mColors = inColors;
@@ -95,7 +93,7 @@ void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, LongBuffer
     mColumns = inColumns;
 
     delete mRowBuffer;
-    mRowBuffer = new Byte[(inColumns * inColors * inBitsPerComponent) / 8];
+    mRowBuffer = new uint8_t[(inColumns * inColors * inBitsPerComponent) / 8];
 
     mReadColorsCount = inColumns * inColors;
     mReadColors = new unsigned short[mReadColorsCount];
@@ -104,29 +102,29 @@ void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, LongBuffer
     mIndexInColor = 0;
 
     mBitMask = 0;
-    for (Byte i = 0; i < inBitsPerComponent; ++i)
+    for (uint8_t i = 0; i < inBitsPerComponent; ++i)
         mBitMask = (mBitMask << 1) + 1;
 }
 
-void InputPredictorTIFFSubStream::ReadByteFromColorsArray(Byte &outBuffer)
+void InputPredictorTIFFSubStream::ReadByteFromColorsArray(uint8_t &outBuffer)
 {
     if (8 == mBitsPerComponent)
     {
-        outBuffer = (Byte)(*mReadColorsIndex);
+        outBuffer = (uint8_t)(*mReadColorsIndex);
         ++mReadColorsIndex;
     }
     else if (8 > mBitsPerComponent)
     {
         outBuffer = 0;
-        for (Byte i = 0; i < (8 / mBitsPerComponent); ++i)
+        for (uint8_t i = 0; i < (8 / mBitsPerComponent); ++i)
         {
-            outBuffer = (outBuffer << mBitsPerComponent) + (Byte)(*mReadColorsIndex);
+            outBuffer = (outBuffer << mBitsPerComponent) + (uint8_t)(*mReadColorsIndex);
             ++mReadColorsIndex;
         }
     }
     else // 8 < mBitsPerComponent [which is just 16 for now]
     {
-        outBuffer = (Byte)(((*mReadColorsIndex) >> (mBitsPerComponent - mIndexInColor * 8)) & 0xff);
+        outBuffer = (uint8_t)(((*mReadColorsIndex) >> (mBitsPerComponent - mIndexInColor * 8)) & 0xff);
         ++mIndexInColor;
         if (mBitsPerComponent / 8 == mIndexInColor)
         {
@@ -143,7 +141,7 @@ void InputPredictorTIFFSubStream::DecodeBufferToColors()
     // 2. Once you got the "colors", loop the array, setting values after diffs (use modulo of bit mask for "sign"
     // computing)
     // 3. Now you have the colors array.
-    LongBufferSizeType i = 0;
+    size_t i = 0;
 
     // read the colors differences according to bits per component
     if (8 == mBitsPerComponent)
@@ -155,7 +153,7 @@ void InputPredictorTIFFSubStream::DecodeBufferToColors()
     {
         for (; i < (mReadColorsCount * mBitsPerComponent / 8); ++i)
         {
-            for (LongBufferSizeType j = 0; j < (LongBufferSizeType)(8 / mBitsPerComponent); ++j)
+            for (size_t j = 0; j < (size_t)(8 / mBitsPerComponent); ++j)
             {
                 mReadColors[(i + 1) * 8 / mBitsPerComponent - j - 1] = mRowBuffer[i] & mBitMask;
                 mRowBuffer[i] = mRowBuffer[i] >> mBitsPerComponent;
@@ -167,7 +165,7 @@ void InputPredictorTIFFSubStream::DecodeBufferToColors()
         for (; i < mReadColorsCount; ++i)
         {
             mReadColors[i] = 0;
-            for (Byte j = 0; j < mBitsPerComponent / 8; ++j)
+            for (uint8_t j = 0; j < mBitsPerComponent / 8; ++j)
                 mReadColors[i] = (mReadColors[i] << mBitsPerComponent) + mRowBuffer[i * mBitsPerComponent / 8 + j];
         }
     }

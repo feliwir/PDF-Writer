@@ -120,11 +120,11 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
     primitivesWriter.SetStreamForWriting(inOutput);
 
     for (int i = 0; i < mTabLevel; ++i)
-        inOutput->Write((const Byte *)"  ", 2);
+        inOutput->Write((const uint8_t *)"  ", 2);
 
     if (inObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
-        inOutput->Write((const Byte *)scIndirectStart, strlen(scIndirectStart));
+        inOutput->Write((const uint8_t *)scIndirectStart, strlen(scIndirectStart));
         if (mIteratedObjectIDs.find(((PDFIndirectObjectReference *)inObject)->mObjectID) == mIteratedObjectIDs.end())
         {
             mIteratedObjectIDs.insert(((PDFIndirectObjectReference *)inObject)->mObjectID);
@@ -141,8 +141,8 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
         else
         {
             for (int i = 0; i < mTabLevel; ++i)
-                inOutput->Write((const Byte *)"  ", 2);
-            inOutput->Write((const Byte *)scParsedAlready, strlen(scParsedAlready));
+                inOutput->Write((const uint8_t *)"  ", 2);
+            inOutput->Write((const uint8_t *)scParsedAlready, strlen(scParsedAlready));
             return PDFHummus::eSuccess;
         }
     }
@@ -179,7 +179,7 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
     }
     else if (inObject->GetType() == PDFObject::ePDFObjectStream)
     {
-        inOutput->Write((const Byte *)scIteratingStreamDict, strlen(scIteratingStreamDict));
+        inOutput->Write((const uint8_t *)scIteratingStreamDict, strlen(scIteratingStreamDict));
         PDFObjectCastPtr<PDFDictionary> aDictionary(((PDFStreamInput *)inObject)->QueryStreamDictionary());
         return IterateObjectTypes(aDictionary.GetPtr(), inParser, inOutput);
     }

@@ -1,5 +1,5 @@
 /*
-   Source File : EmptyPagesPDF.h
+   Source File : EmptyFileTest.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,14 +18,23 @@
 
 
 */
-#pragma once
-#include "ITestUnit.h"
+#include "PDFWriter.h"
+#include "TestHelper.h"
 
-class EmptyPagesPDF : public ITestUnit
+#include <gtest/gtest.h>
+
+using namespace PDFHummus;
+
+TEST(PDF, EmptyFile)
 {
-  public:
-    EmptyPagesPDF(void);
-    ~EmptyPagesPDF(void);
+    PDFWriter pdfWriter;
+    LogConfiguration logConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "EmptyFileLog.txt"));
+    EStatusCode status;
 
-    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
-};
+    status =
+        pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "test.txt"), ePDFVersion13, logConfiguration);
+    ASSERT_EQ(status, PDFHummus::eSuccess);
+
+    status = pdfWriter.EndPDF();
+    ASSERT_EQ(status, PDFHummus::eSuccess);
+}

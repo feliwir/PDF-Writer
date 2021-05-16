@@ -69,8 +69,7 @@ ObjectIDType IndirectObjectsReferenceRegistry::AllocateNewObjectID()
     return newObjectID;
 }
 
-EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsWritten(ObjectIDType inObjectID,
-                                                                  LongFilePositionType inWritePosition)
+EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsWritten(ObjectIDType inObjectID, long long inWritePosition)
 {
     if (mObjectsWritesRegistry.size() <= inObjectID)
     {
@@ -159,7 +158,7 @@ PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::DeleteObject(ObjectIDTy
 }
 
 PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsUpdated(ObjectIDType inObjectID,
-                                                                             LongFilePositionType inNewWritePosition)
+                                                                             long long inNewWritePosition)
 {
     if (mObjectsWritesRegistry.size() <= inObjectID)
     {
@@ -308,7 +307,7 @@ void IndirectObjectsReferenceRegistry::Reset()
 
 void IndirectObjectsReferenceRegistry::AppendExistingItem(
     ObjectWriteInformation::EObjectReferenceType inObjectReferenceType, unsigned long inGenerationNumber,
-    LongFilePositionType inWritePosition)
+    long long inWritePosition)
 {
 
     ObjectWriteInformation newObjectInformation;

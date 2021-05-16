@@ -21,7 +21,8 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 struct JPEGImageInformation;
 class IByteReaderWithPosition;
@@ -53,14 +54,14 @@ class JPEGImageParser
 
   private:
     IByteReaderWithPosition *mImageStream;
-    IOBasicTypes::Byte mReadBuffer[500];
+    uint8_t mReadBuffer[500];
 
     PDFHummus::EStatusCode ReadJPEGID();
     PDFHummus::EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
     TwoLevelStatus ReadStreamToBuffer(unsigned long inAmountToRead, unsigned long &refReadLimit);
     PDFHummus::EStatusCode ReadJpegTag(unsigned int &outTagID);
     PDFHummus::EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
-    unsigned int GetIntValue(const IOBasicTypes::Byte *inBuffer, bool inUseLittleEndian = false);
+    unsigned int GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian = false);
     void SkipStream(unsigned long inSkip);
     PDFHummus::EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
     PDFHummus::EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
@@ -73,11 +74,11 @@ class JPEGImageParser
     PDFHummus::EStatusCode ReadExifID();
     PDFHummus::EStatusCode IsBigEndianExif(bool &outIsBigEndian);
     PDFHummus::EStatusCode ReadIntValue(unsigned int &outIntValue, bool inUseLittleEndian = false);
-    PDFHummus::EStatusCode SkipTillChar(IOBasicTypes::Byte inSkipUntilValue, unsigned long &refSkipLimit);
+    PDFHummus::EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
     PDFHummus::EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
     TwoLevelStatus ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,
                                  bool inUseLittleEndian = false);
-    unsigned long GetLongValue(const IOBasicTypes::Byte *inBuffer, bool inUseLittleEndian);
-    double GetFractValue(const IOBasicTypes::Byte *inBuffer);
+    unsigned long GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian);
+    double GetFractValue(const uint8_t *inBuffer);
     PDFHummus::EStatusCode SkipTag();
 };

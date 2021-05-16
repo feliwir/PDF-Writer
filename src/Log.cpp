@@ -27,17 +27,17 @@
 #include <share.h>
 #endif
 
-void STATIC_LogEntryToFile(Log *inThis, const Byte *inMessage, LongBufferSizeType inMessageSize)
+void STATIC_LogEntryToFile(Log *inThis, const uint8_t *inMessage, size_t inMessageSize)
 {
     inThis->LogEntryToFile(inMessage, inMessageSize);
 }
 
-void STATIC_LogEntryToStream(Log *inThis, const Byte *inMessage, LongBufferSizeType inMessageSize)
+void STATIC_LogEntryToStream(Log *inThis, const uint8_t *inMessage, size_t inMessageSize)
 {
     inThis->LogEntryToStream(inMessage, inMessageSize);
 }
 
-static const Byte scUTF8Bom[3] = {0xEF, 0xBB, 0xBF};
+static const uint8_t scUTF8Bom[3] = {0xEF, 0xBB, 0xBF};
 
 Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
 {
@@ -90,17 +90,17 @@ Log::~Log()
 
 void Log::LogEntry(const std::string &inMessage)
 {
-    LogEntry((const Byte *)inMessage.c_str(), inMessage.length());
+    LogEntry((const uint8_t *)inMessage.c_str(), inMessage.length());
 }
 
-void Log::LogEntry(const Byte *inMessage, LongBufferSizeType inMessageSize)
+void Log::LogEntry(const uint8_t *inMessage, size_t inMessageSize)
 {
     mLogMethod(this, inMessage, inMessageSize);
 }
 
-static const Byte scEndLine[2] = {'\r', '\n'};
+static const uint8_t scEndLine[2] = {'\r', '\n'};
 
-void Log::LogEntryToFile(const Byte *inMessage, LongBufferSizeType inMessageSize)
+void Log::LogEntryToFile(const uint8_t *inMessage, size_t inMessageSize)
 {
     if (mFilePath.size() > 0)
     {
@@ -110,16 +110,16 @@ void Log::LogEntryToFile(const Byte *inMessage, LongBufferSizeType inMessageSize
     }
 }
 
-void Log::LogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize)
+void Log::LogEntryToStream(const uint8_t *inMessage, size_t inMessageSize)
 {
     if (mLogStream != nullptr)
         WriteLogEntryToStream(inMessage, inMessageSize, mLogStream);
 }
 
-void Log::WriteLogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize, IByteWriter *inStream)
+void Log::WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, IByteWriter *inStream)
 {
     std::string formattedTimeString = GetFormattedTimeString();
-    inStream->Write((const Byte *)formattedTimeString.c_str(), formattedTimeString.length());
+    inStream->Write((const uint8_t *)formattedTimeString.c_str(), formattedTimeString.length());
     inStream->Write(inMessage, inMessageSize);
     inStream->Write(scEndLine, 2);
 }

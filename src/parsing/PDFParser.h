@@ -28,8 +28,9 @@
 #include "encryption/DecryptionHelper.h"
 #include "io/AdapterIByteReaderWithPositionToIReadPositionProvider.h"
 #include "io/IByteReaderWithPosition.h"
-#include "io/IOBasicTypes.h"
 #include "objects/PDFDictionary.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <map>
 #include <utility>
@@ -63,7 +64,7 @@ struct XrefEntryInput
 
     // well...it's more like...the first number in a pair on an xref, and the second one. the names
     // are true only for "n" type of entries
-    LongFilePositionType mObjectPosition;
+    long long mObjectPosition;
     unsigned long mRivision;
     EXrefEntryType mType;
 };
@@ -71,7 +72,7 @@ struct XrefEntryInput
 struct ObjectStreamHeaderEntry
 {
     ObjectIDType mObjectNumber;
-    LongFilePositionType mObjectOffset;
+    long long mObjectOffset;
 };
 
 typedef std::map<ObjectIDType, ObjectStreamHeaderEntry *> ObjectIDTypeToObjectStreamHeaderEntryMap;
@@ -172,7 +173,7 @@ class PDFParser
     // advanced, direct xref access
     ObjectIDType GetXrefSize();
     XrefEntryInput *GetXrefEntry(ObjectIDType inObjectID);
-    LongFilePositionType GetXrefPosition();
+    long long GetXrefPosition();
 
     IByteReaderWithPosition *GetParserStream();
 
@@ -183,15 +184,15 @@ class PDFParser
     AdapterIByteReaderWithPositionToIReadPositionProvider mCurrentPositionProvider;
 
     // we'll use this items for bacwkards reading. might turns this into a proper stream object
-    IOBasicTypes::Byte mLinesBuffer[LINE_BUFFER_SIZE];
-    IOBasicTypes::Byte *mCurrentBufferIndex;
-    IOBasicTypes::Byte *mLastAvailableIndex;
-    LongBufferSizeType mLastReadPositionFromEnd;
+    uint8_t mLinesBuffer[LINE_BUFFER_SIZE];
+    uint8_t *mCurrentBufferIndex;
+    uint8_t *mLastAvailableIndex;
+    size_t mLastReadPositionFromEnd;
     bool mEncounteredFileStart;
     ObjectIDTypeToObjectStreamHeaderEntryMap mObjectStreamsCache;
 
     double mPDFLevel;
-    LongFilePositionType mLastXrefPosition;
+    long long mLastXrefPosition;
     RefCountPtr<PDFDictionary> mTrailer;
     ObjectIDType mXrefSize;
     XrefEntryInput *mXrefTable;
@@ -208,11 +209,11 @@ class PDFParser
     PDFHummus::EStatusCode DetermineXrefSize();
     PDFHummus::EStatusCode InitializeXref();
     PDFHummus::EStatusCode ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                  LongFilePositionType inXrefPosition, bool inIsFirstXref,
+                                                  long long inXrefPosition, bool inIsFirstXref,
                                                   XrefEntryInput **outExtendedTable,
                                                   ObjectIDType *outExtendedTableSize);
     XrefEntryInput *ExtendXrefTableToSize(XrefEntryInput *inXrefTable, ObjectIDType inOldSize, ObjectIDType inNewSize);
-    PDFHummus::EStatusCode ReadNextXrefEntry(Byte inBuffer[20]);
+    PDFHummus::EStatusCode ReadNextXrefEntry(uint8_t inBuffer[20]);
     PDFObject *ParseExistingInDirectObject(ObjectIDType inObjectID);
     PDFHummus::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
     PDFHummus::EStatusCode ParsePagesObjectIDs();
@@ -229,21 +230,20 @@ class PDFParser
                                                    ObjectIDType *outExtendedTableSize);
     // an overload for cases where the position should hold a stream object, and it should be parsed
     PDFHummus::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                   LongFilePositionType inXrefPosition,
-                                                   XrefEntryInput **outExtendedTable,
+                                                   long long inXrefPosition, XrefEntryInput **outExtendedTable,
                                                    ObjectIDType *outExtendedTableSize);
     PDFHummus::EStatusCode ReadXrefStreamSegment(XrefEntryInput *inXrefTable, ObjectIDType inSegmentStartObject,
                                                  ObjectIDType inSegmentCount, IByteReader *inReadFrom,
                                                  int *inEntryWidths, unsigned long inEntryWidthsSize);
     PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue);
     PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue);
-    PDFHummus::EStatusCode ParsePreviousFileDirectory(LongFilePositionType inXrefPosition, XrefEntryInput *inXrefTable,
+    PDFHummus::EStatusCode ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
                                                       ObjectIDType inXrefSize, PDFDictionary **outTrailer,
                                                       XrefEntryInput **outExtendedTable,
                                                       ObjectIDType *outExtendedTableSize);
     PDFObject *ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
     PDFHummus::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
-    void MovePositionInStream(LongFilePositionType inPosition);
+    void MovePositionInStream(long long inPosition);
     EStatusCodeAndIByteReader CreateFilterForStream(IByteReader *inStream, PDFName *inFilterName,
                                                     PDFDictionary *inDecodeParams, PDFStreamInput *inPDFStream);
 
@@ -254,12 +254,12 @@ class PDFParser
 
     // Backward reading
     bool ReadNextBufferFromEnd();
-    LongBufferSizeType GetCurrentPositionFromEnd();
-    bool ReadBack(IOBasicTypes::Byte &outValue);
+    size_t GetCurrentPositionFromEnd();
+    bool ReadBack(uint8_t &outValue);
     bool IsBeginOfFile();
 
     bool GoBackTillToken();
     bool GoBackTillNonToken();
     void GoBackTillLineStart();
-    bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
+    bool IsPDFWhiteSpace(uint8_t inCharacter);
 };

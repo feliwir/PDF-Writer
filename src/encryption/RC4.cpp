@@ -21,8 +21,6 @@ limitations under the License.
 
 #include "RC4.h"
 
-using namespace IOBasicTypes;
-
 RC4::RC4()
 {
 }
@@ -34,27 +32,27 @@ RC4::RC4(const ByteList &inKey)
 
 void RC4::Reset(const ByteList &inKey)
 {
-    Byte *buffer = new Byte[inKey.size()];
-    Byte *itBuffer = buffer;
+    uint8_t *buffer = new uint8_t[inKey.size()];
+    uint8_t *itBuffer = buffer;
     auto it = inKey.begin();
     for (; it != inKey.end(); ++it, ++itBuffer)
         *itBuffer = *it;
 
-    Init((const Byte *)buffer, inKey.size());
+    Init((const uint8_t *)buffer, inKey.size());
     delete[] buffer;
 }
 
-RC4::RC4(const Byte *inKey, LongBufferSizeType inLength)
+RC4::RC4(const uint8_t *inKey, size_t inLength)
 {
     Reset(inKey, inLength);
 }
 
-void RC4::Reset(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength)
+void RC4::Reset(const uint8_t *inKey, size_t inLength)
 {
     Init(inKey, inLength);
 }
 
-void RC4::Init(const Byte *inKey, LongBufferSizeType inLength)
+void RC4::Init(const uint8_t *inKey, size_t inLength)
 {
     for (int i = 0; i < 256; ++i)
         mBuffer[i] = i;
@@ -76,12 +74,12 @@ RC4::~RC4()
 
 void RC4::Swap(int a, int b)
 {
-    Byte tmp = mBuffer[a];
+    uint8_t tmp = mBuffer[a];
     mBuffer[a] = mBuffer[b];
     mBuffer[b] = tmp;
 }
 
-Byte RC4::GetNextEncodingByte()
+uint8_t RC4::GetNextEncodingByte()
 {
     mI = (mI + 1) % 256;
     mJ = (mJ + mBuffer[mI]) % 256;
@@ -90,7 +88,7 @@ Byte RC4::GetNextEncodingByte()
     return mBuffer[index];
 }
 
-Byte RC4::DecodeNextByte(Byte inByte)
+uint8_t RC4::DecodeNextByte(uint8_t inByte)
 {
     return inByte ^ GetNextEncodingByte();
 }

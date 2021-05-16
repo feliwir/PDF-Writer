@@ -21,7 +21,8 @@ limitations under the License.
 #pragma once
 
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <list>
 #include <map>
@@ -29,7 +30,7 @@ limitations under the License.
 
 class XCryptionCommon;
 
-typedef std::list<IOBasicTypes::Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 typedef std::list<ByteList> ByteListList;
 typedef std::map<std::string, XCryptionCommon *> StringToXCryptionCommonMap;
 
@@ -72,8 +73,7 @@ class XCryptionCommon
 
     // bytelist operations (class methods)
     static ByteList stringToByteList(const std::string &inString);
-    static ByteList substr(const ByteList &inList, IOBasicTypes::LongBufferSizeType inStart,
-                           IOBasicTypes::LongBufferSizeType inEnd);
+    static ByteList substr(const ByteList &inList, size_t inStart, size_t inEnd);
     static void append(ByteList &ioTargetList, const ByteList &inSource);
     static ByteList add(const ByteList &inA, const ByteList &inB);
     static std::string ByteListToString(const ByteList &inByteList);

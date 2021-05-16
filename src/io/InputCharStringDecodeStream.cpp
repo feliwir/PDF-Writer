@@ -44,7 +44,7 @@ static const int RANDOMIZER_MODULU_VAL = 65536;
 
 void InputCharStringDecodeStream::InitializeCharStringDecode(unsigned long inLenIV)
 {
-    Byte dummyByte;
+    uint8_t dummyByte;
 
     mRandomizer = RANDOMIZER_INIT;
 
@@ -52,9 +52,9 @@ void InputCharStringDecodeStream::InitializeCharStringDecode(unsigned long inLen
         ReadDecodedByte(dummyByte);
 }
 
-EStatusCode InputCharStringDecodeStream::ReadDecodedByte(Byte &outByte)
+EStatusCode InputCharStringDecodeStream::ReadDecodedByte(uint8_t &outByte)
 {
-    Byte buffer;
+    uint8_t buffer;
 
     if (mReadFrom->Read(&buffer, 1) != 1)
         return PDFHummus::eFailure;
@@ -63,16 +63,16 @@ EStatusCode InputCharStringDecodeStream::ReadDecodedByte(Byte &outByte)
     return PDFHummus::eSuccess;
 }
 
-Byte InputCharStringDecodeStream::DecodeByte(Byte inByteToDecode)
+uint8_t InputCharStringDecodeStream::DecodeByte(uint8_t inByteToDecode)
 {
-    Byte result = (Byte)(inByteToDecode ^ (mRandomizer >> 8));
+    uint8_t result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
     mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
     return result;
 }
 
-LongBufferSizeType InputCharStringDecodeStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputCharStringDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType bufferIndex = 0;
+    size_t bufferIndex = 0;
     EStatusCode status = PDFHummus::eSuccess;
 
     while (NotEnded() && inBufferSize > bufferIndex && PDFHummus::eSuccess == status)

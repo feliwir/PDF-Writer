@@ -22,17 +22,15 @@
 
 #include <memory.h>
 
-using namespace IOBasicTypes;
-
 OutputBufferedStream::OutputBufferedStream()
 {
     Initiate(nullptr, DEFAULT_BUFFER_SIZE);
 }
 
-void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)
+void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize)
 {
     mBufferSize = inBufferSize;
-    mBuffer = new Byte[mBufferSize];
+    mBuffer = new uint8_t[mBufferSize];
     mCurrentBufferIndex = mBuffer;
     mTargetStream = inTargetWriter;
 }
@@ -44,12 +42,12 @@ OutputBufferedStream::~OutputBufferedStream()
     delete mTargetStream;
 }
 
-OutputBufferedStream::OutputBufferedStream(LongBufferSizeType inBufferSize)
+OutputBufferedStream::OutputBufferedStream(size_t inBufferSize)
 {
     Initiate(nullptr, inBufferSize);
 }
 
-OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, LongBufferSizeType inBufferSize)
+OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize)
 {
     Initiate(inTargetWriter, inBufferSize);
 }
@@ -60,11 +58,11 @@ void OutputBufferedStream::Assign(IByteWriterWithPosition *inWriter)
     mTargetStream = inWriter;
 }
 
-LongBufferSizeType OutputBufferedStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream != nullptr)
     {
-        LongBufferSizeType bytesWritten;
+        size_t bytesWritten;
 
         // if content to write fits in the buffer write to buffer
         if (inSize <= mBufferSize - (mCurrentBufferIndex - mBuffer))
@@ -80,7 +78,7 @@ LongBufferSizeType OutputBufferedStream::Write(const Byte *inBuffer, LongBufferS
         {
             // if not, flush the buffer. if now won't fit in the buffer write directly to underlying stream
             // all but what size will fit in the buffer - then write to buffer what leftover will fit in.
-            LongBufferSizeType bytesToWriteToBuffer = inSize % mBufferSize;
+            size_t bytesToWriteToBuffer = inSize % mBufferSize;
             Flush();
 
             bytesWritten = mTargetStream->Write(inBuffer, inSize - bytesToWriteToBuffer);
@@ -104,7 +102,7 @@ void OutputBufferedStream::Flush()
     mCurrentBufferIndex = mBuffer;
 }
 
-LongFilePositionType OutputBufferedStream::GetCurrentPosition()
+long long OutputBufferedStream::GetCurrentPosition()
 {
     return mTargetStream != nullptr ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer) : 0;
 }

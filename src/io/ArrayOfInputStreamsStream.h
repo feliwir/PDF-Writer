@@ -34,8 +34,7 @@ class ArrayOfInputStreamsStream : public IByteReader
     virtual ~ArrayOfInputStreamsStream(void);
 
     // IByteReader implementation
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
     virtual bool NotEnded();
 
   private:

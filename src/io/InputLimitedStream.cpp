@@ -20,8 +20,6 @@
 */
 #include "InputLimitedStream.h"
 
-using namespace IOBasicTypes;
-
 #include <algorithm>
 
 InputLimitedStream::InputLimitedStream()
@@ -37,22 +35,21 @@ InputLimitedStream::~InputLimitedStream()
         delete mStream;
 }
 
-InputLimitedStream::InputLimitedStream(IByteReader *inSourceStream, LongFilePositionType inReadLimit, bool inOwnsStream)
+InputLimitedStream::InputLimitedStream(IByteReader *inSourceStream, long long inReadLimit, bool inOwnsStream)
 {
     Assign(inSourceStream, inReadLimit, inOwnsStream);
 }
 
-void InputLimitedStream::Assign(IByteReader *inSourceStream, LongFilePositionType inReadLimit, bool inOwnsStream)
+void InputLimitedStream::Assign(IByteReader *inSourceStream, long long inReadLimit, bool inOwnsStream)
 {
     mStream = inSourceStream;
     mMoreToRead = inReadLimit;
     mOwnsStream = inOwnsStream;
 }
 
-LongBufferSizeType InputLimitedStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputLimitedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType readBytes = mStream->Read(
-        inBuffer, (LongBufferSizeType)std::min<LongFilePositionType>((LongFilePositionType)inBufferSize, mMoreToRead));
+    size_t readBytes = mStream->Read(inBuffer, (size_t)std::min<long long>((long long)inBufferSize, mMoreToRead));
 
     mMoreToRead -= readBytes;
     return readBytes;

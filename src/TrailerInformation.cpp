@@ -34,7 +34,7 @@ void TrailerInformation::SetInfoDictionaryReference(const ObjectReference &inInf
     mInfoDictionaryReference = inInfoDictionaryReference;
 }
 
-void TrailerInformation::SetPrev(LongFilePositionType inPrev)
+void TrailerInformation::SetPrev(long long inPrev)
 {
     mPrev = inPrev;
 }

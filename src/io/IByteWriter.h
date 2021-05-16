@@ -24,7 +24,8 @@
 
 
 */
-#include "IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class IByteWriter
 {
@@ -34,6 +35,5 @@ class IByteWriter
     /*
         Write inSize bytes of inBuffer, returning the number of written bytes
     */
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize) = 0;
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize) = 0;
 };

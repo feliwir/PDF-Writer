@@ -38,9 +38,9 @@ EStatusCode LogTest::Run(const TestConfiguration &inTestConfiguration)
 
     log.LogEntry("testing wide string input");
 
-    const char *aString = "testing Byte input";
+    const char *aString = "testing uint8_t input";
 
-    log.LogEntry((const Byte *)aString, strlen(aString));
+    log.LogEntry((const uint8_t *)aString, strlen(aString));
 
     Trace trace;
 

@@ -58,20 +58,20 @@ class TrueTypeEmbeddedFontWriter
     OpenTypePrimitiveReader mPrimitivesReader;     // same here...
     unsigned short mSubsetFontGlyphsCount;
 
-    LongFilePositionType mCVTEntryWritingOffset;
-    LongFilePositionType mFPGMEntryWritingOffset;
-    LongFilePositionType mGLYFEntryWritingOffset;
-    LongFilePositionType mHEADEntryWritingOffset;
-    LongFilePositionType mHHEAEntryWritingOffset;
-    LongFilePositionType mHMTXEntryWritingOffset;
-    LongFilePositionType mLOCAEntryWritingOffset;
-    LongFilePositionType mMAXPEntryWritingOffset;
-    LongFilePositionType mPREPEntryWritingOffset;
-    LongFilePositionType mNAMEEntryWritingOffset;
-    LongFilePositionType mOS2EntryWritingOffset;
-    LongFilePositionType mCMAPEntryWritingOffset;
+    long long mCVTEntryWritingOffset;
+    long long mFPGMEntryWritingOffset;
+    long long mGLYFEntryWritingOffset;
+    long long mHEADEntryWritingOffset;
+    long long mHHEAEntryWritingOffset;
+    long long mHMTXEntryWritingOffset;
+    long long mLOCAEntryWritingOffset;
+    long long mMAXPEntryWritingOffset;
+    long long mPREPEntryWritingOffset;
+    long long mNAMEEntryWritingOffset;
+    long long mOS2EntryWritingOffset;
+    long long mCMAPEntryWritingOffset;
 
-    LongFilePositionType mHeadCheckSumOffset;
+    long long mHeadCheckSumOffset;
 
     PDFHummus::EStatusCode CreateTrueTypeSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                                 bool &outNotEmbedded, MyStringBuf &outFontProgram);
@@ -82,10 +82,9 @@ class TrueTypeEmbeddedFontWriter
     PDFHummus::EStatusCode WriteTrueTypeHeader();
     unsigned short GetSmallerPower2(unsigned short inNumber);
     unsigned long GetTag(const char *inTagName);
-    void WriteEmptyTableEntry(const char *inTag, LongFilePositionType &outEntryPosition);
+    void WriteEmptyTableEntry(const char *inTag, long long &outEntryPosition);
     PDFHummus::EStatusCode WriteHead();
-    void WriteTableEntryData(LongFilePositionType inTableEntryOffset, LongFilePositionType inTableOffset,
-                             unsigned long inTableLength);
+    void WriteTableEntryData(long long inTableEntryOffset, long long inTableOffset, unsigned long inTableLength);
     PDFHummus::EStatusCode WriteHHea();
     PDFHummus::EStatusCode WriteHMtx();
     PDFHummus::EStatusCode WriteMaxp();
@@ -97,7 +96,7 @@ class TrueTypeEmbeddedFontWriter
     PDFHummus::EStatusCode WriteGlyf(const UIntVector &inSubsetGlyphIDs, unsigned long *inLocaTable);
     PDFHummus::EStatusCode WriteLoca(unsigned long *inLocaTable);
     PDFHummus::EStatusCode WriteCMAP();
-    unsigned long GetCheckSum(LongFilePositionType inOffset, unsigned long inLength);
+    unsigned long GetCheckSum(long long inOffset, unsigned long inLength);
     PDFHummus::EStatusCode CreateHeadTableCheckSumAdjustment();
-    PDFHummus::EStatusCode CreateTableCopy(const char *inTableName, LongFilePositionType inTableEntryLocation);
+    PDFHummus::EStatusCode CreateTableCopy(const char *inTableName, long long inTableEntryLocation);
 };

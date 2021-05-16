@@ -26,11 +26,9 @@
 
 #define BUFFER_SIZE 256 * 1024
 
-using namespace IOBasicTypes;
-
 OutputFlateDecodeStream::OutputFlateDecodeStream()
 {
-    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
     mTargetStream = nullptr;
     mCurrentlyEncoding = false;
@@ -55,7 +53,7 @@ void OutputFlateDecodeStream::FinalizeEncoding()
 
 OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter *inTargetWriter, bool inInitiallyOn)
 {
-    mBuffer = new IOBasicTypes::Byte[BUFFER_SIZE];
+    mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
     mTargetStream = nullptr;
     mCurrentlyEncoding = false;
@@ -93,7 +91,7 @@ void OutputFlateDecodeStream::Assign(IByteWriter *inWriter, bool inInitiallyOn)
         StartEncoding();
 }
 
-LongBufferSizeType OutputFlateDecodeStream::Write(const IOBasicTypes::Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndWrite(inBuffer, inSize);
@@ -103,8 +101,7 @@ LongBufferSizeType OutputFlateDecodeStream::Write(const IOBasicTypes::Byte *inBu
         return 0;
 }
 
-LongBufferSizeType OutputFlateDecodeStream::DecodeBufferAndWrite(const IOBasicTypes::Byte *inBuffer,
-                                                                 LongBufferSizeType inSize)
+size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
 {
     if (0 == inSize)
         return 0; // inflate kinda touchy about getting 0 lengths
@@ -132,7 +129,7 @@ LongBufferSizeType OutputFlateDecodeStream::DecodeBufferAndWrite(const IOBasicTy
         }
         else
         {
-            LongBufferSizeType writtenBytes;
+            size_t writtenBytes;
             writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
             if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
             {

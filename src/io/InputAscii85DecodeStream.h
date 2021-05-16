@@ -39,8 +39,7 @@ class InputAscii85DecodeStream : public IByteReader
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
     // encoded stream. got it?!
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
@@ -48,7 +47,7 @@ class InputAscii85DecodeStream : public IByteReader
     IByteReader *mSourceStream;
 
     bool mHitEnd;
-    IOBasicTypes::Byte mBuffer[4];
+    uint8_t mBuffer[4];
     int mReadBufferSize;
     int mReadBufferIndex;
 

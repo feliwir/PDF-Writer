@@ -58,11 +58,11 @@ EStatusCode decodeStream(const string &sourcePath, const string &targetPath)
                 }
 
                 ofstream os(targetPath.c_str(), ofstream::binary);
-                Byte buffer[1024];
-                LongBufferSizeType total = 0;
+                uint8_t buffer[1024];
+                size_t total = 0;
                 while (reader->NotEnded())
                 {
-                    LongBufferSizeType readAmount = reader->Read(buffer, BUF_SIZE);
+                    size_t readAmount = reader->Read(buffer, BUF_SIZE);
                     os.write((char *)buffer, readAmount);
                     total += readAmount;
                 }

@@ -20,16 +20,15 @@
 */
 #pragma once
 
-#include "io/IOBasicTypes.h"
 #include "io/OutputFile.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <string>
 
-using namespace IOBasicTypes;
-
 class Log;
 
-typedef void (*LogFileMethod)(Log *inThis, const Byte *inMessage, LongBufferSizeType inMessageSize);
+typedef void (*LogFileMethod)(Log *inThis, const uint8_t *inMessage, size_t inMessageSize);
 
 class IByteWriter;
 
@@ -42,11 +41,11 @@ class Log
     ~Log(void);
 
     void LogEntry(const std::string &inMessage);
-    void LogEntry(const Byte *inMessage, LongBufferSizeType inMessageSize);
+    void LogEntry(const uint8_t *inMessage, size_t inMessageSize);
 
     // don't use
-    void LogEntryToFile(const Byte *inMessage, LongBufferSizeType inMessageSize);
-    void LogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize);
+    void LogEntryToFile(const uint8_t *inMessage, size_t inMessageSize);
+    void LogEntryToStream(const uint8_t *inMessage, size_t inMessageSize);
 
   private:
     std::string mFilePath;
@@ -55,5 +54,5 @@ class Log
     LogFileMethod mLogMethod;
 
     std::string GetFormattedTimeString();
-    void WriteLogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize, IByteWriter *inStream);
+    void WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, IByteWriter *inStream);
 };

@@ -23,8 +23,6 @@
 #include "EStatusCode.h"
 #include "io/IByteWriter.h"
 
-using namespace IOBasicTypes;
-
 class CFFPrimitiveWriter
 {
   public:
@@ -35,16 +33,16 @@ class CFFPrimitiveWriter
 
     PDFHummus::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode WriteByte(Byte inValue);
-    PDFHummus::EStatusCode Write(const Byte *inBuffer, LongBufferSizeType inBufferSize);
+    PDFHummus::EStatusCode WriteByte(uint8_t inValue);
+    PDFHummus::EStatusCode Write(const uint8_t *inBuffer, size_t inBufferSize);
 
     // basic CFF values
-    PDFHummus::EStatusCode WriteCard8(Byte inValue);
+    PDFHummus::EStatusCode WriteCard8(uint8_t inValue);
     PDFHummus::EStatusCode WriteCard16(unsigned short inValue);
     // set offsize to write offsets
-    void SetOffSize(Byte inOffSize);
+    void SetOffSize(uint8_t inOffSize);
     PDFHummus::EStatusCode WriteOffset(unsigned long inValue);
-    PDFHummus::EStatusCode WriteOffSize(Byte inValue);
+    PDFHummus::EStatusCode WriteOffSize(uint8_t inValue);
     PDFHummus::EStatusCode WriteSID(unsigned short inValue);
 
     // dict data
@@ -61,10 +59,10 @@ class CFFPrimitiveWriter
   private:
     IByteWriter *mCFFOutput;
     PDFHummus::EStatusCode mInternalState;
-    Byte mCurrentOffsize;
+    uint8_t mCurrentOffsize;
 
     PDFHummus::EStatusCode Write3ByteUnsigned(unsigned long inValue);
     PDFHummus::EStatusCode Write4ByteUnsigned(unsigned long inValue);
-    PDFHummus::EStatusCode WriteIntegerOfReal(double inIntegerValue, Byte &ioBuffer, bool &ioUsedFirst);
-    PDFHummus::EStatusCode SetOrWriteNibble(Byte inValue, Byte &ioBuffer, bool &ioUsedFirst);
+    PDFHummus::EStatusCode WriteIntegerOfReal(double inIntegerValue, uint8_t &ioBuffer, bool &ioUsedFirst);
+    PDFHummus::EStatusCode SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuffer, bool &ioUsedFirst);
 };

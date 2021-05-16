@@ -41,7 +41,7 @@ class AdapterIByteReaderWithPositionToIReadPositionProvider : public IReadPositi
     }
 
     // IReadPositionProvider implementation
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition()
+    virtual long long GetCurrentPosition()
     {
         return mStream->GetCurrentPosition();
     };

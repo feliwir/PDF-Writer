@@ -738,19 +738,19 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteName(const std::string &inSubsetF
 
     std::string fontName = inSubsetFontName.size() == 0 ? mType1Input.mFontDictionary.FontName : inSubsetFontName;
 
-    Byte sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)fontName.size() + 1);
+    uint8_t sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)fontName.size() + 1);
 
     mPrimitivesWriter.WriteCard16(1);
     mPrimitivesWriter.WriteOffSize(sizeOfOffset);
     mPrimitivesWriter.SetOffSize(sizeOfOffset);
     mPrimitivesWriter.WriteOffset(1);
     mPrimitivesWriter.WriteOffset((unsigned long)fontName.size() + 1);
-    mPrimitivesWriter.Write((const Byte *)fontName.c_str(), fontName.size());
+    mPrimitivesWriter.Write((const uint8_t *)fontName.c_str(), fontName.size());
 
     return mPrimitivesWriter.GetInternalState();
 }
 
-Byte Type1ToCFFEmbeddedFontWriter::GetMostCompressedOffsetSize(unsigned long inOffset)
+uint8_t Type1ToCFFEmbeddedFontWriter::GetMostCompressedOffsetSize(unsigned long inOffset)
 {
     if (inOffset < 256)
         return 1;
@@ -777,7 +777,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopIndex()
             break;
 
         // write index section
-        Byte sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)topDictSegment.GetCurrentWritePosition() + 1);
+        uint8_t sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)topDictSegment.GetCurrentWritePosition() + 1);
 
         mPrimitivesWriter.WriteCard16(1);
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
@@ -787,7 +787,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopIndex()
 
         topDictSegment.pubseekoff(0, std::ios_base::beg);
 
-        LongFilePositionType topDictDataOffset = mFontFileStream.GetCurrentPosition();
+        long long topDictDataOffset = mFontFileStream.GetCurrentPosition();
 
         // Write data
         InputStringBufferStream topDictStream(&topDictSegment);
@@ -989,7 +989,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()
         for (; it != mStrings.end(); ++it)
             totalSize += (unsigned long)it->size();
 
-        Byte sizeOfOffset = GetMostCompressedOffsetSize(totalSize + 1);
+        uint8_t sizeOfOffset = GetMostCompressedOffsetSize(totalSize + 1);
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
         mPrimitivesWriter.SetOffSize(sizeOfOffset);
 
@@ -1005,7 +1005,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()
 
         // write the data
         for (it = mStrings.begin(); it != mStrings.end(); ++it)
-            mFontFileStream.Write((const Byte *)(it->c_str()), it->size());
+            mFontFileStream.Write((const uint8_t *)(it->c_str()), it->size());
     }
 
     return mPrimitivesWriter.GetInternalState();
@@ -1028,10 +1028,10 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteEncodings(const StringVector &inS
 
     // assuming that 0 is in the subset glyphs IDs, which does not require encoding
     // get the encodings count
-    Byte encodingGlyphsCount = (Byte)(std::min<size_t>(inSubsetGlyphIDs.size() - 1, 255));
+    uint8_t encodingGlyphsCount = (uint8_t)(std::min<size_t>(inSubsetGlyphIDs.size() - 1, 255));
 
     mPrimitivesWriter.WriteCard8(encodingGlyphsCount);
-    for (Byte i = 0; i < encodingGlyphsCount; ++i)
+    for (uint8_t i = 0; i < encodingGlyphsCount; ++i)
         mPrimitivesWriter.WriteCard8(mType1Input.GetEncoding(inSubsetGlyphIDs[i + 1]));
 
     return mPrimitivesWriter.GetInternalState();
@@ -1092,7 +1092,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteCharStrings(const StringVector &i
 
         // write index section
         mCharStringPosition = mFontFileStream.GetCurrentPosition();
-        Byte sizeOfOffset = GetMostCompressedOffsetSize(offsets[i] + 1);
+        uint8_t sizeOfOffset = GetMostCompressedOffsetSize(offsets[i] + 1);
         mPrimitivesWriter.WriteCard16((unsigned short)inSubsetGlyphIDs.size());
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
         mPrimitivesWriter.SetOffSize(sizeOfOffset);

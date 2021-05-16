@@ -1,11 +1,8 @@
 add_executable(PDFWriterTestPlayground 
 
 #sources
-EmptyFileTest.cpp
-EmptyPagesPDF.cpp
 RotatedPagesPDF.cpp
 FileURL.cpp
-FlateEncryptionTest.cpp
 FlateObjectDecodeTest.cpp
 FormXObjectTest.cpp
 HighLevelContentContext.cpp
@@ -57,15 +54,11 @@ Type1Test.cpp
 UppercaseSequanceTest.cpp
 WindowsPath.cpp
 PDFWriterTestPlayground.cpp
-EncryptedPDF.cpp
 UnicodeTextUsage.cpp
 
 #headers
-EmptyFileTest.h
-EmptyPagesPDF.h
 RotatedPagesPDF.h
 FileURL.h
-FlateEncryptionTest.h
 FlateObjectDecodeTest.h
 HighLevelContentContext.h
 FormXObjectTest.h
@@ -116,7 +109,6 @@ TrueTypeTest.h
 TTCTest.h
 Type1Test.h
 UppercaseSequanceTest.h
-EncryptedPDF.h
 UnicodeTextUsage.h
 )
 

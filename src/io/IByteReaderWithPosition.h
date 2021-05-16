@@ -25,8 +25,6 @@
 
 #include "IByteReader.h"
 
-using namespace IOBasicTypes;
-
 class IByteReaderWithPosition : public IByteReader
 {
   public:
@@ -35,20 +33,20 @@ class IByteReaderWithPosition : public IByteReader
     /*
         Set read position.always set from start
     */
-    virtual void SetPosition(LongFilePositionType inOffsetFromStart) = 0;
+    virtual void SetPosition(long long inOffsetFromStart) = 0;
 
     /*
         Set read position from end. measure is the number of bytes from end towards the beginning
     */
-    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd) = 0;
+    virtual void SetPositionFromEnd(long long inOffsetFromEnd) = 0;
 
     /*
         Get the current read position
     */
-    virtual LongFilePositionType GetCurrentPosition() = 0;
+    virtual long long GetCurrentPosition() = 0;
 
     /*
         skip position (like setting from current)
     */
-    virtual void Skip(LongBufferSizeType inSkipSize) = 0;
+    virtual void Skip(size_t inSkipSize) = 0;
 };

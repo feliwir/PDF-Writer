@@ -21,7 +21,8 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <string>
 #include <utility>
@@ -61,29 +62,29 @@ class PDFParserTokenizer
     // GetNextToken). the implementation counts bytes as it goes, as such any external shifting of the stream will
     // render the method invalid. In other words - use only if the only position movement is through GetNextToken
     // repeated calls. Specifically "ResetReadState" resets the count
-    IOBasicTypes::LongFilePositionType GetRecentTokenPosition();
+    long long GetRecentTokenPosition();
 
     // return the current buffer size. may be 1 or 0. if 1, means that the next char for tokenizing will be taken
     // from the buffer rather from the stream and only later the stream read will be resumed.
     // if you are trying to determine the current position reading the stream, take this size into account (substracting
     // from the current position) to get the "virtual" position from the tokenizer point of view.
-    IOBasicTypes::LongFilePositionType GetReadBufferSize();
+    long long GetReadBufferSize();
 
   private:
     IByteReader *mStream;
     bool mHasTokenBuffer;
-    IOBasicTypes::Byte mTokenBuffer;
-    IOBasicTypes::LongFilePositionType mStreamPositionTracker;
-    IOBasicTypes::LongFilePositionType mRecentTokenPosition;
+    uint8_t mTokenBuffer;
+    long long mStreamPositionTracker;
+    long long mRecentTokenPosition;
 
     void SkipTillToken();
 
     bool CanGetNextByte();
     // failure in GetNextByteForToken actually marks a true read failure, if you checked end of file before calling
     // it...
-    PDFHummus::EStatusCode GetNextByteForToken(IOBasicTypes::Byte &outByte);
+    PDFHummus::EStatusCode GetNextByteForToken(uint8_t &outByte);
 
-    bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
-    void SaveTokenBuffer(IOBasicTypes::Byte inToSave);
-    bool IsPDFEntityBreaker(IOBasicTypes::Byte inCharacter);
+    bool IsPDFWhiteSpace(uint8_t inCharacter);
+    void SaveTokenBuffer(uint8_t inToSave);
+    bool IsPDFEntityBreaker(uint8_t inCharacter);
 };

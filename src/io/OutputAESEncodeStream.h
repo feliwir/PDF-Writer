@@ -24,7 +24,7 @@ limitations under the License.
 
 #include <list>
 
-typedef std::list<IOBasicTypes::Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 
 class OutputAESEncodeStream : public IByteWriterWithPosition
 {
@@ -34,9 +34,8 @@ class OutputAESEncodeStream : public IByteWriterWithPosition
 
     OutputAESEncodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey, bool inOwnsStream);
 
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
+    virtual long long GetCurrentPosition();
 
   private:
     bool mOwnsStream;

@@ -28,11 +28,10 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 #include <utility>
 #include <vector>
-
-using namespace IOBasicTypes;
 
 class ObjectsContext;
 class PDFParser;
@@ -53,7 +52,7 @@ struct ObjectWriteInformation
     // was done to this object)
     bool mIsDirty;
     // value is undefined if mObjectWritten is false or if free
-    LongFilePositionType mWritePosition;
+    long long mWritePosition;
     // free or used object
     EObjectReferenceType mObjectReferenceType;
     // object generation number
@@ -71,7 +70,7 @@ class IndirectObjectsReferenceRegistry
 
     ObjectIDType AllocateNewObjectID();
 
-    PDFHummus::EStatusCode MarkObjectAsWritten(ObjectIDType inObjectID, LongFilePositionType inWritePosition);
+    PDFHummus::EStatusCode MarkObjectAsWritten(ObjectIDType inObjectID, long long inWritePosition);
     GetObjectWriteInformationResult GetObjectWriteInformation(ObjectIDType inObjectID) const;
 
     ObjectIDType GetObjectsCount() const;
@@ -80,7 +79,7 @@ class IndirectObjectsReferenceRegistry
 
     // modified PDF methods
     PDFHummus::EStatusCode DeleteObject(ObjectIDType inObjectID);
-    PDFHummus::EStatusCode MarkObjectAsUpdated(ObjectIDType inObjectID, LongFilePositionType inNewWritePosition);
+    PDFHummus::EStatusCode MarkObjectAsUpdated(ObjectIDType inObjectID, long long inNewWritePosition);
 
     PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
@@ -94,5 +93,5 @@ class IndirectObjectsReferenceRegistry
 
     void SetupInitialFreeObject();
     void AppendExistingItem(ObjectWriteInformation::EObjectReferenceType inObjectReferenceType,
-                            unsigned long inGenerationNumber, LongFilePositionType inWritePosition);
+                            unsigned long inGenerationNumber, long long inWritePosition);
 };

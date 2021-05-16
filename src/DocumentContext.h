@@ -33,18 +33,17 @@
 #include "images/png/PNGImageHandler.h"
 #include "images/tiff/TIFFImageHandler.h"
 #include "images/tiff/TiffUsageParameters.h"
-#include "io/IOBasicTypes.h"
 #include "parsing/PDFDocumentHandler.h"
 #include "parsing/PDFEmbedParameterTypes.h"
 #include "parsing/PDFParsingOptions.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <list>
 #include <map>
 #include <set>
 #include <string>
 #include <utility>
-
-using namespace IOBasicTypes;
 
 typedef std::pair<ObjectIDType, bool> ObjectIDTypeAndBool;
 
@@ -387,7 +386,7 @@ class DocumentContext
                                               IDocumentContextExtender *inModifiedFileCopyContext = NULL);
     PDFHummus::EStatusCode WriteTrailerDictionary();
     PDFHummus::EStatusCode WriteTrailerDictionaryValues(DictionaryContext *inDictionaryContext);
-    void WriteXrefReference(LongFilePositionType inXrefTablePosition);
+    void WriteXrefReference(long long inXrefTablePosition);
     void WriteFinalEOF();
     void WriteInfoDictionary();
     void WriteEncryptionDictionary();
@@ -425,7 +424,7 @@ class DocumentContext
     bool DoExtendersRequireCatalogUpdate(PDFParser *inModifiedFileParser);
     void CopyEncryptionDictionary(PDFParser *inModifiedFileParser);
     bool RequiresXrefStream(PDFParser *inModifiedFileParser);
-    PDFHummus::EStatusCode WriteXrefStream(LongFilePositionType &outXrefPosition);
+    PDFHummus::EStatusCode WriteXrefStream(long long &outXrefPosition);
     HummusImageInformation &GetImageInformationStructFor(const std::string &inImageFile, unsigned long inImageIndex);
 };
 } // namespace PDFHummus

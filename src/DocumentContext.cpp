@@ -171,7 +171,7 @@ void DocumentContext::WriteHeaderComment(EPDFVersion inPDFVersion)
     }
 }
 
-static const IOBasicTypes::Byte scBinaryBytesArray[] = {
+static const uint8_t scBinaryBytesArray[] = {
     '%',  0xBD, 0xBE,
     0xBC, '\r', '\n'}; // might imply that i need a newline writer here....an underlying primitives-token context
 
@@ -185,7 +185,7 @@ void DocumentContext::Write4BinaryBytes()
 EStatusCode DocumentContext::FinalizeNewPDF()
 {
     EStatusCode status;
-    LongFilePositionType xrefTablePosition;
+    long long xrefTablePosition;
 
     // this will finalize writing all renments of the file, like xref, trailer and whatever objects still accumulating
     do
@@ -233,13 +233,13 @@ EStatusCode DocumentContext::FinalizeNewPDF()
 }
 
 static const std::string scStartXref = "startxref";
-void DocumentContext::WriteXrefReference(LongFilePositionType inXrefTablePosition)
+void DocumentContext::WriteXrefReference(long long inXrefTablePosition)
 {
     mObjectsContext->WriteKeyword(scStartXref);
     mObjectsContext->WriteInteger(inXrefTablePosition, eTokenSeparatorEndLine);
 }
 
-static const IOBasicTypes::Byte scEOF[] = {'%', '%', 'E', 'O', 'F'};
+static const uint8_t scEOF[] = {'%', '%', 'E', 'O', 'F'};
 
 void DocumentContext::WriteFinalEOF()
 {
@@ -803,7 +803,7 @@ std::string DocumentContext::GenerateMD5IDForFile()
     // file location
     md5.Accumulate(mOutputFilePath);
 
-    md5.Accumulate(BoxingBaseWithRW<LongFilePositionType>(mObjectsContext->GetCurrentPosition()).ToString());
+    md5.Accumulate(BoxingBaseWithRW<long long>(mObjectsContext->GetCurrentPosition()).ToString());
 
     // document information dictionary
     InfoDictionary &infoDictionary = mTrailerInformation.GetInfo();
@@ -2235,7 +2235,7 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
 EStatusCode DocumentContext::FinalizeModifiedPDF(PDFParser *inModifiedFileParser, EPDFVersion inModifiedPDFVersion)
 {
     EStatusCode status;
-    LongFilePositionType xrefTablePosition;
+    long long xrefTablePosition;
 
     do
     {
@@ -2560,7 +2560,7 @@ bool DocumentContext::RequiresXrefStream(PDFParser *inModifiedFileParser)
     return typeObject->GetValue() == "XRef";
 }
 
-EStatusCode DocumentContext::WriteXrefStream(LongFilePositionType &outXrefPosition)
+EStatusCode DocumentContext::WriteXrefStream(long long &outXrefPosition)
 {
     EStatusCode status = eSuccess;
 
@@ -2723,7 +2723,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition 
     double imageWidth = 0.0;
     double imageHeight = 0.0;
 
-    LongFilePositionType recordedPosition = inImageStream->GetCurrentPosition();
+    long long recordedPosition = inImageStream->GetCurrentPosition();
 
     EHummusImageType imageType = GetImageType(inImageStream, inImageIndex);
 
@@ -2879,13 +2879,13 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inIma
     return DoubleAndDoublePair(imageInformation.imageWidth, imageInformation.imageHeight);
 }
 
-static const Byte scPDFMagic[] = {0x25, 0x50, 0x44, 0x46};
-static const Byte scMagicJPG[] = {0xFF, 0xD8};
-static const Byte scMagicTIFFBigEndianTiff[] = {0x4D, 0x4D, 0x00, 0x2A};
-static const Byte scMagicTIFFBigEndianBigTiff[] = {0x4D, 0x4D, 0x00, 0x2B};
-static const Byte scMagicTIFFLittleEndianTiff[] = {0x49, 0x49, 0x2A, 0x00};
-static const Byte scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
-static const Byte scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
+static const uint8_t scPDFMagic[] = {0x25, 0x50, 0x44, 0x46};
+static const uint8_t scMagicJPG[] = {0xFF, 0xD8};
+static const uint8_t scMagicTIFFBigEndianTiff[] = {0x4D, 0x4D, 0x00, 0x2A};
+static const uint8_t scMagicTIFFBigEndianBigTiff[] = {0x4D, 0x4D, 0x00, 0x2B};
+static const uint8_t scMagicTIFFLittleEndianTiff[] = {0x49, 0x49, 0x2A, 0x00};
+static const uint8_t scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
+static const uint8_t scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
 PDFHummus::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPosition *inImageStream,
                                                           unsigned long /*inImageIndex*/)
@@ -2899,11 +2899,11 @@ PDFHummus::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPositio
 
     // so just read the first 8 bytes and it should be enough to recognize a known format
 
-    Byte magic[8];
+    uint8_t magic[8];
     unsigned long readLength = 8;
     PDFHummus::EHummusImageType imageType;
 
-    LongFilePositionType recordedPosition = inImageStream->GetCurrentPosition();
+    long long recordedPosition = inImageStream->GetCurrentPosition();
 
     inImageStream->Read(magic, readLength);
 
@@ -2946,7 +2946,7 @@ PDFHummus::EHummusImageType DocumentContext::GetImageType(const std::string &inI
 
         // so just read the first 8 bytes and it should be enough to recognize a known format
 
-        Byte magic[8];
+        uint8_t magic[8];
         unsigned long readLength = 8;
         InputFile inputFile;
         PDFHummus::EHummusImageType imageType;

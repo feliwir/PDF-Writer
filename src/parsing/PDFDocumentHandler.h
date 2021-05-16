@@ -62,14 +62,14 @@ typedef std::set<IDocumentContextExtender *> IDocumentContextExtenderSet;
 
 struct ResourceTokenMarker
 {
-    ResourceTokenMarker(std::string inResourceToken, LongFilePositionType inResourceTokenPosition)
+    ResourceTokenMarker(std::string inResourceToken, long long inResourceTokenPosition)
     {
         ResourceToken = inResourceToken;
         ResourceTokenPosition = inResourceTokenPosition;
     }
 
     std::string ResourceToken;
-    LongFilePositionType ResourceTokenPosition;
+    long long ResourceTokenPosition;
 };
 
 class IObjectWritePolicy

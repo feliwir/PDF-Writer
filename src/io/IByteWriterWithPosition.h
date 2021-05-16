@@ -32,5 +32,5 @@ class IByteWriterWithPosition : public IByteWriter
   public:
     virtual ~IByteWriterWithPosition(void){};
 
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
+    virtual long long GetCurrentPosition() = 0;
 };

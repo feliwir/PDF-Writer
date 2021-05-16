@@ -21,7 +21,8 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <string>
 #include <utility>
@@ -40,23 +41,23 @@ class SimpleStringTokenizer
     BoolAndString GetNextToken();
     void ResetReadState();
     void ResetReadState(const SimpleStringTokenizer &inExternalTokenizer);
-    IOBasicTypes::LongFilePositionType GetRecentTokenPosition();
-    IOBasicTypes::LongFilePositionType GetReadBufferSize();
+    long long GetRecentTokenPosition();
+    long long GetReadBufferSize();
 
   private:
     IByteReader *mStream;
     bool mHasTokenBuffer;
-    IOBasicTypes::Byte mTokenBuffer;
-    IOBasicTypes::LongFilePositionType mStreamPositionTracker;
-    IOBasicTypes::LongFilePositionType mRecentTokenPosition;
+    uint8_t mTokenBuffer;
+    long long mStreamPositionTracker;
+    long long mRecentTokenPosition;
 
     void SkipTillToken();
 
     // failure in GetNextByteForToken actually marks a true read failure, if you checked end of file before calling
     // it...
-    PDFHummus::EStatusCode GetNextByteForToken(IOBasicTypes::Byte &outByte);
+    PDFHummus::EStatusCode GetNextByteForToken(uint8_t &outByte);
 
-    bool IsPDFWhiteSpace(IOBasicTypes::Byte inCharacter);
-    void SaveTokenBuffer(IOBasicTypes::Byte inToSave);
-    bool IsPDFEntityBreaker(IOBasicTypes::Byte inCharacter);
+    bool IsPDFWhiteSpace(uint8_t inCharacter);
+    void SaveTokenBuffer(uint8_t inToSave);
+    bool IsPDFEntityBreaker(uint8_t inCharacter);
 };

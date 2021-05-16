@@ -20,9 +20,8 @@
 */
 #pragma once
 #include "EStatusCode.h"
-#include "io/IOBasicTypes.h"
-
-using namespace IOBasicTypes;
+#include <stdint.h>
+#include <stdio.h>
 
 class IByteWriter;
 
@@ -42,5 +41,5 @@ class Type2CharStringWriter
     IByteWriter *mTargetStream;
 
     PDFHummus::EStatusCode WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize);
-    PDFHummus::EStatusCode WriteByte(Byte inValue);
+    PDFHummus::EStatusCode WriteByte(uint8_t inValue);
 };

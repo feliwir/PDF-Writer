@@ -39,10 +39,10 @@ class CharStringType1Interpreter
     LongList mPostScriptOperandStack;
 
     PDFHummus::EStatusCode ProcessCharString(InputCharStringDecodeStream *inCharStringToIntepret);
-    bool IsOperator(Byte inBuffer);
-    PDFHummus::EStatusCode InterpretOperator(Byte inBuffer, InputCharStringDecodeStream *inCharStringToIntepret,
+    bool IsOperator(uint8_t inBuffer);
+    PDFHummus::EStatusCode InterpretOperator(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret,
                                              bool &outGotEndExecutionCommand);
-    PDFHummus::EStatusCode InterpretNumber(Byte inBuffer, InputCharStringDecodeStream *inCharStringToIntepret);
+    PDFHummus::EStatusCode InterpretNumber(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret);
     void ClearStack();
     PDFHummus::EStatusCode DefaultCallOtherSubr();
 

@@ -69,7 +69,7 @@ bool DictionaryContext::HasKey(const std::string &inKey)
     return mKeys.find(inKey) != mKeys.end();
 }
 
-static const Byte scTab[1] = {'\t'};
+static const uint8_t scTab[1] = {'\t'};
 void DictionaryContext::WriteIndents()
 {
     IByteWriterWithPosition *outputStream = mObjectsContext->StartFreeContext();

@@ -67,8 +67,7 @@ void InputLZWDecodeStream::StartEncoding()
     ClearTable();
 }
 
-IOBasicTypes::LongBufferSizeType InputLZWDecodeStream::Read(IOBasicTypes::Byte *inBuffer,
-                                                            IOBasicTypes::LongBufferSizeType /*inBufferSize*/)
+size_t InputLZWDecodeStream::Read(uint8_t *inBuffer, size_t /*inBufferSize*/)
 {
     if (mCurrentlyEncoding)
     {
@@ -190,7 +189,7 @@ int InputLZWDecodeStream::GetCode()
     int c;
     int code;
 
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
     while (inputBits < nextBits)
     {
         mSourceStream->Read(&buffer, 1);

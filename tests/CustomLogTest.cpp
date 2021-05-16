@@ -3,16 +3,17 @@
 #include "Singleton.h"
 #include "TestHelper.h"
 #include "Trace.h"
-#include "io/IOBasicTypes.h"
 #include "io/OutputFile.h"
 #include "io/OutputFlateDecodeStream.h"
 #include "io/OutputFlateEncodeStream.h"
 #include "io/OutputStreamTraits.h"
 #include "io/OutputStringBufferStream.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <gtest/gtest.h>
 #include <string>
-using namespace IOBasicTypes;
+
 using namespace PDFHummus;
 
 TEST(CustomStreams, CustomLog)
@@ -60,7 +61,7 @@ TEST(CustomStreams, CustomLog)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     auto pdfString = pdfStream.ToString();
-    pdfFile.GetOutputStream()->Write((const Byte *)pdfString.c_str(), pdfString.size());
+    pdfFile.GetOutputStream()->Write((const uint8_t *)pdfString.c_str(), pdfString.size());
     pdfFile.CloseFile();
 
     TRACE_LOG("PDF stream dumped");
@@ -80,7 +81,7 @@ TEST(CustomStreams, CustomLog)
 
     // place an initial bom (cause the compressed content is unicode)
     unsigned short bom = (0xFE << 8) + 0xFF;
-    decryptedLogFile.GetOutputStream()->Write((const Byte *)&bom, 2);
+    decryptedLogFile.GetOutputStream()->Write((const uint8_t *)&bom, 2);
 
     flateDecodeStream.Assign(decryptedLogFile.GetOutputStream());
     OutputStreamTraits traits(&flateDecodeStream);

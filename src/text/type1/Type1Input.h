@@ -90,7 +90,7 @@ struct Type1PrivateDictionary
     bool RndStemUp;
 };
 
-typedef std::set<Byte> ByteSet;
+typedef std::set<uint8_t> ByteSet;
 typedef std::set<unsigned short> UShortSet;
 
 struct CharString1Dependencies
@@ -102,7 +102,7 @@ struct CharString1Dependencies
 
 typedef std::vector<Type1CharString> Type1CharStringVector;
 typedef std::map<std::string, Type1CharString> StringToType1CharStringMap;
-typedef std::map<std::string, Byte> StringToByteMap;
+typedef std::map<std::string, uint8_t> StringToByteMap;
 
 class IByteReaderWithPosition;
 
@@ -113,16 +113,16 @@ class Type1Input : public Type1InterpreterImplementationAdapter
     ~Type1Input(void);
 
     PDFHummus::EStatusCode ReadType1File(IByteReaderWithPosition *inType1File);
-    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(Byte inCharStringIndex,
+    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
                                                              CharString1Dependencies &ioDependenciesInfo);
     PDFHummus::EStatusCode CalculateDependenciesForCharIndex(const std::string &inCharStringName,
                                                              CharString1Dependencies &ioDependenciesInfo);
     void Reset();
     Type1CharString *GetGlyphCharString(const std::string &inCharStringName);
-    Type1CharString *GetGlyphCharString(Byte inCharStringIndex);
-    std::string GetGlyphCharStringName(Byte inCharStringIndex);
-    bool IsValidGlyphIndex(Byte inCharStringIndex);
-    Byte GetEncoding(const std::string &inCharStringName);
+    Type1CharString *GetGlyphCharString(uint8_t inCharStringIndex);
+    std::string GetGlyphCharStringName(uint8_t inCharStringIndex);
+    bool IsValidGlyphIndex(uint8_t inCharStringIndex);
+    uint8_t GetEncoding(const std::string &inCharStringName);
     bool IsCustomEncoding();
 
     // some structs for you all laddies and lasses

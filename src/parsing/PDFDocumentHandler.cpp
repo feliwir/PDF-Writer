@@ -1749,12 +1749,11 @@ EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTa
     EStatusCode status = PDFHummus::eSuccess;
     InputStreamSkipperStream skipper(streamReader);
     auto it = inResourceMarkers.begin();
-    LongFilePositionType previousContentPosition = 0;
+    long long previousContentPosition = 0;
 
     for (; it != inResourceMarkers.end() && PDFHummus::eSuccess == status; ++it)
     {
-        status = traits.CopyToOutputStream(streamReader,
-                                           (LongBufferSizeType)(it->ResourceTokenPosition - previousContentPosition));
+        status = traits.CopyToOutputStream(streamReader, (size_t)(it->ResourceTokenPosition - previousContentPosition));
         if (status != PDFHummus::eSuccess)
             break;
         primitivesWriter.WriteName(inMappedResourcesNames.find(it->ResourceToken)->second, eTokenSepratorNone);

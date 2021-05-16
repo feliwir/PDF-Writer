@@ -54,10 +54,9 @@ EStatusCode InputFileStream::Close()
     return result;
 }
 
-LongBufferSizeType InputFileStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputFileStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType readItems =
-        mStream != nullptr ? fread(static_cast<void *>(inBuffer), 1, inBufferSize, mStream) : 0;
+    size_t readItems = mStream != nullptr ? fread(static_cast<void *>(inBuffer), 1, inBufferSize, mStream) : 0;
     return readItems;
 }
 
@@ -69,19 +68,19 @@ bool InputFileStream::NotEnded()
         return false;
 }
 
-void InputFileStream::Skip(LongBufferSizeType inSkipSize)
+void InputFileStream::Skip(size_t inSkipSize)
 {
     if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inSkipSize, SEEK_CUR);
 }
 
-void InputFileStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void InputFileStream::SetPosition(long long inOffsetFromStart)
 {
     if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inOffsetFromStart, SEEK_SET);
 }
 
-LongFilePositionType InputFileStream::GetCurrentPosition()
+long long InputFileStream::GetCurrentPosition()
 {
     if (mStream != nullptr)
         return SAFE_FTELL64(mStream);
@@ -89,13 +88,13 @@ LongFilePositionType InputFileStream::GetCurrentPosition()
         return 0;
 }
 
-LongFilePositionType InputFileStream::GetFileSize()
+long long InputFileStream::GetFileSize()
 {
     if (mStream != nullptr)
     {
         // very messy...prefer a different means sometime
-        LongFilePositionType currentPosition = SAFE_FTELL64(mStream);
-        LongFilePositionType result;
+        long long currentPosition = SAFE_FTELL64(mStream);
+        long long result;
 
         SAFE_FSEEK64(mStream, 0, SEEK_END);
         result = SAFE_FTELL64(mStream);
@@ -106,7 +105,7 @@ LongFilePositionType InputFileStream::GetFileSize()
         return 0;
 }
 
-void InputFileStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
+void InputFileStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     if (mStream != nullptr)
     {

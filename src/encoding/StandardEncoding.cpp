@@ -286,7 +286,7 @@ StandardEncoding::~StandardEncoding()
 {
 }
 
-const char *StandardEncoding::GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter)
+const char *StandardEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }

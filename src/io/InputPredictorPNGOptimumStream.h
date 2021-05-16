@@ -27,29 +27,27 @@ class InputPredictorPNGOptimumStream : public IByteReader
   public:
     InputPredictorPNGOptimumStream(void);
     // Takes ownership (use Assign(NULL,0) to unassign)
-    InputPredictorPNGOptimumStream(IByteReader *inSourceStream, IOBasicTypes::LongBufferSizeType inColors,
-                                   IOBasicTypes::Byte inBitsPerComponent, IOBasicTypes::LongBufferSizeType inColumns);
+    InputPredictorPNGOptimumStream(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
+                                   size_t inColumns);
     virtual ~InputPredictorPNGOptimumStream(void);
 
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
     // Takes ownership (use Assign(NULL,0) to unassign)
-    void Assign(IByteReader *inSourceStream, IOBasicTypes::LongBufferSizeType inColors,
-                IOBasicTypes::Byte inBitsPerComponent, IOBasicTypes::LongBufferSizeType inColumns);
+    void Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent, size_t inColumns);
 
   private:
     IByteReader *mSourceStream;
-    IOBasicTypes::Byte *mBuffer;
-    IOBasicTypes::LongBufferSizeType mBytesPerPixel;
-    IOBasicTypes::LongBufferSizeType mBufferSize;
-    IOBasicTypes::Byte *mIndex;
-    IOBasicTypes::Byte mFunctionType;
+    uint8_t *mBuffer;
+    size_t mBytesPerPixel;
+    size_t mBufferSize;
+    uint8_t *mIndex;
+    uint8_t mFunctionType;
 
-    IOBasicTypes::Byte *mUpValues;
+    uint8_t *mUpValues;
 
-    void DecodeNextByte(IOBasicTypes::Byte &outDecodedByte);
+    void DecodeNextByte(uint8_t &outDecodedByte);
     char PaethPredictor(char inLeft, char inUp, char inUpLeft);
 };

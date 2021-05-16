@@ -42,20 +42,18 @@ class InputFlateDecodeStream : public IByteReader
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
     // encoded stream. got it?!
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
   private:
-    IOBasicTypes::Byte mBuffer;
+    uint8_t mBuffer;
     IByteReader *mSourceStream;
     z_stream *mZLibState;
     bool mCurrentlyEncoding;
     bool mEndOfCompressionEoncountered;
 
     void FinalizeEncoding();
-    IOBasicTypes::LongBufferSizeType DecodeBufferAndRead(const IOBasicTypes::Byte *inBuffer,
-                                                         IOBasicTypes::LongBufferSizeType inSize);
+    size_t DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize);
     void StartEncoding();
 };

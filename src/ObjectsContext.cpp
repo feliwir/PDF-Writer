@@ -25,7 +25,6 @@
 #include "Trace.h"
 #include "encryption/EncryptionHelper.h"
 #include "io/IByteWriterWithPosition.h"
-#include "io/IOBasicTypes.h"
 #include "io/OutputStreamTraits.h"
 #include "objects/PDFBoolean.h"
 #include "objects/PDFDictionary.h"
@@ -34,6 +33,8 @@
 #include "objects/PDFObjectCast.h"
 #include "parsing/PDFObjectParser.h"
 #include "parsing/PDFParser.h"
+#include <stdint.h>
+#include <stdio.h>
 
 using namespace PDFHummus;
 
@@ -65,11 +66,11 @@ bool ObjectsContext::IsEncrypting()
     return (mEncryptionHelper != nullptr) && mEncryptionHelper->IsEncrypting();
 }
 
-static const IOBasicTypes::Byte scComment[1] = {'%'};
+static const uint8_t scComment[1] = {'%'};
 void ObjectsContext::WriteComment(const std::string &inCommentText)
 {
     mOutputStream->Write(scComment, 1);
-    mOutputStream->Write((const IOBasicTypes::Byte *)inCommentText.c_str(), inCommentText.size());
+    mOutputStream->Write((const uint8_t *)inCommentText.c_str(), inCommentText.size());
     EndLine();
 }
 
@@ -125,7 +126,7 @@ void ObjectsContext::WriteNewIndirectObjectReference(ObjectIDType indirectObject
     WriteIndirectObjectReference(indirectObjectID, 0, inSeparate);
 }
 
-static const IOBasicTypes::Byte scR[1] = {'R'};
+static const uint8_t scR[1] = {'R'};
 void ObjectsContext::WriteIndirectObjectReference(ObjectIDType inIndirectObjectID, unsigned long inGenerationNumber,
                                                   ETokenSeparator inSeparate)
 {
@@ -145,7 +146,7 @@ void ObjectsContext::EndFreeContext()
     // currently just a marker, do nothing. allegedly used to return to a "controlled" context
 }
 
-LongFilePositionType ObjectsContext::GetCurrentPosition()
+long long ObjectsContext::GetCurrentPosition()
 {
     if (mOutputStream == nullptr) // in case somebody gets smart and ask before the stream is set
         return 0;
@@ -153,9 +154,9 @@ LongFilePositionType ObjectsContext::GetCurrentPosition()
     return mOutputStream->GetCurrentPosition();
 }
 
-static const IOBasicTypes::Byte scXref[] = {'x', 'r', 'e', 'f'};
+static const uint8_t scXref[] = {'x', 'r', 'e', 'f'};
 
-EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType &outWritePosition)
+EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
 {
     EStatusCode status = PDFHummus::eSuccess;
     outWritePosition = mOutputStream->GetCurrentPosition();
@@ -196,7 +197,7 @@ EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType &outWritePositio
                 {
                     SAFE_SPRINTF_2(entryBuffer, 21, "%010lld %05ld n\r\n", objectReference.mWritePosition,
                                    objectReference.mGenerationNumber);
-                    mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer, 20);
+                    mOutputStream->Write((const uint8_t *)entryBuffer, 20);
                 }
                 else
                 {
@@ -225,7 +226,7 @@ EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType &outWritePositio
 
                 SAFE_SPRINTF_2(entryBuffer, 21, "%010ld %05ld f\r\n", nextFreeObject,
                                objectReference.mGenerationNumber);
-                mOutputStream->Write((const IOBasicTypes::Byte *)entryBuffer, 20);
+                mOutputStream->Write((const uint8_t *)entryBuffer, 20);
             }
         }
 
@@ -655,7 +656,7 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
     // write W entry, which is going to be 1 sizeof(long long) and sizeof(unsigned long), per the types i'm using
 
     size_t typeSize = 1;
-    size_t locationSize = sizeof(LongFilePositionType);
+    size_t locationSize = sizeof(long long);
     size_t generationSize = sizeof(unsigned long);
 
     inDictionaryContext->WriteKey("W");
@@ -735,14 +736,14 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
     return status;
 }
 
-void ObjectsContext::WriteXrefNumber(IByteWriter *inStream, LongFilePositionType inElement, size_t inElementSize)
+void ObjectsContext::WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize)
 {
     // xref numbers are written high order byte first (big endian)
-    Byte *buffer = new Byte[inElementSize];
+    uint8_t *buffer = new uint8_t[inElementSize];
 
     for (size_t i = inElementSize; i > 0; --i)
     {
-        buffer[i - 1] = (Byte)(inElement & 0xff);
+        buffer[i - 1] = (uint8_t)(inElement & 0xff);
         inElement = inElement >> 8;
     }
     inStream->Write(buffer, inElementSize);

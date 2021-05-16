@@ -19,8 +19,6 @@
 
 #include "InputRC4XcodeStream.h"
 
-using namespace IOBasicTypes;
-
 InputRC4XcodeStream::InputRC4XcodeStream()
 {
     mSourceStream = nullptr;
@@ -48,10 +46,10 @@ bool InputRC4XcodeStream::NotEnded()
     return (mSourceStream != nullptr) && mSourceStream->NotEnded();
 }
 
-LongBufferSizeType InputRC4XcodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputRC4XcodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType mCurrentIndex = 0;
-    Byte buffer;
+    size_t mCurrentIndex = 0;
+    uint8_t buffer;
 
     while (NotEnded() && mCurrentIndex < inBufferSize)
     {

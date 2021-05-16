@@ -41,22 +41,21 @@ class InputStreamSkipperStream : public IByteReader, public IReadPositionProvide
     void Assign(IByteReader *inSourceStream);
 
     // IByteReader implementation
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
     virtual bool NotEnded();
 
     // IReadPositionProvider implementation
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual long long GetCurrentPosition();
 
     // here's the interesting part.
-    bool CanSkipTo(IOBasicTypes::LongFilePositionType inPositionInStream);
+    bool CanSkipTo(long long inPositionInStream);
 
     // will skip if can, which is either if not passed position (check with CanSkipTo), or if while skipping will hit
     // EOF
-    void SkipTo(IOBasicTypes::LongFilePositionType inPositionInStream);
+    void SkipTo(long long inPositionInStream);
 
     // will skip by, or hit EOF
-    void SkipBy(IOBasicTypes::LongFilePositionType inAmountToSkipBy);
+    void SkipBy(long long inAmountToSkipBy);
 
     // use this after resetting the input stream to an initial position, to try skipping to the position once more
     // this will reset the read count
@@ -64,5 +63,5 @@ class InputStreamSkipperStream : public IByteReader, public IReadPositionProvide
 
   private:
     IByteReader *mStream;
-    IOBasicTypes::LongFilePositionType mAmountRead;
+    long long mAmountRead;
 };

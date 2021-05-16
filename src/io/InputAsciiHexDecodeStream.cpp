@@ -24,8 +24,6 @@
 
 #include <algorithm>
 
-using namespace IOBasicTypes;
-
 InputAsciiHexDecodeStream::InputAsciiHexDecodeStream()
 {
     mSourceStream = nullptr;
@@ -57,9 +55,9 @@ bool InputAsciiHexDecodeStream::NotEnded()
            ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
-LongBufferSizeType InputAsciiHexDecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputAsciiHexDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType mCurrentIndex = 0;
+    size_t mCurrentIndex = 0;
 
     if (NotEnded() && mReadBufferSize == 0) // read buffer, in any case (don't like 0 size memcpys)
         ReadNextBuffer();
@@ -83,8 +81,8 @@ LongBufferSizeType InputAsciiHexDecodeStream::Read(IOBasicTypes::Byte *inBuffer,
 
 void InputAsciiHexDecodeStream::ReadNextBuffer()
 {
-    Byte buffer[2];
-    Byte aByte = 0;
+    uint8_t buffer[2];
+    uint8_t aByte = 0;
     int readIndex = 0;
 
     while (readIndex < 2 && mSourceStream->NotEnded())

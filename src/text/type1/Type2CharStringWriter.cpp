@@ -58,10 +58,10 @@ EStatusCode Type2CharStringWriter::WriteMaskBytes(unsigned long inMask, unsigned
         if (status != PDFHummus::eSuccess)
             return status;
     }
-    return WriteByte((Byte)(inMask & 0xff));
+    return WriteByte((uint8_t)(inMask & 0xff));
 }
 
-EStatusCode Type2CharStringWriter::WriteByte(Byte inValue)
+EStatusCode Type2CharStringWriter::WriteByte(uint8_t inValue)
 {
     return (mTargetStream->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
 }
@@ -72,11 +72,11 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
 
     if (-107 <= value && value <= 107)
     {
-        return WriteByte((Byte)(value + 139));
+        return WriteByte((uint8_t)(value + 139));
     }
     else if (108 <= value && value <= 1131)
     {
-        Byte byte0, byte1;
+        uint8_t byte0, byte1;
 
         value -= 108;
         byte0 = ((value >> 8) & 0xff) + 247;
@@ -91,7 +91,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
     }
     else if (-1131 <= value && value <= -108)
     {
-        Byte byte0, byte1;
+        uint8_t byte0, byte1;
 
         value = -(value + 108);
 
@@ -107,7 +107,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
     }
     else if (-32768 <= value && value <= 32767)
     {
-        Byte byte1, byte2;
+        uint8_t byte1, byte2;
 
         byte1 = (value >> 8) & 0xff;
         byte2 = value & 0xff;
@@ -133,5 +133,5 @@ EStatusCode Type2CharStringWriter::WriteOperator(unsigned short inOperatorCode)
         if (WriteByte(0x0c) != PDFHummus::eSuccess)
             return PDFHummus::eFailure;
     }
-    return WriteByte(Byte(inOperatorCode & 0x00ff));
+    return WriteByte(uint8_t(inOperatorCode & 0x00ff));
 }

@@ -33,13 +33,12 @@ InputBufferedStream::~InputBufferedStream()
     delete mSourceStream;
 }
 
-InputBufferedStream::InputBufferedStream(IOBasicTypes::LongBufferSizeType inBufferSize)
+InputBufferedStream::InputBufferedStream(size_t inBufferSize)
 {
     Initiate(nullptr, inBufferSize);
 }
 
-InputBufferedStream::InputBufferedStream(IByteReaderWithPosition *inSourceReader,
-                                         IOBasicTypes::LongBufferSizeType inBufferSize)
+InputBufferedStream::InputBufferedStream(IByteReaderWithPosition *inSourceReader, size_t inBufferSize)
 {
     Initiate(inSourceReader, inBufferSize);
 }
@@ -50,15 +49,15 @@ void InputBufferedStream::Assign(IByteReaderWithPosition *inReader)
     mCurrentBufferIndex = mBuffer;
 }
 
-LongBufferSizeType InputBufferedStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mSourceStream != nullptr)
     {
-        LongBufferSizeType bytesRead;
+        size_t bytesRead;
 
         // if there are enough bytes to read from the buffer..just read from the buffer
         // if content to write fits in the buffer write to buffer
-        if (inBufferSize <= (LongBufferSizeType)(mLastAvailableIndex - mCurrentBufferIndex))
+        if (inBufferSize <= (size_t)(mLastAvailableIndex - mCurrentBufferIndex))
         {
             if (inBufferSize > 0)
             {
@@ -83,7 +82,7 @@ LongBufferSizeType InputBufferedStream::Read(Byte *inBuffer, LongBufferSizeType 
             if (mSourceStream->NotEnded())
             {
                 inBufferSize -= bytesRead;
-                LongBufferSizeType bytesToReadToBuffer = inBufferSize % mBufferSize;
+                size_t bytesToReadToBuffer = inBufferSize % mBufferSize;
 
                 bytesRead += mSourceStream->Read(inBuffer + bytesRead, inBufferSize - bytesToReadToBuffer);
 
@@ -91,8 +90,7 @@ LongBufferSizeType InputBufferedStream::Read(Byte *inBuffer, LongBufferSizeType 
                 {
                     mLastAvailableIndex = mBuffer + mSourceStream->Read(mBuffer, mBufferSize);
                     mCurrentBufferIndex = mBuffer;
-                    bytesToReadToBuffer =
-                        std::min<LongBufferSizeType>(bytesToReadToBuffer, mLastAvailableIndex - mBuffer);
+                    bytesToReadToBuffer = std::min<size_t>(bytesToReadToBuffer, mLastAvailableIndex - mBuffer);
                     if (bytesToReadToBuffer > 0)
                     {
                         memcpy(inBuffer + bytesRead, mCurrentBufferIndex, bytesToReadToBuffer);
@@ -113,36 +111,35 @@ bool InputBufferedStream::NotEnded()
     return mSourceStream->NotEnded() || (mCurrentBufferIndex != mLastAvailableIndex);
 }
 
-void InputBufferedStream::Initiate(IByteReaderWithPosition *inSourceReader,
-                                   IOBasicTypes::LongBufferSizeType inBufferSize)
+void InputBufferedStream::Initiate(IByteReaderWithPosition *inSourceReader, size_t inBufferSize)
 {
     mBufferSize = inBufferSize;
-    mBuffer = new Byte[mBufferSize];
+    mBuffer = new uint8_t[mBufferSize];
     mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
     mSourceStream = inSourceReader;
 }
 
-void InputBufferedStream::Skip(LongBufferSizeType inSkipSize)
+void InputBufferedStream::Skip(size_t inSkipSize)
 {
-    if (inSkipSize <= (LongBufferSizeType)(mLastAvailableIndex - mCurrentBufferIndex))
+    if (inSkipSize <= (size_t)(mLastAvailableIndex - mCurrentBufferIndex))
     {
         mCurrentBufferIndex += inSkipSize;
     }
     else
     {
-        inSkipSize -= (LongBufferSizeType)(mLastAvailableIndex - mCurrentBufferIndex);
+        inSkipSize -= (size_t)(mLastAvailableIndex - mCurrentBufferIndex);
         mCurrentBufferIndex = mLastAvailableIndex;
         mSourceStream->Skip(inSkipSize);
     }
 }
 
-void InputBufferedStream::SetPosition(LongFilePositionType inOffsetFromStart)
+void InputBufferedStream::SetPosition(long long inOffsetFromStart)
 {
     mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
     mSourceStream->SetPosition(inOffsetFromStart);
 }
 
-void InputBufferedStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
+void InputBufferedStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
     mSourceStream->SetPositionFromEnd(inOffsetFromEnd);
@@ -153,7 +150,7 @@ IByteReaderWithPosition *InputBufferedStream::GetSourceStream()
     return mSourceStream;
 }
 
-LongFilePositionType InputBufferedStream::GetCurrentPosition()
+long long InputBufferedStream::GetCurrentPosition()
 {
     // when reading the current position is the current stream position minus how much is left
     // to read from the buffer

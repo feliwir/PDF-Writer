@@ -158,11 +158,11 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
 
                     // note that we're writing by color components, but multiply by channel...that's casue we're
                     // skipping alpha
-                    writerStream->Write((IOBasicTypes::Byte *)(row + i * channels_count), colorComponents);
+                    writerStream->Write((uint8_t *)(row + i * channels_count), colorComponents);
 
                     // write out to alpha stream as well (hummfff i don't like this...but i like less to decode the png
                     // again.... alpha is the last byte, so offset by color components
-                    alphaWriteStream.Write((IOBasicTypes::Byte *)(row + i * channels_count + colorComponents), 1);
+                    alphaWriteStream.Write((uint8_t *)(row + i * channels_count + colorComponents), 1);
                 }
             }
         }
@@ -173,7 +173,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
                 // read
                 png_read_row(png_ptr, row, nullptr);
                 // write
-                writerStream->Write((IOBasicTypes::Byte *)(row), transformed_width * colorComponents);
+                writerStream->Write((uint8_t *)(row), transformed_width * colorComponents);
             }
         }
 
@@ -277,9 +277,9 @@ void ReadDataFromStream(png_structp png_ptr, png_bytep data, png_size_t length)
         return;
 
     auto *reader = (IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
-    IOBasicTypes::LongFilePositionType readBytes = reader->Read((IOBasicTypes::Byte *)(data), length);
+    long long readBytes = reader->Read((uint8_t *)(data), length);
 
-    if (readBytes != (IOBasicTypes::LongFilePositionType)length)
+    if (readBytes != (long long)length)
         png_error(png_ptr, "Read Error");
 }
 

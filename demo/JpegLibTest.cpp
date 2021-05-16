@@ -77,7 +77,7 @@ METHODDEF(boolean) HummusFillInputBuffer(j_decompress_ptr cinfo)
     auto *src = (HummusSourceManager *)cinfo->src;
     size_t nbytes;
 
-    nbytes = src->mReader->Read((Byte *)(src->buffer), INPUT_BUF_SIZE);
+    nbytes = src->mReader->Read((uint8_t *)(src->buffer), INPUT_BUF_SIZE);
 
     if (nbytes <= 0)
     {

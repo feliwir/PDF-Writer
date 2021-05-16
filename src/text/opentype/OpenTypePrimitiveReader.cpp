@@ -50,7 +50,7 @@ EStatusCode OpenTypePrimitiveReader::ReadBYTE(unsigned char &outValue)
     if (PDFHummus::eFailure == mInternalState)
         return PDFHummus::eFailure;
 
-    Byte buffer;
+    uint8_t buffer;
     EStatusCode status = (mOpenTypeFile->Read(&buffer, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
 
     if (PDFHummus::eFailure == status)
@@ -61,7 +61,7 @@ EStatusCode OpenTypePrimitiveReader::ReadBYTE(unsigned char &outValue)
 
 EStatusCode OpenTypePrimitiveReader::ReadCHAR(char &outValue)
 {
-    Byte buffer;
+    uint8_t buffer;
 
     if (ReadBYTE(buffer) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -72,7 +72,7 @@ EStatusCode OpenTypePrimitiveReader::ReadCHAR(char &outValue)
 
 EStatusCode OpenTypePrimitiveReader::ReadUSHORT(unsigned short &outValue)
 {
-    Byte byte1, byte2;
+    uint8_t byte1, byte2;
 
     if (ReadBYTE(byte1) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -98,7 +98,7 @@ EStatusCode OpenTypePrimitiveReader::ReadSHORT(short &outValue)
 
 EStatusCode OpenTypePrimitiveReader::ReadULONG(unsigned long &outValue)
 {
-    Byte byte1, byte2, byte3, byte4;
+    uint8_t byte1, byte2, byte3, byte4;
 
     if (ReadBYTE(byte1) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -130,7 +130,7 @@ EStatusCode OpenTypePrimitiveReader::ReadLONG(long &outValue)
 
 EStatusCode OpenTypePrimitiveReader::ReadLongDateTime(long long &outValue)
 {
-    Byte byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8;
+    uint8_t byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8;
 
     if (ReadBYTE(byte1) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -163,13 +163,13 @@ EStatusCode OpenTypePrimitiveReader::ReadLongDateTime(long long &outValue)
     return PDFHummus::eSuccess;
 }
 
-void OpenTypePrimitiveReader::SetOffset(LongFilePositionType inNewOffset)
+void OpenTypePrimitiveReader::SetOffset(long long inNewOffset)
 {
     if (mInternalState != PDFHummus::eFailure)
         mOpenTypeFile->SetPosition(mInitialPosition + inNewOffset);
 }
 
-void OpenTypePrimitiveReader::Skip(LongBufferSizeType inToSkip)
+void OpenTypePrimitiveReader::Skip(size_t inToSkip)
 {
     if (mInternalState != PDFHummus::eFailure)
         mOpenTypeFile->Skip(inToSkip);
@@ -195,7 +195,7 @@ EStatusCode OpenTypePrimitiveReader::ReadFixed(double &outValue)
     return PDFHummus::eSuccess;
 }
 
-LongFilePositionType OpenTypePrimitiveReader::GetCurrentPosition()
+long long OpenTypePrimitiveReader::GetCurrentPosition()
 {
     if (mInternalState != PDFHummus::eFailure)
         return mOpenTypeFile->GetCurrentPosition() - mInitialPosition;
@@ -203,7 +203,7 @@ LongFilePositionType OpenTypePrimitiveReader::GetCurrentPosition()
         return 0;
 }
 
-EStatusCode OpenTypePrimitiveReader::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
+EStatusCode OpenTypePrimitiveReader::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (PDFHummus::eFailure == mInternalState)
         return PDFHummus::eFailure;

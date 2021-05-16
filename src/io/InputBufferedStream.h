@@ -41,13 +41,12 @@ class InputBufferedStream : public IByteReaderWithPosition
     /*
         consturctor with buffer size setup
     */
-    InputBufferedStream(IOBasicTypes::LongBufferSizeType inBufferSize);
+    InputBufferedStream(size_t inBufferSize);
 
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    InputBufferedStream(IByteReaderWithPosition *inSourceReader,
-                        IOBasicTypes::LongBufferSizeType inBufferSize = DEFAULT_BUFFER_SIZE);
+    InputBufferedStream(IByteReaderWithPosition *inSourceReader, size_t inBufferSize = DEFAULT_BUFFER_SIZE);
 
     /*
         Assigns a reader stream for buffered reading. from the moment of assigning the
@@ -57,21 +56,21 @@ class InputBufferedStream : public IByteReaderWithPosition
     void Assign(IByteReaderWithPosition *inReader);
 
     // IByteReaderWithPosition implementation
-    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
     virtual bool NotEnded();
-    virtual void Skip(LongBufferSizeType inSkipSize);
-    virtual void SetPosition(LongFilePositionType inOffsetFromStart);
-    virtual void SetPositionFromEnd(LongFilePositionType inOffsetFromEnd);
-    virtual LongFilePositionType GetCurrentPosition();
+    virtual void Skip(size_t inSkipSize);
+    virtual void SetPosition(long long inOffsetFromStart);
+    virtual void SetPositionFromEnd(long long inOffsetFromEnd);
+    virtual long long GetCurrentPosition();
 
     IByteReaderWithPosition *GetSourceStream();
 
   private:
-    IOBasicTypes::Byte *mBuffer;
-    IOBasicTypes::LongBufferSizeType mBufferSize;
-    IOBasicTypes::Byte *mCurrentBufferIndex;
-    IOBasicTypes::Byte *mLastAvailableIndex;
+    uint8_t *mBuffer;
+    size_t mBufferSize;
+    uint8_t *mCurrentBufferIndex;
+    uint8_t *mLastAvailableIndex;
     IByteReaderWithPosition *mSourceStream;
 
-    void Initiate(IByteReaderWithPosition *inSourceReader, IOBasicTypes::LongBufferSizeType inBufferSize);
+    void Initiate(IByteReaderWithPosition *inSourceReader, size_t inBufferSize);
 };

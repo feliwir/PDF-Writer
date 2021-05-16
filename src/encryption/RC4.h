@@ -20,30 +20,31 @@ limitations under the License.
 */
 #pragma once
 
-#include "io/IOBasicTypes.h"
 #include <list>
+#include <stdint.h>
+#include <stdio.h>
 
-typedef std::list<IOBasicTypes::Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 
 class RC4
 {
   public:
     RC4();
     RC4(const ByteList &inKey);
-    RC4(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
+    RC4(const uint8_t *inKey, size_t inLength);
     ~RC4(void);
 
     void Reset(const ByteList &inKey);
-    void Reset(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
+    void Reset(const uint8_t *inKey, size_t inLength);
 
-    IOBasicTypes::Byte DecodeNextByte(IOBasicTypes::Byte inByte);
-    IOBasicTypes::Byte GetNextEncodingByte();
+    uint8_t DecodeNextByte(uint8_t inByte);
+    uint8_t GetNextEncodingByte();
 
   private:
-    IOBasicTypes::Byte mBuffer[256];
+    uint8_t mBuffer[256];
     int mI;
     int mJ;
 
-    void Init(const IOBasicTypes::Byte *inKey, IOBasicTypes::LongBufferSizeType inLength);
+    void Init(const uint8_t *inKey, size_t inLength);
     void Swap(int a, int b);
 };

@@ -36,15 +36,14 @@ class OutputStringBufferStream : public IByteWriterWithPosition
     void Assign(MyStringBuf *inControlledBuffer); // can assign a new one after creation
 
     // IByteWriter implementation
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual long long GetCurrentPosition();
 
     std::string ToString() const;
     void Reset();
-    void SetPosition(IOBasicTypes::LongFilePositionType inOffsetFromStart);
+    void SetPosition(long long inOffsetFromStart);
 
   private:
     MyStringBuf *mBuffer;

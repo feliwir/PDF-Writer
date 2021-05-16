@@ -95,8 +95,7 @@ static bool isError(int inflateResult)
     }
 }
 
-IOBasicTypes::LongBufferSizeType InputFlateDecodeStream::Read(IOBasicTypes::Byte *inBuffer,
-                                                              IOBasicTypes::LongBufferSizeType inBufferSize)
+size_t InputFlateDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndRead(inBuffer, inBufferSize);
@@ -106,8 +105,7 @@ IOBasicTypes::LongBufferSizeType InputFlateDecodeStream::Read(IOBasicTypes::Byte
         return 0;
 }
 
-IOBasicTypes::LongBufferSizeType InputFlateDecodeStream::DecodeBufferAndRead(const IOBasicTypes::Byte *inBuffer,
-                                                                             IOBasicTypes::LongBufferSizeType inSize)
+size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize)
 {
     if (0 == inSize)
         return 0; // inflate kinda touchy about getting 0 lengths

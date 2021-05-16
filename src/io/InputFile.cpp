@@ -93,7 +93,7 @@ const std::string &InputFile::GetFilePath()
     return mFilePath;
 }
 
-LongFilePositionType InputFile::GetFileSize()
+long long InputFile::GetFileSize()
 {
     if (mInputStream != nullptr)
     {

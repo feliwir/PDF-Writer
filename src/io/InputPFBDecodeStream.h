@@ -31,11 +31,9 @@
 #include <string>
 #include <utility>
 
-using namespace IOBasicTypes;
-
 class InputPFBDecodeStream;
 
-typedef PDFHummus::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, Byte &outByte);
+typedef PDFHummus::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, uint8_t &outByte);
 
 typedef std::pair<bool, std::string> BoolAndString;
 
@@ -50,7 +48,7 @@ class InputPFBDecodeStream : public IByteReader
     PDFHummus::EStatusCode Assign(IByteReader *inStreamToDecode);
 
     // IByteReader implementation
-    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
     virtual bool NotEnded();
 
     // token actions
@@ -67,17 +65,17 @@ class InputPFBDecodeStream : public IByteReader
     PDFHummus::EStatusCode GetInternalState();
 
     // internal usage.
-    PDFHummus::EStatusCode ReadDecodedByte(Byte &outByte);
-    PDFHummus::EStatusCode ReadRegularByte(Byte &outByte);
+    PDFHummus::EStatusCode ReadDecodedByte(uint8_t &outByte);
+    PDFHummus::EStatusCode ReadRegularByte(uint8_t &outByte);
 
   private:
     IByteReader *mStreamToDecode;
-    LongFilePositionType mInSegmentReadIndex;
-    LongFilePositionType mSegmentSize;
-    Byte mCurrentType;
+    long long mInSegmentReadIndex;
+    long long mSegmentSize;
+    uint8_t mCurrentType;
     DecodeMethod mDecodeMethod;
     bool mHasTokenBuffer;
-    Byte mTokenBuffer;
+    uint8_t mTokenBuffer;
     unsigned short mRandomizer;
     bool mFoundEOF;
 
@@ -89,12 +87,12 @@ class InputPFBDecodeStream : public IByteReader
     void ResetReadStatus();
     PDFHummus::EStatusCode StoreSegmentLength();
     PDFHummus::EStatusCode FlushBinarySectionTrailingCode();
-    bool IsPostScriptWhiteSpace(Byte inCharacter);
+    bool IsPostScriptWhiteSpace(uint8_t inCharacter);
     bool IsSegmentNotEnded();
-    void SaveTokenBuffer(Byte inToSave);
-    bool IsPostScriptEntityBreaker(Byte inCharacter);
+    void SaveTokenBuffer(uint8_t inToSave);
+    bool IsPostScriptEntityBreaker(uint8_t inCharacter);
     PDFHummus::EStatusCode InitializeBinaryDecode();
-    Byte DecodeByte(Byte inByteToDecode);
+    uint8_t DecodeByte(uint8_t inByteToDecode);
 
-    PDFHummus::EStatusCode GetNextByteForToken(Byte &outByte);
+    PDFHummus::EStatusCode GetNextByteForToken(uint8_t &outByte);
 };

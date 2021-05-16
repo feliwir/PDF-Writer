@@ -537,7 +537,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
         JPEGImageParser jpgImageParser;
         JPEGImageInformation imageInformation;
 
-        LongFilePositionType recordedPosition = inJPGStream->GetCurrentPosition();
+        long long recordedPosition = inJPGStream->GetCurrentPosition();
 
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
         if (status != PDFHummus::eSuccess)
@@ -587,7 +587,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWith
         JPEGImageParser jpgImageParser;
         JPEGImageInformation imageInformation;
 
-        LongFilePositionType recordedPosition = inJPGStream->GetCurrentPosition();
+        long long recordedPosition = inJPGStream->GetCurrentPosition();
 
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
         if (status != PDFHummus::eSuccess)

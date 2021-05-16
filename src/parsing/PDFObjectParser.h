@@ -22,8 +22,9 @@
 
 #include "EStatusCode.h"
 #include "PDFParserTokenizer.h"
-#include "io/IOBasicTypes.h"
 #include "io/IReadPositionProvider.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <list>
 #include <string>
@@ -34,7 +35,7 @@ class IByteReader;
 class IPDFParserExtender;
 class DecryptionHelper;
 
-typedef std::pair<bool, IOBasicTypes::Byte> BoolAndByte;
+typedef std::pair<bool, uint8_t> BoolAndByte;
 typedef std::list<std::string> StringList;
 
 class PDFObjectParser
@@ -106,7 +107,7 @@ class PDFObjectParser
 
     bool IsComment(const std::string &inToken);
 
-    BoolAndByte GetHexValue(IOBasicTypes::Byte inValue);
+    BoolAndByte GetHexValue(uint8_t inValue);
 
     std::string MaybeDecryptString(const std::string &inString);
 };

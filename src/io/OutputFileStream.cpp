@@ -21,7 +21,6 @@
 #include "io/OutputFileStream.h"
 #include "SafeBufferMacrosDefs.h"
 
-using namespace IOBasicTypes;
 using namespace PDFHummus;
 
 OutputFileStream::OutputFileStream()
@@ -62,15 +61,14 @@ EStatusCode OutputFileStream::Close()
     return result;
 }
 
-LongBufferSizeType OutputFileStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
+size_t OutputFileStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
 
-    LongBufferSizeType writtenItems =
-        mStream != nullptr ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
+    size_t writtenItems = mStream != nullptr ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
     return writtenItems;
 }
 
-LongFilePositionType OutputFileStream::GetCurrentPosition()
+long long OutputFileStream::GetCurrentPosition()
 {
     return mStream != nullptr ? SAFE_FTELL64(mStream) : 0;
 }

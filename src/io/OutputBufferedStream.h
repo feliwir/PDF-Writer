@@ -40,13 +40,12 @@ class OutputBufferedStream : public IByteWriterWithPosition
     /*
         consturctor with buffer size setup
     */
-    OutputBufferedStream(IOBasicTypes::LongBufferSizeType inBufferSize);
+    OutputBufferedStream(size_t inBufferSize);
 
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    OutputBufferedStream(IByteWriterWithPosition *inTargetWriter,
-                         IOBasicTypes::LongBufferSizeType inBufferSize = DEFAULT_BUFFER_SIZE);
+    OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize = DEFAULT_BUFFER_SIZE);
 
     /*
         Assigns a writer for buffered writing. from the moment of assigning the
@@ -57,20 +56,19 @@ class OutputBufferedStream : public IByteWriterWithPosition
     void Assign(IByteWriterWithPosition *inWriter);
 
     // IByteWriter implementation
-    virtual IOBasicTypes::LongBufferSizeType Write(const IOBasicTypes::Byte *inBuffer,
-                                                   IOBasicTypes::LongBufferSizeType inSize);
+    virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition();
+    virtual long long GetCurrentPosition();
 
     // force buffer flush to underlying stream
     void Flush();
 
   private:
-    IOBasicTypes::Byte *mBuffer;
-    IOBasicTypes::LongBufferSizeType mBufferSize;
-    IOBasicTypes::Byte *mCurrentBufferIndex;
+    uint8_t *mBuffer;
+    size_t mBufferSize;
+    uint8_t *mCurrentBufferIndex;
     IByteWriterWithPosition *mTargetStream;
 
-    void Initiate(IByteWriterWithPosition *inTargetWriter, IOBasicTypes::LongBufferSizeType inBufferSize);
+    void Initiate(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize);
 };

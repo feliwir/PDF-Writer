@@ -666,7 +666,7 @@ EStatusCode Type1Input::ParseSubrs()
             break;
 
         mSubrs[subrIndex].CodeLength = Int(token.second);
-        mSubrs[subrIndex].Code = new Byte[mSubrs[subrIndex].CodeLength];
+        mSubrs[subrIndex].Code = new uint8_t[mSubrs[subrIndex].CodeLength];
 
         // skip the RD token (will also skip space)
         mPFBDecoder.GetNextToken();
@@ -723,7 +723,7 @@ EStatusCode Type1Input::ParseCharstrings()
 
         charString.CodeLength = Int(mPFBDecoder.GetNextToken().second);
 
-        charString.Code = new Byte[charString.CodeLength];
+        charString.Code = new uint8_t[charString.CodeLength];
 
         // skip the RD token (will also skip space)
         mPFBDecoder.GetNextToken();
@@ -739,7 +739,7 @@ EStatusCode Type1Input::ParseCharstrings()
     return mPFBDecoder.GetInternalState();
 }
 
-Type1CharString *Type1Input::GetGlyphCharString(Byte inCharStringIndex)
+Type1CharString *Type1Input::GetGlyphCharString(uint8_t inCharStringIndex)
 {
     std::string characterName;
 
@@ -773,7 +773,7 @@ Type1CharString *Type1Input::GetGlyphCharString(const std::string &inCharStringN
         return &(it->second);
 }
 
-EStatusCode Type1Input::CalculateDependenciesForCharIndex(Byte inCharStringIndex,
+EStatusCode Type1Input::CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
                                                           CharString1Dependencies &ioDependenciesInfo)
 {
     CharStringType1Interpreter interpreter;
@@ -828,9 +828,9 @@ EStatusCode Type1Input::Type1Seac(const LongList &inOperandList)
 {
     auto it = inOperandList.rbegin();
 
-    mCurrentDependencies->mCharCodes.insert((Byte)*it);
+    mCurrentDependencies->mCharCodes.insert((uint8_t)*it);
     ++it;
-    mCurrentDependencies->mCharCodes.insert((Byte)*it);
+    mCurrentDependencies->mCharCodes.insert((uint8_t)*it);
     return PDFHummus::eSuccess;
 }
 
@@ -845,7 +845,7 @@ unsigned long Type1Input::GetLenIV()
     return mPrivateDictionary.lenIV;
 }
 
-bool Type1Input::IsValidGlyphIndex(Byte inCharStringIndex)
+bool Type1Input::IsValidGlyphIndex(uint8_t inCharStringIndex)
 {
     std::string characterName;
 
@@ -866,7 +866,7 @@ bool Type1Input::IsValidGlyphIndex(Byte inCharStringIndex)
     return mCharStrings.find(characterName) != mCharStrings.end();
 }
 
-std::string Type1Input::GetGlyphCharStringName(Byte inCharStringIndex)
+std::string Type1Input::GetGlyphCharStringName(uint8_t inCharStringIndex)
 {
     if (eType1EncodingTypeCustom == mEncoding.EncodingType)
     {
@@ -886,7 +886,7 @@ std::string Type1Input::GetGlyphCharStringName(Byte inCharStringIndex)
 std::string Type1Input::FromPSString(const std::string &inPSString)
 {
     std::stringbuf stringBuffer;
-    Byte buffer;
+    uint8_t buffer;
     std::string::const_iterator it = inPSString.begin();
     size_t i = 1;
     ++it; // skip first paranthesis
@@ -948,7 +948,7 @@ std::string Type1Input::FromPSString(const std::string &inPSString)
     return stringBuffer.str();
 }
 
-Byte Type1Input::GetEncoding(const std::string &inCharStringName)
+uint8_t Type1Input::GetEncoding(const std::string &inCharStringName)
 {
     auto it = mReverseEncoding.find(inCharStringName);
     if (it == mReverseEncoding.end())

@@ -29,31 +29,29 @@ class InputPredictorTIFFSubStream : public IByteReader
     virtual ~InputPredictorTIFFSubStream(void);
 
     // Takes ownership (use Assign(NULL,0,0,0) to unassign)
-    InputPredictorTIFFSubStream(IByteReader *inSourceStream, IOBasicTypes::LongBufferSizeType inColors,
-                                IOBasicTypes::Byte inBitsPerComponent, IOBasicTypes::LongBufferSizeType inColumns);
+    InputPredictorTIFFSubStream(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
+                                size_t inColumns);
 
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
     // Takes ownership (use Assign(NULL,0,0,0) to unassign)
-    void Assign(IByteReader *inSourceStream, IOBasicTypes::LongBufferSizeType inColors,
-                IOBasicTypes::Byte inBitsPerComponent, IOBasicTypes::LongBufferSizeType inColumns);
+    void Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent, size_t inColumns);
 
   private:
     IByteReader *mSourceStream;
-    IOBasicTypes::LongBufferSizeType mColors;
-    IOBasicTypes::Byte mBitsPerComponent;
-    IOBasicTypes::LongBufferSizeType mColumns;
+    size_t mColors;
+    uint8_t mBitsPerComponent;
+    size_t mColumns;
 
-    IOBasicTypes::Byte *mRowBuffer;
-    IOBasicTypes::LongBufferSizeType mReadColorsCount;
+    uint8_t *mRowBuffer;
+    size_t mReadColorsCount;
     unsigned short *mReadColors;
     unsigned short *mReadColorsIndex;
-    IOBasicTypes::Byte mIndexInColor;
+    uint8_t mIndexInColor;
     unsigned short mBitMask;
 
-    void ReadByteFromColorsArray(IOBasicTypes::Byte &outBuffer);
+    void ReadByteFromColorsArray(uint8_t &outBuffer);
     void DecodeBufferToColors();
 };

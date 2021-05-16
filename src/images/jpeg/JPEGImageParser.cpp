@@ -210,7 +210,7 @@ EStatusCode JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformat
     return status;
 }
 
-unsigned int JPEGImageParser::GetIntValue(const IOBasicTypes::Byte *inBuffer, bool inUseLittleEndian)
+unsigned int JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian)
 {
     unsigned int value;
 
@@ -600,7 +600,7 @@ EStatusCode JPEGImageParser::ReadIntValue(unsigned int &outIntValue, bool inUseL
     return status;
 }
 
-EStatusCode JPEGImageParser::SkipTillChar(IOBasicTypes::Byte inSkipUntilValue, unsigned long &refSkipLimit)
+EStatusCode JPEGImageParser::SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit)
 {
     EStatusCode status = PDFHummus::eSuccess;
     bool charNotFound = true;
@@ -627,7 +627,7 @@ EStatusCode JPEGImageParser::ReadLongValue(unsigned long &outLongValue, bool inU
     return status;
 }
 
-unsigned long JPEGImageParser::GetLongValue(const IOBasicTypes::Byte *inBuffer, bool inUseLittleEndian)
+unsigned long JPEGImageParser::GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian)
 {
     unsigned long value;
 
@@ -648,7 +648,7 @@ unsigned long JPEGImageParser::GetLongValue(const IOBasicTypes::Byte *inBuffer, 
     return value;
 }
 
-double JPEGImageParser::GetFractValue(const IOBasicTypes::Byte *inBuffer)
+double JPEGImageParser::GetFractValue(const uint8_t *inBuffer)
 {
     double value;
 

@@ -19,7 +19,6 @@ target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/InputStreamSkipperStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/InputStringBufferStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/InputStringStream.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/IOBasicTypes.h
     ${CMAKE_CURRENT_SOURCE_DIR}/IReadPositionProvider.h
     ${CMAKE_CURRENT_SOURCE_DIR}/OutputAESEncodeStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/OutputBufferedStream.h

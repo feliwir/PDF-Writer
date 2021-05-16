@@ -25,14 +25,13 @@
 
 #include <iostream>
 
-using namespace IOBasicTypes;
 using namespace PDFHummus;
 
 TEST(IO, BufferedOutputStream)
 {
     IByteWriter *stream = new OutputBufferedStream(
         new OutputFileStream(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "BufferedOutputStreamTest.txt")), 2);
-    Byte buffer[5] = {'a', 'b', 'c', 'd', 'e'};
+    uint8_t buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
     stream->Write(buffer, 5);
     delete stream;

@@ -22,8 +22,6 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
-using namespace IOBasicTypes;
-
 class InputCharStringDecodeStream : public IByteReader
 {
   public:
@@ -34,7 +32,7 @@ class InputCharStringDecodeStream : public IByteReader
 
     // IByteReader implementation
 
-    virtual LongBufferSizeType Read(Byte *inBuffer, LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
     virtual bool NotEnded();
 
   private:
@@ -42,6 +40,6 @@ class InputCharStringDecodeStream : public IByteReader
     unsigned short mRandomizer;
 
     void InitializeCharStringDecode(unsigned long inLenIV);
-    PDFHummus::EStatusCode ReadDecodedByte(Byte &outByte);
-    Byte DecodeByte(Byte inByteToDecode);
+    PDFHummus::EStatusCode ReadDecodedByte(uint8_t &outByte);
+    uint8_t DecodeByte(uint8_t inByteToDecode);
 };

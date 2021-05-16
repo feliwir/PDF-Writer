@@ -193,10 +193,10 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
     auto it = mCharactersVector.begin() + 1;                                // skip 0 glyph
     unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1; // cause 0 is not there
 
-    cmapWriteContext->Write((const Byte *)scCmapHeader, strlen(scCmapHeader));
+    cmapWriteContext->Write((const uint8_t *)scCmapHeader, strlen(scCmapHeader));
     primitiveWriter.WriteEncodedHexString(scFourByteRangeStart);
     primitiveWriter.WriteEncodedHexString(scFourByteRangeEnd, eTokenSeparatorEndLine);
-    cmapWriteContext->Write((const Byte *)scEndCodeSpaceRange, strlen(scEndCodeSpaceRange));
+    cmapWriteContext->Write((const uint8_t *)scEndCodeSpaceRange, strlen(scEndCodeSpaceRange));
 
     if (vectorSize < 100)
         primitiveWriter.WriteInteger(vectorSize);
@@ -220,13 +220,13 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
         WriteGlyphEntry(cmapWriteContext, it->second.mEncodedCharacter, it->second.mUnicodeCharacters);
     }
     primitiveWriter.WriteKeyword(scEndBFChar);
-    cmapWriteContext->Write((const Byte *)scCmapFooter, strlen(scCmapFooter));
+    cmapWriteContext->Write((const uint8_t *)scCmapFooter, strlen(scCmapFooter));
     mObjectsContext->EndPDFStream(pdfStream);
     delete pdfStream;
 }
 
-static const Byte scEntryEnding[2] = {'>', '\n'};
-static const Byte scAllZeros[4] = {'0', '0', '0', '0'};
+static const uint8_t scEntryEnding[2] = {'>', '\n'};
+static const uint8_t scAllZeros[4] = {'0', '0', '0', '0'};
 void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter,
                                     const ULongVector &inUnicodeValues)
 {
@@ -235,7 +235,7 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnco
     auto it = inUnicodeValues.begin();
 
     SAFE_SPRINTF_1(formattingBuffer, 17, "<%04x> <", inEncodedCharacter);
-    inWriter->Write((const Byte *)formattingBuffer, 8);
+    inWriter->Write((const uint8_t *)formattingBuffer, 8);
 
     if (inUnicodeValues.size() == 0)
     {
@@ -259,12 +259,12 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnco
             if (utf16Result.second.size() == 2)
             {
                 SAFE_SPRINTF_2(formattingBuffer, 17, "%04x%04x", utf16Result.second.front(), utf16Result.second.back());
-                inWriter->Write((const Byte *)formattingBuffer, 8);
+                inWriter->Write((const uint8_t *)formattingBuffer, 8);
             }
             else // 1
             {
                 SAFE_SPRINTF_1(formattingBuffer, 17, "%04x", utf16Result.second.front());
-                inWriter->Write((const Byte *)formattingBuffer, 4);
+                inWriter->Write((const uint8_t *)formattingBuffer, 4);
             }
         }
     }

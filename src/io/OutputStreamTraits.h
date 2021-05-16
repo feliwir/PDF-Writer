@@ -21,12 +21,11 @@
 #pragma once
 
 #include "EStatusCode.h"
-#include "IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class IByteWriter;
 class IByteReader;
-
-using namespace IOBasicTypes;
 
 class OutputStreamTraits
 {
@@ -35,7 +34,7 @@ class OutputStreamTraits
     ~OutputStreamTraits(void);
 
     PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream);
-    PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream, LongBufferSizeType inLength);
+    PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream, size_t inLength);
 
   private:
     IByteWriter *mOutputStream;

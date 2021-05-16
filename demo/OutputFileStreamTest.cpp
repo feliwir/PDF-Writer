@@ -24,7 +24,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace IOBasicTypes;
+
 using namespace PDFHummus;
 
 static const std::string scOutputFileStreamTest = "OutputFileStreamTest";
@@ -40,7 +40,7 @@ OutputFileStreamTest::~OutputFileStreamTest()
 EStatusCode OutputFileStreamTest::Run(const TestConfiguration &inTestConfiguration)
 {
     OutputFileStream stream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "OutputFileStreamTest.txt"));
-    Byte buffer[5] = {'a', 'b', 'c', 'd', 'e'};
+    uint8_t buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
     stream.Write(buffer, 5);
     stream.Close();

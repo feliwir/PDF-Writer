@@ -427,18 +427,18 @@ BoolAndByte PDFDocEncoding::Encode(unsigned long inUnicodeCharacter)
     return result;
 }
 
-const char *PDFDocEncoding::GetEncodedGlyphName(IOBasicTypes::Byte inEncodedCharacter)
+const char *PDFDocEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }
 
-unsigned long PDFDocEncoding::Decode(IOBasicTypes::Byte inEncodedCharacter)
+unsigned long PDFDocEncoding::Decode(uint8_t inEncodedCharacter)
 {
     unsigned long result;
 
-    if (betweenIncluding<IOBasicTypes::Byte>(inEncodedCharacter, 0x00, 0x17) ||
-        betweenIncluding<IOBasicTypes::Byte>(inEncodedCharacter, 0x20, 0x7E) ||
-        betweenIncluding<IOBasicTypes::Byte>(inEncodedCharacter, 0xA1, 0xFF))
+    if (betweenIncluding<uint8_t>(inEncodedCharacter, 0x00, 0x17) ||
+        betweenIncluding<uint8_t>(inEncodedCharacter, 0x20, 0x7E) ||
+        betweenIncluding<uint8_t>(inEncodedCharacter, 0xA1, 0xFF))
     {
         result = (unsigned long)inEncodedCharacter;
     }

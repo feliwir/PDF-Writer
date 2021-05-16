@@ -26,7 +26,7 @@
 
 #include <list>
 
-typedef std::list<IOBasicTypes::Byte> ByteList;
+typedef std::list<uint8_t> ByteList;
 
 class InputAESDecodeStream : public IByteReader
 {
@@ -44,8 +44,7 @@ class InputAESDecodeStream : public IByteReader
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
     // encoded stream. got it?!
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 

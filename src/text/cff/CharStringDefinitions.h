@@ -20,10 +20,9 @@
 */
 #pragma once
 
-#include "io/IOBasicTypes.h"
 #include <list>
-
-using namespace IOBasicTypes;
+#include <stdint.h>
+#include <stdio.h>
 
 struct IndexElement
 {
@@ -34,8 +33,8 @@ struct IndexElement
         mIndex = 0;
     }
 
-    LongFilePositionType mStartPosition;
-    LongFilePositionType mEndPosition;
+    long long mStartPosition;
+    long long mEndPosition;
     unsigned short mIndex;
 };
 

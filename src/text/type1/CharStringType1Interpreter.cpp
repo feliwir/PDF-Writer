@@ -63,7 +63,7 @@ EStatusCode CharStringType1Interpreter::ProcessCharString(InputCharStringDecodeS
 {
     EStatusCode status = PDFHummus::eSuccess;
     bool gotEndExecutionOperator = false;
-    Byte buffer;
+    uint8_t buffer;
 
     while (inCharStringToIntepret->NotEnded() && PDFHummus::eSuccess == status && !gotEndExecutionOperator &&
            !mGotEndChar)
@@ -80,19 +80,19 @@ EStatusCode CharStringType1Interpreter::ProcessCharString(InputCharStringDecodeS
     return status;
 }
 
-bool CharStringType1Interpreter::IsOperator(Byte inBuffer)
+bool CharStringType1Interpreter::IsOperator(uint8_t inBuffer)
 {
     return (inBuffer <= 31);
 }
 
-EStatusCode CharStringType1Interpreter::InterpretOperator(Byte inBuffer,
+EStatusCode CharStringType1Interpreter::InterpretOperator(uint8_t inBuffer,
                                                           InputCharStringDecodeStream *inCharStringToIntepret,
                                                           bool &outGotEndExecutionCommand)
 {
     EStatusCode status = PDFHummus::eFailure;
     unsigned short operatorValue;
     outGotEndExecutionCommand = false;
-    Byte buffer;
+    uint8_t buffer;
 
     if (12 == inBuffer)
     {
@@ -189,7 +189,7 @@ EStatusCode CharStringType1Interpreter::InterpretOperator(Byte inBuffer,
     return status;
 }
 
-EStatusCode CharStringType1Interpreter::InterpretNumber(Byte inBuffer,
+EStatusCode CharStringType1Interpreter::InterpretNumber(uint8_t inBuffer,
                                                         InputCharStringDecodeStream *inCharStringToIntepret)
 {
     long operand;
@@ -200,7 +200,7 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(Byte inBuffer,
     }
     else if (247 <= inBuffer && inBuffer <= 250)
     {
-        Byte byte1;
+        uint8_t byte1;
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
             return PDFHummus::eFailure;
 
@@ -208,7 +208,7 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(Byte inBuffer,
     }
     else if (251 <= inBuffer && inBuffer <= 254)
     {
-        Byte byte1;
+        uint8_t byte1;
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
             return PDFHummus::eFailure;
 
@@ -216,7 +216,7 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(Byte inBuffer,
     }
     else if (255 == inBuffer)
     {
-        Byte byte1, byte2, byte3, byte4;
+        uint8_t byte1, byte2, byte3, byte4;
 
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
             return PDFHummus::eFailure;

@@ -24,7 +24,6 @@
 #include "Trace.h"
 #include "io/IByteWriterWithPosition.h"
 
-using namespace IOBasicTypes;
 using namespace PDFHummus;
 
 StateWriter::StateWriter()
@@ -71,7 +70,7 @@ EStatusCode StateWriter::Finish()
     EStatusCode status;
     do
     {
-        LongFilePositionType xrefTablePosition;
+        long long xrefTablePosition;
 
         status = mObjectsContext->WriteXrefTable(xrefTablePosition);
         if (status != 0)
@@ -115,13 +114,13 @@ void StateWriter::SetRootObject(ObjectIDType inRootObjectID)
 }
 
 static const std::string scStartXref = "startxref";
-void StateWriter::WriteXrefReference(LongFilePositionType inXrefTablePosition)
+void StateWriter::WriteXrefReference(long long inXrefTablePosition)
 {
     mObjectsContext->WriteKeyword(scStartXref);
     mObjectsContext->WriteInteger(inXrefTablePosition, eTokenSeparatorEndLine);
 }
 
-static const IOBasicTypes::Byte scEOF[] = {'%', '%', 'E', 'O', 'F'};
+static const uint8_t scEOF[] = {'%', '%', 'E', 'O', 'F'};
 
 void StateWriter::WriteFinalEOF()
 {

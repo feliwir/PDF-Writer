@@ -121,7 +121,7 @@ struct OS2Table
     short StrikeoutSize;
     short StrikeoutPosition;
     short FamilyClass;
-    Byte Panose[10];
+    uint8_t Panose[10];
     unsigned long UnicodeRange1;
     unsigned long UnicodeRange2;
     unsigned long UnicodeRange3;

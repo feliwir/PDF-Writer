@@ -22,8 +22,6 @@ limitations under the License.
 #include <algorithm>
 #include <string.h>
 
-using namespace IOBasicTypes;
-
 InputAESDecodeStream::InputAESDecodeStream()
 {
     mSourceStream = nullptr;
@@ -67,7 +65,7 @@ bool InputAESDecodeStream::NotEnded()
            ((mOutIndex - mOut) < mReadBlockSize);
 }
 
-LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inSize)
+size_t InputAESDecodeStream::Read(uint8_t *inBuffer, size_t inSize)
 {
     if (mSourceStream == nullptr)
         return 0;
@@ -76,11 +74,11 @@ LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, Long
     if (!mIsIvInit)
     {
         // read iv buffer
-        LongBufferSizeType ivRead = mSourceStream->Read(mIV, AES_BLOCK_SIZE);
+        size_t ivRead = mSourceStream->Read(mIV, AES_BLOCK_SIZE);
         if (ivRead < AES_BLOCK_SIZE)
             return 0;
         // read first buffer
-        LongBufferSizeType firstBlockLength = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
+        size_t firstBlockLength = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
         if (firstBlockLength < AES_BLOCK_SIZE)
             return 0;
 
@@ -91,7 +89,7 @@ LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, Long
         mOutIndex = mOut;
 
         // read next buffer, to determine if first buffer contains padding
-        LongBufferSizeType secondBlockLength = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
+        size_t secondBlockLength = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
         if (secondBlockLength < AES_BLOCK_SIZE)
         {
             mHitEnd = true;
@@ -104,8 +102,8 @@ LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, Long
         mIsIvInit = true;
     }
 
-    IOBasicTypes::LongBufferSizeType left = inSize;
-    IOBasicTypes::LongBufferSizeType remainderRead;
+    size_t left = inSize;
+    size_t remainderRead;
 
     while (left > 0)
     {
@@ -134,7 +132,7 @@ LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, Long
                 mOutIndex = mOut;
 
                 // read next buffer from input stream
-                LongBufferSizeType totalRead = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
+                size_t totalRead = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
                 if (totalRead < AES_BLOCK_SIZE)
                 {                   // this means that we got to final block, with padding
                     mHitEnd = true; // should be 0.

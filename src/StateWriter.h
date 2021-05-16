@@ -22,8 +22,9 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
 #include "io/OutputFile.h"
+#include <stdint.h>
+#include <stdio.h>
 
 #include <string>
 
@@ -46,6 +47,6 @@ class StateWriter
     ObjectIDType mRootObject;
 
     void WriteTrailerDictionary();
-    void WriteXrefReference(IOBasicTypes::LongFilePositionType inXrefTablePosition);
+    void WriteXrefReference(long long inXrefTablePosition);
     void WriteFinalEOF();
 };

@@ -26,11 +26,10 @@ limitations under the License.
 #include <stdint.h>
 
 using namespace std;
-using namespace IOBasicTypes;
 
-const Byte scPaddingFiller[] = {0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E,
-                                0x56, 0xFF, 0xFA, 0x01, 0x08, 0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68,
-                                0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A};
+const uint8_t scPaddingFiller[] = {0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E,
+                                   0x56, 0xFF, 0xFA, 0x01, 0x08, 0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68,
+                                   0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A};
 XCryptionCommon::XCryptionCommon()
 {
     for (unsigned char i : scPaddingFiller)
@@ -96,21 +95,20 @@ ByteList XCryptionCommon::stringToByteList(const std::string &inString)
     std::string::const_iterator it = inString.begin();
 
     for (; it != inString.end(); ++it)
-        buffer.push_back((Byte)*it);
+        buffer.push_back((uint8_t)*it);
 
     return buffer;
 }
-ByteList XCryptionCommon::substr(const ByteList &inList, IOBasicTypes::LongBufferSizeType inStart,
-                                 IOBasicTypes::LongBufferSizeType inLength)
+ByteList XCryptionCommon::substr(const ByteList &inList, size_t inStart, size_t inLength)
 {
     ByteList buffer;
     auto it = inList.begin();
 
-    for (IOBasicTypes::LongBufferSizeType i = 0; i < inStart && it != inList.end(); ++i, ++it)
+    for (size_t i = 0; i < inStart && it != inList.end(); ++i, ++it)
         ;
 
-    for (IOBasicTypes::LongBufferSizeType i = 0; i < inLength && it != inList.end(); ++i, ++it)
-        buffer.push_back((Byte)*it);
+    for (size_t i = 0; i < inLength && it != inList.end(); ++i, ++it)
+        buffer.push_back((uint8_t)*it);
 
     return buffer;
 }
@@ -144,14 +142,14 @@ std::string XCryptionCommon::ByteListToString(const ByteList &inByteList)
     return buffer;
 }
 
-const Byte scAESSuffix[] = {0x73, 0x41, 0x6C, 0x54};
+const uint8_t scAESSuffix[] = {0x73, 0x41, 0x6C, 0x54};
 ByteList XCryptionCommon::algorithm3_1(ObjectIDType inObjectNumber, unsigned long inGenerationNumber,
                                        const ByteList &inEncryptionKey, bool inIsUsingAES)
 {
     MD5Generator md5;
     ByteList result = inEncryptionKey;
-    Byte buffer;
-    LongBufferSizeType outputKeyLength = std::min<size_t>(inEncryptionKey.size() + 5, 16U);
+    uint8_t buffer;
+    size_t outputKeyLength = std::min<size_t>(inEncryptionKey.size() + 5, 16U);
 
     buffer = inObjectNumber & 0xff;
     result.push_back(buffer);
@@ -180,7 +178,7 @@ ByteList XCryptionCommon::algorithm3_1(ObjectIDType inObjectNumber, unsigned lon
     return substr(md5.ToString(), 0, outputKeyLength);
 }
 
-const Byte scFixedEnd[] = {0xFF, 0xFF, 0xFF, 0xFF};
+const uint8_t scFixedEnd[] = {0xFF, 0xFF, 0xFF, 0xFF};
 ByteList XCryptionCommon::algorithm3_2(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
                                        const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                        bool inEncryptMetaData)
@@ -190,7 +188,7 @@ ByteList XCryptionCommon::algorithm3_2(unsigned int inRevision, unsigned int inL
     if (password32Chars.size() < 32)
         append(password32Chars, substr(mPaddingFiller, 0, 32 - inPassword.size()));
     auto truncP = uint32_t(inP);
-    Byte truncPBuffer[4];
+    uint8_t truncPBuffer[4];
     ByteList hashResult;
 
     md5.Accumulate(password32Chars);
@@ -253,7 +251,7 @@ ByteList XCryptionCommon::algorithm3_3(unsigned int inRevision, unsigned int inL
 
     if (inRevision >= 3)
     {
-        for (Byte i = 1; i <= 19; ++i)
+        for (uint8_t i = 1; i <= 19; ++i)
         {
             ByteList newRC4Key;
             auto it = RC4Key.begin();
@@ -270,12 +268,12 @@ ByteList XCryptionCommon::RC4Encode(const ByteList &inKey, const ByteList &inToE
 {
     RC4 rc4(inKey);
     ByteList target;
-    Byte buffer;
+    uint8_t buffer;
     auto it = inToEncode.begin();
 
     for (; it != inToEncode.end(); ++it)
     {
-        buffer = rc4.DecodeNextByte((Byte)*it);
+        buffer = rc4.DecodeNextByte((uint8_t)*it);
         target.push_back(buffer);
     }
     return target;
@@ -304,7 +302,7 @@ ByteList XCryptionCommon::algorithm3_5(unsigned int inRevision, unsigned int inL
 
     hashResult = RC4Encode(encryptionKey, hashResult);
 
-    for (Byte i = 1; i <= 19; ++i)
+    for (uint8_t i = 1; i <= 19; ++i)
     {
         ByteList newEncryptionKey;
         auto it = encryptionKey.begin();

@@ -32,7 +32,7 @@
 #include <string>
 #include <utility>
 
-typedef std::pair<bool, IOBasicTypes::Byte> ConvertToPDFDocEncodingResult;
+typedef std::pair<bool, uint8_t> ConvertToPDFDocEncodingResult;
 
 class PDFTextString
 {

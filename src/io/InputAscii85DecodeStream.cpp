@@ -24,8 +24,6 @@
 
 #include <algorithm>
 
-using namespace IOBasicTypes;
-
 InputAscii85DecodeStream::InputAscii85DecodeStream()
 {
     mSourceStream = nullptr;
@@ -57,9 +55,9 @@ bool InputAscii85DecodeStream::NotEnded()
            ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
-LongBufferSizeType InputAscii85DecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)
+size_t InputAscii85DecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
-    LongBufferSizeType mCurrentIndex = 0;
+    size_t mCurrentIndex = 0;
 
     if (NotEnded() && mReadBufferSize == 0) // read buffer, in any case (don't like 0 size memcpys)
         ReadNextBuffer();
@@ -83,9 +81,9 @@ LongBufferSizeType InputAscii85DecodeStream::Read(IOBasicTypes::Byte *inBuffer, 
 
 void InputAscii85DecodeStream::ReadNextBuffer()
 {
-    Byte buffer[5];
+    uint8_t buffer[5];
     int readIndex = 0;
-    Byte aByte;
+    uint8_t aByte;
 
     while (readIndex < 5 && mSourceStream->NotEnded())
     {

@@ -26,8 +26,8 @@
 class IType2InterpreterImplementation
 {
   public:
-    virtual PDFHummus::EStatusCode ReadCharString(LongFilePositionType inCharStringStart,
-                                                  LongFilePositionType inCharStringEnd, Byte **outCharString) = 0;
+    virtual PDFHummus::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                                  uint8_t **outCharString) = 0;
 
     // events in the code
     virtual PDFHummus::EStatusCode Type2InterpretNumber(const CharStringOperand &inOperand) = 0;
@@ -42,9 +42,9 @@ class IType2InterpreterImplementation
     virtual PDFHummus::EStatusCode Type2Endchar(const CharStringOperandList &inOperandList) = 0;
     virtual PDFHummus::EStatusCode Type2Hstemhm(const CharStringOperandList &inOperandList) = 0;
     virtual PDFHummus::EStatusCode Type2Hintmask(const CharStringOperandList &inOperandList,
-                                                 Byte *inProgramCounter) = 0;
+                                                 uint8_t *inProgramCounter) = 0;
     virtual PDFHummus::EStatusCode Type2Cntrmask(const CharStringOperandList &inOperandList,
-                                                 Byte *inProgramCounter) = 0;
+                                                 uint8_t *inProgramCounter) = 0;
     virtual PDFHummus::EStatusCode Type2Rmoveto(const CharStringOperandList &inOperandList) = 0;
     virtual PDFHummus::EStatusCode Type2Hmoveto(const CharStringOperandList &inOperandList) = 0;
     virtual PDFHummus::EStatusCode Type2Vstemhm(const CharStringOperandList &inOperandList) = 0;
@@ -87,8 +87,8 @@ class IType2InterpreterImplementation
 class Type2InterpreterImplementationAdapter : public IType2InterpreterImplementation
 {
   public:
-    virtual PDFHummus::EStatusCode ReadCharString(LongFilePositionType inCharStringStart,
-                                                  LongFilePositionType inCharStringEnd, Byte **outCharString)
+    virtual PDFHummus::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
+                                                  uint8_t **outCharString)
     {
         (void)inCharStringStart;
         (void)inCharStringEnd;
@@ -150,13 +150,13 @@ class Type2InterpreterImplementationAdapter : public IType2InterpreterImplementa
         (void)inOperandList;
         return PDFHummus::eSuccess;
     }
-    virtual PDFHummus::EStatusCode Type2Hintmask(const CharStringOperandList &inOperandList, Byte *inProgramCounter)
+    virtual PDFHummus::EStatusCode Type2Hintmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter)
     {
         (void)inOperandList;
         (void)(void) inOperandList;
         return PDFHummus::eSuccess;
     }
-    virtual PDFHummus::EStatusCode Type2Cntrmask(const CharStringOperandList &inOperandList, Byte *inProgramCounter)
+    virtual PDFHummus::EStatusCode Type2Cntrmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter)
     {
         return PDFHummus::eSuccess;
     }

@@ -20,7 +20,8 @@
 */
 #pragma once
 
-#include "IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class IReadPositionProvider
 {
@@ -32,5 +33,5 @@ class IReadPositionProvider
     /*
         Get the current read position
     */
-    virtual IOBasicTypes::LongFilePositionType GetCurrentPosition() = 0;
+    virtual long long GetCurrentPosition() = 0;
 };

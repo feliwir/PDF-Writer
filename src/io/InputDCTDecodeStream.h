@@ -42,8 +42,7 @@ class InputDCTDecodeStream : public IByteReader
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
     // encoded stream. got it?!
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize);
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
 
     virtual bool NotEnded();
 
@@ -54,16 +53,15 @@ class InputDCTDecodeStream : public IByteReader
     IByteReader *mStream;
     JSAMPARRAY mSamplesBuffer;
     bool mIsDecoding;
-    IOBasicTypes::LongBufferSizeType mIndexInRow;
-    IOBasicTypes::LongBufferSizeType mCurrentSampleRow;
-    IOBasicTypes::LongBufferSizeType mTotalSampleRows;
+    size_t mIndexInRow;
+    size_t mCurrentSampleRow;
+    size_t mTotalSampleRows;
     bool mIsHeaderRead;
 
     void InitializeDecodingState();
     PDFHummus::EStatusCode StartRead();
     void FinalizeDecoding();
-    IOBasicTypes::Byte *CopySamplesArrayToBuffer(IOBasicTypes::Byte *inBuffer,
-                                                 IOBasicTypes::LongBufferSizeType inBufferSize);
+    uint8_t *CopySamplesArrayToBuffer(uint8_t *inBuffer, size_t inBufferSize);
 };
 
 #endif

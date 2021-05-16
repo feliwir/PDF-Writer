@@ -1611,7 +1611,7 @@ ObjectIDType TIFFImageHandler::WriteTransferFunction(int i)
 
     // the stream
     PDFStream *transferFunctionStream = mObjectsContext->StartPDFStream(transferFunctionDictionary);
-    transferFunctionStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)mT2p->tiff_transferfunction[i],
+    transferFunctionStream->GetWriteStream()->Write((const uint8_t *)mT2p->tiff_transferfunction[i],
                                                     (1 << (mT2p->tiff_bitspersample + 1)));
     mObjectsContext->EndPDFStream(transferFunctionStream);
     delete transferFunctionStream;
@@ -1657,7 +1657,7 @@ ObjectIDType TIFFImageHandler::WritePaletteCS()
 {
     ObjectIDType palleteID = mObjectsContext->StartNewIndirectObject();
     PDFStream *paletteStream = mObjectsContext->StartPDFStream();
-    paletteStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)mT2p->pdf_palette, mT2p->pdf_palettesize);
+    paletteStream->GetWriteStream()->Write((const uint8_t *)mT2p->pdf_palette, mT2p->pdf_palettesize);
     mObjectsContext->EndPDFStream(paletteStream);
     delete paletteStream;
     return palleteID;
@@ -1685,7 +1685,7 @@ ObjectIDType TIFFImageHandler::WriteICCCS()
 
     // the stream
     PDFStream *ICCStream = mObjectsContext->StartPDFStream(ICCDictionary);
-    ICCStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)mT2p->tiff_iccprofile, mT2p->tiff_iccprofilelength);
+    ICCStream->GetWriteStream()->Write((const uint8_t *)mT2p->tiff_iccprofile, mT2p->tiff_iccprofilelength);
     mObjectsContext->EndPDFStream(ICCStream);
     delete ICCStream;
     return ICCID;
@@ -2207,7 +2207,7 @@ static tsize_t t2p_writeproc(thandle_t handle, tdata_t data, tsize_t size)
     T2P *t2p = (T2P *)handle;
     if (t2p->pdfStream != nullptr)
     {
-        auto written = (tsize_t)t2p->pdfStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)data, size);
+        auto written = (tsize_t)t2p->pdfStream->GetWriteStream()->Write((const uint8_t *)data, size);
         return written;
     }
     return size;
@@ -2290,7 +2290,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(PDFStream *inImageStream, int i
             TIFFReadRawTile(mT2p->input, inTileIndex, (tdata_t)buffer, mT2p->tiff_datasize);
             if (mT2p->tiff_fillorder == FILLORDER_LSB2MSB)
                 TIFFReverseBits(buffer, mT2p->tiff_datasize);
-            inImageStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)buffer, mT2p->tiff_datasize);
+            inImageStream->GetWriteStream()->Write((const uint8_t *)buffer, mT2p->tiff_datasize);
             _TIFFfree(buffer);
             break; // finish here if recompression is not required
         }
@@ -2666,7 +2666,7 @@ EStatusCode TIFFImageHandler::WriteImageData(PDFStream *inImageStream)
                 TIFFReadRawStrip(mT2p->input, 0, (tdata_t)buffer, mT2p->tiff_datasize);
                 if (mT2p->tiff_fillorder == FILLORDER_LSB2MSB)
                     TIFFReverseBits(buffer, mT2p->tiff_datasize);
-                inImageStream->GetWriteStream()->Write((const IOBasicTypes::Byte *)buffer, mT2p->tiff_datasize);
+                inImageStream->GetWriteStream()->Write((const uint8_t *)buffer, mT2p->tiff_datasize);
                 _TIFFfree(buffer);
                 break; // stop here if can write directly with no recompression
             }
@@ -3153,12 +3153,12 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWit
 struct StreamWithPos
 {
     IByteReaderWithPosition *mStream;
-    LongFilePositionType mOriginalPosition;
+    long long mOriginalPosition;
 };
 
 static tsize_t STATIC_streamRead(thandle_t inData, tdata_t inBuffer, tsize_t inBufferSize)
 {
-    return (tsize_t)(((StreamWithPos *)inData)->mStream)->Read((Byte *)inBuffer, inBufferSize);
+    return (tsize_t)(((StreamWithPos *)inData)->mStream)->Read((uint8_t *)inBuffer, inBufferSize);
 }
 
 static tsize_t STATIC_streamWrite(thandle_t /*inData*/, tdata_t /*inBuffer*/, tsize_t /*inBufferSize*/)
@@ -3193,11 +3193,11 @@ static int STATIC_streamClose(thandle_t /*inData*/)
 
 toff_t STATIC_tiffSize(thandle_t inData)
 {
-    LongFilePositionType currentPosition = ((StreamWithPos *)inData)->mStream->GetCurrentPosition();
+    long long currentPosition = ((StreamWithPos *)inData)->mStream->GetCurrentPosition();
 
     ((StreamWithPos *)inData)->mStream->SetPositionFromEnd(0);
 
-    LongFilePositionType size =
+    long long size =
         ((StreamWithPos *)inData)->mStream->GetCurrentPosition() - ((StreamWithPos *)inData)->mOriginalPosition;
 
     ((StreamWithPos *)inData)->mStream->SetPosition(currentPosition);

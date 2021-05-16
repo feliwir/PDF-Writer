@@ -42,13 +42,13 @@ EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfigura
 {
     OutputFile outputFile;
     string aString("hello world");
-    IOBasicTypes::Byte buffer;
+    uint8_t buffer;
     InputFlateDecodeStream inputDecoder;
     OutputFlateEncodeStream outputEncoder;
 
     outputFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "source.txt"));
     outputEncoder.Assign(outputFile.GetOutputStream());
-    outputEncoder.Write((IOBasicTypes::Byte *)aString.c_str(), aString.size());
+    outputEncoder.Write((uint8_t *)aString.c_str(), aString.size());
     outputEncoder.Assign(nullptr);
     outputFile.CloseFile();
 
@@ -62,7 +62,7 @@ EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfigura
 
     for (; it != aString.end() && isSame; ++it, ++i)
     {
-        LongBufferSizeType amountRead = inputDecoder.Read(&buffer, 1);
+        size_t amountRead = inputDecoder.Read(&buffer, 1);
 
         if (amountRead != 1)
         {

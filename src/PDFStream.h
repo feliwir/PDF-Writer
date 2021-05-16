@@ -28,12 +28,11 @@
 #include "EStatusCode.h"
 #include "MyStringBuf.h"
 #include "ObjectsBasicTypes.h"
-#include "io/IOBasicTypes.h"
 #include "io/OutputFlateEncodeStream.h"
 #include "io/OutputStringBufferStream.h"
 #include <sstream>
-
-using namespace IOBasicTypes;
+#include <stdint.h>
+#include <stdio.h>
 
 class IByteWriterWithPosition;
 class IObjectsContextExtender;
@@ -64,7 +63,7 @@ class PDFStream
     bool IsStreamCompressed();
     ObjectIDType GetExtentObjectID();
 
-    LongFilePositionType GetLength(); // get the stream extent
+    long long GetLength(); // get the stream extent
 
     // direct extent specific
     DictionaryContext *GetStreamDictionaryForDirectExtentStream();
@@ -76,8 +75,8 @@ class PDFStream
     IByteWriterWithPosition *mOutputStream;
     IByteWriterWithPosition *mEncryptionStream;
     ObjectIDType mExtendObjectID;
-    LongFilePositionType mStreamLength;
-    LongFilePositionType mStreamStartPosition;
+    long long mStreamLength;
+    long long mStreamStartPosition;
     IByteWriter *mWriteStream;
     IObjectsContextExtender *mExtender;
     MyStringBuf mTemporaryStream;

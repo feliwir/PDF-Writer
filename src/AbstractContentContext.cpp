@@ -1118,11 +1118,11 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
         for (; it != encodedCharactersList.end(); ++it)
         {
             formattingBuffer[0] = ((*it) >> 8) & 0x00ff;
-            stringStream.Write((const Byte *)formattingBuffer, 1);
+            stringStream.Write((const uint8_t *)formattingBuffer, 1);
             formattingBuffer[0] = (*it) & 0x00ff;
-            stringStream.Write((const Byte *)formattingBuffer, 1);
+            stringStream.Write((const uint8_t *)formattingBuffer, 1);
             // SAFE_SPRINTF_2(formattingBuffer,5,"%02x%02x",((*it)>>8) & 0x00ff,(*it) & 0x00ff);
-            // stringStream.Write((const Byte*)formattingBuffer,4);
+            // stringStream.Write((const uint8_t*)formattingBuffer,4);
         }
         inTextCommand->WriteHexStringCommand(stringStream.ToString());
     }
@@ -1131,7 +1131,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
         for (; it != encodedCharactersList.end(); ++it)
         {
             formattingBuffer[0] = (*it) & 0x00ff;
-            stringStream.Write((const Byte *)formattingBuffer, 1);
+            stringStream.Write((const uint8_t *)formattingBuffer, 1);
         }
         inTextCommand->WriteLiteralStringCommand(stringStream.ToString());
     }
@@ -1219,7 +1219,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
                 {
                     SAFE_SPRINTF_2(formattingBuffer, 5, "%02x%02x", ((*itEncoded) >> 8) & 0x00ff,
                                    (*itEncoded) & 0x00ff);
-                    stringStream.Write((const Byte *)formattingBuffer, 4);
+                    stringStream.Write((const uint8_t *)formattingBuffer, 4);
                 }
                 stringOrDoubleList.emplace_back(stringStream.ToString());
                 stringStream.Reset();
@@ -1242,7 +1242,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
                 for (itEncoded = itEncodedList->begin(); itEncoded != itEncodedList->end(); ++itEncoded)
                 {
                     formattingBuffer[0] = (*itEncoded) & 0x00ff;
-                    stringStream.Write((const Byte *)formattingBuffer, 1);
+                    stringStream.Write((const uint8_t *)formattingBuffer, 1);
                 }
                 stringOrDoubleList.emplace_back(stringStream.ToString());
                 stringStream.Reset();
@@ -1257,7 +1257,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
 void AbstractContentContext::WriteFreeCode(const std::string &inFreeCode)
 {
     RenewStreamConnection();
-    mPrimitiveWriter.GetWritingStream()->Write((const Byte *)(inFreeCode.c_str()), inFreeCode.length());
+    mPrimitiveWriter.GetWritingStream()->Write((const uint8_t *)(inFreeCode.c_str()), inFreeCode.length());
 }
 void AbstractContentContext::WriteFreeCode(IByteReader *inFreeCodeSource)
 {

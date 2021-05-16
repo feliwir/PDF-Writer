@@ -25,7 +25,8 @@
 
 */
 
-#include "IOBasicTypes.h"
+#include <stdint.h>
+#include <stdio.h>
 
 class IByteReader
 {
@@ -35,8 +36,7 @@ class IByteReader
     /*
         Read inSize bytes of inBuffer, returning the number of bytes actually read
     */
-    virtual IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize) = 0;
+    virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize) = 0;
 
     /*
         boolean to determine whether reading will get more content or not. opposite of IsEOF. cause i'm sick of

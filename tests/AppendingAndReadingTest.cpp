@@ -29,9 +29,9 @@
 
 using namespace PDFHummus;
 
-static const Byte scTest[5] = {'T', 'e', 's', 't', '\n'};
-static const Byte scTest1[6] = {'T', 'e', 's', 't', '1', '\n'};
-static const Byte scTest2[6] = {'T', 'e', 's', 't', '2', '\n'};
+static const uint8_t scTest[5] = {'T', 'e', 's', 't', '\n'};
+static const uint8_t scTest1[6] = {'T', 'e', 's', 't', '1', '\n'};
+static const uint8_t scTest2[6] = {'T', 'e', 's', 't', '2', '\n'};
 
 TEST(Modification, AppendingAndReading)
 {
@@ -67,7 +67,7 @@ TEST(Modification, AppendingAndReading)
 
     // check reading 1
     inputFile.GetInputStream()->SetPosition(5);
-    Byte bufferTest1[6];
+    uint8_t bufferTest1[6];
 
     inputFile.GetInputStream()->Read(bufferTest1, 6);
     ASSERT_EQ(memcmp(bufferTest1, scTest1, 6), 0);
@@ -81,7 +81,7 @@ TEST(Modification, AppendingAndReading)
 
     // check reading 3
     inputFile.GetInputStream()->SetPosition(0);
-    Byte bufferTest[5];
+    uint8_t bufferTest[5];
     inputFile.GetInputStream()->Read(bufferTest, 5);
     ASSERT_EQ(memcmp(bufferTest, scTest, 5), 0);
 
