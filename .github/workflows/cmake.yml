@@ -41,7 +41,10 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Coverage
-      working-directory: ${{github.workspace}}/build
       # Our coverage target is called "pdfwriter_coverage"
       run: cmake --build . --target pdfwriter_coverage
-      
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        files: ./build/pdfwriter_coverage.info
