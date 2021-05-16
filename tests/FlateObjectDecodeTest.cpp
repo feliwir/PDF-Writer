@@ -18,14 +18,15 @@ limitations under the License.
 
 
 */
-#include "FlateObjectDecodeTest.h"
 #include "EStatusCode.h"
+#include "TestHelper.h"
 #include "io/IByteReader.h"
 #include "io/InputFile.h"
 #include "objects/PDFStreamInput.h"
 #include "parsing/PDFParser.h"
 
 #include <fstream>
+#include <gtest/gtest.h>
 #include <iostream>
 #include <string>
 
@@ -55,7 +56,7 @@ EStatusCode decodeStream(const std::string &sourcePath, const std::string &targe
     if (reader == nullptr)
         return eFailure;
 
-    std::ofstream os(targetPath.c_str(), ofstream::binary);
+    std::ofstream os(targetPath.c_str(), std::ofstream::binary);
     uint8_t buffer[1024];
     size_t total = 0;
     while (reader->NotEnded())
@@ -75,6 +76,7 @@ EStatusCode decodeStream(const std::string &sourcePath, const std::string &targe
 
 TEST(Parsing, FlateObjectDecodeTest)
 {
-    ASSERT_EQ(decodeStream(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test2.pdf"),
-                        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "image.data"), eSuccess);
+    ASSERT_EQ(decodeStream(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/test2.pdf"),
+                           RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "image.data")),
+              eSuccess);
 }
