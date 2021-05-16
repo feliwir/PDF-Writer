@@ -62,7 +62,7 @@ void ObjectsContext::SetEncryptionHelper(EncryptionHelper *inEncryptionHelper)
 
 bool ObjectsContext::IsEncrypting()
 {
-    return mEncryptionHelper && mEncryptionHelper->IsEncrypting();
+    return (mEncryptionHelper != nullptr) && mEncryptionHelper->IsEncrypting();
 }
 
 static const IOBasicTypes::Byte scComment[1] = {'%'};
@@ -147,7 +147,7 @@ void ObjectsContext::EndFreeContext()
 
 LongFilePositionType ObjectsContext::GetCurrentPosition()
 {
-    if (!mOutputStream) // in case somebody gets smart and ask before the stream is set
+    if (mOutputStream == nullptr) // in case somebody gets smart and ask before the stream is set
         return 0;
 
     return mOutputStream->GetCurrentPosition();
@@ -245,7 +245,7 @@ EStatusCode ObjectsContext::WriteXrefTable(LongFilePositionType &outWritePositio
 
 DictionaryContext *ObjectsContext::StartDictionary()
 {
-    DictionaryContext *newDictionary = new DictionaryContext(this, mDictionaryStack.size());
+    auto *newDictionary = new DictionaryContext(this, mDictionaryStack.size());
 
     mDictionaryStack.push_back(newDictionary);
     return newDictionary;
@@ -403,7 +403,8 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
 
     // Write the stream header
     // Write Stream Dictionary (note that inStreamDictionary is optionally used)
-    DictionaryContext *streamDictionaryContext = (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    DictionaryContext *streamDictionaryContext =
+        (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
     // Compression (if necessary)
     if (mCompressStreams)
@@ -433,7 +434,7 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
 
     // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
     // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
-    if (mEncryptionHelper)
+    if (mEncryptionHelper != nullptr)
         mEncryptionHelper->PauseEncryption();
 
     return result;
@@ -446,7 +447,8 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
 
     // Write the stream header
     // Write Stream Dictionary (note that inStreamDictionary is optionally used)
-    DictionaryContext *streamDictionaryContext = (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
+    DictionaryContext *streamDictionaryContext =
+        (nullptr == inStreamDictionary ? StartDictionary() : inStreamDictionary);
 
     // Length (write as an indirect object)
     streamDictionaryContext->WriteKey(scLength);
@@ -459,11 +461,11 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
     WriteKeyword(scStream);
 
     // now begin the stream itself
-    PDFStream *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, nullptr);
+    auto *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, nullptr);
 
     // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
     // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
-    if (mEncryptionHelper)
+    if (mEncryptionHelper != nullptr)
         mEncryptionHelper->PauseEncryption();
 
     return result;
@@ -475,7 +477,7 @@ void ObjectsContext::EndPDFStream(PDFStream *inStream)
     inStream->FinalizeStreamWrite();
 
     // bring back encryption, if exists
-    if (mEncryptionHelper)
+    if (mEncryptionHelper != nullptr)
         mEncryptionHelper->ReleaseEncryption();
 
     if (inStream->GetExtentObjectID() == 0)

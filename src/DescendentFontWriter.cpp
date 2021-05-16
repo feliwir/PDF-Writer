@@ -106,7 +106,7 @@ EStatusCode DescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID, co
         fontDescriptorWriter.WriteFontDescriptor(fontDescriptorObjectID, inFontName, &inFontInfo, inEncodedGlyphs,
                                                  inObjectsContext, this);
 
-        if (mCIDSetObjectID) // set by descriptor writer callback
+        if (mCIDSetObjectID != 0u) // set by descriptor writer callback
             WriteCIDSet(inEncodedGlyphs);
     } while (false);
     return status;
@@ -118,7 +118,7 @@ static const std::string scW = "W";
 void DescendentFontWriter::WriteWidths(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
                                        DictionaryContext *inFontContext)
 {
-    UIntAndGlyphEncodingInfoVector::const_iterator it = inEncodedGlyphs.begin(); // will be the 0 glyph
+    auto it = inEncodedGlyphs.begin(); // will be the 0 glyph
     FT_Pos defaultWidth;
     FTPosList widthsList;
     bool allWidthsSame = true;
@@ -193,7 +193,7 @@ void DescendentFontWriter::WriteWidthsItem(bool inAllWidthsSame, const FTPosList
     }
     else
     {
-        FTPosList::const_iterator it = inWidths.begin();
+        auto it = inWidths.begin();
 
         mObjectsContext->StartArray();
         for (; it != inWidths.end(); ++it)
@@ -216,11 +216,11 @@ void DescendentFontWriter::WriteCIDSystemInfo(ObjectIDType inCIDSystemInfoObject
     FT_Int supplement;
 
     if (FT_Get_CID_Is_Internally_CID_Keyed(*mFontInfo, &isCID) != 0)
-        isCID = false;
-    if (isCID && FT_Get_CID_Registry_Ordering_Supplement(*mFontInfo, &registry, &ordering, &supplement) != 0)
-        isCID = false;
+        isCID = 0u;
+    if ((isCID != 0u) && FT_Get_CID_Registry_Ordering_Supplement(*mFontInfo, &registry, &ordering, &supplement) != 0)
+        isCID = 0u;
 
-    if (!isCID)
+    if (isCID == 0u)
     {
         registry = scAdobe;
         ordering = scIdentity;
@@ -268,7 +268,7 @@ void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inE
     PDFStream *pdfStream = mObjectsContext->StartPDFStream();
     IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
     Byte buffer;
-    UIntAndGlyphEncodingInfoVector::const_iterator it = inEncodedGlyphs.begin();
+    auto it = inEncodedGlyphs.begin();
     unsigned int upperLimit = inEncodedGlyphs.back().first;
 
     for (unsigned int i = 0; i < upperLimit; i += 8)

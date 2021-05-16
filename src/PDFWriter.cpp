@@ -164,7 +164,7 @@ EStatusCode PDFWriter::WritePageAndRelease(PDFPage *inPage)
 
 void PDFWriter::SetupLog(const LogConfiguration &inLogConfiguration)
 {
-    if (inLogConfiguration.LogStream)
+    if (inLogConfiguration.LogStream != nullptr)
         Trace::DefaultTrace().SetLogSettings(inLogConfiguration.LogStream, inLogConfiguration.ShouldLog);
     else
         Trace::DefaultTrace().SetLogSettings(inLogConfiguration.LogFileLocation, inLogConfiguration.ShouldLog,
@@ -510,7 +510,7 @@ EStatusCode PDFWriter::ContinuePDFForStream(IByteWriterWithPosition *inOutputStr
 {
     SetupLog(inLogConfiguration);
 
-    if (inModifiedSourceStream)
+    if (inModifiedSourceStream != nullptr)
         if (mModifiedFileParser.StartPDFParsing(inModifiedSourceStream) != eSuccess)
             return eFailure;
 
@@ -858,7 +858,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
         // and set the same)
         copyingContext =
             pdfWriter.CreatePDFCopyingContext(inOriginalPDFStream, PDFParsingOptions(inOriginalPDFPassword));
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             status = PDFHummus::eFailure;
             break;

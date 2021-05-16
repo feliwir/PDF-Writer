@@ -159,7 +159,7 @@ static bool sUShortSort(const UIntAndGlyphEncodingInfo &inLeft, const UIntAndGly
 void CIDFontWriter::CalculateCharacterEncodingArray()
 {
     // first we need to sort the fonts charachters by character code
-    UIntToGlyphEncodingInfoMap::iterator it = mFontOccurrence->mGlyphIDToEncodedChar.begin();
+    auto it = mFontOccurrence->mGlyphIDToEncodedChar.begin();
 
     for (; it != mFontOccurrence->mGlyphIDToEncodedChar.end(); ++it)
         mCharactersVector.push_back(UIntAndGlyphEncodingInfo(it->first, it->second));
@@ -190,8 +190,8 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
     IByteWriter *cmapWriteContext = pdfStream->GetWriteStream();
     PrimitiveObjectsWriter primitiveWriter(cmapWriteContext);
     unsigned long i = 1;
-    UIntAndGlyphEncodingInfoVector::iterator it = mCharactersVector.begin() + 1; // skip 0 glyph
-    unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1;      // cause 0 is not there
+    auto it = mCharactersVector.begin() + 1;                                // skip 0 glyph
+    unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1; // cause 0 is not there
 
     cmapWriteContext->Write((const Byte *)scCmapHeader, strlen(scCmapHeader));
     primitiveWriter.WriteEncodedHexString(scFourByteRangeStart);
@@ -232,7 +232,7 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnco
 {
     UnicodeString unicode;
     char formattingBuffer[17];
-    ULongVector::const_iterator it = inUnicodeValues.begin();
+    auto it = inUnicodeValues.begin();
 
     SAFE_SPRINTF_1(formattingBuffer, 17, "<%04x> <", inEncodedCharacter);
     inWriter->Write((const Byte *)formattingBuffer, 8);

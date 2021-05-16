@@ -49,7 +49,7 @@ void Type1Input::FreeTables()
     mSubrs = nullptr;
     mSubrsCount = 0;
 
-    StringToType1CharStringMap::iterator itCharStrings = mCharStrings.begin();
+    auto itCharStrings = mCharStrings.begin();
 
     for (; itCharStrings != mCharStrings.end(); ++itCharStrings)
         delete[] itCharStrings->second.Code;
@@ -66,7 +66,7 @@ void Type1Input::Reset()
         mFontDictionary.FontMatrix[5] = 0;
     mFontDictionary.FontMatrix[0] = mFontDictionary.FontMatrix[3] = 0.001;
     mFontDictionary.UniqueID = -1;
-    for (auto & i : mEncoding.mCustomEncoding)
+    for (auto &i : mEncoding.mCustomEncoding)
         i.clear();
     mReverseEncoding.clear();
     mFontDictionary.StrokeWidth = 1;
@@ -757,7 +757,7 @@ Type1CharString *Type1Input::GetGlyphCharString(Byte inCharStringIndex)
         characterName = standardEncoding.GetEncodedGlyphName(inCharStringIndex);
     }
 
-    StringToType1CharStringMap::iterator it = mCharStrings.find(characterName);
+    auto it = mCharStrings.find(characterName);
     if (it == mCharStrings.end())
         return nullptr;
     else
@@ -766,7 +766,7 @@ Type1CharString *Type1Input::GetGlyphCharString(Byte inCharStringIndex)
 
 Type1CharString *Type1Input::GetGlyphCharString(const std::string &inCharStringName)
 {
-    StringToType1CharStringMap::iterator it = mCharStrings.find(inCharStringName);
+    auto it = mCharStrings.find(inCharStringName);
     if (it == mCharStrings.end())
         return nullptr;
     else
@@ -779,7 +779,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(Byte inCharStringIndex
     CharStringType1Interpreter interpreter;
 
     Type1CharString *charString = GetGlyphCharString(inCharStringIndex);
-    if (!charString)
+    if (charString == nullptr)
     {
         TRACE_LOG("Type1Input::CalculateDependenciesForCharIndex, Exception, cannot find glyph index");
         return PDFHummus::eFailure;
@@ -795,7 +795,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(const std::string &inC
                                                           CharString1Dependencies &ioDependenciesInfo)
 {
     CharStringType1Interpreter interpreter;
-    StringToType1CharStringMap::iterator it = mCharStrings.find(inCharStringName);
+    auto it = mCharStrings.find(inCharStringName);
 
     if (it == mCharStrings.end())
     {
@@ -811,7 +811,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(const std::string &inC
 
 Type1CharString *Type1Input::GetSubr(long inSubrIndex)
 {
-    if (mCurrentDependencies)
+    if (mCurrentDependencies != nullptr)
         mCurrentDependencies->mSubrs.insert((unsigned short)inSubrIndex);
 
     if (inSubrIndex >= mSubrsCount)
@@ -826,7 +826,7 @@ Type1CharString *Type1Input::GetSubr(long inSubrIndex)
 
 EStatusCode Type1Input::Type1Seac(const LongList &inOperandList)
 {
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     mCurrentDependencies->mCharCodes.insert((Byte)*it);
     ++it;
@@ -950,7 +950,7 @@ std::string Type1Input::FromPSString(const std::string &inPSString)
 
 Byte Type1Input::GetEncoding(const std::string &inCharStringName)
 {
-    StringToByteMap::iterator it = mReverseEncoding.find(inCharStringName);
+    auto it = mReverseEncoding.find(inCharStringName);
     if (it == mReverseEncoding.end())
         return 0;
     else

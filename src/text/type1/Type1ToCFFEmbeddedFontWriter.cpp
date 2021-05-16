@@ -666,7 +666,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::AddDependentGlyphs(StringVector &ioSub
 {
     EStatusCode status = PDFHummus::eSuccess;
     StringSet glyphsSet;
-    StringVector::iterator it = ioSubsetGlyphIDs.begin();
+    auto it = ioSubsetGlyphIDs.begin();
     bool hasCompositeGlyphs = false;
 
     for (; it != ioSubsetGlyphIDs.end() && PDFHummus::eSuccess == status; ++it)
@@ -701,7 +701,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::AddComponentGlyphs(const std::string &
 
     if (PDFHummus::eSuccess == status && dependencies.mCharCodes.size() != 0)
     {
-        ByteSet::iterator it = dependencies.mCharCodes.begin();
+        auto it = dependencies.mCharCodes.begin();
         for (; it != dependencies.mCharCodes.end() && PDFHummus::eSuccess == status; ++it)
         {
             bool dummyFound;
@@ -944,7 +944,7 @@ unsigned short Type1ToCFFEmbeddedFontWriter::AddStringToStringsArray(const std::
     }
 
     // it's not - add to strings vector and return the index
-    StringToUShortMap::iterator it = mNonStandardStringToIndex.find(inString);
+    auto it = mNonStandardStringToIndex.find(inString);
     if (it == mNonStandardStringToIndex.end())
     {
         it = mNonStandardStringToIndex.insert(StringToUShortMap::value_type(inString, (unsigned short)mStrings.size()))
@@ -985,7 +985,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()
     {
         // calculate the total data size to determine the required offset size
         unsigned long totalSize = 0;
-        StringVector::iterator it = mStrings.begin();
+        auto it = mStrings.begin();
         for (; it != mStrings.end(); ++it)
             totalSize += (unsigned long)it->size();
 
@@ -1067,11 +1067,11 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteCharStrings(const StringVector &i
         3. copy the data into the stream
     */
 
-    unsigned long *offsets = new unsigned long[inSubsetGlyphIDs.size() + 1];
+    auto *offsets = new unsigned long[inSubsetGlyphIDs.size() + 1];
     MyStringBuf charStringsData;
     OutputStringBufferStream charStringsDataWriteStream(&charStringsData);
     Type1ToType2Converter charStringConverter;
-    StringVector::const_iterator itGlyphs = inSubsetGlyphIDs.begin();
+    auto itGlyphs = inSubsetGlyphIDs.begin();
     EStatusCode status = PDFHummus::eSuccess;
 
     do
@@ -1146,7 +1146,7 @@ void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &
 
     int currentValue = 0;
 
-    std::vector<int>::const_iterator it = inArray.begin();
+    auto it = inArray.begin();
     for (; it != inArray.end(); ++it)
     {
         inWriter.WriteIntegerOperand(*it - currentValue);
@@ -1164,7 +1164,7 @@ void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &
 
     double currentValue = 0;
 
-    std::vector<double>::const_iterator it = inArray.begin();
+    auto it = inArray.begin();
     for (; it != inArray.end(); ++it)
     {
         inWriter.WriteRealOperand(*it - currentValue);
@@ -1195,7 +1195,7 @@ void Type1ToCFFEmbeddedFontWriter::TranslateFromFreeTypeToType1(FreeTypeFaceWrap
                                                                 const UIntVector &inSubsetGlyphIDs,
                                                                 StringVector &outGlyphNames)
 {
-    UIntVector::const_iterator it = inSubsetGlyphIDs.begin();
+    auto it = inSubsetGlyphIDs.begin();
 
     for (; it != inSubsetGlyphIDs.end(); ++it)
         outGlyphNames.push_back(inFontInfo.GetGlyphName(*it));

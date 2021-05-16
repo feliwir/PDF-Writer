@@ -277,7 +277,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
 void TrueTypeEmbeddedFontWriter::AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs)
 {
     UIntSet glyphsSet;
-    UIntVector::iterator it = ioSubsetGlyphIDs.begin();
+    auto it = ioSubsetGlyphIDs.begin();
     bool hasCompositeGlyphs = false;
 
     for (; it != ioSubsetGlyphIDs.end(); ++it)
@@ -455,8 +455,8 @@ void TrueTypeEmbeddedFontWriter::WriteTableEntryData(LongFilePositionType inTabl
 unsigned long TrueTypeEmbeddedFontWriter::GetCheckSum(LongFilePositionType inOffset, unsigned long inLength)
 {
     unsigned long sum = 0L;
-    unsigned long endPosition = (unsigned long)(inOffset + ((inLength + 3) & ~3) / 4);
-    unsigned long position = (unsigned long)inOffset;
+    auto endPosition = (unsigned long)(inOffset + ((inLength + 3) & ~3) / 4);
+    auto position = (unsigned long)inOffset;
     unsigned long value;
 
     mFontFileStream.SetPosition(inOffset);
@@ -592,7 +592,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteGlyf(const UIntVector &inSubsetGlyp
 
     TableEntry *tableEntry = mTrueTypeInput.GetTableEntry("glyf");
     LongFilePositionType startTableOffset = mFontFileStream.GetCurrentPosition();
-    UIntVector::const_iterator it = inSubsetGlyphIDs.begin();
+    auto it = inSubsetGlyphIDs.begin();
     OutputStreamTraits streamCopier(&mFontFileStream);
     unsigned short glyphIndex, previousGlyphIndexEnd = 0;
     inLocaTable[0] = 0;

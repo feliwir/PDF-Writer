@@ -52,13 +52,13 @@ class PDFDictionaryIterator
     PDFDictionaryIterator(PDFParser &parser, PDFDictionary *inDict) : mDictonary(inDict), mParser(parser)
     {
     }
-    std::string GetStrValue(std::string s);
+    std::string GetStrValue(const std::string &s);
 
-    PDFDictionaryIterator Enter(std::string s);
+    PDFDictionaryIterator Enter(const std::string &s);
 
-    PDFArrayIterator Array(std::string s);
+    PDFArrayIterator Array(const std::string &s);
 
-    bool WriteStreamToFile(InputFile &pdfFile, std::string s, const std::string& filePath);
+    bool WriteStreamToFile(InputFile &pdfFile, const std::string &s, const std::string &filePath);
 
   private:
     void SetDictRefPtr(PDFDictionary *dictonary)

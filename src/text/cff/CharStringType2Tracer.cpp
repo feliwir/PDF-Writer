@@ -56,7 +56,7 @@ EStatusCode CharStringType2Tracer::TraceGlyphProgram(unsigned short inFontIndex,
         }
 
         CharString *charString = inCFFFileInput->GetGlyphCharString(inFontIndex, inGlyphIndex);
-        if (!charString)
+        if (charString == nullptr)
         {
             TRACE_LOG("CharStringType2Tracer::Trace, Exception, cannot find glyph index");
             break;
@@ -176,7 +176,8 @@ void CharStringType2Tracer::WriteStemMask(Byte *inProgramCounter)
     mWriter->Write((const Byte *)")", 1);
 }
 
-EStatusCode CharStringType2Tracer::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/, Byte *inProgramCounter)
+EStatusCode CharStringType2Tracer::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/,
+                                                 Byte *inProgramCounter)
 {
     WriteStemMask(inProgramCounter);
     mPrimitiveWriter.WriteKeyword("cntrmask");

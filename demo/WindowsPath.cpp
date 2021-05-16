@@ -79,7 +79,7 @@ WindowsPath WindowsPath::InterpretFrom(const WindowsPath &inPath) const
 
     WindowsPath newPath = inPath;
 
-    StringList::const_iterator it = mPathComponents.begin();
+    auto it = mPathComponents.begin();
     for (; it != mPathComponents.end(); ++it)
     {
         if (*it == "..")
@@ -100,7 +100,7 @@ string WindowsPath::ToString() const
 
     if (mPathComponents.size() > 0)
     {
-        StringList::const_iterator it = mPathComponents.begin();
+        auto it = mPathComponents.begin();
         pathStream << *it;
         ++it;
 
@@ -138,7 +138,7 @@ FileURL WindowsPath::ToFileURL() const
         aFileURL.SetIsAbsolute(true);
     }
 
-    StringList::const_iterator it = mPathComponents.begin();
+    auto it = mPathComponents.begin();
 
     for (; it != mPathComponents.end(); ++it)
         aFileURL.PushPathComponent(*it);

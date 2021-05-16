@@ -46,7 +46,7 @@ Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
     bool exists;
     SAFE_FOPEN(logFile, inLogFilePath.c_str(), "r")
     exists = (logFile != nullptr);
-    if (logFile)
+    if (logFile != nullptr)
         fclose(logFile);
 
     if (!exists)
@@ -54,7 +54,7 @@ Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
         // first, test if i can open the file. don't use mLogFile, becuase if file cannot be opened
         // will get into infinite recursion due to trying to log the fact that it cant open the file...
         SAFE_FOPEN(logFile, inLogFilePath.c_str(), "wb")
-        if (logFile)
+        if (logFile != nullptr)
         {
             fclose(logFile); // continue with using the regular file implementation
             mLogFile.OpenFile(inLogFilePath);
@@ -112,7 +112,7 @@ void Log::LogEntryToFile(const Byte *inMessage, LongBufferSizeType inMessageSize
 
 void Log::LogEntryToStream(const Byte *inMessage, LongBufferSizeType inMessageSize)
 {
-    if (mLogStream)
+    if (mLogStream != nullptr)
         WriteLogEntryToStream(inMessage, inMessageSize, mLogStream);
 }
 

@@ -248,7 +248,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
         XObjectContentContext *xobjectContentContext = formXObject->GetContentContext();
 
         // iterate the images in the list and place one on top of each other
-        PDFImageXObjectList::const_iterator it = inImageXObject.begin();
+        auto it = inImageXObject.begin();
         for (; it != inImageXObject.end(); ++it)
         {
             xobjectContentContext->q();
@@ -276,7 +276,7 @@ void ReadDataFromStream(png_structp png_ptr, png_bytep data, png_size_t length)
     if (png_ptr == nullptr)
         return;
 
-    IByteReaderWithPosition *reader = (IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
+    auto *reader = (IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
     IOBasicTypes::LongFilePositionType readBytes = reader->Read((IOBasicTypes::Byte *)(data), length);
 
     if (readBytes != (IOBasicTypes::LongFilePositionType)length)
@@ -286,15 +286,15 @@ void ReadDataFromStream(png_structp png_ptr, png_bytep data, png_size_t length)
 void HandlePngError(png_structp png_ptr, png_const_charp error_message)
 {
     {
-        if (error_message)
+        if (error_message != nullptr)
             TRACE_LOG1("LibPNG Error: %s", error_message);
     }
     png_longjmp(png_ptr, 1);
 }
 
-void HandlePngWarning(png_structp  /*png_ptr*/, png_const_charp warning_message)
+void HandlePngWarning(png_structp /*png_ptr*/, png_const_charp warning_message)
 {
-    if (warning_message)
+    if (warning_message != nullptr)
         TRACE_LOG1("LibPNG Warning: %s", warning_message);
 }
 
@@ -352,7 +352,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
             png_set_palette_to_rgb(png_ptr);
         if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
             png_set_expand_gray_1_2_4_to_8(png_ptr);
-        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) != 0u)
             png_set_tRNS_to_alpha(png_ptr);
 
         // now let's also avoid 16 bits for now, to stay always at 8 bits per component
@@ -401,7 +401,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
         while (passes-- > 0)
         {
             imageXObject = CreateImageXObjectForData(png_ptr, info_ptr, row, inObjectsContext);
-            if (!imageXObject)
+            if (imageXObject == nullptr)
             {
                 status = eFailure;
                 break;
@@ -421,7 +421,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
         // now let's get to the form, which should just place the image and be done
         formXObject = CreateImageFormXObjectFromImageXObject(listOfImages, inFormXObjectID, transformed_width,
                                                              transformed_height, inDocumentContext);
-        if (!formXObject)
+        if (formXObject == nullptr)
         {
             status = eFailure;
         }
@@ -430,7 +430,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
     png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
     if (row != nullptr)
         free(row);
-    PDFImageXObjectList::iterator it = listOfImages.begin();
+    auto it = listOfImages.begin();
     for (; it != listOfImages.end(); ++it)
         delete *it;
     listOfImages.clear();
@@ -450,7 +450,7 @@ PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(IByteReaderWithP
 
     do
     {
-        if (!mObjectsContext || !mObjectsContext)
+        if ((mObjectsContext == nullptr) || (mObjectsContext == nullptr))
         {
             TRACE_LOG("PNGImageHandler::CreateFormXObjectFromPNGFile. Unexpected Error, mDocumentContex or "
                       "mObjectsContext not initialized");
@@ -520,7 +520,7 @@ PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(IByteReaderWithPosi
             png_set_palette_to_rgb(png_ptr);
         if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
             png_set_expand_gray_1_2_4_to_8(png_ptr);
-        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
+        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS) != 0u)
             png_set_tRNS_to_alpha(png_ptr);
 
         // now let's also avoid 16 bits for now, to stay always at 8 bits per component

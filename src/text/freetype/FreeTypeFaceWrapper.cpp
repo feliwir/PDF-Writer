@@ -133,7 +133,7 @@ static const char *scCFF = "CFF";
 void FreeTypeFaceWrapper::SetupFormatSpecificExtender(
     const std::string &inFontFilePath, const std::string &inPFMFilePath /*pass empty if non existant or irrelevant*/)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         const char *fontFormat = FT_Get_X11_Font_Format(mFace);
 
@@ -156,7 +156,7 @@ void FreeTypeFaceWrapper::SetupFormatSpecificExtender(
 static const char *scEmpty = "";
 const char *FreeTypeFaceWrapper::GetTypeString()
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         const char *fontFormat = FT_Get_X11_Font_Format(mFace);
         return fontFormat;
@@ -179,12 +179,12 @@ FreeTypeFaceWrapper::operator FT_Face()
 
 bool FreeTypeFaceWrapper::IsValid()
 {
-    return mFace && mFormatParticularWrapper;
+    return (mFace != nullptr) && (mFormatParticularWrapper != nullptr);
 }
 
 FT_Error FreeTypeFaceWrapper::DoneFace()
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         FT_Error status = FT_Done_Face(mFace);
         mFace = nullptr;
@@ -198,12 +198,12 @@ FT_Error FreeTypeFaceWrapper::DoneFace()
 
 double FreeTypeFaceWrapper::GetItalicAngle()
 {
-    return mFormatParticularWrapper ? mFormatParticularWrapper->GetItalicAngle() : 0;
+    return mFormatParticularWrapper != nullptr ? mFormatParticularWrapper->GetItalicAngle() : 0;
 }
 
 BoolAndFTShort FreeTypeFaceWrapper::GetCapHeightInternal()
 {
-    if (mFormatParticularWrapper)
+    if (mFormatParticularWrapper != nullptr)
     {
         BoolAndFTShort fontDependentResult = mFormatParticularWrapper->GetCapHeight();
         if (fontDependentResult.first)
@@ -231,7 +231,7 @@ BoolAndFTShort FreeTypeFaceWrapper::CapHeightFromHHeight()
 
 BoolAndFTShort FreeTypeFaceWrapper::GetxHeightInternal()
 {
-    if (mFormatParticularWrapper)
+    if (mFormatParticularWrapper != nullptr)
     {
         BoolAndFTShort fontDependentResult = mFormatParticularWrapper->GetxHeight();
         if (fontDependentResult.first)
@@ -259,7 +259,7 @@ BoolAndFTShort FreeTypeFaceWrapper::XHeightFromLowerXHeight()
 
 BoolAndFTShort FreeTypeFaceWrapper::GetYBearingForUnicodeChar(unsigned short unicodeCharCode)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         mGlyphIsLoaded = false;
         if (FT_Load_Char(mFace, unicodeCharCode, FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT | FT_LOAD_NO_SCALE) != 0)
@@ -276,12 +276,12 @@ BoolAndFTShort FreeTypeFaceWrapper::GetYBearingForUnicodeChar(unsigned short uni
 
 FT_UShort FreeTypeFaceWrapper::GetStemV()
 {
-    return mFormatParticularWrapper ? GetInPDFMeasurements(mFormatParticularWrapper->GetStemV()) : 0;
+    return mFormatParticularWrapper != nullptr ? GetInPDFMeasurements(mFormatParticularWrapper->GetStemV()) : 0;
 }
 
 EFontStretch FreeTypeFaceWrapper::GetFontStretch()
 {
-    if (mFormatParticularWrapper)
+    if (mFormatParticularWrapper != nullptr)
     {
         EFontStretch result = mFormatParticularWrapper->GetFontStretch();
         if (eFontStretchUknown == result)
@@ -294,9 +294,9 @@ EFontStretch FreeTypeFaceWrapper::GetFontStretch()
 
 EFontStretch FreeTypeFaceWrapper::StretchFromName()
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
-        if (mFace->style_name)
+        if (mFace->style_name != nullptr)
         {
             if (strstr(mFace->style_name, "Semi Condensed") != nullptr)
                 return eFontStretchSemiCondensed;
@@ -306,7 +306,8 @@ EFontStretch FreeTypeFaceWrapper::StretchFromName()
                 strstr(mFace->style_name, "Ultra Compressed") != nullptr)
                 return eFontStretchUltraCondensed;
 
-            if (strstr(mFace->style_name, "Extra Condensed") != nullptr || strstr(mFace->style_name, "Compressed") != nullptr)
+            if (strstr(mFace->style_name, "Extra Condensed") != nullptr ||
+                strstr(mFace->style_name, "Compressed") != nullptr)
                 return eFontStretchExtraCondensed;
 
             if (strstr(mFace->style_name, "Condensed") != nullptr)
@@ -335,7 +336,7 @@ EFontStretch FreeTypeFaceWrapper::StretchFromName()
 
 FT_UShort FreeTypeFaceWrapper::GetFontWeight()
 {
-    if (mFormatParticularWrapper)
+    if (mFormatParticularWrapper != nullptr)
     {
         FT_UShort result = mFormatParticularWrapper->GetFontWeight();
         if (1000 == result) // 1000 marks unknown
@@ -348,9 +349,9 @@ FT_UShort FreeTypeFaceWrapper::GetFontWeight()
 
 FT_UShort FreeTypeFaceWrapper::WeightFromName()
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
-        if (mFace->style_name)
+        if (mFace->style_name != nullptr)
         {
             if (strstr(mFace->style_name, "Thin") != nullptr)
                 return 100;
@@ -358,11 +359,13 @@ FT_UShort FreeTypeFaceWrapper::WeightFromName()
             if (strstr(mFace->style_name, "Black") != nullptr || strstr(mFace->style_name, "Heavy") != nullptr)
                 return 900;
 
-            if (strstr(mFace->style_name, "Extra Light") != nullptr || strstr(mFace->style_name, "Ultra Light") != nullptr)
+            if (strstr(mFace->style_name, "Extra Light") != nullptr ||
+                strstr(mFace->style_name, "Ultra Light") != nullptr)
                 return 200;
 
             if (strstr(mFace->style_name, "Regular") != nullptr || strstr(mFace->style_name, "Normal") != nullptr ||
-                strstr(mFace->style_name, "Demi Light") != nullptr || strstr(mFace->style_name, "Semi Light") != nullptr)
+                strstr(mFace->style_name, "Demi Light") != nullptr ||
+                strstr(mFace->style_name, "Semi Light") != nullptr)
                 return 400;
 
             if (strstr(mFace->style_name, "Light") != nullptr)
@@ -374,7 +377,8 @@ FT_UShort FreeTypeFaceWrapper::WeightFromName()
             if (strstr(mFace->style_name, "Semi Bold") != nullptr || strstr(mFace->style_name, "Demi Bold") != nullptr)
                 return 600;
 
-            if (strstr(mFace->style_name, "Extra Bold") != nullptr || strstr(mFace->style_name, "Ultra Bold") != nullptr)
+            if (strstr(mFace->style_name, "Extra Bold") != nullptr ||
+                strstr(mFace->style_name, "Ultra Bold") != nullptr)
                 return 800;
 
             if (strstr(mFace->style_name, "Bold") != nullptr)
@@ -429,12 +433,12 @@ unsigned int FreeTypeFaceWrapper::GetFontFlags()
 
 bool FreeTypeFaceWrapper::IsFixedPitch()
 {
-    return mFace ? FT_IS_FIXED_WIDTH(mFace) != 0 : false;
+    return mFace != nullptr ? FT_IS_FIXED_WIDTH(mFace) != 0 : false;
 }
 
 bool FreeTypeFaceWrapper::IsSerif()
 {
-    return mFormatParticularWrapper ? mFormatParticularWrapper->HasSerifs() : false;
+    return mFormatParticularWrapper != nullptr ? mFormatParticularWrapper->HasSerifs() : false;
 }
 
 bool FreeTypeFaceWrapper::IsSymbolic()
@@ -447,7 +451,7 @@ bool FreeTypeFaceWrapper::IsSymbolic()
 
 bool FreeTypeFaceWrapper::IsDefiningCharsNotInAdobeStandardLatin()
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         // loop charachters in font, till you find a non Adobe Standard Latin. hmm. seems like this method marks all as
         // symbol... need to think about this...
@@ -533,7 +537,7 @@ bool FreeTypeFaceWrapper::IsCharachterCodeAdobeStandard(FT_ULong inCharacterCode
 
 bool FreeTypeFaceWrapper::IsScript()
 {
-    return mFormatParticularWrapper ? mFormatParticularWrapper->IsScript() : false;
+    return mFormatParticularWrapper != nullptr ? mFormatParticularWrapper->IsScript() : false;
 }
 
 bool FreeTypeFaceWrapper::IsItalic()
@@ -543,7 +547,7 @@ bool FreeTypeFaceWrapper::IsItalic()
 
 bool FreeTypeFaceWrapper::IsForceBold()
 {
-    return mFormatParticularWrapper ? mFormatParticularWrapper->IsForceBold() : false;
+    return mFormatParticularWrapper != nullptr ? mFormatParticularWrapper->IsForceBold() : false;
 }
 
 std::string FreeTypeFaceWrapper::GetPostscriptName()
@@ -551,14 +555,14 @@ std::string FreeTypeFaceWrapper::GetPostscriptName()
     std::string name;
 
     const char *postscriptFontName = FT_Get_Postscript_Name(mFace);
-    if (postscriptFontName)
+    if (postscriptFontName != nullptr)
     {
         name.assign(postscriptFontName);
     }
     else
     {
         // some fonts have the postscript name data, but in a non standard way, try to retrieve
-        if (mFormatParticularWrapper)
+        if (mFormatParticularWrapper != nullptr)
             name = mFormatParticularWrapper->GetPostscriptNameNonStandard();
         if (name.length() == 0)
             TRACE_LOG("FreeTypeFaceWrapper::GetPostscriptName, unexpected failure. no postscript font name for font");
@@ -569,7 +573,7 @@ std::string FreeTypeFaceWrapper::GetPostscriptName()
 
 std::string FreeTypeFaceWrapper::GetGlyphName(unsigned int inGlyphIndex, bool safe)
 {
-    if (mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding())
+    if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
     {
         std::string glyphName = mFormatParticularWrapper->GetPrivateGlyphName(inGlyphIndex);
         if (glyphName == ".notdef" && !safe)
@@ -593,17 +597,17 @@ std::string FreeTypeFaceWrapper::GetGlyphName(unsigned int inGlyphIndex, bool sa
 
 EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnicodeCharacters, UIntList &outGlyphs)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         FT_UInt glyphIndex;
         EStatusCode status = PDFHummus::eSuccess;
 
         outGlyphs.clear();
 
-        ULongList::const_iterator it = inUnicodeCharacters.begin();
+        auto it = inUnicodeCharacters.begin();
         for (; it != inUnicodeCharacters.end(); ++it)
         {
-            if (mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding())
+            if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
             {
                 glyphIndex = mFormatParticularWrapper->GetGlyphForUnicodeChar(*it);
                 // glyphIndex == 0 is allowed in some Type1 fonts with custom encoding
@@ -638,7 +642,7 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongListList &in
 {
     UIntList glyphs;
     EStatusCode status = PDFHummus::eSuccess;
-    ULongListList::const_iterator it = inUnicodeCharacters.begin();
+    auto it = inUnicodeCharacters.begin();
 
     for (; it != inUnicodeCharacters.end(); ++it)
     {
@@ -652,18 +656,18 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongListList &in
 
 IWrittenFont *FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext *inObjectsContext, bool inFontIsToBeEmbedded)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         IWrittenFont *result;
         const char *fontFormat = FT_Get_X11_Font_Format(mFace);
 
         if (strcmp(fontFormat, scType1) == 0 || strcmp(fontFormat, scCFF) == 0)
         {
-            FT_Bool isCID = false;
+            FT_Bool isCID = 0u;
 
             // CFF written fonts needs to know if the font is originally CID in order to disallow ANSI form in this case
             if (FT_Get_CID_Is_Internally_CID_Keyed(mFace, &isCID) != 0)
-                isCID = false;
+                isCID = 0u;
 
             result = new WrittenFontCFF(inObjectsContext, isCID != 0,
                                         inFontIsToBeEmbedded); // CFF fonts should know if font is to be embedded, as
@@ -698,7 +702,7 @@ long FreeTypeFaceWrapper::GetFontIndex()
 
 FT_Short FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Short inFontMeasurement)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
@@ -711,7 +715,7 @@ FT_Short FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Short inFontMeasurement)
 
 FT_UShort FreeTypeFaceWrapper::GetInPDFMeasurements(FT_UShort inFontMeasurement)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
@@ -724,7 +728,7 @@ FT_UShort FreeTypeFaceWrapper::GetInPDFMeasurements(FT_UShort inFontMeasurement)
 
 FT_Pos FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Pos inFontMeasurement)
 {
-    if (mFace)
+    if (mFace != nullptr)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
@@ -737,7 +741,7 @@ FT_Pos FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Pos inFontMeasurement)
 
 FT_Pos FreeTypeFaceWrapper::GetGlyphWidth(unsigned int inGlyphIndex)
 {
-    if (LoadGlyph(inGlyphIndex))
+    if (LoadGlyph(inGlyphIndex) != 0)
         return 0;
     else
         return GetInPDFMeasurements(mFace->glyph->metrics.horiAdvance);
@@ -745,7 +749,7 @@ FT_Pos FreeTypeFaceWrapper::GetGlyphWidth(unsigned int inGlyphIndex)
 
 unsigned int FreeTypeFaceWrapper::GetGlyphIndexInFreeTypeIndexes(unsigned int inGlyphIndex)
 {
-    if (mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding())
+    if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
         return mFormatParticularWrapper->GetFreeTypeGlyphIndexFromEncodingGlyphIndex(inGlyphIndex);
     else
         return inGlyphIndex;
@@ -756,9 +760,10 @@ bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex,
 {
     bool status = false;
     if (mFace->glyph->format == FT_GLYPH_FORMAT_OUTLINE &&
-        !(mFace->face_flags & FT_FACE_FLAG_TRICKY)) // scaled-font implementation would be needed for 'tricky' fonts
+        ((mFace->face_flags & FT_FACE_FLAG_TRICKY) ==
+         0)) // scaled-font implementation would be needed for 'tricky' fonts
     {
-        if (!LoadGlyph(inGlyphIndex))
+        if (LoadGlyph(inGlyphIndex) == 0)
         {
             FT_Outline_Funcs callbacks = {IOutlineEnumerator::outline_moveto,
                                           IOutlineEnumerator::outline_lineto,
@@ -780,7 +785,7 @@ FT_Error FreeTypeFaceWrapper::LoadGlyph(FT_UInt inGlyphIndex, FT_Int32 inFlags)
     FT_Error status = 0; // assume success
     if (!mGlyphIsLoaded || inGlyphIndex != mCurrentGlyph)
     {
-        if (mFormatParticularWrapper && mFormatParticularWrapper->HasPrivateEncoding())
+        if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
             status = FT_Load_Glyph(mFace,
                                    mFormatParticularWrapper->GetFreeTypeGlyphIndexFromEncodingGlyphIndex(inGlyphIndex),
                                    inFlags | FT_LOAD_NO_HINTING | FT_LOAD_NO_AUTOHINT | FT_LOAD_NO_SCALE);

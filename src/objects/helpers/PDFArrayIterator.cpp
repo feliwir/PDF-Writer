@@ -7,7 +7,7 @@
 
 PDFDictionaryIterator PDFArrayIterator::DictAt(int ndx)
 {
-    if (!mArray.GetPtr())
+    if (mArray.GetPtr() == nullptr)
         return PDFDictionaryIterator(mParser);
     PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mArray->QueryObject(ndx));
     if (!foundReference)
@@ -22,7 +22,7 @@ PDFDictionaryIterator PDFArrayIterator::DictAt(int ndx)
 
 unsigned long PDFArrayIterator::GetLength()
 {
-    if (!mArray.GetPtr())
+    if (mArray.GetPtr() == nullptr)
         return 0;
     return mArray->GetLength();
 }

@@ -43,7 +43,7 @@ PageContentContext::~PageContentContext()
 
 void PageContentContext::StartAStreamIfRequired()
 {
-    if (!mCurrentStream)
+    if (mCurrentStream == nullptr)
     {
         StartContentStreamDefinition();
         mCurrentStream = mObjectsContext->StartPDFStream();
@@ -64,7 +64,7 @@ ResourcesDictionary *PageContentContext::GetResourcesDictionary()
 
 EStatusCode PageContentContext::FinalizeCurrentStream()
 {
-    if (mCurrentStream)
+    if (mCurrentStream != nullptr)
         return FinalizeStreamWriteAndRelease();
     else
         return PDFHummus::eSuccess;
@@ -112,7 +112,7 @@ class PageImageWritingTask : public IPageEndWritingTask
     }
 
     PDFHummus::EStatusCode Write(PDFPage * /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
-                                         PDFHummus::DocumentContext *inDocumentContext) override
+                                 PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

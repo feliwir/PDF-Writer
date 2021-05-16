@@ -79,7 +79,7 @@ PosixPath PosixPath::InterpretFrom(const PosixPath &inURL) const
 
     PosixPath newURL = inURL;
 
-    StringList::const_iterator it = mPathComponents.begin();
+    auto it = mPathComponents.begin();
     for (; it != mPathComponents.end(); ++it)
     {
         if (*it == "..")
@@ -100,7 +100,7 @@ string PosixPath::ToString() const
 
     if (mPathComponents.size() > 0)
     {
-        StringList::const_iterator it = mPathComponents.begin();
+        auto it = mPathComponents.begin();
         pathStream << *it;
         ++it;
 
@@ -133,7 +133,7 @@ FileURL PosixPath::ToFileURL() const
 
     aFileURL.SetIsAbsolute(IsAbsolute());
 
-    StringList::const_iterator it = mPathComponents.begin();
+    auto it = mPathComponents.begin();
 
     for (; it != mPathComponents.end(); ++it)
         aFileURL.PushPathComponent(*it);

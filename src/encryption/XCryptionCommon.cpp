@@ -104,7 +104,7 @@ ByteList XCryptionCommon::substr(const ByteList &inList, IOBasicTypes::LongBuffe
                                  IOBasicTypes::LongBufferSizeType inLength)
 {
     ByteList buffer;
-    ByteList::const_iterator it = inList.begin();
+    auto it = inList.begin();
 
     for (IOBasicTypes::LongBufferSizeType i = 0; i < inStart && it != inList.end(); ++i, ++it)
         ;
@@ -117,7 +117,7 @@ ByteList XCryptionCommon::substr(const ByteList &inList, IOBasicTypes::LongBuffe
 
 void XCryptionCommon::append(ByteList &ioTargetList, const ByteList &inSource)
 {
-    ByteList::const_iterator it = inSource.begin();
+    auto it = inSource.begin();
 
     for (; it != inSource.end(); ++it)
         ioTargetList.push_back(*it);
@@ -136,7 +136,7 @@ ByteList XCryptionCommon::add(const ByteList &inA, const ByteList &inB)
 std::string XCryptionCommon::ByteListToString(const ByteList &inByteList)
 {
     std::string buffer;
-    ByteList::const_iterator it = inByteList.begin();
+    auto it = inByteList.begin();
 
     for (; it != inByteList.end(); ++it)
         buffer.push_back((char)*it);
@@ -189,13 +189,13 @@ ByteList XCryptionCommon::algorithm3_2(unsigned int inRevision, unsigned int inL
     ByteList password32Chars = substr(inPassword, 0, 32);
     if (password32Chars.size() < 32)
         append(password32Chars, substr(mPaddingFiller, 0, 32 - inPassword.size()));
-    uint32_t truncP = uint32_t(inP);
+    auto truncP = uint32_t(inP);
     Byte truncPBuffer[4];
     ByteList hashResult;
 
     md5.Accumulate(password32Chars);
     md5.Accumulate(inO);
-    for (unsigned char & i : truncPBuffer)
+    for (unsigned char &i : truncPBuffer)
     {
         i = truncP & 0xFF;
         truncP >>= 8;
@@ -256,7 +256,7 @@ ByteList XCryptionCommon::algorithm3_3(unsigned int inRevision, unsigned int inL
         for (Byte i = 1; i <= 19; ++i)
         {
             ByteList newRC4Key;
-            ByteList::iterator it = RC4Key.begin();
+            auto it = RC4Key.begin();
             for (; it != RC4Key.end(); ++it)
                 newRC4Key.push_back((*it) ^ i);
             hashResult = RC4Encode(newRC4Key, hashResult);
@@ -271,7 +271,7 @@ ByteList XCryptionCommon::RC4Encode(const ByteList &inKey, const ByteList &inToE
     RC4 rc4(inKey);
     ByteList target;
     Byte buffer;
-    ByteList::const_iterator it = inToEncode.begin();
+    auto it = inToEncode.begin();
 
     for (; it != inToEncode.end(); ++it)
     {
@@ -307,7 +307,7 @@ ByteList XCryptionCommon::algorithm3_5(unsigned int inRevision, unsigned int inL
     for (Byte i = 1; i <= 19; ++i)
     {
         ByteList newEncryptionKey;
-        ByteList::iterator it = encryptionKey.begin();
+        auto it = encryptionKey.begin();
         for (; it != encryptionKey.end(); ++it)
             newEncryptionKey.push_back((*it) ^ i);
         hashResult = RC4Encode(newEncryptionKey, hashResult);
@@ -318,7 +318,7 @@ ByteList XCryptionCommon::algorithm3_5(unsigned int inRevision, unsigned int inL
 
 bool XCryptionCommon::algorithm3_6(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
                                    const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
-                                   bool inEncryptMetaData, const ByteList& inU)
+                                   bool inEncryptMetaData, const ByteList &inU)
 {
     ByteList hashResult =
         (inRevision == 2) ? algorithm3_4(inLength, inPassword, inO, inP, inFileIDPart1, inEncryptMetaData)
@@ -329,7 +329,7 @@ bool XCryptionCommon::algorithm3_6(unsigned int inRevision, unsigned int inLengt
 
 bool XCryptionCommon::algorithm3_7(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
                                    const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
-                                   bool inEncryptMetaData, const ByteList& inU)
+                                   bool inEncryptMetaData, const ByteList &inU)
 {
     ByteList password32Chars =
         add(substr(inPassword, 0, 32),
@@ -364,7 +364,7 @@ bool XCryptionCommon::algorithm3_7(unsigned int inRevision, unsigned int inLengt
         for (int i = 19; i >= 0; --i)
         {
             ByteList newEncryptionKey;
-            ByteList::iterator it = RC4Key.begin();
+            auto it = RC4Key.begin();
             for (; it != RC4Key.end(); ++it)
                 newEncryptionKey.push_back((*it) ^ i);
 

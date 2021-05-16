@@ -33,7 +33,7 @@ InputAscii85DecodeStream::InputAscii85DecodeStream()
 
 InputAscii85DecodeStream::~InputAscii85DecodeStream()
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
@@ -53,7 +53,8 @@ void InputAscii85DecodeStream::Assign(IByteReader *inSourceReader)
 
 bool InputAscii85DecodeStream::NotEnded()
 {
-    return mSourceStream && ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
+    return (mSourceStream != nullptr) &&
+           ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
 LongBufferSizeType InputAscii85DecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)

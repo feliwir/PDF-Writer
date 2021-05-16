@@ -19,6 +19,9 @@
 
 */
 #include "UppercaseSequance.h"
+
+#include <utility>
+
 #include "Trace.h"
 
 UppercaseSequance::UppercaseSequance()
@@ -28,7 +31,7 @@ UppercaseSequance::UppercaseSequance()
 
 UppercaseSequance::UppercaseSequance(std::string inSequanceString)
 {
-    mSequanceString = inSequanceString;
+    mSequanceString = std::move(inSequanceString);
 }
 
 void UppercaseSequance::Reset()

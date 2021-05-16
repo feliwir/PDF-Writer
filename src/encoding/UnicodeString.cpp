@@ -140,7 +140,7 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
 
 EStatusCodeAndString UnicodeString::ToUTF8() const
 {
-    ULongList::const_iterator it = mUnicodeCharacters.begin();
+    auto it = mUnicodeCharacters.begin();
     EStatusCode status = PDFHummus::eSuccess;
     std::stringstream result;
 
@@ -342,7 +342,7 @@ EStatusCode UnicodeString::FromUTF16UShort(const unsigned short *inShorts, unsig
 
 EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
 {
-    ULongList::const_iterator it = mUnicodeCharacters.begin();
+    auto it = mUnicodeCharacters.begin();
     EStatusCode status = PDFHummus::eSuccess;
     std::stringstream result;
 
@@ -361,8 +361,8 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            unsigned short highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            unsigned short lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.put((unsigned char)(highSurrogate >> 8));
             result.put((unsigned char)(highSurrogate & 0xFF));
@@ -381,7 +381,7 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
 
 EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
 {
-    ULongList::const_iterator it = mUnicodeCharacters.begin();
+    auto it = mUnicodeCharacters.begin();
     EStatusCode status = PDFHummus::eSuccess;
     std::stringstream result;
 
@@ -400,8 +400,8 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            unsigned short highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            unsigned short lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.put((unsigned char)(highSurrogate & 0xFF));
             result.put((unsigned char)(highSurrogate >> 8));
@@ -420,7 +420,7 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
 
 EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
 {
-    ULongList::const_iterator it = mUnicodeCharacters.begin();
+    auto it = mUnicodeCharacters.begin();
     EStatusCode status = PDFHummus::eSuccess;
     UShortList result;
 
@@ -432,8 +432,8 @@ EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            unsigned short highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            unsigned short lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.push_back(highSurrogate);
             result.push_back(lowSurrogate);

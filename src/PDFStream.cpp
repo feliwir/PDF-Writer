@@ -33,7 +33,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
     mExtendObjectID = inExtentObjectID;
     mStreamStartPosition = inOutputStream->GetCurrentPosition();
     mOutputStream = inOutputStream;
-    if (inEncryptionHelper && inEncryptionHelper->IsEncrypting())
+    if ((inEncryptionHelper != nullptr) && inEncryptionHelper->IsEncrypting())
     {
         mEncryptionStream = inEncryptionHelper->CreateEncryptionStream(inOutputStream);
     }
@@ -47,18 +47,19 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
 
     if (mCompressStream)
     {
-        if (mExtender && mExtender->OverridesStreamCompression())
+        if ((mExtender != nullptr) && mExtender->OverridesStreamCompression())
         {
-            mWriteStream = mExtender->GetCompressionWriteStream(mEncryptionStream ? mEncryptionStream : inOutputStream);
+            mWriteStream =
+                mExtender->GetCompressionWriteStream(mEncryptionStream != nullptr ? mEncryptionStream : inOutputStream);
         }
         else
         {
-            mFlateEncodingStream.Assign(mEncryptionStream ? mEncryptionStream : inOutputStream);
+            mFlateEncodingStream.Assign(mEncryptionStream != nullptr ? mEncryptionStream : inOutputStream);
             mWriteStream = &mFlateEncodingStream;
         }
     }
     else
-        mWriteStream = mEncryptionStream ? mEncryptionStream : inOutputStream;
+        mWriteStream = mEncryptionStream != nullptr ? mEncryptionStream : inOutputStream;
 }
 
 PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStream,
@@ -75,7 +76,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
     mStreamDictionaryContextForDirectExtentStream = inStreamDictionaryContextForDirectExtentStream;
 
     mTemporaryOutputStream.Assign(&mTemporaryStream);
-    if (inEncryptionHelper && inEncryptionHelper->IsEncrypting())
+    if ((inEncryptionHelper != nullptr) && inEncryptionHelper->IsEncrypting())
     {
         mEncryptionStream = inEncryptionHelper->CreateEncryptionStream(&mTemporaryOutputStream);
     }
@@ -86,19 +87,19 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
 
     if (mCompressStream)
     {
-        if (mExtender && mExtender->OverridesStreamCompression())
+        if ((mExtender != nullptr) && mExtender->OverridesStreamCompression())
         {
-            mWriteStream =
-                mExtender->GetCompressionWriteStream(mEncryptionStream ? mEncryptionStream : &mTemporaryOutputStream);
+            mWriteStream = mExtender->GetCompressionWriteStream(mEncryptionStream != nullptr ? mEncryptionStream
+                                                                                             : &mTemporaryOutputStream);
         }
         else
         {
-            mFlateEncodingStream.Assign(mEncryptionStream ? mEncryptionStream : &mTemporaryOutputStream);
+            mFlateEncodingStream.Assign(mEncryptionStream != nullptr ? mEncryptionStream : &mTemporaryOutputStream);
             mWriteStream = &mFlateEncodingStream;
         }
     }
     else
-        mWriteStream = mEncryptionStream ? mEncryptionStream : &mTemporaryOutputStream;
+        mWriteStream = mEncryptionStream != nullptr ? mEncryptionStream : &mTemporaryOutputStream;
 }
 
 PDFStream::~PDFStream()
@@ -112,14 +113,14 @@ IByteWriter *PDFStream::GetWriteStream()
 
 void PDFStream::FinalizeStreamWrite()
 {
-    if (mExtender && mExtender->OverridesStreamCompression() && mCompressStream)
+    if ((mExtender != nullptr) && mExtender->OverridesStreamCompression() && mCompressStream)
         mExtender->FinalizeCompressedStreamWrite(mWriteStream);
     mWriteStream = nullptr;
     if (mCompressStream)
         mFlateEncodingStream.Assign(
             nullptr); // this both finished encoding any left buffers and releases ownership from mFlateEncodingStream
 
-    if (mEncryptionStream)
+    if (mEncryptionStream != nullptr)
     {
         // safe to delete. encryption stream is not supposed to own the underlying stream in any case. make sure
         // to delete before measuring output, as flushing may occur at this point

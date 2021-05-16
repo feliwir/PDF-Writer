@@ -54,13 +54,13 @@ EStatusCode TestMeasurementsTest::Run(const TestConfiguration &inTestConfigurati
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
         PDFUsedFont *arialFont = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!arialFont)
+        if (arialFont == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font for arial font\n";

@@ -56,7 +56,7 @@ EStatusCode Type1ToType2Converter::WriteConvertedFontProgram(const std::string &
         mFlexParameters.clear();
 
         Type1CharString *charString = inType1Input->GetGlyphCharString(inGlyphName);
-        if (!charString)
+        if (charString == nullptr)
         {
             TRACE_LOG1("Type1ToType2Converter::WriteConvertedFontProgram, Exception, cannot find glyph name %s",
                        inGlyphName.substr(0, MAX_TRACE_SIZE - 200).c_str());
@@ -131,7 +131,7 @@ EStatusCode Type1ToType2Converter::CallOtherSubr(const LongList &inOperandList, 
 {
     // should get here onther for 0 othersubr, to mark flex segment end. implement it...and also insert a node
     // for flex
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
     ++it;
     long argumentsCount = *it;
     ++it;
@@ -202,7 +202,7 @@ EStatusCode Type1ToType2Converter::Type1Hsbw(const LongList &inOperandList)
     if (inOperandList.size() < 2)
         return PDFHummus::eFailure;
 
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     mWidth[1] = 0;
     mWidth[0] = *it;
@@ -217,7 +217,7 @@ EStatusCode Type1ToType2Converter::Type1Sbw(const LongList &inOperandList)
     if (inOperandList.size() < 4)
         return PDFHummus::eFailure;
 
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     mWidth[1] = *it;
     ++it;
@@ -231,7 +231,7 @@ EStatusCode Type1ToType2Converter::Type1Sbw(const LongList &inOperandList)
 
 EStatusCode Type1ToType2Converter::Type1Hstem(const LongList &inOperandList)
 {
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     long extent = *it;
     ++it;
@@ -245,7 +245,7 @@ EStatusCode Type1ToType2Converter::Type1Hstem(const LongList &inOperandList)
 EStatusCode Type1ToType2Converter::AddHStem(long inOrigin, long inExtent)
 {
     Stem aStem(inOrigin, inExtent);
-    StemToSizeTMap::iterator it = mHStems.find(aStem);
+    auto it = mHStems.find(aStem);
 
     if (it == mHStems.end())
         mHStems.insert(StemToSizeTMap::value_type(aStem, 0));
@@ -255,7 +255,7 @@ EStatusCode Type1ToType2Converter::AddHStem(long inOrigin, long inExtent)
 EStatusCode Type1ToType2Converter::AddVStem(long inOrigin, long inExtent)
 {
     Stem aStem(inOrigin, inExtent);
-    StemToSizeTMap::iterator it = mVStems.find(aStem);
+    auto it = mVStems.find(aStem);
 
     if (it == mVStems.end())
         mVStems.insert(StemToSizeTMap::value_type(aStem, 0));
@@ -274,7 +274,7 @@ EStatusCode Type1ToType2Converter::RecordOperatorWithParameters(unsigned short i
 
 EStatusCode Type1ToType2Converter::Type1Vstem(const LongList &inOperandList)
 {
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     long extent = *it;
     ++it;
@@ -287,7 +287,7 @@ EStatusCode Type1ToType2Converter::Type1Vstem(const LongList &inOperandList)
 
 EStatusCode Type1ToType2Converter::Type1VStem3(const LongList &inOperandList)
 {
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     long extent = *it;
     ++it;
@@ -310,7 +310,7 @@ EStatusCode Type1ToType2Converter::Type1VStem3(const LongList &inOperandList)
 
 EStatusCode Type1ToType2Converter::Type1HStem3(const LongList &inOperandList)
 {
-    LongList::const_reverse_iterator it = inOperandList.rbegin();
+    auto it = inOperandList.rbegin();
 
     long extent = *it;
     ++it;
@@ -343,13 +343,13 @@ EStatusCode Type1ToType2Converter::Type1RMoveto(const LongList &inOperandList)
     if (mInFlexCollectionMode)
     {
         // while in flex, collect the parameters to the flex parameter
-        LongList::const_iterator it = inOperandList.begin();
+        auto it = inOperandList.begin();
 
         // note a paculiarness for the 2nd pair of coordinates.
         // in type1 flex, the first 2 coordinates summed are the first edge coordinate
         if (mFlexParameters.size() == 2 && mIsFirst2Coordinates)
         {
-            LongList::iterator itFlex = mFlexParameters.begin();
+            auto itFlex = mFlexParameters.begin();
             *itFlex += *it;
             ++it;
             ++itFlex;
@@ -432,7 +432,7 @@ EStatusCode Type1ToType2Converter::Type1Seac(const LongList &inOperandList)
 
     // note that type2 endchar implementation avoids sidebearing
     LongList params;
-    LongList::const_iterator it = inOperandList.begin();
+    auto it = inOperandList.begin();
     ++it;
     for (; it != inOperandList.end(); ++it)
         params.push_back(*it);
@@ -453,7 +453,7 @@ void Type1ToType2Converter::ConvertStems()
     StemVector orderedHStems;
     StemVector orderedVStems;
 
-    StemToSizeTMap::iterator it = mHStems.begin();
+    auto it = mHStems.begin();
     for (; it != mHStems.end(); ++it)
         orderedHStems.push_back(&(it->first));
     it = mVStems.begin();
@@ -464,7 +464,7 @@ void Type1ToType2Converter::ConvertStems()
     sort(orderedHStems.begin(), orderedHStems.end(), sStemSort);
     sort(orderedVStems.begin(), orderedVStems.end(), sStemSort);
 
-    ConversionNodeList::iterator itProgramPosition = mConversionProgram.begin();
+    auto itProgramPosition = mConversionProgram.begin();
 
     // determine if hint mask is required.
     // two conditions:
@@ -510,7 +510,7 @@ void Type1ToType2Converter::ConvertStems()
         {
             if (IsStemHint(itProgramPosition->mMarkerType))
             {
-                ConversionNodeList::iterator firstNonHint = CollectHintIndexesFromHere(itProgramPosition);
+                auto firstNonHint = CollectHintIndexesFromHere(itProgramPosition);
 
                 // remove stem definitions
                 itProgramPosition = mConversionProgram.erase(itProgramPosition, firstNonHint);
@@ -564,7 +564,7 @@ ConversionNodeList::iterator Type1ToType2Converter::InsertOperatorMarker(unsigne
                                                                          ConversionNodeList::iterator inInsertPosition)
 {
     ConversionNode node;
-    ConversionNodeList::iterator result = mConversionProgram.insert(inInsertPosition, node);
+    auto result = mConversionProgram.insert(inInsertPosition, node);
     result->mMarkerType = inMarkerType;
     return result;
 }
@@ -572,7 +572,7 @@ ConversionNodeList::iterator Type1ToType2Converter::InsertOperatorMarker(unsigne
 void Type1ToType2Converter::SetupStemHintsInNode(const StemVector &inStems, long inOffsetCoordinate,
                                                  ConversionNode &refNode)
 {
-    StemVector::const_iterator it = inStems.begin();
+    auto it = inStems.begin();
     long lastCoordinate;
 
     refNode.mOperands.push_back((*it)->mOrigin + inOffsetCoordinate);
@@ -596,13 +596,13 @@ bool Type1ToType2Converter::IsStemHint(unsigned short inMarkerType)
 ConversionNodeList::iterator Type1ToType2Converter::CollectHintIndexesFromHere(
     ConversionNodeList::iterator inFirstStemHint)
 {
-    ConversionNodeList::iterator it = inFirstStemHint;
+    auto it = inFirstStemHint;
     for (; it != mConversionProgram.end(); ++it)
     {
         // hstem
         if (1 == it->mMarkerType)
         {
-            LongList::const_reverse_iterator itOperands = it->mOperands.rbegin();
+            auto itOperands = it->mOperands.rbegin();
 
             long extent = *itOperands;
             ++itOperands;
@@ -612,7 +612,7 @@ ConversionNodeList::iterator Type1ToType2Converter::CollectHintIndexesFromHere(
         } // vstem
         else if (3 == it->mMarkerType)
         {
-            LongList::const_reverse_iterator itOperands = it->mOperands.rbegin();
+            auto itOperands = it->mOperands.rbegin();
 
             long extent = *itOperands;
             ++itOperands;
@@ -621,7 +621,7 @@ ConversionNodeList::iterator Type1ToType2Converter::CollectHintIndexesFromHere(
         } // vstem3
         else if (0x0c01 == it->mMarkerType)
         {
-            LongList::const_reverse_iterator itOperands = it->mOperands.rbegin();
+            auto itOperands = it->mOperands.rbegin();
 
             long extent = *itOperands;
             ++itOperands;
@@ -640,7 +640,7 @@ ConversionNodeList::iterator Type1ToType2Converter::CollectHintIndexesFromHere(
         } // hstem3
         else if (0x0c02 == it->mMarkerType)
         {
-            LongList::const_reverse_iterator itOperands = it->mOperands.rbegin();
+            auto itOperands = it->mOperands.rbegin();
 
             long extent = *itOperands;
             ++itOperands;
@@ -669,8 +669,8 @@ long Type1ToType2Converter::GenerateHintMaskFromCollectedHints()
 {
     unsigned long hintMask = 0;
     size_t totalHints = mHStems.size() + mVStems.size();
-    SizeTSet::iterator it = mCurrentHints.begin();
-    unsigned long maskByteSize = (unsigned long)(totalHints / 8 + (totalHints % 8 != 0 ? 1 : 0));
+    auto it = mCurrentHints.begin();
+    auto maskByteSize = (unsigned long)(totalHints / 8 + (totalHints % 8 != 0 ? 1 : 0));
 
     for (; it != mCurrentHints.end(); ++it)
         hintMask = hintMask | (1 << (maskByteSize * 8 - 1 - *it));
@@ -684,7 +684,7 @@ static const unsigned long scMergeLimit =
 void Type1ToType2Converter::ConvertPathConsturction()
 {
     // find the first removeto, and add sidebearing offset to it
-    ConversionNodeList::iterator it = mConversionProgram.begin();
+    auto it = mConversionProgram.begin();
 
     for (; it != mConversionProgram.end(); ++it)
     {
@@ -693,7 +693,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
         {
             long x;
             long y;
-            LongList::iterator itOperands = it->mOperands.begin();
+            auto itOperands = it->mOperands.begin();
 
             if (4 == it->mMarkerType) // vmoveto
             {
@@ -735,13 +735,13 @@ void Type1ToType2Converter::ConvertPathConsturction()
 
     // now, convert some rrcurvetos into vvcurvetos and hhcurvetos, if there are any [should be at first *moveto
     // position now]
-    ConversionNodeList::iterator itFirstMoveto = it;
+    auto itFirstMoveto = it;
     for (; it != mConversionProgram.end(); ++it)
     {
         if (8 == it->mMarkerType)
         {
             // look for either horizontal curves, or vertical curves
-            LongList::iterator itOperands = it->mOperands.begin();
+            auto itOperands = it->mOperands.begin();
 
             long operands[6];
             for (int i = 0; i < 6; ++i, ++itOperands)
@@ -797,7 +797,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
         }
         case (30): // vhcurveto
         {
-            ConversionNodeList::iterator itStarter = it;
+            auto itStarter = it;
 
             it = MergeAltenratingOperators(it, 31);
 
@@ -811,7 +811,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
                     // this curve needs to start with vertical
                     if (0 == *(it->mOperands.begin()))
                     {
-                        LongList::iterator itOperands = it->mOperands.begin();
+                        auto itOperands = it->mOperands.begin();
                         ++itOperands;
                         itStarter->mOperands.insert(itStarter->mOperands.end(), itOperands, it->mOperands.end());
                         it = mConversionProgram.erase(it);
@@ -820,7 +820,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
                 else
                 {
                     // this curve needs to start with horizontal
-                    LongList::iterator itOperands = it->mOperands.begin();
+                    auto itOperands = it->mOperands.begin();
                     ++itOperands;
                     if (0 == *itOperands)
                     {
@@ -842,7 +842,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
         }
         case (31): // hvcurveto
         {
-            ConversionNodeList::iterator itStarter = it;
+            auto itStarter = it;
 
             it = MergeAltenratingOperators(it, 30);
 
@@ -854,7 +854,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
                 if (itStarter->mOperands.size() % 8 == 0)
                 {
                     // this curve needs to start with horizontal
-                    LongList::iterator itOperands = it->mOperands.begin();
+                    auto itOperands = it->mOperands.begin();
                     ++itOperands;
                     if (0 == *itOperands)
                     {
@@ -876,7 +876,7 @@ void Type1ToType2Converter::ConvertPathConsturction()
                     // this curve needs to start with vertical
                     if (0 == *(it->mOperands.begin()))
                     {
-                        LongList::iterator itOperands = it->mOperands.begin();
+                        auto itOperands = it->mOperands.begin();
                         ++itOperands;
                         itStarter->mOperands.insert(itStarter->mOperands.end(), itOperands, it->mOperands.end());
                         it = mConversionProgram.erase(it);
@@ -899,7 +899,7 @@ ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(Conversio
 ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(ConversionNodeList::iterator inStartingNode,
                                                                        unsigned short inOpCode)
 {
-    ConversionNodeList::iterator itNext = inStartingNode;
+    auto itNext = inStartingNode;
     ++itNext;
 
     while (inOpCode == itNext->mMarkerType &&
@@ -915,7 +915,7 @@ ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(Conversio
 ConversionNodeList::iterator Type1ToType2Converter::MergeAltenratingOperators(
     ConversionNodeList::iterator inStartingNode, unsigned short inAlternatingOpcode)
 {
-    ConversionNodeList::iterator itNext = inStartingNode;
+    auto itNext = inStartingNode;
     ++itNext;
     unsigned short currentMarker = inAlternatingOpcode;
 
@@ -938,7 +938,7 @@ void Type1ToType2Converter::AddInitialWidthParameter()
     // rmoveto, or endchar
     // [note theat cntrmask i'm not using and hintmask can't appear before stem hints...so not checking fo these]
 
-    ConversionNodeList::iterator it = mConversionProgram.begin();
+    auto it = mConversionProgram.begin();
 
     for (; it != mConversionProgram.end(); ++it)
     {
@@ -962,11 +962,11 @@ EStatusCode Type1ToType2Converter::WriteProgramToStream(IByteWriter *inByteWrite
     Type2CharStringWriter commandWriter(inByteWriter);
     EStatusCode status = PDFHummus::eSuccess;
 
-    ConversionNodeList::iterator it = mConversionProgram.begin();
+    auto it = mConversionProgram.begin();
 
     for (; it != mConversionProgram.end() && PDFHummus::eSuccess == status; ++it)
     {
-        LongList::iterator itOperands = it->mOperands.begin();
+        auto itOperands = it->mOperands.begin();
 
         if (19 == it->mMarkerType) // hintmask
         {
@@ -983,7 +983,7 @@ EStatusCode Type1ToType2Converter::WriteProgramToStream(IByteWriter *inByteWrite
                 // if marker type is vstemhm, and next one is hintmask, no need to write vstemhm
                 if (23 == it->mMarkerType)
                 {
-                    ConversionNodeList::iterator itNext = it;
+                    auto itNext = it;
                     ++itNext;
                     if (itNext->mMarkerType != 19)
                         status = commandWriter.WriteOperator(it->mMarkerType);

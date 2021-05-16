@@ -41,7 +41,7 @@ PDFObject::PDFObject(int inType)
 
 PDFObject::~PDFObject()
 {
-    StringToIDeletable::iterator it = mMetadata.begin();
+    auto it = mMetadata.begin();
     for (; it != mMetadata.end(); ++it)
     {
         it->second->DeleteMe();
@@ -64,7 +64,7 @@ void PDFObject::SetMetadata(const std::string &inKey, IDeletable *inValue)
 
 IDeletable *PDFObject::GetMetadata(const std::string &inKey)
 {
-    StringToIDeletable::iterator it = mMetadata.find(inKey);
+    auto it = mMetadata.find(inKey);
 
     if (it == mMetadata.end())
         return nullptr;
@@ -74,7 +74,7 @@ IDeletable *PDFObject::GetMetadata(const std::string &inKey)
 
 IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
 {
-    StringToIDeletable::iterator it = mMetadata.find(inKey);
+    auto it = mMetadata.find(inKey);
 
     if (it == mMetadata.end())
         return nullptr;
@@ -89,6 +89,6 @@ IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
 void PDFObject::DeleteMetadata(const std::string &inKey)
 {
     IDeletable *result = DetachMetadata(inKey);
-    if (result)
+    if (result != nullptr)
         result->DeleteMe();
 }

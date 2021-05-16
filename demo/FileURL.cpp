@@ -79,7 +79,7 @@ FileURL FileURL::InterpretFrom(const FileURL &inURL) const
 
     FileURL newURL = inURL;
 
-    StringList::const_iterator it = mPathComponents.begin();
+    auto it = mPathComponents.begin();
     for (; it != mPathComponents.end(); ++it)
     {
         if (*it == "..")
@@ -100,7 +100,7 @@ string FileURL::ToString() const
 
     if (mPathComponents.size() > 0)
     {
-        StringList::const_iterator it = mPathComponents.begin();
+        auto it = mPathComponents.begin();
         pathStream << *it;
         ++it;
 

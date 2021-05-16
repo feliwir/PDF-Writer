@@ -62,10 +62,9 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
             PDFModifiedPage modifiedPage(&pdfWriter, 0);
 
             AbstractContentContext *contentContext = modifiedPage.StartContentContext();
-            AbstractContentContext::TextOptions opt(
-                pdfWriter.GetFontForFile(
-                    RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
-                14, AbstractContentContext::eGray, 0);
+            AbstractContentContext::TextOptions opt(pdfWriter.GetFontForFile(RelativeURLToLocalPath(
+                                                        inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
+                                                    14, AbstractContentContext::eGray, 0);
 
             contentContext->WriteText(10, 805, "new text on encrypted page!", opt);
 
@@ -75,7 +74,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
 
         // add new page with an image
         {
-            PDFPage *page = new PDFPage();
+            auto *page = new PDFPage();
             page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -86,9 +85,9 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, PDFWriter &pdf
                 break;
             }
 
-            contentContext->DrawImage(10, 300,
-                                      RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                             "data/images/soundcloud_logo.jpg"));
+            contentContext->DrawImage(
+                10, 300,
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
             status = pdfWriter.EndPageContentContext(contentContext);
             if (status != PDFHummus::eSuccess)
@@ -125,8 +124,7 @@ EStatusCode ModifyingEncryptedFile::Run(const TestConfiguration &inTestConfigura
         {
             PDFWriter pdfWriter;
             status = pdfWriter.ModifyPDF(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                       string("data/PDFWithPassword.pdf")),
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/PDFWithPassword.pdf")),
                 ePDFVersion13,
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
                                        string("PDFWithPasswordEcnryptedModified.pdf")),
@@ -145,8 +143,7 @@ EStatusCode ModifyingEncryptedFile::Run(const TestConfiguration &inTestConfigura
         {
             PDFWriter pdfWriter;
             status = pdfWriter.ModifyPDF(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/china.pdf")),
-                ePDFVersion13,
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/china.pdf")), ePDFVersion13,
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("chinaEcnryptedModified.pdf")),
                 LogConfiguration(
                     true, true,

@@ -35,7 +35,7 @@ InputFlateDecodeStream::~InputFlateDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         delete mSourceStream;
     delete mZLibState;
 }
@@ -59,7 +59,7 @@ InputFlateDecodeStream::InputFlateDecodeStream(IByteReader *inSourceReader)
 void InputFlateDecodeStream::Assign(IByteReader *inSourceReader)
 {
     mSourceStream = inSourceReader;
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         StartEncoding();
 }
 
@@ -100,7 +100,7 @@ IOBasicTypes::LongBufferSizeType InputFlateDecodeStream::Read(IOBasicTypes::Byte
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndRead(inBuffer, inBufferSize);
-    else if (mSourceStream)
+    else if (mSourceStream != nullptr)
         return mSourceStream->Read(inBuffer, inBufferSize);
     else
         return 0;
@@ -185,7 +185,7 @@ IOBasicTypes::LongBufferSizeType InputFlateDecodeStream::DecodeBufferAndRead(con
 
 bool InputFlateDecodeStream::NotEnded()
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         return (mSourceStream->NotEnded() || mZLibState->avail_in != 0) && !mEndOfCompressionEoncountered;
     else
         return mZLibState->avail_in != 0 && mEndOfCompressionEoncountered;

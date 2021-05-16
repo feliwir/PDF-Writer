@@ -62,7 +62,7 @@ void OutputBufferedStream::Assign(IByteWriterWithPosition *inWriter)
 
 LongBufferSizeType OutputBufferedStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
-    if (mTargetStream)
+    if (mTargetStream != nullptr)
     {
         LongBufferSizeType bytesWritten;
 
@@ -99,12 +99,12 @@ LongBufferSizeType OutputBufferedStream::Write(const Byte *inBuffer, LongBufferS
 
 void OutputBufferedStream::Flush()
 {
-    if (mTargetStream && mCurrentBufferIndex != mBuffer)
+    if ((mTargetStream != nullptr) && mCurrentBufferIndex != mBuffer)
         mTargetStream->Write(mBuffer, mCurrentBufferIndex - mBuffer);
     mCurrentBufferIndex = mBuffer;
 }
 
 LongFilePositionType OutputBufferedStream::GetCurrentPosition()
 {
-    return mTargetStream ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer) : 0;
+    return mTargetStream != nullptr ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer) : 0;
 }

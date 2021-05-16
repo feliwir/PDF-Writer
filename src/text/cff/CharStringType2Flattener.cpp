@@ -57,7 +57,7 @@ EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(unsigned short 
         }
 
         CharString *charString = inCFFFileInput->GetGlyphCharString(inFontIndex, inGlyphIndex);
-        if (!charString)
+        if (charString == nullptr)
         {
             TRACE_LOG("CharStringType2Flattener::Trace, Exception, cannot find glyph index");
             break;
@@ -102,7 +102,7 @@ EStatusCode CharStringType2Flattener::Type2Hstem(const CharStringOperandList &in
 
 EStatusCode CharStringType2Flattener::WriteRegularOperator(unsigned short inOperatorCode)
 {
-    CharStringOperandList::iterator it = mOperandsToWrite.begin();
+    auto it = mOperandsToWrite.begin();
     EStatusCode status = PDFHummus::eSuccess;
 
     for (; it != mOperandsToWrite.end() && PDFHummus::eSuccess == status; ++it)
@@ -281,7 +281,8 @@ EStatusCode CharStringType2Flattener::WriteStemMask(Byte *inProgramCounter)
     return mWriter->Write(inProgramCounter, maskSize) != maskSize ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
-EStatusCode CharStringType2Flattener::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/, Byte *inProgramCounter)
+EStatusCode CharStringType2Flattener::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/,
+                                                    Byte *inProgramCounter)
 {
     if (WriteRegularOperator(20) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -464,7 +465,7 @@ CharString *CharStringType2Flattener::GetLocalSubr(long inSubrIndex)
     return mHelper->GetLocalSubr(inSubrIndex);
 }
 
-EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short  /*inOperatorCode*/)
+EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short /*inOperatorCode*/)
 {
     if (mOperandsToWrite.size() > 0)
     {
@@ -472,7 +473,7 @@ EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short  /*inOper
         mOperandsToWrite.pop_back(); // pop back parameter, which is the subr index
 
         // now continue writing all operands
-        CharStringOperandList::iterator it = mOperandsToWrite.begin();
+        auto it = mOperandsToWrite.begin();
 
         for (; it != mOperandsToWrite.end() && PDFHummus::eSuccess == status; ++it)
             status = WriteCharStringOperand(*it);

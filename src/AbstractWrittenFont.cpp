@@ -54,7 +54,8 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingList &inGlyphsLi
 
     // if all strings glyphs exist in CID representation, use it. CID gets preference, being the one that should be
     // used at all times, once the first usage of it occured. if all included...no glyphs added, good.
-    if (mCIDRepresentation && CanEncodeWithIncludedChars(mCIDRepresentation, inGlyphsList, outEncodedCharacters))
+    if ((mCIDRepresentation != nullptr) &&
+        CanEncodeWithIncludedChars(mCIDRepresentation, inGlyphsList, outEncodedCharacters))
     {
         outFontObjectID = mCIDRepresentation->mWrittenObjectID;
         outEncodingIsMultiByte = true;
@@ -63,7 +64,8 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingList &inGlyphsLi
 
     // k. no need to be hard...if by chance it's not in the CID (or CID does not exist yet) but is in the
     // ANSI representation - use it. no new glyphs added, everyone's happy
-    if (mANSIRepresentation && CanEncodeWithIncludedChars(mANSIRepresentation, inGlyphsList, outEncodedCharacters))
+    if ((mANSIRepresentation != nullptr) &&
+        CanEncodeWithIncludedChars(mANSIRepresentation, inGlyphsList, outEncodedCharacters))
     {
         outFontObjectID = mANSIRepresentation->mWrittenObjectID;
         outEncodingIsMultiByte = false;
@@ -72,7 +74,7 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingList &inGlyphsLi
 
     // So it looks like we need to add glyphs.
     // if a CID representation exists - prefer it over the ANSI.
-    if (mCIDRepresentation)
+    if (mCIDRepresentation != nullptr)
     {
         AddToCIDRepresentation(inGlyphsList, outEncodedCharacters);
         outFontObjectID = mCIDRepresentation->mWrittenObjectID;
@@ -82,7 +84,7 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingList &inGlyphsLi
 
     // if CID does not yet exist, try going for ANSI. it is, after all, more efficient.
     // but - consider that it might not be possible to encode the string
-    if (!mANSIRepresentation)
+    if (mANSIRepresentation == nullptr)
         mANSIRepresentation = new WrittenFontRepresentation();
 
     // [note that each font type will have a different set of rules as to whether the glyphs
@@ -110,7 +112,7 @@ bool AbstractWrittenFont::CanEncodeWithIncludedChars(WrittenFontRepresentation *
                                                      UShortList &outEncodedCharacters)
 {
     UShortList candidateEncoding;
-    GlyphUnicodeMappingList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     bool allIncluded = true;
 
@@ -139,7 +141,7 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingList &
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
-    GlyphUnicodeMappingList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
 
     for (; it != inGlyphsList.end(); ++it)
@@ -185,21 +187,23 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingListList &inGlyp
 {
     // same as the regular one, but with lists of strings
 
-    if (mCIDRepresentation && CanEncodeWithIncludedChars(mCIDRepresentation, inGlyphsList, outEncodedCharacters))
+    if ((mCIDRepresentation != nullptr) &&
+        CanEncodeWithIncludedChars(mCIDRepresentation, inGlyphsList, outEncodedCharacters))
     {
         outFontObjectID = mCIDRepresentation->mWrittenObjectID;
         outEncodingIsMultiByte = true;
         return;
     }
 
-    if (mANSIRepresentation && CanEncodeWithIncludedChars(mANSIRepresentation, inGlyphsList, outEncodedCharacters))
+    if ((mANSIRepresentation != nullptr) &&
+        CanEncodeWithIncludedChars(mANSIRepresentation, inGlyphsList, outEncodedCharacters))
     {
         outFontObjectID = mANSIRepresentation->mWrittenObjectID;
         outEncodingIsMultiByte = false;
         return;
     }
 
-    if (mCIDRepresentation)
+    if (mCIDRepresentation != nullptr)
     {
         AddToCIDRepresentation(inGlyphsList, outEncodedCharacters);
         outFontObjectID = mCIDRepresentation->mWrittenObjectID;
@@ -207,7 +211,7 @@ void AbstractWrittenFont::AppendGlyphs(const GlyphUnicodeMappingListList &inGlyp
         return;
     }
 
-    if (!mANSIRepresentation)
+    if (mANSIRepresentation == nullptr)
         mANSIRepresentation = new WrittenFontRepresentation();
 
     if (AddToANSIRepresentation(inGlyphsList, outEncodedCharacters))
@@ -232,7 +236,7 @@ bool AbstractWrittenFont::CanEncodeWithIncludedChars(WrittenFontRepresentation *
 {
     UShortListList candidateEncodingList;
     UShortList candidateEncoding;
-    GlyphUnicodeMappingListList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     GlyphUnicodeMappingList::const_iterator itGlyphs;
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     bool allIncluded = true;
@@ -268,7 +272,7 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingListLi
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
-    GlyphUnicodeMappingListList::const_iterator itList = inGlyphsList.begin();
+    auto itList = inGlyphsList.begin();
     GlyphUnicodeMappingList::const_iterator it;
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     UShortList encodedCharacters;
@@ -301,7 +305,7 @@ EStatusCode AbstractWrittenFont::WriteStateInDictionary(ObjectsContext *inStateW
                                                         DictionaryContext *inDerivedObjectDictionary)
 {
 
-    if (mCIDRepresentation)
+    if (mCIDRepresentation != nullptr)
     {
         mCidRepresentationObjectStateID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
 
@@ -309,7 +313,7 @@ EStatusCode AbstractWrittenFont::WriteStateInDictionary(ObjectsContext *inStateW
         inDerivedObjectDictionary->WriteNewObjectReferenceValue(mCidRepresentationObjectStateID);
     }
 
-    if (mANSIRepresentation)
+    if (mANSIRepresentation != nullptr)
     {
         mAnsiRepresentationObjectStateID = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
 
@@ -325,14 +329,14 @@ EStatusCode AbstractWrittenFont::WriteStateAfterDictionary(ObjectsContext *inSta
 
     do
     {
-        if (mCIDRepresentation)
+        if (mCIDRepresentation != nullptr)
         {
             status = WriteWrittenFontState(mCIDRepresentation, inStateWriter, mCidRepresentationObjectStateID);
             if (status != PDFHummus::eSuccess)
                 break;
         }
 
-        if (mANSIRepresentation)
+        if (mANSIRepresentation != nullptr)
         {
             status = WriteWrittenFontState(mANSIRepresentation, inStateWriter, mAnsiRepresentationObjectStateID);
             if (status != PDFHummus::eSuccess)
@@ -359,7 +363,7 @@ EStatusCode AbstractWrittenFont::WriteWrittenFontState(WrittenFontRepresentation
     writtenFontObject->WriteKey("mGlyphIDToEncodedChar");
     inStateWriter->StartArray();
 
-    UIntToGlyphEncodingInfoMap::iterator it = inRepresentation->mGlyphIDToEncodedChar.begin();
+    auto it = inRepresentation->mGlyphIDToEncodedChar.begin();
 
     for (; it != inRepresentation->mGlyphIDToEncodedChar.end(); ++it)
     {
@@ -379,7 +383,7 @@ EStatusCode AbstractWrittenFont::WriteWrittenFontState(WrittenFontRepresentation
 
     if (objectIDs.size() > 0)
     {
-        ObjectIDTypeList::iterator itIDs = objectIDs.begin();
+        auto itIDs = objectIDs.begin();
 
         it = inRepresentation->mGlyphIDToEncodedChar.begin();
         for (; it != inRepresentation->mGlyphIDToEncodedChar.end(); ++it, ++itIDs)
@@ -404,7 +408,7 @@ void AbstractWrittenFont::WriteGlyphEncodingInfoState(ObjectsContext *inStateWri
     glyphEncodingInfoObject->WriteKey("mUnicodeCharacters");
     inStateWriter->StartArray();
 
-    ULongVector::const_iterator it = inGlyphEncodingInfo.mUnicodeCharacters.begin();
+    auto it = inGlyphEncodingInfo.mUnicodeCharacters.begin();
     for (; it != inGlyphEncodingInfo.mUnicodeCharacters.end(); ++it)
         inStateWriter->WriteInteger(*it);
 
@@ -424,7 +428,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
     delete mCIDRepresentation;
     delete mANSIRepresentation;
 
-    if (cidRepresentationState.GetPtr())
+    if (cidRepresentationState.GetPtr() != nullptr)
     {
         mCIDRepresentation = new WrittenFontRepresentation();
         ReadWrittenFontState(inStateReader, cidRepresentationState.GetPtr(), mCIDRepresentation);
@@ -432,7 +436,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
     else
         mCIDRepresentation = nullptr;
 
-    if (ansiRepresentationState.GetPtr())
+    if (ansiRepresentationState.GetPtr() != nullptr)
     {
         mANSIRepresentation = new WrittenFontRepresentation();
         ReadWrittenFontState(inStateReader, ansiRepresentationState.GetPtr(), mANSIRepresentation);

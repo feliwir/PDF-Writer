@@ -34,11 +34,11 @@ CatalogInformation::~CatalogInformation()
 
 void CatalogInformation::Reset()
 {
-    if (mCurrentPageTreeNode)
+    if (mCurrentPageTreeNode != nullptr)
     {
         // delete root
         PageTree *resultPageTree = mCurrentPageTreeNode;
-        while (resultPageTree->GetParent())
+        while (resultPageTree->GetParent() != nullptr)
             resultPageTree = resultPageTree->GetParent();
         delete resultPageTree;
     }
@@ -48,7 +48,7 @@ void CatalogInformation::Reset()
 ObjectIDType CatalogInformation::AddPageToPageTree(ObjectIDType inPageID,
                                                    IndirectObjectsReferenceRegistry &inObjectsRegistry)
 {
-    if (!mCurrentPageTreeNode)
+    if (mCurrentPageTreeNode == nullptr)
         mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
 
     mCurrentPageTreeNode = mCurrentPageTreeNode->AddNodeToTree(inPageID, inObjectsRegistry);
@@ -57,10 +57,10 @@ ObjectIDType CatalogInformation::AddPageToPageTree(ObjectIDType inPageID,
 
 PageTree *CatalogInformation::GetPageTreeRoot(IndirectObjectsReferenceRegistry &inObjectsRegistry)
 {
-    if (mCurrentPageTreeNode)
+    if (mCurrentPageTreeNode != nullptr)
     {
         PageTree *resultPageTree = mCurrentPageTreeNode;
-        while (resultPageTree->GetParent())
+        while (resultPageTree->GetParent() != nullptr)
             resultPageTree = resultPageTree->GetParent();
         return resultPageTree;
     }

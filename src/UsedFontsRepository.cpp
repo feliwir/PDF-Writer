@@ -66,16 +66,16 @@ void UsedFontsRepository::SetEmbedFonts(bool inEmbedFonts)
 PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePath,
                                                  const std::string &inOptionalMetricsFile, long inFontIndex)
 {
-    if (!mObjectsContext)
+    if (mObjectsContext == nullptr)
     {
         TRACE_LOG("UsedFontsRepository::GetFontForFile, exception, not objects context available");
         return nullptr;
     }
 
-    StringAndLongToPDFUsedFontMap::iterator it = mUsedFonts.find(StringAndLong(inFontFilePath, inFontIndex));
+    auto it = mUsedFonts.find(StringAndLong(inFontFilePath, inFontIndex));
     if (it == mUsedFonts.end())
     {
-        if (!mInputFontsInformation)
+        if (mInputFontsInformation == nullptr)
             mInputFontsInformation = new FreeTypeWrapper();
 
         FT_Face face;
@@ -86,7 +86,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
         }
         else
             face = mInputFontsInformation->NewFace(inFontFilePath, inFontIndex);
-        if (!face)
+        if (face == nullptr)
         {
             TRACE_LOG1("UsedFontsRepository::GetFontForFile, Failed to load font from %s", inFontFilePath.c_str());
             PDFUsedFont *aNull = nullptr;
@@ -98,7 +98,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
         else
         {
 
-            PDFUsedFont *usedFont =
+            auto *usedFont =
                 new PDFUsedFont(face, inFontFilePath, inOptionalMetricsFile, inFontIndex, mObjectsContext, mEmbedFonts);
             if (!usedFont->IsValid())
             {
@@ -118,11 +118,11 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
 
 EStatusCode UsedFontsRepository::WriteUsedFontsDefinitions()
 {
-    StringAndLongToPDFUsedFontMap::iterator it = mUsedFonts.begin();
+    auto it = mUsedFonts.begin();
     EStatusCode status = PDFHummus::eSuccess;
 
     for (; it != mUsedFonts.end() && PDFHummus::eSuccess == status; ++it)
-        status = it->second ? it->second->WriteFontDefinition() : eFailure;
+        status = it->second != nullptr ? it->second->WriteFontDefinition() : eFailure;
 
     return status;
 }
@@ -150,7 +150,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
     usedFontsRepositoryObject->WriteKey("mUsedFonts");
     inStateWriter->StartArray();
 
-    StringAndLongToPDFUsedFontMap::iterator it = mUsedFonts.begin();
+    auto it = mUsedFonts.begin();
 
     for (; it != mUsedFonts.end(); ++it)
     {
@@ -169,7 +169,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
     usedFontsRepositoryObject->WriteKey("mOptionaMetricsFiles");
     inStateWriter->StartArray();
 
-    StringToStringMap::iterator itOptionals = mOptionaMetricsFiles.begin();
+    auto itOptionals = mOptionaMetricsFiles.begin();
     for (; itOptionals != mOptionaMetricsFiles.end(); ++itOptionals)
     {
         PDFTextString aTextString(itOptionals->first);
@@ -187,7 +187,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
     if (usedFontsObjects.size() > 0)
     {
         it = mUsedFonts.begin();
-        ObjectIDTypeList::iterator itIDs = usedFontsObjects.begin();
+        auto itIDs = usedFontsObjects.begin();
 
         for (; it != mUsedFonts.end() && PDFHummus::eSuccess == status; ++it, ++itIDs)
             status = it->second->WriteState(inStateWriter, *itIDs);
@@ -201,7 +201,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
     EStatusCode status = PDFHummus::eSuccess;
 
     // clear current state
-    StringAndLongToPDFUsedFontMap::iterator itUsedFonts = mUsedFonts.begin();
+    auto itUsedFonts = mUsedFonts.begin();
     for (; itUsedFonts != mUsedFonts.end(); ++itUsedFonts)
         delete (itUsedFonts->second);
     mUsedFonts.clear();
@@ -240,7 +240,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
     PDFObjectCastPtr<PDFInteger> keyIndexItem;
     PDFObjectCastPtr<PDFIndirectObjectReference> valueItem;
 
-    if (!mInputFontsInformation)
+    if (mInputFontsInformation == nullptr)
         mInputFontsInformation = new FreeTypeWrapper();
 
     while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -258,7 +258,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
         FT_Face face;
         face = mInputFontsInformation->NewFace(filePath, fontIndex);
 
-        if (!face)
+        if (face == nullptr)
         {
             TRACE_LOG2("UsedFontsRepository::ReadState, Failed to load font from %s at index %ld", filePath.c_str(),
                        fontIndex);
@@ -268,7 +268,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
 
         PDFUsedFont *usedFont;
 
-        StringToStringMap::iterator itOptionlMetricsFile = mOptionaMetricsFiles.find(filePath);
+        auto itOptionlMetricsFile = mOptionaMetricsFiles.find(filePath);
         if (itOptionlMetricsFile != mOptionaMetricsFiles.end())
             usedFont =
                 new PDFUsedFont(face, filePath, itOptionlMetricsFile->second, fontIndex, mObjectsContext, mEmbedFonts);
@@ -292,7 +292,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
 
 void UsedFontsRepository::Reset()
 {
-    StringAndLongToPDFUsedFontMap::iterator it = mUsedFonts.begin();
+    auto it = mUsedFonts.begin();
     for (; it != mUsedFonts.end(); ++it)
         delete (it->second);
     mUsedFonts.clear();

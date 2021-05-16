@@ -55,8 +55,7 @@ EStatusCode ModifyingExistingFileContent::Run(const TestConfiguration &inTestCon
 
         // open file for modification
         status = pdfWriter.ModifyPDF(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/AddedPage.pdf")),
-            ePDFVersion13,
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("data/AddedPage.pdf")), ePDFVersion13,
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, string("ModifyingExistingFileContent.pdf")),
             LogConfiguration(true, true,
                              RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
@@ -103,7 +102,7 @@ EStatusCode ModifyingExistingFileContent::TestPageSizeModification(PDFWriter *in
         // Change 3rd page bbox to landscape by modifying the page object
         PDFDocumentCopyingContext *copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
 
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             cout << "failed to create copying context for modified file\n";
             status = eFailure;
@@ -215,7 +214,7 @@ EStatusCode ModifyingExistingFileContent::TestAddingComments(PDFWriter *inPDFWri
         // now write these comments to the 4th page
         PDFDocumentCopyingContext *copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
 
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             cout << "failed to create copying context for modified file\n";
             status = eFailure;
@@ -244,7 +243,7 @@ EStatusCode ModifyingExistingFileContent::TestAddingComments(PDFWriter *inPDFWri
         modifiedPageObject->WriteKey("Annots");
         inPDFWriter->GetObjectsContext().StartArray();
 
-        PDFCommentToObjectIDTypeMap::iterator it = pageCommentContext.begin();
+        auto it = pageCommentContext.begin();
         for (; it != pageCommentContext.end(); ++it)
             inPDFWriter->GetObjectsContext().WriteIndirectObjectReference(it->second);
 

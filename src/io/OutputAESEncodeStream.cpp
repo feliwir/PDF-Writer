@@ -35,7 +35,7 @@ OutputAESEncodeStream::OutputAESEncodeStream()
 OutputAESEncodeStream::~OutputAESEncodeStream()
 {
     Flush();
-    if (mEncryptionKey)
+    if (mEncryptionKey != nullptr)
         delete[] mEncryptionKey;
     if (mOwnsStream)
         delete mTargetStream;
@@ -47,7 +47,7 @@ OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetSt
     mTargetStream = inTargetStream;
     mOwnsStream = inOwnsStream;
 
-    if (!mTargetStream)
+    if (mTargetStream == nullptr)
         return;
 
     mInIndex = mIn;
@@ -55,7 +55,7 @@ OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetSt
     // convert inEncryptionKey to internal rep and init encrypt [let's hope its 16...]
     mEncryptionKey = new unsigned char[inEncryptionKey.size()];
     mEncryptionKeyLength = inEncryptionKey.size();
-    ByteList::const_iterator it = inEncryptionKey.begin();
+    auto it = inEncryptionKey.begin();
     size_t i = 0;
     for (; it != inEncryptionKey.end(); ++i, ++it)
         mEncryptionKey[i] = *it;
@@ -66,7 +66,7 @@ OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetSt
 
 LongFilePositionType OutputAESEncodeStream::GetCurrentPosition()
 {
-    if (mTargetStream)
+    if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
     else
         return 0;
@@ -75,7 +75,7 @@ LongFilePositionType OutputAESEncodeStream::GetCurrentPosition()
 LongBufferSizeType OutputAESEncodeStream::Write(const IOBasicTypes::Byte *inBuffer,
                                                 IOBasicTypes::LongBufferSizeType inSize)
 {
-    if (!mTargetStream)
+    if (mTargetStream == nullptr)
         return 0;
 
     // write IV if didn't write yet
@@ -137,7 +137,7 @@ void OutputAESEncodeStream::Flush()
 
     // (otherwise or in addition) finish encoding by completing a full block with the block remainder size. if the
     // remainder is AES_BLOCK_SIZE cause block is empty, fill with AES_BLOCK_SIZE
-    unsigned char remainder = (unsigned char)(AES_BLOCK_SIZE - (mInIndex - mIn));
+    auto remainder = (unsigned char)(AES_BLOCK_SIZE - (mInIndex - mIn));
     for (size_t i = 0; i < remainder; ++i)
         mInIndex[i] = remainder;
     mEncrypt.cbc_encrypt(mIn, mOut, AES_BLOCK_SIZE, mIV);

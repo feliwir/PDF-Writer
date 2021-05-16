@@ -136,7 +136,7 @@ static bool sUShortSort(const UIntAndGlyphEncodingInfo &inLeft, const UIntAndGly
 void ANSIFontWriter::CalculateCharacterEncodingArray()
 {
     // first we need to sort the fonts charachters by character code
-    UIntToGlyphEncodingInfoMap::iterator it = mFontOccurrence->mGlyphIDToEncodedChar.begin();
+    auto it = mFontOccurrence->mGlyphIDToEncodedChar.begin();
 
     for (; it != mFontOccurrence->mGlyphIDToEncodedChar.end(); ++it)
         mCharactersVector.push_back(UIntAndGlyphEncodingInfo(it->first, it->second));
@@ -164,7 +164,7 @@ void ANSIFontWriter::WriteWidths(DictionaryContext *inFontContext)
 
     mObjectsContext->StartArray();
 
-    UIntAndGlyphEncodingInfoVector::iterator itCharacters = mCharactersVector.begin();
+    auto itCharacters = mCharactersVector.begin();
     for (unsigned short i = itCharacters->second.mEncodedCharacter;
          i <= mCharactersVector.back().second.mEncodedCharacter; ++i)
     {
@@ -188,7 +188,7 @@ void ANSIFontWriter::CalculateDifferences()
     // whenever glyph name is different, add to differences array
     WinAnsiEncoding winAnsiEncoding;
 
-    UIntAndGlyphEncodingInfoVector::iterator it = mCharactersVector.begin();
+    auto it = mCharactersVector.begin();
 
     for (; it != mCharactersVector.end(); ++it)
     {
@@ -240,7 +240,7 @@ void ANSIFontWriter::WriteEncodingDictionary()
     encodingDictionary->WriteKey(scDifferences);
     mObjectsContext->StartArray();
 
-    UShortAndStringList::iterator it = mDifferences.begin();
+    auto it = mDifferences.begin();
     unsigned short previousEncoding;
 
     encodingDictionary->WriteIntegerValue(it->first);
@@ -298,8 +298,8 @@ void ANSIFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
     IByteWriter *cmapWriteContext = pdfStream->GetWriteStream();
     PrimitiveObjectsWriter primitiveWriter(cmapWriteContext);
     unsigned long i = 1;
-    UIntAndGlyphEncodingInfoVector::iterator it = mCharactersVector.begin() + 1; // skip 0 glyph
-    unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1;      // cause 0 is not there
+    auto it = mCharactersVector.begin() + 1;                                // skip 0 glyph
+    unsigned long vectorSize = (unsigned long)mCharactersVector.size() - 1; // cause 0 is not there
 
     cmapWriteContext->Write((const Byte *)scCmapHeader, strlen(scCmapHeader));
     primitiveWriter.WriteEncodedHexString(scTwoByteRangeStart);
@@ -344,7 +344,7 @@ void ANSIFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnc
 {
     UnicodeString unicode;
     char formattingBuffer[17];
-    ULongVector::const_iterator it = inUnicodeValues.begin();
+    auto it = inUnicodeValues.begin();
 
     SAFE_SPRINTF_1(formattingBuffer, 17, "<%02x> <", inEncodedCharacter);
     inWriter->Write((const Byte *)formattingBuffer, 6);

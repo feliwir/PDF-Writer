@@ -44,7 +44,7 @@ EStatusCode CharStringType1Interpreter::Intepret(const Type1CharString &inCharSt
         InputCharStringDecodeStream charStringStream(&byteArrayStream, inImplementationHelper->GetLenIV());
 
         mGotEndChar = false;
-        if (!inImplementationHelper)
+        if (inImplementationHelper == nullptr)
         {
             TRACE_LOG(
                 "CharStringType1Interpreter::Intepret, null implementation helper passed. pass a proper pointer!!");
@@ -515,7 +515,7 @@ EStatusCode CharStringType1Interpreter::DefaultCallOtherSubr()
 
     */
 
-    LongList::reverse_iterator it = mOperandStack.rbegin();
+    auto it = mOperandStack.rbegin();
     ++it;
     long argumentsCount = *it;
     ++it;

@@ -42,11 +42,11 @@ ArrayOfInputStreamsStream::~ArrayOfInputStreamsStream()
 IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
 {
 
-    if (mCurrentStream && mCurrentStream->NotEnded())
+    if ((mCurrentStream != nullptr) && mCurrentStream->NotEnded())
         return mCurrentStream;
 
     // delete current stream, done with it
-    if (mCurrentStream)
+    if (mCurrentStream != nullptr)
     {
         ++mCurrentIndex;
     }
@@ -56,14 +56,14 @@ IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
     // get next stream in array
     PDFObjectCastPtr<PDFStreamInput> aStream;
 
-    while (!mCurrentStream && mCurrentIndex < mArray->GetLength())
+    while ((mCurrentStream == nullptr) && mCurrentIndex < mArray->GetLength())
     {
         PDFObjectCastPtr<PDFStreamInput> aStream = mParser->QueryArrayObject(mArray.GetPtr(), mCurrentIndex);
         if (!!aStream)
         {
             mCurrentStream = mParser->StartReadingFromStream(aStream.GetPtr());
             // couldn't start, try with next array object
-            if (!mCurrentStream)
+            if (mCurrentStream == nullptr)
                 ++mCurrentIndex;
         }
         else
@@ -87,7 +87,7 @@ LongBufferSizeType ArrayOfInputStreamsStream::Read(Byte *inBuffer, LongBufferSiz
     {
         // read from current stream
         IByteReader *reader = GetActiveStream();
-        if (reader && reader->NotEnded())
+        if ((reader != nullptr) && reader->NotEnded())
         {
             readAmount += reader->Read(inBuffer + readAmount, inBufferSize - readAmount);
         }

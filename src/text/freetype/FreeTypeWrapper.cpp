@@ -45,7 +45,7 @@ static const struct
 
     FreeTypeWrapper::FreeTypeWrapper()
 {
-    if (FT_Init_FreeType(&mFreeType))
+    if (FT_Init_FreeType(&mFreeType) != 0)
     {
         TRACE_LOG("FreeTypeWrapper::FreeTypeWrapper, unexpected failure. failed to initialize Free Type");
         mFreeType = nullptr;
@@ -54,17 +54,17 @@ static const struct
 
 FreeTypeWrapper::~FreeTypeWrapper()
 {
-    FTFaceToFTStreamListMap::iterator it = mOpenStreams.begin();
+    auto it = mOpenStreams.begin();
     for (; it != mOpenStreams.end(); ++it)
     {
-        FTStreamList::iterator itStreams = it->second.begin();
+        auto itStreams = it->second.begin();
         for (; itStreams != it->second.end(); ++itStreams)
         {
             delete *itStreams;
         }
     }
     mOpenStreams.clear();
-    if (mFreeType)
+    if (mFreeType != nullptr)
         FT_Done_FreeType(mFreeType);
 }
 
@@ -84,7 +84,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
 
         FT_Error ftStatus = FT_Open_Face(mFreeType, &openFaceArguments, inFontIndex, &face);
 
-        if (ftStatus)
+        if (ftStatus != 0)
         {
             TRACE_LOG2("FreeTypeWrapper::NewFace, unable to load font named %s with index %ld", inFilePath.c_str(),
                        inFontIndex);
@@ -95,7 +95,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
 
     } while (false);
 
-    if (!face)
+    if (face == nullptr)
         CloseOpenFaceArgumentsStream(openFaceArguments);
     else
         RegisterStreamForFace(face, openFaceArguments.stream);
@@ -113,7 +113,7 @@ EStatusCode FreeTypeWrapper::FillOpenFaceArgumentsForUTF8String(const std::strin
     ioArgs.params = nullptr;
     ioArgs.stream = CreateFTStreamForPath(inFilePath);
 
-    if (ioArgs.stream)
+    if (ioArgs.stream != nullptr)
     {
         return PDFHummus::eSuccess;
     }
@@ -127,7 +127,7 @@ EStatusCode FreeTypeWrapper::FillOpenFaceArgumentsForUTF8String(const std::strin
 
 void FreeTypeWrapper::CloseOpenFaceArgumentsStream(FT_Open_Args &ioArgs)
 {
-    if (ioArgs.stream)
+    if (ioArgs.stream != nullptr)
     {
         delete (InputFile *)(ioArgs.stream->descriptor.pointer);
         delete ioArgs.stream;
@@ -136,7 +136,7 @@ void FreeTypeWrapper::CloseOpenFaceArgumentsStream(FT_Open_Args &ioArgs)
 
 void FreeTypeWrapper::RegisterStreamForFace(FT_Face inFace, FT_Stream inStream)
 {
-    FTFaceToFTStreamListMap::iterator it = mOpenStreams.find(inFace);
+    auto it = mOpenStreams.find(inFace);
     if (it == mOpenStreams.end())
         it = mOpenStreams.insert(FTFaceToFTStreamListMap::value_type(inFace, FTStreamList())).first;
     it->second.push_back(inStream);
@@ -148,7 +148,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, const std::strin
     FT_Open_Args attachStreamArguments;
 
     FT_Face face = NewFace(inFilePath, inFontIndex);
-    if (face)
+    if (face != nullptr)
     {
         do
         {
@@ -170,7 +170,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, const std::strin
             }
         } while (false);
 
-        if (!face)
+        if (face == nullptr)
             CloseOpenFaceArgumentsStream(attachStreamArguments);
         else
             RegisterStreamForFace(face, attachStreamArguments.stream);
@@ -188,10 +188,10 @@ FT_Error FreeTypeWrapper::DoneFace(FT_Face ioFace)
 
 void FreeTypeWrapper::CleanStreamsForFace(FT_Face inFace)
 {
-    FTFaceToFTStreamListMap::iterator it = mOpenStreams.find(inFace);
+    auto it = mOpenStreams.find(inFace);
     if (it != mOpenStreams.end())
     {
-        FTStreamList::iterator itStreams = it->second.begin();
+        auto itStreams = it->second.begin();
         for (; itStreams != it->second.end(); ++itStreams)
         {
             delete *itStreams;
@@ -225,12 +225,12 @@ static void InputFileClose(FT_Stream stream)
 
 FT_Stream FreeTypeWrapper::CreateFTStreamForPath(const std::string &inFilePath)
 {
-    InputFile *inputFile = new InputFile;
+    auto *inputFile = new InputFile;
 
     if (inputFile->OpenFile(inFilePath) != PDFHummus::eSuccess)
         return nullptr;
 
-    FT_Stream aStream = new FT_StreamRec();
+    auto *aStream = new FT_StreamRec();
 
     aStream->base = nullptr;
     aStream->size = (unsigned long)inputFile->GetFileSize();

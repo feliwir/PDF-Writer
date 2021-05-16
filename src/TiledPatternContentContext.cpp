@@ -59,7 +59,7 @@ class TiledPatternImageWritingTask : public ITiledPatternEndWritingTask
     }
 
     PDFHummus::EStatusCode Write(PDFTiledPattern * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
-                                         PDFHummus::DocumentContext *inDocumentContext) override
+                                 PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

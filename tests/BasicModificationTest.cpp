@@ -47,7 +47,7 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    PDFPage *page = new PDFPage();
+    auto *page = new PDFPage();
     page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -55,7 +55,7 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
         return PDFHummus::eFailure;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/couri.ttf"));
-    if (!font)
+    if (font == nullptr)
         return PDFHummus::eFailure;
 
     // Draw some text
@@ -125,15 +125,15 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    PDFPage *page = new PDFPage();
+    auto *page = new PDFPage();
     page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
-    if (!contentContext)
+    if (contentContext == nullptr)
         return PDFHummus::eFailure;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/couri.ttf"));
-    if (!font)
+    if (font == nullptr)
         return PDFHummus::eFailure;
 
     // Draw some text

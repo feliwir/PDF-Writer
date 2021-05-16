@@ -138,7 +138,7 @@ PDFObject *PDFObjectParser::ParseNewObject()
 
             // this could be an indirect reference in case this is a positive integer
             // and the next one is also, and then there's an "R" keyword
-            if (pdfObject && (pdfObject->GetType() == PDFObject::ePDFObjectInteger) &&
+            if ((pdfObject != nullptr) && (pdfObject->GetType() == PDFObject::ePDFObjectInteger) &&
                 ((PDFInteger *)pdfObject)->GetValue() > 0)
             {
                 // try parse version
@@ -156,7 +156,7 @@ PDFObject *PDFObjectParser::ParseNewObject()
                 bool isReference = false;
                 do
                 {
-                    if (!versionObject || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
+                    if ((versionObject == nullptr) || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
                         ((PDFInteger *)versionObject)->GetValue() <
                             0) // k. failure to parse number, or no non-negative, cant be reference
                     {
@@ -203,7 +203,7 @@ PDFObject *PDFObjectParser::ParseNewObject()
         {
             pdfObject = ParseDictionary();
 
-            if (pdfObject)
+            if (pdfObject != nullptr)
             {
                 // could be a stream. will be if the next token is the "stream" keyword
                 if (!GetNextToken(token))
@@ -372,14 +372,14 @@ PDFObject *PDFObjectParser::ParseLiteralString(const std::string &inToken)
 
 std::string PDFObjectParser::MaybeDecryptString(const std::string &inString)
 {
-    if (mDecryptionHelper && mDecryptionHelper->IsEncrypted())
+    if ((mDecryptionHelper != nullptr) && mDecryptionHelper->IsEncrypted())
     {
 
         if (mDecryptionHelper->CanDecryptDocument())
             return mDecryptionHelper->DecryptString(inString);
         else
         {
-            if (mParserExtender)
+            if (mParserExtender != nullptr)
                 return mParserExtender->DecryptString(inString);
             else
                 return inString;
@@ -413,7 +413,7 @@ PDFObject *PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
     return new PDFHexString(MaybeDecryptString(DecodeHexString(inToken.substr(1, inToken.size() - 2))));
 }
 
-std::string PDFObjectParser::DecodeHexString(const std::string& inStringToDecode)
+std::string PDFObjectParser::DecodeHexString(const std::string &inStringToDecode)
 {
     std::stringbuf stringBuffer;
     std::string content = inStringToDecode;
@@ -588,7 +588,7 @@ bool PDFObjectParser::IsArray(const std::string &inToken)
 static const std::string scRightSquare = "]";
 PDFObject *PDFObjectParser::ParseArray()
 {
-    PDFArray *anArray = new PDFArray();
+    auto *anArray = new PDFArray();
     bool arrayEndEncountered = false;
     std::string token;
     EStatusCode status = PDFHummus::eSuccess;
@@ -648,7 +648,7 @@ bool PDFObjectParser::IsDictionary(const std::string &inToken)
 static const std::string scDoubleRightAngle = ">>";
 PDFObject *PDFObjectParser::ParseDictionary()
 {
-    PDFDictionary *aDictionary = new PDFDictionary();
+    auto *aDictionary = new PDFDictionary();
     bool dictionaryEndEncountered = false;
     std::string token;
     EStatusCode status = PDFHummus::eSuccess;
@@ -716,7 +716,7 @@ BoolAndByte PDFObjectParser::GetHexValue(Byte inValue)
         return BoolAndByte(true, inValue - 'a' + 10);
     else
     {
-        if (!isspace(inValue))
+        if (isspace(inValue) == 0)
         {
             TRACE_LOG1("PDFObjectParser::GetHexValue, unrecongnized hex value - %c", inValue);
         }

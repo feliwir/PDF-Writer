@@ -43,7 +43,7 @@ OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStre
 
 LongBufferSizeType OutputRC4XcodeStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
-    if (!mTargetStream)
+    if (mTargetStream == nullptr)
         return 0;
 
     LongBufferSizeType mCurrentIndex = 0;
@@ -61,7 +61,7 @@ LongBufferSizeType OutputRC4XcodeStream::Write(const Byte *inBuffer, LongBufferS
 
 LongFilePositionType OutputRC4XcodeStream::GetCurrentPosition()
 {
-    if (!mTargetStream)
+    if (mTargetStream == nullptr)
         return 0;
 
     return mTargetStream->GetCurrentPosition();

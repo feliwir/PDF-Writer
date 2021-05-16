@@ -35,7 +35,7 @@ CFFPrimitiveReader::~CFFPrimitiveReader()
 void CFFPrimitiveReader::SetStream(IByteReaderWithPosition *inCFFFile)
 {
     mCFFFile = inCFFFile;
-    if (inCFFFile)
+    if (inCFFFile != nullptr)
     {
         mCurrentOffsize = 1;
         mInitialPosition = inCFFFile->GetCurrentPosition();

@@ -63,15 +63,14 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
         }
 
         // create simple page
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
         // draw an image
-        cxt->DrawImage(
-            10, 100,
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
+        cxt->DrawImage(10, 100,
+                       RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
 
         // place some text
         AbstractContentContext::TextOptions textOptions(

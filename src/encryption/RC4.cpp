@@ -36,7 +36,7 @@ void RC4::Reset(const ByteList &inKey)
 {
     Byte *buffer = new Byte[inKey.size()];
     Byte *itBuffer = buffer;
-    ByteList::const_iterator it = inKey.begin();
+    auto it = inKey.begin();
     for (; it != inKey.end(); ++it, ++itBuffer)
         *itBuffer = *it;
 

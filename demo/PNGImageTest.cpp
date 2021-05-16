@@ -60,7 +60,7 @@ EStatusCode RunImageTest(const TestConfiguration &inTestConfiguration, const str
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
@@ -79,10 +79,10 @@ EStatusCode RunImageTest(const TestConfiguration &inTestConfiguration, const str
         AbstractContentContext::ImageOptions imageOptions;
         imageOptions.transformationMethod = AbstractContentContext::eMatrix;
         imageOptions.matrix[0] = imageOptions.matrix[3] = 0.5;
-        pageContentContext->DrawImage(10, 200,
-                                      RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                             "data/images/png/" + inImageName + ".png"),
-                                      imageOptions);
+        pageContentContext->DrawImage(
+            10, 200,
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/png/" + inImageName + ".png"),
+            imageOptions);
 
         status = pdfWriter.EndPageContentContext(pageContentContext);
         if (status != PDFHummus::eSuccess)

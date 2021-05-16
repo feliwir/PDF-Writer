@@ -60,7 +60,7 @@ void InfoDictionary::AddAdditionalInfoEntry(const std::string &inKey, const PDFT
 
 void InfoDictionary::RemoveAdditionalInfoEntry(const std::string &inKey)
 {
-    StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
+    auto it = mAdditionalInfoEntries.find(inKey);
     if (it != mAdditionalInfoEntries.end())
         mAdditionalInfoEntries.erase(it);
 }
@@ -72,7 +72,7 @@ void InfoDictionary::ClearAdditionalInfoEntries()
 
 PDFTextString InfoDictionary::GetAdditionalInfoEntry(const std::string &inKey)
 {
-    StringToPDFTextString::iterator it = mAdditionalInfoEntries.find(inKey);
+    auto it = mAdditionalInfoEntries.find(inKey);
 
     if (it == mAdditionalInfoEntries.end())
         return PDFTextString::Empty();

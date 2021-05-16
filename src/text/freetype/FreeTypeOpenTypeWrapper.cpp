@@ -29,7 +29,7 @@
 FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
 {
     void *tableInfo = FT_Get_Sfnt_Table(inFace, ft_sfnt_post);
-    if (tableInfo)
+    if (tableInfo != nullptr)
     {
         mPostScriptTable = (TT_Postscript *)tableInfo;
     }
@@ -40,7 +40,7 @@ FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
     }
 
     tableInfo = FT_Get_Sfnt_Table(inFace, ft_sfnt_os2);
-    if (tableInfo)
+    if (tableInfo != nullptr)
     {
         mOS2Table = (TT_OS2 *)tableInfo;
     }
@@ -49,10 +49,10 @@ FreeTypeOpenTypeWrapper::FreeTypeOpenTypeWrapper(FT_Face inFace)
         mOS2Table = nullptr;
     }
 
-    if (!mOS2Table) // don't need the pclt table if i have OS2 (OS2 FTW!!!1)
+    if (mOS2Table == nullptr) // don't need the pclt table if i have OS2 (OS2 FTW!!!1)
     {
         tableInfo = FT_Get_Sfnt_Table(inFace, ft_sfnt_pclt);
-        if (tableInfo)
+        if (tableInfo != nullptr)
         {
             mPCLTTable = (TT_PCLT *)tableInfo;
         }
@@ -73,7 +73,7 @@ FreeTypeOpenTypeWrapper::~FreeTypeOpenTypeWrapper()
 
 double FreeTypeOpenTypeWrapper::GetItalicAngle()
 {
-    return mPostScriptTable ? SixTeenFloatToDouble(mPostScriptTable->italicAngle) : 0;
+    return mPostScriptTable != nullptr ? SixTeenFloatToDouble(mPostScriptTable->italicAngle) : 0;
 }
 
 double FreeTypeOpenTypeWrapper::SixTeenFloatToDouble(FT_Fixed inFixed16_16)
@@ -83,11 +83,11 @@ double FreeTypeOpenTypeWrapper::SixTeenFloatToDouble(FT_Fixed inFixed16_16)
 
 BoolAndFTShort FreeTypeOpenTypeWrapper::GetCapHeight()
 {
-    if (mOS2Table)
+    if (mOS2Table != nullptr)
     {
         return BoolAndFTShort(true, mOS2Table->sCapHeight);
     }
-    else if (mPCLTTable)
+    else if (mPCLTTable != nullptr)
     {
         // converting ushort to short...yikes. hope it ain't a problem. but than it's not supposed to be more than a 1k
         // or something, nah?
@@ -99,11 +99,11 @@ BoolAndFTShort FreeTypeOpenTypeWrapper::GetCapHeight()
 
 BoolAndFTShort FreeTypeOpenTypeWrapper::GetxHeight()
 {
-    if (mOS2Table)
+    if (mOS2Table != nullptr)
     {
         return BoolAndFTShort(true, mOS2Table->sxHeight);
     }
-    else if (mPCLTTable)
+    else if (mPCLTTable != nullptr)
     {
         // converting ushort to short...yikes. hope it ain't a problem. but than it's not supposed to be more than a 1k
         // or something, nah?
@@ -128,9 +128,9 @@ FT_UShort FreeTypeOpenTypeWrapper::GetStemV()
     else
     {
         FT_UShort weight;
-        if (mOS2Table)
+        if (mOS2Table != nullptr)
             weight = mOS2Table->usWeightClass;
-        else if (mPCLTTable)
+        else if (mPCLTTable != nullptr)
             weight = std::max(
                 mPCLTTable->StrokeWeight * 80 + 500,
                 0); // what you see here is an attempt to use linear function to get from strokeweight to weight class
@@ -155,8 +155,9 @@ BoolAndFTUShort FreeTypeOpenTypeWrapper::StemVFromLowerLWidth()
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretch()
 {
-    return mOS2Table ? (EFontStretch)mOS2Table->usWidthClass
-                     : mPCLTTable ? GetFontStretchForPCLTValue(mPCLTTable->WidthType) : eFontStretchUknown;
+    return mOS2Table != nullptr
+               ? (EFontStretch)mOS2Table->usWidthClass
+               : mPCLTTable != nullptr ? GetFontStretchForPCLTValue(mPCLTTable->WidthType) : eFontStretchUknown;
 }
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretchForPCLTValue(FT_Char inWidthValue)
@@ -170,8 +171,8 @@ EFontStretch FreeTypeOpenTypeWrapper::GetFontStretchForPCLTValue(FT_Char inWidth
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeight()
 {
-    return mOS2Table ? mOS2Table->usWeightClass
-                     : mPCLTTable ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight) : 1000;
+    return mOS2Table != nullptr ? mOS2Table->usWeightClass
+                                : mPCLTTable != nullptr ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight) : 1000;
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeightFromPCLTValue(FT_Char inWeightValue)
@@ -221,7 +222,7 @@ FT_UShort FreeTypeOpenTypeWrapper::GetFontWeightFromPCLTValue(FT_Char inWeightVa
 bool FreeTypeOpenTypeWrapper::HasSerifs()
 {
     // assume that it does, unless PCLT table says otherwise
-    return mPCLTTable ? ((mPCLTTable->SerifStyle >> 6) & 3) != 1 : true;
+    return mPCLTTable != nullptr ? ((mPCLTTable->SerifStyle >> 6) & 3) != 1 : true;
 }
 
 bool FreeTypeOpenTypeWrapper::IsScript()
@@ -239,13 +240,13 @@ bool FreeTypeOpenTypeWrapper::HasPrivateEncoding()
     return false;
 }
 
-unsigned int FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long  /*inChar*/)
+unsigned int FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long /*inChar*/)
 {
     // emtpy implementation (always false at "GetPrivateEncoding")
     return 0;
 }
 
-std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(unsigned int  /*inGlyphIndex*/)
+std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(unsigned int /*inGlyphIndex*/)
 {
     // empty implementation (always false at "GetPrivateEncoding);
     return ".notdef";

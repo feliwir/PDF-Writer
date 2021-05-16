@@ -25,7 +25,7 @@ EStatusCode PDFCommentWriter::AttachCommentTreeToNextPage(PDFComment *inComment,
     if (status != eSuccess)
         return status;
 
-    PDFCommentToObjectIDTypeMap::iterator it = ioPageCommentsContext.begin();
+    auto it = ioPageCommentsContext.begin();
 
     for (; it != ioPageCommentsContext.end(); ++it)
         mPDFWriter->GetDocumentContext().RegisterAnnotationReferenceForNextPageWrite(it->second);
@@ -40,7 +40,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
     ObjectIDType repliedTo = 0;
 
     // if already written, return
-    PDFCommentToObjectIDTypeMap::iterator it = inCommentsContext.find(inComment);
+    auto it = inCommentsContext.find(inComment);
     if (it != inCommentsContext.end())
     {
         result.first = eSuccess;

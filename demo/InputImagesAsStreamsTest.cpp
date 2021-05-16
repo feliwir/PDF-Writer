@@ -37,7 +37,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         // JPG image
@@ -55,7 +55,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
         }
 
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGStream(jpgImage.GetInputStream());
-        if (!formXObject)
+        if (formXObject == nullptr)
         {
             cout << "failed to create form XObject from file\n";
             status = PDFHummus::eFailure;
@@ -108,7 +108,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
             break;
         }
         formXObject = pdfWriter.CreateFormXObjectFromTIFFStream(tiffFile.GetInputStream());
-        if (!formXObject)
+        if (formXObject == nullptr)
         {
             cout << "failed to create image form XObject for TIFF\n";
             status = PDFHummus::eFailure;
@@ -150,8 +150,7 @@ EStatusCode InputImagesAsStreamsTest::Run(const TestConfiguration &inTestConfigu
 
         InputFile pdfFile;
 
-        status =
-            pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Original.pdf"));
+        status = pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Original.pdf"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to open PDF file in"

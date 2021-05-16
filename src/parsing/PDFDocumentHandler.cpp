@@ -90,7 +90,8 @@ class PageEmbedInFormWithCropBox : public IPageEmbedInFormCommand
     }
 
     PDFFormXObject *CreatePDFFormXObjectForPage(PDFDocumentHandler *inDocumentHandler, unsigned long i,
-                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId) override
+                                                const double *inTransformationMatrix,
+                                                ObjectIDType inPredefinedFormId) override
     {
         return inDocumentHandler->CreatePDFFormXObjectForPage(i, mCropBox, inTransformationMatrix, inPredefinedFormId);
     }
@@ -108,7 +109,8 @@ class PageEmbedInFormWithPageBox : public IPageEmbedInFormCommand
     }
 
     PDFFormXObject *CreatePDFFormXObjectForPage(PDFDocumentHandler *inDocumentHandler, unsigned long i,
-                                                const double *inTransformationMatrix, ObjectIDType inPredefinedFormId) override
+                                                const double *inTransformationMatrix,
+                                                ObjectIDType inPredefinedFormId) override
     {
         return inDocumentHandler->CreatePDFFormXObjectForPage(i, mPageBoxToUseAsFormBox, inTransformationMatrix,
                                                               inPredefinedFormId);
@@ -140,7 +142,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
 
     do
     {
-        IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+        auto it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
         {
             result.first = (*it)->OnPDFParsingComplete(mObjectsContext, mDocumentContext, this);
@@ -164,14 +166,14 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
 
         if (PDFPageRange::eRangeTypeAll == inPageRange.mType)
         {
-            ObjectIDTypeList::const_iterator itFormIDs = inPredefinedFormIDs.begin();
+            auto itFormIDs = inPredefinedFormIDs.begin();
             for (unsigned long i = 0; i < mParser->GetPagesCount() && PDFHummus::eSuccess == result.first; ++i)
             {
                 newObject = inPageEmbedCommand->CreatePDFFormXObjectForPage(
                     this, i, inTransformationMatrix, itFormIDs == inPredefinedFormIDs.end() ? 0 : *itFormIDs);
                 if (itFormIDs != inPredefinedFormIDs.end())
                     ++itFormIDs;
-                if (newObject)
+                if (newObject != nullptr)
                 {
                     result.second.push_back(newObject->GetObjectID());
                     delete newObject;
@@ -186,8 +188,8 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
         else
         {
             // eRangeTypeSpecific
-            ULongAndULongList::const_iterator it = inPageRange.mSpecificRanges.begin();
-            ObjectIDTypeList::const_iterator itFormIDs = inPredefinedFormIDs.begin();
+            auto it = inPageRange.mSpecificRanges.begin();
+            auto itFormIDs = inPredefinedFormIDs.begin();
             for (; it != inPageRange.mSpecificRanges.end() && PDFHummus::eSuccess == result.first; ++it)
             {
                 if (it->first <= it->second && it->second < mParser->GetPagesCount())
@@ -198,7 +200,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
                             this, i, inTransformationMatrix, itFormIDs == inPredefinedFormIDs.end() ? 0 : *itFormIDs);
                         if (itFormIDs != inPredefinedFormIDs.end())
                             ++itFormIDs;
-                        if (newObject)
+                        if (newObject != nullptr)
                         {
                             result.second.push_back(newObject->GetObjectID());
                             delete newObject;
@@ -223,7 +225,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
 
     } while (false);
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
     {
         result.first = (*it)->OnPDFCopyingComplete(mObjectsContext, mDocumentContext, this);
@@ -285,7 +287,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
     PDFFormXObject *result = nullptr;
     EStatusCode status = PDFHummus::eSuccess;
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
     {
         status = (*it)->OnBeforeCreateXObjectFromPage(inPageObject, mObjectsContext, mDocumentContext, this);
@@ -333,9 +335,9 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
     mWrittenPage = nullptr;
     mDocumentContext->RemoveDocumentContextExtender(this);
 
-    if (result)
+    if (result != nullptr)
     {
-        IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+        auto it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
         {
             status = (*it)->OnAfterCreateXObjectFromPage(result, inPageObject, mObjectsContext, mDocumentContext, this);
@@ -464,7 +466,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTarge
 {
     IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
-    if (!streamReader)
+    if (streamReader == nullptr)
         return PDFHummus::eFailure;
 
     mPDFStream->SetPosition(inSourceStream->GetStreamContentStart());
@@ -506,7 +508,7 @@ EStatusCode PDFDocumentHandler::WriteNewObjects(const ObjectIDTypeList &inSource
                                                 ObjectIDTypeSet &ioCopiedObjects)
 {
 
-    ObjectIDTypeList::const_iterator itNewObjects = inSourceObjectIDs.begin();
+    auto itNewObjects = inSourceObjectIDs.begin();
     EStatusCode status = PDFHummus::eSuccess;
 
     for (; itNewObjects != inSourceObjectIDs.end() && PDFHummus::eSuccess == status; ++itNewObjects)
@@ -515,7 +517,7 @@ EStatusCode PDFDocumentHandler::WriteNewObjects(const ObjectIDTypeList &inSource
         // copied, so make sure to check that these objects are still required for copying
         if (ioCopiedObjects.find(*itNewObjects) == ioCopiedObjects.end())
         {
-            ObjectIDTypeToObjectIDTypeMap::iterator it = mSourceToTarget.find(*itNewObjects);
+            auto it = mSourceToTarget.find(*itNewObjects);
             if (it == mSourceToTarget.end())
             {
                 ObjectIDType newObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
@@ -538,8 +540,7 @@ void PDFDocumentHandler::RegisterInDirectObjects(PDFDictionary *inDictionary, Ob
     {
         if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            ObjectIDTypeToObjectIDTypeMap::iterator itObjects =
-                mSourceToTarget.find(((PDFIndirectObjectReference *)it.GetValue())->mObjectID);
+            auto itObjects = mSourceToTarget.find(((PDFIndirectObjectReference *)it.GetValue())->mObjectID);
             if (itObjects == mSourceToTarget.end())
                 outNewObjects.push_back(((PDFIndirectObjectReference *)it.GetValue())->mObjectID);
         }
@@ -562,8 +563,7 @@ void PDFDocumentHandler::RegisterInDirectObjects(PDFArray *inArray, ObjectIDType
     {
         if (it.GetItem()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            ObjectIDTypeToObjectIDTypeMap::iterator itObjects =
-                mSourceToTarget.find(((PDFIndirectObjectReference *)it.GetItem())->mObjectID);
+            auto itObjects = mSourceToTarget.find(((PDFIndirectObjectReference *)it.GetItem())->mObjectID);
             if (itObjects == mSourceToTarget.end())
                 outNewObjects.push_back(((PDFIndirectObjectReference *)it.GetItem())->mObjectID);
         }
@@ -674,7 +674,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDFInContex
     do
     {
 
-        IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+        auto it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
         {
             result.first = (*it)->OnPDFParsingComplete(mObjectsContext, mDocumentContext, this);
@@ -715,7 +715,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDFInContex
         else
         {
             // eRangeTypeSpecific
-            ULongAndULongList::const_iterator it = inPageRange.mSpecificRanges.begin();
+            auto it = inPageRange.mSpecificRanges.begin();
             for (; it != inPageRange.mSpecificRanges.end() && PDFHummus::eSuccess == result.first; ++it)
             {
                 if (it->first <= it->second && it->second < mParser->GetPagesCount())
@@ -746,7 +746,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDFInContex
 
     } while (false);
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
     {
         result.first = (*it)->OnPDFCopyingComplete(mObjectsContext, mDocumentContext, this);
@@ -777,7 +777,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
 
     EStatusCode status = PDFHummus::eSuccess;
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
     {
         status = (*it)->OnBeforeCreatePageFromPage(pageObject.GetPtr(), mObjectsContext, mDocumentContext, this);
@@ -1000,7 +1000,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(PDFParser *inPDFParser)
 
     do
     {
-        if (mParser && mParserOwned)
+        if ((mParser != nullptr) && mParserOwned)
             delete mParser;
         mParserOwned = false;
         mParser = inPDFParser;
@@ -1026,7 +1026,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition *inP
 
     do
     {
-        if (!mParserOwned || !mParser)
+        if (!mParserOwned || (mParser == nullptr))
             mParser = new PDFParser();
         mPDFStream = inPDFStream;
         mParserOwned = true;
@@ -1063,7 +1063,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreateFormXObjectFromPDFPage(unsi
     {
         newObject = CreatePDFFormXObjectForPage(inPageIndex, inPageBoxToUseAsFormBox, inTransformationMatrix,
                                                 inPredefinedFormId);
-        if (newObject)
+        if (newObject != nullptr)
         {
             result.first = PDFHummus::eSuccess;
             result.second = newObject->GetObjectID();
@@ -1096,7 +1096,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreateFormXObjectFromPDFPage(unsi
     if (inPageIndex < mParser->GetPagesCount())
     {
         newObject = CreatePDFFormXObjectForPage(inPageIndex, inCropBox, inTransformationMatrix, inPredefinedFormId);
-        if (newObject)
+        if (newObject != nullptr)
         {
             result.first = PDFHummus::eSuccess;
             result.second = newObject->GetObjectID();
@@ -1142,7 +1142,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObject(ObjectIDType inSourceO
 {
     EStatusCodeAndObjectIDType result;
 
-    ObjectIDTypeToObjectIDTypeMap::iterator it = mSourceToTarget.find(inSourceObjectID);
+    auto it = mSourceToTarget.find(inSourceObjectID);
     if (it == mSourceToTarget.end())
     {
         ObjectIDTypeList anObjectList;
@@ -1167,7 +1167,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::GetCopiedObjectID(ObjectIDType in
 {
     EStatusCodeAndObjectIDType result;
 
-    ObjectIDTypeToObjectIDTypeMap::iterator it = mSourceToTarget.find(inSourceObjectID);
+    auto it = mSourceToTarget.find(inSourceObjectID);
     if (it == mSourceToTarget.end())
     {
         result.first = PDFHummus::eFailure;
@@ -1193,7 +1193,7 @@ void PDFDocumentHandler::StopCopyingContext()
     mSourceToTarget.clear();
     if (mParserOwned)
     {
-        if (mParser)
+        if (mParser != nullptr)
         {
             mParser->ResetParser();
             delete mParser;
@@ -1231,7 +1231,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage *inPage, co
 
     do
     {
-        IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+        auto it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
         {
             status = (*it)->OnPDFParsingComplete(mObjectsContext, mDocumentContext, this);
@@ -1263,7 +1263,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage *inPage, co
         else
         {
             // eRangeTypeSpecific
-            ULongAndULongList::const_iterator it = inPageRange.mSpecificRanges.begin();
+            auto it = inPageRange.mSpecificRanges.begin();
             for (; it != inPageRange.mSpecificRanges.end() && PDFHummus::eSuccess == status; ++it)
             {
                 if (it->first <= it->second && it->second < mParser->GetPagesCount())
@@ -1287,7 +1287,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage *inPage, co
 
     } while (false);
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
     {
         status = (*it)->OnPDFCopyingComplete(mObjectsContext, mDocumentContext, this);
@@ -1314,7 +1314,7 @@ EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage *inTargetPage, unsig
         return PDFHummus::eFailure;
     }
 
-    IDocumentContextExtenderSet::iterator it = mExtenders.begin();
+    auto it = mExtenders.begin();
     for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
     {
         status = (*it)->OnBeforeMergePageFromPage(inTargetPage, pageObject.GetPtr(), mObjectsContext, mDocumentContext,
@@ -1379,7 +1379,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
     // ProcSet
     PDFObjectCastPtr<PDFArray> procsets(mParser->QueryDictionaryObject(resources.GetPtr(), "ProcSet"));
-    if (procsets.GetPtr())
+    if (procsets.GetPtr() != nullptr)
     {
         SingleValueContainerIterator<PDFObjectVector> it(procsets->GetIterator());
         while (it.MoveNext())
@@ -1391,7 +1391,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // ExtGState
         PDFObjectCastPtr<PDFDictionary> extgstate(mParser->QueryDictionaryObject(resources.GetPtr(), "ExtGState"));
-        if (extgstate.GetPtr())
+        if (extgstate.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(extgstate->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1411,7 +1411,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // ColorSpace
         PDFObjectCastPtr<PDFDictionary> colorspace(mParser->QueryDictionaryObject(resources.GetPtr(), "ColorSpace"));
-        if (colorspace.GetPtr())
+        if (colorspace.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(colorspace->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1429,7 +1429,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // Pattern
         PDFObjectCastPtr<PDFDictionary> pattern(mParser->QueryDictionaryObject(resources.GetPtr(), "Pattern"));
-        if (pattern.GetPtr())
+        if (pattern.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(pattern->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1447,7 +1447,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // Shading
         PDFObjectCastPtr<PDFDictionary> shading(mParser->QueryDictionaryObject(resources.GetPtr(), "Shading"));
-        if (shading.GetPtr())
+        if (shading.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(shading->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1465,7 +1465,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // XObject
         PDFObjectCastPtr<PDFDictionary> xobject(mParser->QueryDictionaryObject(resources.GetPtr(), "XObject"));
-        if (xobject.GetPtr())
+        if (xobject.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(xobject->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1483,7 +1483,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // Font
         PDFObjectCastPtr<PDFDictionary> font(mParser->QueryDictionaryObject(resources.GetPtr(), "Font"));
-        if (font.GetPtr())
+        if (font.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(font->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1501,7 +1501,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
 
         // Properties
         PDFObjectCastPtr<PDFDictionary> properties(mParser->QueryDictionaryObject(resources.GetPtr(), "Properties"));
-        if (properties.GetPtr())
+        if (properties.GetPtr() != nullptr)
         {
             MapIterator<PDFNameToPDFObjectMap> it(properties->GetIterator());
             while (it.MoveNext() && PDFHummus::eSuccess == status)
@@ -1545,8 +1545,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(PDFObj
     }
     else
     {
-        ObjectIDTypeToObjectIDTypeMap::iterator itObjects =
-            mSourceToTarget.find(((PDFIndirectObjectReference *)inObject)->mObjectID);
+        auto itObjects = mSourceToTarget.find(((PDFIndirectObjectReference *)inObject)->mObjectID);
         if (itObjects == mSourceToTarget.end())
         {
             result.second = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
@@ -1697,7 +1696,7 @@ EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(PDFStreamInput *inS
 {
     IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
-    if (!streamReader)
+    if (streamReader == nullptr)
         return PDFHummus::eFailure;
 
     mPDFStream->SetPosition(inSourceStream->GetStreamContentStart());
@@ -1739,7 +1738,7 @@ EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTa
 {
     IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
-    if (!streamReader)
+    if (streamReader == nullptr)
         return PDFHummus::eFailure;
 
     mPDFStream->SetPosition(inSourceStream->GetStreamContentStart());
@@ -1749,7 +1748,7 @@ EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTa
     primitivesWriter.SetStreamForWriting(inTargetStream);
     EStatusCode status = PDFHummus::eSuccess;
     InputStreamSkipperStream skipper(streamReader);
-    ResourceTokenMarkerList::const_iterator it = inResourceMarkers.begin();
+    auto it = inResourceMarkers.begin();
     LongFilePositionType previousContentPosition = 0;
 
     for (; it != inResourceMarkers.end() && PDFHummus::eSuccess == status; ++it)
@@ -1881,7 +1880,7 @@ void PDFDocumentHandler::SetParserExtender(IPDFParserExtender *inParserExtender)
 
 void PDFDocumentHandler::ReplaceSourceObjects(const ObjectIDTypeToObjectIDTypeMap &inSourceObjectsToNewTargetObjects)
 {
-    ObjectIDTypeToObjectIDTypeMap::const_iterator itReplaced = inSourceObjectsToNewTargetObjects.begin();
+    auto itReplaced = inSourceObjectsToNewTargetObjects.begin();
 
     for (; itReplaced != inSourceObjectsToNewTargetObjects.end(); ++itReplaced)
     {
@@ -1911,7 +1910,7 @@ void InWritingPolicy::WriteReference(PDFIndirectObjectReference *inReference, ET
 void OutWritingPolicy::WriteReference(PDFIndirectObjectReference *inReference, ETokenSeparator inSeparator)
 {
     ObjectIDType sourceObjectID = inReference->mObjectID;
-    ObjectIDTypeToObjectIDTypeMap::iterator itObjects = mDocumentHandler->mSourceToTarget.find(sourceObjectID);
+    auto itObjects = mDocumentHandler->mSourceToTarget.find(sourceObjectID);
     if (itObjects == mDocumentHandler->mSourceToTarget.end())
     {
         ObjectIDType newObjectID =
@@ -2314,7 +2313,7 @@ EStatusCode PDFDocumentHandler::RegisterResourcesForForm(PDFFormXObject *inTarge
 
         // ProcSet
         PDFObjectCastPtr<PDFArray> procsets(mParser->QueryDictionaryObject(resources.GetPtr(), "ProcSet"));
-        if (procsets.GetPtr())
+        if (procsets.GetPtr() != nullptr)
         {
             SingleValueContainerIterator<PDFObjectVector> it(procsets->GetIterator());
             while (it.MoveNext())
@@ -2380,7 +2379,7 @@ class ResourceCopierTask : public IResourceWritingTask
     }
 
     EStatusCode Write(DictionaryContext *inResoruceCategoryContext, ObjectsContext * /*inObjectsContext*/,
-                              PDFHummus::DocumentContext * /*inDocumentContext*/) override
+                      PDFHummus::DocumentContext * /*inDocumentContext*/) override
     {
         // write key
         inResoruceCategoryContext->WriteKey(mResourceName);
@@ -2412,15 +2411,15 @@ void PDFDocumentHandler::RegisterResourcesForResourcesCategory(PDFFormXObject *i
 {
     PDFObjectCastPtr<PDFDictionary> resourcesCategoryDictionary(
         mParser->QueryDictionaryObject(inResourcesDictionary, inCommand->GetResourcesCategoryName()));
-    if (resourcesCategoryDictionary.GetPtr())
+    if (resourcesCategoryDictionary.GetPtr() != nullptr)
     {
         MapIterator<PDFNameToPDFObjectMap> it(resourcesCategoryDictionary->GetIterator());
         while (it.MoveNext())
         {
             if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
             {
-                PDFIndirectObjectReference *indirectReference = (PDFIndirectObjectReference *)(it.GetValue());
-                ObjectIDTypeToObjectIDTypeMap::iterator itObjects = mSourceToTarget.find(indirectReference->mObjectID);
+                auto *indirectReference = (PDFIndirectObjectReference *)(it.GetValue());
+                auto itObjects = mSourceToTarget.find(indirectReference->mObjectID);
                 ObjectIDType targetObjectID;
                 if (itObjects == mSourceToTarget.end())
                 {
@@ -2440,14 +2439,13 @@ void PDFDocumentHandler::RegisterResourcesForResourcesCategory(PDFFormXObject *i
             else
             {
 
-                ResourceCopierTask *task = new ResourceCopierTask(inTargetFormXObject, this, it.GetValue());
-                StringToStringMap::iterator itInsert =
-                    ioMappedResourcesNames
-                        .insert(StringToStringMap::value_type(
-                            AsEncodedName(it.GetKey()->GetValue()),
-                            mDocumentContext->AddExtendedResourceMapping(inTargetFormXObject,
-                                                                         inCommand->GetResourcesCategoryName(), task)))
-                        .first;
+                auto *task = new ResourceCopierTask(inTargetFormXObject, this, it.GetValue());
+                auto itInsert = ioMappedResourcesNames
+                                    .insert(StringToStringMap::value_type(
+                                        AsEncodedName(it.GetKey()->GetValue()),
+                                        mDocumentContext->AddExtendedResourceMapping(
+                                            inTargetFormXObject, inCommand->GetResourcesCategoryName(), task)))
+                                    .first;
                 task->SetResourceName(itInsert->second);
             }
         }
@@ -2526,7 +2524,7 @@ class ObjectsCopyingTask : public IFormEndWritingTask
     }
 
     EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
-                              PDFHummus::DocumentContext * /*inDocumentContext*/) override
+                      PDFHummus::DocumentContext * /*inDocumentContext*/) override
     {
         return mCopier->CopyNewObjectsForDirectObject(mObjectsToWrite);
     }

@@ -31,7 +31,7 @@ OutputFileStream::OutputFileStream()
 
 OutputFileStream::~OutputFileStream()
 {
-    if (mStream)
+    if (mStream != nullptr)
         Close();
 }
 
@@ -45,7 +45,7 @@ EStatusCode OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
 {
     SAFE_FOPEN(mStream, inFilePath.c_str(), inAppend ? "ab" : "wb")
 
-    if (!mStream)
+    if (mStream == nullptr)
         return PDFHummus::eFailure;
 
     // seek to end, so position reading gets the correct file position, even before first write
@@ -65,11 +65,12 @@ EStatusCode OutputFileStream::Close()
 LongBufferSizeType OutputFileStream::Write(const Byte *inBuffer, LongBufferSizeType inSize)
 {
 
-    LongBufferSizeType writtenItems = mStream ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
+    LongBufferSizeType writtenItems =
+        mStream != nullptr ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
     return writtenItems;
 }
 
 LongFilePositionType OutputFileStream::GetCurrentPosition()
 {
-    return mStream ? SAFE_FTELL64(mStream) : 0;
+    return mStream != nullptr ? SAFE_FTELL64(mStream) : 0;
 }

@@ -44,7 +44,7 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
 
   public:
     IOBasicTypes::LongBufferSizeType Read(IOBasicTypes::Byte *inBuffer,
-                                                  IOBasicTypes::LongBufferSizeType inBufferSize) override
+                                          IOBasicTypes::LongBufferSizeType inBufferSize) override
     {
         const char *data = mInput.data();
         if (!NotEnded())

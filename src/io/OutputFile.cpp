@@ -49,7 +49,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
             break;
         }
 
-        OutputFileStream *outputFileStream = new OutputFileStream();
+        auto *outputFileStream = new OutputFileStream();
         status = outputFileStream->Open(inFilePath, inAppend); // explicitly open, so status may be retrieved
         if (status != PDFHummus::eSuccess)
         {

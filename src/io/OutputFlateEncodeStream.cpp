@@ -38,7 +38,7 @@ OutputFlateEncodeStream::~OutputFlateEncodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
-    if (mTargetStream)
+    if (mTargetStream != nullptr)
         delete mTargetStream;
     delete[] mBuffer;
     delete mZLibState;
@@ -111,7 +111,7 @@ void OutputFlateEncodeStream::Assign(IByteWriterWithPosition *inWriter, bool inI
     if (mCurrentlyEncoding)
         FinalizeEncoding();
     mTargetStream = inWriter;
-    if (inInitiallyOn && mTargetStream)
+    if (inInitiallyOn && (mTargetStream != nullptr))
         StartEncoding();
 }
 
@@ -119,7 +119,7 @@ LongBufferSizeType OutputFlateEncodeStream::Write(const IOBasicTypes::Byte *inBu
 {
     if (mCurrentlyEncoding)
         return EncodeBufferAndWrite(inBuffer, inSize);
-    else if (mTargetStream)
+    else if (mTargetStream != nullptr)
         return mTargetStream->Write(inBuffer, inSize);
     else
         return 0;
@@ -170,7 +170,7 @@ LongBufferSizeType OutputFlateEncodeStream::EncodeBufferAndWrite(const IOBasicTy
 
 LongFilePositionType OutputFlateEncodeStream::GetCurrentPosition()
 {
-    if (mTargetStream)
+    if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
     else
         return 0;

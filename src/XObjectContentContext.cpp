@@ -59,7 +59,7 @@ class FormImageWritingTask : public IFormEndWritingTask
     }
 
     PDFHummus::EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
-                                         PDFHummus::DocumentContext *inDocumentContext) override
+                                 PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

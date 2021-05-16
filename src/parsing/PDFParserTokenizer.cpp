@@ -345,7 +345,7 @@ void PDFParserTokenizer::SkipTillToken()
 
 bool PDFParserTokenizer::CanGetNextByte()
 {
-    return !!mStream && (mHasTokenBuffer || mStream->NotEnded());
+    return !(mStream == nullptr) && (mHasTokenBuffer || mStream->NotEnded());
 }
 
 EStatusCode PDFParserTokenizer::GetNextByteForToken(Byte &outByte)

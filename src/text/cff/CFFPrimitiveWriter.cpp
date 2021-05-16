@@ -35,7 +35,7 @@ CFFPrimitiveWriter::~CFFPrimitiveWriter()
 void CFFPrimitiveWriter::SetStream(IByteWriter *inCFFOutput)
 {
     mCFFOutput = inCFFOutput;
-    if (inCFFOutput)
+    if (inCFFOutput != nullptr)
     {
         mCurrentOffsize = 1;
         mInternalState = PDFHummus::eSuccess;
@@ -191,7 +191,7 @@ EStatusCode CFFPrimitiveWriter::WriteDictOperand(const DictOperand &inOperand)
 EStatusCode CFFPrimitiveWriter::WriteDictItems(unsigned short inOperator, const DictOperandList &inOperands)
 {
     EStatusCode status = PDFHummus::eSuccess;
-    DictOperandList::const_iterator it = inOperands.begin();
+    auto it = inOperands.begin();
 
     for (; it != inOperands.end() && PDFHummus::eSuccess == status; ++it)
         status = WriteDictOperand(*it);

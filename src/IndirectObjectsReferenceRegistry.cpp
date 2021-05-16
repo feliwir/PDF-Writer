@@ -201,7 +201,7 @@ EStatusCode IndirectObjectsReferenceRegistry::WriteState(ObjectsContext *inState
 
     myDictionary->WriteKey("mObjectsWritesRegistry");
 
-    ObjectWriteInformationVector::iterator it = mObjectsWritesRegistry.begin();
+    auto it = mObjectsWritesRegistry.begin();
 
     inStateWriter->StartArray();
     for (; it != mObjectsWritesRegistry.end(); ++it)
@@ -215,7 +215,7 @@ EStatusCode IndirectObjectsReferenceRegistry::WriteState(ObjectsContext *inState
     inStateWriter->EndDictionary(myDictionary);
     inStateWriter->EndIndirectObject();
 
-    ObjectIDTypeList::iterator itIDs = objects.begin();
+    auto itIDs = objects.begin();
 
     it = mObjectsWritesRegistry.begin();
 

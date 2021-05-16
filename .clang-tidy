@@ -1,1 +1,1 @@
-Checks: '-*,clang-diagnostic-*,llvm-*,misc-*,modernize-loop-convert,modernize-use-override,modernize-redundant-void-arg,modernize-use-nullptr,readability-redundant-*,readability-simplify-*,performance-*'
+Checks: '-*,clang-diagnostic-*,llvm-*,misc-*,modernize-use-auto,modernize-loop-convert,modernize-use-override,modernize-redundant-void-arg,modernize-use-nullptr,readability-redundant-*,readability-simplify-*,performance-*'

@@ -100,14 +100,14 @@ EStatusCode TextUsageBugs::RunKoreanFontTest(const TestConfiguration &inTestConf
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
         AbstractContentContext::TextOptions textOptions(
-            pdfWriter.GetFontForFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                            "data/fonts/NotoSerifCJKkr-Regular.otf")),
+            pdfWriter.GetFontForFile(
+                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/NotoSerifCJKkr-Regular.otf")),
             14, AbstractContentContext::eGray, 0);
 
         cxt->WriteText(10, 200, "hello", textOptions);
@@ -159,7 +159,7 @@ EStatusCode TextUsageBugs::RunCNRSTest(const TestConfiguration &inTestConfigurat
             cout << "failed to start PDF\n";
             break;
         }
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -171,7 +171,7 @@ EStatusCode TextUsageBugs::RunCNRSTest(const TestConfiguration &inTestConfigurat
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object\n";
@@ -246,7 +246,7 @@ EStatusCode TextUsageBugs::RunCNRS2SampleTest(const TestConfiguration &inTestCon
             cout << "failed to start PDF\n";
             break;
         }
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -258,7 +258,7 @@ EStatusCode TextUsageBugs::RunCNRS2SampleTest(const TestConfiguration &inTestCon
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object\n";
@@ -2361,7 +2361,7 @@ EStatusCode TextUsageBugs::RunCNRS2Test(const TestConfiguration &inTestConfigura
             cout << "failed to start PDF\n";
             break;
         }
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -2373,7 +2373,7 @@ EStatusCode TextUsageBugs::RunCNRS2Test(const TestConfiguration &inTestConfigura
         }
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/texgyrepagella-math.otf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object\n";

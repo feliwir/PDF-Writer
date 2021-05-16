@@ -40,7 +40,7 @@ EStatusCode InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
 {
     mStreamToDecode = inStreamToDecode;
 
-    if (mStreamToDecode)
+    if (mStreamToDecode != nullptr)
     {
         ResetReadStatus();
         mInternalState = InitializeStreamSegment();
@@ -583,7 +583,7 @@ LongBufferSizeType InputPFBDecodeStream::Read(Byte *inBuffer, LongBufferSizeType
 
 bool InputPFBDecodeStream::NotEnded()
 {
-    return mStreamToDecode && mStreamToDecode->NotEnded() && !mFoundEOF;
+    return (mStreamToDecode != nullptr) && mStreamToDecode->NotEnded() && !mFoundEOF;
 }
 
 EStatusCode InputPFBDecodeStream::GetInternalState()

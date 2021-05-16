@@ -33,7 +33,7 @@ InputAsciiHexDecodeStream::InputAsciiHexDecodeStream()
 
 InputAsciiHexDecodeStream::~InputAsciiHexDecodeStream()
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
@@ -53,7 +53,8 @@ void InputAsciiHexDecodeStream::Assign(IByteReader *inSourceReader)
 
 bool InputAsciiHexDecodeStream::NotEnded()
 {
-    return mSourceStream && ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
+    return (mSourceStream != nullptr) &&
+           ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
 LongBufferSizeType InputAsciiHexDecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)

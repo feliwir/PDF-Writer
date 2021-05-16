@@ -319,7 +319,7 @@ EStatusCode JPEGImageParser::ReadPhotoshopData(JPEGImageInformation &outImageInf
             if (nameSkip % 2 == 0)
                 ++nameSkip;
             twoLevelStatus.secondary = SkipStream(nameSkip, toSkip);
-            if (twoLevelStatus.secondary)
+            if (twoLevelStatus.secondary != 0)
                 break;
             resolutionBimNotFound = (0 != memcmp(mReadBuffer, scResolutionBIMID, 2));
             twoLevelStatus = ReadLongValue(toSkip, dataLength);

@@ -1,8 +1,8 @@
 #include "PDFPage.h"
 #include "PDFWriter.h"
+#include "Singleton.h"
 #include "TestHelper.h"
 #include "Trace.h"
-#include "Singleton.h"
 #include "io/IOBasicTypes.h"
 #include "io/OutputFile.h"
 #include "io/OutputFlateDecodeStream.h"
@@ -38,7 +38,7 @@ TEST(CustomStreams, CustomLog)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     TRACE_LOG("Now will add an empty page");
-    PDFPage *page = new PDFPage();
+    auto *page = new PDFPage();
 
     page->SetMediaBox(PDFRectangle(0, 0, 400, 400));
 

@@ -49,8 +49,8 @@ class PDFDictionary : public PDFObject
     // AddRefs on both
     void Insert(PDFName *inKeyObject, PDFObject *inValueObject);
 
-    bool Exists(const std::string& inName);
-    PDFObject *QueryDirectObject(const std::string& inName);
+    bool Exists(const std::string &inName);
+    PDFObject *QueryDirectObject(const std::string &inName);
 
     MapIterator<PDFNameToPDFObjectMap> GetIterator();
 

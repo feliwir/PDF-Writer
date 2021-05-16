@@ -50,8 +50,8 @@ EStatusCode CFFEmbeddedFontWriter::WriteEmbeddedFont(
     FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs, const std::string &inFontFile3SubType,
     const std::string &inSubsetFontName, ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID)
 {
-    return WriteEmbeddedFont(inFontInfo, inSubsetGlyphIDs, inFontFile3SubType, inSubsetFontName, inObjectsContext, nullptr,
-                             outEmbeddedFontObjectID);
+    return WriteEmbeddedFont(inFontInfo, inSubsetGlyphIDs, inFontFile3SubType, inSubsetFontName, inObjectsContext,
+                             nullptr, outEmbeddedFontObjectID);
 }
 
 EStatusCode CFFEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo,
@@ -267,7 +267,7 @@ EStatusCode CFFEmbeddedFontWriter::AddDependentGlyphs(UIntVector &ioSubsetGlyphI
 {
     EStatusCode status = PDFHummus::eSuccess;
     UIntSet glyphsSet;
-    UIntVector::iterator it = ioSubsetGlyphIDs.begin();
+    auto it = ioSubsetGlyphIDs.begin();
     bool hasCompositeGlyphs = false;
 
     for (; it != ioSubsetGlyphIDs.end() && PDFHummus::eSuccess == status; ++it)
@@ -301,7 +301,7 @@ EStatusCode CFFEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UI
 
     if (PDFHummus::eSuccess == status && dependencies.mCharCodes.size() != 0)
     {
-        UShortSet::iterator it = dependencies.mCharCodes.begin();
+        auto it = dependencies.mCharCodes.begin();
         for (; it != dependencies.mCharCodes.end() && PDFHummus::eSuccess == status; ++it)
         {
             bool dummyFound;
@@ -597,7 +597,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
         // actually have. but cause i'm lazy i'll just do the first format.
 
         // figure out if we got supplements
-        UIntVector::const_iterator it = inSubsetGlyphIDs.begin();
+        auto it = inSubsetGlyphIDs.begin();
         ByteAndUShortList supplements;
 
         for (; it != inSubsetGlyphIDs.end(); ++it)
@@ -605,10 +605,10 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
             // don't be confused! the supplements is by SID! not GID!
             unsigned short sid = mOpenTypeInput.mCFF.GetGlyphSID(0, *it);
 
-            UShortToByteList::iterator itSupplements = encodingInfo->mSupplements.find(sid);
+            auto itSupplements = encodingInfo->mSupplements.find(sid);
             if (itSupplements != encodingInfo->mSupplements.end())
             {
-                ByteList::iterator itMoreEncoding = itSupplements->second.begin();
+                auto itMoreEncoding = itSupplements->second.begin();
                 for (; itMoreEncoding != itSupplements->second.end(); ++itMoreEncoding)
                     supplements.push_back(ByteAndUShort(*itMoreEncoding, sid));
             }
@@ -637,7 +637,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
         if (supplements.size() > 0)
         {
             mPrimitivesWriter.WriteCard8(Byte(supplements.size()));
-            ByteAndUShortList::iterator itCollectedSupplements = supplements.begin();
+            auto itCollectedSupplements = supplements.begin();
 
             for (; itCollectedSupplements != supplements.end(); ++itCollectedSupplements)
             {
@@ -654,15 +654,15 @@ EStatusCode CFFEmbeddedFontWriter::WriteCharsets(const UIntVector &inSubsetGlyph
 {
     // since this is a subset the chances that i'll get a defult charset are 0.
     // hence i'll always do some charset. and using format 0 !!1
-    UIntVector::const_iterator it = inSubsetGlyphIDs.begin();
+    auto it = inSubsetGlyphIDs.begin();
     ++it; // skip the 0
 
     mCharsetPosition = mFontFileStream.GetCurrentPosition();
 
     mPrimitivesWriter.WriteCard8(0);
-    if (mIsCID && inCIDMapping)
+    if (mIsCID && (inCIDMapping != nullptr))
     {
-        UShortVector::const_iterator itCIDs = inCIDMapping->begin();
+        auto itCIDs = inCIDMapping->begin();
         ++itCIDs;
         for (; it != inSubsetGlyphIDs.end(); ++it, ++itCIDs)
             mPrimitivesWriter.WriteSID(*itCIDs);
@@ -686,11 +686,11 @@ EStatusCode CFFEmbeddedFontWriter::WriteCharStrings(const UIntVector &inSubsetGl
         3. copy the data into the stream
     */
 
-    unsigned long *offsets = new unsigned long[inSubsetGlyphIDs.size() + 1];
+    auto *offsets = new unsigned long[inSubsetGlyphIDs.size() + 1];
     MyStringBuf charStringsData;
     OutputStringBufferStream charStringsDataWriteStream(&charStringsData);
     CharStringType2Flattener charStringFlattener;
-    UIntVector::const_iterator itGlyphs = inSubsetGlyphIDs.begin();
+    auto itGlyphs = inSubsetGlyphIDs.begin();
     EStatusCode status = PDFHummus::eSuccess;
 
     do
@@ -743,7 +743,7 @@ EStatusCode CFFEmbeddedFontWriter::WritePrivateDictionaryBody(const PrivateDictI
     // just copy the private dict, without the subrs reference
     if (inPrivateDictionary.mPrivateDictStart != 0)
     {
-        UShortToDictOperandListMap::const_iterator it = inPrivateDictionary.mPrivateDict.begin();
+        auto it = inPrivateDictionary.mPrivateDict.begin();
 
         outWritePosition = mFontFileStream.GetCurrentPosition();
         for (; it != inPrivateDictionary.mPrivateDict.end(); ++it)
@@ -768,11 +768,11 @@ typedef std::map<FontDictInfo *, LongFilePositionTypePair> FontDictInfoToLongFil
 void CFFEmbeddedFontWriter::DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs,
                                                     FontDictInfoToByteMap &outNewFontDictsIndexes)
 {
-    UIntVector::const_iterator itGlyphs = inSubsetGlyphIDs.begin();
+    auto itGlyphs = inSubsetGlyphIDs.begin();
     FontDictInfoSet fontDictInfos;
 
     for (; itGlyphs != inSubsetGlyphIDs.end(); ++itGlyphs)
-        if (mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs])
+        if (mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs] != nullptr)
             fontDictInfos.insert(mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs]);
 
     FontDictInfoSet::iterator itFontInfos;
@@ -806,7 +806,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGly
 
         // loop the font infos, and write the private dictionaries
         LongFilePositionType privatePosition, privateSize;
-        FontDictInfoToByteMap::const_iterator itFontInfos = inNewFontDictsIndexes.begin();
+        auto itFontInfos = inNewFontDictsIndexes.begin();
         for (; itFontInfos != inNewFontDictsIndexes.end() && PDFHummus::eSuccess == status; ++itFontInfos)
         {
             status = WritePrivateDictionaryBody(itFontInfos->first->mPrivateDict, privateSize, privatePosition);
@@ -830,7 +830,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGly
         {
             offsets[i] = (unsigned long)fontDictDataWriteStream.GetCurrentPosition();
 
-            UShortToDictOperandListMap::const_iterator itDict = itFontInfos->first->mFontDict.begin();
+            auto itDict = itFontInfos->first->mFontDict.begin();
 
             for (; itDict != itFontInfos->first->mFontDict.end() && PDFHummus::eSuccess == status; ++itDict)
                 if (itDict->first !=
@@ -883,7 +883,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDSelect(const UIntVector &inSubsetGlyph
 {
     // always write format 3. cause at most cases the FD dicts count will be so low that it'd
     // take a bloody mircale for no repeats to occur.
-    UIntVector::const_iterator itGlyphs = inSubsetGlyphIDs.begin();
+    auto itGlyphs = inSubsetGlyphIDs.begin();
 
     mFDSelectPosition = mFontFileStream.GetCurrentPosition();
     mPrimitivesWriter.WriteCard8(3);
@@ -894,8 +894,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDSelect(const UIntVector &inSubsetGlyph
     unsigned short rangesCount = 1;
     Byte currentFD, newFD;
     unsigned short glyphIndex = 1;
-    FontDictInfoToByteMap::const_iterator itNewIndex =
-        inNewFontDictsIndexes.find(mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs]);
+    auto itNewIndex = inNewFontDictsIndexes.find(mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs]);
 
     // k. seems like i probably just imagine exceptions here. i guess there must
     // be a proper FDSelect with FDs for all...so i'm defaulting to some 0

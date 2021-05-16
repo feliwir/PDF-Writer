@@ -43,6 +43,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <variant>
 
 namespace PDFHummus
 {
@@ -56,32 +57,10 @@ class ITextCommand;
 class IByteReader;
 class IContentContextListener;
 
-template <typename T> struct SomethingOrDouble
-{
-    T SomeValue;
-    double DoubleValue;
-
-    bool IsDouble; // true - double, false - other
-
-    SomethingOrDouble(T inSome)
-    {
-        SomeValue = inSome;
-        IsDouble = false;
-    }
-    SomethingOrDouble(double inDouble)
-    {
-        DoubleValue = inDouble;
-        IsDouble = true;
-    }
-};
-
+template <class T> using SomethingOrDouble = std::variant<T, double>;
 typedef SomethingOrDouble<std::string> StringOrDouble;
 typedef SomethingOrDouble<GlyphUnicodeMappingList> GlyphUnicodeMappingListOrDouble;
 
-typedef std::list<StringOrDouble> StringOrDoubleList;
-typedef std::list<GlyphUnicodeMappingListOrDouble> GlyphUnicodeMappingListOrDoubleList;
-
-typedef std::set<IContentContextListener *> IContentContextListenerSet;
 typedef std::pair<double, double> DoubleAndDoublePair;
 typedef std::list<DoubleAndDoublePair> DoubleAndDoublePairList;
 
@@ -288,7 +267,7 @@ class AbstractContentContext
     // The rest of the text operators, handled by the library handing of font. text is in UTF8
     PDFHummus::EStatusCode Quote(const std::string &inText);
     PDFHummus::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing, const std::string &inText);
-    PDFHummus::EStatusCode TJ(const StringOrDoubleList &inStringsAndSpacing);
+    PDFHummus::EStatusCode TJ(const std::list<StringOrDouble> &inStringsAndSpacing);
 
     //
     // Text showing operators using the library handling of fonts with direct glyph selection
@@ -302,7 +281,7 @@ class AbstractContentContext
     PDFHummus::EStatusCode Quote(const GlyphUnicodeMappingList &inText);
     PDFHummus::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing,
                                        const GlyphUnicodeMappingList &inText);
-    PDFHummus::EStatusCode TJ(const GlyphUnicodeMappingListOrDoubleList &inStringsAndSpacing);
+    PDFHummus::EStatusCode TJ(const std::list<GlyphUnicodeMappingListOrDouble> &inStringsAndSpacing);
 
     //
     // Text showing operators overriding library behavior
@@ -328,8 +307,8 @@ class AbstractContentContext
 
     // similar to the TJ PDF command, TJ() recieves an input an array of items which
     // can be either a string or a double
-    void TJLow(const StringOrDoubleList &inStringsAndSpacing);
-    void TJHexLow(const StringOrDoubleList &inStringsAndSpacing);
+    void TJLow(const std::list<StringOrDouble> &inStringsAndSpacing);
+    void TJHexLow(const std::list<StringOrDouble> &inStringsAndSpacing);
 
     // introduce free code
     void WriteFreeCode(const std::string &inFreeCode);
@@ -365,7 +344,7 @@ class AbstractContentContext
     GraphicStateStack mGraphicStack;
 
     // listeners
-    IContentContextListenerSet mListeners;
+    std::set<IContentContextListener *> mListeners;
 
     void AssertProcsetAvailable(const std::string &inProcsetName);
 

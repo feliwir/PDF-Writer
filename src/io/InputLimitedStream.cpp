@@ -33,7 +33,7 @@ InputLimitedStream::InputLimitedStream()
 
 InputLimitedStream::~InputLimitedStream()
 {
-    if (mStream && mOwnsStream)
+    if ((mStream != nullptr) && mOwnsStream)
         delete mStream;
 }
 

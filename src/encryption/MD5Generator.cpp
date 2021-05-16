@@ -107,7 +107,7 @@ EStatusCode MD5Generator::Accumulate(const ByteList &inString)
 
     Byte *buffer = new Byte[inString.size()];
     Byte *itBuffer = buffer;
-    ByteList::const_iterator it = inString.begin();
+    auto it = inString.begin();
     for (; it != inString.end(); ++it, ++itBuffer)
         *itBuffer = *it;
 
@@ -407,7 +407,7 @@ void MD5Generator::PrepareFinalStrings()
     char formattedHex[3];
     MD5FinalString.clear();
 
-    for (unsigned char & i : mDigest)
+    for (unsigned char &i : mDigest)
     {
         SAFE_SPRINTF_1(formattedHex, 3, "%02x", i);
         stringHexStream.Write((const Byte *)formattedHex, 2);

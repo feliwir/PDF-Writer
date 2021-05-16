@@ -63,7 +63,7 @@ std::string ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjec
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mXObjects.find(inFormXObjectID);
+        auto it = mXObjects.find(inFormXObjectID);
 
         if (it == mXObjects.end())
         {
@@ -77,7 +77,7 @@ std::string ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjec
 
 void ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID, const std::string &inFormXObjectName)
 {
-    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inFormXObjectID);
+    auto it = mXObjects.find(inFormXObjectID);
 
     if (it == mXObjects.end())
         mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID, inFormXObjectName));
@@ -88,7 +88,7 @@ void ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID, co
 static const std::string scIM = "Im";
 std::string ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject *inImageXObject)
 {
-    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
+    auto it = mXObjects.find(inImageXObject->GetImageObjectID());
 
     if (it == mXObjects.end())
     {
@@ -108,7 +108,7 @@ void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject *inImag
 {
     mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObject->GetImageObjectID(), inImageXObjectName));
 
-    StringList::const_iterator it = inImageXObject->GetRequiredProcsetResourceNames().begin();
+    auto it = inImageXObject->GetRequiredProcsetResourceNames().begin();
     for (; it != inImageXObject->GetRequiredProcsetResourceNames().end(); ++it)
     {
         if (it->size() > 0)
@@ -118,7 +118,7 @@ void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject *inImag
 
 void ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject *inImageXObject, const std::string &inImageXObjectName)
 {
-    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObject->GetImageObjectID());
+    auto it = mXObjects.find(inImageXObject->GetImageObjectID());
 
     if (it == mXObjects.end())
         AddImageXObjectMappingWithName(inImageXObject, inImageXObjectName);
@@ -137,7 +137,7 @@ std::string ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mXObjects.find(inExtGStateID);
+        auto it = mXObjects.find(inExtGStateID);
 
         if (it == mXObjects.end())
         {
@@ -151,7 +151,7 @@ std::string ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID)
 
 void ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string &inExtGStateName)
 {
-    ObjectIDTypeToStringMap::iterator it = mExtGStates.find(inExtGStateID);
+    auto it = mExtGStates.find(inExtGStateID);
 
     if (it == mExtGStates.end())
         mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID, inExtGStateName));
@@ -174,7 +174,7 @@ std::string ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObj
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObjectID);
+        auto it = mXObjects.find(inImageXObjectID);
 
         if (it == mXObjects.end())
         {
@@ -188,7 +188,7 @@ std::string ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObj
 
 void ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string &inImageXObjectName)
 {
-    ObjectIDTypeToStringMap::iterator it = mXObjects.find(inImageXObjectID);
+    auto it = mXObjects.find(inImageXObjectID);
 
     if (it == mXObjects.end())
         mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID, inImageXObjectName));
@@ -207,7 +207,7 @@ std::string ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mFonts.find(inFontObjectID);
+        auto it = mFonts.find(inFontObjectID);
 
         if (it == mFonts.end())
         {
@@ -221,7 +221,7 @@ std::string ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID)
 
 void ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID, const std::string &inFontObjectName)
 {
-    ObjectIDTypeToStringMap::iterator it = mFonts.find(inFontObjectID);
+    auto it = mFonts.find(inFontObjectID);
 
     if (it == mFonts.end())
         mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID, inFontObjectName));
@@ -246,7 +246,7 @@ std::string ResourcesDictionary::AddColorSpaceMapping(ObjectIDType inColorspaceI
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mColorSpaces.find(inColorspaceID);
+        auto it = mColorSpaces.find(inColorspaceID);
 
         if (it == mColorSpaces.end())
         {
@@ -275,7 +275,7 @@ std::string ResourcesDictionary::AddPatternMapping(ObjectIDType inPatternID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mPatterns.find(inPatternID);
+        auto it = mPatterns.find(inPatternID);
 
         if (it == mPatterns.end())
         {
@@ -304,7 +304,7 @@ std::string ResourcesDictionary::AddPropertyMapping(ObjectIDType inPropertyID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mProperties.find(inPropertyID);
+        auto it = mProperties.find(inPropertyID);
 
         if (it == mProperties.end())
         {
@@ -333,7 +333,7 @@ std::string ResourcesDictionary::AddXObjectMapping(ObjectIDType inXObjectID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mXObjects.find(inXObjectID);
+        auto it = mXObjects.find(inXObjectID);
 
         if (it == mXObjects.end())
         {
@@ -362,7 +362,7 @@ std::string ResourcesDictionary::AddShadingMapping(ObjectIDType inShadingID)
     }
     else
     {
-        ObjectIDTypeToStringMap::iterator it = mShading.find(inShadingID);
+        auto it = mShading.find(inShadingID);
 
         if (it == mShading.end())
         {

@@ -134,7 +134,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -147,7 +147,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/BrushScriptStd.otf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for brushscriptstd.otf\n";
@@ -175,7 +175,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
 
         PDFUsedFont *fontK = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/KozGoPro-Regular.otf"));
-        if (!fontK)
+        if (fontK == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for KozGoPro-Regular.otf\n";
@@ -237,7 +237,7 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -250,7 +250,7 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for arial.ttf\n";
@@ -316,7 +316,7 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -330,7 +330,7 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"),
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFM"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for Helvetica Neue font\n";
@@ -398,7 +398,7 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -412,7 +412,7 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"),
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFM"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for Helvetica Neue font\n";

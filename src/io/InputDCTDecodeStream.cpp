@@ -58,7 +58,7 @@ struct HummusSourceManager
 
 METHODDEF(boolean) HummusFillInputBuffer(j_decompress_ptr cinfo)
 {
-    HummusSourceManager *src = (HummusSourceManager *)cinfo->src;
+    auto *src = (HummusSourceManager *)cinfo->src;
     size_t nbytes;
 
     nbytes = src->mReader->Read((Byte *)(src->buffer), INPUT_BUF_SIZE);
@@ -129,7 +129,7 @@ METHODDEF(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReade
     src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
     src->pub.term_source = HummusNoOp;
     src->mReader = inSourceStream;
-    src->pub.bytes_in_buffer = 0;    /* forces fill_input_buffer on first read */
+    src->pub.bytes_in_buffer = 0;       /* forces fill_input_buffer on first read */
     src->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
@@ -147,7 +147,7 @@ InputDCTDecodeStream::~InputDCTDecodeStream()
 {
     if (mIsDecoding)
         FinalizeDecoding();
-    if (mStream)
+    if (mStream != nullptr)
         delete mStream;
 }
 
@@ -171,7 +171,7 @@ InputDCTDecodeStream::InputDCTDecodeStream(IByteReader *inSourceReader)
 void InputDCTDecodeStream::Assign(IByteReader *inSourceReader)
 {
     mStream = inSourceReader;
-    if (mStream)
+    if (mStream != nullptr)
         InitializeDecodingState();
 }
 
@@ -286,7 +286,7 @@ Byte *InputDCTDecodeStream::CopySamplesArrayToBuffer(Byte *inBuffer, LongBufferS
 
 bool InputDCTDecodeStream::NotEnded()
 {
-    if (!mStream || !mIsDecoding)
+    if ((mStream == nullptr) || !mIsDecoding)
         return false;
     else
         return (!mIsHeaderRead || (mCurrentSampleRow < mTotalSampleRows) ||

@@ -38,7 +38,7 @@ TrueTypeDescendentFontWriter::~TrueTypeDescendentFontWriter()
 static UIntVector GetOrderedKeys(const UIntAndGlyphEncodingInfoVector &inMap)
 {
     UIntVector result;
-    for (const auto & it : inMap)
+    for (const auto &it : inMap)
         result.push_back(it.first);
     sort(result.begin(), result.end());
     return result;

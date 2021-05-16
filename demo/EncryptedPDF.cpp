@@ -42,7 +42,7 @@ EStatusCode EncryptedPDFTester::Run(const TestConfiguration &inTestConfiguration
         copyingContext = pdfWriter.CreatePDFCopyingContext(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/PDFWithPassword.pdf"),
             PDFParsingOptions("user"));
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             cout << "failed to initialize copying context from PDFWithPassword.pdf\n";
             status = PDFHummus::eFailure;

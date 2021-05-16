@@ -26,7 +26,7 @@ PDFArray::PDFArray() : PDFObject(eType)
 
 PDFArray::~PDFArray()
 {
-    PDFObjectVector::iterator it = mValues.begin();
+    auto it = mValues.begin();
 
     for (; it != mValues.end(); ++it)
         (*it)->Release();

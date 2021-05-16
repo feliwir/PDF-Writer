@@ -53,7 +53,7 @@ IOBasicTypes::LongBufferSizeType InputStreamSkipperStream::Read(IOBasicTypes::By
 
 bool InputStreamSkipperStream::NotEnded()
 {
-    return mStream ? mStream->NotEnded() : false;
+    return mStream != nullptr ? mStream->NotEnded() : false;
 }
 
 bool InputStreamSkipperStream::CanSkipTo(IOBasicTypes::LongFilePositionType inPositionInStream)

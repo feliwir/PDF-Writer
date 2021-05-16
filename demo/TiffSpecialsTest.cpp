@@ -66,7 +66,7 @@ EStatusCode TiffSpecialsTest::Run(const TestConfiguration &inTestConfiguration)
             PDFFormXObject *imageFormXObject = pdfWriter.CreateFormXObjectFromTIFFFile(
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/multipage.tif"),
                 TIFFParameters);
-            if (!imageFormXObject)
+            if (imageFormXObject == nullptr)
             {
                 cout << "failed to create image form XObject from file, for file "
                      << "multipage.tif page " << i << "\n";
@@ -105,7 +105,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
 
     do
     {
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
@@ -146,8 +146,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
 EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfiguration &inTestConfiguration,
                                                            PDFWriter &inpdfWriter)
 {
-    string scJimBW =
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___ah.tif");
+    string scJimBW = RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___ah.tif");
 
     EStatusCode status = PDFHummus::eSuccess;
     TIFFUsageParameters TIFFParameters;
@@ -155,7 +154,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
     do
     {
         PDFFormXObject *imageBW = inpdfWriter.CreateFormXObjectFromTIFFFile(scJimBW);
-        if (!imageBW)
+        if (imageBW == nullptr)
         {
             cout << "failed to create image BW, for file " << scJimBW << "\n";
             status = PDFHummus::eFailure;
@@ -165,14 +164,14 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
         TIFFParameters.BWTreatment.AsImageMask = true;
         TIFFParameters.BWTreatment.OneColor = CMYKRGBColor(255, 128, 0);
         PDFFormXObject *imageBWMask = inpdfWriter.CreateFormXObjectFromTIFFFile(scJimBW, TIFFParameters);
-        if (!imageBWMask)
+        if (imageBWMask == nullptr)
         {
             cout << "failed to create image mask BW, for file " << scJimBW << "\n";
             status = PDFHummus::eFailure;
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
@@ -222,15 +221,14 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
     EStatusCode status = PDFHummus::eSuccess;
     TIFFUsageParameters TIFFParameters;
 
-    string scWJim =
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___cg.tif");
+    string scWJim = RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___cg.tif");
 
     do
     {
 
         // GrayScale regular
         PDFFormXObject *imageGrayScale = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim);
-        if (!imageGrayScale)
+        if (imageGrayScale == nullptr)
         {
             cout << "failed to create image form XObject from file, grayscale for file " << scWJim;
             status = PDFHummus::eFailure;
@@ -242,7 +240,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         TIFFParameters.GrayscaleTreatment.OneColor = CMYKRGBColor(0, 255, 0);
         TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(255, 255, 255);
         PDFFormXObject *imageGrayScaleGreen = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
-        if (!imageGrayScaleGreen)
+        if (imageGrayScaleGreen == nullptr)
         {
             cout << "failed to create image form XObject from file, green n white for file " << scWJim;
             status = PDFHummus::eFailure;
@@ -254,7 +252,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         TIFFParameters.GrayscaleTreatment.OneColor = CMYKRGBColor(255, 255, 0, 0);
         TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(0, 0, 0, 0);
         PDFFormXObject *imageGrayScaleCyanMagenta = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
-        if (!imageGrayScaleCyanMagenta)
+        if (imageGrayScaleCyanMagenta == nullptr)
         {
             cout << "failed to create image form XObject from file, cyan magenta n white for file " << scWJim;
             status = PDFHummus::eFailure;
@@ -266,7 +264,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         TIFFParameters.GrayscaleTreatment.OneColor = CMYKRGBColor(0, 255, 0);
         TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(255, 0, 0);
         PDFFormXObject *imageGrayScaleGreenVSRed = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
-        if (!imageGrayScaleGreenVSRed)
+        if (imageGrayScaleGreenVSRed == nullptr)
         {
             cout << "failed to create image form XObject from file, green n red for file " << scWJim;
             status = PDFHummus::eFailure;
@@ -278,7 +276,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         TIFFParameters.GrayscaleTreatment.OneColor = CMYKRGBColor(255, 0, 0, 0);
         TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(0, 255, 0, 0);
         PDFFormXObject *imageGrayScaleCyanVSMagenta = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
-        if (!imageGrayScaleCyanVSMagenta)
+        if (imageGrayScaleCyanVSMagenta == nullptr)
         {
             cout << "failed to create image form XObject from file, cyan n magenta for file " << scWJim;
             status = PDFHummus::eFailure;
@@ -286,7 +284,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         }
 
         // start page
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);

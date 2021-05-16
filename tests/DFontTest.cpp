@@ -48,7 +48,7 @@ TEST(FontPackages, DFont)
         ASSERT_NE(courierFonts[i], nullptr);
     }
 
-    PDFPage *page = new PDFPage();
+    auto *page = new PDFPage();
     page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);

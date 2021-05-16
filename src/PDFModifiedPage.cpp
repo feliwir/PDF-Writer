@@ -52,7 +52,7 @@ PDFModifiedPage::PDFModifiedPage(PDFWriter *inWriter, unsigned long inPageIndex,
 
 PDFModifiedPage::~PDFModifiedPage()
 {
-    for (auto & mContenxt : mContenxts)
+    for (auto &mContenxt : mContenxts)
     {
         delete mContenxt;
     }
@@ -60,10 +60,10 @@ PDFModifiedPage::~PDFModifiedPage()
 
 AbstractContentContext *PDFModifiedPage::StartContentContext()
 {
-    if (!mCurrentContext)
+    if (mCurrentContext == nullptr)
     {
         PDFObject *page = mWriter->GetModifiedFileParser().ParsePage(mPageIndex);
-        if (!page)
+        if (page == nullptr)
         {
             TRACE_LOG("AbstractContentContext::PDFModifiedPage, null page object");
             return nullptr;
@@ -82,7 +82,7 @@ PDFHummus::EStatusCode PDFModifiedPage::PauseContentContext()
 
 PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
 {
-    if (mCurrentContext)
+    if (mCurrentContext != nullptr)
     {
         mIsDirty = true;
         EStatusCode status = mWriter->EndFormXObject(mCurrentContext);
@@ -96,7 +96,7 @@ PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
 
 AbstractContentContext *PDFModifiedPage::GetContentContext()
 {
-    return mCurrentContext ? mCurrentContext->GetContentContext() : nullptr;
+    return mCurrentContext != nullptr ? mCurrentContext->GetContentContext() : nullptr;
 }
 
 PDFHummus::EStatusCode PDFModifiedPage::AttachURLLinktoCurrentPage(const std::string &inURL,
@@ -210,7 +210,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             ObjectIDTypeSet &annotations = mWriter->GetDocumentContext().GetAnnotations();
             if (annotations.size() > 0)
             {
-                ObjectIDTypeSet::iterator it = annotations.begin();
+                auto it = annotations.begin();
                 for (; it != annotations.end(); ++it)
                     objectContext.WriteNewIndirectObjectReference(*it);
             }
@@ -244,7 +244,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             }
             else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
             {
-                PDFArray *anArray = (PDFArray *)pageContent.GetPtr();
+                auto *anArray = (PDFArray *)pageContent.GetPtr();
 
                 // multiple content streams
                 SingleValueContainerIterator<PDFObjectVector> refs = anArray->GetIterator();
@@ -370,7 +370,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             primitivesWriter.WriteKeyword("Q");
         }
 
-        vector<string>::iterator it = formResourcesNames.begin();
+        auto it = formResourcesNames.begin();
         for (; it != formResourcesNames.end(); ++it)
         {
             primitivesWriter.WriteKeyword("q");
@@ -423,7 +423,7 @@ vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser, 
     PDFObjectCastPtr<PDFDictionary> existingXObjectDict(
         inParser->QueryDictionaryObject(inResourcesDictionary, "XObject"));
     string imageObjectName;
-    if (existingXObjectDict.GetPtr())
+    if (existingXObjectDict.GetPtr() != nullptr)
     {
         // i'm having a very sophisticated algo here to create a new unique name.
         // i'm making sure it's different in one letter from any name, using a well known discrete math proof method
@@ -441,7 +441,7 @@ vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser, 
         inObjectContext.EndLine();
     }
 
-    PDFFormXObjectVector::iterator itForms = mContenxts.begin();
+    auto itForms = mContenxts.begin();
     imageObjectName.push_back('_');
     for (int i = 0; itForms != mContenxts.end(); ++i, ++itForms)
     {
@@ -487,5 +487,5 @@ PDFFormXObject *PDFModifiedPage::GetCurrentFormContext()
 
 ResourcesDictionary *PDFModifiedPage::GetCurrentResourcesDictionary()
 {
-    return mCurrentContext ? &(mCurrentContext->GetResourcesDictionary()) : nullptr;
+    return mCurrentContext != nullptr ? &(mCurrentContext->GetResourcesDictionary()) : nullptr;
 }

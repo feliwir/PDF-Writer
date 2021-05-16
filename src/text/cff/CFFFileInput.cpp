@@ -503,14 +503,14 @@ void CFFFileInput::FreeData()
     delete[] mPrivateDicts;
     mPrivateDicts = nullptr;
 
-    LongFilePositionTypeToCharStringsMap::iterator itLocalSubrs = mLocalSubrs.begin();
+    auto itLocalSubrs = mLocalSubrs.begin();
     for (; itLocalSubrs != mLocalSubrs.end(); ++itLocalSubrs)
     {
         delete[] itLocalSubrs->second->mCharStringsIndex;
         delete itLocalSubrs->second;
     }
 
-    CharSetInfoVector::iterator itCharSets = mCharSets.begin();
+    auto itCharSets = mCharSets.begin();
     for (; itCharSets != mCharSets.end(); ++itCharSets)
     {
         delete[](*itCharSets)->mSIDs;
@@ -519,7 +519,7 @@ void CFFFileInput::FreeData()
     }
     mCharSets.clear();
 
-    EncodingsInfoVector::iterator itEncodings = mEncodings.begin();
+    auto itEncodings = mEncodings.begin();
     for (; itEncodings != mEncodings.end(); ++itEncodings)
     {
         delete[](*itEncodings)->mEncoding;
@@ -706,7 +706,7 @@ EStatusCode CFFFileInput::ReadNameIndex()
 
 BoolAndUShort CFFFileInput::GetIndexForFontName(const std::string &inFontName)
 {
-    StringToUShort::iterator it = mNameToIndex.find(inFontName);
+    auto it = mNameToIndex.find(inFontName);
 
     if (it == mNameToIndex.end())
         return BoolAndUShort(false, 0);
@@ -932,7 +932,7 @@ long CFFFileInput::GetSingleIntegerValue(unsigned short inFontIndex, unsigned sh
 long CFFFileInput::GetSingleIntegerValueFromDict(const UShortToDictOperandListMap &inDict, unsigned short inKey,
                                                  long inDefault)
 {
-    UShortToDictOperandListMap::const_iterator it = inDict.find(inKey);
+    auto it = inDict.find(inKey);
 
     if (it != inDict.end())
         return it->second.front().IntegerValue;
@@ -965,7 +965,7 @@ EStatusCode CFFFileInput::ReadPrivateDict(const UShortToDictOperandListMap &inRe
                                           PrivateDictInfo *outPrivateDict)
 {
     EStatusCode status = PDFHummus::eSuccess;
-    UShortToDictOperandListMap::const_iterator it = inReferencingDict.find(scPrivate);
+    auto it = inReferencingDict.find(scPrivate);
 
     outPrivateDict->mLocalSubrs = nullptr;
     if (it == inReferencingDict.end())
@@ -1011,11 +1011,10 @@ EStatusCode CFFFileInput::ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivat
     }
     else
     {
-        LongFilePositionTypeToCharStringsMap::iterator it =
-            mLocalSubrs.find(inPrivateDict->mPrivateDictStart + subrsPosition);
+        auto it = mLocalSubrs.find(inPrivateDict->mPrivateDictStart + subrsPosition);
         if (it == mLocalSubrs.end())
         {
-            CharStrings *charStrings = new CharStrings();
+            auto *charStrings = new CharStrings();
             charStrings->mCharStringsType = inCharStringType;
             mPrimitivesReader.SetOffset(inPrivateDict->mPrivateDictStart + subrsPosition);
             status = ReadSubrsFromIndex(charStrings->mCharStringsCount, &(charStrings->mCharStringsIndex));
@@ -1048,7 +1047,7 @@ EStatusCode CFFFileInput::ReadCharsets()
         it = offsetToIndex.find(charsetPosition);
         if (it == offsetToIndex.end())
         {
-            CharSetInfo *charSet = new CharSetInfo();
+            auto *charSet = new CharSetInfo();
             bool isCID = mTopDictIndex[i].mTopDict.find(scROS) != mTopDictIndex[i].mTopDict.end();
             if (charsetPosition <= 2)
             {
@@ -1101,7 +1100,7 @@ EStatusCode CFFFileInput::ReadEncodings()
         it = offsetToEncoding.find(encodingPosition);
         if (it == offsetToEncoding.end())
         {
-            EncodingsInfo *encoding = new EncodingsInfo();
+            auto *encoding = new EncodingsInfo();
             ReadEncoding(encoding, encodingPosition);
             mEncodings.push_back(encoding);
             it = offsetToEncoding.insert(LongFilePositionTypeToEncodingsInfoMap::value_type(encodingPosition, encoding))
@@ -1188,7 +1187,7 @@ void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, LongFilePositionType 
                     mPrimitivesReader.ReadCard8(encoding);
                     mPrimitivesReader.ReadCard16(SID);
 
-                    UShortToByteList::iterator it = inEncoding->mSupplements.find(SID);
+                    auto it = inEncoding->mSupplements.find(SID);
                     if (it == inEncoding->mSupplements.end())
                         it = inEncoding->mSupplements.insert(UShortToByteList::value_type(SID, ByteList())).first;
                     it->second.push_back(encoding);
@@ -1363,7 +1362,7 @@ EStatusCode CFFFileInput::PrepareForGlyphIntepretation(unsigned short inFontInde
 
     if (2 == mCharStrings[inFontIndex].mCharStringsType)
     {
-        if (mTopDictIndex[inFontIndex].mFDSelect) // CIDs have FDSelect
+        if (mTopDictIndex[inFontIndex].mFDSelect != nullptr) // CIDs have FDSelect
         {
             mCurrentLocalSubrs = mTopDictIndex[inFontIndex].mFDSelect[inCharStringIndex]->mPrivateDict.mLocalSubrs;
             mCurrentCharsetInfo = mTopDictIndex[inFontIndex].mCharSet;
@@ -1424,7 +1423,7 @@ EStatusCode CFFFileInput::ReadCharString(LongFilePositionType inCharStringStart,
 
     } while (false);
 
-    if (status != PDFHummus::eSuccess && *outCharString)
+    if (status != PDFHummus::eSuccess && (*outCharString != nullptr))
         delete[] * outCharString;
 
     return status;
@@ -1439,7 +1438,7 @@ CharString *CFFFileInput::GetLocalSubr(long inSubrIndex)
     if (biasedIndex < mCurrentLocalSubrs->mCharStringsCount)
     {
         CharString *returnValue = mCurrentLocalSubrs->mCharStringsIndex + biasedIndex;
-        if (mCurrentDependencies)
+        if (mCurrentDependencies != nullptr)
             mCurrentDependencies->mLocalSubrs.insert(biasedIndex);
         return returnValue;
     }
@@ -1464,7 +1463,7 @@ CharString *CFFFileInput::GetGlobalSubr(long inSubrIndex)
     if (biasedIndex < mGlobalSubrs.mCharStringsCount)
     {
         CharString *returnValue = mGlobalSubrs.mCharStringsIndex + biasedIndex;
-        if (mCurrentDependencies)
+        if (mCurrentDependencies != nullptr)
             mCurrentDependencies->mGlobalSubrs.insert(biasedIndex);
         return returnValue;
     }
@@ -1482,7 +1481,7 @@ EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandLis
     if (inOperandList.size() >= 4) // meaning it's got the depracated seac usage. 2 topmost charachters on the stack are
                                    // charachter codes of off StandardEncoding
     {
-        CharStringOperandList::const_reverse_iterator it = inOperandList.rbegin();
+        auto it = inOperandList.rbegin();
         Byte characterCode1, characterCode2;
 
         characterCode1 = it->IsInteger ? (Byte)it->IntegerValue : (Byte)it->RealValue;
@@ -1492,7 +1491,7 @@ EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandLis
         CharString *character1 = GetCharacterFromStandardEncoding(characterCode1);
         CharString *character2 = GetCharacterFromStandardEncoding(characterCode2);
 
-        if (character1 && character2 && mCurrentDependencies)
+        if ((character1 != nullptr) && (character2 != nullptr) && (mCurrentDependencies != nullptr))
         {
             mCurrentDependencies->mCharCodes.insert(character1->mIndex);
             mCurrentDependencies->mCharCodes.insert(character2->mIndex);
@@ -1509,11 +1508,11 @@ CharString *CFFFileInput::GetCharacterFromStandardEncoding(Byte inCharacterCode)
 {
     StandardEncoding standardEncoding;
     const char *glyphName = standardEncoding.GetEncodedGlyphName(inCharacterCode);
-    CharPToUShortMap::iterator itStringToSID = mStringToSID.find(glyphName);
+    auto itStringToSID = mStringToSID.find(glyphName);
 
     if (itStringToSID != mStringToSID.end())
     {
-        UShortToCharStringMap::iterator itSIDToGlyph = mCurrentCharsetInfo->mSIDToGlyphMap.find(itStringToSID->second);
+        auto itSIDToGlyph = mCurrentCharsetInfo->mSIDToGlyphMap.find(itStringToSID->second);
         if (itSIDToGlyph != mCurrentCharsetInfo->mSIDToGlyphMap.end())
             return itSIDToGlyph->second;
         else
@@ -1874,7 +1873,7 @@ EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
     EStatusCode status = PDFHummus::eSuccess;
 
     LongFilePositionType charsetPosition = GetCharsetPosition(inFontIndex);
-    CharSetInfo *charSet = new CharSetInfo();
+    auto *charSet = new CharSetInfo();
     bool isCID = mTopDictIndex[inFontIndex].mTopDict.find(scROS) != mTopDictIndex[inFontIndex].mTopDict.end();
     if (charsetPosition <= 2)
     {
@@ -1912,7 +1911,7 @@ EStatusCode CFFFileInput::ReadEncodings(unsigned short inFontIndex)
 {
     // read all encodings positions
     LongFilePositionType encodingPosition = GetEncodingPosition(inFontIndex);
-    EncodingsInfo *encoding = new EncodingsInfo();
+    auto *encoding = new EncodingsInfo();
 
     ReadEncoding(encoding, encodingPosition);
     mEncodings.push_back(encoding);
@@ -1958,7 +1957,7 @@ EStatusCode CFFFileInput::ReadCFFFile(IByteReaderWithPosition *inCFFFile, const 
     return ReadCFFFileByIndexOrName(inCFFFile, inFontName, 0);
 }
 
-unsigned short CFFFileInput::GetFontsCount(unsigned short  /*inFontIndex*/)
+unsigned short CFFFileInput::GetFontsCount(unsigned short /*inFontIndex*/)
 {
     return mFontsCount;
 }

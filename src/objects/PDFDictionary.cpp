@@ -26,7 +26,7 @@ PDFDictionary::PDFDictionary() : PDFObject(eType)
 
 PDFDictionary::~PDFDictionary()
 {
-    PDFNameToPDFObjectMap::iterator it = mValues.begin();
+    auto it = mValues.begin();
 
     for (; it != mValues.end(); ++it)
     {
@@ -35,10 +35,10 @@ PDFDictionary::~PDFDictionary()
     }
 }
 
-PDFObject *PDFDictionary::QueryDirectObject(const std::string& inName)
+PDFObject *PDFDictionary::QueryDirectObject(const std::string &inName)
 {
     PDFName key(inName);
-    PDFNameToPDFObjectMap::iterator it = mValues.find(&key);
+    auto it = mValues.find(&key);
 
     if (it == mValues.end())
     {
@@ -59,7 +59,7 @@ void PDFDictionary::Insert(PDFName *inKeyObject, PDFObject *inValueObject)
     mValues.insert(PDFNameToPDFObjectMap::value_type(inKeyObject, inValueObject));
 }
 
-bool PDFDictionary::Exists(const std::string& inName)
+bool PDFDictionary::Exists(const std::string &inName)
 {
     PDFName key(inName);
     return mValues.find(&key) != mValues.end();

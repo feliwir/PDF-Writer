@@ -60,7 +60,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingList &inGl
     // categorically do not allow an ANSI representation if the font is CID
     if (!mIsCID && HasEnoughSpaceForGlyphs(inGlyphsList))
     {
-        GlyphUnicodeMappingList::const_iterator it = inGlyphsList.begin();
+        auto it = inGlyphsList.begin();
 
         for (; it != inGlyphsList.end(); ++it)
             outEncodedCharacters.push_back(EncodeGlyph(it->mGlyphCode, it->mUnicodeValues));
@@ -72,7 +72,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingList &inGl
 
 bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingList &inGlyphsList)
 {
-    GlyphUnicodeMappingList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     int glyphsToAddCount = 0;
 
     for (; it != inGlyphsList.end(); ++it)
@@ -95,7 +95,7 @@ unsigned short WrittenFontCFF::EncodeGlyph(unsigned int inGlyph, const ULongVect
         mAssignedPositionsAvailable[0] = false;
     }
 
-    UIntToGlyphEncodingInfoMap::iterator it = mANSIRepresentation->mGlyphIDToEncodedChar.find(inGlyph);
+    auto it = mANSIRepresentation->mGlyphIDToEncodedChar.find(inGlyph);
 
     if (it == mANSIRepresentation->mGlyphIDToEncodedChar.end())
     {
@@ -122,7 +122,7 @@ unsigned short WrittenFontCFF::EncodeGlyph(unsigned int inGlyph, const ULongVect
 void WrittenFontCFF::RemoveFromFreeList(unsigned char inAllocatedPosition)
 {
     // yeah yeah, you want binary search. i hear you.
-    UCharAndUCharList::iterator it = mFreeList.begin();
+    auto it = mFreeList.begin();
 
     for (; it != mFreeList.end(); ++it)
     {
@@ -152,10 +152,10 @@ void WrittenFontCFF::RemoveFromFreeList(unsigned char inAllocatedPosition)
     }
 }
 
-unsigned char WrittenFontCFF::AllocateFromFreeList(unsigned int  /*inGlyph*/)
+unsigned char WrittenFontCFF::AllocateFromFreeList(unsigned int /*inGlyph*/)
 {
     // just allocate the first available position
-    UCharAndUCharList::iterator it = mFreeList.begin();
+    auto it = mFreeList.begin();
     unsigned char result = it->first;
 
     if (it->first == it->second)
@@ -170,7 +170,8 @@ EStatusCode WrittenFontCFF::WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo,
     EStatusCode status = PDFHummus::eSuccess;
     do
     {
-        if (mANSIRepresentation && !mANSIRepresentation->isEmpty() && mANSIRepresentation->mWrittenObjectID != 0)
+        if ((mANSIRepresentation != nullptr) && !mANSIRepresentation->isEmpty() &&
+            mANSIRepresentation->mWrittenObjectID != 0)
         {
             CFFANSIFontWriter fontWriter;
 
@@ -182,7 +183,8 @@ EStatusCode WrittenFontCFF::WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo,
             }
         }
 
-        if (mCIDRepresentation && !mCIDRepresentation->isEmpty() && mCIDRepresentation->mWrittenObjectID != 0)
+        if ((mCIDRepresentation != nullptr) && !mCIDRepresentation->isEmpty() &&
+            mCIDRepresentation->mWrittenObjectID != 0)
         {
             CIDFontWriter fontWriter;
             CFFDescendentFontWriter descendentFontWriter;
@@ -207,7 +209,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingListList &
     // categorically do not allow an ANSI representation if the font is CID
     if (!mIsCID && HasEnoughSpaceForGlyphs(inGlyphsList))
     {
-        GlyphUnicodeMappingListList::const_iterator itList = inGlyphsList.begin();
+        auto itList = inGlyphsList.begin();
         GlyphUnicodeMappingList::const_iterator it;
         UShortList encodedCharacters;
 
@@ -227,7 +229,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingListList &
 
 bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingListList &inGlyphsList)
 {
-    GlyphUnicodeMappingListList::const_iterator itList = inGlyphsList.begin();
+    auto itList = inGlyphsList.begin();
     GlyphUnicodeMappingList::const_iterator it;
     int glyphsToAddCount = 0;
 
@@ -258,7 +260,7 @@ EStatusCode WrittenFontCFF::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
     writtenFontDictionary->WriteKey("mFreeList");
 
     inStateWriter->StartArray();
-    UCharAndUCharList::iterator it = mFreeList.begin();
+    auto it = mFreeList.begin();
     for (; it != mFreeList.end(); ++it)
     {
         inStateWriter->WriteInteger(it->first);

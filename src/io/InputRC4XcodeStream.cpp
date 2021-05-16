@@ -33,7 +33,7 @@ InputRC4XcodeStream::InputRC4XcodeStream(IByteReader *inSourceReader, const Byte
 
 InputRC4XcodeStream::~InputRC4XcodeStream()
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
@@ -45,7 +45,7 @@ void InputRC4XcodeStream::Assign(IByteReader *inSourceReader, const ByteList &in
 
 bool InputRC4XcodeStream::NotEnded()
 {
-    return mSourceStream && mSourceStream->NotEnded();
+    return (mSourceStream != nullptr) && mSourceStream->NotEnded();
 }
 
 LongBufferSizeType InputRC4XcodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inBufferSize)

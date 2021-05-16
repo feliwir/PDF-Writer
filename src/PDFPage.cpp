@@ -47,7 +47,7 @@ const PDFRectangle &PDFPage::GetMediaBox() const
 
 void PDFPage::SetRotate(int inRotate)
 {
-    if (inRotate % 90)
+    if ((inRotate % 90) != 0)
     {
         TRACE_LOG("PDFPage::SetRotate, Exception, the value must be a multiple of 90. defaulting to 0");
         inRotate = 0;

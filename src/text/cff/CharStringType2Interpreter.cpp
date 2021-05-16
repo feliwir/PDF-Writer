@@ -46,7 +46,7 @@ EStatusCode CharStringType2Interpreter::Intepret(const CharString &inCharStringT
         mGotEndChar = false;
         mStemsCount = 0;
         mCheckedWidth = false;
-        if (!inImplementationHelper)
+        if (inImplementationHelper == nullptr)
         {
             TRACE_LOG(
                 "CharStringType2Interpreter::Intepret, null implementation helper passed. pass a proper pointer!!");
@@ -86,13 +86,13 @@ EStatusCode CharStringType2Interpreter::ProcessCharString(Byte *inCharString, Lo
         if (IsOperator(pointer))
         {
             pointer = InterpretOperator(pointer, gotEndExecutionOperator);
-            if (!pointer)
+            if (pointer == nullptr)
                 status = PDFHummus::eFailure;
         }
         else
         {
             pointer = InterpretNumber(pointer);
-            if (!pointer)
+            if (pointer == nullptr)
                 status = PDFHummus::eFailure;
         }
     }
@@ -148,7 +148,7 @@ Byte *CharStringType2Interpreter::InterpretNumber(Byte *inProgramCounter)
     else
         newPosition = nullptr; // error
 
-    if (newPosition)
+    if (newPosition != nullptr)
     {
         mOperandStack.push_back(operand);
         EStatusCode status = mImplementationHelper->Type2InterpretNumber(operand);
@@ -675,8 +675,8 @@ Byte *CharStringType2Interpreter::InterpretAnd(Byte *inProgramCounter)
     valueA = mOperandStack.back();
     mOperandStack.pop_back();
 
-    newOperand.IntegerValue = ((valueB.IsInteger ? valueB.IntegerValue : valueB.RealValue) &&
-                               (valueA.IsInteger ? valueA.IntegerValue : valueA.RealValue))
+    newOperand.IntegerValue = (((valueB.IsInteger ? valueB.IntegerValue : valueB.RealValue) != 0.0) &&
+                               ((valueA.IsInteger ? valueA.IntegerValue : valueA.RealValue) != 0.0))
                                   ? 1
                                   : 0;
     mOperandStack.push_back(newOperand);
@@ -699,8 +699,8 @@ Byte *CharStringType2Interpreter::InterpretOr(Byte *inProgramCounter)
     valueA = mOperandStack.back();
     mOperandStack.pop_back();
 
-    newOperand.IntegerValue = ((valueB.IsInteger ? valueB.IntegerValue : valueB.RealValue) ||
-                               (valueA.IsInteger ? valueA.IntegerValue : valueA.RealValue))
+    newOperand.IntegerValue = (((valueB.IsInteger ? valueB.IntegerValue : valueB.RealValue) != 0.0) ||
+                               ((valueA.IsInteger ? valueA.IntegerValue : valueA.RealValue) != 0.0))
                                   ? 1
                                   : 0;
     mOperandStack.push_back(newOperand);
@@ -720,7 +720,7 @@ Byte *CharStringType2Interpreter::InterpretNot(Byte *inProgramCounter)
     value = mOperandStack.back();
     mOperandStack.pop_back();
 
-    newOperand.IntegerValue = (value.IsInteger ? value.IntegerValue : value.RealValue) ? 1 : 0;
+    newOperand.IntegerValue = (value.IsInteger ? value.IntegerValue : value.RealValue) != 0.0 ? 1 : 0;
     mOperandStack.push_back(newOperand);
     return inProgramCounter;
 }
@@ -1074,7 +1074,7 @@ Byte *CharStringType2Interpreter::InterpretIndex(Byte *inProgramCounter)
     value = mOperandStack.back();
     mOperandStack.pop_back();
     long index = (value.IsInteger ? value.IntegerValue : (long)value.RealValue);
-    CharStringOperandList::reverse_iterator it = mOperandStack.rbegin();
+    auto it = mOperandStack.rbegin();
 
     while (index > 0)
         ++it;

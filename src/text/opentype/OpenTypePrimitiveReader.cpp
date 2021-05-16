@@ -34,7 +34,7 @@ OpenTypePrimitiveReader::~OpenTypePrimitiveReader()
 void OpenTypePrimitiveReader::SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile)
 {
     mOpenTypeFile = inOpenTypeFile;
-    if (inOpenTypeFile)
+    if (inOpenTypeFile != nullptr)
     {
         mInitialPosition = inOpenTypeFile->GetCurrentPosition();
         mInternalState = PDFHummus::eSuccess;

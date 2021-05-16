@@ -57,7 +57,7 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
 
         // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         copyingContext = pdfWriter.CreatePDFCopyingContext(

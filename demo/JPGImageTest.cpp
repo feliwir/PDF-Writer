@@ -57,7 +57,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
@@ -85,7 +85,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
         // Create image xobject from
         PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
-        if (!imageXObject)
+        if (imageXObject == nullptr)
         {
             cout << "failed to create image XObject from file\n";
             status = PDFHummus::eFailure;
@@ -111,7 +111,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
 
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"));
-        if (!formXObject)
+        if (formXObject == nullptr)
         {
             cout << "failed to create form XObject from file\n";
             status = PDFHummus::eFailure;

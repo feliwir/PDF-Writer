@@ -62,7 +62,7 @@ EStatusCode PDFUsedFont::EncodeStringForShowing(const GlyphUnicodeMappingList &i
         return PDFHummus::eSuccess;
     }
 
-    if (!mWrittenFont)
+    if (mWrittenFont == nullptr)
         mWrittenFont = mFaceWrapper.CreateWrittenFontObject(mObjectsContext, mEmbedFont);
 
     mWrittenFont->AppendGlyphs(inText, outCharactersToUse, outTreatCharactersAsCID, outFontObjectToUse);
@@ -82,8 +82,8 @@ EStatusCode PDFUsedFont::TranslateStringToGlyphs(const std::string &inText,
 
     status = mFaceWrapper.GetGlyphsForUnicodeText(unicode.GetUnicodeList(), glyphs);
 
-    ULongList::const_iterator itUnicode = unicode.GetUnicodeList().begin();
-    UIntList::iterator itGlyphs = glyphs.begin();
+    auto itUnicode = unicode.GetUnicodeList().begin();
+    auto itGlyphs = glyphs.begin();
 
     for (; itUnicode != unicode.GetUnicodeList().end(); ++itUnicode, ++itGlyphs)
         outGlyphsUnicodeMapping.push_back(GlyphUnicodeMapping(*itGlyphs, *itUnicode));
@@ -102,7 +102,7 @@ EStatusCode PDFUsedFont::EncodeStringsForShowing(const GlyphUnicodeMappingListLi
         return PDFHummus::eSuccess;
     }
 
-    if (!mWrittenFont)
+    if (mWrittenFont == nullptr)
         mWrittenFont = mFaceWrapper.CreateWrittenFontObject(mObjectsContext, mEmbedFont);
 
     mWrittenFont->AppendGlyphs(inText, outCharactersToUse, outTreatCharactersAsCID, outFontObjectToUse);
@@ -114,7 +114,7 @@ EStatusCode PDFUsedFont::WriteFontDefinition()
 {
     // note that written font may be empty, in case no glyphs were used for this font! in the empty case, just dont
     // write the def
-    if (!mWrittenFont)
+    if (mWrittenFont == nullptr)
         return eSuccess;
     else
         return mWrittenFont->WriteFontDefinition(mFaceWrapper, mEmbedFont);
@@ -130,7 +130,7 @@ EStatusCode PDFUsedFont::WriteState(ObjectsContext *inStateWriter, ObjectIDType 
 
     ObjectIDType writtenFontObject = 0;
 
-    if (mWrittenFont)
+    if (mWrittenFont != nullptr)
     {
         writtenFontObject = inStateWriter->GetInDirectObjectsRegistry().AllocateNewObjectID();
 
@@ -141,7 +141,7 @@ EStatusCode PDFUsedFont::WriteState(ObjectsContext *inStateWriter, ObjectIDType 
     inStateWriter->EndDictionary(pdfUsedFontObject);
     inStateWriter->EndIndirectObject();
 
-    if (mWrittenFont)
+    if (mWrittenFont != nullptr)
         mWrittenFont->WriteState(inStateWriter, writtenFontObject);
 
     return PDFHummus::eSuccess;
@@ -157,11 +157,11 @@ EStatusCode PDFUsedFont::ReadState(PDFParser *inStateReader, ObjectIDType inObje
     if (!writtenFontReference)
         return PDFHummus::eSuccess;
 
-    if (mWrittenFont)
+    if (mWrittenFont != nullptr)
         delete mWrittenFont;
 
     mWrittenFont = mFaceWrapper.CreateWrittenFontObject(mObjectsContext, mEmbedFont);
-    if (!mWrittenFont)
+    if (mWrittenFont == nullptr)
         return PDFHummus::eFailure;
 
     return mWrittenFont->ReadState(inStateReader, writtenFontReference->mObjectID);
@@ -201,10 +201,10 @@ PDFUsedFont::TextMeasures PDFUsedFont::CalculateTextDimensions(const UIntList &i
     pen_x = 0; /* start at (0,0) */
     pen_y = 0;
 
-    UIntList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     for (; it != inGlyphsList.end(); ++it)
     {
-        pos.push_back(FT_Vector());
+        pos.emplace_back();
 
         pos.back().x = pen_x;
         pos.back().y = pen_y;
@@ -220,7 +220,7 @@ PDFUsedFont::TextMeasures PDFUsedFont::CalculateTextDimensions(const UIntList &i
     bbox.xMax = bbox.yMax = -32000;
 
     it = inGlyphsList.begin();
-    std::list<FT_Vector>::iterator itPos = pos.begin();
+    auto itPos = pos.begin();
 
     for (; it != inGlyphsList.end(); ++it, ++itPos)
     {
@@ -282,7 +282,7 @@ double PDFUsedFont::CalculateTextAdvance(const std::string &inText, double inFon
 double PDFUsedFont::CalculateTextAdvance(const UIntList &inGlyphsList, double inFontSize)
 {
     FT_Pos pen = 0;
-    UIntList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
     for (; it != inGlyphsList.end(); ++it)
     {
         FT_Pos adv;

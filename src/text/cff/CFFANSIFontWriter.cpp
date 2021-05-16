@@ -130,7 +130,7 @@ void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, Obj
     OutputStringBufferStream aStream;
     PrimitiveObjectsWriter primitiveWriter(&aStream);
 
-    UIntAndGlyphEncodingInfoVector::const_iterator it = inEncodedGlyphs.begin() + 1; // skip 0 character
+    auto it = inEncodedGlyphs.begin() + 1; // skip 0 character
 
     for (; it != inEncodedGlyphs.end(); ++it)
     {
@@ -144,7 +144,8 @@ void CFFANSIFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, Obj
 }
 
 static const std::string scFontFile3 = "FontFile3";
-void CFFANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext * /*inObjectsContext*/)
+void CFFANSIFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,
+                                               ObjectsContext * /*inObjectsContext*/)
 {
     // write font reference only if there's what to write....
     if (mEmbeddedFontFileObjectID != 0)

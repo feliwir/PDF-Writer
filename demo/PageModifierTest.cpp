@@ -64,10 +64,9 @@ EStatusCode PageModifierTest::Run(const TestConfiguration &inTestConfiguration)
         PDFModifiedPage modifiedPage(&pdfWriter, 0);
 
         AbstractContentContext *contentContext = modifiedPage.StartContentContext();
-        AbstractContentContext::TextOptions opt(
-            pdfWriter.GetFontForFile(
-                RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
-            14, AbstractContentContext::eGray, 0);
+        AbstractContentContext::TextOptions opt(pdfWriter.GetFontForFile(RelativeURLToLocalPath(
+                                                    inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf")),
+                                                14, AbstractContentContext::eGray, 0);
 
         contentContext->WriteText(75, 805, "Test Text", opt);
 

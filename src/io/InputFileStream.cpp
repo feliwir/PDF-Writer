@@ -30,7 +30,7 @@ InputFileStream::InputFileStream()
 
 InputFileStream::~InputFileStream()
 {
-    if (mStream)
+    if (mStream != nullptr)
         Close();
 }
 
@@ -56,33 +56,34 @@ EStatusCode InputFileStream::Close()
 
 LongBufferSizeType InputFileStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-    LongBufferSizeType readItems = mStream ? fread(static_cast<void *>(inBuffer), 1, inBufferSize, mStream) : 0;
+    LongBufferSizeType readItems =
+        mStream != nullptr ? fread(static_cast<void *>(inBuffer), 1, inBufferSize, mStream) : 0;
     return readItems;
 }
 
 bool InputFileStream::NotEnded()
 {
-    if (mStream)
-        return !feof(mStream);
+    if (mStream != nullptr)
+        return feof(mStream) == 0;
     else
         return false;
 }
 
 void InputFileStream::Skip(LongBufferSizeType inSkipSize)
 {
-    if (mStream)
+    if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inSkipSize, SEEK_CUR);
 }
 
 void InputFileStream::SetPosition(LongFilePositionType inOffsetFromStart)
 {
-    if (mStream)
+    if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inOffsetFromStart, SEEK_SET);
 }
 
 LongFilePositionType InputFileStream::GetCurrentPosition()
 {
-    if (mStream)
+    if (mStream != nullptr)
         return SAFE_FTELL64(mStream);
     else
         return 0;
@@ -90,7 +91,7 @@ LongFilePositionType InputFileStream::GetCurrentPosition()
 
 LongFilePositionType InputFileStream::GetFileSize()
 {
-    if (mStream)
+    if (mStream != nullptr)
     {
         // very messy...prefer a different means sometime
         LongFilePositionType currentPosition = SAFE_FTELL64(mStream);
@@ -107,7 +108,7 @@ LongFilePositionType InputFileStream::GetFileSize()
 
 void InputFileStream::SetPositionFromEnd(LongFilePositionType inOffsetFromEnd)
 {
-    if (mStream)
+    if (mStream != nullptr)
     {
         // if failed, probaby means that seeks too much, so place at file begin.
         if (SAFE_FSEEK64(mStream, -inOffsetFromEnd, SEEK_END) != 0)

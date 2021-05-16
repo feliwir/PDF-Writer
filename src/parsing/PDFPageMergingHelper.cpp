@@ -50,7 +50,7 @@ EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, const st
     {
         PDFDocumentCopyingContext *copyingContext = inWriter->CreatePDFCopyingContext(inPDFFilePath);
 
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             status = eFailure;
             break;
@@ -72,7 +72,7 @@ EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, IByteRea
     {
         PDFDocumentCopyingContext *copyingContext = inWriter->CreatePDFCopyingContext(inPDFStream);
 
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             status = eFailure;
             break;

@@ -79,7 +79,7 @@ EStatusCode CFFDescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID,
         // in the subset font and so their GID which MUST match the encoded char.
         // sort(encodedGlyphs.begin(), encodedGlyphs.end(), sEncodedGlypsSort);
 
-        for (const auto & encodedGlyph : encodedGlyphs)
+        for (const auto &encodedGlyph : encodedGlyphs)
         {
             orderedGlyphs.push_back(encodedGlyph.first);
             cidMapping.push_back(encodedGlyph.second.mEncodedCharacter);

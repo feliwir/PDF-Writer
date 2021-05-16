@@ -49,7 +49,7 @@ DecryptionHelper::DecryptionHelper()
 
 void DecryptionHelper::Release()
 {
-    StringToXCryptionCommonMap::iterator it = mXcrypts.begin();
+    auto it = mXcrypts.begin();
     for (; it != mXcrypts.end(); ++it)
         delete it->second;
     mXcrypts.clear();
@@ -84,7 +84,7 @@ unsigned int ComputeLength(PDFObject *inLengthObject)
 
 XCryptionCommon *GetFilterForName(const StringToXCryptionCommonMap &inXcryptions, const string &inName)
 {
-    StringToXCryptionCommonMap::const_iterator it = inXcryptions.find(inName);
+    auto it = inXcryptions.find(inName);
 
     if (it == inXcryptions.end())
         return nullptr;
@@ -252,7 +252,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
                             inParser->QueryDictionaryObject(cryptFilter.GetPtr(), "Length"));
                         unsigned int length = !lengthObject ? mLength : ComputeLength(lengthObject.GetPtr());
 
-                        XCryptionCommon *encryption = new XCryptionCommon();
+                        auto *encryption = new XCryptionCommon();
                         encryption->Setup(cfmName->GetValue() == "AESV2"); // singe xcryptions are always RC4
                         encryption->SetupInitialEncryptionKey(inPassword, mRevision, length, mO, mP, mFileIDPart1,
                                                               mEncryptMetaData);
@@ -275,7 +275,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
         else
         {
             // single xcryption, use as the single encryption source
-            XCryptionCommon *defaultEncryption = new XCryptionCommon();
+            auto *defaultEncryption = new XCryptionCommon();
             defaultEncryption->Setup(false); // single xcryptions are always RC4
             defaultEncryption->SetupInitialEncryptionKey(inPassword, mRevision, mLength, mO, mP, mFileIDPart1,
                                                          mEncryptMetaData);
@@ -338,7 +338,7 @@ bool HasCryptFilterDefinition(PDFParser *inParser, PDFStreamInput *inStream)
 
     if (filterObject->GetType() == PDFObject::ePDFObjectArray)
     {
-        PDFArray *filterObjectArray = (PDFArray *)filterObject.GetPtr();
+        auto *filterObjectArray = (PDFArray *)filterObject.GetPtr();
         bool foundCrypt = false;
         for (unsigned long i = 0; i < filterObjectArray->GetLength() && !foundCrypt; ++i)
         {
@@ -365,11 +365,12 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(PDFStreamI
 {
     // This will create a decryption filter for streams that dont have their own defined crypt filters. null for no
     // decryption filter
-    if (!IsEncrypted() || !CanDecryptDocument() || HasCryptFilterDefinition(mParser, inStream) || !mXcryptStreams)
+    if (!IsEncrypted() || !CanDecryptDocument() || HasCryptFilterDefinition(mParser, inStream) ||
+        (mXcryptStreams == nullptr))
         return nullptr;
 
     IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
-    if (savedEcnryptionKey)
+    if (savedEcnryptionKey != nullptr)
     {
         return CreateDecryptionReader(inToWrapStream, *(((Deletable<ByteList> *)savedEcnryptionKey)->GetPtr()),
                                       mXcryptStreams->IsUsingAES());
@@ -386,14 +387,14 @@ IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(PDFStreamInput *i
         return inToWrapStream;
 
     IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
-    if (!savedEcnryptionKey)
+    if (savedEcnryptionKey == nullptr)
     {
         // sign for no encryption here
         return inToWrapStream;
     }
     XCryptionCommon *xcryption = GetFilterForName(mXcrypts, inCryptName);
 
-    if (xcryption && savedEcnryptionKey)
+    if ((xcryption != nullptr) && (savedEcnryptionKey != nullptr))
     {
         return CreateDecryptionReader(inToWrapStream, *(((Deletable<ByteList> *)savedEcnryptionKey)->GetPtr()),
                                       xcryption->IsUsingAES());
@@ -409,12 +410,12 @@ bool DecryptionHelper::IsDecrypting()
 
 std::string DecryptionHelper::DecryptString(const std::string &inStringToDecrypt)
 {
-    if (!IsDecrypting() || !mXcryptStrings)
+    if (!IsDecrypting() || (mXcryptStrings == nullptr))
         return inStringToDecrypt;
 
     IByteReader *decryptStream = CreateDecryptionReader(
         new InputStringStream(inStringToDecrypt), mXcryptStrings->GetCurrentObjectKey(), mXcryptStrings->IsUsingAES());
-    if (decryptStream)
+    if (decryptStream != nullptr)
     {
         OutputStringBufferStream outputStream;
         OutputStreamTraits traits(&outputStream);
@@ -429,7 +430,7 @@ std::string DecryptionHelper::DecryptString(const std::string &inStringToDecrypt
 
 void DecryptionHelper::OnObjectStart(long long inObjectID, long long inGenerationNumber)
 {
-    StringToXCryptionCommonMap::iterator it = mXcrypts.begin();
+    auto it = mXcrypts.begin();
     for (; it != mXcrypts.end(); ++it)
     {
         it->second->OnObjectStart(inObjectID, inGenerationNumber);
@@ -451,7 +452,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
         RefCountPtr<PDFObject> filterObject(mParser->QueryDictionaryObject(streamDictionary.GetPtr(), "Filter"));
         if (filterObject->GetType() == PDFObject::ePDFObjectArray)
         {
-            PDFArray *filterObjectArray = (PDFArray *)filterObject.GetPtr();
+            auto *filterObjectArray = (PDFArray *)filterObject.GetPtr();
             unsigned long i = 0;
             for (; i < filterObjectArray->GetLength(); ++i)
             {
@@ -507,14 +508,14 @@ void DecryptionHelper::OnObjectEnd(PDFObject *inObject)
     if ((inObject->GetType() == PDFObject::ePDFObjectStream) && IsDecrypting())
     {
         XCryptionCommon *streamCryptFilter = GetCryptForStream((PDFStreamInput *)inObject);
-        if (streamCryptFilter)
+        if (streamCryptFilter != nullptr)
         {
-            ByteList *savedKey = new ByteList(streamCryptFilter->GetCurrentObjectKey());
+            auto *savedKey = new ByteList(streamCryptFilter->GetCurrentObjectKey());
             inObject->SetMetadata(scEcnryptionKeyMetadataKey, new Deletable<ByteList>(savedKey));
         }
     }
 
-    StringToXCryptionCommonMap::iterator it = mXcrypts.begin();
+    auto it = mXcrypts.begin();
     for (; it != mXcrypts.end(); ++it)
     {
         it->second->OnObjectEnd();
@@ -532,7 +533,7 @@ IByteReader *DecryptionHelper::CreateDecryptionReader(IByteReader *inSourceStrea
 
 bool DecryptionHelper::AuthenticateUserPassword(const ByteList &inPassword)
 {
-    if (!mXcryptAuthentication)
+    if (mXcryptAuthentication == nullptr)
         return true;
     return mXcryptAuthentication->algorithm3_6(mRevision, mLength, inPassword, mO, mP, mFileIDPart1, mEncryptMetaData,
                                                mU);
@@ -540,7 +541,7 @@ bool DecryptionHelper::AuthenticateUserPassword(const ByteList &inPassword)
 
 bool DecryptionHelper::AuthenticateOwnerPassword(const ByteList &inPassword)
 {
-    if (!mXcryptAuthentication)
+    if (mXcryptAuthentication == nullptr)
         return true;
 
     return mXcryptAuthentication->algorithm3_7(mRevision, mLength, inPassword, mO, mP, mFileIDPart1, mEncryptMetaData,

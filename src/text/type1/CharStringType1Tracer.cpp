@@ -62,7 +62,7 @@ EStatusCode CharStringType1Tracer::TraceGlyphProgram(const std::string &inGlyphN
     mPrimitiveWriter.SetStreamForWriting(inWriter);
 
     Type1CharString *charString = inType1Input->GetGlyphCharString(inGlyphName);
-    if (!charString)
+    if (charString == nullptr)
     {
         TRACE_LOG("CharStringType1Tracer::TraceGlyphProgram, Exception, cannot find glyph name");
         return PDFHummus::eFailure;
@@ -203,19 +203,21 @@ EStatusCode CharStringType1Tracer::Type1Div(const LongList & /*inOperandList*/)
     return PDFHummus::eSuccess;
 }
 
-bool CharStringType1Tracer::IsOtherSubrSupported(long  /*inOtherSubrsIndex*/)
+bool CharStringType1Tracer::IsOtherSubrSupported(long /*inOtherSubrsIndex*/)
 {
     mPrimitiveWriter.WriteKeyword("callothersubr");
     return false;
 }
 
-EStatusCode CharStringType1Tracer::CallOtherSubr(const LongList & /*inOperandList*/, LongList & /*outPostScriptOperandStack*/)
+EStatusCode CharStringType1Tracer::CallOtherSubr(const LongList & /*inOperandList*/,
+                                                 LongList & /*outPostScriptOperandStack*/)
 {
     // not looking to get here, due to IsOtherSubrSupported returning false
     return PDFHummus::eSuccess;
 }
 
-EStatusCode CharStringType1Tracer::Type1Pop(const LongList & /*inOperandList*/, const LongList & /*inPostScriptOperandStack*/)
+EStatusCode CharStringType1Tracer::Type1Pop(const LongList & /*inOperandList*/,
+                                            const LongList & /*inPostScriptOperandStack*/)
 {
     mPrimitiveWriter.WriteKeyword("pop");
     return PDFHummus::eSuccess;

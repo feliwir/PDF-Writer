@@ -47,8 +47,8 @@ EStatusCode Type1Test::Run(const TestConfiguration &inTestConfiguration)
 
     do
     {
-        status = type1File.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"));
+        status =
+            type1File.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"));
         if (status != PDFHummus::eSuccess)
         {
             cout << "Failed to open Helvetica input file\n";
@@ -170,7 +170,7 @@ void Type1Test::ShowPrivateInfoDictionary(const Type1PrivateDictionary &inPrivat
 
 void Type1Test::ShowIntVector(const vector<int> &inVector)
 {
-    vector<int>::const_iterator it = inVector.begin();
+    auto it = inVector.begin();
 
     cout << "[ ";
     for (; it != inVector.end(); ++it)
@@ -180,7 +180,7 @@ void Type1Test::ShowIntVector(const vector<int> &inVector)
 
 void Type1Test::ShowDoubleVector(const vector<double> &inVector)
 {
-    vector<double>::const_iterator it = inVector.begin();
+    auto it = inVector.begin();
 
     cout << "[ ";
     for (; it != inVector.end(); ++it)
@@ -202,10 +202,10 @@ EStatusCode Type1Test::ShowDependencies(const string &inCharStringName, Type1Inp
     if (dependencies.mCharCodes.size() != 0 || dependencies.mOtherSubrs.size() != 0 || dependencies.mSubrs.size() != 0)
     {
         cout << "Glyph " << inCharStringName.c_str() << " has dependencies:\n";
-        ByteSet::iterator itBytes = dependencies.mCharCodes.begin();
+        auto itBytes = dependencies.mCharCodes.begin();
         for (; itBytes != dependencies.mCharCodes.end(); ++itBytes)
             cout << "Seac Charcode " << *itBytes << "\n";
-        UShortSet::iterator itShort = dependencies.mOtherSubrs.begin();
+        auto itShort = dependencies.mOtherSubrs.begin();
         for (; itShort != dependencies.mOtherSubrs.end(); ++itShort)
             cout << "Other Subr " << *itShort << "\n";
         itShort = dependencies.mSubrs.begin();

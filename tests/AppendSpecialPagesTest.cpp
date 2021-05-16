@@ -39,36 +39,36 @@ TEST(PDFEmbedding, ApppendSpecialPages)
 
     EStatusCodeAndObjectIDTypeList result;
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Protected.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Protected.pdf"),
+                                             PDFPageRange());
     ASSERT_NE(result.first, PDFHummus::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/ObjectStreamsModified.pdf"), PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/ObjectStreams.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/ObjectStreams.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/AddedItem.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/AddedItem.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/AddedPage.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/AddedPage.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/MultipleChange.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/MultipleChange.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/RemovedItem.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/RemovedItem.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     status = pdfWriter.EndPDF();

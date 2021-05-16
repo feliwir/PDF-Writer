@@ -56,7 +56,7 @@ PageTree *PageTree::AddNodeToTree(ObjectIDType inNodeID, IndirectObjectsReferenc
     }
     else
     {
-        if (!mParent)
+        if (mParent == nullptr)
         {
             mParent = new PageTree(inObjectsRegistry);
             mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
@@ -78,7 +78,7 @@ PageTree *PageTree::AddNodeToTree(PageTree *inPageTreeNode, IndirectObjectsRefer
     }
     else
     {
-        if (!mParent)
+        if (mParent == nullptr)
         {
             mParent = new PageTree(inObjectsRegistry);
             mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
@@ -100,7 +100,7 @@ PageTree *PageTree::CreateBrotherOrCousin(IndirectObjectsReferenceRegistry &inOb
     }
     else
     {
-        if (!mParent)
+        if (mParent == nullptr)
         {
             mParent = new PageTree(inObjectsRegistry);
             mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one

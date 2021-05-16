@@ -119,8 +119,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
     Trace::DefaultTrace().SetLogSettings(
         RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "parsingFaultyLog.txt"), true, true);
 
-    EStatusCode status =
-        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test3.pdf"));
+    EStatusCode status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test3.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing test3.pdf" << std::endl;
@@ -134,8 +133,7 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
         return status;
     }
 
-    status =
-        openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/kids-as-reference.pdf"));
+    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/kids-as-reference.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing kids-as-reference.pdf" << std::endl;
@@ -150,24 +148,22 @@ EStatusCode ParsingFaulty::Run(const TestConfiguration &inTestConfiguration)
         return status;
     }
 
-    status = openPDFForRotationTest(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/wrong.rotation.pdf"));
+    status =
+        openPDFForRotationTest(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/wrong.rotation.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing wrong.rotation.pdf" << std::endl;
         return status;
     }
 
-    status = openPDF(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/1.unfamiliar.entry.type.pdf"));
+    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/1.unfamiliar.entry.type.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing 1.unfamiliar.entry.type.pdf" << std::endl;
         return status;
     }
 
-    status = openPDF(
-        RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/2.unfamiliar.entry.type.pdf"));
+    status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/2.unfamiliar.entry.type.pdf"));
     if (status != eSuccess)
     {
         std::cout << "Failed at start parsing 2.unfamiliar.entry.type.pdf" << std::endl;

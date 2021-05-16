@@ -42,7 +42,7 @@ OutputStringBufferStream::OutputStringBufferStream(MyStringBuf *inControlledBuff
 
 void OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
 {
-    if (inControlledBuffer)
+    if (inControlledBuffer != nullptr)
     {
         if (mOwnsBuffer)
             delete mBuffer;

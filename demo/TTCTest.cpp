@@ -54,7 +54,7 @@ PDFHummus::EStatusCode TTCTest::Run(const TestConfiguration &inTestConfiguration
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -67,7 +67,7 @@ PDFHummus::EStatusCode TTCTest::Run(const TestConfiguration &inTestConfiguration
 
         PDFUsedFont *fontLucidaGrande0 = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/LucidaGrande.ttc"), 0);
-        if (!fontLucidaGrande0)
+        if (fontLucidaGrande0 == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for lucida Grande font at 0\n";
@@ -76,7 +76,7 @@ PDFHummus::EStatusCode TTCTest::Run(const TestConfiguration &inTestConfiguration
 
         PDFUsedFont *fontLucidaGrande1 = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/LucidaGrande.ttc"), 1);
-        if (!fontLucidaGrande1)
+        if (fontLucidaGrande1 == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for lucida Grande font at 1\n";

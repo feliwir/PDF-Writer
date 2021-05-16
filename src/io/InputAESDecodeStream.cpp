@@ -36,10 +36,10 @@ InputAESDecodeStream::InputAESDecodeStream(IByteReader *inSourceReader, const By
 
 InputAESDecodeStream::~InputAESDecodeStream()
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
         delete mSourceStream;
 
-    if (mKey)
+    if (mKey != nullptr)
         delete[] mKey;
 }
 
@@ -50,7 +50,7 @@ void InputAESDecodeStream::Assign(IByteReader *inSourceReader, const ByteList &i
     // convert inEncryptionKey to internal rep and init decrypt [let's hope its 16...]
     mKeyLength = inKey.size();
     mKey = new unsigned char[mKeyLength];
-    ByteList::const_iterator it = inKey.begin();
+    auto it = inKey.begin();
     size_t i = 0;
     for (; it != inKey.end(); ++i, ++it)
         mKey[i] = *it;
@@ -63,12 +63,13 @@ void InputAESDecodeStream::Assign(IByteReader *inSourceReader, const ByteList &i
 
 bool InputAESDecodeStream::NotEnded()
 {
-    return (mSourceStream && mSourceStream->NotEnded()) || !mHitEnd || ((mOutIndex - mOut) < mReadBlockSize);
+    return ((mSourceStream != nullptr) && mSourceStream->NotEnded()) || !mHitEnd ||
+           ((mOutIndex - mOut) < mReadBlockSize);
 }
 
 LongBufferSizeType InputAESDecodeStream::Read(IOBasicTypes::Byte *inBuffer, LongBufferSizeType inSize)
 {
-    if (!mSourceStream)
+    if (mSourceStream == nullptr)
         return 0;
 
     // if iv not init yet, init now

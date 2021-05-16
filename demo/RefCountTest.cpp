@@ -95,7 +95,7 @@ EStatusCode RefCountTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 
     // 2 refs to direct object
     {
-        MyClass *aClass = new MyClass(2);
+        auto *aClass = new MyClass(2);
 
         if (MyClass::TotalObjectsCount != 1)
         {
@@ -188,7 +188,7 @@ EStatusCode RefCountTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 
     // pointer equality
     {
-        MyClass *anObject = new MyClass(4);
+        auto *anObject = new MyClass(4);
 
         RefCountPtr<MyClass> firstPtr(anObject);
         RefCountPtr<MyClass> secondPtr = firstPtr;

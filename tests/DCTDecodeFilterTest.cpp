@@ -55,7 +55,7 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    PDFPage *page = new PDFPage();
+    auto *page = new PDFPage();
     page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
@@ -144,7 +144,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
                 break;
             }
 
-            PDFArray *filtersArray = (PDFArray *)filters.GetPtr();
+            auto *filtersArray = (PDFArray *)filters.GetPtr();
 
             if (filtersArray->GetLength() == 1)
             {
@@ -247,7 +247,7 @@ TEST(DCTDecode, DCTDecodeFilter)
            you got a working DCT decoder
      */
 
-    auto testFileName = "DCTTest.pdf";
+    const auto *testFileName = "DCTTest.pdf";
 
     // ceate file
     status = CreateFileWithJPGImage(testFileName);

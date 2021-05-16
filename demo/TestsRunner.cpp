@@ -36,10 +36,10 @@ TestsRunner::~TestsRunner()
 
 void TestsRunner::DeleteTests()
 {
-    StringToStringAndTestUnitListMap::iterator it = mTests.begin();
+    auto it = mTests.begin();
     for (; it != mTests.end(); ++it)
     {
-        StringAndTestUnitList::iterator itList = it->second.begin();
+        auto itList = it->second.begin();
         for (; itList != it->second.end(); ++itList)
             delete (itList->second);
     }
@@ -49,7 +49,7 @@ void TestsRunner::DeleteTests()
 EStatusCode TestsRunner::RunAll(const TestConfiguration &inTestConfiguration)
 {
     StringAndTestUnitList testsList;
-    StringToTestUnitMap::iterator it = mTestsByName.begin();
+    auto it = mTestsByName.begin();
     for (; it != mTestsByName.end(); ++it)
         testsList.push_back(StringAndTestUnit(it->first, it->second));
     return RunTestsInList(inTestConfiguration, testsList);
@@ -72,7 +72,7 @@ EStatusCode TestsRunner::RunTestsInList(const TestConfiguration &inTestConfigura
     else
     {
         unsigned long failedCount = 0, succeededCount = 0;
-        StringAndTestUnitList::const_iterator it = inTests.begin();
+        auto it = inTests.begin();
         EStatusCode testStatus;
         testsStatus = PDFHummus::eSuccess;
 
@@ -112,11 +112,11 @@ EStatusCode TestsRunner::RunSingleTest(const TestConfiguration &inTestConfigurat
 
 void TestsRunner::AddTest(const std::string &inTestLabel, const std::string &inCategory, ITestUnit *inTest)
 {
-    StringToStringAndTestUnitListMap::iterator it = mTests.find(inCategory);
+    auto it = mTests.find(inCategory);
 
     if (it == mTests.end())
         it = mTests.insert(StringToStringAndTestUnitListMap::value_type(inCategory, StringAndTestUnitList())).first;
-    it->second.push_back(StringAndTestUnit(inTestLabel, inTest));
+    it->second.emplace_back(inTestLabel, inTest);
     mTestsByName.insert(StringToTestUnitMap::value_type(inTestLabel, inTest));
 }
 
@@ -128,7 +128,7 @@ void TestsRunner::AddTest(const string &inTestLabel, ITestUnit *inTest)
 
 EStatusCode TestsRunner::RunTest(const TestConfiguration &inTestConfiguration, const string &inTestLabel)
 {
-    StringToTestUnitMap::iterator it = mTestsByName.find(inTestLabel);
+    auto it = mTestsByName.find(inTestLabel);
 
     if (it == mTestsByName.end())
     {
@@ -142,10 +142,10 @@ EStatusCode TestsRunner::RunTest(const TestConfiguration &inTestConfiguration, c
 EStatusCode TestsRunner::RunTests(const TestConfiguration &inTestConfiguration, const StringList &inTestsLabels)
 {
     StringAndTestUnitList testsList;
-    StringList::const_iterator it = inTestsLabels.begin();
+    auto it = inTestsLabels.begin();
     for (; it != inTestsLabels.end(); ++it)
     {
-        StringToTestUnitMap::iterator itMap = mTestsByName.find(*it);
+        auto itMap = mTestsByName.find(*it);
         if (itMap != mTestsByName.end())
             testsList.push_back(StringAndTestUnit(itMap->first, itMap->second));
         else
@@ -156,7 +156,7 @@ EStatusCode TestsRunner::RunTests(const TestConfiguration &inTestConfiguration, 
 
 EStatusCode TestsRunner::RunCategory(const TestConfiguration &inTestConfiguration, const string &inCategory)
 {
-    StringToStringAndTestUnitListMap::iterator it = mTests.find(inCategory);
+    auto it = mTests.find(inCategory);
 
     if (it == mTests.end())
     {
@@ -170,11 +170,11 @@ EStatusCode TestsRunner::RunCategory(const TestConfiguration &inTestConfiguratio
 EStatusCode TestsRunner::RunCategories(const TestConfiguration &inTestConfiguration, const StringList &inCategories)
 {
     StringAndTestUnitList testsList;
-    StringList::const_iterator it = inCategories.begin();
+    auto it = inCategories.begin();
 
     for (; it != inCategories.end(); ++it)
     {
-        StringToStringAndTestUnitListMap::iterator itMap = mTests.find(*it);
+        auto itMap = mTests.find(*it);
         if (itMap != mTests.end())
             testsList.insert(testsList.end(), itMap->second.begin(), itMap->second.end());
         else
@@ -188,14 +188,14 @@ EStatusCode TestsRunner::RunCategories(const TestConfiguration &inTestConfigurat
                                        const StringSet &inTestsToExclude)
 {
     StringAndTestUnitList testsList;
-    StringList::const_iterator it = inCategories.begin();
+    auto it = inCategories.begin();
 
     for (; it != inCategories.end(); ++it)
     {
-        StringToStringAndTestUnitListMap::iterator itMap = mTests.find(*it);
+        auto itMap = mTests.find(*it);
         if (itMap != mTests.end())
         {
-            StringAndTestUnitList::iterator itCategoryTests = itMap->second.begin();
+            auto itCategoryTests = itMap->second.begin();
             for (; itCategoryTests != itMap->second.end(); ++itCategoryTests)
                 if (inTestsToExclude.find(itCategoryTests->first) == inTestsToExclude.end())
                     testsList.push_back(StringAndTestUnit(itCategoryTests->first, itCategoryTests->second));
@@ -211,7 +211,7 @@ EStatusCode TestsRunner::RunExcludeCategories(const TestConfiguration &inTestCon
                                               const StringSet &inCategories)
 {
     StringAndTestUnitList testsList;
-    StringToStringAndTestUnitListMap::iterator it = mTests.begin();
+    auto it = mTests.begin();
 
     for (; it != mTests.end(); ++it)
         if (inCategories.find(it->first) == inCategories.end())
@@ -222,7 +222,7 @@ EStatusCode TestsRunner::RunExcludeCategories(const TestConfiguration &inTestCon
 EStatusCode TestsRunner::RunExcludeTests(const TestConfiguration &inTestConfiguration, const StringSet &inTests)
 {
     StringAndTestUnitList testsList;
-    StringToTestUnitMap::iterator it = mTestsByName.begin();
+    auto it = mTestsByName.begin();
 
     for (; it != mTestsByName.end(); ++it)
         if (inTests.find(it->first) == inTests.end())

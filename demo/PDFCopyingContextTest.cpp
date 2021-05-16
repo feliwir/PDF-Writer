@@ -56,7 +56,7 @@ EStatusCode PDFCopyingContextTest::Run(const TestConfiguration &inTestConfigurat
 
         copyingContext = pdfWriter.CreatePDFCopyingContext(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/BasicTIFFImagesTest.pdf"));
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             cout << "failed to initialize copying context from BasicTIFFImagesTest\n";
             status = PDFHummus::eFailure;

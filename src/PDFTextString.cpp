@@ -103,7 +103,7 @@ bool PDFTextString::ConvertUTF8ToPDFDocEncoding(const std::string &inStringToCon
 
     unicodeString.FromUTF8(inStringToConvert);
 
-    ULongList::const_iterator it = unicodeString.GetUnicodeList().begin();
+    auto it = unicodeString.GetUnicodeList().begin();
     for (; it != unicodeString.GetUnicodeList().end() && PDFEncodingOK; ++it)
     {
         encodingResult = pdfDocEncoding.Encode(*it);

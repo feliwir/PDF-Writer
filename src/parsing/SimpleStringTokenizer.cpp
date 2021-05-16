@@ -66,7 +66,7 @@ BoolAndString SimpleStringTokenizer::GetNextToken()
     Byte buffer;
     OutputStringBufferStream tokenBuffer;
 
-    if (!mStream || (!mStream->NotEnded() && !mHasTokenBuffer))
+    if ((mStream == nullptr) || (!mStream->NotEnded() && !mHasTokenBuffer))
     {
         result.first = false;
         return result;
@@ -123,7 +123,7 @@ void SimpleStringTokenizer::SkipTillToken()
 {
     Byte buffer = 0;
 
-    if (!mStream)
+    if (mStream == nullptr)
         return;
 
     // skip till hitting first non space, or segment end

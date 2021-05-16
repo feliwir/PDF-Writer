@@ -90,7 +90,7 @@ int PDFPageInput::GetRotate()
     else
     {
         result = static_cast<int>(helper.GetAsInteger());
-        if (result % 90)
+        if ((result % 90) != 0)
         {
             TRACE_LOG(
                 "PDFPageInput::GetRotate, Exception, pdf page rotation must be a multiple of 90. defaulting to 0");

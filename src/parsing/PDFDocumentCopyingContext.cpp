@@ -125,7 +125,7 @@ EStatusCode PDFDocumentCopyingContext::MergePDFPageToFormXObject(PDFFormXObject 
 void PDFDocumentCopyingContext::End()
 {
     mDocumentHandler.StopCopyingContext();
-    if (mDocumentContext)
+    if (mDocumentContext != nullptr)
     {
         mDocumentContext->UnRegisterCopyingContext(this);
         mDocumentContext = nullptr;

@@ -43,7 +43,7 @@ void OpenTypeFileInput::FreeTables()
 {
     delete[] mHMtx;
     mHMtx = nullptr;
-    if (mName.mNameEntries)
+    if (mName.mNameEntries != nullptr)
     {
         for (unsigned short i = 0; i < mName.mNameEntriesCount; ++i)
             delete[] mName.mNameEntries[i].String;
@@ -55,7 +55,7 @@ void OpenTypeFileInput::FreeTables()
     delete[] mGlyf;
     mGlyf = nullptr;
 
-    UShortToGlyphEntryMap::iterator it = mActualGlyphs.begin();
+    auto it = mActualGlyphs.begin();
     for (; it != mActualGlyphs.end(); ++it)
         delete it->second;
     mActualGlyphs.clear();
@@ -414,8 +414,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
             int face_index = mFaceIndex, cur_face = 0;
             unsigned long fontOffset = 0;
 
-            for (std::map<unsigned short, unsigned long>::iterator it = resOffsetsMap.begin();
-                 it != resOffsetsMap.end(); ++it, ++cur_face)
+            for (auto it = resOffsetsMap.begin(); it != resOffsetsMap.end(); ++it, ++cur_face)
             {
                 if (cur_face == face_index)
                 {
@@ -461,7 +460,7 @@ unsigned long OpenTypeFileInput::GetTag(const char *inTagName)
 
 EStatusCode OpenTypeFileInput::ReadHead()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("head"));
+    auto it = mTables.find(GetTag("head"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHead, could not find head table");
@@ -492,7 +491,7 @@ EStatusCode OpenTypeFileInput::ReadHead()
 
 EStatusCode OpenTypeFileInput::ReadMaxP()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("maxp"));
+    auto it = mTables.find(GetTag("maxp"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadMaxP, could not find maxp table");
@@ -527,7 +526,7 @@ EStatusCode OpenTypeFileInput::ReadMaxP()
 
 EStatusCode OpenTypeFileInput::ReadHHea()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("hhea"));
+    auto it = mTables.find(GetTag("hhea"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHHea, could not find hhea table");
@@ -556,7 +555,7 @@ EStatusCode OpenTypeFileInput::ReadHHea()
 
 EStatusCode OpenTypeFileInput::ReadHMtx()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("hmtx"));
+    auto it = mTables.find(GetTag("hmtx"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHMtx, could not find hmtx table");
@@ -588,7 +587,7 @@ EStatusCode OpenTypeFileInput::ReadOS2()
 {
     memset(&mOS2, 0, sizeof(OS2Table));
 
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("OS/2"));
+    auto it = mTables.find(GetTag("OS/2"));
     if (it == mTables.end())
     {
         mOS2Exists = false;
@@ -616,13 +615,13 @@ EStatusCode OpenTypeFileInput::ReadOS2()
     mPrimitivesReader.ReadSHORT(mOS2.StrikeoutSize);
     mPrimitivesReader.ReadSHORT(mOS2.StrikeoutPosition);
     mPrimitivesReader.ReadSHORT(mOS2.FamilyClass);
-    for (unsigned char & i : mOS2.Panose)
+    for (unsigned char &i : mOS2.Panose)
         mPrimitivesReader.ReadBYTE(i);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange1);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange2);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange3);
     mPrimitivesReader.ReadULONG(mOS2.UnicodeRange4);
-    for (char & i : mOS2.AchVendID)
+    for (char &i : mOS2.AchVendID)
         mPrimitivesReader.ReadCHAR(i);
     mPrimitivesReader.ReadUSHORT(mOS2.FSSelection);
     mPrimitivesReader.ReadUSHORT(mOS2.FirstCharIndex);
@@ -649,7 +648,7 @@ EStatusCode OpenTypeFileInput::ReadOS2()
 
 EStatusCode OpenTypeFileInput::ReadName()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("name"));
+    auto it = mTables.find(GetTag("name"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadName, could not find name table");
@@ -687,7 +686,7 @@ EStatusCode OpenTypeFileInput::ReadName()
 
 EStatusCode OpenTypeFileInput::ReadLoca()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("loca"));
+    auto it = mTables.find(GetTag("loca"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadLoca, could not find loca table");
@@ -716,7 +715,7 @@ EStatusCode OpenTypeFileInput::ReadLoca()
 
 EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("glyf"));
+    auto it = mTables.find(GetTag("glyf"));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadGlyfForDependencies, could not find glyf table");
@@ -792,7 +791,7 @@ unsigned short OpenTypeFileInput::GetGlyphsCount()
 
 TableEntry *OpenTypeFileInput::GetTableEntry(const char *inTagName)
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag(inTagName));
+    auto it = mTables.find(GetTag(inTagName));
 
     if (it == mTables.end())
         return nullptr;
@@ -802,7 +801,7 @@ TableEntry *OpenTypeFileInput::GetTableEntry(const char *inTagName)
 
 EStatusCode OpenTypeFileInput::ReadCFF()
 {
-    ULongToTableEntryMap::iterator it = mTables.find(GetTag("CFF "));
+    auto it = mTables.find(GetTag("CFF "));
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadCFF, could not find cff table entry");

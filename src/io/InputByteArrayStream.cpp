@@ -47,7 +47,7 @@ void InputByteArrayStream::Assign(IOBasicTypes::Byte *inByteArray, IOBasicTypes:
 LongBufferSizeType InputByteArrayStream::Read(IOBasicTypes::Byte *inBuffer,
                                               IOBasicTypes::LongBufferSizeType inBufferSize)
 {
-    if (!mByteArray)
+    if (mByteArray == nullptr)
         return 0;
 
     LongBufferSizeType amountToRead = inBufferSize < (LongBufferSizeType)(mArrayLength - mCurrentPosition)
@@ -62,7 +62,7 @@ LongBufferSizeType InputByteArrayStream::Read(IOBasicTypes::Byte *inBuffer,
 
 bool InputByteArrayStream::NotEnded()
 {
-    return mByteArray && mCurrentPosition < mArrayLength;
+    return (mByteArray != nullptr) && mCurrentPosition < mArrayLength;
 }
 
 void InputByteArrayStream::Skip(LongBufferSizeType inSkipSize)

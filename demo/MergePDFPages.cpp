@@ -121,7 +121,7 @@ EStatusCode MergePDFPages::TestOnlyMerge(const TestConfiguration &inTestConfigur
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFPageRange singePageRange;
@@ -158,12 +158,12 @@ EStatusCode MergePDFPages::TestPrefixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             break;
@@ -220,7 +220,7 @@ EStatusCode MergePDFPages::TestSuffixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFPageRange singePageRange;
@@ -235,7 +235,7 @@ EStatusCode MergePDFPages::TestSuffixGraphicsMerge(const TestConfiguration &inTe
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             break;
@@ -280,12 +280,12 @@ EStatusCode MergePDFPages::TestBothGraphicsMerge(const TestConfiguration &inTest
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             break;
@@ -353,7 +353,7 @@ EStatusCode MergePDFPages::MergeTwoPageInSeparatePhases(const TestConfiguration 
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
@@ -448,7 +448,7 @@ EStatusCode MergePDFPages::MergeTwoPageWithEvents(const TestConfiguration &inTes
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
@@ -511,7 +511,7 @@ EStatusCode MergePDFPages::MergePagesUsingCopyingContext(const TestConfiguration
 
         PDFDocumentCopyingContext *copyingContext = pdfWriter.CreatePDFCopyingContext(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/BasicTIFFImagesTest.pdf"));
-        if (!copyingContext)
+        if (copyingContext == nullptr)
         {
             status = PDFHummus::eFailure;
             break;
@@ -528,7 +528,7 @@ EStatusCode MergePDFPages::MergePagesUsingCopyingContext(const TestConfiguration
 
         // now let's begin constructing the pages
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);

@@ -49,7 +49,7 @@ EStatusCode InputFile::OpenFile(const std::string &inFilePath)
             break;
         }
 
-        InputFileStream *inputFileStream = new InputFileStream();
+        auto *inputFileStream = new InputFileStream();
         status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
         if (status != PDFHummus::eSuccess)
         {
@@ -95,9 +95,9 @@ const std::string &InputFile::GetFilePath()
 
 LongFilePositionType InputFile::GetFileSize()
 {
-    if (mInputStream)
+    if (mInputStream != nullptr)
     {
-        InputFileStream *inputFileStream = (InputFileStream *)mInputStream->GetSourceStream();
+        auto *inputFileStream = (InputFileStream *)mInputStream->GetSourceStream();
 
         return inputFileStream->GetFileSize();
     }

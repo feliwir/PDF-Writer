@@ -57,7 +57,7 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingList 
     UShortList candidates;
     BoolAndByte encodingResult(true, 0);
     WinAnsiEncoding winAnsiEncoding;
-    GlyphUnicodeMappingList::const_iterator it = inGlyphsList.begin();
+    auto it = inGlyphsList.begin();
 
     for (; it != inGlyphsList.end() && encodingResult.first; ++it)
     {
@@ -92,8 +92,8 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingList 
             mANSIRepresentation->mGlyphIDToEncodedChar.insert(
                 UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(0, 0)));
 
-        GlyphUnicodeMappingList::const_iterator itGlyphs = inGlyphsList.begin();
-        UShortList::iterator itEncoded = candidates.begin();
+        auto itGlyphs = inGlyphsList.begin();
+        auto itEncoded = candidates.begin();
         for (; itGlyphs != inGlyphsList.end(); ++itGlyphs, ++itEncoded)
         {
             if (mANSIRepresentation->mGlyphIDToEncodedChar.find(itGlyphs->mGlyphCode) ==
@@ -113,7 +113,8 @@ EStatusCode WrittenFontTrueType::WriteFontDefinition(FreeTypeFaceWrapper &inFont
     EStatusCode status = PDFHummus::eSuccess;
     do
     {
-        if (mANSIRepresentation && !mANSIRepresentation->isEmpty() && mANSIRepresentation->mWrittenObjectID != 0)
+        if ((mANSIRepresentation != nullptr) && !mANSIRepresentation->isEmpty() &&
+            mANSIRepresentation->mWrittenObjectID != 0)
         {
             TrueTypeANSIFontWriter fontWriter;
 
@@ -125,7 +126,8 @@ EStatusCode WrittenFontTrueType::WriteFontDefinition(FreeTypeFaceWrapper &inFont
             }
         }
 
-        if (mCIDRepresentation && !mCIDRepresentation->isEmpty() && mCIDRepresentation->mWrittenObjectID != 0)
+        if ((mCIDRepresentation != nullptr) && !mCIDRepresentation->isEmpty() &&
+            mCIDRepresentation->mWrittenObjectID != 0)
         {
             CIDFontWriter fontWriter;
             TrueTypeDescendentFontWriter descendentFontWriter;
@@ -151,7 +153,7 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingListL
     UShortList candidates;
     BoolAndByte encodingResult(true, 0);
     WinAnsiEncoding winAnsiEncoding;
-    GlyphUnicodeMappingListList::const_iterator itList = inGlyphsList.begin();
+    auto itList = inGlyphsList.begin();
     GlyphUnicodeMappingList::const_iterator it;
 
     for (; itList != inGlyphsList.end() && encodingResult.first; ++itList)
@@ -197,8 +199,8 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingListL
             mANSIRepresentation->mGlyphIDToEncodedChar.insert(
                 UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(0, 0)));
 
-        GlyphUnicodeMappingListList::const_iterator itGlyphsList = inGlyphsList.begin();
-        UShortListList::iterator itEncodedList = candidatesList.begin();
+        auto itGlyphsList = inGlyphsList.begin();
+        auto itEncodedList = candidatesList.begin();
         GlyphUnicodeMappingList::const_iterator itGlyphs;
         UShortList::iterator itEncoded;
 

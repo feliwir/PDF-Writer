@@ -54,7 +54,7 @@ EStatusCode EmptyPagesPDF::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         for (int i = 0; i < 4 && PDFHummus::eSuccess == status; ++i)

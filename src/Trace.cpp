@@ -78,7 +78,7 @@ void Trace::TraceToLog(const char *inFormat, ...)
     {
         if (nullptr == mLog)
         {
-            if (mLogStream)
+            if (mLogStream != nullptr)
                 mLog = new Log(mLogStream);
             else
                 mLog = new Log(mLogFilePath, mPlaceUTF8Bom);
@@ -100,7 +100,7 @@ void Trace::TraceToLog(const char *inFormat, va_list inList)
     {
         if (nullptr == mLog)
         {
-            if (mLogStream)
+            if (mLogStream != nullptr)
                 mLog = new Log(mLogStream);
             else
                 mLog = new Log(mLogFilePath, mPlaceUTF8Bom);

@@ -66,8 +66,8 @@ EStatusCode FreeTypeInitializationTest::Run(const TestConfiguration &inTestConfi
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = ShowFaceProperties(ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase,
-                                                                      "data/fonts/BrushScriptStd.otf"));
+        status = ShowFaceProperties(
+            ftWrapper, RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/BrushScriptStd.otf"));
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -91,7 +91,7 @@ EStatusCode FreeTypeInitializationTest::ShowFaceProperties(FreeTypeWrapper &inFr
             face = inFreeType.NewFace(inFontFilePath, inSecondaryFontFilePath, 0);
         else
             face = inFreeType.NewFace(inFontFilePath, 0);
-        if (!face)
+        if (face == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to load font from " << inFontFilePath.c_str() << "\n";
@@ -111,11 +111,11 @@ EStatusCode FreeTypeInitializationTest::ShowGlobalFontProperties(FreeTypeWrapper
 
     FreeTypeFaceWrapper face(inFace, "", 0, false);
 
-    cout << "Font Family = " << (face->family_name ? face->family_name : "somefont") << "\n";
-    cout << "Font Style = " << (face->style_name ? face->style_name : "somestyle") << "\n";
+    cout << "Font Family = " << (face->family_name != nullptr ? face->family_name : "somefont") << "\n";
+    cout << "Font Style = " << (face->style_name != nullptr ? face->style_name : "somestyle") << "\n";
     cout << "Font Format = " << FT_Get_X11_Font_Format(face) << "\n";
-    cout << "Font CID Keyed (does not includes sfnts) = " << (face->face_flags & FT_FACE_FLAG_CID_KEYED ? "yes" : "no")
-         << "\n";
+    cout << "Font CID Keyed (does not includes sfnts) = "
+         << ((face->face_flags & FT_FACE_FLAG_CID_KEYED) != 0 ? "yes" : "no") << "\n";
     cout << "Font SFNT modeled = " << (FT_IS_SFNT(face) ? "yes" : "no") << "\n";
     if (FT_IS_SFNT(face))
     {
@@ -129,12 +129,12 @@ EStatusCode FreeTypeInitializationTest::ShowGlobalFontProperties(FreeTypeWrapper
     if (FT_Get_CID_Is_Internally_CID_Keyed(face, &isCID) != 0)
     {
         cout << "No CID information to read\n";
-        isCID = false;
+        isCID = 0u;
     }
     else
-        cout << "Font Internally CID (checks also sfnts) = " << (isCID ? "yes" : "no") << "\n";
+        cout << "Font Internally CID (checks also sfnts) = " << (isCID != 0u ? "yes" : "no") << "\n";
 
-    if (isCID)
+    if (isCID != 0u)
     {
         const char *registry;
         const char *ordering;

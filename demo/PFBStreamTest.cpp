@@ -48,8 +48,7 @@ EStatusCode PFBStreamTest::Run(const TestConfiguration &inTestConfiguration)
 
     do
     {
-        pfbFile.OpenFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"));
+        pfbFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/HLB_____.PFB"));
 
         decodedPFBFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "decodedPFBFile.txt"));
 

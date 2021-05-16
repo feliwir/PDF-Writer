@@ -35,7 +35,7 @@ TrueTypePrimitiveWriter::~TrueTypePrimitiveWriter()
 void TrueTypePrimitiveWriter::SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile)
 {
     mTrueTypeFile = inTrueTypeFile;
-    mInternalState = (inTrueTypeFile ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    mInternalState = (inTrueTypeFile != nullptr ? PDFHummus::eSuccess : PDFHummus::eFailure);
 }
 
 EStatusCode TrueTypePrimitiveWriter::GetInternalState()

@@ -52,7 +52,7 @@ void InputBufferedStream::Assign(IByteReaderWithPosition *inReader)
 
 LongBufferSizeType InputBufferedStream::Read(Byte *inBuffer, LongBufferSizeType inBufferSize)
 {
-    if (mSourceStream)
+    if (mSourceStream != nullptr)
     {
         LongBufferSizeType bytesRead;
 

@@ -60,7 +60,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
@@ -122,9 +122,8 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
 
         // Create image xobject
         PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"),
-            imageXObjectID);
-        if (!imageXObject)
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"), imageXObjectID);
+        if (imageXObject == nullptr)
         {
             cout << "failed to create image XObject from file\n";
             status = PDFHummus::eFailure;
@@ -133,9 +132,8 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
 
         // now create form xobject
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGFile(
-            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"),
-            formXObjectID);
-        if (!formXObject)
+            RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/otherStage.JPG"), formXObjectID);
+        if (formXObject == nullptr)
         {
             cout << "failed to create form XObject from file\n";
             status = PDFHummus::eFailure;
@@ -146,7 +144,7 @@ EStatusCode ImagesAndFormsForwardReferenceTest::Run(const TestConfiguration &inT
         PDFFormXObject *tiffFormXObject = pdfWriter.CreateFormXObjectFromTIFFFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/tiff/jim___ah.tif"),
             tiffFormXObjectID);
-        if (!tiffFormXObject)
+        if (tiffFormXObject == nullptr)
         {
             cout << "failed to create image form XObject from file, for file\n";
             status = PDFHummus::eFailure;

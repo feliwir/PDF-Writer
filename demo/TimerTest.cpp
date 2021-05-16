@@ -62,7 +62,7 @@ EStatusCode TimerTest::Run(const TestConfiguration &inTestConfiguration)
 
 void TimerTest::Sleep(double inSeconds)
 {
-    clock_t wait = (clock_t)(inSeconds * CLOCKS_PER_SEC);
+    auto wait = (clock_t)(inSeconds * CLOCKS_PER_SEC);
     clock_t goal;
     goal = wait + clock();
     while (goal > clock())

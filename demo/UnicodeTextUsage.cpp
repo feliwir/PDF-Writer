@@ -54,7 +54,7 @@ EStatusCode UnicodeTextUsage::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        PDFPage *page = new PDFPage();
+        auto *page = new PDFPage();
         page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
@@ -67,7 +67,7 @@ EStatusCode UnicodeTextUsage::Run(const TestConfiguration &inTestConfiguration)
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
-        if (!font)
+        if (font == nullptr)
         {
             status = PDFHummus::eFailure;
             cout << "Failed to create font object for arial.ttf\n";

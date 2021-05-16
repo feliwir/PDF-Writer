@@ -43,8 +43,8 @@ TEST(PDFEmbedding, AppendPages)
                                              PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
-    result = pdfWriter.AppendPDFPagesFromPDF(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), PDFPageRange());
+    result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"),
+                                             PDFPageRange());
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(
