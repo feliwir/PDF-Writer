@@ -35,7 +35,7 @@
 #include "io/InputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
 #include "io/OutputStringBufferStream.h"
-#include "png.h"
+#include <png.h>
 
 #include <list>
 #include <stdlib.h>
