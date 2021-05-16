@@ -11,6 +11,14 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/DFontTest.cpp
  )
 
+if(BUILD_COVERAGE)
+    setup_target_for_coverage_lcov(
+        NAME pdfwriter_coverage
+        EXECUTABLE ctest -j ${n_cores}
+        EXCLUDE "demo/*" "contrib/*" "/usr/include/*"
+        DEPENDENCIES pdfwriter_tests)
+endif()
+
 target_compile_definitions(pdfwriter_tests PRIVATE "-DPDFWRITE_SOURCE_PATH=\"${CMAKE_SOURCE_DIR}\" ")
 target_compile_definitions(pdfwriter_tests PRIVATE "-DPDFWRITE_BINARY_PATH=\"${CMAKE_CURRENT_BINARY_DIR}\" ")
 
