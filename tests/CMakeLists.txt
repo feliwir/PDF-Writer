@@ -14,6 +14,8 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/EncryptedPDFTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FlateEncryptionTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FlateObjectDecodeTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FormXObjectTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeInitializationTest.cpp
  )
 
 if(BUILD_COVERAGE)

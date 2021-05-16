@@ -3,9 +3,7 @@ add_executable(PDFWriterTestPlayground
 #sources
 RotatedPagesPDF.cpp
 FileURL.cpp
-FormXObjectTest.cpp
 HighLevelContentContext.cpp
-FreeTypeInitializationTest.cpp
 ImagesAndFormsForwardReferenceTest.cpp
 InputFlateDecodeTester.cpp
 InputImagesAsStreamsTest.cpp
@@ -59,8 +57,6 @@ UnicodeTextUsage.cpp
 RotatedPagesPDF.h
 FileURL.h
 HighLevelContentContext.h
-FormXObjectTest.h
-FreeTypeInitializationTest.h
 ImagesAndFormsForwardReferenceTest.h
 InputFlateDecodeTester.h
 InputImagesAsStreamsTest.h
