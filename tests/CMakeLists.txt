@@ -10,8 +10,10 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/DCTDecodeFilterTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/DFontTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/EmptyFileTest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/EmptyPagesPDF.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/EncryptedPDF.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/EmptyPagesPDFTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/EncryptedPDFTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FlateEncryptionTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FlateObjectDecodeTest.cpp
  )
 
 if(BUILD_COVERAGE)

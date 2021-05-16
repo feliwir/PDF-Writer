@@ -25,6 +25,7 @@
 #include "io/OutputFlateDecodeStream.h"
 #include "io/OutputFlateEncodeStream.h"
 #include "io/OutputStreamTraits.h"
+#include "TestHelper.h"
 
 #include <gtest/gtest.h>
 #include <iostream>
@@ -68,6 +69,4 @@ TEST(IO, FlateEncryption)
     delete decoderReaderStream;
 
     ASSERT_EQ(strcmp(aString.c_str(), buffer), 0);
-
-    return status;
 }
