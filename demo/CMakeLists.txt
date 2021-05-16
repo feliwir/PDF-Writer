@@ -3,8 +3,6 @@ add_executable(PDFWriterTestPlayground
 #sources
 RotatedPagesPDF.cpp
 FileURL.cpp
-HighLevelContentContext.cpp
-ImagesAndFormsForwardReferenceTest.cpp
 InputFlateDecodeTester.cpp
 InputImagesAsStreamsTest.cpp
 JpegLibTest.cpp
@@ -41,7 +39,6 @@ SimpleTextUsage.cpp
 TestMeasurementsTest.cpp
 TestsRunner.cpp
 TextUsageBugs.cpp
-HighLevelImages.cpp
 TIFFImageTest.cpp
 TiffSpecialsTest.cpp
 TimerTest.cpp
@@ -56,8 +53,6 @@ UnicodeTextUsage.cpp
 #headers
 RotatedPagesPDF.h
 FileURL.h
-HighLevelContentContext.h
-ImagesAndFormsForwardReferenceTest.h
 InputFlateDecodeTester.h
 InputImagesAsStreamsTest.h
 ITestUnit.h
@@ -95,7 +90,6 @@ SimpleTextUsage.h
 TestMeasurementsTest.h
 TestsRunner.h
 TextUsageBugs.h
-HighLevelImages.h
 TIFFImageTest.h
 TiffSpecialsTest.h
 TimerTest.h

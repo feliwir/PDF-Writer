@@ -31,7 +31,7 @@
 #include "io/OutputStreamTraits.h"
 #include "io/OutputStringBufferStream.h"
 #include <ctype.h>
-#include <locale>
+#include <algorithm>
 
 using namespace PDFHummus;
 
@@ -185,8 +185,10 @@ class CSSColorMap
 
 unsigned long CSSColorMap::GetRGBForColorName(const std::string &inColorName)
 {
-    std::locale loc;
-    auto it = kCSSColors.find(std::tolower(inColorName, loc));
+    std::string key = inColorName;
+    std::transform(key.begin(), key.end(), key.begin(), ::tolower);
+    
+    auto it = kCSSColors.find(key);
 
     if (it == kCSSColors.end())
         return 0;
