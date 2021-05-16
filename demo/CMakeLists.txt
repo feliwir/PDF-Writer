@@ -3,8 +3,6 @@ add_executable(PDFWriterTestPlayground
 #sources
 RotatedPagesPDF.cpp
 FileURL.cpp
-InputFlateDecodeTester.cpp
-InputImagesAsStreamsTest.cpp
 JpegLibTest.cpp
 JPGImageTest.cpp
 LinksTest.cpp
@@ -53,8 +51,6 @@ UnicodeTextUsage.cpp
 #headers
 RotatedPagesPDF.h
 FileURL.h
-InputFlateDecodeTester.h
-InputImagesAsStreamsTest.h
 ITestUnit.h
 JpegLibTest.h
 JPGImageTest.h

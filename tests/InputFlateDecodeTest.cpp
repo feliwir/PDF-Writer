@@ -18,55 +18,44 @@
 
 
 */
-#include "InputFlateDecodeTester.h"
-#include "TestsRunner.h"
+#include "TestHelper.h"
 #include "io/InputFile.h"
 #include "io/InputFlateDecodeStream.h"
 #include "io/OutputFile.h"
 #include "io/OutputFlateEncodeStream.h"
 
+#include <gtest/gtest.h>
 #include <iostream>
 
-using namespace std;
 using namespace PDFHummus;
 
-InputFlateDecodeTester::InputFlateDecodeTester()
-{
-}
-
-InputFlateDecodeTester::~InputFlateDecodeTester()
-{
-}
-
-EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfiguration)
+TEST(PDFEmbedding, InputFlateDecode)
 {
     OutputFile outputFile;
-    string aString("hello world");
+    std::string aString("hello world");
     uint8_t buffer;
     InputFlateDecodeStream inputDecoder;
     OutputFlateEncodeStream outputEncoder;
 
-    outputFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "source.txt"));
+    outputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "source.txt"));
     outputEncoder.Assign(outputFile.GetOutputStream());
     outputEncoder.Write((uint8_t *)aString.c_str(), aString.size());
     outputEncoder.Assign(nullptr);
     outputFile.CloseFile();
 
     InputFile inputFile;
-    inputFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "source.txt"));
+    inputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "source.txt"));
     inputDecoder.Assign(inputFile.GetInputStream());
 
     bool isSame = true;
     int i = 0;
-    string::iterator it = aString.begin();
 
-    for (; it != aString.end() && isSame; ++it, ++i)
+    for (auto it = aString.begin(); it != aString.end() && isSame; ++it, ++i)
     {
         size_t amountRead = inputDecoder.Read(&buffer, 1);
 
         if (amountRead != 1)
         {
-            cout << "Read failes. expected " << 1 << " characters. Found" << amountRead << "\n";
             isSame = false;
             break;
         }
@@ -76,13 +65,5 @@ EStatusCode InputFlateDecodeTester::Run(const TestConfiguration &inTestConfigura
     inputDecoder.Assign(nullptr);
     inputFile.CloseFile();
 
-    if (!isSame)
-    {
-        cout << "Read failes. different characters than what expected\n";
-        return PDFHummus::eFailure;
-    }
-    else
-        return PDFHummus::eSuccess;
+    ASSERT_TRUE(isSame);
 }
-
-ADD_CATEGORIZED_TEST(InputFlateDecodeTester, "PDFEmbedding")

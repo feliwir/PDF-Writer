@@ -19,6 +19,8 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/HighLevelContentContextTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/HighLevelImagesTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ImagesAndFormsForwardReferenceTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/InputFlateDecodeTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/InputImagesAsStreamsTest.cpp
  )
 
 if(BUILD_COVERAGE)
