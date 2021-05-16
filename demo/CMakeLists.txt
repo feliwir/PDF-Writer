@@ -3,9 +3,6 @@ add_executable(PDFWriterTestPlayground
 #sources
 AppendingAndReading.cpp
 BasicModification.cpp
-CustomLogTest.cpp
-DCTDecodeFilterTest.cpp
-DFontTest.cpp
 EmptyFileTest.cpp
 EmptyPagesPDF.cpp
 RotatedPagesPDF.cpp
@@ -68,9 +65,6 @@ UnicodeTextUsage.cpp
 #headers
 AppendingAndReading.h
 BasicModification.h
-CustomLogTest.h
-DCTDecodeFilterTest.h
-DFontTest.h
 EmptyFileTest.h
 EmptyPagesPDF.h
 RotatedPagesPDF.h

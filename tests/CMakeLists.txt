@@ -4,6 +4,9 @@ add_executable(pdfwrite_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/BoxingBaseTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/BufferedOutputStreamTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CopyingAndMergingEmptyPagesTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CustomLogTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DCTDecodeFilterTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/DFontTest.cpp
  )
 
 target_compile_definitions(pdfwrite_tests PRIVATE "-DPDFWRITE_SOURCE_PATH=\"${CMAKE_SOURCE_DIR}\" ")
