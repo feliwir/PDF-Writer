@@ -1,4 +1,4 @@
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/IPDFParserExtender.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentCopyingContext.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentHandler.h
@@ -11,7 +11,7 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleStringTokenizer.h
 )
 
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentCopyingContext.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFObjectParser.cpp

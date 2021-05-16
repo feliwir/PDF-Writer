@@ -1,4 +1,4 @@
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/ArrayOfInputStreamsStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/InputAESDecodeStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/InputAscii85DecodeStream.h
@@ -32,7 +32,7 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/OutputStringBufferStream.h
 )
 
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/ArrayOfInputStreamsStream.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/InputAESDecodeStream.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/InputAscii85DecodeStream.cpp

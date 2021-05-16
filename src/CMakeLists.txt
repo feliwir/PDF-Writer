@@ -156,7 +156,7 @@ set(PDF_WRITER_HEADERS
     XObjectContentContext.h
 )
 
-add_library(PDFWriter ${PDF_WRITER_SOURCE} ${PDF_WRITER_HEADERS})
+add_library(pdfwriter ${PDF_WRITER_SOURCE} ${PDF_WRITER_HEADERS})
 
 add_subdirectory(encoding)
 add_subdirectory(encryption)
@@ -166,6 +166,6 @@ add_subdirectory(objects)
 add_subdirectory(parsing)
 add_subdirectory(text)
 
-target_link_libraries(PDFWriter PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
-target_include_directories(PDFWriter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(PDFWriter PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(pdfwriter PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
+target_include_directories(pdfwriter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(pdfwriter PUBLIC ${FREETYPE_INCLUDE_DIRS})

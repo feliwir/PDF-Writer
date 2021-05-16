@@ -1,4 +1,4 @@
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/EFontStretch.h
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeFaceWrapper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeOpenTypeWrapper.h
@@ -8,7 +8,7 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PFMFileReader.h
 )
 
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeFaceWrapper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeOpenTypeWrapper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeType1Wrapper.cpp

@@ -1,4 +1,4 @@
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CharStringType1Interpreter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/CharStringType1Tracer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/Type1Input.h
@@ -7,7 +7,7 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Type2CharStringWriter.h
 )
 
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CharStringType1Interpreter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/CharStringType1Tracer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Type1Input.cpp

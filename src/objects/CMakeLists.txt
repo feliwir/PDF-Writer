@@ -1,4 +1,4 @@
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Deletable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/IDeletable.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFArray.h
@@ -24,7 +24,7 @@ target_sources(PDFWriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFPageInput.h
 )
 
-target_sources(PDFWriter PRIVATE
+target_sources(pdfwriter PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFArray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFBoolean.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCosArray.cpp

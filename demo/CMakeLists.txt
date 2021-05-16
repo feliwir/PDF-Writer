@@ -1,8 +1,6 @@
 add_executable(PDFWriterTestPlayground 
 
 #sources
-AppendingAndReading.cpp
-BasicModification.cpp
 EmptyFileTest.cpp
 EmptyPagesPDF.cpp
 RotatedPagesPDF.cpp
@@ -63,8 +61,6 @@ EncryptedPDF.cpp
 UnicodeTextUsage.cpp
 
 #headers
-AppendingAndReading.h
-BasicModification.h
 EmptyFileTest.h
 EmptyPagesPDF.h
 RotatedPagesPDF.h
@@ -124,7 +120,7 @@ EncryptedPDF.h
 UnicodeTextUsage.h
 )
 
-target_link_libraries(PDFWriterTestPlayground PDFWriter) #add_dependencies makes sure that dependencies are built before main target
+target_link_libraries(PDFWriterTestPlayground pdfwriter) #add_dependencies makes sure that dependencies are built before main target
 
 add_custom_target(check
     ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/TestMaterials ${CMAKE_BINARY_DIR}/Testing/TestMaterials
