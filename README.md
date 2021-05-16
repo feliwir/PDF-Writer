@@ -12,5 +12,5 @@ but i decided to pick it up and use the latest C++ features to simplify it's usa
 ## Build status
 
 [![CMake](https://github.com/feliwir/PDF-Writer/actions/workflows/cmake.yml/badge.svg)](https://github.com/feliwir/PDF-Writer/actions/workflows/cmake.yml)
- 
+[![codecov](https://codecov.io/gh/feliwir/PDF-Writer/branch/master/graph/badge.svg?token=AIPJNC43PJ)](https://codecov.io/gh/feliwir/PDF-Writer)
 
