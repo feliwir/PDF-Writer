@@ -43,5 +43,5 @@ jobs:
     - name: Coverage
       working-directory: ${{github.workspace}}/build
       # Our coverage target is called "pdfwriter_coverage"
-      run: cmake --build --target pdfwriter_coverage
+      run: cmake --build . --target pdfwriter_coverage
       
