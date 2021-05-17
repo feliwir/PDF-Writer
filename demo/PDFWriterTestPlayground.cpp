@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
                         hasExclusions = true;
                         break;
                     }
-                    else
-                        categories.push_back(argv[i]);
+                    categories.push_back(argv[i]);
                 }
 
                 if (hasExclusions)

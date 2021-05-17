@@ -64,11 +64,9 @@ PageTree *CatalogInformation::GetPageTreeRoot(IndirectObjectsReferenceRegistry &
             resultPageTree = resultPageTree->GetParent();
         return resultPageTree;
     }
-    else
-    {
-        mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
-        return mCurrentPageTreeNode;
-    }
+
+    mCurrentPageTreeNode = new PageTree(inObjectsRegistry);
+    return mCurrentPageTreeNode;
 }
 
 PageTree *CatalogInformation::GetCurrentPageTreeNode()

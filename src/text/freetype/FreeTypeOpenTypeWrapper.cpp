@@ -87,14 +87,13 @@ BoolAndFTShort FreeTypeOpenTypeWrapper::GetCapHeight()
     {
         return BoolAndFTShort(true, mOS2Table->sCapHeight);
     }
-    else if (mPCLTTable != nullptr)
+    if (mPCLTTable != nullptr)
     {
         // converting ushort to short...yikes. hope it ain't a problem. but than it's not supposed to be more than a 1k
         // or something, nah?
         return BoolAndFTShort(true, mPCLTTable->CapHeight);
     }
-    else
-        return BoolAndFTShort(false, 0);
+    return BoolAndFTShort(false, 0);
 }
 
 BoolAndFTShort FreeTypeOpenTypeWrapper::GetxHeight()
@@ -103,14 +102,13 @@ BoolAndFTShort FreeTypeOpenTypeWrapper::GetxHeight()
     {
         return BoolAndFTShort(true, mOS2Table->sxHeight);
     }
-    else if (mPCLTTable != nullptr)
+    if (mPCLTTable != nullptr)
     {
         // converting ushort to short...yikes. hope it ain't a problem. but than it's not supposed to be more than a 1k
         // or something, nah?
         return BoolAndFTShort(true, mPCLTTable->xHeight);
     }
-    else
-        return BoolAndFTShort(false, 0);
+    return BoolAndFTShort(false, 0);
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetStemV()
@@ -125,20 +123,18 @@ FT_UShort FreeTypeOpenTypeWrapper::GetStemV()
     {
         return lowerLWidthResult.second;
     }
+
+    FT_UShort weight;
+    if (mOS2Table != nullptr)
+        weight = mOS2Table->usWeightClass;
+    else if (mPCLTTable != nullptr)
+        weight = std::max(
+            mPCLTTable->StrokeWeight * 80 + 500,
+            0); // what you see here is an attempt to use linear function to get from strokeweight to weight class
     else
-    {
-        FT_UShort weight;
-        if (mOS2Table != nullptr)
-            weight = mOS2Table->usWeightClass;
-        else if (mPCLTTable != nullptr)
-            weight = std::max(
-                mPCLTTable->StrokeWeight * 80 + 500,
-                0); // what you see here is an attempt to use linear function to get from strokeweight to weight class
-        else
-            weight = 500;
-        return (FT_UShort)(
-            50 + pow(weight / 65.0, 2)); // this is some heuristic i found in a web site...lord knows if it's true
-    }
+        weight = 500;
+    return (FT_UShort)(50 +
+                       pow(weight / 65.0, 2)); // this is some heuristic i found in a web site...lord knows if it's true
 }
 
 BoolAndFTUShort FreeTypeOpenTypeWrapper::StemVFromLowerLWidth()
@@ -155,24 +151,25 @@ BoolAndFTUShort FreeTypeOpenTypeWrapper::StemVFromLowerLWidth()
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretch()
 {
-    return mOS2Table != nullptr
-               ? (EFontStretch)mOS2Table->usWidthClass
-               : mPCLTTable != nullptr ? GetFontStretchForPCLTValue(mPCLTTable->WidthType) : eFontStretchUknown;
+    return mOS2Table != nullptr    ? (EFontStretch)mOS2Table->usWidthClass
+           : mPCLTTable != nullptr ? GetFontStretchForPCLTValue(mPCLTTable->WidthType)
+                                   : eFontStretchUknown;
 }
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretchForPCLTValue(FT_Char inWidthValue)
 {
-    return (5 == inWidthValue)
-               ? eFontStretchUltraExpanded
-               : (-5 == inWidthValue) ? eFontStretchUltraCondensed : EFontStretch(eFontStretchNormal + inWidthValue);
+    return (5 == inWidthValue)    ? eFontStretchUltraExpanded
+           : (-5 == inWidthValue) ? eFontStretchUltraCondensed
+                                  : EFontStretch(eFontStretchNormal + inWidthValue);
 
     // mapping edges to extremes, the rest is linear
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeight()
 {
-    return mOS2Table != nullptr ? mOS2Table->usWeightClass
-                                : mPCLTTable != nullptr ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight) : 1000;
+    return mOS2Table != nullptr    ? mOS2Table->usWeightClass
+           : mPCLTTable != nullptr ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight)
+                                   : 1000;
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeightFromPCLTValue(FT_Char inWeightValue)

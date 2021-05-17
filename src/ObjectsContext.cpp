@@ -105,8 +105,7 @@ std::string ObjectsContext::MaybeEncryptString(const std::string &inString)
 {
     if (IsEncrypting())
         return mEncryptionHelper->EncryptString(inString);
-    else
-        return inString;
+    return inString;
 }
 
 std::string ObjectsContext::DecodeHexString(const std::string &inString)
@@ -262,19 +261,15 @@ EStatusCode ObjectsContext::EndDictionary(DictionaryContext *ObjectsContext)
             mDictionaryStack.pop_back();
             return PDFHummus::eSuccess;
         }
-        else
-        {
-            TRACE_LOG("ObjectsContext::EndDictionary, nesting violation. Trying to close a dictionary while one of "
-                      "it's children is still open. First End the children");
-            return PDFHummus::eFailure;
-        }
-    }
-    else
-    {
-        TRACE_LOG("ObjectsContext::EndDictionary, stack underflow. Trying to end a dictionary when there's no open "
-                  "dictionaries");
+
+        TRACE_LOG("ObjectsContext::EndDictionary, nesting violation. Trying to close a dictionary while one of "
+                  "it's children is still open. First End the children");
         return PDFHummus::eFailure;
     }
+
+    TRACE_LOG("ObjectsContext::EndDictionary, stack underflow. Trying to end a dictionary when there's no open "
+              "dictionaries");
+    return PDFHummus::eFailure;
 }
 
 IndirectObjectsReferenceRegistry &ObjectsContext::GetInDirectObjectsRegistry()
@@ -739,7 +734,7 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
 void ObjectsContext::WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize)
 {
     // xref numbers are written high order byte first (big endian)
-    uint8_t *buffer = new uint8_t[inElementSize];
+    auto *buffer = new uint8_t[inElementSize];
 
     for (size_t i = inElementSize; i > 0; --i)
     {

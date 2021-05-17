@@ -164,15 +164,14 @@ PDFObject *PDFPageInput::QueryInheritedValue(PDFDictionary *inDictionary, const 
     {
         return mParser->QueryDictionaryObject(inDictionary, inName);
     }
-    else if (inDictionary->Exists(scParent))
+    if (inDictionary->Exists(scParent))
     {
         PDFObjectCastPtr<PDFDictionary> parent(mParser->QueryDictionaryObject(inDictionary, scParent));
         if (!parent)
             return nullptr;
         return QueryInheritedValue(parent.GetPtr(), inName);
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 void PDFPageInput::SetPDFRectangleFromPDFArray(PDFArray *inPDFArray, PDFRectangle &outPDFRectangle)

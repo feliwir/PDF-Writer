@@ -129,8 +129,7 @@ std::string EncryptionHelper::EncryptString(const std::string &inStringToEncrypt
 
         return buffer.ToString();
     }
-    else
-        return inStringToEncrypt;
+    return inStringToEncrypt;
 }
 
 IByteWriterWithPosition *EncryptionHelper::CreateEncryptionStream(IByteWriterWithPosition *inToWrapStream)
@@ -145,10 +144,8 @@ IByteWriterWithPosition *EncryptionHelper::CreateEncryptionWriter(IByteWriterWit
     {
         return new OutputAESEncodeStream(inToWrapStream, inEncryptionKey, false);
     }
-    else
-    {
-        return new OutputRC4XcodeStream(inToWrapStream, inEncryptionKey, false);
-    }
+
+    return new OutputRC4XcodeStream(inToWrapStream, inEncryptionKey, false);
 }
 
 static const string scFilter = "Filter";

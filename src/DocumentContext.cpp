@@ -125,8 +125,7 @@ EStatusCode DocumentContext::WriteHeader(EPDFVersion inPDFVersion)
         Write4BinaryBytes();
         return PDFHummus::eSuccess;
     }
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 static const std::string scPDFVersion10 = "PDF-1.0";
@@ -583,46 +582,44 @@ int DocumentContext::WritePageTree(PageTree *inPageTreeToWrite)
 
         return inPageTreeToWrite->GetNodesCount();
     }
-    else
+
+    int totalPagesNodes = 0;
+
+    // first loop the kids and write them (while at it, accumulate the children count).
+    for (int i = 0; i < inPageTreeToWrite->GetNodesCount(); ++i)
+        totalPagesNodes += WritePageTree(inPageTreeToWrite->GetPageTreeChild(i));
+
+    mObjectsContext->StartNewIndirectObject(inPageTreeToWrite->GetID());
+
+    pagesTreeContext = mObjectsContext->StartDictionary();
+
+    // type
+    pagesTreeContext->WriteKey(scType);
+    pagesTreeContext->WriteNameValue(scPages);
+
+    // count
+    pagesTreeContext->WriteKey(scCount);
+    pagesTreeContext->WriteIntegerValue(totalPagesNodes);
+
+    // kids
+    pagesTreeContext->WriteKey(scKids);
+    mObjectsContext->StartArray();
+    for (int j = 0; j < inPageTreeToWrite->GetNodesCount(); ++j)
+        mObjectsContext->WriteNewIndirectObjectReference(inPageTreeToWrite->GetPageTreeChild(j)->GetID());
+    mObjectsContext->EndArray();
+    mObjectsContext->EndLine();
+
+    // parent
+    if (inPageTreeToWrite->GetParent() != nullptr)
     {
-        int totalPagesNodes = 0;
-
-        // first loop the kids and write them (while at it, accumulate the children count).
-        for (int i = 0; i < inPageTreeToWrite->GetNodesCount(); ++i)
-            totalPagesNodes += WritePageTree(inPageTreeToWrite->GetPageTreeChild(i));
-
-        mObjectsContext->StartNewIndirectObject(inPageTreeToWrite->GetID());
-
-        pagesTreeContext = mObjectsContext->StartDictionary();
-
-        // type
-        pagesTreeContext->WriteKey(scType);
-        pagesTreeContext->WriteNameValue(scPages);
-
-        // count
-        pagesTreeContext->WriteKey(scCount);
-        pagesTreeContext->WriteIntegerValue(totalPagesNodes);
-
-        // kids
-        pagesTreeContext->WriteKey(scKids);
-        mObjectsContext->StartArray();
-        for (int j = 0; j < inPageTreeToWrite->GetNodesCount(); ++j)
-            mObjectsContext->WriteNewIndirectObjectReference(inPageTreeToWrite->GetPageTreeChild(j)->GetID());
-        mObjectsContext->EndArray();
-        mObjectsContext->EndLine();
-
-        // parent
-        if (inPageTreeToWrite->GetParent() != nullptr)
-        {
-            pagesTreeContext->WriteKey(scParent);
-            pagesTreeContext->WriteNewObjectReferenceValue(inPageTreeToWrite->GetParent()->GetID());
-        }
-
-        mObjectsContext->EndDictionary(pagesTreeContext);
-        mObjectsContext->EndIndirectObject();
-
-        return totalPagesNodes;
+        pagesTreeContext->WriteKey(scParent);
+        pagesTreeContext->WriteNewObjectReferenceValue(inPageTreeToWrite->GetParent()->GetID());
     }
+
+    mObjectsContext->EndDictionary(pagesTreeContext);
+    mObjectsContext->EndIndirectObject();
+
+    return totalPagesNodes;
 }
 
 static const std::string scResources = "Resources";
@@ -1872,8 +1869,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(const std::s
         delete context;
         return nullptr;
     }
-    else
-        return context;
+    return context;
 }
 
 EStatusCode DocumentContext::AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea)
@@ -2056,8 +2052,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(IByteReaderW
         delete context;
         return nullptr;
     }
-    else
-        return context;
+    return context;
 }
 
 void DocumentContext::Cleanup()
@@ -2101,18 +2096,18 @@ void DocumentContext::Cleanup()
     }
     mFormEndTasks.clear();
 
-    for (auto itPageEnd = mPageEndTasks.begin(); itPageEnd != mPageEndTasks.end(); ++itPageEnd)
+    for (auto &mPageEndTask : mPageEndTasks)
     {
-        auto itPageEndWritingTasks = itPageEnd->second.begin();
-        for (; itPageEndWritingTasks != itPageEnd->second.end(); ++itPageEndWritingTasks)
+        auto itPageEndWritingTasks = mPageEndTask.second.begin();
+        for (; itPageEndWritingTasks != mPageEndTask.second.end(); ++itPageEndWritingTasks)
             delete *itPageEndWritingTasks;
     }
     mPageEndTasks.clear();
 
-    for (auto itPatternEnd = mTiledPatternEndTasks.begin(); itPatternEnd != mTiledPatternEndTasks.end(); ++itPatternEnd)
+    for (auto &mTiledPatternEndTask : mTiledPatternEndTasks)
     {
-        auto itTiledPatternEndWritingTasks = itPatternEnd->second.begin();
-        for (; itTiledPatternEndWritingTasks != itPatternEnd->second.end(); ++itTiledPatternEndWritingTasks)
+        auto itTiledPatternEndWritingTasks = mTiledPatternEndTask.second.begin();
+        for (; itTiledPatternEndWritingTasks != mTiledPatternEndTask.second.end(); ++itTiledPatternEndWritingTasks)
             delete *itTiledPatternEndWritingTasks;
     }
     mTiledPatternEndTasks.clear();
@@ -2384,8 +2379,7 @@ bool DocumentContext::DocumentHasNewPages()
         hasLeafs = pageTreeRoot->IsLeafParent();
         if (pageTreeRoot->GetNodesCount() == 0)
             break;
-        else
-            pageTreeRoot = pageTreeRoot->GetPageTreeChild(0);
+        pageTreeRoot = pageTreeRoot->GetPageTreeChild(0);
     }
 
     return hasLeafs;
@@ -2492,8 +2486,7 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
 
     if (status == eSuccess)
         return newPageRootTreeID;
-    else
-        return 0;
+    return 0;
 }
 
 bool DocumentContext::IsRequiredVersionHigherThanPDFVersion(PDFParser *inModifiedFileParser,
@@ -2600,8 +2593,7 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(PDFParser *i
         delete context;
         return nullptr;
     }
-    else
-        return context;
+    return context;
 }
 
 std::string DocumentContext::AddExtendedResourceMapping(PDFPage &inPage, const std::string &inResourceCategoryName,

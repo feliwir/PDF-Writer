@@ -117,12 +117,10 @@ EStatusCode FreeTypeWrapper::FillOpenFaceArgumentsForUTF8String(const std::strin
     {
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        TRACE_LOG1("FreeTypeWrapper::FillOpenFaceArgumentsForWideString, Cannot Open file for reading %s",
-                   inFilePath.c_str());
-        return PDFHummus::eFailure;
-    }
+
+    TRACE_LOG1("FreeTypeWrapper::FillOpenFaceArgumentsForWideString, Cannot Open file for reading %s",
+               inFilePath.c_str());
+    return PDFHummus::eFailure;
 }
 
 void FreeTypeWrapper::CloseOpenFaceArgumentsStream(FT_Open_Args &ioArgs)

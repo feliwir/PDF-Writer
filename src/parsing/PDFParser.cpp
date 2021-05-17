@@ -285,18 +285,15 @@ bool PDFParser::ReadBack(uint8_t &outValue)
         outValue = *mCurrentBufferIndex;
         return true;
     }
-    else
+
+    ReadNextBufferFromEnd(); // must be able to read...but could be 0 bytes
+    if (mCurrentBufferIndex > mLinesBuffer)
     {
-        ReadNextBufferFromEnd(); // must be able to read...but could be 0 bytes
-        if (mCurrentBufferIndex > mLinesBuffer)
-        {
-            --mCurrentBufferIndex;
-            outValue = *mCurrentBufferIndex;
-            return true;
-        }
-        else
-            return false;
+        --mCurrentBufferIndex;
+        outValue = *mCurrentBufferIndex;
+        return true;
     }
+    return false;
 }
 
 bool PDFParser::ReadNextBufferFromEnd()
@@ -305,23 +302,21 @@ bool PDFParser::ReadNextBufferFromEnd()
     {
         return false;
     }
-    else
-    {
-        mStream->SetPositionFromEnd(mLastReadPositionFromEnd); // last known position that worked.
-        long long positionBefore = mStream->GetCurrentPosition();
-        mStream->SetPositionFromEnd(mLastReadPositionFromEnd + LINE_BUFFER_SIZE); // try earlier one
-        long long positionAfter = mStream->GetCurrentPosition();
-        size_t readAmount = positionBefore - positionAfter; // check if got to start by testing position
-        if (readAmount != 0)
-            readAmount = mStream->Read(mLinesBuffer, readAmount);
-        mEncounteredFileStart = readAmount < LINE_BUFFER_SIZE;
-        if (0 == readAmount)
-            return false;
-        mLastAvailableIndex = mLinesBuffer + readAmount;
-        mCurrentBufferIndex = mLastAvailableIndex;
-        mLastReadPositionFromEnd += readAmount;
-        return true;
-    }
+
+    mStream->SetPositionFromEnd(mLastReadPositionFromEnd); // last known position that worked.
+    long long positionBefore = mStream->GetCurrentPosition();
+    mStream->SetPositionFromEnd(mLastReadPositionFromEnd + LINE_BUFFER_SIZE); // try earlier one
+    long long positionAfter = mStream->GetCurrentPosition();
+    size_t readAmount = positionBefore - positionAfter; // check if got to start by testing position
+    if (readAmount != 0)
+        readAmount = mStream->Read(mLinesBuffer, readAmount);
+    mEncounteredFileStart = readAmount < LINE_BUFFER_SIZE;
+    if (0 == readAmount)
+        return false;
+    mLastAvailableIndex = mLinesBuffer + readAmount;
+    mCurrentBufferIndex = mLastAvailableIndex;
+    mLastReadPositionFromEnd += readAmount;
+    return true;
 }
 
 bool PDFParser::IsBeginOfFile()
@@ -527,11 +522,9 @@ EStatusCode PDFParser::DetermineXrefSize()
     {
         return PDFHummus::eFailure;
     }
-    else
-    {
-        mXrefSize = (ObjectIDType)aSize->GetValue();
-        return PDFHummus::eSuccess;
-    }
+
+    mXrefSize = (ObjectIDType)aSize->GetValue();
+    return PDFHummus::eSuccess;
 }
 
 EStatusCode PDFParser::InitializeXref()
@@ -708,11 +701,11 @@ PDFObject *PDFParser::ParseNewObject(ObjectIDType inObjectId)
     {
         return nullptr;
     }
-    else if (eXrefEntryExisting == mXrefTable[inObjectId].mType)
+    if (eXrefEntryExisting == mXrefTable[inObjectId].mType)
     {
         return ParseExistingInDirectObject(inObjectId);
     }
-    else if (eXrefEntryStreamObject == mXrefTable[inObjectId].mType)
+    if (eXrefEntryStreamObject == mXrefTable[inObjectId].mType)
     {
         return ParseExistingInDirectStreamObject(inObjectId);
     }
@@ -1003,12 +996,9 @@ PDFDictionary *PDFParser::ParsePage(unsigned long inPageIndex)
         pageObject->AddRef();
         return pageObject.GetPtr();
     }
-    else
-    {
-        TRACE_LOG1("PDFParser::ParsePage, page object listed in page array for %ld is actually not a page",
-                   inPageIndex);
-        return nullptr;
-    }
+
+    TRACE_LOG1("PDFParser::ParsePage, page object listed in page array for %ld is actually not a page", inPageIndex);
+    return nullptr;
 }
 
 PDFObject *PDFParser::QueryDictionaryObject(PDFDictionary *inDictionary, const std::string &inName)
@@ -1023,11 +1013,9 @@ PDFObject *PDFParser::QueryDictionaryObject(PDFDictionary *inDictionary, const s
         PDFObject *theActualObject = ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
         return theActualObject;
     }
-    else
-    {
-        anObject->AddRef(); // adding ref to increase owners
-        return anObject.GetPtr();
-    }
+
+    anObject->AddRef(); // adding ref to increase owners
+    return anObject.GetPtr();
 }
 
 PDFObject *PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
@@ -1042,11 +1030,9 @@ PDFObject *PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
         PDFObject *theActualObject = ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
         return theActualObject;
     }
-    else
-    {
-        anObject->AddRef(); // adding ref to increase owners
-        return anObject.GetPtr();
-    }
+
+    anObject->AddRef(); // adding ref to increase owners
+    return anObject.GetPtr();
 }
 
 EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
@@ -1852,13 +1838,10 @@ IByteReader *PDFParser::WrapWithDecryptionFilter(PDFStreamInput *inStream, IByte
 
         if (result != nullptr)
             return result;
-        else
-            return inToWrapStream;
-    }
-    else
-    {
         return inToWrapStream;
     }
+
+    return inToWrapStream;
 }
 
 IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
@@ -1924,8 +1907,7 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
                     status = PDFHummus::eFailure;
                     break;
                 }
-                else
-                    result = createStatus.second;
+                result = createStatus.second;
             }
         }
         else if (filterObject->GetType() == PDFObject::ePDFObjectName)
@@ -1940,8 +1922,7 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
                 status = PDFHummus::eFailure;
                 break;
             }
-            else
-                result = createStatus.second;
+            result = createStatus.second;
         }
         else
         {

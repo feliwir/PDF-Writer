@@ -32,7 +32,7 @@ RC4::RC4(const ByteList &inKey)
 
 void RC4::Reset(const ByteList &inKey)
 {
-    uint8_t *buffer = new uint8_t[inKey.size()];
+    auto *buffer = new uint8_t[inKey.size()];
     uint8_t *itBuffer = buffer;
     auto it = inKey.begin();
     for (; it != inKey.end(); ++it, ++itBuffer)

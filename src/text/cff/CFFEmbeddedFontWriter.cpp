@@ -151,8 +151,7 @@ EStatusCode CFFEmbeddedFontWriter::CreateCFFSubset(FreeTypeFaceWrapper &inFontIn
             outNotEmbedded = true;
             return PDFHummus::eSuccess;
         }
-        else
-            outNotEmbedded = false;
+        outNotEmbedded = false;
 
         UIntVector subsetGlyphIDs = inSubsetGlyphIDs;
         if (subsetGlyphIDs.front() != 0) // make sure 0 glyph is in
@@ -421,8 +420,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteTopIndex()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesWriter.GetInternalState();
+    return mPrimitivesWriter.GetInternalState();
     return status;
 }
 
@@ -527,43 +525,40 @@ EStatusCode CFFEmbeddedFontWriter::WriteStringIndex()
             mOpenTypeFile.GetInputStream(),
             (size_t)(mOpenTypeInput.mCFF.mGlobalSubrsPosition - mOpenTypeInput.mCFF.mStringIndexPosition));
     }
-    else
+
+    // need to write the bloody strings...[remember that i'm adding one more string at the end]
+    mPrimitivesWriter.WriteCard16(mOpenTypeInput.mCFF.mStringsCount + 1);
+
+    // calculate the total data size to determine the required offset size
+    unsigned long totalSize = 0;
+    for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
+        totalSize += (unsigned long)strlen(mOpenTypeInput.mCFF.mStrings[i]);
+    totalSize += (unsigned long)mOptionalEmbeddedPostscript.size();
+
+    uint8_t sizeOfOffset = GetMostCompressedOffsetSize(totalSize + 1);
+    mPrimitivesWriter.WriteOffSize(sizeOfOffset);
+    mPrimitivesWriter.SetOffSize(sizeOfOffset);
+
+    unsigned long currentOffset = 1;
+
+    // write the offsets
+    for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
     {
-        // need to write the bloody strings...[remember that i'm adding one more string at the end]
-        mPrimitivesWriter.WriteCard16(mOpenTypeInput.mCFF.mStringsCount + 1);
-
-        // calculate the total data size to determine the required offset size
-        unsigned long totalSize = 0;
-        for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
-            totalSize += (unsigned long)strlen(mOpenTypeInput.mCFF.mStrings[i]);
-        totalSize += (unsigned long)mOptionalEmbeddedPostscript.size();
-
-        uint8_t sizeOfOffset = GetMostCompressedOffsetSize(totalSize + 1);
-        mPrimitivesWriter.WriteOffSize(sizeOfOffset);
-        mPrimitivesWriter.SetOffSize(sizeOfOffset);
-
-        unsigned long currentOffset = 1;
-
-        // write the offsets
-        for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
-        {
-            mPrimitivesWriter.WriteOffset(currentOffset);
-            currentOffset += (unsigned long)strlen(mOpenTypeInput.mCFF.mStrings[i]);
-        }
         mPrimitivesWriter.WriteOffset(currentOffset);
-        currentOffset += (unsigned long)mOptionalEmbeddedPostscript.size();
-        mPrimitivesWriter.WriteOffset(currentOffset);
-
-        // write the data
-        for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
-        {
-            mFontFileStream.Write((const uint8_t *)(mOpenTypeInput.mCFF.mStrings[i]),
-                                  strlen(mOpenTypeInput.mCFF.mStrings[i]));
-        }
-        mFontFileStream.Write((const uint8_t *)(mOptionalEmbeddedPostscript.c_str()),
-                              mOptionalEmbeddedPostscript.size());
-        return mPrimitivesWriter.GetInternalState();
+        currentOffset += (unsigned long)strlen(mOpenTypeInput.mCFF.mStrings[i]);
     }
+    mPrimitivesWriter.WriteOffset(currentOffset);
+    currentOffset += (unsigned long)mOptionalEmbeddedPostscript.size();
+    mPrimitivesWriter.WriteOffset(currentOffset);
+
+    // write the data
+    for (int i = 0; i < mOpenTypeInput.mCFF.mStringsCount; ++i)
+    {
+        mFontFileStream.Write((const uint8_t *)(mOpenTypeInput.mCFF.mStrings[i]),
+                              strlen(mOpenTypeInput.mCFF.mStrings[i]));
+    }
+    mFontFileStream.Write((const uint8_t *)(mOptionalEmbeddedPostscript.c_str()), mOptionalEmbeddedPostscript.size());
+    return mPrimitivesWriter.GetInternalState();
 }
 
 EStatusCode CFFEmbeddedFontWriter::WriteGlobalSubrsIndex()
@@ -753,12 +748,10 @@ EStatusCode CFFEmbeddedFontWriter::WritePrivateDictionaryBody(const PrivateDictI
         outWriteSize = mFontFileStream.GetCurrentPosition() - outWritePosition;
         return mPrimitivesWriter.GetInternalState();
     }
-    else
-    {
-        outWritePosition = 0;
-        outWriteSize = 0;
-        return PDFHummus::eSuccess;
-    }
+
+    outWritePosition = 0;
+    outWriteSize = 0;
+    return PDFHummus::eSuccess;
 }
 
 typedef std::set<FontDictInfo *> FontDictInfoSet;
@@ -874,8 +867,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGly
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesWriter.GetInternalState();
+    return mPrimitivesWriter.GetInternalState();
 }
 
 EStatusCode CFFEmbeddedFontWriter::WriteFDSelect(const UIntVector &inSubsetGlyphIDs,

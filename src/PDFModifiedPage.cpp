@@ -90,8 +90,8 @@ PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
         mCurrentContext = nullptr;
         return status;
     }
-    else
-        return eSuccess;
+
+    return eSuccess;
 }
 
 AbstractContentContext *PDFModifiedPage::GetContentContext()
@@ -132,19 +132,15 @@ PDFObject *PDFModifiedPage::findInheritedResources(PDFParser *inParser, PDFDicti
     {
         return inParser->QueryDictionaryObject(inDictionary, "Resources");
     }
-    else
+
+    PDFObjectCastPtr<PDFDictionary> parentDict(
+        inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
+    if (!parentDict)
     {
-        PDFObjectCastPtr<PDFDictionary> parentDict(
-            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
-        if (!parentDict)
-        {
-            return nullptr;
-        }
-        else
-        {
-            return findInheritedResources(inParser, parentDict.GetPtr());
-        }
+        return nullptr;
     }
+
+    return findInheritedResources(inParser, parentDict.GetPtr());
 }
 
 PDFHummus::EStatusCode PDFModifiedPage::WritePage()

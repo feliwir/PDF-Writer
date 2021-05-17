@@ -138,13 +138,11 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
             }
             return IterateObjectTypes(pointedObject.GetPtr(), inParser, inOutput);
         }
-        else
-        {
-            for (int i = 0; i < mTabLevel; ++i)
-                inOutput->Write((const uint8_t *)"  ", 2);
-            inOutput->Write((const uint8_t *)scParsedAlready, strlen(scParsedAlready));
-            return PDFHummus::eSuccess;
-        }
+
+        for (int i = 0; i < mTabLevel; ++i)
+            inOutput->Write((const uint8_t *)"  ", 2);
+        inOutput->Write((const uint8_t *)scParsedAlready, strlen(scParsedAlready));
+        return PDFHummus::eSuccess;
     }
     else if (inObject->GetType() == PDFObject::ePDFObjectArray)
     {

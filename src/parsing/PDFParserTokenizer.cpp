@@ -157,7 +157,7 @@ BoolAndString PDFParserTokenizer::GetNextToken()
                         backSlashEncountered = true;
                         continue;
                     }
-                    else if ('(' == buffer)
+                    if ('(' == buffer)
                         ++balanceLevel;
                     else if (')' == buffer)
                         --balanceLevel;
@@ -193,24 +193,23 @@ BoolAndString PDFParserTokenizer::GetNextToken()
                 result.second = tokenBuffer.ToString();
                 break;
             }
-            else
+
+            // Hex string
+
+            tokenBuffer.Write(&buffer, 1);
+
+            while (CanGetNextByte() && buffer != '>')
             {
-                // Hex string
-
-                tokenBuffer.Write(&buffer, 1);
-
-                while (CanGetNextByte() && buffer != '>')
+                if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
                 {
-                    if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
-                    {
-                        result.first = !CanGetNextByte();
-                        break;
-                    }
-
-                    if (!IsPDFWhiteSpace(buffer))
-                        tokenBuffer.Write(&buffer, 1);
+                    result.first = !CanGetNextByte();
+                    break;
                 }
+
+                if (!IsPDFWhiteSpace(buffer))
+                    tokenBuffer.Write(&buffer, 1);
             }
+
             result.second = tokenBuffer.ToString();
             break;
         }
@@ -240,13 +239,11 @@ BoolAndString PDFParserTokenizer::GetNextToken()
                 result.second = tokenBuffer.ToString();
                 break;
             }
-            else
-            {
-                // hex string loose end
-                SaveTokenBuffer(buffer);
-                result.second = tokenBuffer.ToString();
-                break;
-            }
+
+            // hex string loose end
+            SaveTokenBuffer(buffer);
+            result.second = tokenBuffer.ToString();
+            break;
 
             break;
         }
@@ -264,13 +261,12 @@ BoolAndString PDFParserTokenizer::GetNextToken()
                 {
                     break;
                 }
-                else if (IsPDFEntityBreaker(buffer))
+                if (IsPDFEntityBreaker(buffer))
                 {
                     SaveTokenBuffer(buffer); // for a non-space breaker, save the token for next token read
                     break;
                 }
-                else
-                    tokenBuffer.Write(&buffer, 1);
+                tokenBuffer.Write(&buffer, 1);
             }
             result.second = tokenBuffer.ToString();
 
@@ -302,7 +298,7 @@ BoolAndString PDFParserTokenizer::GetNextToken()
                         result.first = true;
                         break;
                     }
-                    else if (scLF == buffer)
+                    if (scLF == buffer)
                     {
                         result.first = true;
                         break;
@@ -356,8 +352,7 @@ EStatusCode PDFParserTokenizer::GetNextByteForToken(uint8_t &outByte)
         mHasTokenBuffer = false;
         return PDFHummus::eSuccess;
     }
-    else
-        return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
 static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};

@@ -112,13 +112,12 @@ bool AbstractWrittenFont::CanEncodeWithIncludedChars(WrittenFontRepresentation *
                                                      UShortList &outEncodedCharacters)
 {
     UShortList candidateEncoding;
-    auto it = inGlyphsList.begin();
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     bool allIncluded = true;
 
-    for (; it != inGlyphsList.end() && allIncluded; ++it)
+    for (const auto &glyph : inGlyphsList)
     {
-        itEncoding = inRepresentation->mGlyphIDToEncodedChar.find(it->mGlyphCode);
+        itEncoding = inRepresentation->mGlyphIDToEncodedChar.find(glyph.mGlyphCode);
         if (itEncoding == inRepresentation->mGlyphIDToEncodedChar.end())
             allIncluded = false;
         else
@@ -141,17 +140,16 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingList &
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
-    auto it = inGlyphsList.begin();
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
 
-    for (; it != inGlyphsList.end(); ++it)
+    for (const auto &glyph : inGlyphsList)
     {
-        itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar.find(it->mGlyphCode);
+        itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar.find(glyph.mGlyphCode);
         if (itEncoding == mCIDRepresentation->mGlyphIDToEncodedChar.end())
         {
             itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar
                              .insert(UIntToGlyphEncodingInfoMap::value_type(
-                                 it->mGlyphCode, GlyphEncodingInfo(EncodeCIDGlyph(it->mGlyphCode), it->mUnicodeValues)))
+                                 glyph.mGlyphCode, GlyphEncodingInfo(EncodeCIDGlyph(glyph.mGlyphCode), glyph.mUnicodeValues)))
                              .first;
         }
         outEncodedCharacters.push_back(itEncoding->second.mEncodedCharacter);
@@ -236,15 +234,12 @@ bool AbstractWrittenFont::CanEncodeWithIncludedChars(WrittenFontRepresentation *
 {
     UShortListList candidateEncodingList;
     UShortList candidateEncoding;
-    auto it = inGlyphsList.begin();
-    GlyphUnicodeMappingList::const_iterator itGlyphs;
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     bool allIncluded = true;
 
-    for (; it != inGlyphsList.end() && allIncluded; ++it)
+    for (auto it = inGlyphsList.begin(); it != inGlyphsList.end() && allIncluded; ++it)
     {
-        itGlyphs = it->begin();
-        for (; itGlyphs != it->end() && allIncluded; ++itGlyphs)
+        for (auto itGlyphs = it->begin(); itGlyphs != it->end() && allIncluded; ++itGlyphs)
         {
             itEncoding = inRepresentation->mGlyphIDToEncodedChar.find(itGlyphs->mGlyphCode);
             if (itEncoding == inRepresentation->mGlyphIDToEncodedChar.end())
@@ -272,24 +267,21 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingListLi
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
-    auto itList = inGlyphsList.begin();
-    GlyphUnicodeMappingList::const_iterator it;
     UIntToGlyphEncodingInfoMap::iterator itEncoding;
     UShortList encodedCharacters;
 
-    for (; itList != inGlyphsList.end(); ++itList)
+    for (const auto &itList : inGlyphsList)
     {
-        it = itList->begin();
-        for (; it != itList->end(); ++it)
+        for (const auto &gylph : itList)
         {
-            itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar.find(it->mGlyphCode);
+            itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar.find(gylph.mGlyphCode);
             if (itEncoding == mCIDRepresentation->mGlyphIDToEncodedChar.end())
             {
-                itEncoding =
-                    mCIDRepresentation->mGlyphIDToEncodedChar
-                        .insert(UIntToGlyphEncodingInfoMap::value_type(
-                            it->mGlyphCode, GlyphEncodingInfo(EncodeCIDGlyph(it->mGlyphCode), it->mUnicodeValues)))
-                        .first;
+                itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar
+                                 .insert(UIntToGlyphEncodingInfoMap::value_type(
+                                     gylph.mGlyphCode,
+                                     GlyphEncodingInfo(EncodeCIDGlyph(gylph.mGlyphCode), gylph.mUnicodeValues)))
+                                 .first;
             }
             encodedCharacters.push_back(itEncoding->second.mEncodedCharacter);
         }

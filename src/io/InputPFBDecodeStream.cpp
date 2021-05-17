@@ -46,11 +46,9 @@ EStatusCode InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
         mInternalState = InitializeStreamSegment();
         return mInternalState;
     }
-    else
-    {
-        mInternalState = PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
-    }
+
+    mInternalState = PDFHummus::eFailure;
+    return PDFHummus::eSuccess;
 }
 
 void InputPFBDecodeStream::ResetReadStatus()
@@ -74,11 +72,9 @@ EStatusCode InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
     {
         return PDFHummus::eFailure;
     }
-    else
-    {
-        ++mInSegmentReadIndex;
-        return (mStreamToDecode->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
-    }
+
+    ++mInSegmentReadIndex;
+    return (mStreamToDecode->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
 EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
@@ -160,8 +156,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
 
     if (PDFHummus::eSuccess == status && requireSegmentReread)
         return InitializeStreamSegment();
-    else
-        return status;
+    return status;
 }
 
 EStatusCode InputPFBDecodeStream::StoreSegmentLength()
@@ -345,7 +340,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                         backSlashEncountered = true;
                         continue;
                     }
-                    else if ('(' == buffer)
+                    if ('(' == buffer)
                         ++balanceLevel;
                     else if (')' == buffer)
                         --balanceLevel;
@@ -443,13 +438,12 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                 {
                     break;
                 }
-                else if (IsPostScriptEntityBreaker(buffer))
+                if (IsPostScriptEntityBreaker(buffer))
                 {
                     SaveTokenBuffer(buffer); // for a non-space breaker, save the token for next token read
                     break;
                 }
-                else
-                    tokenBuffer.Write(&buffer, 1);
+                tokenBuffer.Write(&buffer, 1);
             }
             result.second = tokenBuffer.ToString();
             break;
@@ -468,8 +462,7 @@ EStatusCode InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
         mHasTokenBuffer = false;
         return PDFHummus::eSuccess;
     }
-    else
-        return mDecodeMethod(this, outByte);
+    return mDecodeMethod(this, outByte);
 }
 
 void InputPFBDecodeStream::SaveTokenBuffer(uint8_t inToSave)
@@ -536,20 +529,18 @@ EStatusCode InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
     {
         return PDFHummus::eFailure;
     }
-    else
-    {
-        ++mInSegmentReadIndex;
-        if (mStreamToDecode->Read(&buffer, 1) != 1)
-            return PDFHummus::eFailure;
 
-        outByte = DecodeByte(buffer);
-        return PDFHummus::eSuccess;
-    }
+    ++mInSegmentReadIndex;
+    if (mStreamToDecode->Read(&buffer, 1) != 1)
+        return PDFHummus::eFailure;
+
+    outByte = DecodeByte(buffer);
+    return PDFHummus::eSuccess;
 }
 
 uint8_t InputPFBDecodeStream::DecodeByte(uint8_t inByteToDecode)
 {
-    uint8_t result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
+    auto result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
     mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
     return result;
 }

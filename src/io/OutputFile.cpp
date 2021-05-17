@@ -72,16 +72,14 @@ EStatusCode OutputFile::CloseFile()
     {
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        mOutputStream->Flush();
-        EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
 
-        delete mOutputStream; // will delete the referenced file stream as well
-        mOutputStream = nullptr;
-        mFileStream = nullptr;
-        return status;
-    }
+    mOutputStream->Flush();
+    EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
+
+    delete mOutputStream; // will delete the referenced file stream as well
+    mOutputStream = nullptr;
+    mFileStream = nullptr;
+    return status;
 }
 
 IByteWriterWithPosition *OutputFile::GetOutputStream()

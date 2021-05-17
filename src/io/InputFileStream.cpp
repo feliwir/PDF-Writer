@@ -64,8 +64,7 @@ bool InputFileStream::NotEnded()
 {
     if (mStream != nullptr)
         return feof(mStream) == 0;
-    else
-        return false;
+    return false;
 }
 
 void InputFileStream::Skip(size_t inSkipSize)
@@ -84,8 +83,7 @@ long long InputFileStream::GetCurrentPosition()
 {
     if (mStream != nullptr)
         return SAFE_FTELL64(mStream);
-    else
-        return 0;
+    return 0;
 }
 
 long long InputFileStream::GetFileSize()
@@ -101,8 +99,7 @@ long long InputFileStream::GetFileSize()
         SAFE_FSEEK64(mStream, currentPosition, SEEK_SET);
         return result;
     }
-    else
-        return 0;
+    return 0;
 }
 
 void InputFileStream::SetPositionFromEnd(long long inOffsetFromEnd)

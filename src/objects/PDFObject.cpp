@@ -68,8 +68,7 @@ IDeletable *PDFObject::GetMetadata(const std::string &inKey)
 
     if (it == mMetadata.end())
         return nullptr;
-    else
-        return it->second;
+    return it->second;
 }
 
 IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
@@ -78,12 +77,10 @@ IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
 
     if (it == mMetadata.end())
         return nullptr;
-    else
-    {
-        IDeletable *result = it->second;
-        mMetadata.erase(it);
-        return result;
-    }
+
+    IDeletable *result = it->second;
+    mMetadata.erase(it);
+    return result;
 }
 
 void PDFObject::DeleteMetadata(const std::string &inKey)

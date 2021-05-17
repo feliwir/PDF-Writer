@@ -30,4 +30,4 @@ enum EHummusImageType
     eTIFF,
     ePNG
 };
-}
+} // namespace PDFHummus

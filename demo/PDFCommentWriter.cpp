@@ -59,8 +59,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
             result.second = 0;
             return result;
         }
-        else
-            repliedTo = repliedtoResult.second;
+        repliedTo = repliedtoResult.second;
     }
 
     do

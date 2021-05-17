@@ -335,13 +335,10 @@ EStatusCode CharStringType1Interpreter::InterpretCallSubr()
         EStatusCode status = ProcessCharString(&charStringStream);
         if (status != PDFHummus::eSuccess)
             return PDFHummus::eFailure;
-        else
-            return PDFHummus::eSuccess;
+        return PDFHummus::eSuccess;
     }
-    else
-    {
-        return PDFHummus::eFailure;
-    }
+
+    return PDFHummus::eFailure;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretReturn()

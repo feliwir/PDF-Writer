@@ -30,8 +30,8 @@
 #include "Trace.h"
 #include "io/OutputStreamTraits.h"
 #include "io/OutputStringBufferStream.h"
-#include <ctype.h>
 #include <algorithm>
+#include <ctype.h>
 
 using namespace PDFHummus;
 
@@ -187,13 +187,12 @@ unsigned long CSSColorMap::GetRGBForColorName(const std::string &inColorName)
 {
     std::string key = inColorName;
     std::transform(key.begin(), key.end(), key.begin(), ::tolower);
-    
+
     auto it = kCSSColors.find(key);
 
     if (it == kCSSColors.end())
         return 0;
-    else
-        return it->second;
+    return it->second;
 }
 
 // single instance of color map
@@ -1114,14 +1113,13 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     // Now write the string using the text command
     OutputStringBufferStream stringStream;
     char formattingBuffer[5];
-    auto it = encodedCharactersList.begin();
     if (writeAsCID)
     {
-        for (; it != encodedCharactersList.end(); ++it)
+        for (unsigned short &it : encodedCharactersList)
         {
-            formattingBuffer[0] = ((*it) >> 8) & 0x00ff;
+            formattingBuffer[0] = (it >> 8) & 0x00ff;
             stringStream.Write((const uint8_t *)formattingBuffer, 1);
-            formattingBuffer[0] = (*it) & 0x00ff;
+            formattingBuffer[0] = it & 0x00ff;
             stringStream.Write((const uint8_t *)formattingBuffer, 1);
             // SAFE_SPRINTF_2(formattingBuffer,5,"%02x%02x",((*it)>>8) & 0x00ff,(*it) & 0x00ff);
             // stringStream.Write((const uint8_t*)formattingBuffer,4);
@@ -1130,9 +1128,9 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     }
     else
     {
-        for (; it != encodedCharactersList.end(); ++it)
+        for (unsigned short &it : encodedCharactersList)
         {
-            formattingBuffer[0] = (*it) & 0x00ff;
+            formattingBuffer[0] = it & 0x00ff;
             stringStream.Write((const uint8_t *)formattingBuffer, 1);
         }
         inTextCommand->WriteLiteralStringCommand(stringStream.ToString());
@@ -1205,7 +1203,6 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
     char formattingBuffer[5];
     std::list<StringOrDouble> stringOrDoubleList;
     auto itEncodedList = encodedCharachtersListsList.begin();
-    UShortList::iterator itEncoded;
 
     if (writeAsCID)
     {
@@ -1217,10 +1214,9 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
             }
             else
             {
-                for (itEncoded = itEncodedList->begin(); itEncoded != itEncodedList->end(); ++itEncoded)
+                for (unsigned short &itEncoded : *itEncodedList)
                 {
-                    SAFE_SPRINTF_2(formattingBuffer, 5, "%02x%02x", ((*itEncoded) >> 8) & 0x00ff,
-                                   (*itEncoded) & 0x00ff);
+                    SAFE_SPRINTF_2(formattingBuffer, 5, "%02x%02x", (itEncoded >> 8) & 0x00ff, itEncoded & 0x00ff);
                     stringStream.Write((const uint8_t *)formattingBuffer, 4);
                 }
                 stringOrDoubleList.emplace_back(stringStream.ToString());
@@ -1241,9 +1237,9 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
             }
             else
             {
-                for (itEncoded = itEncodedList->begin(); itEncoded != itEncodedList->end(); ++itEncoded)
+                for (unsigned short &itEncoded : *itEncodedList)
                 {
-                    formattingBuffer[0] = (*itEncoded) & 0x00ff;
+                    formattingBuffer[0] = itEncoded & 0x00ff;
                     stringStream.Write((const uint8_t *)formattingBuffer, 1);
                 }
                 stringOrDoubleList.emplace_back(stringStream.ToString());

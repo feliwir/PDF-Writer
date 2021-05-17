@@ -99,10 +99,9 @@ size_t InputFlateDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndRead(inBuffer, inBufferSize);
-    else if (mSourceStream != nullptr)
+    if (mSourceStream != nullptr)
         return mSourceStream->Read(inBuffer, inBufferSize);
-    else
-        return 0;
+    return 0;
 }
 
 size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize)
@@ -177,14 +176,12 @@ size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size
     mEndOfCompressionEoncountered = (Z_STREAM_END == inflateResult) || isError(inflateResult);
     if (Z_OK == inflateResult || Z_STREAM_END == inflateResult)
         return inSize - mZLibState->avail_out;
-    else
-        return 0;
+    return 0;
 }
 
 bool InputFlateDecodeStream::NotEnded()
 {
     if (mSourceStream != nullptr)
         return (mSourceStream->NotEnded() || mZLibState->avail_in != 0) && !mEndOfCompressionEoncountered;
-    else
-        return mZLibState->avail_in != 0 && mEndOfCompressionEoncountered;
+    return mZLibState->avail_in != 0 && mEndOfCompressionEoncountered;
 }

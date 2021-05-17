@@ -27,4 +27,4 @@ enum EStatusCode
     eFailure = -1,
     eSuccess = 0
 };
-}
+} // namespace PDFHummus

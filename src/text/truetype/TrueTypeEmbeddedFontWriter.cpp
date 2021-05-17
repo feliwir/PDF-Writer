@@ -137,8 +137,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
             outNotEmbedded = true;
             return PDFHummus::eSuccess;
         }
-        else
-            outNotEmbedded = false;
+        outNotEmbedded = false;
 
         AddDependentGlyphs(subsetGlyphIDs);
 

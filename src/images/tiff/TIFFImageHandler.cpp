@@ -888,23 +888,20 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                                mT2p->inputFilePath.c_str());
                     break;
                 }
-                else
-                {
-                    TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
-                               "per pixel",
-                               mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
-                    status = PDFHummus::eFailure;
-                    break;
-                }
-            }
-            else
-            {
-                TRACE_LOG2(
-                    "TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples per pixel",
-                    mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
+
+                TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
+                           "per pixel",
+                           mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
                 status = PDFHummus::eFailure;
                 break;
             }
+
+            TRACE_LOG2(
+                "TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples per pixel",
+                mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
+            status = PDFHummus::eFailure;
+            break;
+
         case PHOTOMETRIC_PALETTE:
             status = ReadPhotometricPalette();
             break;
@@ -1332,40 +1329,18 @@ void TIFFImageHandler::ComposePDFPage()
         ComposePDFPageOrient(&(mT2p->pdf_imagebox), mT2p->tiff_orientation);
         return;
     }
-    else
+
+    tilewidth = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilewidth;
+    tilelength = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilelength;
+    tilecountx = (mT2p->tiff_width + tilewidth - 1) / tilewidth;
+    (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilecountx = tilecountx;
+    tilecounty = (mT2p->tiff_length + tilelength - 1) / tilelength;
+    (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilecounty = tilecounty;
+    (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_edgetilewidth = mT2p->tiff_width % tilewidth;
+    (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_edgetilelength = mT2p->tiff_length % tilelength;
+    tiles = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tiles;
+    for (i2 = 0; i2 < tilecounty - 1; i2++)
     {
-        tilewidth = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilewidth;
-        tilelength = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilelength;
-        tilecountx = (mT2p->tiff_width + tilewidth - 1) / tilewidth;
-        (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilecountx = tilecountx;
-        tilecounty = (mT2p->tiff_length + tilelength - 1) / tilelength;
-        (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilecounty = tilecounty;
-        (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_edgetilewidth = mT2p->tiff_width % tilewidth;
-        (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_edgetilelength = mT2p->tiff_length % tilelength;
-        tiles = (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tiles;
-        for (i2 = 0; i2 < tilecounty - 1; i2++)
-        {
-            for (i = 0; i < tilecountx - 1; i++)
-            {
-                boxp = &(tiles[i2 * tilecountx + i].tile_box);
-                boxp->x1 =
-                    mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
-                boxp->x2 = mT2p->pdf_imagebox.x1 +
-                           ((float)(mT2p->pdf_imagewidth * (i + 1) * tilewidth) / (float)mT2p->tiff_width);
-                boxp->y1 = mT2p->pdf_imagebox.y2 -
-                           ((float)(mT2p->pdf_imagelength * (i2 + 1) * tilelength) / (float)mT2p->tiff_length);
-                boxp->y2 = mT2p->pdf_imagebox.y2 -
-                           ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
-            }
-            boxp = &(tiles[i2 * tilecountx + i].tile_box);
-            boxp->x1 =
-                mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
-            boxp->x2 = mT2p->pdf_imagebox.x2;
-            boxp->y1 = mT2p->pdf_imagebox.y2 -
-                       ((float)(mT2p->pdf_imagelength * (i2 + 1) * tilelength) / (float)mT2p->tiff_length);
-            boxp->y2 =
-                mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
-        }
         for (i = 0; i < tilecountx - 1; i++)
         {
             boxp = &(tiles[i2 * tilecountx + i].tile_box);
@@ -1373,17 +1348,35 @@ void TIFFImageHandler::ComposePDFPage()
                 mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
             boxp->x2 =
                 mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * (i + 1) * tilewidth) / (float)mT2p->tiff_width);
-            boxp->y1 = mT2p->pdf_imagebox.y1;
+            boxp->y1 = mT2p->pdf_imagebox.y2 -
+                       ((float)(mT2p->pdf_imagelength * (i2 + 1) * tilelength) / (float)mT2p->tiff_length);
             boxp->y2 =
                 mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
         }
         boxp = &(tiles[i2 * tilecountx + i].tile_box);
         boxp->x1 = mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
         boxp->x2 = mT2p->pdf_imagebox.x2;
+        boxp->y1 =
+            mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * (i2 + 1) * tilelength) / (float)mT2p->tiff_length);
+        boxp->y2 =
+            mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
+    }
+    for (i = 0; i < tilecountx - 1; i++)
+    {
+        boxp = &(tiles[i2 * tilecountx + i].tile_box);
+        boxp->x1 = mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
+        boxp->x2 =
+            mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * (i + 1) * tilewidth) / (float)mT2p->tiff_width);
         boxp->y1 = mT2p->pdf_imagebox.y1;
         boxp->y2 =
             mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
     }
+    boxp = &(tiles[i2 * tilecountx + i].tile_box);
+    boxp->x1 = mT2p->pdf_imagebox.x1 + ((float)(mT2p->pdf_imagewidth * i * tilewidth) / (float)mT2p->tiff_width);
+    boxp->x2 = mT2p->pdf_imagebox.x2;
+    boxp->y1 = mT2p->pdf_imagebox.y1;
+    boxp->y2 = mT2p->pdf_imagebox.y2 - ((float)(mT2p->pdf_imagelength * i2 * tilelength) / (float)mT2p->tiff_length);
+
     if (mT2p->tiff_orientation == 0 || mT2p->tiff_orientation == 1)
     {
         for (i = 0; i < (mT2p->tiff_tiles[mT2p->pdf_page]).tiles_tilecount; i++)
@@ -2834,10 +2827,9 @@ EStatusCode TIFFImageHandler::WriteImageData(PDFStream *inImageStream)
                     _TIFFfree(buffer);
                     break;
                 }
-                else
-                {
-                    buffer = samplebuffer;
-                }
+
+                buffer = samplebuffer;
+
                 if (TIFFReadRGBAImageOriented(mT2p->input, mT2p->tiff_width, mT2p->tiff_length, (uint32 *)buffer,
                                               ORIENTATION_TOPLEFT, 0) == 0)
                 {

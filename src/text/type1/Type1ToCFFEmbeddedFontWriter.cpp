@@ -554,8 +554,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::CreateCFFSubset(FreeTypeFaceWrapper &i
                 outNotEmbedded = true;
                 return PDFHummus::eSuccess;
             }
-            else
-                outNotEmbedded = false;
+            outNotEmbedded = false;
         }
         else
             outNotEmbedded = false;
@@ -806,8 +805,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopIndex()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesWriter.GetInternalState();
+    return mPrimitivesWriter.GetInternalState();
     return status;
 }
 
@@ -971,10 +969,9 @@ BoolAndUShort Type1ToCFFEmbeddedFontWriter::FindStandardString(const std::string
 
     if (strcmp(inStringToFind.c_str(), scSortedStandardStrings[lowerBound]) == 0)
         return BoolAndUShort(true, scSortedStandardStringsPositions[lowerBound]);
-    else if (strcmp(inStringToFind.c_str(), scSortedStandardStrings[upperBound]) == 0)
+    if (strcmp(inStringToFind.c_str(), scSortedStandardStrings[upperBound]) == 0)
         return BoolAndUShort(true, scSortedStandardStringsPositions[upperBound]);
-    else
-        return BoolAndUShort(false, scSortedStandardStringsPositions[0]);
+    return BoolAndUShort(false, scSortedStandardStringsPositions[0]);
 }
 
 EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()

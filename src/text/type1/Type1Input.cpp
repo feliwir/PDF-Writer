@@ -638,8 +638,7 @@ EStatusCode Type1Input::ParseSubrs()
         mSubrs = nullptr;
         return PDFHummus::eSuccess;
     }
-    else
-        mSubrs = new Type1CharString[mSubrsCount];
+    mSubrs = new Type1CharString[mSubrsCount];
 
     // parse the subrs. they look like this:
     // dup index nbytes RD ~n~binary~bytes~ NP
@@ -760,8 +759,7 @@ Type1CharString *Type1Input::GetGlyphCharString(uint8_t inCharStringIndex)
     auto it = mCharStrings.find(characterName);
     if (it == mCharStrings.end())
         return nullptr;
-    else
-        return &(it->second);
+    return &(it->second);
 }
 
 Type1CharString *Type1Input::GetGlyphCharString(const std::string &inCharStringName)
@@ -769,8 +767,7 @@ Type1CharString *Type1Input::GetGlyphCharString(const std::string &inCharStringN
     auto it = mCharStrings.find(inCharStringName);
     if (it == mCharStrings.end())
         return nullptr;
-    else
-        return &(it->second);
+    return &(it->second);
 }
 
 EStatusCode Type1Input::CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
@@ -820,8 +817,7 @@ Type1CharString *Type1Input::GetSubr(long inSubrIndex)
                    inSubrIndex, mSubrsCount);
         return nullptr;
     }
-    else
-        return mSubrs + inSubrIndex;
+    return mSubrs + inSubrIndex;
 }
 
 EStatusCode Type1Input::Type1Seac(const LongList &inOperandList)
@@ -872,15 +868,12 @@ std::string Type1Input::GetGlyphCharStringName(uint8_t inCharStringIndex)
     {
         if (mEncoding.mCustomEncoding[inCharStringIndex].size() == 0)
             return ".notdef";
-        else
-            return mEncoding.mCustomEncoding[inCharStringIndex];
+        return mEncoding.mCustomEncoding[inCharStringIndex];
     }
-    else
-    {
-        StandardEncoding standardEncoding;
 
-        return standardEncoding.GetEncodedGlyphName(inCharStringIndex);
-    }
+    StandardEncoding standardEncoding;
+
+    return standardEncoding.GetEncodedGlyphName(inCharStringIndex);
 }
 
 std::string Type1Input::FromPSString(const std::string &inPSString)
@@ -953,6 +946,5 @@ uint8_t Type1Input::GetEncoding(const std::string &inCharStringName)
     auto it = mReverseEncoding.find(inCharStringName);
     if (it == mReverseEncoding.end())
         return 0;
-    else
-        return it->second;
+    return it->second;
 }

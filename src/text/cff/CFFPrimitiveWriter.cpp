@@ -176,16 +176,14 @@ EStatusCode CFFPrimitiveWriter::WriteDictOperator(unsigned short inOperator)
 {
     if (((inOperator >> 8) & 0xff) == 12)
         return WriteCard16(inOperator);
-    else
-        return WriteCard8((uint8_t)(inOperator & 0xff));
+    return WriteCard8((uint8_t)(inOperator & 0xff));
 }
 
 EStatusCode CFFPrimitiveWriter::WriteDictOperand(const DictOperand &inOperand)
 {
     if (inOperand.IsInteger)
         return WriteIntegerOperand(inOperand.IntegerValue);
-    else
-        return WriteRealOperand(inOperand.RealValue, inOperand.RealValueFractalEnd);
+    return WriteRealOperand(inOperand.RealValue, inOperand.RealValueFractalEnd);
 }
 
 EStatusCode CFFPrimitiveWriter::WriteDictItems(unsigned short inOperator, const DictOperandList &inOperands)
@@ -207,7 +205,7 @@ EStatusCode CFFPrimitiveWriter::WriteIntegerOperand(long inValue)
     {
         return WriteByte((uint8_t)(inValue + 139));
     }
-    else if (108 <= inValue && inValue <= 1131)
+    if (108 <= inValue && inValue <= 1131)
     {
         uint8_t byte0, byte1;
 
@@ -380,8 +378,7 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
     // final f or ff
     if (usedFirst)
         return SetOrWriteNibble(0xf, buffer, usedFirst);
-    else
-        return WriteByte(0xff);
+    return WriteByte(0xff);
 }
 
 EStatusCode CFFPrimitiveWriter::SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuffer, bool &ioUsedFirst)

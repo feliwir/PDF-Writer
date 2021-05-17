@@ -44,11 +44,9 @@ PDFObject *PDFDictionary::QueryDirectObject(const std::string &inName)
     {
         return nullptr;
     }
-    else
-    {
-        it->second->AddRef();
-        return it->second;
-    }
+
+    it->second->AddRef();
+    return it->second;
 }
 
 void PDFDictionary::Insert(PDFName *inKeyObject, PDFObject *inValueObject)

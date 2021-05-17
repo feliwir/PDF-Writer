@@ -76,8 +76,7 @@ PDFTextString InfoDictionary::GetAdditionalInfoEntry(const std::string &inKey)
 
     if (it == mAdditionalInfoEntries.end())
         return PDFTextString::Empty();
-    else
-        return it->second;
+    return it->second;
 }
 
 MapIterator<StringToPDFTextString> InfoDictionary::GetAdditionaEntriesIterator()

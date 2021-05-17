@@ -156,8 +156,7 @@ char InputPredictorPNGOptimumStream::PaethPredictor(char inLeft, char inUp, char
 
     if (pLeft <= pUp && pLeft <= pUpLeft)
         return pLeft;
-    else if (pUp <= pUpLeft)
+    if (pUp <= pUpLeft)
         return inUp;
-    else
-        return inUpLeft;
+    return inUpLeft;
 }

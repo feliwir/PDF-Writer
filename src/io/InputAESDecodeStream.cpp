@@ -123,24 +123,22 @@ size_t InputAESDecodeStream::Read(uint8_t *inBuffer, size_t inSize)
                 // that's true EOF...so finish
                 break;
             }
-            else
-            {
-                // decrypt next block
-                memcpy(mIn, mInNext, AES_BLOCK_SIZE);
-                if (mDecrypt.cbc_decrypt(mIn, mOut, AES_BLOCK_SIZE, mIV) != EXIT_SUCCESS)
-                    break;
-                mOutIndex = mOut;
 
-                // read next buffer from input stream
-                size_t totalRead = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
-                if (totalRead < AES_BLOCK_SIZE)
-                {                   // this means that we got to final block, with padding
-                    mHitEnd = true; // should be 0.
-                    // now we know that next block is the final one, and can consider padding (using min for safety)
-                    mReadBlockSize = AES_BLOCK_SIZE - std::min<size_t>(mOut[AES_BLOCK_SIZE - 1], AES_BLOCK_SIZE);
-                    // Gal: one can find out here that the next block is actually empty...that's not gonna be great for
-                    // NotEnded + read of 1 byte....
-                }
+            // decrypt next block
+            memcpy(mIn, mInNext, AES_BLOCK_SIZE);
+            if (mDecrypt.cbc_decrypt(mIn, mOut, AES_BLOCK_SIZE, mIV) != EXIT_SUCCESS)
+                break;
+            mOutIndex = mOut;
+
+            // read next buffer from input stream
+            size_t totalRead = mSourceStream->Read(mInNext, AES_BLOCK_SIZE);
+            if (totalRead < AES_BLOCK_SIZE)
+            {                   // this means that we got to final block, with padding
+                mHitEnd = true; // should be 0.
+                // now we know that next block is the final one, and can consider padding (using min for safety)
+                mReadBlockSize = AES_BLOCK_SIZE - std::min<size_t>(mOut[AES_BLOCK_SIZE - 1], AES_BLOCK_SIZE);
+                // Gal: one can find out here that the next block is actually empty...that's not gonna be great for
+                // NotEnded + read of 1 byte....
             }
         }
     }

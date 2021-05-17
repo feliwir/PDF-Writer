@@ -104,13 +104,12 @@ BoolAndString SimpleStringTokenizer::GetNextToken()
             {
                 break;
             }
-            else if (IsPDFEntityBreaker(buffer))
+            if (IsPDFEntityBreaker(buffer))
             {
                 SaveTokenBuffer(buffer); // for a non-space breaker, save the token for next token read
                 break;
             }
-            else
-                tokenBuffer.Write(&buffer, 1);
+            tokenBuffer.Write(&buffer, 1);
         }
         result.second = tokenBuffer.ToString();
     } while (false);
@@ -148,8 +147,7 @@ EStatusCode SimpleStringTokenizer::GetNextByteForToken(uint8_t &outByte)
         mHasTokenBuffer = false;
         return PDFHummus::eSuccess;
     }
-    else
-        return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return (mStream->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
 
 static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};

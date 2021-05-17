@@ -199,8 +199,7 @@ long long OpenTypePrimitiveReader::GetCurrentPosition()
 {
     if (mInternalState != PDFHummus::eFailure)
         return mOpenTypeFile->GetCurrentPosition() - mInitialPosition;
-    else
-        return 0;
+    return 0;
 }
 
 EStatusCode OpenTypePrimitiveReader::Read(uint8_t *inBuffer, size_t inBufferSize)

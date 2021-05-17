@@ -364,10 +364,8 @@ EStatusCode Type1ToType2Converter::Type1RMoveto(const LongList &inOperandList)
         }
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        return RecordOperatorWithParameters(21, inOperandList);
-    }
+
+    return RecordOperatorWithParameters(21, inOperandList);
 }
 
 EStatusCode Type1ToType2Converter::Type1HMoveto(const LongList &inOperandList)

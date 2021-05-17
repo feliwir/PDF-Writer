@@ -55,13 +55,11 @@ EStatusCode DictionaryContext::WriteKey(const std::string &inKey)
         mKeys.insert(inKey);
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same "
-                   "dictionary. key reused - %s",
-                   inKey.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return PDFHummus::eFailure;
-    }
+
+    TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same "
+               "dictionary. key reused - %s",
+               inKey.substr(0, MAX_TRACE_SIZE - 200).c_str());
+    return PDFHummus::eFailure;
 }
 
 bool DictionaryContext::HasKey(const std::string &inKey)

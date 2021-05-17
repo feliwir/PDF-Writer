@@ -115,8 +115,7 @@ std::string FreeTypeFaceWrapper::GetExtension(const std::string &inFilePath)
 
     if (inFilePath.npos == dotPosition || (inFilePath.size() - 1) == dotPosition)
         return "";
-    else
-        return inFilePath.substr(dotPosition + 1);
+    return inFilePath.substr(dotPosition + 1);
 }
 
 FreeTypeFaceWrapper::~FreeTypeFaceWrapper()
@@ -161,10 +160,8 @@ const char *FreeTypeFaceWrapper::GetTypeString()
         const char *fontFormat = FT_Get_X11_Font_Format(mFace);
         return fontFormat;
     }
-    else
-    {
-        return scEmpty;
-    }
+
+    return scEmpty;
 }
 
 FT_Face FreeTypeFaceWrapper::operator->()
@@ -192,8 +189,7 @@ FT_Error FreeTypeFaceWrapper::DoneFace()
         mFormatParticularWrapper = nullptr;
         return status;
     }
-    else
-        return 0;
+    return 0;
 }
 
 double FreeTypeFaceWrapper::GetItalicAngle()
@@ -208,11 +204,9 @@ BoolAndFTShort FreeTypeFaceWrapper::GetCapHeightInternal()
         BoolAndFTShort fontDependentResult = mFormatParticularWrapper->GetCapHeight();
         if (fontDependentResult.first)
             return fontDependentResult;
-        else
-            return CapHeightFromHHeight();
-    }
-    else
         return CapHeightFromHHeight();
+    }
+    return CapHeightFromHHeight();
 }
 
 BoolAndFTShort FreeTypeFaceWrapper::GetCapHeight()
@@ -236,11 +230,9 @@ BoolAndFTShort FreeTypeFaceWrapper::GetxHeightInternal()
         BoolAndFTShort fontDependentResult = mFormatParticularWrapper->GetxHeight();
         if (fontDependentResult.first)
             return fontDependentResult;
-        else
-            return XHeightFromLowerXHeight();
-    }
-    else
         return XHeightFromLowerXHeight();
+    }
+    return XHeightFromLowerXHeight();
 }
 
 BoolAndFTShort FreeTypeFaceWrapper::GetxHeight()
@@ -270,8 +262,7 @@ BoolAndFTShort FreeTypeFaceWrapper::GetYBearingForUnicodeChar(unsigned short uni
         }
         return BoolAndFTShort(true, (FT_Short)mFace->glyph->metrics.horiBearingY);
     }
-    else
-        return BoolAndFTShort(false, 0);
+    return BoolAndFTShort(false, 0);
 }
 
 FT_UShort FreeTypeFaceWrapper::GetStemV()
@@ -286,8 +277,7 @@ EFontStretch FreeTypeFaceWrapper::GetFontStretch()
         EFontStretch result = mFormatParticularWrapper->GetFontStretch();
         if (eFontStretchUknown == result)
             return StretchFromName();
-        else
-            return result;
+        return result;
     }
     return StretchFromName();
 }
@@ -327,11 +317,9 @@ EFontStretch FreeTypeFaceWrapper::StretchFromName()
 
             return eFontStretchNormal;
         }
-        else
-            return eFontStretchNormal;
+        return eFontStretchNormal;
     }
-    else
-        return eFontStretchUknown;
+    return eFontStretchUknown;
 }
 
 FT_UShort FreeTypeFaceWrapper::GetFontWeight()
@@ -341,8 +329,7 @@ FT_UShort FreeTypeFaceWrapper::GetFontWeight()
         FT_UShort result = mFormatParticularWrapper->GetFontWeight();
         if (1000 == result) // 1000 marks unknown
             return WeightFromName();
-        else
-            return result;
+        return result;
     }
     return WeightFromName();
 }
@@ -386,11 +373,9 @@ FT_UShort FreeTypeFaceWrapper::WeightFromName()
 
             return 400;
         }
-        else
-            return 400;
+        return 400;
     }
-    else
-        return 1000;
+    return 1000;
 }
 
 unsigned int FreeTypeFaceWrapper::GetFontFlags()
@@ -468,8 +453,7 @@ bool FreeTypeFaceWrapper::IsDefiningCharsNotInAdobeStandardLatin()
         }
         return !hasOnlyAdobeStandard;
     }
-    else
-        return false;
+    return false;
 }
 
 bool FreeTypeFaceWrapper::IsCharachterCodeAdobeStandard(FT_ULong inCharacterCode)
@@ -578,21 +562,17 @@ std::string FreeTypeFaceWrapper::GetGlyphName(unsigned int inGlyphIndex, bool sa
         std::string glyphName = mFormatParticularWrapper->GetPrivateGlyphName(inGlyphIndex);
         if (glyphName == ".notdef" && !safe)
             return NotDefGlyphName(); // handling fonts that don't have notdef
-        else
-            return glyphName;
+        return glyphName;
     }
-    else
+
+    if (inGlyphIndex < (unsigned int)mFace->num_glyphs)
     {
-        if (inGlyphIndex < (unsigned int)mFace->num_glyphs)
-        {
-            char buffer[100];
-            FT_Get_Glyph_Name(mFace, inGlyphIndex, buffer, 100);
-            return std::string(buffer);
-        }
-        else
-            return NotDefGlyphName(); // normally this will be .notdef (in am allowing edge/illegal cases where there's
-                                      // a font with no .notdef)
+        char buffer[100];
+        FT_Get_Glyph_Name(mFace, inGlyphIndex, buffer, 100);
+        return std::string(buffer);
     }
+    return NotDefGlyphName(); // normally this will be .notdef (in am allowing edge/illegal cases where there's
+                              // a font with no .notdef)
 }
 
 EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnicodeCharacters, UIntList &outGlyphs)
@@ -633,8 +613,7 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnic
 
         return status;
     }
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongListList &inUnicodeCharacters,
@@ -686,8 +665,7 @@ IWrittenFont *FreeTypeFaceWrapper::CreateWrittenFontObject(ObjectsContext *inObj
         }
         return result;
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 const std::string &FreeTypeFaceWrapper::GetFontFilePath()
@@ -706,11 +684,9 @@ FT_Short FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Short inFontMeasurement)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
-        else
-            return FT_Short((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
+        return FT_Short((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
     }
-    else
-        return 0;
+    return 0;
 }
 
 FT_UShort FreeTypeFaceWrapper::GetInPDFMeasurements(FT_UShort inFontMeasurement)
@@ -719,11 +695,9 @@ FT_UShort FreeTypeFaceWrapper::GetInPDFMeasurements(FT_UShort inFontMeasurement)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
-        else
-            return FT_UShort((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
+        return FT_UShort((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
     }
-    else
-        return 0;
+    return 0;
 }
 
 FT_Pos FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Pos inFontMeasurement)
@@ -732,27 +706,23 @@ FT_Pos FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Pos inFontMeasurement)
     {
         if (1000 == mFace->units_per_EM)
             return inFontMeasurement;
-        else
-            return FT_Pos((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
+        return FT_Pos((double)inFontMeasurement * 1000.0 / mFace->units_per_EM);
     }
-    else
-        return 0;
+    return 0;
 }
 
 FT_Pos FreeTypeFaceWrapper::GetGlyphWidth(unsigned int inGlyphIndex)
 {
     if (LoadGlyph(inGlyphIndex) != 0)
         return 0;
-    else
-        return GetInPDFMeasurements(mFace->glyph->metrics.horiAdvance);
+    return GetInPDFMeasurements(mFace->glyph->metrics.horiAdvance);
 }
 
 unsigned int FreeTypeFaceWrapper::GetGlyphIndexInFreeTypeIndexes(unsigned int inGlyphIndex)
 {
     if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
         return mFormatParticularWrapper->GetFreeTypeGlyphIndexFromEncodingGlyphIndex(inGlyphIndex);
-    else
-        return inGlyphIndex;
+    return inGlyphIndex;
 }
 
 bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex,

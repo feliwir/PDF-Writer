@@ -68,8 +68,7 @@ long long CFFPrimitiveReader::GetCurrentPosition()
 {
     if (mInternalState != PDFHummus::eFailure)
         return mCFFFile->GetCurrentPosition() - mInitialPosition;
-    else
-        return 0;
+    return 0;
 }
 
 EStatusCode CFFPrimitiveReader::ReadByte(uint8_t &outValue)
@@ -359,14 +358,11 @@ EStatusCode CFFPrimitiveReader::ReadDictOperator(uint8_t inFirstByte, unsigned s
             outOperator = ((unsigned short)inFirstByte << 8) | buffer;
             return PDFHummus::eSuccess;
         }
-        else
-            return PDFHummus::eFailure;
+        return PDFHummus::eFailure;
     }
-    else
-    {
-        outOperator = inFirstByte;
-        return PDFHummus::eSuccess;
-    }
+
+    outOperator = inFirstByte;
+    return PDFHummus::eSuccess;
 }
 
 EStatusCode CFFPrimitiveReader::ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand)
@@ -376,12 +372,11 @@ EStatusCode CFFPrimitiveReader::ReadDictOperand(uint8_t inFirstByte, DictOperand
         outOperand.IsInteger = false;
         return ReadRealOperand(outOperand.RealValue, outOperand.RealValueFractalEnd);
     }
-    else if (28 == inFirstByte || 29 == inFirstByte || (32 <= inFirstByte && inFirstByte <= 246) ||
-             (247 <= inFirstByte && inFirstByte <= 250) || (251 <= inFirstByte && inFirstByte <= 254))
+    if (28 == inFirstByte || 29 == inFirstByte || (32 <= inFirstByte && inFirstByte <= 246) ||
+        (247 <= inFirstByte && inFirstByte <= 250) || (251 <= inFirstByte && inFirstByte <= 254))
     {
         outOperand.IsInteger = true;
         return ReadIntegerOperand(inFirstByte, outOperand.IntegerValue);
     }
-    else
-        return PDFHummus::eFailure; // not an operand
+    return PDFHummus::eFailure; // not an operand
 }

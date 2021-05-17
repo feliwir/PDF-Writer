@@ -125,7 +125,7 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
         {
             return WriteByte((uint8_t)(value + 139));
         }
-        else if (108 <= value && value <= 1131)
+        if (108 <= value && value <= 1131)
         {
             uint8_t byte0, byte1;
 
@@ -482,8 +482,8 @@ EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short /*inOpera
         mOperandsToWrite.clear();
         return status;
     }
-    else // no current operands. either result of calculation or just multiple operators one of the other
-        return WriteCharStringOperator(0x0c12); // write a "drop" command for the subr index
+    // no current operands. either result of calculation or just multiple operators one of the other
+    return WriteCharStringOperator(0x0c12); // write a "drop" command for the subr index
 }
 
 CharString *CharStringType2Flattener::GetGlobalSubr(long inSubrIndex)

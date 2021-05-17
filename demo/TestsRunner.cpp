@@ -135,8 +135,7 @@ EStatusCode TestsRunner::RunTest(const TestConfiguration &inTestConfiguration, c
         cout << "Test not found\n";
         return PDFHummus::eSuccess;
     }
-    else
-        return RunSingleTest(inTestConfiguration, it->first, it->second);
+    return RunSingleTest(inTestConfiguration, it->first, it->second);
 }
 
 EStatusCode TestsRunner::RunTests(const TestConfiguration &inTestConfiguration, const StringList &inTestsLabels)
@@ -163,8 +162,7 @@ EStatusCode TestsRunner::RunCategory(const TestConfiguration &inTestConfiguratio
         cout << "Category " << inCategory << "not found\n";
         return PDFHummus::eSuccess;
     }
-    else
-        return RunTestsInList(inTestConfiguration, it->second);
+    return RunTestsInList(inTestConfiguration, it->second);
 }
 
 EStatusCode TestsRunner::RunCategories(const TestConfiguration &inTestConfiguration, const StringList &inCategories)

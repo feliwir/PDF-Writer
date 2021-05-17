@@ -116,8 +116,7 @@ EStatusCode PDFUsedFont::WriteFontDefinition()
     // write the def
     if (mWrittenFont == nullptr)
         return eSuccess;
-    else
-        return mWrittenFont->WriteFontDefinition(mFaceWrapper, mEmbedFont);
+    return mWrittenFont->WriteFontDefinition(mFaceWrapper, mEmbedFont);
 }
 
 EStatusCode PDFUsedFont::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)

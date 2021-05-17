@@ -95,7 +95,7 @@ size_t OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndWrite(inBuffer, inSize);
-    else if (mTargetStream != nullptr)
+    if (mTargetStream != nullptr)
         return mTargetStream->Write(inBuffer, inSize);
     else
         return 0;
@@ -127,30 +127,27 @@ size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, si
             inflateEnd(mZLibState);
             break;
         }
-        else
+
+        size_t writtenBytes;
+        writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
+        if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
-            size_t writtenBytes;
-            writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
-            if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
-            {
 #ifndef NO_TRACE
-                TRACE_LOG2("OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib "
-                           "bytes to underlying stream. supposed to write %lld, wrote %lld",
-                           BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
+            TRACE_LOG2("OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib "
+                       "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                       BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
 #endif
-                inflateEnd(mZLibState);
-                inflateResult = Z_STREAM_ERROR;
-                mCurrentlyEncoding = false;
-                break;
-            }
+            inflateEnd(mZLibState);
+            inflateResult = Z_STREAM_ERROR;
+            mCurrentlyEncoding = false;
+            break;
         }
     } while (mZLibState->avail_out == 0); // waiting for either no more writes
 
     // should be that at the last buffer we'll get here a nice Z_STREAM_END
     if (Z_OK == inflateResult || Z_STREAM_END == inflateResult)
         return inSize;
-    else
-        return 0;
+    return 0;
 }
 
 void OutputFlateDecodeStream::TurnOnEncoding()

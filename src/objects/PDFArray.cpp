@@ -49,11 +49,9 @@ PDFObject *PDFArray::QueryObject(unsigned long i)
     {
         return nullptr;
     }
-    else
-    {
-        mValues[i]->AddRef();
-        return mValues[i];
-    }
+
+    mValues[i]->AddRef();
+    return mValues[i];
 }
 
 unsigned long PDFArray::GetLength()

@@ -108,13 +108,13 @@ PDFObject *PDFObjectParser::ParseNewObject()
             break;
         }
         // Literal String
-        else if (IsLiteralString(token))
+        if (IsLiteralString(token))
         {
             pdfObject = ParseLiteralString(token);
             break;
         }
         // Hexadecimal String
-        else if (IsHexadecimalString(token))
+        if (IsHexadecimalString(token))
         {
             pdfObject = ParseHexadecimalString(token);
             break;
@@ -242,22 +242,20 @@ bool PDFObjectParser::GetNextToken(std::string &outToken)
         mTokenBuffer.pop_front();
         return true;
     }
-    else
-    {
-        // skip comments
-        BoolAndString tokenizerResult;
 
-        do
+    // skip comments
+    BoolAndString tokenizerResult;
+
+    do
+    {
+        tokenizerResult = mTokenizer.GetNextToken();
+        if (tokenizerResult.first && !IsComment(tokenizerResult.second))
         {
-            tokenizerResult = mTokenizer.GetNextToken();
-            if (tokenizerResult.first && !IsComment(tokenizerResult.second))
-            {
-                outToken = tokenizerResult.second;
-                break;
-            }
-        } while (tokenizerResult.first);
-        return tokenizerResult.first;
-    }
+            outToken = tokenizerResult.second;
+            break;
+        }
+    } while (tokenizerResult.first);
+    return tokenizerResult.first;
 }
 
 static const std::string scTrue = "true";
@@ -377,13 +375,10 @@ std::string PDFObjectParser::MaybeDecryptString(const std::string &inString)
 
         if (mDecryptionHelper->CanDecryptDocument())
             return mDecryptionHelper->DecryptString(inString);
-        else
-        {
-            if (mParserExtender != nullptr)
-                return mParserExtender->DecryptString(inString);
-            else
-                return inString;
-        }
+
+        if (mParserExtender != nullptr)
+            return mParserExtender->DecryptString(inString);
+        return inString;
     }
     else
     {
@@ -524,8 +519,7 @@ PDFObject *PDFObjectParser::ParseName(const std::string &inToken)
 
     if (PDFHummus::eSuccess == status)
         return new PDFName(stringBuffer.str());
-    else
-        return nullptr;
+    return nullptr;
 }
 
 static const char scPlus = '+';
@@ -575,8 +569,7 @@ PDFObject *PDFObjectParser::ParseNumber(const std::string &inToken)
     // classes for better accuracy
     if (inToken.find(scDot) != inToken.npos)
         return new PDFReal(Double(inToken));
-    else
-        return new PDFInteger(LongLong(inToken));
+    return new PDFInteger(LongLong(inToken));
 }
 
 static const std::string scLeftSquare = "[";
@@ -619,14 +612,12 @@ PDFObject *PDFObjectParser::ParseArray()
     {
         return anArray;
     }
-    else
-    {
-        delete anArray;
-        TRACE_LOG1("PDFObjectParser::ParseArray, failure to parse array, didn't find end of array or failure to parse "
-                   "array member object. token = %s",
-                   token.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return nullptr;
-    }
+
+    delete anArray;
+    TRACE_LOG1("PDFObjectParser::ParseArray, failure to parse array, didn't find end of array or failure to parse "
+               "array member object. token = %s",
+               token.substr(0, MAX_TRACE_SIZE - 200).c_str());
+    return nullptr;
 }
 
 void PDFObjectParser::SaveTokenToBuffer(std::string &inToken)
@@ -690,14 +681,12 @@ PDFObject *PDFObjectParser::ParseDictionary()
     {
         return aDictionary;
     }
-    else
-    {
-        delete aDictionary;
-        TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse dictionary, didn't find end of array or failure "
-                   "to parse dictionary member object. token = %s",
-                   token.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return nullptr;
-    }
+
+    delete aDictionary;
+    TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse dictionary, didn't find end of array or failure "
+               "to parse dictionary member object. token = %s",
+               token.substr(0, MAX_TRACE_SIZE - 200).c_str());
+    return nullptr;
 }
 
 static const char scCommentStart = '%';
@@ -710,9 +699,9 @@ BoolAndByte PDFObjectParser::GetHexValue(uint8_t inValue)
 {
     if ('0' <= inValue && inValue <= '9')
         return BoolAndByte(true, inValue - '0');
-    else if ('A' <= inValue && inValue <= 'F')
+    if ('A' <= inValue && inValue <= 'F')
         return BoolAndByte(true, inValue - 'A' + 10);
-    else if ('a' <= inValue && inValue <= 'f')
+    if ('a' <= inValue && inValue <= 'f')
         return BoolAndByte(true, inValue - 'a' + 10);
     else
     {

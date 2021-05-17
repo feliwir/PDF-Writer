@@ -61,18 +61,16 @@ std::string ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjec
         ++mFormXObjectsCount;
         return newName;
     }
-    else
-    {
-        auto it = mXObjects.find(inFormXObjectID);
 
-        if (it == mXObjects.end())
-        {
-            std::string newName = scFM + ULong(mFormXObjectsCount + 1).ToString();
-            ++mFormXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID, newName)).first;
-        }
-        return it->second;
+    auto it = mXObjects.find(inFormXObjectID);
+
+    if (it == mXObjects.end())
+    {
+        std::string newName = scFM + ULong(mFormXObjectsCount + 1).ToString();
+        ++mFormXObjectsCount;
+        it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inFormXObjectID, newName)).first;
     }
+    return it->second;
 }
 
 void ResourcesDictionary::AddFormXObjectMapping(ObjectIDType inFormXObjectID, const std::string &inFormXObjectName)
@@ -97,10 +95,8 @@ std::string ResourcesDictionary::AddImageXObjectMapping(PDFImageXObject *inImage
         AddImageXObjectMappingWithName(inImageXObject, newName);
         return newName;
     }
-    else
-    {
-        return it->second;
-    }
+
+    return it->second;
 }
 
 void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject *inImageXObject,
@@ -135,18 +131,16 @@ std::string ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID)
         ++mExtGStatesCount;
         return newName;
     }
-    else
-    {
-        auto it = mXObjects.find(inExtGStateID);
 
-        if (it == mXObjects.end())
-        {
-            std::string newName = scGS + ULong(mExtGStatesCount + 1).ToString();
-            ++mExtGStatesCount;
-            it = mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID, newName)).first;
-        }
-        return it->second;
+    auto it = mXObjects.find(inExtGStateID);
+
+    if (it == mXObjects.end())
+    {
+        std::string newName = scGS + ULong(mExtGStatesCount + 1).ToString();
+        ++mExtGStatesCount;
+        it = mExtGStates.insert(ObjectIDTypeToStringMap::value_type(inExtGStateID, newName)).first;
     }
+    return it->second;
 }
 
 void ResourcesDictionary::AddExtGStateMapping(ObjectIDType inExtGStateID, const std::string &inExtGStateName)
@@ -172,18 +166,16 @@ std::string ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObj
         ++mImageXObjectsCount;
         return newName;
     }
-    else
-    {
-        auto it = mXObjects.find(inImageXObjectID);
 
-        if (it == mXObjects.end())
-        {
-            std::string newName = scIM + ULong(mImageXObjectsCount + 1).ToString();
-            ++mImageXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID, newName)).first;
-        }
-        return it->second;
+    auto it = mXObjects.find(inImageXObjectID);
+
+    if (it == mXObjects.end())
+    {
+        std::string newName = scIM + ULong(mImageXObjectsCount + 1).ToString();
+        ++mImageXObjectsCount;
+        it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inImageXObjectID, newName)).first;
     }
+    return it->second;
 }
 
 void ResourcesDictionary::AddImageXObjectMapping(ObjectIDType inImageXObjectID, const std::string &inImageXObjectName)
@@ -205,18 +197,16 @@ std::string ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID)
         ++mFontsCount;
         return newName;
     }
-    else
-    {
-        auto it = mFonts.find(inFontObjectID);
 
-        if (it == mFonts.end())
-        {
-            std::string newName = scFN + ULong(mFontsCount + 1).ToString();
-            ++mFontsCount;
-            it = mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID, newName)).first;
-        }
-        return it->second;
+    auto it = mFonts.find(inFontObjectID);
+
+    if (it == mFonts.end())
+    {
+        std::string newName = scFN + ULong(mFontsCount + 1).ToString();
+        ++mFontsCount;
+        it = mFonts.insert(ObjectIDTypeToStringMap::value_type(inFontObjectID, newName)).first;
     }
+    return it->second;
 }
 
 void ResourcesDictionary::AddFontMapping(ObjectIDType inFontObjectID, const std::string &inFontObjectName)
@@ -244,18 +234,16 @@ std::string ResourcesDictionary::AddColorSpaceMapping(ObjectIDType inColorspaceI
         ++mColorSpacesCount;
         return newName;
     }
-    else
-    {
-        auto it = mColorSpaces.find(inColorspaceID);
 
-        if (it == mColorSpaces.end())
-        {
-            std::string newName = scCS + ULong(mColorSpacesCount + 1).ToString();
-            ++mColorSpacesCount;
-            it = mColorSpaces.insert(ObjectIDTypeToStringMap::value_type(inColorspaceID, newName)).first;
-        }
-        return it->second;
+    auto it = mColorSpaces.find(inColorspaceID);
+
+    if (it == mColorSpaces.end())
+    {
+        std::string newName = scCS + ULong(mColorSpacesCount + 1).ToString();
+        ++mColorSpacesCount;
+        it = mColorSpaces.insert(ObjectIDTypeToStringMap::value_type(inColorspaceID, newName)).first;
     }
+    return it->second;
 }
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetColorSpacesIterator()
@@ -273,18 +261,16 @@ std::string ResourcesDictionary::AddPatternMapping(ObjectIDType inPatternID)
         ++mPatternsCount;
         return newName;
     }
-    else
-    {
-        auto it = mPatterns.find(inPatternID);
 
-        if (it == mPatterns.end())
-        {
-            std::string newName = scPT + ULong(mPatternsCount + 1).ToString();
-            ++mPatternsCount;
-            it = mPatterns.insert(ObjectIDTypeToStringMap::value_type(inPatternID, newName)).first;
-        }
-        return it->second;
+    auto it = mPatterns.find(inPatternID);
+
+    if (it == mPatterns.end())
+    {
+        std::string newName = scPT + ULong(mPatternsCount + 1).ToString();
+        ++mPatternsCount;
+        it = mPatterns.insert(ObjectIDTypeToStringMap::value_type(inPatternID, newName)).first;
     }
+    return it->second;
 }
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetPatternsIterator()
@@ -302,18 +288,16 @@ std::string ResourcesDictionary::AddPropertyMapping(ObjectIDType inPropertyID)
         ++mPropertiesCount;
         return newName;
     }
-    else
-    {
-        auto it = mProperties.find(inPropertyID);
 
-        if (it == mProperties.end())
-        {
-            std::string newName = scPP + ULong(mPropertiesCount + 1).ToString();
-            ++mPropertiesCount;
-            it = mProperties.insert(ObjectIDTypeToStringMap::value_type(inPropertyID, newName)).first;
-        }
-        return it->second;
+    auto it = mProperties.find(inPropertyID);
+
+    if (it == mProperties.end())
+    {
+        std::string newName = scPP + ULong(mPropertiesCount + 1).ToString();
+        ++mPropertiesCount;
+        it = mProperties.insert(ObjectIDTypeToStringMap::value_type(inPropertyID, newName)).first;
     }
+    return it->second;
 }
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetPropertiesIterator()
@@ -331,18 +315,16 @@ std::string ResourcesDictionary::AddXObjectMapping(ObjectIDType inXObjectID)
         ++mGenericXObjectsCount;
         return newName;
     }
-    else
-    {
-        auto it = mXObjects.find(inXObjectID);
 
-        if (it == mXObjects.end())
-        {
-            std::string newName = scXO + ULong(mGenericXObjectsCount + 1).ToString();
-            ++mGenericXObjectsCount;
-            it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inXObjectID, newName)).first;
-        }
-        return it->second;
+    auto it = mXObjects.find(inXObjectID);
+
+    if (it == mXObjects.end())
+    {
+        std::string newName = scXO + ULong(mGenericXObjectsCount + 1).ToString();
+        ++mGenericXObjectsCount;
+        it = mXObjects.insert(ObjectIDTypeToStringMap::value_type(inXObjectID, newName)).first;
     }
+    return it->second;
 }
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetXObjectsIterator()
@@ -360,18 +342,16 @@ std::string ResourcesDictionary::AddShadingMapping(ObjectIDType inShadingID)
         ++mShadingCount;
         return newName;
     }
-    else
-    {
-        auto it = mShading.find(inShadingID);
 
-        if (it == mShading.end())
-        {
-            std::string newName = scSH + ULong(mShadingCount + 1).ToString();
-            ++mShadingCount;
-            it = mShading.insert(ObjectIDTypeToStringMap::value_type(inShadingID, newName)).first;
-        }
-        return it->second;
+    auto it = mShading.find(inShadingID);
+
+    if (it == mShading.end())
+    {
+        std::string newName = scSH + ULong(mShadingCount + 1).ToString();
+        ++mShadingCount;
+        it = mShading.insert(ObjectIDTypeToStringMap::value_type(inShadingID, newName)).first;
     }
+    return it->second;
 }
 
 MapIterator<ObjectIDTypeToStringMap> ResourcesDictionary::GetShadingsIterator()

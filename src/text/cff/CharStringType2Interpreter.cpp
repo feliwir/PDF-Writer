@@ -368,8 +368,7 @@ EStatusCode CharStringType2Interpreter::ClearNFromStack(unsigned short inCount)
             mOperandStack.pop_back();
         return PDFHummus::eSuccess;
     }
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 void CharStringType2Interpreter::ClearStack()
@@ -467,13 +466,10 @@ uint8_t *CharStringType2Interpreter::InterpretCallSubr(uint8_t *inProgramCounter
         delete charString;
         if (status != PDFHummus::eSuccess)
             return nullptr;
-        else
-            return inProgramCounter;
+        return inProgramCounter;
     }
-    else
-    {
-        return nullptr;
-    }
+
+    return nullptr;
 }
 
 uint8_t *CharStringType2Interpreter::InterpretReturn(uint8_t *inProgramCounter)
@@ -630,13 +626,10 @@ uint8_t *CharStringType2Interpreter::InterpretCallGSubr(uint8_t *inProgramCounte
         delete charString;
         if (status != PDFHummus::eSuccess)
             return nullptr;
-        else
-            return inProgramCounter;
+        return inProgramCounter;
     }
-    else
-    {
-        return nullptr;
-    }
+
+    return nullptr;
 }
 
 uint8_t *CharStringType2Interpreter::InterpretVHCurveto(uint8_t *inProgramCounter)
@@ -927,8 +920,7 @@ uint8_t *CharStringType2Interpreter::InterpretGet(uint8_t *inProgramCounter)
         mOperandStack.push_back(mStorage[index]);
         return inProgramCounter;
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 uint8_t *CharStringType2Interpreter::InterpretIfelse(uint8_t *inProgramCounter)

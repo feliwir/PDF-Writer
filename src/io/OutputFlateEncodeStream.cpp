@@ -62,18 +62,17 @@ void OutputFlateEncodeStream::FinalizeEncoding()
                 deflateResult);
             break;
         }
-        else
+
+        size_t writtenBytes;
+        writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
+        if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
-            size_t writtenBytes;
-            writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
-            if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
-            {
-                TRACE_LOG2("OutputFlateEncodeStream::FinalizeEncoding, Failed to write the desired amount of zlib "
-                           "bytes to underlying stream. supposed to write %lld, wrote %lld",
-                           BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
-                break;
-            }
+            TRACE_LOG2("OutputFlateEncodeStream::FinalizeEncoding, Failed to write the desired amount of zlib "
+                       "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                       BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
+            break;
         }
+
     } while (Z_OK == deflateResult); // waiting for either an error, or Z_STREAM_END
     deflateEnd(mZLibState);
     mCurrentlyEncoding = false;
@@ -117,10 +116,9 @@ size_t OutputFlateEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return EncodeBufferAndWrite(inBuffer, inSize);
-    else if (mTargetStream != nullptr)
+    if (mTargetStream != nullptr)
         return mTargetStream->Write(inBuffer, inSize);
-    else
-        return 0;
+    return 0;
 }
 
 size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
@@ -142,35 +140,32 @@ size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, si
                        deflateResult);
             break;
         }
-        else
+
+        size_t writtenBytes;
+        writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
+        if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
-            size_t writtenBytes;
-            writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
-            if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
-            {
-                TRACE_LOG2("OutputFlateEncodeStream::EncodeBufferAndWrite, Failed to write the desired amount of zlib "
-                           "bytes to underlying stream. supposed to write %lld, wrote %lld",
-                           BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
-                deflateEnd(mZLibState);
-                deflateResult = Z_STREAM_ERROR;
-                mCurrentlyEncoding = false;
-                break;
-            }
+            TRACE_LOG2("OutputFlateEncodeStream::EncodeBufferAndWrite, Failed to write the desired amount of zlib "
+                       "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                       BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
+            deflateEnd(mZLibState);
+            deflateResult = Z_STREAM_ERROR;
+            mCurrentlyEncoding = false;
+            break;
         }
+
     } while (mZLibState->avail_out == 0); // waiting for either no more writes
 
     if (Z_OK == deflateResult)
         return inSize;
-    else
-        return 0;
+    return 0;
 }
 
 long long OutputFlateEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
-    else
-        return 0;
+    return 0;
 }
 
 void OutputFlateEncodeStream::TurnOnEncoding()

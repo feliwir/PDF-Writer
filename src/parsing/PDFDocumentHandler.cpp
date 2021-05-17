@@ -273,10 +273,9 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                    inPageIndex);
         return nullptr;
     }
-    else
-        return CreatePDFFormXObjectForPage(pageObject.GetPtr(),
-                                           DeterminePageBox(pageObject.GetPtr(), inPageBoxToUseAsFormBox),
-                                           inTransformationMatrix, inPredefinedFormId);
+    return CreatePDFFormXObjectForPage(pageObject.GetPtr(),
+                                       DeterminePageBox(pageObject.GetPtr(), inPageBoxToUseAsFormBox),
+                                       inTransformationMatrix, inPredefinedFormId);
 }
 
 PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *inPageObject,
@@ -350,11 +349,9 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(PDFDictionary *i
             delete result;
             return nullptr;
         }
-        else
-            return result;
-    }
-    else
         return result;
+    }
+    return result;
 }
 
 PDFRectangle PDFDocumentHandler::DeterminePageBox(PDFDictionary *inDictionary, EPDFPageBox inPageBoxType)
@@ -402,8 +399,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                    inPageIndex);
         return nullptr;
     }
-    else
-        return CreatePDFFormXObjectForPage(pageObject.GetPtr(), inCropBox, inTransformationMatrix, inPredefinedFormId);
+    return CreatePDFFormXObjectForPage(pageObject.GetPtr(), inCropBox, inTransformationMatrix, inPredefinedFormId);
 }
 
 EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter *inTargetStream, PDFDictionary *inPageObject)
@@ -607,12 +603,10 @@ EStatusCode PDFDocumentHandler::CopyInDirectObject(ObjectIDType inSourceObjectID
             mObjectsContext->GetInDirectObjectsRegistry().DeleteObject(inTargetObjectID);
             return PDFHummus::eSuccess;
         }
-        else
-        {
-            // fail
-            TRACE_LOG1("PDFDocumentHandler::CopyInDirectObject, object not found. %ld", inSourceObjectID);
-            return PDFHummus::eFailure;
-        }
+
+        // fail
+        TRACE_LOG1("PDFDocumentHandler::CopyInDirectObject, object not found. %ld", inSourceObjectID);
+        return PDFHummus::eFailure;
     }
 
     mObjectsContext->StartNewIndirectObject(inTargetObjectID);
@@ -624,8 +618,7 @@ EStatusCode PDFDocumentHandler::CopyInDirectObject(ObjectIDType inSourceObjectID
             mObjectsContext->EndIndirectObject();
         return WriteNewObjects(newObjectsToWrite, ioCopiedObjects);
     }
-    else
-        return status;
+    return status;
 }
 
 EStatusCode PDFDocumentHandler::OnResourcesWrite(ResourcesDictionary * /*inResources*/,
@@ -833,8 +826,8 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
         it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
         {
-            result.first = (*it)->OnAfterCreatePageFromPage(newPage, pageObject.GetPtr(), mObjectsContext,
-                                                            mDocumentContext, this);
+            result.first =
+                (*it)->OnAfterCreatePageFromPage(newPage, pageObject.GetPtr(), mObjectsContext, mDocumentContext, this);
             if (result.first != PDFHummus::eSuccess)
                 TRACE_LOG("DocumentContext::CreatePDFFormXObjectForPage, unexpected failure. extender declared failure "
                           "after writing page.");
@@ -1491,9 +1484,9 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, PDFD
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
                 if (result.first != PDFHummus::eSuccess)
                     status = PDFHummus::eFailure;
-                outMappedResourcesNames.insert(StringToStringMap::value_type(
-                    AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage.GetResourcesDictionary().AddFontMapping(result.second)));
+                outMappedResourcesNames.insert(
+                    StringToStringMap::value_type(AsEncodedName(it.GetKey()->GetValue()),
+                                                  inTargetPage.GetResourcesDictionary().AddFontMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1577,8 +1570,7 @@ EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(PDFObject *inOb
             mObjectsContext->EndIndirectObject();
         return WriteNewObjects(newObjectsToWrite);
     }
-    else
-        return status;
+    return status;
 }
 
 EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPage, PDFDictionary *inSourcePage,
@@ -2016,8 +2008,7 @@ EStatusCode PDFDocumentHandler::WriteDictionaryObject(PDFDictionary *inDictionar
     {
         return mObjectsContext->EndDictionary(dictionary);
     }
-    else
-        return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
 EStatusCode PDFDocumentHandler::WriteStreamObject(PDFStreamInput *inStream, IObjectWritePolicy *inWritePolicy)
@@ -2545,17 +2536,13 @@ PDFObject *PDFDocumentHandler::FindPageResources(PDFParser *inParser, PDFDiction
     {
         return inParser->QueryDictionaryObject(inDictionary, "Resources");
     }
-    else
+
+    PDFObjectCastPtr<PDFDictionary> parentDict(
+        inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
+    if (!parentDict)
     {
-        PDFObjectCastPtr<PDFDictionary> parentDict(
-            inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
-        if (!parentDict)
-        {
-            return nullptr;
-        }
-        else
-        {
-            return FindPageResources(inParser, parentDict.GetPtr());
-        }
+        return nullptr;
     }
+
+    return FindPageResources(inParser, parentDict.GetPtr());
 }

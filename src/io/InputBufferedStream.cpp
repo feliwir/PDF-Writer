@@ -102,8 +102,7 @@ size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
         }
         return bytesRead;
     }
-    else
-        return 0;
+    return 0;
 }
 
 bool InputBufferedStream::NotEnded()

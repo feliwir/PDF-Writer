@@ -286,9 +286,8 @@ bool InputDCTDecodeStream::NotEnded()
 {
     if ((mStream == nullptr) || !mIsDecoding)
         return false;
-    else
-        return (!mIsHeaderRead || (mCurrentSampleRow < mTotalSampleRows) ||
-                (mJPGState.output_scanline < mJPGState.output_height));
+    return (!mIsHeaderRead || (mCurrentSampleRow < mTotalSampleRows) ||
+            (mJPGState.output_scanline < mJPGState.output_height));
 }
 
 #endif

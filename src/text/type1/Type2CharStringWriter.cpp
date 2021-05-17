@@ -74,7 +74,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
     {
         return WriteByte((uint8_t)(value + 139));
     }
-    else if (108 <= value && value <= 1131)
+    if (108 <= value && value <= 1131)
     {
         uint8_t byte0, byte1;
 
@@ -89,7 +89,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
             return PDFHummus::eFailure;
         return PDFHummus::eSuccess;
     }
-    else if (-1131 <= value && value <= -108)
+    if (-1131 <= value && value <= -108)
     {
         uint8_t byte0, byte1;
 

@@ -47,11 +47,9 @@ EStatusCode GraphicStateStack::Pop()
         TRACE_LOG("GraphicStateStack::Pop, exception. stack underflow, reached to the initial state");
         return PDFHummus::eFailure;
     }
-    else
-    {
-        mGraphicStateStack.pop_back();
-        return PDFHummus::eSuccess;
-    }
+
+    mGraphicStateStack.pop_back();
+    return PDFHummus::eSuccess;
 }
 
 GraphicState &GraphicStateStack::GetCurrentState()

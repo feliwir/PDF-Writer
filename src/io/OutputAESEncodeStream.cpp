@@ -66,8 +66,7 @@ long long OutputAESEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
-    else
-        return 0;
+    return 0;
 }
 
 size_t OutputAESEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)

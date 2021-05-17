@@ -65,8 +65,7 @@ EStatusCode PageContentContext::FinalizeCurrentStream()
 {
     if (mCurrentStream != nullptr)
         return FinalizeStreamWriteAndRelease();
-    else
-        return PDFHummus::eSuccess;
+    return PDFHummus::eSuccess;
 }
 
 PDFPage &PageContentContext::GetAssociatedPage()

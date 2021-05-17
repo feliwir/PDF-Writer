@@ -700,8 +700,7 @@ EStatusCode CFFFileInput::ReadNameIndex()
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 BoolAndUShort CFFFileInput::GetIndexForFontName(const std::string &inFontName)
@@ -710,8 +709,7 @@ BoolAndUShort CFFFileInput::GetIndexForFontName(const std::string &inFontName)
 
     if (it == mNameToIndex.end())
         return BoolAndUShort(false, 0);
-    else
-        return BoolAndUShort(true, it->second);
+    return BoolAndUShort(true, it->second);
 }
 
 EStatusCode CFFFileInput::ReadTopDictIndex()
@@ -740,8 +738,7 @@ EStatusCode CFFFileInput::ReadTopDictIndex()
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadDict(unsigned long inReadAmount, UShortToDictOperandListMap &outDict)
@@ -830,18 +827,16 @@ EStatusCode CFFFileInput::ReadStringIndex()
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 std::string CFFFileInput::GetStringForSID(unsigned short inSID)
 {
     if (inSID < N_STD_STRINGS)
         return scStandardStrings[inSID];
-    else if (inSID < N_STD_STRINGS + mStringsCount)
+    if (inSID < N_STD_STRINGS + mStringsCount)
         return mStrings[inSID - N_STD_STRINGS];
-    else
-        return "";
+    return "";
 }
 
 EStatusCode CFFFileInput::ReadGlobalSubrs()
@@ -886,8 +881,7 @@ EStatusCode CFFFileInput::ReadSubrsFromIndex(unsigned short &outSubrsCount, Char
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadCharStrings()
@@ -914,8 +908,7 @@ EStatusCode CFFFileInput::ReadCharStrings()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 static const unsigned short scCharStringsKey = 17;
@@ -936,8 +929,7 @@ long CFFFileInput::GetSingleIntegerValueFromDict(const UShortToDictOperandListMa
 
     if (it != inDict.end())
         return it->second.front().IntegerValue;
-    else
-        return inDefault;
+    return inDefault;
 }
 
 static const unsigned short scCharstringType = 0x0C06;
@@ -956,8 +948,7 @@ EStatusCode CFFFileInput::ReadPrivateDicts()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 static const unsigned short scPrivate = 18;
@@ -994,8 +985,7 @@ EStatusCode CFFFileInput::ReadLocalSubrs()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 static const unsigned short scSubrs = 19;
@@ -1080,8 +1070,7 @@ EStatusCode CFFFileInput::ReadCharsets()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 typedef std::map<long long, EncodingsInfo *> LongFilePositionTypeToEncodingsInfoMap;
@@ -1110,8 +1099,7 @@ EStatusCode CFFFileInput::ReadEncodings()
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 void CFFFileInput::ReadEncoding(EncodingsInfo *inEncoding, long long inEncodingPosition)
@@ -1337,8 +1325,7 @@ EStatusCode CFFFileInput::CalculateDependenciesForCharIndex(unsigned short inFon
         mCurrentDependencies = &ioDependenciesInfo;
         return interpreter.Intepret(*GetGlyphCharString(inFontIndex, inCharStringIndex), this);
     }
-    else
-        return status;
+    return status;
 }
 
 EStatusCode CFFFileInput::PrepareForGlyphIntepretation(unsigned short inFontIndex, unsigned short inCharStringIndex)
@@ -1375,13 +1362,11 @@ EStatusCode CFFFileInput::PrepareForGlyphIntepretation(unsigned short inFontInde
         }
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        TRACE_LOG1("CFFFileInput::PrepareForGlyphIntepretation, unsupported charstring format = %d. only type 2 "
-                   "charstrings are supported",
-                   mCharStrings[inFontIndex].mCharStringsType);
-        return PDFHummus::eFailure;
-    }
+
+    TRACE_LOG1("CFFFileInput::PrepareForGlyphIntepretation, unsupported charstring format = %d. only type 2 "
+               "charstrings are supported",
+               mCharStrings[inFontIndex].mCharStringsType);
+    return PDFHummus::eFailure;
 }
 
 CharString *CFFFileInput::GetGlyphCharString(unsigned short inFontIndex, unsigned short inCharStringIndex)
@@ -1441,18 +1426,16 @@ CharString *CFFFileInput::GetLocalSubr(long inSubrIndex)
             mCurrentDependencies->mLocalSubrs.insert(biasedIndex);
         return returnValue;
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 unsigned short CFFFileInput::GetBiasedIndex(unsigned short inSubroutineCollectionSize, long inSubroutineIndex)
 {
     if (inSubroutineCollectionSize < 1240)
         return (unsigned short)(107 + inSubroutineIndex);
-    else if (inSubroutineCollectionSize < 33900)
+    if (inSubroutineCollectionSize < 33900)
         return (unsigned short)(1131 + inSubroutineIndex);
-    else
-        return (unsigned short)(32768 + inSubroutineIndex);
+    return (unsigned short)(32768 + inSubroutineIndex);
 }
 
 CharString *CFFFileInput::GetGlobalSubr(long inSubrIndex)
@@ -1466,8 +1449,7 @@ CharString *CFFFileInput::GetGlobalSubr(long inSubrIndex)
             mCurrentDependencies->mGlobalSubrs.insert(biasedIndex);
         return returnValue;
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandList)
@@ -1496,8 +1478,7 @@ EStatusCode CFFFileInput::Type2Endchar(const CharStringOperandList &inOperandLis
             mCurrentDependencies->mCharCodes.insert(character2->mIndex);
             return PDFHummus::eSuccess;
         }
-        else
-            return PDFHummus::eFailure;
+        return PDFHummus::eFailure;
     }
 
     return PDFHummus::eSuccess;
@@ -1514,11 +1495,9 @@ CharString *CFFFileInput::GetCharacterFromStandardEncoding(uint8_t inCharacterCo
         auto itSIDToGlyph = mCurrentCharsetInfo->mSIDToGlyphMap.find(itStringToSID->second);
         if (itSIDToGlyph != mCurrentCharsetInfo->mSIDToGlyphMap.end())
             return itSIDToGlyph->second;
-        else
-            return nullptr;
-    }
-    else
         return nullptr;
+    }
+    return nullptr;
 }
 
 EStatusCode CFFFileInput::ReadCIDInformation()
@@ -1602,8 +1581,7 @@ EStatusCode CFFFileInput::ReadFDArray(unsigned short inFontIndex)
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 static const unsigned short scFDArray = 0xC24;
@@ -1664,8 +1642,7 @@ EStatusCode CFFFileInput::ReadFDSelect(unsigned short inFontIndex)
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 static const unsigned short scFDSelect = 0xC25;
@@ -1823,8 +1800,7 @@ EStatusCode CFFFileInput::ReadTopDictIndex(unsigned short inFontIndex)
     delete[] offsets;
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadCharStrings(unsigned short inFontIndex)
@@ -1844,8 +1820,7 @@ EStatusCode CFFFileInput::ReadCharStrings(unsigned short inFontIndex)
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadPrivateDicts(unsigned short inFontIndex)
@@ -1856,8 +1831,7 @@ EStatusCode CFFFileInput::ReadPrivateDicts(unsigned short inFontIndex)
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadLocalSubrs(unsigned short inFontIndex)
@@ -1902,8 +1876,7 @@ EStatusCode CFFFileInput::ReadCharsets(unsigned short inFontIndex)
 
     if (status != PDFHummus::eSuccess)
         return status;
-    else
-        return mPrimitivesReader.GetInternalState();
+    return mPrimitivesReader.GetInternalState();
 }
 
 EStatusCode CFFFileInput::ReadEncodings(unsigned short inFontIndex)
@@ -1965,8 +1938,7 @@ unsigned short CFFFileInput::GetCharStringsCount(unsigned short inFontIndex)
 {
     if (inFontIndex >= mFontsCount)
         return 0;
-    else
-        return mCharStrings[inFontIndex].mCharStringsCount;
+    return mCharStrings[inFontIndex].mCharStringsCount;
 }
 
 std::string CFFFileInput::GetGlyphName(unsigned short inFontIndex, unsigned short inGlyphIndex)
@@ -1980,25 +1952,23 @@ unsigned short CFFFileInput::GetGlyphSID(unsigned short inFontIndex, unsigned sh
     {
         return 0;
     }
+
+    unsigned short sid;
+    if (0 == inGlyphIndex)
+    {
+        sid = 0;
+    }
     else
     {
-        unsigned short sid;
-        if (0 == inGlyphIndex)
+        if (eCharSetCustom == mTopDictIndex[inFontIndex].mCharSet->mType)
         {
-            sid = 0;
+            sid = mTopDictIndex[inFontIndex].mCharSet->mSIDs[inGlyphIndex];
         }
         else
         {
-            if (eCharSetCustom == mTopDictIndex[inFontIndex].mCharSet->mType)
-            {
-                sid = mTopDictIndex[inFontIndex].mCharSet->mSIDs[inGlyphIndex];
-            }
-            else
-            {
-                // SID 0 is omitted for the default charsets
-                sid = scDefaultCharsets[(uint8_t)mTopDictIndex[inFontIndex].mCharSet->mType][inGlyphIndex - 1];
-            }
+            // SID 0 is omitted for the default charsets
+            sid = scDefaultCharsets[(uint8_t)mTopDictIndex[inFontIndex].mCharSet->mType][inGlyphIndex - 1];
         }
-        return sid;
     }
+    return sid;
 }

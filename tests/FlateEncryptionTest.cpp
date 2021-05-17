@@ -18,6 +18,7 @@
 
 
 */
+#include "TestHelper.h"
 #include "io/InputBufferedStream.h"
 #include "io/InputFileStream.h"
 #include "io/OutputBufferedStream.h"
@@ -25,7 +26,6 @@
 #include "io/OutputFlateDecodeStream.h"
 #include "io/OutputFlateEncodeStream.h"
 #include "io/OutputStreamTraits.h"
-#include "TestHelper.h"
 
 #include <gtest/gtest.h>
 #include <iostream>

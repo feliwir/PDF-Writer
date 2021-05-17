@@ -301,8 +301,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 159.36, 842 - 195.12);
-        pageContentContext->Do(
-            page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreen->GetObjectID()));
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreen->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();

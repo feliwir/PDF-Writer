@@ -124,8 +124,7 @@ std::string PDFTextString::ToUTF8String() const
 {
     if (mTextString.size() >= 2 && (uint8_t)mTextString.at(0) == 0xFE && (uint8_t)mTextString.at(1) == 0xFF)
         return ToUTF8FromUTF16BE();
-    else
-        return ToUTF8FromPDFDocEncoding();
+    return ToUTF8FromPDFDocEncoding();
 }
 
 std::string PDFTextString::ToUTF8FromUTF16BE() const

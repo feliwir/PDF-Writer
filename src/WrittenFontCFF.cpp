@@ -66,8 +66,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingList &inGl
             outEncodedCharacters.push_back(EncodeGlyph(it->mGlyphCode, it->mUnicodeValues));
         return true;
     }
-    else
-        return false;
+    return false;
 }
 
 bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingList &inGlyphsList)
@@ -223,8 +222,7 @@ bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingListList &
         }
         return true;
     }
-    else
-        return false;
+    return false;
 }
 
 bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingListList &inGlyphsList)
@@ -359,6 +357,5 @@ unsigned short WrittenFontCFF::EncodeCIDGlyph(unsigned int inGlyphId)
     // Hence, we need a slight difference for this case, and an override is provided
     if (mFontWillBeEmbedded)
         return mCIDRepresentation->mGlyphIDToEncodedChar.size();
-    else
-        return (unsigned short)inGlyphId;
+    return (unsigned short)inGlyphId;
 }

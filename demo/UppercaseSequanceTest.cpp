@@ -47,10 +47,8 @@ EStatusCode UppercaseSequanceTest::Run(const TestConfiguration & /*inTestConfigu
             status = PDFHummus::eFailure;
             break;
         }
-        else
-        {
-            cout << "Success in single increase\n";
-        }
+
+        cout << "Success in single increase\n";
 
         for (int i = 0; i < 25; ++i)
             value = sequance.GetNextValue();
@@ -60,10 +58,8 @@ EStatusCode UppercaseSequanceTest::Run(const TestConfiguration & /*inTestConfigu
             status = PDFHummus::eFailure;
             break;
         }
-        else
-        {
-            cout << "Success in 24 increase\n";
-        }
+
+        cout << "Success in 24 increase\n";
 
         for (int j = 0; j < 26 * 25; ++j)
             value = sequance.GetNextValue();
@@ -73,10 +69,8 @@ EStatusCode UppercaseSequanceTest::Run(const TestConfiguration & /*inTestConfigu
             status = PDFHummus::eFailure;
             break;
         }
-        else
-        {
-            cout << "Success in 26*25 increase\n";
-        }
+
+        cout << "Success in 26*25 increase\n";
 
     } while (false);
 

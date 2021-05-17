@@ -265,12 +265,12 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
 
         return ReadOpenTypeSFNT();
     }
-    else if ((0x10000 == sfntVersion) || (0x74727565 /* true */ == sfntVersion))
+    if ((0x10000 == sfntVersion) || (0x74727565 /* true */ == sfntVersion))
     {
         mFontType = EOpenTypeTrueType;
         return PDFHummus::eSuccess;
     }
-    else if (0x4F54544F /* OTTO */ == sfntVersion)
+    if (0x4F54544F /* OTTO */ == sfntVersion)
     {
         mFontType = EOpenTypeCFF;
         return PDFHummus::eSuccess;
@@ -440,8 +440,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
     if (status == eSuccess && foundSfnt)
         return ReadOpenTypeSFNT();
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 unsigned long OpenTypeFileInput::GetTag(const char *inTagName)
 
@@ -795,8 +794,7 @@ TableEntry *OpenTypeFileInput::GetTableEntry(const char *inTagName)
 
     if (it == mTables.end())
         return nullptr;
-    else
-        return &(it->second);
+    return &(it->second);
 }
 
 EStatusCode OpenTypeFileInput::ReadCFF()

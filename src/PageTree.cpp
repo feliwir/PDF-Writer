@@ -54,17 +54,15 @@ PageTree *PageTree::AddNodeToTree(ObjectIDType inNodeID, IndirectObjectsReferenc
         mIsLeafParent = true;
         return this;
     }
-    else
+
+    if (mParent == nullptr)
     {
-        if (mParent == nullptr)
-        {
-            mParent = new PageTree(inObjectsRegistry);
-            mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
-        }
-        PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
-        brotherOrCousin->AddNodeToTree(inNodeID, inObjectsRegistry); // will surely succeed - first one
-        return brotherOrCousin;
+        mParent = new PageTree(inObjectsRegistry);
+        mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
     }
+    PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
+    brotherOrCousin->AddNodeToTree(inNodeID, inObjectsRegistry); // will surely succeed - first one
+    return brotherOrCousin;
 }
 
 PageTree *PageTree::AddNodeToTree(PageTree *inPageTreeNode, IndirectObjectsReferenceRegistry &inObjectsRegistry)
@@ -76,17 +74,15 @@ PageTree *PageTree::AddNodeToTree(PageTree *inPageTreeNode, IndirectObjectsRefer
         inPageTreeNode->SetParent(this);
         return this;
     }
-    else
+
+    if (mParent == nullptr)
     {
-        if (mParent == nullptr)
-        {
-            mParent = new PageTree(inObjectsRegistry);
-            mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
-        }
-        PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
-        brotherOrCousin->AddNodeToTree(inPageTreeNode, inObjectsRegistry); // will surely succeed - first one
-        return brotherOrCousin;
+        mParent = new PageTree(inObjectsRegistry);
+        mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
     }
+    PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
+    brotherOrCousin->AddNodeToTree(inPageTreeNode, inObjectsRegistry); // will surely succeed - first one
+    return brotherOrCousin;
 }
 
 PageTree *PageTree::CreateBrotherOrCousin(IndirectObjectsReferenceRegistry &inObjectsRegistry)
@@ -98,18 +94,16 @@ PageTree *PageTree::CreateBrotherOrCousin(IndirectObjectsReferenceRegistry &inOb
         mKidsNodes[mKidsIndex]->SetParent(this);
         return mKidsNodes[mKidsIndex++];
     }
-    else
+
+    if (mParent == nullptr)
     {
-        if (mParent == nullptr)
-        {
-            mParent = new PageTree(inObjectsRegistry);
-            mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
-        }
-        PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
-        PageTree *nephew =
-            brotherOrCousin->CreateBrotherOrCousin(inObjectsRegistry); // will surely create brother - first one
-        return nephew;
+        mParent = new PageTree(inObjectsRegistry);
+        mParent->AddNodeToTree(this, inObjectsRegistry); // will surely succeed - first one
     }
+    PageTree *brotherOrCousin = mParent->CreateBrotherOrCousin(inObjectsRegistry);
+    PageTree *nephew =
+        brotherOrCousin->CreateBrotherOrCousin(inObjectsRegistry); // will surely create brother - first one
+    return nephew;
 }
 
 ObjectIDType PageTree::GetID()
@@ -136,16 +130,14 @@ PageTree *PageTree::GetPageTreeChild(int i)
 {
     if (mIsLeafParent || mKidsIndex <= i)
         return nullptr;
-    else
-        return mKidsNodes[i];
+    return mKidsNodes[i];
 }
 
 ObjectIDType PageTree::GetPageIDChild(int i)
 {
     if (!mIsLeafParent || mKidsIndex <= i)
         return 0;
-    else
-        return mKidsIDs[i];
+    return mKidsIDs[i];
 }
 
 void PageTree::SetParent(PageTree *inParent)

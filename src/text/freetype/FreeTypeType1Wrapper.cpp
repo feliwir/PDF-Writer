@@ -75,16 +75,14 @@ BoolAndFTShort FreeTypeType1Wrapper::GetCapHeight()
 {
     if (mPFMFileInfoRelevant)
         return BoolAndFTShort(true, mPFMReader.ExtendedFontMetrics.CapHeight);
-    else
-        return BoolAndFTShort(false, 0);
+    return BoolAndFTShort(false, 0);
 }
 
 BoolAndFTShort FreeTypeType1Wrapper::GetxHeight()
 {
     if (mPFMFileInfoRelevant)
         return BoolAndFTShort(true, mPFMReader.ExtendedFontMetrics.XHeight);
-    else
-        return BoolAndFTShort(false, 0);
+    return BoolAndFTShort(false, 0);
 }
 
 FT_UShort FreeTypeType1Wrapper::GetStemV()
@@ -108,16 +106,14 @@ bool FreeTypeType1Wrapper::HasSerifs()
 {
     if (mPFMFileInfoRelevant)
         return (mPFMReader.Header.PitchAndFamily & 16) != 0;
-    else
-        return false;
+    return false;
 }
 
 bool FreeTypeType1Wrapper::IsScript()
 {
     if (mPFMFileInfoRelevant)
         return (mPFMReader.Header.PitchAndFamily & 64) != 0;
-    else
-        return false;
+    return false;
 }
 
 bool FreeTypeType1Wrapper::IsForceBold()

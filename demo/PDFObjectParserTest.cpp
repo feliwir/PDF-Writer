@@ -78,7 +78,7 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
         return mInput;
     }
 
-    InputInterfaceToStream() : mInput(""), mLen(0), mPos(0)
+    InputInterfaceToStream() : mLen(0), mPos(0)
     {
     }
 

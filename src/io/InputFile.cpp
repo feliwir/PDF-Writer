@@ -72,15 +72,13 @@ EStatusCode InputFile::CloseFile()
     {
         return PDFHummus::eSuccess;
     }
-    else
-    {
-        EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
 
-        delete mInputStream; // will delete the referenced file stream as well
-        mInputStream = nullptr;
-        mFileStream = nullptr;
-        return status;
-    }
+    EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
+
+    delete mInputStream; // will delete the referenced file stream as well
+    mInputStream = nullptr;
+    mFileStream = nullptr;
+    return status;
 }
 
 IByteReaderWithPosition *InputFile::GetInputStream()
@@ -101,6 +99,5 @@ long long InputFile::GetFileSize()
 
         return inputFileStream->GetFileSize();
     }
-    else
-        return 0;
+    return 0;
 }

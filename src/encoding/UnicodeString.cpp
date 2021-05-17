@@ -192,10 +192,9 @@ EStatusCode UnicodeString::FromUTF16(const unsigned char *inString, unsigned lon
 
     if (inString[0] == 0xFE && inString[1] == 0xFF)
         return FromUTF16BE(inString + 2, inLength - 2);
-    else if (inString[0] == 0xFF && inString[1] == 0xFE)
+    if (inString[0] == 0xFF && inString[1] == 0xFE)
         return FromUTF16LE(inString + 2, inLength - 2);
-    else
-        return PDFHummus::eFailure; // no bom
+    return PDFHummus::eFailure; // no bom
 }
 
 EStatusCode UnicodeString::FromUTF16BE(const std::string &inString)

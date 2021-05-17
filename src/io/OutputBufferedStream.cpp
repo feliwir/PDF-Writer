@@ -91,8 +91,7 @@ size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
         }
         return bytesWritten;
     }
-    else
-        return 0;
+    return 0;
 }
 
 void OutputBufferedStream::Flush()

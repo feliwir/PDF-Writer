@@ -48,13 +48,12 @@ double ParsedPrimitiveHelper::GetAsDouble()
         auto *anInteger = (PDFInteger *)mWrappedObject;
         return (double)anInteger->GetValue();
     }
-    else if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
+    if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
     {
         auto *aReal = (PDFReal *)mWrappedObject;
         return aReal->GetValue();
     }
-    else
-        return 0;
+    return 0;
 }
 
 long long ParsedPrimitiveHelper::GetAsInteger()
@@ -64,13 +63,12 @@ long long ParsedPrimitiveHelper::GetAsInteger()
         auto *anInteger = (PDFInteger *)mWrappedObject;
         return anInteger->GetValue();
     }
-    else if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
+    if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
     {
         auto *aReal = (PDFReal *)mWrappedObject;
         return (long long)aReal->GetValue();
     }
-    else
-        return 0;
+    return 0;
 }
 
 bool ParsedPrimitiveHelper::IsNumber()

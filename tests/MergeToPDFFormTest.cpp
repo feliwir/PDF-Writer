@@ -39,8 +39,7 @@ TEST(PDFEmbedding, MergeToPDFForm)
 
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.pdf"), ePDFVersion13,
-        LogConfiguration(true, true,
-                         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.txt")));
+        LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.txt")));
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
@@ -48,8 +47,8 @@ TEST(PDFEmbedding, MergeToPDFForm)
     PDFPage page;
     page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-    copyingContext = pdfWriter.CreatePDFCopyingContext(
-        RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"));
+    copyingContext =
+        pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"));
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     // create form for two pages.

@@ -104,7 +104,7 @@ EStatusCode MD5Generator::Accumulate(const ByteList &inString)
     if (mIsFinalized)
         return PDFHummus::eFailure;
 
-    uint8_t *buffer = new uint8_t[inString.size()];
+    auto *buffer = new uint8_t[inString.size()];
     uint8_t *itBuffer = buffer;
     auto it = inString.begin();
     for (; it != inString.end(); ++it, ++itBuffer)

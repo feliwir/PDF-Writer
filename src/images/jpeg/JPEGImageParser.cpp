@@ -151,8 +151,7 @@ EStatusCode JPEGImageParser::Parse(IByteReaderWithPosition *inImageStream, JPEGI
             status = PDFHummus::eFailure;
             break;
         }
-        else
-            status = PDFHummus::eSuccess;
+        status = PDFHummus::eSuccess;
     } while (false);
 
     return status;
@@ -175,8 +174,7 @@ EStatusCode JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead)
 {
     if (inAmountToRead == mImageStream->Read(mReadBuffer, inAmountToRead))
         return PDFHummus::eSuccess;
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 EStatusCode JPEGImageParser::ReadJpegTag(unsigned int &outTagID)
