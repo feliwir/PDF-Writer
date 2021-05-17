@@ -55,8 +55,8 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
@@ -82,7 +82,7 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     // continue page drawing size the image to 500,400
     pageContentContext->q();
     pageContentContext->cm(500, 0, 0, 400, 0, 0);
-    pageContentContext->Do(page->GetResourcesDictionary().AddImageXObjectMapping(imageXObject));
+    pageContentContext->Do(page.GetResourcesDictionary().AddImageXObjectMapping(imageXObject));
     pageContentContext->Q();
 
     delete imageXObject;
@@ -90,7 +90,7 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     status = pdfWriter.EndPageContentContext(pageContentContext);
     if (status != PDFHummus::eSuccess)
         return status;
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     if (status != PDFHummus::eSuccess)
         return status;
     status = pdfWriter.EndPDF();

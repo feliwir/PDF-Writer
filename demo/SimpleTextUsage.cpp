@@ -134,8 +134,8 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -200,7 +200,7 @@ EStatusCode SimpleTextUsage::RunCFFTest(const TestConfiguration &inTestConfigura
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";
@@ -237,8 +237,8 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -279,7 +279,7 @@ EStatusCode SimpleTextUsage::RunTrueTypeTest(const TestConfiguration &inTestConf
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";
@@ -316,8 +316,8 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -360,7 +360,7 @@ EStatusCode SimpleTextUsage::RunType1Test(const TestConfiguration &inTestConfigu
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";
@@ -398,8 +398,8 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -439,7 +439,7 @@ EStatusCode SimpleTextUsage::RunNoTextTest(const TestConfiguration &inTestConfig
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";

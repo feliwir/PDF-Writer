@@ -29,7 +29,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 {
   public:
     // add items to the page dictionary while it's written
-    virtual PDFHummus::EStatusCode OnPageWrite(PDFPage *inPage, DictionaryContext *inPageDictionaryContext,
+    virtual PDFHummus::EStatusCode OnPageWrite(PDFPage &inPage, DictionaryContext *inPageDictionaryContext,
                                                ObjectsContext *inPDFWriterObjectContext,
                                                PDFHummus::DocumentContext *inDocumentContext)
     {
@@ -180,7 +180,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When appending pages from PDF - after appending a particular page
-    virtual PDFHummus::EStatusCode OnAfterCreatePageFromPage(PDFPage *iPageObjectResultPage,
+    virtual PDFHummus::EStatusCode OnAfterCreatePageFromPage(PDFPage &iPageObjectResultPage,
                                                              PDFDictionary *inPageObjectDictionary,
                                                              ObjectsContext *inPDFWriterObjectContext,
                                                              PDFHummus::DocumentContext *inDocumentContext,
@@ -195,7 +195,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When merging pages from PDF - before merging a particular page
-    virtual PDFHummus::EStatusCode OnBeforeMergePageFromPage(PDFPage *inTargetPage,
+    virtual PDFHummus::EStatusCode OnBeforeMergePageFromPage(PDFPage &inTargetPage,
                                                              PDFDictionary *inPageObjectDictionary,
                                                              ObjectsContext *inPDFWriterObjectContext,
                                                              PDFHummus::DocumentContext *inDocumentContext,
@@ -210,7 +210,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When merging pages from PDF - after merging a particular page
-    virtual PDFHummus::EStatusCode OnAfterMergePageFromPage(PDFPage *inTargetPage,
+    virtual PDFHummus::EStatusCode OnAfterMergePageFromPage(PDFPage &inTargetPage,
                                                             PDFDictionary *inPageObjectDictionary,
                                                             ObjectsContext *inPDFWriterObjectContext,
                                                             PDFHummus::DocumentContext *inDocumentContext,

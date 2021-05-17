@@ -142,7 +142,7 @@ void PDFWriter::Reset()
     Cleanup();
 }
 
-EStatusCodeAndObjectIDType PDFWriter::WritePageAndReturnPageID(PDFPage *inPage)
+EStatusCodeAndObjectIDType PDFWriter::WritePageAndReturnPageID(PDFPage &inPage)
 {
     return mDocumentContext.WritePage(inPage);
 }
@@ -152,7 +152,7 @@ EStatusCodeAndObjectIDType PDFWriter::WritePageReleaseAndReturnPageID(PDFPage *i
     return mDocumentContext.WritePageAndRelease(inPage);
 }
 
-EStatusCode PDFWriter::WritePage(PDFPage *inPage)
+EStatusCode PDFWriter::WritePage(PDFPage &inPage)
 {
     return mDocumentContext.WritePage(inPage).first;
 }
@@ -197,7 +197,7 @@ OutputFile &PDFWriter::GetOutputFile()
     return mOutputFile;
 }
 
-PageContentContext *PDFWriter::StartPageContentContext(PDFPage *inPage)
+PageContentContext *PDFWriter::StartPageContentContext(PDFPage &inPage)
 {
     return mDocumentContext.StartPageContentContext(inPage);
 }
@@ -530,7 +530,7 @@ EStatusCode PDFWriter::AttachURLLinktoCurrentPage(const std::string &inURL, cons
     return mDocumentContext.AttachURLLinktoCurrentPage(inURL, inLinkClickArea);
 }
 
-EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage *inPage, const std::string &inPDFFilePath,
+EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
                                            const PDFPageRange &inPageRange,
                                            const ObjectIDTypeList &inCopyAdditionalObjects,
                                            const PDFParsingOptions &inParsingOptions)
@@ -624,7 +624,7 @@ EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(IByteReaderWithP
     return mDocumentContext.AppendPDFPagesFromPDF(inPDFStream, inParsingOptions, inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage *inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
                                            const PDFPageRange &inPageRange,
                                            const ObjectIDTypeList &inCopyAdditionalObjects,
                                            const PDFParsingOptions &inParsingOptions)

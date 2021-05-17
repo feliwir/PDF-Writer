@@ -54,8 +54,8 @@ EStatusCode TestMeasurementsTest::Run(const TestConfiguration &inTestConfigurati
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
         PDFUsedFont *arialFont = pdfWriter.GetFontForFile(
@@ -92,7 +92,7 @@ EStatusCode TestMeasurementsTest::Run(const TestConfiguration &inTestConfigurati
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != eSuccess)
         {
             status = PDFHummus::eFailure;

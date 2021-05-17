@@ -64,7 +64,7 @@ class PDFDocumentCopyingContext
                                                             const double *inTransformationMatrix = NULL,
                                                             ObjectIDType inPredefinedFormId = 0);
     EStatusCodeAndObjectIDType AppendPDFPageFromPDF(unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex);
+    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
 
     // MergePDFPageToFormXObject merges a page content into a form xobject.
     // Such merging may require some resources copying, which can't be done while the form is still

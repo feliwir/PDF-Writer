@@ -121,8 +121,8 @@ EStatusCode MergePDFPages::TestOnlyMerge(const TestConfiguration &inTestConfigur
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFPageRange singePageRange;
         singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -134,7 +134,7 @@ EStatusCode MergePDFPages::TestOnlyMerge(const TestConfiguration &inTestConfigur
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -158,8 +158,8 @@ EStatusCode MergePDFPages::TestPrefixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
@@ -196,7 +196,7 @@ EStatusCode MergePDFPages::TestPrefixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -220,8 +220,8 @@ EStatusCode MergePDFPages::TestSuffixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFPageRange singePageRange;
         singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -256,7 +256,7 @@ EStatusCode MergePDFPages::TestSuffixGraphicsMerge(const TestConfiguration &inTe
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -280,8 +280,8 @@ EStatusCode MergePDFPages::TestBothGraphicsMerge(const TestConfiguration &inTest
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFUsedFont *font = pdfWriter.GetFontForFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
@@ -328,7 +328,7 @@ EStatusCode MergePDFPages::TestBothGraphicsMerge(const TestConfiguration &inTest
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -353,8 +353,8 @@ EStatusCode MergePDFPages::MergeTwoPageInSeparatePhases(const TestConfiguration 
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -392,7 +392,7 @@ EStatusCode MergePDFPages::MergeTwoPageInSeparatePhases(const TestConfiguration 
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -414,7 +414,7 @@ class MyPDFMergingHandler : public DocumentContextExtenderAdapter
         mPageIndex = 0;
     }
 
-    EStatusCode OnAfterMergePageFromPage(PDFPage * /*inTargetPage*/, PDFDictionary * /*inPageObjectDictionary*/,
+    EStatusCode OnAfterMergePageFromPage(PDFPage & /*inTargetPage*/, PDFDictionary * /*inPageObjectDictionary*/,
                                          ObjectsContext * /*inPDFWriterObjectContext*/,
                                          DocumentContext * /*inPDFWriterDocumentContext*/,
                                          PDFDocumentHandler * /*inPDFDocumentHandler*/) override
@@ -448,8 +448,8 @@ EStatusCode MergePDFPages::MergeTwoPageWithEvents(const TestConfiguration &inTes
         if (status != PDFHummus::eSuccess)
             break;
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -479,7 +479,7 @@ EStatusCode MergePDFPages::MergeTwoPageWithEvents(const TestConfiguration &inTes
         if (status != PDFHummus::eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -527,70 +527,72 @@ EStatusCode MergePDFPages::MergePagesUsingCopyingContext(const TestConfiguration
         ObjectIDType reusableObjectID = result.second;
 
         // now let's begin constructing the pages
+        {
+            PDFPage page;
+            page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+            PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
-        PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
+            pageContent->q();
+            pageContent->cm(0.5, 0, 0, 0.5, 0, 0);
 
-        pageContent->q();
-        pageContent->cm(0.5, 0, 0, 0.5, 0, 0);
+            // merge unique page at lower left
+            status = copyingContext->MergePDFPageToPage(page, 1);
+            if (status != PDFHummus::eSuccess)
+                break;
 
-        // merge unique page at lower left
-        status = copyingContext->MergePDFPageToPage(page, 1);
-        if (status != PDFHummus::eSuccess)
-            break;
+            pageContent->Q();
 
-        pageContent->Q();
+            pageContent->q();
+            pageContent->cm(0.5, 0, 0, 0.5, 297.5, 421);
 
-        pageContent->q();
-        pageContent->cm(0.5, 0, 0, 0.5, 297.5, 421);
+            // place reusable object page on the upper right corner of the page
+            pageContent->Do(page.GetResourcesDictionary().AddFormXObjectMapping(reusableObjectID));
 
-        // place reusable object page on the upper right corner of the page
-        pageContent->Do(page->GetResourcesDictionary().AddFormXObjectMapping(reusableObjectID));
+            pageContent->Q();
 
-        pageContent->Q();
+            status = pdfWriter.EndPageContentContext(pageContent);
+            if (status != PDFHummus::eSuccess)
+                break;
 
-        status = pdfWriter.EndPageContentContext(pageContent);
-        if (status != PDFHummus::eSuccess)
-            break;
-
-        status = pdfWriter.WritePageAndRelease(page);
-        if (status != PDFHummus::eSuccess)
-            break;
+            status = pdfWriter.WritePage(page);
+            if (status != PDFHummus::eSuccess)
+                break;
+        }
 
         // now let's do the second page. similar, but with the second page as the unique content
+        {
+            PDFPage page;
+            page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-        page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+            PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
-        pageContent = pdfWriter.StartPageContentContext(page);
+            pageContent->q();
+            pageContent->cm(0.5, 0, 0, 0.5, 0, 0);
 
-        pageContent->q();
-        pageContent->cm(0.5, 0, 0, 0.5, 0, 0);
+            // merge unique page at lower left
+            status = copyingContext->MergePDFPageToPage(page, 2);
+            if (status != PDFHummus::eSuccess)
+                break;
 
-        // merge unique page at lower left
-        status = copyingContext->MergePDFPageToPage(page, 2);
-        if (status != PDFHummus::eSuccess)
-            break;
+            pageContent->Q();
 
-        pageContent->Q();
+            pageContent->q();
+            pageContent->cm(0.5, 0, 0, 0.5, 297.5, 421);
 
-        pageContent->q();
-        pageContent->cm(0.5, 0, 0, 0.5, 297.5, 421);
+            // place reusable object page on the upper right corner of the page
+            pageContent->Do(page.GetResourcesDictionary().AddFormXObjectMapping(reusableObjectID));
 
-        // place reusable object page on the upper right corner of the page
-        pageContent->Do(page->GetResourcesDictionary().AddFormXObjectMapping(reusableObjectID));
+            pageContent->Q();
 
-        pageContent->Q();
+            status = pdfWriter.EndPageContentContext(pageContent);
+            if (status != PDFHummus::eSuccess)
+                break;
 
-        status = pdfWriter.EndPageContentContext(pageContent);
-        if (status != PDFHummus::eSuccess)
-            break;
-
-        status = pdfWriter.WritePageAndRelease(page);
-        if (status != PDFHummus::eSuccess)
-            break;
+            status = pdfWriter.WritePage(page);
+            if (status != PDFHummus::eSuccess)
+                break;
+        }
 
         status = pdfWriter.EndPDF();
         if (status != PDFHummus::eSuccess)

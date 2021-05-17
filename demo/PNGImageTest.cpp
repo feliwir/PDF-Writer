@@ -60,8 +60,8 @@ EStatusCode RunImageTest(const TestConfiguration &inTestConfiguration, const str
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -91,7 +91,7 @@ EStatusCode RunImageTest(const TestConfiguration &inTestConfiguration, const str
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";

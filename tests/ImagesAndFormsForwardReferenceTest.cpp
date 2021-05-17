@@ -43,8 +43,8 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
                                 ePDFVersion13);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(pageContentContext, nullptr);
@@ -54,12 +54,12 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
     pageContentContext->cm(500, 0, 0, 400, 0, 0);
 
     ObjectIDType imageXObjectID = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry().AllocateNewObjectID();
-    pageContentContext->Do(page->GetResourcesDictionary().AddImageXObjectMapping(imageXObjectID));
+    pageContentContext->Do(page.GetResourcesDictionary().AddImageXObjectMapping(imageXObjectID));
 
     // optionally i can also add the necessary PDF Procsets. i'll just add all that might be relevant
-    page->GetResourcesDictionary().AddProcsetResource(KProcsetImageB);
-    page->GetResourcesDictionary().AddProcsetResource(KProcsetImageC);
-    page->GetResourcesDictionary().AddProcsetResource(KProcsetImageI);
+    page.GetResourcesDictionary().AddProcsetResource(KProcsetImageB);
+    page.GetResourcesDictionary().AddProcsetResource(KProcsetImageC);
+    page.GetResourcesDictionary().AddProcsetResource(KProcsetImageI);
 
     pageContentContext->Q();
 
@@ -67,26 +67,26 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
     pageContentContext->q();
     pageContentContext->cm(1, 0, 0, 1, 0, 400);
     ObjectIDType formXObjectID = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry().AllocateNewObjectID();
-    pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(formXObjectID));
+    pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(formXObjectID));
     pageContentContext->Q();
 
 #ifndef PDFHUMMUS_NO_TIFF
     pageContentContext->q();
     ObjectIDType tiffFormXObjectID = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry().AllocateNewObjectID();
-    pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(tiffFormXObjectID));
+    pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(tiffFormXObjectID));
     pageContentContext->Q();
 #endif
 
     pageContentContext->q();
     pageContentContext->cm(1, 0, 0, 1, 100, 500);
     ObjectIDType simpleFormXObjectID = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry().AllocateNewObjectID();
-    pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(simpleFormXObjectID));
+    pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(simpleFormXObjectID));
     pageContentContext->Q();
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     // Create image xobject

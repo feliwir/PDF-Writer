@@ -63,8 +63,8 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
         }
 
         // create simple page
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
@@ -87,8 +87,7 @@ EStatusCode RunTest(const TestConfiguration &inTestConfiguration, bool inUseAES)
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
-        page = nullptr;
+        status = pdfWriter.WritePage(page);
 
         if (status != PDFHummus::eSuccess)
         {

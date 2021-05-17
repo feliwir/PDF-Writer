@@ -22,71 +22,73 @@ TEST(CustomStreams, InputImagesAsStreams)
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ImagesInStreams.pdf"), ePDFVersion13);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    {
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-    // JPG image
+        // JPG image
 
-    InputFile jpgImage;
+        InputFile jpgImage;
 
-    status = jpgImage.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/otherStage.JPG"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+        status = jpgImage.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/otherStage.JPG"));
+        ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGStream(jpgImage.GetInputStream());
-    ASSERT_NE(formXObject, nullptr);
+        PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGStream(jpgImage.GetInputStream());
+        ASSERT_NE(formXObject, nullptr);
 
-    jpgImage.CloseFile();
+        jpgImage.CloseFile();
 
-    PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
-    ASSERT_NE(pageContentContext, nullptr);
+        PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
+        ASSERT_NE(pageContentContext, nullptr);
 
-    pageContentContext->q();
-    pageContentContext->cm(1, 0, 0, 1, 0, 400);
-    pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
-    pageContentContext->Q();
+        pageContentContext->q();
+        pageContentContext->cm(1, 0, 0, 1, 0, 400);
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
+        pageContentContext->Q();
 
-    delete formXObject;
+        delete formXObject;
 
-    status = pdfWriter.EndPageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+        status = pdfWriter.EndPageContentContext(pageContentContext);
+        ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    status = pdfWriter.WritePageAndRelease(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+        status = pdfWriter.WritePage(page);
+        ASSERT_EQ(status, PDFHummus::eSuccess);
+    }
 
     // TIFF image
 #ifndef PDFHUMMUS_NO_TIFF
-    page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    {
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
-    InputFile tiffFile;
-    status = tiffFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/FLAG_T24.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+        InputFile tiffFile;
+        status = tiffFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/FLAG_T24.TIF"));
+        ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    formXObject = pdfWriter.CreateFormXObjectFromTIFFStream(tiffFile.GetInputStream());
-    ASSERT_NE(formXObject, nullptr);
+        PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromTIFFStream(tiffFile.GetInputStream());
+        ASSERT_NE(formXObject, nullptr);
 
-    tiffFile.CloseFile();
-    pageContentContext = pdfWriter.StartPageContentContext(page);
-    ASSERT_NE(pageContentContext, nullptr);
+        tiffFile.CloseFile();
+        PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
+        ASSERT_NE(pageContentContext, nullptr);
 
-    // continue page drawing, place the image in 0,0 (playing...could avoid CM at all)
-    pageContentContext->q();
-    pageContentContext->cm(1, 0, 0, 1, 0, 0);
-    pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
-    pageContentContext->Q();
+        // continue page drawing, place the image in 0,0 (playing...could avoid CM at all)
+        pageContentContext->q();
+        pageContentContext->cm(1, 0, 0, 1, 0, 0);
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
+        pageContentContext->Q();
 
-    delete formXObject;
+        delete formXObject;
 
-    status = pdfWriter.EndPageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+        status = pdfWriter.EndPageContentContext(pageContentContext);
+        ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    status = pdfWriter.WritePageAndRelease(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
-
+        status = pdfWriter.WritePage(page);
+        ASSERT_EQ(status, PDFHummus::eSuccess);
+    }
 #endif
 
     // PDF
-
     InputFile pdfFile;
 
     status = pdfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Original.pdf"));

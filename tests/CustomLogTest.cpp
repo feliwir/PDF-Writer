@@ -39,11 +39,11 @@ TEST(CustomStreams, CustomLog)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     TRACE_LOG("Now will add an empty page");
-    auto *page = new PDFPage();
+    PDFPage page;
 
-    page->SetMediaBox(PDFRectangle(0, 0, 400, 400));
+    page.SetMediaBox(PDFRectangle(0, 0, 400, 400));
 
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     TRACE_LOG("Added page, now will close");

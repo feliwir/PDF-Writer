@@ -111,7 +111,7 @@ MapIterator<ObjectIDTypeToObjectIDTypeMap> PDFDocumentCopyingContext::GetCopiedO
     return mDocumentHandler.GetCopiedObjectsMappingIterator();
 }
 
-EStatusCode PDFDocumentCopyingContext::MergePDFPageToPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex)
+EStatusCode PDFDocumentCopyingContext::MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex)
 {
     return mDocumentHandler.MergePDFPageToPage(inTargetPage, inSourcePageIndex);
 }

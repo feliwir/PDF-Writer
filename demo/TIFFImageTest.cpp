@@ -241,8 +241,8 @@ EStatusCode TIFFImageTest::AddPageForTIFF(PDFWriter &inpdfWriter, const string &
 
     do
     {
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -259,7 +259,7 @@ EStatusCode TIFFImageTest::AddPageForTIFF(PDFWriter &inpdfWriter, const string &
             break;
         }
 
-        string imageXObjectName = page->GetResourcesDictionary().AddFormXObjectMapping(imageFormXObject->GetObjectID());
+        string imageXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(imageFormXObject->GetObjectID());
 
         // continue page drawing, place the image in 0,0 (playing...could avoid CM at all)
         pageContentContext->q();
@@ -276,7 +276,7 @@ EStatusCode TIFFImageTest::AddPageForTIFF(PDFWriter &inpdfWriter, const string &
             break;
         }
 
-        status = inpdfWriter.WritePageAndRelease(page);
+        status = inpdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page, for file" << inTiffFilePath.c_str() << "\n";

@@ -38,7 +38,7 @@ PDFPageMergingHelper::~PDFPageMergingHelper()
 EStatusCode PDFPageMergingHelper::MergePageContent(PDFDocumentCopyingContext *inCopyingContext,
                                                    unsigned long inPageIndex)
 {
-    return inCopyingContext->MergePDFPageToPage(mPage, inPageIndex);
+    return inCopyingContext->MergePDFPageToPage(*mPage, inPageIndex);
 }
 
 EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,

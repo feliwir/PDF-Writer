@@ -57,8 +57,8 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
                 break;
             }
 
-            auto *page = new PDFPage();
-            page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+            PDFPage page;
+            page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PDFUsedFont *font = pdfWriterA.GetFontForFile(
                 RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/fonts/arial.ttf"));
@@ -128,7 +128,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
                 break;
             }
 
-            status = pdfWriterA.WritePageAndRelease(page);
+            status = pdfWriterA.WritePage(page);
             if (status != PDFHummus::eSuccess)
             {
                 cout << "failed to write page\n";
@@ -154,8 +154,8 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
                 break;
             }
 
-            auto *page = new PDFPage();
-            page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+            PDFPage page;
+            page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
             PageContentContext *pageContentContext = pdfWriterB.StartPageContentContext(page);
             if (nullptr == pageContentContext)
@@ -197,7 +197,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
                 break;
             }
 
-            string formXObjectName = page->GetResourcesDictionary().AddFormXObjectMapping(formObjectID);
+            string formXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(formObjectID);
 
             // continue page drawing, place the form in 200,600
             pageContentContext->q();
@@ -227,7 +227,7 @@ EStatusCode ShutDownRestartTest::Run(const TestConfiguration &inTestConfiguratio
                 break;
             }
 
-            status = pdfWriterB.WritePageAndRelease(page);
+            status = pdfWriterB.WritePage(page);
             if (status != PDFHummus::eSuccess)
             {
                 cout << "failed to write page\n";

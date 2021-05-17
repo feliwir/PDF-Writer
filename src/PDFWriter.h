@@ -134,17 +134,17 @@ class PDFWriter
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration());
 
     // Page context, for drwaing page content
-    PageContentContext *StartPageContentContext(PDFPage *inPage);
+    PageContentContext *StartPageContentContext(PDFPage &inPage);
     PDFHummus::EStatusCode PausePageContentContext(PageContentContext *inPageContext);
     PDFHummus::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
 
     // Page Writing [create a new Page by creating a new instance of PDFPage. instances may be reused.
-    PDFHummus::EStatusCode WritePage(PDFPage *inPage);
+    PDFHummus::EStatusCode WritePage(PDFPage &inPage);
     PDFHummus::EStatusCode WritePageAndRelease(PDFPage *inPage);
 
     // same as above page writing, but also return page ID. good for extensibility, when you want to refer to the
     // written page form some other place
-    EStatusCodeAndObjectIDType WritePageAndReturnPageID(PDFPage *inPage);
+    EStatusCodeAndObjectIDType WritePageAndReturnPageID(PDFPage &inPage);
     EStatusCodeAndObjectIDType WritePageReleaseAndReturnPageID(PDFPage *inPage);
 
     // Form XObject creating and writing
@@ -244,12 +244,12 @@ class PDFWriter
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
     PDFHummus::EStatusCode MergePDFPagesToPage(
-        PDFPage *inPage, const std::string &inPDFFilePath, const PDFPageRange &inPageRange,
+        PDFPage &inPage, const std::string &inPDFFilePath, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     PDFHummus::EStatusCode MergePDFPagesToPage(
-        PDFPage *inPage, IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
+        PDFPage &inPage, IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 

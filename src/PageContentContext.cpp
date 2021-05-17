@@ -28,11 +28,10 @@
 
 using namespace PDFHummus;
 
-PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage *inPageOfContext,
+PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
                                        ObjectsContext *inObjectsContext)
-    : AbstractContentContext(inDocumentContext)
+    : AbstractContentContext(inDocumentContext), mPageOfContext(inPageOfContext)
 {
-    mPageOfContext = inPageOfContext;
     mObjectsContext = inObjectsContext;
     mCurrentStream = nullptr;
 }
@@ -54,12 +53,12 @@ void PageContentContext::StartAStreamIfRequired()
 void PageContentContext::StartContentStreamDefinition()
 {
     ObjectIDType streamObjectID = mObjectsContext->StartNewIndirectObject();
-    mPageOfContext->AddContentStreamReference(streamObjectID);
+    mPageOfContext.AddContentStreamReference(streamObjectID);
 }
 
 ResourcesDictionary *PageContentContext::GetResourcesDictionary()
 {
-    return &(mPageOfContext->GetResourcesDictionary());
+    return &(mPageOfContext.GetResourcesDictionary());
 }
 
 EStatusCode PageContentContext::FinalizeCurrentStream()
@@ -70,7 +69,7 @@ EStatusCode PageContentContext::FinalizeCurrentStream()
         return PDFHummus::eSuccess;
 }
 
-PDFPage *PageContentContext::GetAssociatedPage()
+PDFPage &PageContentContext::GetAssociatedPage()
 {
     return mPageOfContext;
 }
@@ -111,7 +110,7 @@ class PageImageWritingTask : public IPageEndWritingTask
     {
     }
 
-    PDFHummus::EStatusCode Write(PDFPage * /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
+    PDFHummus::EStatusCode Write(PDFPage & /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
                                  PDFHummus::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);

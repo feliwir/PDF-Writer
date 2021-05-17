@@ -84,7 +84,7 @@ EStatusCode RotatedPagesPDF::Run(const TestConfiguration &inTestConfiguration)
             std::ostringstream s;
             s << "Page rotated by " << i * 90 << " degrees.";
 
-            PageContentContext *cxt = pdfWriter.StartPageContentContext(&page);
+            PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
             cxt->WriteText(75, 805, s.str(), textOptions);
             status = pdfWriter.EndPageContentContext(cxt);
             if (status != eSuccess)
@@ -94,7 +94,7 @@ EStatusCode RotatedPagesPDF::Run(const TestConfiguration &inTestConfiguration)
                 break;
             }
 
-            status = pdfWriter.WritePage(&page);
+            status = pdfWriter.WritePage(page);
             if (status != PDFHummus::eSuccess)
                 cout << "failed to write page " << i << "\n";
         }

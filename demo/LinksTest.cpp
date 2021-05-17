@@ -53,8 +53,8 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PDFFormXObject *soundCloudLogo = pdfWriter.CreateFormXObjectFromJPGFile(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/images/soundcloud_logo.jpg"));
@@ -90,7 +90,7 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
         // Draw soundcloud loog
         contentContext->q();
         contentContext->cm(0.5, 0, 0, 0.5, 90.024, 200);
-        contentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(soundCloudLogo->GetObjectID()));
+        contentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(soundCloudLogo->GetObjectID()));
         contentContext->Q();
 
         status = pdfWriter.EndPageContentContext(contentContext);
@@ -110,7 +110,7 @@ EStatusCode LinksTest::Run(const TestConfiguration &inTestConfiguration)
         // second, link for the logo.
         pdfWriter.AttachURLLinktoCurrentPage("http://www.soundcloud.com", PDFRectangle(90.024, 200, 367.524, 375));
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";

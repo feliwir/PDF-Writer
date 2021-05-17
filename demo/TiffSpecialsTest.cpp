@@ -105,8 +105,8 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
 
     do
     {
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -115,7 +115,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
             cout << "failed to create content context for page\n";
         }
 
-        string imageXObjectName = page->GetResourcesDictionary().AddFormXObjectMapping(inImageObject->GetObjectID());
+        string imageXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(inImageObject->GetObjectID());
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 0, 0);
@@ -132,7 +132,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
             break;
         }
 
-        status = inpdfWriter.WritePageAndRelease(page);
+        status = inpdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page, for image form xobject " << inImageObject->GetObjectID() << "\n";
@@ -171,8 +171,8 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -183,7 +183,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 0, 842 - 195.12);
-        pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(imageBW->GetObjectID()));
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(imageBW->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();
@@ -191,7 +191,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
         pageContentContext->rg(0, 0, 1);
         pageContentContext->re(0, 0, 159.36, 195.12);
         pageContentContext->f();
-        pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(imageBWMask->GetObjectID()));
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(imageBWMask->GetObjectID()));
         pageContentContext->Q();
 
         delete imageBW;
@@ -204,7 +204,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
             break;
         }
 
-        status = inpdfWriter.WritePageAndRelease(page);
+        status = inpdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page, for image BWs test\n";
@@ -284,8 +284,8 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
         }
 
         // start page
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -296,31 +296,31 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 0, 842 - 195.12);
-        pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(imageGrayScale->GetObjectID()));
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScale->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 159.36, 842 - 195.12);
         pageContentContext->Do(
-            page->GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreen->GetObjectID()));
+            page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreen->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 159.36 * 2, 842 - 195.12);
         pageContentContext->Do(
-            page->GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleCyanMagenta->GetObjectID()));
+            page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleCyanMagenta->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 0, 842 - 195.12 * 2);
         pageContentContext->Do(
-            page->GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreenVSRed->GetObjectID()));
+            page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleGreenVSRed->GetObjectID()));
         pageContentContext->Q();
 
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 159.36, 842 - 195.12 * 2);
         pageContentContext->Do(
-            page->GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleCyanVSMagenta->GetObjectID()));
+            page.GetResourcesDictionary().AddFormXObjectMapping(imageGrayScaleCyanVSMagenta->GetObjectID()));
         pageContentContext->Q();
 
         delete imageGrayScale;
@@ -336,7 +336,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
             break;
         }
 
-        status = inpdfWriter.WritePageAndRelease(page);
+        status = inpdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page, for bilevel grayscale images\n";

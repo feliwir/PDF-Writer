@@ -37,15 +37,14 @@ TEST(PDF, EmptyPagesPDF)
                                 logConfiguration);
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     for (int i = 0; i < 4 && PDFHummus::eSuccess == status; ++i)
     {
         status = pdfWriter.WritePage(page);
         ASSERT_EQ(status, PDFHummus::eSuccess);
     }
-    delete page;
 
     status = pdfWriter.EndPDF();
     ASSERT_EQ(status, PDFHummus::eSuccess);

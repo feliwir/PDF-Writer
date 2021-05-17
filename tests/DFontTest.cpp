@@ -48,8 +48,8 @@ TEST(FontPackages, DFont)
         ASSERT_NE(courierFonts[i], nullptr);
     }
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(contentContext, nullptr);
@@ -68,7 +68,7 @@ TEST(FontPackages, DFont)
     status = pdfWriter.EndPageContentContext(contentContext);
     ASSERT_EQ(status, eSuccess);
 
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     ASSERT_EQ(status, eSuccess);
 
     status = pdfWriter.EndPDF();

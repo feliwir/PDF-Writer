@@ -47,8 +47,8 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (nullptr == contentContext)
@@ -77,7 +77,7 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     if (status != PDFHummus::eSuccess)
         return status;
 
@@ -125,8 +125,8 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    auto *page = new PDFPage();
-    page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    PDFPage page;
+    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
@@ -155,7 +155,7 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
     if (status != PDFHummus::eSuccess)
         return status;
 
-    status = pdfWriter.WritePageAndRelease(page);
+    status = pdfWriter.WritePage(page);
     if (status != PDFHummus::eSuccess)
         return status;
 

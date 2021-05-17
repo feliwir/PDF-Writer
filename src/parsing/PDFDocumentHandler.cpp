@@ -810,7 +810,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
         newPage.SetRotate(pageInput.GetRotate());
 
         // copy the page content to the target page content
-        if (CopyPageContentToTargetPagePassthrough(&newPage, pageObject.GetPtr()) != PDFHummus::eSuccess)
+        if (CopyPageContentToTargetPagePassthrough(newPage, pageObject.GetPtr()) != PDFHummus::eSuccess)
             break;
 
         // resources dictionary is gonna be empty at this point...so we can use our own code to write the dictionary, by
@@ -819,7 +819,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
         mDocumentContext->AddDocumentContextExtender(this);
         mWrittenPage = pageObject.GetPtr();
 
-        result = mDocumentContext->WritePage(&newPage);
+        result = mDocumentContext->WritePage(newPage);
         if (result.first != PDFHummus::eSuccess)
             break;
 
@@ -833,7 +833,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
         it = mExtenders.begin();
         for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
         {
-            result.first = (*it)->OnAfterCreatePageFromPage(&newPage, pageObject.GetPtr(), mObjectsContext,
+            result.first = (*it)->OnAfterCreatePageFromPage(newPage, pageObject.GetPtr(), mObjectsContext,
                                                             mDocumentContext, this);
             if (result.first != PDFHummus::eSuccess)
                 TRACE_LOG("DocumentContext::CreatePDFFormXObjectForPage, unexpected failure. extender declared failure "
@@ -844,7 +844,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
     return result;
 }
 
-EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage *inPage, PDFDictionary *inPageObject)
+EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage &inPage, PDFDictionary *inPageObject)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -861,7 +861,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage *
         status = copyObjectStatus.first;
         if (PDFHummus::eSuccess == status)
         {
-            inPage->AddContentStreamReference(copyObjectStatus.second);
+            inPage.AddContentStreamReference(copyObjectStatus.second);
         }
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
@@ -882,7 +882,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage *
             status = copyObjectStatus.first;
             if (PDFHummus::eSuccess == status)
             {
-                inPage->AddContentStreamReference(copyObjectStatus.second);
+                inPage.AddContentStreamReference(copyObjectStatus.second);
             }
         }
     }
@@ -897,7 +897,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage *
     return status;
 }
 
-EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage *inPage, PDFDictionary *inPageObject)
+EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPage, PDFDictionary *inPageObject)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -1213,7 +1213,7 @@ void PDFDocumentHandler::RemoveDocumentContextExtender(IDocumentContextExtender 
     mExtenders.erase(inExtender);
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage *inPage, const std::string &inPDFFilePath,
+EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
                                                     const PDFParsingOptions &inParsingOptions,
                                                     const PDFPageRange &inPageRange,
                                                     const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -1224,7 +1224,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage *inPage, const std::
     return MergePDFPagesToPageInContext(inPage, inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage *inPage, const PDFPageRange &inPageRange,
+EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage &inPage, const PDFPageRange &inPageRange,
                                                              const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     EStatusCode status = PDFHummus::eSuccess;
@@ -1301,7 +1301,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage *inPage, co
     return status;
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex)
+EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex)
 {
     RefCountPtr<PDFDictionary> pageObject = mParser->ParsePage(inSourcePageIndex);
     EStatusCode status = PDFHummus::eSuccess;
@@ -1363,7 +1363,7 @@ EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage *inTargetPage, unsig
     return status;
 }
 
-EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFDictionary *inPage,
+EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, PDFDictionary *inPage,
                                                      StringToStringMap &outMappedResourcesNames)
 {
     // parse each individual resources dictionary separately and copy the resources. the output parameter should be used
@@ -1383,7 +1383,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
     {
         SingleValueContainerIterator<PDFObjectVector> it(procsets->GetIterator());
         while (it.MoveNext())
-            inTargetPage->GetResourcesDictionary().AddProcsetResource(((PDFName *)it.GetItem())->GetValue());
+            inTargetPage.GetResourcesDictionary().AddProcsetResource(((PDFName *)it.GetItem())->GetValue());
     }
 
     do
@@ -1403,7 +1403,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddExtGStateMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddExtGStateMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1421,7 +1421,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddColorSpaceMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddColorSpaceMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1439,7 +1439,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddPatternMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddPatternMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1457,7 +1457,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddShadingMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddShadingMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1475,7 +1475,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddXObjectMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddXObjectMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1493,7 +1493,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddFontMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddFontMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1511,7 +1511,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage *inTargetPage, PDFD
                     status = PDFHummus::eFailure;
                 outMappedResourcesNames.insert(StringToStringMap::value_type(
                     AsEncodedName(it.GetKey()->GetValue()),
-                    inTargetPage->GetResourcesDictionary().AddPropertyMapping(result.second)));
+                    inTargetPage.GetResourcesDictionary().AddPropertyMapping(result.second)));
             }
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1581,7 +1581,7 @@ EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(PDFObject *inOb
         return status;
 }
 
-EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage *inTargetPage, PDFDictionary *inSourcePage,
+EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPage, PDFDictionary *inSourcePage,
                                                              const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = PDFHummus::eSuccess;
@@ -1773,7 +1773,7 @@ EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTa
     return status;
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPageToPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex)
+EStatusCode PDFDocumentHandler::MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex)
 {
     EStatusCode status;
 
@@ -1835,7 +1835,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(
     return AppendPDFPagesFromPDFInContext(inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage *inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
                                                     const PDFParsingOptions &inParsingOptions,
                                                     const PDFPageRange &inPageRange,
                                                     const ObjectIDTypeList &inCopyAdditionalObjects)

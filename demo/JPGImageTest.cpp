@@ -57,8 +57,8 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -95,7 +95,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
         // continue page drawing size the image to 500,400
         pageContentContext->q();
         pageContentContext->cm(500, 0, 0, 400, 0, 0);
-        pageContentContext->Do(page->GetResourcesDictionary().AddImageXObjectMapping(imageXObject));
+        pageContentContext->Do(page.GetResourcesDictionary().AddImageXObjectMapping(imageXObject));
         pageContentContext->Q();
 
         delete imageXObject;
@@ -121,7 +121,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
         // continue page drawing size the image to 500,400
         pageContentContext->q();
         pageContentContext->cm(1, 0, 0, 1, 0, 400);
-        pageContentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
+        pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(formXObject->GetObjectID()));
         pageContentContext->Q();
 
         delete formXObject;
@@ -133,7 +133,7 @@ EStatusCode JPGImageTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";

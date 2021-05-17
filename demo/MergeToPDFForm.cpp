@@ -57,8 +57,8 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
 
         // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         copyingContext = pdfWriter.CreatePDFCopyingContext(
             RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/Linearized.pdf"));
@@ -92,7 +92,7 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
         // now place it in the page
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
 
-        string formName = page->GetResourcesDictionary().AddFormXObjectMapping(formID);
+        string formName = page.GetResourcesDictionary().AddFormXObjectMapping(formID);
 
         pageContentContext->q();
         pageContentContext->Do(formName);
@@ -104,7 +104,7 @@ EStatusCode MergeToPDFForm::Run(const TestConfiguration &inTestConfiguration)
         if (status != eSuccess)
             break;
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
             break;
 

@@ -63,15 +63,15 @@ EStatusCode PDFEmbedTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        auto *page = new PDFPage();
-        page->SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        PDFPage page;
+        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
 
         // place the first page in the top left corner of the document
         contentContext->q();
         contentContext->cm(0.5, 0, 0, 0.5, 0, 421);
-        contentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(result.second.front()));
+        contentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(result.second.front()));
         contentContext->Q();
 
         contentContext->G(0);
@@ -82,7 +82,7 @@ EStatusCode PDFEmbedTest::Run(const TestConfiguration &inTestConfiguration)
         // place the second page in the bottom right corner of the document
         contentContext->q();
         contentContext->cm(0.5, 0, 0, 0.5, 297.5, 0);
-        contentContext->Do(page->GetResourcesDictionary().AddFormXObjectMapping(result.second.back()));
+        contentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(result.second.back()));
         contentContext->Q();
 
         contentContext->G(0);
@@ -97,7 +97,7 @@ EStatusCode PDFEmbedTest::Run(const TestConfiguration &inTestConfiguration)
             break;
         }
 
-        status = pdfWriter.WritePageAndRelease(page);
+        status = pdfWriter.WritePage(page);
         if (status != PDFHummus::eSuccess)
         {
             cout << "failed to write page\n";

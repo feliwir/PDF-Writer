@@ -134,7 +134,7 @@ class DocumentContext
     // Use StartPageContentContext for creating a page content for this page.
     // using the context you can now start creating content for it.
     // if this page already has a content context, it will be returned
-    PageContentContext *StartPageContentContext(PDFPage *inPage);
+    PageContentContext *StartPageContentContext(PDFPage &inPage);
 
     // Use PausePageContentContext in order to flush a current content write, in order
     // to write some other object. A common use case is when wanting to use an image in a page.
@@ -147,9 +147,9 @@ class DocumentContext
     PDFHummus::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
 
     // Determine whether this page already has a content context
-    bool HasContentContext(PDFPage *inPage);
+    bool HasContentContext(PDFPage &inPage);
 
-    EStatusCodeAndObjectIDType WritePage(PDFPage *inPage);
+    EStatusCodeAndObjectIDType WritePage(PDFPage &inPage);
     EStatusCodeAndObjectIDType WritePageAndRelease(PDFPage *inPage);
 
     // Use this to add annotation references to a page. the references will be written on the next page write (see
@@ -256,12 +256,12 @@ class DocumentContext
 
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage *inPage, const std::string &inPDFFilePath,
+    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
                                                const PDFParsingOptions &inParsingOptions,
                                                const PDFPageRange &inPageRange,
                                                const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
 
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage *inPage, IByteReaderWithPosition *inPDFStream,
+    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
                                                const PDFParsingOptions &inParsingOptions,
                                                const PDFPageRange &inPageRange,
                                                const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
@@ -306,7 +306,7 @@ class DocumentContext
     // returns the name of the newley added resource
     std::string AddExtendedResourceMapping(PDFFormXObject *inFormXObject, const std::string &inResourceCategoryName,
                                            IResourceWritingTask *inWritingTask);
-    std::string AddExtendedResourceMapping(PDFPage *inPage, const std::string &inResourceCategoryName,
+    std::string AddExtendedResourceMapping(PDFPage &inPage, const std::string &inResourceCategoryName,
                                            IResourceWritingTask *inWritingTask);
     std::string AddExtendedResourceMapping(PDFTiledPattern *inTiledPattern, const std::string &inResourceCategoryName,
                                            IResourceWritingTask *inWritingTask);
@@ -317,7 +317,7 @@ class DocumentContext
     // Extensibility option. option of writing a single time task for when a particular form ends
     void RegisterFormEndWritingTask(PDFFormXObject *inFormXObject, IFormEndWritingTask *inWritingTask);
     // Extensibility option. option of writing a single time task for when a particular page ends
-    void RegisterPageEndWritingTask(PDFPage *inPageObject, IPageEndWritingTask *inWritingTask);
+    void RegisterPageEndWritingTask(PDFPage &inPageObject, IPageEndWritingTask *inWritingTask);
     // Extensibility option. option of writing a single time task for when a particular pattern ends
     void RegisterTiledPatternEndWritingTask(PDFTiledPattern *inTiledPatternObject,
                                             ITiledPatternEndWritingTask *inWritingTask);

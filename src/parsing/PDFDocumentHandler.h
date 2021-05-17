@@ -157,12 +157,12 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
 
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage *inPage, const std::string &inPDFFilePath,
+    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
                                                const PDFParsingOptions &inParsingOptions,
                                                const PDFPageRange &inPageRange,
                                                const ObjectIDTypeList &inCopyAdditionalObjects);
 
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage *inPage, IByteReaderWithPosition *inPDFStream,
+    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
                                                const PDFParsingOptions &inParsingOptions,
                                                const PDFPageRange &inPageRange,
                                                const ObjectIDTypeList &inCopyAdditionalObjects);
@@ -191,7 +191,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                             const double *inTransformationMatrix,
                                                             ObjectIDType inPredefinedFormId);
     EStatusCodeAndObjectIDType AppendPDFPageFromPDF(unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex);
+    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
     PDFHummus::EStatusCode MergePDFPageToFormXObject(PDFFormXObject *inTargetFormXObject,
                                                      unsigned long inSourcePageIndex);
     EStatusCodeAndObjectIDType CopyObject(ObjectIDType inSourceObjectID);
@@ -257,17 +257,17 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
 
     EStatusCodeAndObjectIDType CreatePDFPageForPage(unsigned long inPageIndex);
 
-    PDFHummus::EStatusCode CopyPageContentToTargetPagePassthrough(PDFPage *inPage, PDFDictionary *inPageObject);
-    PDFHummus::EStatusCode CopyPageContentToTargetPageRecoded(PDFPage *inPage, PDFDictionary *inPageObject);
+    PDFHummus::EStatusCode CopyPageContentToTargetPagePassthrough(PDFPage &inPage, PDFDictionary *inPageObject);
+    PDFHummus::EStatusCode CopyPageContentToTargetPageRecoded(PDFPage &inPage, PDFDictionary *inPageObject);
 
     PDFHummus::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
                                                                PDFStreamInput *inContentSource);
-    PDFHummus::EStatusCode MergePDFPageForPage(PDFPage *inTargetPage, unsigned long inSourcePageIndex);
-    PDFHummus::EStatusCode MergeResourcesToPage(PDFPage *inTargetPage, PDFDictionary *inPage,
+    PDFHummus::EStatusCode MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
+    PDFHummus::EStatusCode MergeResourcesToPage(PDFPage &inTargetPage, PDFDictionary *inPage,
                                                 StringToStringMap &outMappedResourcesNames);
     EStatusCodeAndObjectIDType CopyObjectToIndirectObject(PDFObject *inObject);
     PDFHummus::EStatusCode CopyDirectObjectToIndirectObject(PDFObject *inObject, ObjectIDType inTargetObjectID);
-    PDFHummus::EStatusCode MergePageContentToTargetPage(PDFPage *inTargetPage, PDFDictionary *inSourcePage,
+    PDFHummus::EStatusCode MergePageContentToTargetPage(PDFPage &inTargetPage, PDFDictionary *inSourcePage,
                                                         const StringToStringMap &inMappedResourcesNames);
     PDFHummus::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
                                                                PDFStreamInput *inContentSource,
@@ -295,7 +295,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                              const ObjectIDTypeList &inPredefinedFormIDs);
     EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDFInContext(const PDFPageRange &inPageRange,
                                                                   const ObjectIDTypeList &inCopyAdditionalObjects);
-    PDFHummus::EStatusCode MergePDFPagesToPageInContext(PDFPage *inPage, const PDFPageRange &inPageRange,
+    PDFHummus::EStatusCode MergePDFPagesToPageInContext(PDFPage &inPage, const PDFPageRange &inPageRange,
                                                         const ObjectIDTypeList &inCopyAdditionalObjects);
     PDFHummus::EStatusCode StartCopyingContext(IByteReaderWithPosition *inPDFStream,
                                                const PDFParsingOptions &inOptions);

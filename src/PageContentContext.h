@@ -29,7 +29,7 @@ class PDFStream;
 class PageContentContext : public AbstractContentContext
 {
   public:
-    PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage *inPageOfContext,
+    PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
                        ObjectsContext *inObjectsContext);
     virtual ~PageContentContext(void);
 
@@ -43,10 +43,10 @@ class PageContentContext : public AbstractContentContext
     void StartAStreamIfRequired();
 
     // Extensibility method, get the page to which this content is associated
-    PDFPage *GetAssociatedPage();
+    PDFPage &GetAssociatedPage();
 
   private:
-    PDFPage *mPageOfContext;
+    PDFPage &mPageOfContext;
     ObjectsContext *mObjectsContext;
     PDFStream *mCurrentStream;
 

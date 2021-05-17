@@ -635,7 +635,7 @@ static const std::string scTrimBox = "TrimBox";
 static const std::string scArtBox = "ArtBox";
 static const std::string scContents = "Contents";
 
-EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage *inPage)
+EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
 {
     EStatusCodeAndObjectIDType result;
 
@@ -655,52 +655,52 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage *inPage)
 
     // Media Box
     pageContext->WriteKey(scMediaBox);
-    pageContext->WriteRectangleValue(inPage->GetMediaBox());
+    pageContext->WriteRectangleValue(inPage.GetMediaBox());
 
     // Rotate
-    if (inPage->GetRotate().first)
+    if (inPage.GetRotate().first)
     {
         pageContext->WriteKey(scRotate);
-        pageContext->WriteIntegerValue(inPage->GetRotate().second);
+        pageContext->WriteIntegerValue(inPage.GetRotate().second);
     }
 
     // Crop Box
     PDFRectangle cropBox;
-    if (inPage->GetCropBox().first && (inPage->GetCropBox().second != inPage->GetMediaBox()))
+    if (inPage.GetCropBox().first && (inPage.GetCropBox().second != inPage.GetMediaBox()))
     {
         pageContext->WriteKey(scCropBox);
-        pageContext->WriteRectangleValue(inPage->GetCropBox().second);
-        cropBox = inPage->GetCropBox().second;
+        pageContext->WriteRectangleValue(inPage.GetCropBox().second);
+        cropBox = inPage.GetCropBox().second;
     }
     else
-        cropBox = inPage->GetMediaBox();
+        cropBox = inPage.GetMediaBox();
 
     // Bleed Box
-    if (inPage->GetBleedBox().first && (inPage->GetBleedBox().second != cropBox))
+    if (inPage.GetBleedBox().first && (inPage.GetBleedBox().second != cropBox))
     {
         pageContext->WriteKey(scBleedBox);
-        pageContext->WriteRectangleValue(inPage->GetBleedBox().second);
+        pageContext->WriteRectangleValue(inPage.GetBleedBox().second);
     }
 
     // Trim Box
-    if (inPage->GetTrimBox().first && (inPage->GetTrimBox().second != cropBox))
+    if (inPage.GetTrimBox().first && (inPage.GetTrimBox().second != cropBox))
     {
         pageContext->WriteKey(scTrimBox);
-        pageContext->WriteRectangleValue(inPage->GetTrimBox().second);
+        pageContext->WriteRectangleValue(inPage.GetTrimBox().second);
     }
 
     // Art Box
-    if (inPage->GetArtBox().first && (inPage->GetArtBox().second != cropBox))
+    if (inPage.GetArtBox().first && (inPage.GetArtBox().second != cropBox))
     {
         pageContext->WriteKey(scArtBox);
-        pageContext->WriteRectangleValue(inPage->GetArtBox().second);
+        pageContext->WriteRectangleValue(inPage.GetArtBox().second);
     }
 
     do
     {
         // Resource dict
         pageContext->WriteKey(scResources);
-        result.first = WriteResourcesDictionary(inPage->GetResourcesDictionary());
+        result.first = WriteResourcesDictionary(inPage.GetResourcesDictionary());
         if (result.first != PDFHummus::eSuccess)
         {
             TRACE_LOG("DocumentContext::WritePage, failed to write resources dictionary");
@@ -722,12 +722,12 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage *inPage)
         mAnnotations.clear();
 
         // Content
-        if (inPage->GetContentStreamsCount() > 0)
+        if (inPage.GetContentStreamsCount() > 0)
         {
-            SingleValueContainerIterator<ObjectIDTypeList> iterator = inPage->GetContentStreamReferencesIterator();
+            SingleValueContainerIterator<ObjectIDTypeList> iterator = inPage.GetContentStreamReferencesIterator();
 
             pageContext->WriteKey(scContents);
-            if (inPage->GetContentStreamsCount() > 1)
+            if (inPage.GetContentStreamsCount() > 1)
             {
                 mObjectsContext->StartArray();
                 while (iterator.MoveNext())
@@ -762,7 +762,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage *inPage)
         mObjectsContext->EndIndirectObject();
 
         // now write writing tasks
-        auto itPageTasks = mPageEndTasks.find(inPage);
+        auto itPageTasks = mPageEndTasks.find(&inPage);
 
         result.first = eSuccess;
         if (itPageTasks != mPageEndTasks.end())
@@ -785,7 +785,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage *inPage)
 
 EStatusCodeAndObjectIDType DocumentContext::WritePageAndRelease(PDFPage *inPage)
 {
-    EStatusCodeAndObjectIDType status = WritePage(inPage);
+    EStatusCodeAndObjectIDType status = WritePage(*inPage);
     delete inPage;
     return status;
 }
@@ -828,18 +828,18 @@ std::string DocumentContext::GenerateMD5IDForFile()
     return md5.ToStringAsString();
 }
 
-bool DocumentContext::HasContentContext(PDFPage *inPage)
+bool DocumentContext::HasContentContext(PDFPage &inPage)
 {
-    return inPage->GetAssociatedContentContext() != nullptr;
+    return inPage.GetAssociatedContentContext() != nullptr;
 }
 
-PageContentContext *DocumentContext::StartPageContentContext(PDFPage *inPage)
+PageContentContext *DocumentContext::StartPageContentContext(PDFPage &inPage)
 {
-    if (inPage->GetAssociatedContentContext() == nullptr)
+    if (inPage.GetAssociatedContentContext() == nullptr)
     {
-        inPage->AssociateContentContext(new PageContentContext(this, inPage, mObjectsContext));
+        inPage.AssociateContentContext(new PageContentContext(this, inPage, mObjectsContext));
     }
-    return inPage->GetAssociatedContentContext();
+    return inPage.GetAssociatedContentContext();
 }
 
 EStatusCode DocumentContext::PausePageContentContext(PageContentContext *inPageContext)
@@ -850,7 +850,7 @@ EStatusCode DocumentContext::PausePageContentContext(PageContentContext *inPageC
 EStatusCode DocumentContext::EndPageContentContext(PageContentContext *inPageContext)
 {
     EStatusCode status = inPageContext->FinalizeCurrentStream();
-    inPageContext->GetAssociatedPage()->DisassociateContentContext();
+    inPageContext->GetAssociatedPage().DisassociateContentContext();
     delete inPageContext;
     return status;
 }
@@ -1977,7 +1977,7 @@ ObjectIDTypeSet &DocumentContext::GetAnnotations()
     return mAnnotations;
 }
 
-EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage *inPage, const std::string &inPDFFilePath,
+EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
                                                  const PDFParsingOptions &inParsingOptions,
                                                  const PDFPageRange &inPageRange,
                                                  const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -2037,7 +2037,7 @@ EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(IByteReade
                                                      inCopyAdditionalObjects);
 }
 
-EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage *inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
                                                  const PDFParsingOptions &inParsingOptions,
                                                  const PDFPageRange &inPageRange,
                                                  const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -2101,9 +2101,7 @@ void DocumentContext::Cleanup()
     }
     mFormEndTasks.clear();
 
-    auto itPageEnd = mPageEndTasks.begin();
-
-    for (; itPageEnd != mPageEndTasks.end(); ++itPageEnd)
+    for (auto itPageEnd = mPageEndTasks.begin(); itPageEnd != mPageEndTasks.end(); ++itPageEnd)
     {
         auto itPageEndWritingTasks = itPageEnd->second.begin();
         for (; itPageEndWritingTasks != itPageEnd->second.end(); ++itPageEndWritingTasks)
@@ -2111,9 +2109,7 @@ void DocumentContext::Cleanup()
     }
     mPageEndTasks.clear();
 
-    auto itPatternEnd = mTiledPatternEndTasks.begin();
-
-    for (; itPatternEnd != mTiledPatternEndTasks.end(); ++itPatternEnd)
+    for (auto itPatternEnd = mTiledPatternEndTasks.begin(); itPatternEnd != mTiledPatternEndTasks.end(); ++itPatternEnd)
     {
         auto itTiledPatternEndWritingTasks = itPatternEnd->second.begin();
         for (; itTiledPatternEndWritingTasks != itPatternEnd->second.end(); ++itTiledPatternEndWritingTasks)
@@ -2608,10 +2604,10 @@ PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(PDFParser *i
         return context;
 }
 
-std::string DocumentContext::AddExtendedResourceMapping(PDFPage *inPage, const std::string &inResourceCategoryName,
+std::string DocumentContext::AddExtendedResourceMapping(PDFPage &inPage, const std::string &inResourceCategoryName,
                                                         IResourceWritingTask *inWritingTask)
 {
-    return AddExtendedResourceMapping(&inPage->GetResourcesDictionary(), inResourceCategoryName, inWritingTask);
+    return AddExtendedResourceMapping(&inPage.GetResourcesDictionary(), inResourceCategoryName, inWritingTask);
 }
 
 std::string DocumentContext::AddExtendedResourceMapping(PDFTiledPattern *inPattern,
@@ -2688,13 +2684,13 @@ void DocumentContext::RegisterFormEndWritingTask(PDFFormXObject *inFormXObject, 
     it->second.push_back(inWritingTask);
 }
 
-void DocumentContext::RegisterPageEndWritingTask(PDFPage *inPage, IPageEndWritingTask *inWritingTask)
+void DocumentContext::RegisterPageEndWritingTask(PDFPage &inPage, IPageEndWritingTask *inWritingTask)
 {
-    auto it = mPageEndTasks.find(inPage);
+    auto it = mPageEndTasks.find(&inPage);
 
     if (it == mPageEndTasks.end())
     {
-        it = mPageEndTasks.insert(PDFPageToIPageEndWritingTaskListMap::value_type(inPage, IPageEndWritingTaskList()))
+        it = mPageEndTasks.insert(PDFPageToIPageEndWritingTaskListMap::value_type(&inPage, IPageEndWritingTaskList()))
                  .first;
     }
 

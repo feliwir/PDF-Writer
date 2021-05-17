@@ -36,6 +36,6 @@ class IPageEndWritingTask
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFPage *inPageObject, ObjectsContext *inObjectsContext,
+    virtual PDFHummus::EStatusCode Write(PDFPage &inPageObject, ObjectsContext *inObjectsContext,
                                          PDFHummus::DocumentContext *inDocumentContext) = 0;
 };
