@@ -24,6 +24,8 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/JPGImageTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/LinksTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/LogTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/MergePDFPagesTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/MergeToPDFFormTest.cpp
  )
 
 if(BUILD_COVERAGE)

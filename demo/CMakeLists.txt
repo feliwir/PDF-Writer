@@ -4,8 +4,6 @@ add_executable(PDFWriterTestPlayground
 RotatedPagesPDF.cpp
 FileURL.cpp
 PDFWithPassword.cpp
-MergePDFPages.cpp
-MergeToPDFForm.cpp
 ModifyingEncryptedFile.cpp
 ModifyingExistingFileContent.cpp
 PageModifierTest.cpp
@@ -49,8 +47,6 @@ RotatedPagesPDF.h
 FileURL.h
 ITestUnit.h
 PDFWithPassword.h
-MergePDFPages.h
-MergeToPDFForm.h
 ModifyingEncryptedFile.h
 ModifyingExistingFileContent.h
 PageModifierTest.h
