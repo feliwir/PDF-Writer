@@ -18,23 +18,16 @@
 
 
 */
-#include "LogTest.h"
 #include "Log.h"
+#include "TestHelper.h"
 #include "Trace.h"
+#include <gtest/gtest.h>
 
 using namespace PDFHummus;
 
-LogTest::LogTest()
+TEST(IO, Log)
 {
-}
-
-LogTest::~LogTest()
-{
-}
-
-EStatusCode LogTest::Run(const TestConfiguration &inTestConfiguration)
-{
-    Log log(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "logTest.txt"), true);
+    Log log(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "logTest.txt"), true);
 
     log.LogEntry("testing wide string input");
 
@@ -44,11 +37,7 @@ EStatusCode LogTest::Run(const TestConfiguration &inTestConfiguration)
 
     Trace trace;
 
-    trace.SetLogSettings(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "traceTest.txt"), true, true);
+    trace.SetLogSettings(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "traceTest.txt"), true, true);
     trace.TraceToLog("Tracing number %d %d", 10, 20);
     trace.TraceToLog("Tracing some other items %s 0x%x", "hello", 20);
-
-    return PDFHummus::eSuccess;
 }
-
-ADD_CATEGORIZED_TEST(LogTest, "IO")

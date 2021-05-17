@@ -21,6 +21,9 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/ImagesAndFormsForwardReferenceTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/InputFlateDecodeTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/InputImagesAsStreamsTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/JPGImageTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/LinksTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/LogTest.cpp
  )
 
 if(BUILD_COVERAGE)

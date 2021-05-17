@@ -3,10 +3,6 @@ add_executable(PDFWriterTestPlayground
 #sources
 RotatedPagesPDF.cpp
 FileURL.cpp
-JpegLibTest.cpp
-JPGImageTest.cpp
-LinksTest.cpp
-LogTest.cpp
 PDFWithPassword.cpp
 MergePDFPages.cpp
 MergeToPDFForm.cpp
@@ -52,10 +48,6 @@ UnicodeTextUsage.cpp
 RotatedPagesPDF.h
 FileURL.h
 ITestUnit.h
-JpegLibTest.h
-JPGImageTest.h
-LinksTest.h
-LogTest.h
 PDFWithPassword.h
 MergePDFPages.h
 MergeToPDFForm.h
