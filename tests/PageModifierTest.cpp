@@ -39,8 +39,7 @@ TEST(Modification, PageModifier)
     status = pdfWriter.ModifyPDF(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), ePDFVersion13,
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentModified.pdf"),
-        LogConfiguration(true, true,
-                         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentModified.log")));
+        LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentModified.log")));
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     PDFModifiedPage modifiedPage(&pdfWriter, 0);

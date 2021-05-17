@@ -18,56 +18,32 @@ limitations under the License.
 
 
 */
-#include "ParsingBadXref.h"
 #include "EStatusCode.h"
+#include "TestHelper.h"
 #include "io/InputFile.h"
 #include "parsing/PDFParser.h"
 
 #include <fstream>
+#include <gtest/gtest.h>
 #include <iostream>
 #include <string>
 
-using namespace std;
 using namespace PDFHummus;
 
-ParsingBadXref::ParsingBadXref()
-{
-}
-
-ParsingBadXref::~ParsingBadXref()
-{
-}
-
-static EStatusCode openPDF(const string &path);
-
-EStatusCode openPDF(const string &path)
+static EStatusCode openPDF(const std::string &path)
 {
     PDFParser parser;
     InputFile pdfFile;
     EStatusCode status = pdfFile.OpenFile(path);
     if (status != eSuccess)
-    {
-        std::cout << "Invalid path: " << path.c_str() << std::endl;
         return status;
-    }
 
-    status = parser.StartPDFParsing(pdfFile.GetInputStream());
-    if (status != eSuccess)
-    {
-        std::cout << "Failed at start parsing" << std::endl;
-    }
-    return status;
+    return parser.StartPDFParsing(pdfFile.GetInputStream());
 }
 
-EStatusCode ParsingBadXref::Run(const TestConfiguration &inTestConfiguration)
+TEST(Parsing, ParsingBadXref)
 {
-    EStatusCode status = openPDF(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/test_bad_xref.pdf"));
-    if (status != eSuccess)
-    {
-        std::cout << "Failed at start parsing test_bad_xref.pdf" << std::endl;
-        return status;
-    }
-    return status;
+    EStatusCode status = openPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/test_bad_xref.pdf"));
+    // This should be a failure
+    ASSERT_EQ(status, PDFHummus::eFailure);
 }
-
-ADD_CATEGORIZED_TEST(ParsingBadXref, "Parsing")

@@ -4,9 +4,6 @@ add_executable(PDFWriterTestPlayground
 RotatedPagesPDF.cpp
 FileURL.cpp
 PDFWithPassword.cpp
-PageOrderModification.cpp
-ParsingFaulty.cpp
-PDFCopyingContextTest.cpp
 PDFDateTest.cpp
 PDFEmbedTest.cpp
 PDFObjectCastTest.cpp
@@ -40,9 +37,6 @@ RotatedPagesPDF.h
 FileURL.h
 ITestUnit.h
 PDFWithPassword.h
-PageOrderModification.h
-ParsingFaulty.h
-PDFCopyingContextTest.h
 PDFDateTest.h
 PDFEmbedTest.h
 PDFObjectCastTest.h

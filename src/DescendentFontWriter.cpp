@@ -60,55 +60,52 @@ EStatusCode DescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID, co
     mObjectsContext = inObjectsContext;
     mCIDSetObjectID = 0;
 
-    do
+    DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+
+    // Type
+    fontContext->WriteKey(scType);
+    fontContext->WriteNameValue(scFont);
+
+    // SubType
+    fontContext->WriteKey(scSubtype);
+    inDescendentFontWriterHelper->WriteSubTypeValue(fontContext);
+
+    // BaseFont
+    fontContext->WriteKey(scBaseFont);
+    fontContext->WriteNameValue(inFontName);
+
+    WriteWidths(inEncodedGlyphs, fontContext);
+
+    // CIDSystemInfo
+    fontContext->WriteKey(scCIDSystemInfo);
+    ObjectIDType cidSystemInfoObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+    fontContext->WriteNewObjectReferenceValue(cidSystemInfoObjectID);
+
+    // FontDescriptor
+    fontContext->WriteKey(scFontDescriptor);
+    ObjectIDType fontDescriptorObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+    fontContext->WriteNewObjectReferenceValue(fontDescriptorObjectID);
+
+    // free dictionary end writing
+    inDescendentFontWriterHelper->WriteAdditionalKeys(fontContext);
+
+    status = inObjectsContext->EndDictionary(fontContext);
+    if (status != PDFHummus::eSuccess)
     {
-        DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+        TRACE_LOG("CFFANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+        return status;
+    }
 
-        // Type
-        fontContext->WriteKey(scType);
-        fontContext->WriteNameValue(scFont);
+    inObjectsContext->EndIndirectObject();
 
-        // SubType
-        fontContext->WriteKey(scSubtype);
-        inDescendentFontWriterHelper->WriteSubTypeValue(fontContext);
+    WriteCIDSystemInfo(cidSystemInfoObjectID);
+    mWriterHelper = inDescendentFontWriterHelper; // save the helper pointer, to write the font program reference in
+                                                  // the descriptor
+    fontDescriptorWriter.WriteFontDescriptor(fontDescriptorObjectID, inFontName, &inFontInfo, inEncodedGlyphs,
+                                             inObjectsContext, this);
 
-        // BaseFont
-        fontContext->WriteKey(scBaseFont);
-        fontContext->WriteNameValue(inFontName);
-
-        WriteWidths(inEncodedGlyphs, fontContext);
-
-        // CIDSystemInfo
-        fontContext->WriteKey(scCIDSystemInfo);
-        ObjectIDType cidSystemInfoObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-        fontContext->WriteNewObjectReferenceValue(cidSystemInfoObjectID);
-
-        // FontDescriptor
-        fontContext->WriteKey(scFontDescriptor);
-        ObjectIDType fontDescriptorObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-        fontContext->WriteNewObjectReferenceValue(fontDescriptorObjectID);
-
-        // free dictionary end writing
-        inDescendentFontWriterHelper->WriteAdditionalKeys(fontContext);
-
-        status = inObjectsContext->EndDictionary(fontContext);
-        if (status != PDFHummus::eSuccess)
-        {
-            TRACE_LOG("CFFANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
-            break;
-        }
-
-        inObjectsContext->EndIndirectObject();
-
-        WriteCIDSystemInfo(cidSystemInfoObjectID);
-        mWriterHelper = inDescendentFontWriterHelper; // save the helper pointer, to write the font program reference in
-                                                      // the descriptor
-        fontDescriptorWriter.WriteFontDescriptor(fontDescriptorObjectID, inFontName, &inFontInfo, inEncodedGlyphs,
-                                                 inObjectsContext, this);
-
-        if (mCIDSetObjectID != 0u) // set by descriptor writer callback
-            WriteCIDSet(inEncodedGlyphs);
-    } while (false);
+    if (mCIDSetObjectID != 0u) // set by descriptor writer callback
+        WriteCIDSet(inEncodedGlyphs);
     return status;
 }
 

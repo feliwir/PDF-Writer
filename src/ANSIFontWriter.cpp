@@ -67,64 +67,60 @@ EStatusCode ANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFo
     mFontOccurrence = inFontOccurrence;
     mObjectsContext = inObjectsContext;
 
-    do
+    DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+
+    // Type
+    fontContext->WriteKey(scType);
+    fontContext->WriteNameValue(scFont);
+
+    // SubType
+    fontContext->WriteKey(scSubtype);
+    inANSIFontWriterHelper->WriteSubTypeValue(fontContext); // using the font particular type
+
+    // BaseFont
+    fontContext->WriteKey(scBaseFont);
+    fontContext->WriteNameValue(inSubsetFontName);
+
+    /*
+        as for widths.
+        i have to create a list/array of the characters ordered from lowest encoded value to highest, and fill it up
+       with the charachters mapped to glyphs. this will allow me to later write the highest and lowest char codes,
+       as well as loop the list and write the widths.
+    */
+    CalculateCharacterEncodingArray();
+
+    WriteWidths(fontContext);
+
+    if (inANSIFontWriterHelper->CanWriteDifferencesFromWinAnsi())
+        CalculateDifferences();
+    WriteEncoding(fontContext);
+
+    // ToUnicode
+    fontContext->WriteKey(scToUnicode);
+    ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+    fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
+
+    // FontDescriptor
+    fontContext->WriteKey(scFontDescriptor);
+    ObjectIDType fontDescriptorObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+    fontContext->WriteNewObjectReferenceValue(fontDescriptorObjectID);
+
+    status = inObjectsContext->EndDictionary(fontContext);
+    if (status != PDFHummus::eSuccess)
     {
-        DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+        TRACE_LOG("ANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+        return status;
+    }
 
-        // Type
-        fontContext->WriteKey(scType);
-        fontContext->WriteNameValue(scFont);
+    inObjectsContext->EndIndirectObject();
 
-        // SubType
-        fontContext->WriteKey(scSubtype);
-        inANSIFontWriterHelper->WriteSubTypeValue(fontContext); // using the font particular type
+    // if necessary, write a dictionary encoding
+    if (mDifferences.size() > 0)
+        WriteEncodingDictionary();
 
-        // BaseFont
-        fontContext->WriteKey(scBaseFont);
-        fontContext->WriteNameValue(inSubsetFontName);
-
-        /*
-            as for widths.
-            i have to create a list/array of the characters ordered from lowest encoded value to highest, and fill it up
-           with the charachters mapped to glyphs. this will allow me to later write the highest and lowest char codes,
-           as well as loop the list and write the widths.
-        */
-        CalculateCharacterEncodingArray();
-
-        WriteWidths(fontContext);
-
-        if (inANSIFontWriterHelper->CanWriteDifferencesFromWinAnsi())
-            CalculateDifferences();
-        WriteEncoding(fontContext);
-
-        // ToUnicode
-        fontContext->WriteKey(scToUnicode);
-        ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-        fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
-
-        // FontDescriptor
-        fontContext->WriteKey(scFontDescriptor);
-        ObjectIDType fontDescriptorObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-        fontContext->WriteNewObjectReferenceValue(fontDescriptorObjectID);
-
-        status = inObjectsContext->EndDictionary(fontContext);
-        if (status != PDFHummus::eSuccess)
-        {
-            TRACE_LOG("ANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
-            break;
-        }
-
-        inObjectsContext->EndIndirectObject();
-
-        // if necessary, write a dictionary encoding
-        if (mDifferences.size() > 0)
-            WriteEncodingDictionary();
-
-        WriteToUnicodeMap(toUnicodeMapObjectID);
-        fontDescriptorWriter.WriteFontDescriptor(fontDescriptorObjectID, inSubsetFontName, &inFontInfo,
-                                                 mCharactersVector, inObjectsContext,
-                                                 inANSIFontWriterHelper->GetCharsetWriter());
-    } while (false);
+    WriteToUnicodeMap(toUnicodeMapObjectID);
+    fontDescriptorWriter.WriteFontDescriptor(fontDescriptorObjectID, inSubsetFontName, &inFontInfo, mCharactersVector,
+                                             inObjectsContext, inANSIFontWriterHelper->GetCharsetWriter());
     return status;
 }
 

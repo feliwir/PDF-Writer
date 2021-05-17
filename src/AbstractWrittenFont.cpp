@@ -320,22 +320,19 @@ EStatusCode AbstractWrittenFont::WriteStateAfterDictionary(ObjectsContext *inSta
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    do
+    if (mCIDRepresentation != nullptr)
     {
-        if (mCIDRepresentation != nullptr)
-        {
-            status = WriteWrittenFontState(mCIDRepresentation, inStateWriter, mCidRepresentationObjectStateID);
-            if (status != PDFHummus::eSuccess)
-                break;
-        }
+        status = WriteWrittenFontState(mCIDRepresentation, inStateWriter, mCidRepresentationObjectStateID);
+        if (status != PDFHummus::eSuccess)
+            return status;
+    }
 
-        if (mANSIRepresentation != nullptr)
-        {
-            status = WriteWrittenFontState(mANSIRepresentation, inStateWriter, mAnsiRepresentationObjectStateID);
-            if (status != PDFHummus::eSuccess)
-                break;
-        }
-    } while (false);
+    if (mANSIRepresentation != nullptr)
+    {
+        status = WriteWrittenFontState(mANSIRepresentation, inStateWriter, mAnsiRepresentationObjectStateID);
+        if (status != PDFHummus::eSuccess)
+            return status;
+    }
 
     return status;
 }

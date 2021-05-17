@@ -66,80 +66,72 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFon
     mFontOccurrence = inFontOccurrence;
     mObjectsContext = inObjectsContext;
 
-    do
+    DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+
+    // Type
+    fontContext->WriteKey(scType);
+    fontContext->WriteNameValue(scFont);
+
+    // SubType
+    fontContext->WriteKey(scSubtype);
+    fontContext->WriteNameValue(scType0);
+
+    // BaseFont
+    fontContext->WriteKey(scBaseFont);
+    std::string postscriptFontName = inFontInfo.GetPostscriptName();
+    if (postscriptFontName.length() == 0)
     {
-        DictionaryContext *fontContext = inObjectsContext->StartDictionary();
+        TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. no postscript font name for font");
+        return PDFHummus::eFailure;
+    }
+    std::string fontName =
+        inEmbedFont ? (inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName) : postscriptFontName;
+    fontContext->WriteNameValue(fontName);
 
-        // Type
-        fontContext->WriteKey(scType);
-        fontContext->WriteNameValue(scFont);
+    WriteEncoding(fontContext);
 
-        // SubType
-        fontContext->WriteKey(scSubtype);
-        fontContext->WriteNameValue(scType0);
+    // DescendantFonts
+    ObjectIDType descendantFontID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
 
-        // BaseFont
-        fontContext->WriteKey(scBaseFont);
-        std::string postscriptFontName = inFontInfo.GetPostscriptName();
-        if (postscriptFontName.length() == 0)
+    fontContext->WriteKey(scDescendantFonts);
+    mObjectsContext->StartArray();
+    mObjectsContext->WriteNewIndirectObjectReference(descendantFontID);
+    mObjectsContext->EndArray(eTokenSeparatorEndLine);
+
+    CalculateCharacterEncodingArray(); // put the charachter in the order of encoding, for the ToUnicode map
+
+    // ToUnicode
+    if (mCharactersVector.size() > 1)
+    {
+        // make sure there's more than just the 0 char (which would make this an array of size of one
+        fontContext->WriteKey(scToUnicode);
+        ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
+        fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
+
+        status = inObjectsContext->EndDictionary(fontContext);
+        if (status != PDFHummus::eSuccess)
         {
-            TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. no postscript font name for font");
-            status = PDFHummus::eFailure;
-            break;
+            TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+            return status;
         }
-        std::string fontName = inEmbedFont
-                                   ? (inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName)
-                                   : postscriptFontName;
-        fontContext->WriteNameValue(fontName);
-
-        WriteEncoding(fontContext);
-
-        // DescendantFonts
-        ObjectIDType descendantFontID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-
-        fontContext->WriteKey(scDescendantFonts);
-        mObjectsContext->StartArray();
-        mObjectsContext->WriteNewIndirectObjectReference(descendantFontID);
-        mObjectsContext->EndArray(eTokenSeparatorEndLine);
-
-        CalculateCharacterEncodingArray(); // put the charachter in the order of encoding, for the ToUnicode map
-
-        // ToUnicode
-        if (mCharactersVector.size() > 1)
+        inObjectsContext->EndIndirectObject();
+        WriteToUnicodeMap(toUnicodeMapObjectID);
+    }
+    else
+    {
+        // else just finish font writing (a bit of an edge case here...but should take care of, for cleanliness)
+        status = inObjectsContext->EndDictionary(fontContext);
+        if (status != PDFHummus::eSuccess)
         {
-            // make sure there's more than just the 0 char (which would make this an array of size of one
-            fontContext->WriteKey(scToUnicode);
-            ObjectIDType toUnicodeMapObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
-            fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
-
-            status = inObjectsContext->EndDictionary(fontContext);
-            if (status != PDFHummus::eSuccess)
-            {
-                TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
-                break;
-            }
-            inObjectsContext->EndIndirectObject();
-            WriteToUnicodeMap(toUnicodeMapObjectID);
+            TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
+            return status;
         }
-        else
-        {
-            // else just finish font writing (a bit of an edge case here...but should take care of, for cleanliness)
-            status = inObjectsContext->EndDictionary(fontContext);
-            if (status != PDFHummus::eSuccess)
-            {
-                TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
-                break;
-            }
-            inObjectsContext->EndIndirectObject();
-        }
+        inObjectsContext->EndIndirectObject();
+    }
 
-        // Write the descendant font
-        status = inDescendentFontWriter->WriteFont(descendantFontID, fontName, *mFontInfo, mCharactersVector,
-                                                   mObjectsContext, inEmbedFont);
-
-    } while (false);
-
-    return status;
+    // Write the descendant font
+    return inDescendentFontWriter->WriteFont(descendantFontID, fontName, *mFontInfo, mCharactersVector, mObjectsContext,
+                                             inEmbedFont);
 }
 
 static const std::string scEncoding = "Encoding";

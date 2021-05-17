@@ -31,9 +31,13 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/OpenTypeTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/OutputFileStreamTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PageModifierTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PageOrderModificationTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParsingBadXrefTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ParsingFaultyTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFComment.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFCopyingContextTest.cpp
  )
 
 if(BUILD_COVERAGE)
