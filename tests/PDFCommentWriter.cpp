@@ -13,12 +13,8 @@ PDFCommentWriter::PDFCommentWriter(PDFWriter *inPDFWriter)
     mPDFWriter = inPDFWriter;
 }
 
-PDFCommentWriter::~PDFCommentWriter()
-{
-}
-
 EStatusCode PDFCommentWriter::AttachCommentTreeToNextPage(PDFComment *inComment,
-                                                          PDFCommentToObjectIDTypeMap &ioPageCommentsContext)
+                                                          std::map<PDFComment *, ObjectIDType> &ioPageCommentsContext)
 {
 
     EStatusCode status = WriteCommentsTree(inComment, ioPageCommentsContext).first;
@@ -34,7 +30,7 @@ EStatusCode PDFCommentWriter::AttachCommentTreeToNextPage(PDFComment *inComment,
 }
 
 EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inComment,
-                                                               PDFCommentToObjectIDTypeMap &inCommentsContext)
+                                                               std::map<PDFComment *, ObjectIDType> &inCommentsContext)
 {
     EStatusCodeAndObjectIDType result;
     ObjectIDType repliedTo = 0;
@@ -142,7 +138,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
         }
         objectsContext.EndIndirectObject();
 
-        inCommentsContext.insert(PDFCommentToObjectIDTypeMap::value_type(inComment, result.second));
+        inCommentsContext.insert({inComment, result.second});
 
         result.first = eSuccess;
     } while (false);
@@ -151,7 +147,7 @@ EStatusCodeAndObjectIDType PDFCommentWriter::WriteCommentsTree(PDFComment *inCom
 }
 
 EStatusCode PDFCommentWriter::WriteCommentTree(PDFComment *inComment,
-                                               PDFCommentToObjectIDTypeMap &ioPageCommentsContext)
+                                               std::map<PDFComment *, ObjectIDType> &ioPageCommentsContext)
 {
 
     return WriteCommentsTree(inComment, ioPageCommentsContext).first;

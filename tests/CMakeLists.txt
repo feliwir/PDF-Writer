@@ -26,6 +26,14 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/LogTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MergePDFPagesTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/MergeToPDFFormTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ModifyingEncryptedFileTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ModifyingExistingFileContentTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OpenTypeTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/OutputFileStreamTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PageModifierTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFComment.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.h
  )
 
 if(BUILD_COVERAGE)

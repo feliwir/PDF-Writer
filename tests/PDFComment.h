@@ -7,16 +7,18 @@
 
 #include <string>
 
-using namespace std;
-
 class PDFComment
 {
   public:
-    PDFComment(void);
-    ~PDFComment(void);
+    PDFComment()
+    {
+        Time.SetToCurrentTime();
+        ReplyTo = nullptr;
+        FrameBoundings[0] = FrameBoundings[1] = FrameBoundings[2] = FrameBoundings[3] = 0.0;
+    }
 
-    string Text;
-    string CommentatorName;
+    std::string Text;
+    std::string CommentatorName;
     double FrameBoundings[4];
     CMYKRGBColor Color;
     PDFDate Time;

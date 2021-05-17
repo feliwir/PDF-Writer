@@ -147,10 +147,11 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingList &
         itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar.find(glyph.mGlyphCode);
         if (itEncoding == mCIDRepresentation->mGlyphIDToEncodedChar.end())
         {
-            itEncoding = mCIDRepresentation->mGlyphIDToEncodedChar
-                             .insert(UIntToGlyphEncodingInfoMap::value_type(
-                                 glyph.mGlyphCode, GlyphEncodingInfo(EncodeCIDGlyph(glyph.mGlyphCode), glyph.mUnicodeValues)))
-                             .first;
+            itEncoding =
+                mCIDRepresentation->mGlyphIDToEncodedChar
+                    .insert(UIntToGlyphEncodingInfoMap::value_type(
+                        glyph.mGlyphCode, GlyphEncodingInfo(EncodeCIDGlyph(glyph.mGlyphCode), glyph.mUnicodeValues)))
+                    .first;
         }
         outEncodedCharacters.push_back(itEncoding->second.mEncodedCharacter);
     }

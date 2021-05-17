@@ -1,5 +1,5 @@
 /*
-   Source File : OutputFileStreamTest.h
+   Source File : OutputFileStreamTest.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,15 +18,21 @@
 
 
 */
-#pragma once
+#include "io/OutputFileStream.h"
+#include "TestHelper.h"
 
-#include "TestsRunner.h"
+#include <gtest/gtest.h>
+#include <iostream>
 
-class OutputFileStreamTest : public ITestUnit
+using namespace PDFHummus;
+
+static const std::string scOutputFileStreamTest = "OutputFileStreamTest";
+
+TEST(IO, OutputFileStreamTest)
 {
-  public:
-    OutputFileStreamTest(void);
-    virtual ~OutputFileStreamTest(void);
+    OutputFileStream stream(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "OutputFileStreamTest.txt"));
+    uint8_t buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
-    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
-};
+    stream.Write(buffer, 5);
+    stream.Close();
+}
