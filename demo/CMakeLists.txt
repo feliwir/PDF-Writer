@@ -6,8 +6,6 @@ FileURL.cpp
 PDFObjectCastTest.cpp
 PDFObjectParserTest.cpp
 PDFParserTest.cpp
-PFBStreamTest.cpp
-PNGImageTest.cpp
 PosixPath.cpp
 RecryptPDF.cpp
 RefCountTest.cpp
@@ -17,7 +15,6 @@ SimpleTextUsage.cpp
 TestMeasurementsTest.cpp
 TestsRunner.cpp
 TextUsageBugs.cpp
-TIFFImageTest.cpp
 TiffSpecialsTest.cpp
 TimerTest.cpp
 UppercaseSequanceTest.cpp
@@ -32,8 +29,6 @@ ITestUnit.h
 PDFObjectCastTest.h
 PDFObjectParserTest.h
 PDFParserTest.h
-PFBStreamTest.h
-PNGImageTest.h
 PosixPath.h
 RecryptPDF.h
 RefCountTest.h
@@ -43,7 +38,6 @@ SimpleTextUsage.h
 TestMeasurementsTest.h
 TestsRunner.h
 TextUsageBugs.h
-TIFFImageTest.h
 TiffSpecialsTest.h
 TimerTest.h
 UppercaseSequanceTest.h
