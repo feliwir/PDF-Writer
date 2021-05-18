@@ -78,7 +78,7 @@ TEST(PDFImages, TIFFImage)
     for (int i = 1; i < 9 && status != PDFHummus::eFailure; ++i)
         status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
 
-                                                                         "data/images/tiff/CCITT_")) +
+                                                                              "data/images/tiff/CCITT_")) +
 
                                                Int(i).ToString() + ".TIF");
     ASSERT_EQ(status, PDFHummus::eSuccess);
@@ -164,9 +164,9 @@ TEST(PDFImages, TIFFImage)
 
     for (int i = 2; i < 9; i = i * 2)
     {
-        status = AddPageForTIFF(
-            pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-minisblack-")) +
-                           Int(i).ToString() + ".tif");
+        status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
+                                                                              "data/images/tiff/flower-minisblack-")) +
+                                               Int(i).ToString() + ".tif");
         ASSERT_EQ(status, PDFHummus::eSuccess);
     }
 
@@ -180,9 +180,9 @@ TEST(PDFImages, TIFFImage)
 
     for (int i = 2; i < 9; i = i * 2)
     {
-        status = AddPageForTIFF(
-            pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-rgb-contig-")) +
-                           Int(i).ToString() + ".tif");
+        status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
+                                                                              "data/images/tiff/flower-rgb-contig-")) +
+                                               Int(i).ToString() + ".tif");
         ASSERT_EQ(status, PDFHummus::eSuccess);
     }
 

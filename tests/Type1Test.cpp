@@ -115,7 +115,6 @@ void ShowPrivateInfoDictionary(const Type1PrivateDictionary &inPrivateDictionary
               << "RndStemUp = " << PSBool(inPrivateDictionary.RndStemUp).ToString().c_str() << "\n";
 }
 
-
 EStatusCode ShowDependencies(const std::string &inCharStringName, Type1Input *inType1Input)
 {
     CharString1Dependencies dependencies;

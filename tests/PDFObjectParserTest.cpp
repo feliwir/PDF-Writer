@@ -18,8 +18,9 @@ limitations under the License.
 
 
 */
-#include "PDFObjectParserTest.h"
+#include "parsing/PDFObjectParser.h"
 #include "PDFTextString.h"
+#include "TestHelper.h"
 #include "io/IByteWriterWithPosition.h"
 #include "io/OutputFile.h"
 #include "objects/PDFHexString.h"
@@ -27,20 +28,19 @@ limitations under the License.
 #include "objects/PDFObject.h"
 #include "objects/PDFObjectCast.h"
 #include "objects/helpers/ParsedPrimitiveHelper.h"
-#include "parsing/PDFObjectParser.h"
 #include "parsing/PDFParser.h"
 
+#include <gtest/gtest.h>
 #include <iostream>
 #include <sstream>
 
-using namespace std;
 using namespace PDFHummus;
 
 class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
 {
   private:
-    string mInput;
-    string::size_type mLen, mPos;
+    std::string mInput;
+    std::string::size_type mLen, mPos;
 
   public:
     size_t Read(uint8_t *inBuffer, size_t inBufferSize) override
@@ -66,23 +66,19 @@ class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
         return static_cast<long long>(mPos);
     };
 
-    void setInput(const string &input)
+    void setInput(const std::string &input)
     {
         mInput = input;
         mLen = input.size();
         mPos = 0;
     }
 
-    const string &getInput() const
+    const std::string &getInput() const
     {
         return mInput;
     }
 
     InputInterfaceToStream() : mLen(0), mPos(0)
-    {
-    }
-
-    ~InputInterfaceToStream() override
     {
     }
 };
@@ -93,22 +89,14 @@ class PDFObjectParserTestLogHelper
     OutputFile mOutput;
 
   public:
-    PDFObjectParserTestLogHelper()
-    {
-    }
-
-    ~PDFObjectParserTestLogHelper()
-    {
-    }
-
-    EStatusCode openLog(const string &path)
+    EStatusCode openLog(const std::string &path)
     {
         return mOutput.OpenFile(path);
     }
 
     template <class T> PDFObjectParserTestLogHelper &operator<<(T out)
     {
-        ostringstream ss;
+        std::ostringstream ss;
         ss << out;
         mOutput.GetOutputStream()->Write((const unsigned char *)ss.str().c_str(), ss.str().size());
         return *this;
@@ -130,7 +118,7 @@ template <class _resultObjectType> class ExpectedResult
     {
     }
 
-    int setResult(const string &input, const string &expected, PDFObjectParserTestLogHelper &log)
+    int setResult(const std::string &input, const std::string &expected, PDFObjectParserTestLogHelper &log)
     {
         if (!mObject)
         {
@@ -140,7 +128,7 @@ template <class _resultObjectType> class ExpectedResult
         if (!!mObject && !mTypedObject)
         {
             int object_type = mObject->GetType();
-            string result_type = "invalid";
+            std::string result_type = "invalid";
             if (object_type >= 0 && object_type <= PDFObject::ePDFObjectSymbol)
             {
                 result_type = PDFObject::scPDFObjectTypeLabel(mObject->GetType());
@@ -150,7 +138,7 @@ template <class _resultObjectType> class ExpectedResult
                 << result_type << "' from input: '" << input << "'\n";
             return 1;
         }
-        string result = PDFTextString(ParsedPrimitiveHelper(mTypedObject.GetPtr()).ToString()).ToUTF8String();
+        std::string result = PDFTextString(ParsedPrimitiveHelper(mTypedObject.GetPtr()).ToString()).ToUTF8String();
         if (result != expected)
         {
             log << "Failed parse. Expected '" << expected << "' got '" << result << "' from input: '" << input << "'\n";
@@ -161,51 +149,7 @@ template <class _resultObjectType> class ExpectedResult
     }
 };
 
-PDFObjectParserTest::PDFObjectParserTest()
-{
-}
-
-PDFObjectParserTest::~PDFObjectParserTest()
-{
-}
-
-EStatusCode PDFObjectParserTest::Run(const TestConfiguration &inTestConfiguration)
-{
-    int failures = 0;
-    PDFObjectParserTestLogHelper log;
-    if (log.openLog(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "PDFObjectParserTest.txt")) != eSuccess)
-    {
-        cout << "failed to initialize log output\n";
-        return eFailure;
-    }
-
-    PDFParser parser;
-    PDFObjectParser *pObjectParser = &parser.GetObjectParser();
-
-    if (ParseCommentedTokens(pObjectParser, &log) == eFailure)
-    {
-        ++failures;
-    }
-
-    if (ParseHexStringTokens(pObjectParser, &log) == eFailure)
-    {
-        ++failures;
-    }
-
-    if (ParseLiteralStringTokens(pObjectParser, &log) == eFailure)
-    {
-        ++failures;
-    }
-
-    if (failures > 0)
-    {
-        cout << "Failed tests in PDFObjectParserTest: " << failures << endl;
-        return eFailure;
-    }
-    return eSuccess;
-}
-
-EStatusCode PDFObjectParserTest::ParseCommentedTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log)
+EStatusCode ParseCommentedTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log)
 {
     int failures = 0;
     InputInterfaceToStream input;
@@ -229,14 +173,10 @@ EStatusCode PDFObjectParserTest::ParseCommentedTokens(PDFObjectParser *objectPar
         failures += result.setResult(input.getInput(), "AB", *log);
     };*/
 
-    if (failures > 0)
-    {
-        cout << "Failed tests in PDFObjectParserTest::ParseCommentedTokens: " << failures << endl;
-        return eFailure;
-    }
-    return eSuccess;
+    return (failures > 0) ? eFailure : eSuccess;
 }
-EStatusCode PDFObjectParserTest::ParseHexStringTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log)
+
+EStatusCode ParseHexStringTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log)
 {
     int failures = 0;
     InputInterfaceToStream input;
@@ -279,7 +219,7 @@ EStatusCode PDFObjectParserTest::ParseHexStringTokens(PDFObjectParser *objectPar
         objectParser->SetReadStream(&input, &input);
         ExpectedResult<PDFHexString> result(objectParser->ParseNewObject());
 
-        failures += result.setResult(input.getInput(), string("\x04\x00\x02\x01", 4), *log);
+        failures += result.setResult(input.getInput(), std::string("\x04\x00\x02\x01", 4), *log);
     };
 
     {
@@ -306,15 +246,10 @@ EStatusCode PDFObjectParserTest::ParseHexStringTokens(PDFObjectParser *objectPar
         failures += result.setResult(input.getInput(), "\x50", *log);
     };
 
-    if (failures > 0)
-    {
-        cout << "Failed tests in PDFObjectParserTest::ParseHexStringTokens: " << failures << endl;
-        return eFailure;
-    }
-    return eSuccess;
+    return (failures > 0) ? eFailure : eSuccess;
 }
-EStatusCode PDFObjectParserTest::ParseLiteralStringTokens(PDFObjectParser *objectParser,
-                                                          PDFObjectParserTestLogHelper *log)
+
+EStatusCode ParseLiteralStringTokens(PDFObjectParser *objectParser, PDFObjectParserTestLogHelper *log)
 {
     int failures = 0;
     InputInterfaceToStream input;
@@ -376,19 +311,25 @@ EStatusCode PDFObjectParserTest::ParseLiteralStringTokens(PDFObjectParser *objec
     };
 
     {
-        input.setInput(string("(\\376\\377\\0\\101)", 16)); // in hex this is: fe ff 00 41
+        input.setInput(std::string("(\\376\\377\\0\\101)", 16)); // in hex this is: fe ff 00 41
         objectParser->SetReadStream(&input, &input);
         ExpectedResult<PDFLiteralString> result(objectParser->ParseNewObject());
 
         failures += result.setResult(input.getInput(), "A", *log);
     };
 
-    if (failures > 0)
-    {
-        cout << "Failed tests in PDFObjectParserTest::ParseLiteralStringTokens: " << failures << endl;
-        return eFailure;
-    }
-    return eSuccess;
+    return (failures > 0) ? eFailure : eSuccess;
 }
 
-ADD_CATEGORIZED_TEST(PDFObjectParserTest, "Parsing")
+TEST(Parsing, PDFObjectParser)
+{
+    int failures = 0;
+    PDFObjectParserTestLogHelper log;
+    ASSERT_EQ(log.openLog(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFObjectParserTest.txt")), eSuccess);
+
+    PDFParser parser;
+    PDFObjectParser *pObjectParser = &parser.GetObjectParser();
+    EXPECT_EQ(ParseCommentedTokens(pObjectParser, &log), eSuccess);
+    EXPECT_EQ(ParseHexStringTokens(pObjectParser, &log), eSuccess);
+    EXPECT_EQ(ParseLiteralStringTokens(pObjectParser, &log), eSuccess);
+}

@@ -18,8 +18,10 @@
 
 
 */
-#include "PDFParserTest.h"
+#include "parsing/PDFParser.h"
+#include "ObjectsBasicTypes.h"
 #include "PrimitiveObjectsWriter.h"
+#include "TestHelper.h"
 #include "io/IByteWriterWithPosition.h"
 #include "io/InputFile.h"
 #include "io/OutputFile.h"
@@ -29,91 +31,20 @@
 #include "objects/PDFObject.h"
 #include "objects/PDFObjectCast.h"
 #include "objects/PDFStreamInput.h"
-#include "parsing/PDFParser.h"
 
+#include <gtest/gtest.h>
 #include <iostream>
 
-using namespace std;
 using namespace PDFHummus;
-
-PDFParserTest::PDFParserTest()
-{
-}
-
-PDFParserTest::~PDFParserTest()
-{
-}
-
-EStatusCode PDFParserTest::Run(const TestConfiguration &inTestConfiguration)
-{
-    EStatusCode status = PDFHummus::eSuccess;
-    InputFile pdfFile;
-    PDFParser parser;
-    OutputFile outputFile;
-
-    do
-    {
-        status =
-            pdfFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "data/XObjectContent.pdf"));
-        if (status != PDFHummus::eSuccess)
-        {
-            cout << "unable to open file for reading. should be in TestMaterials/XObjectContent.pdf\n";
-            break;
-        }
-
-        status = parser.StartPDFParsing(pdfFile.GetInputStream());
-        if (status != PDFHummus::eSuccess)
-        {
-            cout << "unable to parse input file";
-            break;
-        }
-
-        // now let's do something with what got parsed
-
-        if (parser.GetPDFLevel() != 1.3)
-        {
-            cout << "expecting level 1.3, got " << parser.GetPDFLevel() << "\n";
-            status = PDFHummus::eFailure;
-            break;
-        }
-
-        if (parser.GetPagesCount() != 2)
-        {
-            cout << "expecting 2 pages, got " << parser.GetPagesCount() << "\n";
-            status = PDFHummus::eFailure;
-            break;
-        }
-
-        // now just iterate, and print the object types
-        PDFObjectCastPtr<PDFDictionary> catalog(parser.QueryDictionaryObject(parser.GetTrailer(), "Root"));
-        if (!catalog)
-        {
-            cout << "Can't find catalog. fail\n";
-            status = PDFHummus::eFailure;
-            break;
-        }
-
-        mTabLevel = 0;
-        status =
-            outputFile.OpenFile(RelativeURLToLocalPath(inTestConfiguration.mSampleFileBase, "PDFParserTestOutput.txt"));
-
-        status = IterateObjectTypes(catalog.GetPtr(), parser, outputFile.GetOutputStream());
-        if (status != PDFHummus::eSuccess)
-        {
-            cout << "Failed iterating object types\n";
-            break;
-        }
-
-    } while (false);
-
-    return status;
-}
 
 static const char *scIndirectStart = "Indirect object reference:\r\n";
 static const char *scParsedAlready = "was parsed already\r\n";
 static const char *scIteratingStreamDict = "Stream . iterating stream dictionary:\r\n";
 
-EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWriter *inOutput)
+static int mTabLevel = 0;
+static std::set<ObjectIDType> mIteratedObjectIDs;
+
+EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWriter *inOutput)
 {
     PrimitiveObjectsWriter primitivesWriter;
 
@@ -132,8 +63,8 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
                 inParser.ParseNewObject(((PDFIndirectObjectReference *)inObject)->mObjectID));
             if (!pointedObject)
             {
-                cout << "\nFailed to retreive object of ID =" << ((PDFIndirectObjectReference *)inObject)->mObjectID
-                     << "\n";
+                std::cout << "\nFailed to retreive object of ID ="
+                          << ((PDFIndirectObjectReference *)inObject)->mObjectID << "\n";
                 return PDFHummus::eFailure;
             }
             return IterateObjectTypes(pointedObject.GetPtr(), inParser, inOutput);
@@ -188,4 +119,31 @@ EStatusCode PDFParserTest::IterateObjectTypes(PDFObject *inObject, PDFParser &in
     }
 }
 
-ADD_CATEGORIZED_TEST(PDFParserTest, "PDFEmbedding")
+TEST(PDFEmbedding, PDFParser)
+{
+    EStatusCode status = PDFHummus::eSuccess;
+    InputFile pdfFile;
+    PDFParser parser;
+    OutputFile outputFile;
+
+    status = pdfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"));
+    ASSERT_EQ(status, eSuccess);
+
+    status = parser.StartPDFParsing(pdfFile.GetInputStream());
+    ASSERT_EQ(status, eSuccess);
+
+    // now let's do something with what got parsed
+
+    ASSERT_EQ(parser.GetPDFLevel(), 1.3);
+    ASSERT_EQ(parser.GetPagesCount(), 2);
+
+    // now just iterate, and print the object types
+    PDFObjectCastPtr<PDFDictionary> catalog(parser.QueryDictionaryObject(parser.GetTrailer(), "Root"));
+    ASSERT_NE(catalog.GetPtr(), nullptr);
+
+    mTabLevel = 0;
+    status = outputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFParserTestOutput.txt"));
+
+    status = IterateObjectTypes(catalog.GetPtr(), parser, outputFile.GetOutputStream());
+    ASSERT_EQ(status, eSuccess);
+}

@@ -151,24 +151,25 @@ BoolAndFTUShort FreeTypeOpenTypeWrapper::StemVFromLowerLWidth()
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretch()
 {
-    return mOS2Table != nullptr
-               ? (EFontStretch)mOS2Table->usWidthClass
-               : mPCLTTable != nullptr ? GetFontStretchForPCLTValue(mPCLTTable->WidthType) : eFontStretchUknown;
+    return mOS2Table != nullptr    ? (EFontStretch)mOS2Table->usWidthClass
+           : mPCLTTable != nullptr ? GetFontStretchForPCLTValue(mPCLTTable->WidthType)
+                                   : eFontStretchUknown;
 }
 
 EFontStretch FreeTypeOpenTypeWrapper::GetFontStretchForPCLTValue(FT_Char inWidthValue)
 {
-    return (5 == inWidthValue)
-               ? eFontStretchUltraExpanded
-               : (-5 == inWidthValue) ? eFontStretchUltraCondensed : EFontStretch(eFontStretchNormal + inWidthValue);
+    return (5 == inWidthValue)    ? eFontStretchUltraExpanded
+           : (-5 == inWidthValue) ? eFontStretchUltraCondensed
+                                  : EFontStretch(eFontStretchNormal + inWidthValue);
 
     // mapping edges to extremes, the rest is linear
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeight()
 {
-    return mOS2Table != nullptr ? mOS2Table->usWeightClass
-                                : mPCLTTable != nullptr ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight) : 1000;
+    return mOS2Table != nullptr    ? mOS2Table->usWeightClass
+           : mPCLTTable != nullptr ? GetFontWeightFromPCLTValue(mPCLTTable->StrokeWeight)
+                                   : 1000;
 }
 
 FT_UShort FreeTypeOpenTypeWrapper::GetFontWeightFromPCLTValue(FT_Char inWeightValue)

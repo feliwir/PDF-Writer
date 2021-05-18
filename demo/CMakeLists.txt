@@ -4,8 +4,6 @@ add_executable(PDFWriterTestPlayground
 RotatedPagesPDF.cpp
 FileURL.cpp
 PDFObjectCastTest.cpp
-PDFObjectParserTest.cpp
-PDFParserTest.cpp
 PosixPath.cpp
 RecryptPDF.cpp
 RefCountTest.cpp
@@ -27,8 +25,6 @@ RotatedPagesPDF.h
 FileURL.h
 ITestUnit.h
 PDFObjectCastTest.h
-PDFObjectParserTest.h
-PDFParserTest.h
 PosixPath.h
 RecryptPDF.h
 RefCountTest.h
