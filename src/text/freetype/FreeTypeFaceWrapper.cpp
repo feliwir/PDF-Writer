@@ -103,7 +103,7 @@ std::string FreeTypeFaceWrapper::NotDefGlyphName()
                     mNotDefGlyphName = GetGlyphName(gindex, true);
             }
         }
-        if (mNotDefGlyphName == "")
+        if (mNotDefGlyphName.empty())
             mNotDefGlyphName = ".notdef";
     }
     return mNotDefGlyphName;

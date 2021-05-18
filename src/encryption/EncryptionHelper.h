@@ -67,7 +67,7 @@ class EncryptionHelper
        supported or that the encrytion mechanism is not currently in a state that encrypts (say when writing an
        encryption dictionary).
     */
-    bool IsEncrypting();
+    bool IsEncrypting() const;
 
     // use this to flag that encryption should not happen now. like when you are writing the encryption dictionary (well
     // in this case it is called internally) unencrypted metadata, or the trailer file ID

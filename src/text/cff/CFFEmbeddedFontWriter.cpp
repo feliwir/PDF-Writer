@@ -294,7 +294,7 @@ EStatusCode CFFEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UI
     CharString2Dependencies dependencies;
     EStatusCode status = mOpenTypeInput.mCFF.CalculateDependenciesForCharIndex(0, inGlyphID, dependencies);
 
-    if (PDFHummus::eSuccess == status && dependencies.mCharCodes.size() != 0)
+    if (PDFHummus::eSuccess == status && !dependencies.mCharCodes.empty())
     {
         auto it = dependencies.mCharCodes.begin();
         for (; it != dependencies.mCharCodes.end() && PDFHummus::eSuccess == status; ++it)
@@ -331,7 +331,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteName(const std::string &inSubsetFontName
 {
     // get the first name from the name table, and write it here
 
-    std::string fontName = inSubsetFontName.size() == 0 ? mOpenTypeInput.mCFF.mName.front() : inSubsetFontName;
+    std::string fontName = inSubsetFontName.empty() ? mOpenTypeInput.mCFF.mName.front() : inSubsetFontName;
 
     uint8_t sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)fontName.size() + 1);
 
@@ -509,7 +509,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteTopDictSegment(MyStringBuf &ioTopDictSeg
 EStatusCode CFFEmbeddedFontWriter::WriteStringIndex()
 {
     // if added a new string...needs to work hard, otherwise just copy the strings.
-    if (mOptionalEmbeddedPostscript.size() == 0)
+    if (mOptionalEmbeddedPostscript.empty())
     {
         // copy as is from the original file. note that the global subroutines
         // starting position is equal to the strings end position. hence length is...
@@ -608,7 +608,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
 
         mEncodingPosition = mFontFileStream.GetCurrentPosition();
 
-        if (supplements.size() > 0)
+        if (!supplements.empty())
             mPrimitivesWriter.WriteCard8(0x80);
         else
             mPrimitivesWriter.WriteCard8(0);
@@ -626,7 +626,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
                 mPrimitivesWriter.WriteCard8(0);
         }
 
-        if (supplements.size() > 0)
+        if (!supplements.empty())
         {
             mPrimitivesWriter.WriteCard8(uint8_t(supplements.size()));
             auto itCollectedSupplements = supplements.begin();
@@ -785,7 +785,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGly
 
     do
     {
-        if (inNewFontDictsIndexes.size() == 0)
+        if (inNewFontDictsIndexes.empty())
         {
             // if no valid font infos, write an empty index and finish
             mFDArrayPosition = mFontFileStream.GetCurrentPosition();

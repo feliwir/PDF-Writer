@@ -79,7 +79,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
             mInputFontsInformation = new FreeTypeWrapper();
 
         FT_Face face;
-        if (inOptionalMetricsFile.size() > 0)
+        if (!inOptionalMetricsFile.empty())
         {
             face = mInputFontsInformation->NewFace(inFontFilePath, inOptionalMetricsFile, inFontIndex);
             mOptionaMetricsFiles.insert(StringToStringMap::value_type(inFontFilePath, inOptionalMetricsFile));
@@ -184,7 +184,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
     inStateWriter->EndDictionary(usedFontsRepositoryObject);
     inStateWriter->EndIndirectObject();
 
-    if (usedFontsObjects.size() > 0)
+    if (!usedFontsObjects.empty())
     {
         it = mUsedFonts.begin();
         auto itIDs = usedFontsObjects.begin();

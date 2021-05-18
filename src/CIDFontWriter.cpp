@@ -225,7 +225,7 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnco
     SAFE_SPRINTF_1(formattingBuffer, 17, "<%04x> <", inEncodedCharacter);
     inWriter->Write((const uint8_t *)formattingBuffer, 8);
 
-    if (inUnicodeValues.size() == 0)
+    if (inUnicodeValues.empty())
     {
         inWriter->Write(scAllZeros, 4);
     }
@@ -237,7 +237,7 @@ void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnco
             EStatusCodeAndUShortList utf16Result = unicode.ToUTF16UShort();
             unicode.GetUnicodeList().clear();
 
-            if (utf16Result.first == eFailure || utf16Result.second.size() == 0)
+            if (utf16Result.first == eFailure || utf16Result.second.empty())
             {
                 TRACE_LOG1("CIDFontWriter::WriteGlyphEntry, got invalid glyph value. saving as 0. value = ", *it);
                 utf16Result.second.clear();

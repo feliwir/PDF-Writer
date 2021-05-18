@@ -73,7 +73,7 @@ bool EncryptionHelper::IsDocumentEncrypted() const
     return mIsDocumentEncrypted;
 }
 
-bool EncryptionHelper::IsEncrypting()
+bool EncryptionHelper::IsEncrypting() const
 {
     return IsDocumentEncrypted() && mEncryptionPauseLevel == 0;
 }
@@ -290,7 +290,7 @@ EStatusCode EncryptionHelper::Setup(bool inShouldEncrypt, double inPDFLevel, con
     mP = truncP;
 
     ByteList ownerPassword =
-        XCryptionCommon::stringToByteList(inOwnerPassword.size() > 0 ? inOwnerPassword : inUserPassword);
+        XCryptionCommon::stringToByteList(!inOwnerPassword.empty() ? inOwnerPassword : inUserPassword);
     ByteList userPassword = XCryptionCommon::stringToByteList(inUserPassword);
     mEncryptMetaData = inEncryptMetadata;
     mFileIDPart1 = XCryptionCommon::stringToByteList(inFileIDPart1);

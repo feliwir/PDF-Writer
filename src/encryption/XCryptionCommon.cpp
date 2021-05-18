@@ -84,7 +84,7 @@ const ByteList scEmptyByteList;
 
 const ByteList &XCryptionCommon::GetCurrentObjectKey()
 {
-    return mEncryptionKeysStack.size() > 0 ? mEncryptionKeysStack.back() : scEmptyByteList;
+    return !mEncryptionKeysStack.empty() ? mEncryptionKeysStack.back() : scEmptyByteList;
 }
 
 ByteList XCryptionCommon::stringToByteList(const std::string &inString)

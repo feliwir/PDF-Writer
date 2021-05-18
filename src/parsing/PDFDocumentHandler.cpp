@@ -152,7 +152,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDFInCo
         }
 
         // copy additional objects prior to pages, so we have them ready at page copying
-        if (inCopyAdditionalObjects.size() > 0)
+        if (!inCopyAdditionalObjects.empty())
         {
             result.first = WriteNewObjects(inCopyAdditionalObjects);
             if (result.first != PDFHummus::eSuccess)
@@ -677,7 +677,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDFInContex
         }
 
         // copy additional objects prior to pages, so we have them ready at page copying
-        if (inCopyAdditionalObjects.size() > 0)
+        if (!inCopyAdditionalObjects.empty())
         {
             result.first = WriteNewObjects(inCopyAdditionalObjects);
             if (result.first != PDFHummus::eSuccess)
@@ -1234,7 +1234,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage &inPage, co
         }
 
         // copy additional objects prior to pages, so we have them ready at page merging
-        if (inCopyAdditionalObjects.size() > 0)
+        if (!inCopyAdditionalObjects.empty())
         {
             status = WriteNewObjects(inCopyAdditionalObjects);
             if (status != PDFHummus::eSuccess)

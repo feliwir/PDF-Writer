@@ -1310,7 +1310,7 @@ void AbstractContentContext::DrawCircle(double inCenterX, double inCenterY, doub
 
 void AbstractContentContext::DrawPath(const DoubleAndDoublePairList &inPathPoints, const GraphicOptions &inOptions)
 {
-    if (inPathPoints.size() == 0)
+    if (inPathPoints.empty())
         return;
 
     SetupColor(inOptions);

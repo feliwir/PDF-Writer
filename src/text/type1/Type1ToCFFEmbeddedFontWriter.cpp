@@ -696,7 +696,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::AddComponentGlyphs(const std::string &
     StandardEncoding standardEncoding;
     EStatusCode status = mType1Input.CalculateDependenciesForCharIndex(inGlyphID, dependencies);
 
-    if (PDFHummus::eSuccess == status && dependencies.mCharCodes.size() != 0)
+    if (PDFHummus::eSuccess == status && !dependencies.mCharCodes.empty())
     {
         auto it = dependencies.mCharCodes.begin();
         for (; it != dependencies.mCharCodes.end() && PDFHummus::eSuccess == status; ++it)
@@ -733,7 +733,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteName(const std::string &inSubsetF
 {
     // get the first name from the name table, and write it here
 
-    std::string fontName = inSubsetFontName.size() == 0 ? mType1Input.mFontDictionary.FontName : inSubsetFontName;
+    std::string fontName = inSubsetFontName.empty() ? mType1Input.mFontDictionary.FontName : inSubsetFontName;
 
     uint8_t sizeOfOffset = GetMostCompressedOffsetSize((unsigned long)fontName.size() + 1);
 
@@ -901,7 +901,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopDictSegment(MyStringBuf &ioTop
 void Type1ToCFFEmbeddedFontWriter::AddStringOperandIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::string &inString,
                                                               unsigned short inOperator)
 {
-    if (inString.size() != 0)
+    if (!inString.empty())
     {
         inWriter.WriteIntegerOperand(AddStringToStringsArray(inString));
         inWriter.WriteDictOperator(inOperator);
@@ -976,7 +976,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()
 {
 
     mPrimitivesWriter.WriteCard16((unsigned short)mStrings.size());
-    if (mStrings.size() > 0)
+    if (!mStrings.empty())
     {
         // calculate the total data size to determine the required offset size
         unsigned long totalSize = 0;
@@ -1136,7 +1136,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WritePrivateDictionary()
 void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter,
                                                             const std::vector<int> &inArray, unsigned short inOperator)
 {
-    if (inArray.size() == 0)
+    if (inArray.empty())
         return;
 
     int currentValue = 0;
@@ -1154,7 +1154,7 @@ void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &
                                                             const std::vector<double> &inArray,
                                                             unsigned short inOperator)
 {
-    if (inArray.size() == 0)
+    if (inArray.empty())
         return;
 
     double currentValue = 0;

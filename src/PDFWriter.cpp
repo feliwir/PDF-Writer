@@ -437,7 +437,7 @@ EStatusCode PDFWriter::ContinuePDF(const std::string &inOutputFilePath, const st
     if (status != eSuccess)
         return status;
 
-    if (inOptionalModifiedFile.size() != 0)
+    if (!inOptionalModifiedFile.empty())
     {
         // setup parser for reading modified file
         status = mModifiedFile.OpenFile(inOptionalModifiedFile);
@@ -650,7 +650,7 @@ EStatusCode PDFWriter::ModifyPDF(const std::string &inModifiedFile, EPDFVersion 
     do
     {
         // either append to original file, or create a new copy and "modify" it. depending on users choice
-        if (inOptionalAlternativeOutputFile.size() == 0 || (inOptionalAlternativeOutputFile == inModifiedFile))
+        if (inOptionalAlternativeOutputFile.empty() || (inOptionalAlternativeOutputFile == inModifiedFile))
         {
             status = mOutputFile.OpenFile(inModifiedFile, true);
             if (status != eSuccess)

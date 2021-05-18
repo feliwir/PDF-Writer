@@ -41,7 +41,7 @@ class PDFDate
                  EUTCRelation inUTC = eUndefined, int inHourFromUTC = -1, int inMinuteFromUTC = -1);
 
     bool IsNull() const;                         // null is signified by having -1 as the year.
-    std::string ToString();                // writes only non-null values
+    std::string ToString() const;                // writes only non-null values
     void ParseString(std::string inValue); // sets date from input string
 
     // set PDF Date to the current time

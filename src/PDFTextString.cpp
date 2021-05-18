@@ -47,7 +47,7 @@ PDFTextString &PDFTextString::FromUTF8(const std::string &inString)
 
 bool PDFTextString::IsEmpty() const
 {
-    return mTextString.size() == 0;
+    return mTextString.empty();
 }
 
 const std::string &PDFTextString::ToString() const

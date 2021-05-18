@@ -136,7 +136,7 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingList &
     // glyphs...oops. take care of this sometimes.
 
     // for the first time, add also 0,0 mapping
-    if (mCIDRepresentation->mGlyphIDToEncodedChar.size() == 0)
+    if (mCIDRepresentation->mGlyphIDToEncodedChar.empty())
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
@@ -264,7 +264,7 @@ void AbstractWrittenFont::AddToCIDRepresentation(const GlyphUnicodeMappingListLi
     // glyphs...oops. take care of this sometimes.
 
     // for the first time, add also 0,0 mapping
-    if (mCIDRepresentation->mGlyphIDToEncodedChar.size() == 0)
+    if (mCIDRepresentation->mGlyphIDToEncodedChar.empty())
         mCIDRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(EncodeCIDGlyph(0), 0)));
 
@@ -371,7 +371,7 @@ EStatusCode AbstractWrittenFont::WriteWrittenFontState(WrittenFontRepresentation
     inStateWriter->EndDictionary(writtenFontObject);
     inStateWriter->EndIndirectObject();
 
-    if (objectIDs.size() > 0)
+    if (!objectIDs.empty())
     {
         auto itIDs = objectIDs.begin();
 

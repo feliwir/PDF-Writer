@@ -464,7 +464,7 @@ CharString *CharStringType2Flattener::GetLocalSubr(long inSubrIndex)
 
 EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short /*inOperatorCode*/)
 {
-    if (mOperandsToWrite.size() > 0)
+    if (!mOperandsToWrite.empty())
     {
         EStatusCode status = PDFHummus::eSuccess;
         mOperandsToWrite.pop_back(); // pop back parameter, which is the subr index

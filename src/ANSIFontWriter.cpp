@@ -111,7 +111,7 @@ EStatusCode ANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFo
     inObjectsContext->EndIndirectObject();
 
     // if necessary, write a dictionary encoding
-    if (mDifferences.size() > 0)
+    if (!mDifferences.empty())
         WriteEncodingDictionary();
 
     WriteToUnicodeMap(toUnicodeMapObjectID);
@@ -199,7 +199,7 @@ void ANSIFontWriter::WriteEncoding(DictionaryContext *inFontContext)
     // Encoding
 
     inFontContext->WriteKey(scEncoding);
-    if (mDifferences.size() == 0)
+    if (mDifferences.empty())
     {
         inFontContext->WriteNameValue(scWinAnsiEncoding);
     }
@@ -340,7 +340,7 @@ void ANSIFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnc
     SAFE_SPRINTF_1(formattingBuffer, 17, "<%02x> <", inEncodedCharacter);
     inWriter->Write((const uint8_t *)formattingBuffer, 6);
 
-    if (inUnicodeValues.size() == 0)
+    if (inUnicodeValues.empty())
     {
         inWriter->Write(scAllZeros, 4);
     }
@@ -352,7 +352,7 @@ void ANSIFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEnc
             EStatusCodeAndUShortList utf16Result = unicode.ToUTF16UShort();
             unicode.GetUnicodeList().clear();
 
-            if (utf16Result.first == eFailure || utf16Result.second.size() == 0)
+            if (utf16Result.first == eFailure || utf16Result.second.empty())
             {
                 TRACE_LOG1("ANSIFontWriter::WriteGlyphEntry, got invalid glyph value. saving as 0. value = ", *it);
                 utf16Result.second.clear();

@@ -187,7 +187,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
         }
 
         // Write new annotations entry, joining existing annotations, and new ones (from links attaching or what not)
-        if (pageDictionaryObject->Exists("Annots") || mWriter->GetDocumentContext().GetAnnotations().size() > 0)
+        if (pageDictionaryObject->Exists("Annots") || !mWriter->GetDocumentContext().GetAnnotations().empty())
         {
             modifiedPageObject->WriteKey("Annots");
             objectContext.StartArray();
@@ -204,7 +204,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
 
             // write new annots from links
             ObjectIDTypeSet &annotations = mWriter->GetDocumentContext().GetAnnotations();
-            if (annotations.size() > 0)
+            if (!annotations.empty())
             {
                 auto it = annotations.begin();
                 for (; it != annotations.end(); ++it)

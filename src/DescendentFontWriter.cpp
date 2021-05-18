@@ -139,7 +139,7 @@ void DescendentFontWriter::WriteWidths(const UIntAndGlyphEncodingInfoVector &inE
         }
     }
 
-    if (widthsList.size() != 0)
+    if (!widthsList.empty())
     {
         ++it; // promote the iterator, from the already recorded glyph
 
@@ -169,7 +169,7 @@ void DescendentFontWriter::WriteWidths(const UIntAndGlyphEncodingInfoVector &inE
                 }
             }
         }
-        if (widthsList.size() > 0)
+        if (!widthsList.empty())
             WriteWidthsItem(allWidthsSame, widthsList, firstCIDInList, previousCIDInList);
         mObjectsContext->EndArray(eTokenSeparatorEndLine);
     }

@@ -1682,7 +1682,7 @@ EStatusCode CFFFileInput::ReadCFFFileByIndexOrName(IByteReaderWithPosition *inCF
             break;
         }
 
-        if (inFontName.size() > 0)
+        if (!inFontName.empty())
         {
             BoolAndUShort fontIndexResult = GetIndexForFontName(inFontName);
             if (fontIndexResult.first)

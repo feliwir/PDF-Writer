@@ -58,7 +58,7 @@ EStatusCode TestsRunner::RunTestsInList(const TestConfiguration &inTestConfigura
 {
     EStatusCode testsStatus;
 
-    if (inTests.size() == 0)
+    if (inTests.empty())
     {
         cout << "No tests to run\n";
         testsStatus = PDFHummus::eSuccess;

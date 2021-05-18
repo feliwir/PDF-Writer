@@ -310,7 +310,7 @@ bool TrueTypeEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UInt
     }
 
     glyfTableEntry = mTrueTypeInput.mGlyf[inGlyphID];
-    if (glyfTableEntry != nullptr && glyfTableEntry->mComponentGlyphs.size() > 0)
+    if (glyfTableEntry != nullptr && !glyfTableEntry->mComponentGlyphs.empty())
     {
         isComposite = true;
         for (itComponentGlyphs = glyfTableEntry->mComponentGlyphs.begin();

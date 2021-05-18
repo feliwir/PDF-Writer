@@ -41,7 +41,7 @@ void FileURL::SetURLFromString(const string &inURL)
 
         // with .. i'm doing some calculation already of sparing interim folders.
         // as a result if there are still ..s they will be only at the beginning of the path
-        if (newComponent == ".." && mPathComponents.size() > 0 && mPathComponents.back() != "..")
+        if (newComponent == ".." && !mPathComponents.empty() && mPathComponents.back() != "..")
             PopPathComponent();
         else if (newComponent != ".")
             PushPathComponent(newComponent);
@@ -96,7 +96,7 @@ string FileURL::ToString() const
     if (mIsAbsolute)
         pathStream << "file:///";
 
-    if (mPathComponents.size() > 0)
+    if (!mPathComponents.empty())
     {
         auto it = mPathComponents.begin();
         pathStream << *it;
@@ -116,7 +116,7 @@ void FileURL::PushPathComponent(const string &inComponent)
 
 void FileURL::PopPathComponent()
 {
-    if (mPathComponents.size() > 0)
+    if (!mPathComponents.empty())
         mPathComponents.pop_back();
 }
 

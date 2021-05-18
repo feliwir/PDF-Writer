@@ -83,7 +83,7 @@ bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingList &inGl
 unsigned short WrittenFontCFF::EncodeGlyph(unsigned int inGlyph, const ULongVector &inCharacters)
 {
     // for the first time, add also 0,0 mapping
-    if (mANSIRepresentation->mGlyphIDToEncodedChar.size() == 0)
+    if (mANSIRepresentation->mGlyphIDToEncodedChar.empty())
     {
         mANSIRepresentation->mGlyphIDToEncodedChar.insert(
             UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(0, 0)));
@@ -98,7 +98,7 @@ unsigned short WrittenFontCFF::EncodeGlyph(unsigned int inGlyph, const ULongVect
     {
         // as a default position, i'm grabbing the ansi bits. this should display nice charachters, when possible
         unsigned char encoding;
-        if (inCharacters.size() > 0)
+        if (!inCharacters.empty())
             encoding = (unsigned char)(inCharacters.back() & 0xff);
         else
             encoding = (unsigned char)(inGlyph & 0xff);

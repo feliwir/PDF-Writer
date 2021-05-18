@@ -86,7 +86,7 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingList 
     if (encodingResult.first)
     {
         // for the first time, add also 0,0 mapping
-        if (mANSIRepresentation->mGlyphIDToEncodedChar.size() == 0)
+        if (mANSIRepresentation->mGlyphIDToEncodedChar.empty())
             mANSIRepresentation->mGlyphIDToEncodedChar.insert(
                 UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(0, 0)));
 
@@ -193,7 +193,7 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingListL
     if (encodingResult.first)
     {
         // for the first time, add also 0,0 mapping
-        if (mANSIRepresentation->mGlyphIDToEncodedChar.size() == 0)
+        if (mANSIRepresentation->mGlyphIDToEncodedChar.empty())
             mANSIRepresentation->mGlyphIDToEncodedChar.insert(
                 UIntToGlyphEncodingInfoMap::value_type(0, GlyphEncodingInfo(0, 0)));
 

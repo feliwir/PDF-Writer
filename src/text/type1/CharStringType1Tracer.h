@@ -31,7 +31,7 @@ class CharStringType1Tracer : public IType1InterpreterImplementation
 {
   public:
     CharStringType1Tracer(void);
-    ~CharStringType1Tracer(void);
+    ~CharStringType1Tracer(void) = default;
 
     PDFHummus::EStatusCode TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input *inType1Input, IByteWriter *inWriter);
     PDFHummus::EStatusCode TraceGlyphProgram(const std::string &inGlyphName, Type1Input *inType1Input,

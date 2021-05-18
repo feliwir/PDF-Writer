@@ -122,7 +122,7 @@ EStatusCode ShowDependencies(const std::string &inCharStringName, Type1Input *in
     if (status != PDFHummus::eSuccess)
         return status;
 
-    if (dependencies.mCharCodes.size() != 0 || dependencies.mOtherSubrs.size() != 0 || dependencies.mSubrs.size() != 0)
+    if (!dependencies.mCharCodes.empty() || !dependencies.mOtherSubrs.empty() || !dependencies.mSubrs.empty())
     {
         std::cout << "Glyph " << inCharStringName.c_str() << " has dependencies:\n";
         auto itBytes = dependencies.mCharCodes.begin();

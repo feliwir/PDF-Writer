@@ -251,7 +251,7 @@ DictionaryContext *ObjectsContext::StartDictionary()
 
 EStatusCode ObjectsContext::EndDictionary(DictionaryContext *ObjectsContext)
 {
-    if (mDictionaryStack.size() > 0)
+    if (!mDictionaryStack.empty())
     {
         if (mDictionaryStack.back() == ObjectsContext)
         {

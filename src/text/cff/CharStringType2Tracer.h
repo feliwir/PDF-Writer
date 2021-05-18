@@ -31,7 +31,7 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
 {
   public:
     CharStringType2Tracer(void);
-    ~CharStringType2Tracer(void);
+    ~CharStringType2Tracer(void) = default;
 
     PDFHummus::EStatusCode TraceGlyphProgram(unsigned short inFontIndex, unsigned short inGlyphIndex,
                                              CFFFileInput *inCFFFileInput, IByteWriter *inWriter);

@@ -236,7 +236,7 @@ PDFObject *PDFObjectParser::ParseNewObject()
 
 bool PDFObjectParser::GetNextToken(std::string &outToken)
 {
-    if (mTokenBuffer.size() > 0)
+    if (!mTokenBuffer.empty())
     {
         outToken = mTokenBuffer.front();
         mTokenBuffer.pop_front();

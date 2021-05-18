@@ -441,7 +441,7 @@ static bool sStemSort(const Stem *inLeft, const Stem *inRight)
 void Type1ToType2Converter::ConvertStems()
 {
 
-    if (mHStems.size() == 0 && mVStems.size() == 0)
+    if (mHStems.empty() && mVStems.empty())
         return;
 
     StemVector orderedHStems;
@@ -476,7 +476,7 @@ void Type1ToType2Converter::ConvertStems()
             mVStems[*orderedVStems[i]] = i + orderedHStems.size();
 
         // write initial hstemhm command
-        if (orderedHStems.size() > 0)
+        if (!orderedHStems.empty())
         {
             itProgramPosition = InsertOperatorMarker(18, itProgramPosition);
             SetupStemHintsInNode(orderedHStems, mSideBearing[1], *itProgramPosition);
@@ -484,7 +484,7 @@ void Type1ToType2Converter::ConvertStems()
         }
 
         // write vstemhm command
-        if (orderedVStems.size() > 0)
+        if (!orderedVStems.empty())
         {
             itProgramPosition = InsertOperatorMarker(23, itProgramPosition);
             SetupStemHintsInNode(orderedVStems, mSideBearing[0], *itProgramPosition);
@@ -528,7 +528,7 @@ void Type1ToType2Converter::ConvertStems()
     {
         // if not hint mask, just write the hint definitions and go.
         // write initial hstem command
-        if (orderedHStems.size() > 0)
+        if (!orderedHStems.empty())
         {
             itProgramPosition = InsertOperatorMarker(1, itProgramPosition);
             SetupStemHintsInNode(orderedHStems, mSideBearing[1], *itProgramPosition);
@@ -536,7 +536,7 @@ void Type1ToType2Converter::ConvertStems()
         }
 
         // write vstem command
-        if (orderedVStems.size() > 0)
+        if (!orderedVStems.empty())
         {
             itProgramPosition = InsertOperatorMarker(3, itProgramPosition);
             SetupStemHintsInNode(orderedVStems, mSideBearing[0], *itProgramPosition);

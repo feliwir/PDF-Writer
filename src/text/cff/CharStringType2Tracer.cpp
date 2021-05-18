@@ -30,7 +30,7 @@ using namespace PDFHummus;
 
 CharStringType2Tracer::CharStringType2Tracer() = default;
 
-CharStringType2Tracer::~CharStringType2Tracer() = default;
+
 
 EStatusCode CharStringType2Tracer::TraceGlyphProgram(unsigned short inFontIndex, unsigned short inGlyphIndex,
                                                      CFFFileInput *inCFFFileInput, IByteWriter *inWriter)

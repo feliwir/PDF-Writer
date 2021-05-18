@@ -105,7 +105,7 @@ void ResourcesDictionary::AddImageXObjectMappingWithName(PDFImageXObject *inImag
     auto it = inImageXObject->GetRequiredProcsetResourceNames().begin();
     for (; it != inImageXObject->GetRequiredProcsetResourceNames().end(); ++it)
     {
-        if (it->size() > 0)
+        if (!it->empty())
             AddProcsetResource(*it);
     }
 }

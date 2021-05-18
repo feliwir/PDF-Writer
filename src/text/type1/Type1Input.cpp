@@ -744,7 +744,7 @@ Type1CharString *Type1Input::GetGlyphCharString(uint8_t inCharStringIndex)
 
     if (eType1EncodingTypeCustom == mEncoding.EncodingType)
     {
-        if (mEncoding.mCustomEncoding[inCharStringIndex].size() == 0)
+        if (mEncoding.mCustomEncoding[inCharStringIndex].empty())
             characterName = ".notdef";
         else
             characterName = mEncoding.mCustomEncoding[inCharStringIndex];
@@ -847,7 +847,7 @@ bool Type1Input::IsValidGlyphIndex(uint8_t inCharStringIndex)
 
     if (eType1EncodingTypeCustom == mEncoding.EncodingType)
     {
-        if (mEncoding.mCustomEncoding[inCharStringIndex].size() == 0)
+        if (mEncoding.mCustomEncoding[inCharStringIndex].empty())
             characterName = ".notdef";
         else
             characterName = mEncoding.mCustomEncoding[inCharStringIndex];
@@ -866,7 +866,7 @@ std::string Type1Input::GetGlyphCharStringName(uint8_t inCharStringIndex)
 {
     if (eType1EncodingTypeCustom == mEncoding.EncodingType)
     {
-        if (mEncoding.mCustomEncoding[inCharStringIndex].size() == 0)
+        if (mEncoding.mCustomEncoding[inCharStringIndex].empty())
             return ".notdef";
         return mEncoding.mCustomEncoding[inCharStringIndex];
     }

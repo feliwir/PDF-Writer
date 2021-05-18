@@ -705,7 +705,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
         }
 
         // Annotations
-        if (mAnnotations.size() > 0)
+        if (!mAnnotations.empty())
         {
             pageContext->WriteKey("Annots");
 
@@ -1635,7 +1635,7 @@ void DocumentContext::WritePageTreeState(ObjectsContext *inStateWriter, ObjectID
     inStateWriter->EndDictionary(pageTreeDictionary);
     inStateWriter->EndIndirectObject();
 
-    if (kidsObjectIDs.size() > 0)
+    if (!kidsObjectIDs.empty())
     {
         auto it = kidsObjectIDs.begin();
         int i = 0;

@@ -66,7 +66,7 @@ bool PDFDate::IsNull() const
 */
 
 static const std::string scEmpty;
-std::string PDFDate::ToString()
+std::string PDFDate::ToString() const
 {
     if (IsNull())
         return scEmpty;

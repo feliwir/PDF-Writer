@@ -100,7 +100,7 @@ static const uint8_t scEndLine[2] = {'\r', '\n'};
 
 void Log::LogEntryToFile(const uint8_t *inMessage, size_t inMessageSize)
 {
-    if (mFilePath.size() > 0)
+    if (!mFilePath.empty())
     {
         mLogFile.OpenFile(mFilePath, true);
         WriteLogEntryToStream(inMessage, inMessageSize, mLogFile.GetOutputStream());
