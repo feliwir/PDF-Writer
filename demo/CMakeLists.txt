@@ -8,8 +8,6 @@ PosixPath.cpp
 RecryptPDF.cpp
 RefCountTest.cpp
 ShutDownRestartTest.cpp
-SimpleContentPageTest.cpp
-SimpleTextUsage.cpp
 TestMeasurementsTest.cpp
 TestsRunner.cpp
 TextUsageBugs.cpp
@@ -29,8 +27,6 @@ PosixPath.h
 RecryptPDF.h
 RefCountTest.h
 ShutDownRestartTest.h
-SimpleContentPageTest.h
-SimpleTextUsage.h
 TestMeasurementsTest.h
 TestsRunner.h
 TextUsageBugs.h
