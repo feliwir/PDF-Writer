@@ -42,7 +42,9 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFEmbedTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFTextStringTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFWithPasswordTest.cpp
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TTCTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Type1Test.cpp
  )
 
 if(BUILD_COVERAGE)

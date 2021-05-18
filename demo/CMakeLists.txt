@@ -20,9 +20,6 @@ TextUsageBugs.cpp
 TIFFImageTest.cpp
 TiffSpecialsTest.cpp
 TimerTest.cpp
-TrueTypeTest.cpp
-TTCTest.cpp
-Type1Test.cpp
 UppercaseSequanceTest.cpp
 WindowsPath.cpp
 PDFWriterTestPlayground.cpp
@@ -49,9 +46,6 @@ TextUsageBugs.h
 TIFFImageTest.h
 TiffSpecialsTest.h
 TimerTest.h
-TrueTypeTest.h
-TTCTest.h
-Type1Test.h
 UppercaseSequanceTest.h
 UnicodeTextUsage.h
 )

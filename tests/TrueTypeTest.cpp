@@ -1,5 +1,5 @@
 /*
-   Source File : TrueTypeTest.h
+   Source File : TrueTypeTest.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,14 +18,25 @@
 
 
 */
-#pragma once
-#include "ITestUnit.h"
+#include "TestHelper.h"
+#include "io/InputFile.h"
+#include "text/opentype/OpenTypeFileInput.h"
 
-class TrueTypeTest : public ITestUnit
+#include <gtest/gtest.h>
+#include <iostream>
+
+using namespace PDFHummus;
+
+TEST(TrueType, TrueType)
 {
-  public:
-    TrueTypeTest(void);
-    ~TrueTypeTest(void);
+    EStatusCode status;
+    InputFile ttfFile;
 
-    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
-};
+    status = ttfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
+    ASSERT_EQ(status, PDFHummus::eSuccess);
+
+    OpenTypeFileInput trueTypeReader;
+
+    status = trueTypeReader.ReadOpenTypeFile(ttfFile.GetInputStream(), 0);
+    ASSERT_EQ(status, PDFHummus::eSuccess);
+}
