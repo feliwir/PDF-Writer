@@ -1,5 +1,5 @@
 /*
-   Source File : ShutDownRestartTest.h
+   Source File : UppercaseSequence.h
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -19,13 +19,27 @@
 
 */
 #pragma once
-#include "ITestUnit.h"
 
-class ShutDownRestartTest : public ITestUnit
+#include <string>
+
+class UppercaseSequence
 {
   public:
-    ShutDownRestartTest(void);
-    virtual ~ShutDownRestartTest(void);
+    UppercaseSequence(void);
+    ~UppercaseSequence(void);
 
-    virtual PDFHummus::EStatusCode Run(const TestConfiguration &inTestConfiguration);
+    UppercaseSequence(std::string inSequanceString);
+
+    // returns the string after the increase
+    const std::string &GetNextValue();
+
+    // get the current value
+    const std::string &ToString();
+    void SetSequanceString(const std::string &inSequanceString);
+
+    // reset to beginning value
+    void Reset();
+
+  private:
+    std::string mSequanceString;
 };

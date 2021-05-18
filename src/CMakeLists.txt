@@ -62,11 +62,9 @@ set(PDF_WRITER_SOURCE
     ResourcesDictionary.cpp
     StateReader.cpp
     StateWriter.cpp
-    Timer.cpp
-    TimersRegistry.cpp
     Trace.cpp
     TrailerInformation.cpp
-    UppercaseSequance.cpp
+    UppercaseSequence.cpp
     UsedFontsRepository.cpp
     WrittenFontCFF.cpp
     WrittenFontTrueType.cpp
@@ -144,11 +142,9 @@ set(PDF_WRITER_HEADERS
     SingleValueContainerIterator.h
     StateReader.h
     StateWriter.h
-    Timer.h
-    TimersRegistry.h
     Trace.h
     TrailerInformation.h
-    UppercaseSequance.h
+    UppercaseSequence.h
     UsedFontsRepository.h
     WrittenFontCFF.h
     WrittenFontRepresentation.h

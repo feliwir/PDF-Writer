@@ -565,7 +565,7 @@ EStatusCode ObjectsContext::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
         DictionaryContext *sequanceDict = inStateWriter->StartDictionary();
 
         sequanceDict->WriteKey("Type");
-        sequanceDict->WriteNameValue("UppercaseSequance");
+        sequanceDict->WriteNameValue("UppercaseSequence");
 
         sequanceDict->WriteKey("mSequanceString");
         sequanceDict->WriteLiteralStringValue(mSubsetFontsNamesSequance.ToString());

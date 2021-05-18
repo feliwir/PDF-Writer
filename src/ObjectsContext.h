@@ -24,7 +24,7 @@
 #include "ETokenSeparator.h"
 #include "IndirectObjectsReferenceRegistry.h"
 #include "PrimitiveObjectsWriter.h"
-#include "UppercaseSequance.h"
+#include "UppercaseSequence.h"
 #include <list>
 #include <string>
 
@@ -143,7 +143,7 @@ class ObjectsContext
     IndirectObjectsReferenceRegistry mReferencesRegistry;
     PrimitiveObjectsWriter mPrimitiveWriter;
     bool mCompressStreams;
-    UppercaseSequance mSubsetFontsNamesSequance;
+    UppercaseSequence mSubsetFontsNamesSequance;
     EncryptionHelper *mEncryptionHelper;
 
     DictionaryContextList mDictionaryStack;

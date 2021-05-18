@@ -1,5 +1,5 @@
 /*
-   Source File : UppercaseSequance.cpp
+   Source File : UppercaseSequence.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,32 +18,32 @@
 
 
 */
-#include "UppercaseSequance.h"
+#include "UppercaseSequence.h"
 
 #include <utility>
 
 #include "Trace.h"
 
-UppercaseSequance::UppercaseSequance()
+UppercaseSequence::UppercaseSequence()
 {
     mSequanceString = "AAAAAA";
 }
 
-UppercaseSequance::UppercaseSequance(std::string inSequanceString)
+UppercaseSequence::UppercaseSequence(std::string inSequanceString)
 {
     mSequanceString = std::move(inSequanceString);
 }
 
-void UppercaseSequance::Reset()
+void UppercaseSequence::Reset()
 {
     mSequanceString = "AAAAAA";
 }
 
-UppercaseSequance::~UppercaseSequance()
+UppercaseSequence::~UppercaseSequence()
 {
 }
 
-const std::string &UppercaseSequance::GetNextValue()
+const std::string &UppercaseSequence::GetNextValue()
 {
     int i = 5;
 
@@ -57,7 +57,7 @@ const std::string &UppercaseSequance::GetNextValue()
 
         if (i == 0)
         {
-            TRACE_LOG("UppercaseSequance::GetNextValue, oops, reached overflow");
+            TRACE_LOG("UppercaseSequence::GetNextValue, oops, reached overflow");
             break;
         }
         mSequanceString.at(i) = 'A';
@@ -66,12 +66,12 @@ const std::string &UppercaseSequance::GetNextValue()
     return mSequanceString;
 }
 
-const std::string &UppercaseSequance::ToString()
+const std::string &UppercaseSequence::ToString()
 {
     return mSequanceString;
 }
 
-void UppercaseSequance::SetSequanceString(const std::string &inSequanceString)
+void UppercaseSequence::SetSequanceString(const std::string &inSequanceString)
 {
     mSequanceString = inSequanceString;
 }

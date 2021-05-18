@@ -46,13 +46,20 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFWithPasswordTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PFBStreamTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PNGImageTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/RecryptPDFTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/RotatedPagesPDFTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ShutDownRestartTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleContentPageTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTextUsageTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TestHelper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/TextMeasurementsTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TIFFImageTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TTCTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Type1Test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/UnicodeTextUsageTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/UppercaseSequenceTest.cpp
+
  )
 
 if(BUILD_COVERAGE)
