@@ -38,6 +38,11 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCommentWriter.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFCopyingContextTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFDateTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFEmbedTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFTextStringTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFWithPasswordTest.cpp
+
  )
 
 if(BUILD_COVERAGE)

@@ -3,13 +3,9 @@ add_executable(PDFWriterTestPlayground
 #sources
 RotatedPagesPDF.cpp
 FileURL.cpp
-PDFWithPassword.cpp
-PDFDateTest.cpp
-PDFEmbedTest.cpp
 PDFObjectCastTest.cpp
 PDFObjectParserTest.cpp
 PDFParserTest.cpp
-PDFTextStringTest.cpp
 PFBStreamTest.cpp
 PNGImageTest.cpp
 PosixPath.cpp
@@ -36,13 +32,9 @@ UnicodeTextUsage.cpp
 RotatedPagesPDF.h
 FileURL.h
 ITestUnit.h
-PDFWithPassword.h
-PDFDateTest.h
-PDFEmbedTest.h
 PDFObjectCastTest.h
 PDFObjectParserTest.h
 PDFParserTest.h
-PDFTextStringTest.h
 PFBStreamTest.h
 PNGImageTest.h
 PosixPath.h

@@ -18,42 +18,26 @@
 
 
 */
-#include "PDFTextStringTest.h"
 #include "PDFTextString.h"
+#include "TestHelper.h"
 #include "encoding/UnicodeString.h"
 
+#include <gtest/gtest.h>
 #include <iostream>
 
-using namespace std;
 using namespace PDFHummus;
 
-PDFTextStringTest::PDFTextStringTest()
-{
-}
-
-PDFTextStringTest::~PDFTextStringTest()
-{
-}
-
-EStatusCode PDFTextStringTest::Run(const TestConfiguration & /*inTestConfiguration*/)
+TEST(ObjectContext, PDFTextString)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
     // Empty String test
     PDFTextString emptyString;
-    if (emptyString.ToString() != "")
-    {
-        status = PDFHummus::eFailure;
-        cout << "wrong for empty string - " << emptyString.ToString().c_str() << "\n";
-    }
+    ASSERT_TRUE(emptyString.ToString().empty());
 
     // PDFEncoded test, Latin
     PDFTextString latinString("Hello World");
-    if (latinString.ToString() != "Hello World")
-    {
-        status = PDFHummus::eFailure;
-        cout << "wrong for empty string - " << latinString.ToString().c_str() << "\n";
-    }
+    ASSERT_EQ(latinString.ToString(), "Hello World");
 
     // PDFEncoded test, special char
     UnicodeString aString;
@@ -61,11 +45,7 @@ EStatusCode PDFTextStringTest::Run(const TestConfiguration & /*inTestConfigurati
 
     PDFTextString latinSpecialString;
     latinSpecialString.FromUTF8(aString.ToUTF8().second);
-    if (latinSpecialString.ToString() != "\xA0")
-    {
-        status = PDFHummus::eFailure;
-        cout << "wrong for latin special string - " << latinSpecialString.ToString().c_str() << "\n";
-    }
+    ASSERT_EQ(latinSpecialString.ToString(), "\xA0");
 
     // UTF16 test
     UnicodeString bString;
@@ -73,13 +53,5 @@ EStatusCode PDFTextStringTest::Run(const TestConfiguration & /*inTestConfigurati
 
     PDFTextString latinUTF16String;
     latinUTF16String.FromUTF8(bString.ToUTF8().second);
-    if (latinUTF16String.ToString() != "\xFE\xFF\x20\xAB")
-    {
-        status = PDFHummus::eFailure;
-        cout << "wrong for latin UTF16 - " << latinUTF16String.ToString().c_str() << "\n";
-    }
-
-    return status;
+    ASSERT_EQ(latinUTF16String.ToString(), "\xFE\xFF\x20\xAB");
 }
-
-ADD_CATEGORIZED_TEST(PDFTextStringTest, "ObjectContext")
