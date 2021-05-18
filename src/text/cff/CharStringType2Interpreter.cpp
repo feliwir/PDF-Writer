@@ -30,9 +30,7 @@ CharStringType2Interpreter::CharStringType2Interpreter()
     mImplementationHelper = nullptr;
 }
 
-CharStringType2Interpreter::~CharStringType2Interpreter()
-{
-}
+CharStringType2Interpreter::~CharStringType2Interpreter() = default;
 
 EStatusCode CharStringType2Interpreter::Intepret(const CharString &inCharStringToIntepret,
                                                  IType2InterpreterImplementation *inImplementationHelper)

@@ -29,13 +29,9 @@
 
 using namespace PDFHummus;
 
-Type1ToType2Converter::Type1ToType2Converter()
-{
-}
+Type1ToType2Converter::Type1ToType2Converter() = default;
 
-Type1ToType2Converter::~Type1ToType2Converter()
-{
-}
+Type1ToType2Converter::~Type1ToType2Converter() = default;
 
 EStatusCode Type1ToType2Converter::WriteConvertedFontProgram(const std::string &inGlyphName, Type1Input *inType1Input,
                                                              IByteWriter *inByteWriter)

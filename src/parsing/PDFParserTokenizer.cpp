@@ -30,9 +30,7 @@ PDFParserTokenizer::PDFParserTokenizer()
     ResetReadState();
 }
 
-PDFParserTokenizer::~PDFParserTokenizer()
-{
-}
+PDFParserTokenizer::~PDFParserTokenizer() = default;
 
 void PDFParserTokenizer::SetReadStream(IByteReader *inSourceStream)
 {

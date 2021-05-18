@@ -33,9 +33,7 @@ XObjectContentContext::XObjectContentContext(PDFHummus::DocumentContext *inDocum
     SetPDFStreamForWrite(inFormXObject->GetContentStream());
 }
 
-XObjectContentContext::~XObjectContentContext()
-{
-}
+XObjectContentContext::~XObjectContentContext() = default;
 
 ResourcesDictionary *XObjectContentContext::GetResourcesDictionary()
 {
@@ -54,9 +52,7 @@ class FormImageWritingTask : public IFormEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    ~FormImageWritingTask() override
-    {
-    }
+    ~FormImageWritingTask() override = default;
 
     PDFHummus::EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
                                  PDFHummus::DocumentContext *inDocumentContext) override

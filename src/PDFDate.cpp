@@ -37,9 +37,7 @@ PDFDate::PDFDate()
     SetTime(-1);
 }
 
-PDFDate::~PDFDate()
-{
-}
+PDFDate::~PDFDate() = default;
 
 void PDFDate::SetTime(int inYear, int inMonth, int inDay, int inHour, int inMinute, int inSecond, EUTCRelation inUTC,
                       int inHourFromUTC, int inMinuteFromUTC)

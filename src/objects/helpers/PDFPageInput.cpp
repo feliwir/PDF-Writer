@@ -66,9 +66,7 @@ PDFPageInput::PDFPageInput(const PDFPageInput &inOtherPage)
     AssertPageObjectValid();
 }
 
-PDFPageInput::~PDFPageInput()
-{
-}
+PDFPageInput::~PDFPageInput() = default;
 
 bool PDFPageInput::operator!()
 {

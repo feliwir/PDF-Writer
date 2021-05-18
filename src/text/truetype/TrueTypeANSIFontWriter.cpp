@@ -32,13 +32,9 @@
 
 using namespace PDFHummus;
 
-TrueTypeANSIFontWriter::TrueTypeANSIFontWriter()
-{
-}
+TrueTypeANSIFontWriter::TrueTypeANSIFontWriter() = default;
 
-TrueTypeANSIFontWriter::~TrueTypeANSIFontWriter()
-{
-}
+TrueTypeANSIFontWriter::~TrueTypeANSIFontWriter() = default;
 
 static const std::string scPlus = "+";
 EStatusCode TrueTypeANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo,

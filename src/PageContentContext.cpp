@@ -36,9 +36,7 @@ PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentCon
     mCurrentStream = nullptr;
 }
 
-PageContentContext::~PageContentContext()
-{
-}
+PageContentContext::~PageContentContext() = default;
 
 void PageContentContext::StartAStreamIfRequired()
 {
@@ -105,9 +103,7 @@ class PageImageWritingTask : public IPageEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    ~PageImageWritingTask() override
-    {
-    }
+    ~PageImageWritingTask() override = default;
 
     PDFHummus::EStatusCode Write(PDFPage & /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
                                  PDFHummus::DocumentContext *inDocumentContext) override

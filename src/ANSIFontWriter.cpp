@@ -39,13 +39,9 @@
 
 using namespace PDFHummus;
 
-ANSIFontWriter::ANSIFontWriter()
-{
-}
+ANSIFontWriter::ANSIFontWriter() = default;
 
-ANSIFontWriter::~ANSIFontWriter()
-{
-}
+ANSIFontWriter::~ANSIFontWriter() = default;
 
 static const std::string scType = "Type";
 static const std::string scFont = "Font";

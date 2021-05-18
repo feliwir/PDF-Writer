@@ -24,13 +24,9 @@
 
 using namespace PDFHummus;
 
-UnicodeString::UnicodeString()
-{
-}
+UnicodeString::UnicodeString() = default;
 
-UnicodeString::~UnicodeString()
-{
-}
+UnicodeString::~UnicodeString() = default;
 
 UnicodeString::UnicodeString(const UnicodeString &inOtherString)
 {
@@ -42,11 +38,7 @@ UnicodeString::UnicodeString(const ULongList &inOtherList)
     mUnicodeCharacters = inOtherList;
 }
 
-UnicodeString &UnicodeString::operator=(const UnicodeString &inOtherString)
-{
-    mUnicodeCharacters = inOtherString.mUnicodeCharacters;
-    return *this;
-}
+UnicodeString &UnicodeString::operator=(const UnicodeString &inOtherString) = default;
 
 UnicodeString &UnicodeString::operator=(const ULongList &inOtherList)
 {

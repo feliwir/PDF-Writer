@@ -25,9 +25,7 @@ PDFSymbol::PDFSymbol(const std::string &inSymbol) : PDFObject(eType)
     mValue = inSymbol;
 }
 
-PDFSymbol::~PDFSymbol()
-{
-}
+PDFSymbol::~PDFSymbol() = default;
 
 const std::string &PDFSymbol::GetValue() const
 {

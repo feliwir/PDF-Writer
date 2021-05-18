@@ -24,18 +24,14 @@
 #include "io/OutputStringBufferStream.h"
 #include <sstream>
 
-PDFTextString::PDFTextString()
-{
-}
+PDFTextString::PDFTextString() = default;
 
 PDFTextString::PDFTextString(const std::string &inString)
 {
     mTextString = inString;
 }
 
-PDFTextString::~PDFTextString()
-{
-}
+PDFTextString::~PDFTextString() = default;
 
 const PDFTextString &PDFTextString::Empty()
 {
@@ -64,11 +60,7 @@ bool PDFTextString::operator==(const PDFTextString &inString) const
     return mTextString == inString.mTextString;
 }
 
-PDFTextString &PDFTextString::operator=(const PDFTextString &inString)
-{
-    mTextString = inString.mTextString;
-    return *this;
-}
+PDFTextString &PDFTextString::operator=(const PDFTextString &inString) = default;
 
 void PDFTextString::ConvertFromUTF8(const std::string &inStringToConvert)
 {

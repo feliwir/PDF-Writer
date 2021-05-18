@@ -28,13 +28,9 @@
 
 using namespace PDFHummus;
 
-CFFDescendentFontWriter::CFFDescendentFontWriter()
-{
-}
+CFFDescendentFontWriter::CFFDescendentFontWriter() = default;
 
-CFFDescendentFontWriter::~CFFDescendentFontWriter()
-{
-}
+CFFDescendentFontWriter::~CFFDescendentFontWriter() = default;
 
 /*static bool sEncodedGlypsSort(const UIntAndGlyphEncodingInfo& inLeft, const UIntAndGlyphEncodingInfo& inRight)
 {

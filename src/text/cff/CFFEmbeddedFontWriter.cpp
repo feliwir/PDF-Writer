@@ -36,13 +36,9 @@
 
 using namespace PDFHummus;
 
-CFFEmbeddedFontWriter::CFFEmbeddedFontWriter()
-{
-}
+CFFEmbeddedFontWriter::CFFEmbeddedFontWriter() = default;
 
-CFFEmbeddedFontWriter::~CFFEmbeddedFontWriter()
-{
-}
+CFFEmbeddedFontWriter::~CFFEmbeddedFontWriter() = default;
 
 static const std::string scSubtype = "Subtype";
 

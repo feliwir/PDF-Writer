@@ -51,9 +51,7 @@ void IndirectObjectsReferenceRegistry::SetupInitialFreeObject()
     mObjectsWritesRegistry.push_back(singleFreeObjectInformation);
 }
 
-IndirectObjectsReferenceRegistry::~IndirectObjectsReferenceRegistry()
-{
-}
+IndirectObjectsReferenceRegistry::~IndirectObjectsReferenceRegistry() = default;
 
 ObjectIDType IndirectObjectsReferenceRegistry::AllocateNewObjectID()
 {

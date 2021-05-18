@@ -25,9 +25,7 @@ InfoDictionary::InfoDictionary()
     Trapped = EInfoTrappedUnknown;
 }
 
-InfoDictionary::~InfoDictionary()
-{
-}
+InfoDictionary::~InfoDictionary() = default;
 
 bool InfoDictionary::IsEmpty()
 {

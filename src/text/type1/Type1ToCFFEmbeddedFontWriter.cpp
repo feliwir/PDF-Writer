@@ -39,9 +39,7 @@ Type1ToCFFEmbeddedFontWriter::Type1ToCFFEmbeddedFontWriter()
     mCharset = nullptr;
 }
 
-Type1ToCFFEmbeddedFontWriter::~Type1ToCFFEmbeddedFontWriter()
-{
-}
+Type1ToCFFEmbeddedFontWriter::~Type1ToCFFEmbeddedFontWriter() = default;
 
 #define N_STD_STRINGS 391
 

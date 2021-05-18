@@ -2131,9 +2131,7 @@ EStatusCode PDFDocumentHandler::MergePDFPageForXObject(PDFFormXObject *inTargetF
 class ICategoryServicesCommand
 {
   public:
-    virtual ~ICategoryServicesCommand()
-    {
-    }
+    virtual ~ICategoryServicesCommand() = default;
 
     virtual std::string GetResourcesCategoryName() = 0;
     virtual std::string RegisterInDirectResourceInFormResources(ObjectIDType inResourceToRegister) = 0;
@@ -2509,9 +2507,7 @@ class ObjectsCopyingTask : public IFormEndWritingTask
         mObjectsToWrite = inObjectsToWrite;
     }
 
-    ~ObjectsCopyingTask() override
-    {
-    }
+    ~ObjectsCopyingTask() override = default;
 
     EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
                       PDFHummus::DocumentContext * /*inDocumentContext*/) override

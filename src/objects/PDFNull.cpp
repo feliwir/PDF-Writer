@@ -24,6 +24,4 @@ PDFNull::PDFNull() : PDFObject(eType)
 {
 }
 
-PDFNull::~PDFNull()
-{
-}
+PDFNull::~PDFNull() = default;

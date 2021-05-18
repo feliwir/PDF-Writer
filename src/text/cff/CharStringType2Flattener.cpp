@@ -28,13 +28,9 @@
 
 using namespace PDFHummus;
 
-CharStringType2Flattener::CharStringType2Flattener()
-{
-}
+CharStringType2Flattener::CharStringType2Flattener() = default;
 
-CharStringType2Flattener::~CharStringType2Flattener()
-{
-}
+CharStringType2Flattener::~CharStringType2Flattener() = default;
 
 EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(unsigned short inFontIndex,
                                                                  unsigned short inGlyphIndex,

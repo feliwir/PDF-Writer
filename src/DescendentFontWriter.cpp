@@ -31,13 +31,9 @@
 
 using namespace PDFHummus;
 
-DescendentFontWriter::DescendentFontWriter()
-{
-}
+DescendentFontWriter::DescendentFontWriter() = default;
 
-DescendentFontWriter::~DescendentFontWriter()
-{
-}
+DescendentFontWriter::~DescendentFontWriter() = default;
 
 static const std::string scType = "Type";
 static const std::string scFont = "Font";

@@ -25,9 +25,7 @@ PDFInteger::PDFInteger(long long inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFInteger::~PDFInteger()
-{
-}
+PDFInteger::~PDFInteger() = default;
 
 long long PDFInteger::GetValue() const
 {

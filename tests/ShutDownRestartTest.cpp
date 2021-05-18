@@ -85,7 +85,7 @@ TEST(PDF, ShutDownRestart)
         contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
         EStatusCode encodingStatus = contentContext->Tj("hello world");
-        ASSERT_EQ (encodingStatus, PDFHummus::eSuccess);
+        ASSERT_EQ(encodingStatus, PDFHummus::eSuccess);
 
         // continue even if failed...want to see how it looks like
         contentContext->ET();

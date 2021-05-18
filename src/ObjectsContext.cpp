@@ -46,9 +46,7 @@ ObjectsContext::ObjectsContext()
     mEncryptionHelper = nullptr;
 }
 
-ObjectsContext::~ObjectsContext()
-{
-}
+ObjectsContext::~ObjectsContext() = default;
 
 void ObjectsContext::SetOutputStream(IByteWriterWithPosition *inOutputStream)
 {

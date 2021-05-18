@@ -25,9 +25,7 @@ PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFHexString::~PDFHexString()
-{
-}
+PDFHexString::~PDFHexString() = default;
 
 const std::string &PDFHexString::GetValue() const
 {

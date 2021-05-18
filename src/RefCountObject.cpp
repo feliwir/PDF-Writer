@@ -25,9 +25,7 @@ RefCountObject::RefCountObject()
     mRefCount = 1;
 }
 
-RefCountObject::~RefCountObject()
-{
-}
+RefCountObject::~RefCountObject() = default;
 
 void RefCountObject::AddRef()
 {

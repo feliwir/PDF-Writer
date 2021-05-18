@@ -12,9 +12,7 @@ PosixPath::PosixPath(const string &inPath)
     SetPathFromString(inPath);
 }
 
-PosixPath::~PosixPath()
-{
-}
+PosixPath::~PosixPath() = default;
 
 void PosixPath::SetPathFromString(const string &inPath)
 {

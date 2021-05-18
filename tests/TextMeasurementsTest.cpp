@@ -36,8 +36,7 @@ TEST(Text, TextMeasurements)
 
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TextMeasurementsTest.pdf"), ePDFVersion13,
-        LogConfiguration(true, true,
-                         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TextMeasurementsTest.log")));
+        LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TextMeasurementsTest.log")));
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     PDFPage page;

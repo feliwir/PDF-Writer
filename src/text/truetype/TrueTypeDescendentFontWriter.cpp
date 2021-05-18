@@ -27,13 +27,9 @@
 
 using namespace PDFHummus;
 
-TrueTypeDescendentFontWriter::TrueTypeDescendentFontWriter()
-{
-}
+TrueTypeDescendentFontWriter::TrueTypeDescendentFontWriter() = default;
 
-TrueTypeDescendentFontWriter::~TrueTypeDescendentFontWriter()
-{
-}
+TrueTypeDescendentFontWriter::~TrueTypeDescendentFontWriter() = default;
 
 static UIntVector GetOrderedKeys(const UIntAndGlyphEncodingInfoVector &inMap)
 {

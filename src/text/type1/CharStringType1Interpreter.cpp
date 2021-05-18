@@ -24,13 +24,9 @@
 
 using namespace PDFHummus;
 
-CharStringType1Interpreter::CharStringType1Interpreter()
-{
-}
+CharStringType1Interpreter::CharStringType1Interpreter() = default;
 
-CharStringType1Interpreter::~CharStringType1Interpreter()
-{
-}
+CharStringType1Interpreter::~CharStringType1Interpreter() = default;
 
 EStatusCode CharStringType1Interpreter::Intepret(const Type1CharString &inCharStringToIntepret,
                                                  IType1InterpreterImplementation *inImplementationHelper)

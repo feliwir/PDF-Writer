@@ -38,9 +38,7 @@ TrueTypeEmbeddedFontWriter::TrueTypeEmbeddedFontWriter() : mFontFileReaderStream
 {
 }
 
-TrueTypeEmbeddedFontWriter::~TrueTypeEmbeddedFontWriter()
-{
-}
+TrueTypeEmbeddedFontWriter::~TrueTypeEmbeddedFontWriter() = default;
 
 static const std::string scLength1 = "Length1";
 EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo,

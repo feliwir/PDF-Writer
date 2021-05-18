@@ -31,9 +31,7 @@ PDFPageMergingHelper::PDFPageMergingHelper(PDFPage *inPage)
     mPage = inPage;
 }
 
-PDFPageMergingHelper::~PDFPageMergingHelper()
-{
-}
+PDFPageMergingHelper::~PDFPageMergingHelper() = default;
 
 EStatusCode PDFPageMergingHelper::MergePageContent(PDFDocumentCopyingContext *inCopyingContext,
                                                    unsigned long inPageIndex)

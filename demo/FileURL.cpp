@@ -12,9 +12,7 @@ FileURL::FileURL(const string &inURL)
     SetURLFromString(inURL);
 }
 
-FileURL::~FileURL()
-{
-}
+FileURL::~FileURL() = default;
 
 void FileURL::SetURLFromString(const string &inURL)
 {

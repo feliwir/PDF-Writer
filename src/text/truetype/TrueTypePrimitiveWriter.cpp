@@ -28,9 +28,7 @@ TrueTypePrimitiveWriter::TrueTypePrimitiveWriter(OutputStringBufferStream *inTru
     SetOpenTypeStream(inTrueTypeFile);
 }
 
-TrueTypePrimitiveWriter::~TrueTypePrimitiveWriter()
-{
-}
+TrueTypePrimitiveWriter::~TrueTypePrimitiveWriter() = default;
 
 void TrueTypePrimitiveWriter::SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile)
 {

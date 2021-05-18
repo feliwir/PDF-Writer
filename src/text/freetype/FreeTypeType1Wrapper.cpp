@@ -62,9 +62,7 @@ FreeTypeType1Wrapper::FreeTypeType1Wrapper(FT_Face inFace, const std::string &in
     mFace = inFace;
 }
 
-FreeTypeType1Wrapper::~FreeTypeType1Wrapper()
-{
-}
+FreeTypeType1Wrapper::~FreeTypeType1Wrapper() = default;
 
 double FreeTypeType1Wrapper::GetItalicAngle()
 {

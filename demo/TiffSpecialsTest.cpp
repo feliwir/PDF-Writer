@@ -33,13 +33,9 @@
 using namespace std;
 using namespace PDFHummus;
 
-TiffSpecialsTest::TiffSpecialsTest()
-{
-}
+TiffSpecialsTest::TiffSpecialsTest() = default;
 
-TiffSpecialsTest::~TiffSpecialsTest()
-{
-}
+TiffSpecialsTest::~TiffSpecialsTest() = default;
 
 EStatusCode TiffSpecialsTest::Run(const TestConfiguration &inTestConfiguration)
 {

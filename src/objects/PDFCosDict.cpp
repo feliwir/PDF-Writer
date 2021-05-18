@@ -2,10 +2,13 @@
 // PDFCosDict.cpp   Stefan Woerthmueller    2014       StefanWoe@googlemail.com
 ///////////////////////////////////////////////////////////////////////////////
 #include "PDFCosDict.h"
+
+#include <utility>
+
 #include "PDFCosArray.h"
 
 PDFCosDict::PDFCosDict(PDFCosDict &parentDict, std::string name)
-    : m_Name(name), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)
+    : m_Name(std::move(name)), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)
 {
     parentDict.m_DictonaryContext->WriteKey(m_Name);
     m_DictonaryContext = m_DocumentContext.StartDictionary();

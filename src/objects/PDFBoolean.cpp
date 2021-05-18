@@ -25,9 +25,7 @@ PDFBoolean::PDFBoolean(bool inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFBoolean::~PDFBoolean()
-{
-}
+PDFBoolean::~PDFBoolean() = default;
 
 bool PDFBoolean::GetValue() const
 {

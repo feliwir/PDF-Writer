@@ -102,9 +102,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
         mWriteStream = mEncryptionStream != nullptr ? mEncryptionStream : &mTemporaryOutputStream;
 }
 
-PDFStream::~PDFStream()
-{
-}
+PDFStream::~PDFStream() = default;
 
 IByteWriter *PDFStream::GetWriteStream()
 {

@@ -26,13 +26,9 @@
 
 using namespace PDFHummus;
 
-JPEGImageParser::JPEGImageParser()
-{
-}
+JPEGImageParser::JPEGImageParser() = default;
 
-JPEGImageParser::~JPEGImageParser()
-{
-}
+JPEGImageParser::~JPEGImageParser() = default;
 
 const unsigned int scSOF0TagID = 0xc0; // baseline format
 const unsigned int scSOF1TagID = 0xc1;

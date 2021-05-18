@@ -18,8 +18,8 @@
 
 
 */
-#include "EStatusCode.h"
 #include "UppercaseSequence.h"
+#include "EStatusCode.h"
 #include "TestHelper.h"
 
 #include <gtest/gtest.h>

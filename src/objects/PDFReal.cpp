@@ -25,9 +25,7 @@ PDFReal::PDFReal(double inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFReal::~PDFReal()
-{
-}
+PDFReal::~PDFReal() = default;
 
 double PDFReal::GetValue() const
 {

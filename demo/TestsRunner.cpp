@@ -25,9 +25,7 @@
 using namespace std;
 using namespace PDFHummus;
 
-TestsRunner::TestsRunner()
-{
-}
+TestsRunner::TestsRunner() = default;
 
 TestsRunner::~TestsRunner()
 {

@@ -43,9 +43,7 @@ JPEGImageHandler::JPEGImageHandler()
     mDocumentContext = nullptr;
 }
 
-JPEGImageHandler::~JPEGImageHandler()
-{
-}
+JPEGImageHandler::~JPEGImageHandler() = default;
 
 void JPEGImageHandler::Reset()
 {

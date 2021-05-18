@@ -2172,9 +2172,7 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
         mRequiresVersionUpdate = inRequiredVersionUpdate;
         mPDFVersion = inPDFVersion;
     }
-    ~ModifiedDocCatalogWriterExtension() override
-    {
-    }
+    ~ModifiedDocCatalogWriterExtension() override = default;
 
     // IDocumentContextExtender implementation
     PDFHummus::EStatusCode OnCatalogWrite(CatalogInformation * /*inCatalogInformation*/,

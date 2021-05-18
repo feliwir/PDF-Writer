@@ -25,13 +25,9 @@
 
 using namespace PDFHummus;
 
-StateReader::StateReader()
-{
-}
+StateReader::StateReader() = default;
 
-StateReader::~StateReader()
-{
-}
+StateReader::~StateReader() = default;
 
 EStatusCode StateReader::Start(const std::string &inStateFilePath)
 {

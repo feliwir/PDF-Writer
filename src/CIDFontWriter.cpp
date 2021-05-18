@@ -37,13 +37,9 @@
 
 using namespace PDFHummus;
 
-CIDFontWriter::CIDFontWriter()
-{
-}
+CIDFontWriter::CIDFontWriter() = default;
 
-CIDFontWriter::~CIDFontWriter()
-{
-}
+CIDFontWriter::~CIDFontWriter() = default;
 
 static const std::string scType = "Type";
 static const std::string scFont = "Font";

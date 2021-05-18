@@ -36,9 +36,7 @@ WrittenFontTrueType::WrittenFontTrueType(ObjectsContext *inObjectsContext) : Abs
 {
 }
 
-WrittenFontTrueType::~WrittenFontTrueType()
-{
-}
+WrittenFontTrueType::~WrittenFontTrueType() = default;
 
 /*
 here's what i'm deciding on:

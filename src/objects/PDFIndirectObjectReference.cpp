@@ -27,6 +27,4 @@ PDFIndirectObjectReference::PDFIndirectObjectReference(ObjectIDType inObjectID, 
     mVersion = inVersion;
 }
 
-PDFIndirectObjectReference::~PDFIndirectObjectReference()
-{
-}
+PDFIndirectObjectReference::~PDFIndirectObjectReference() = default;

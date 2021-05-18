@@ -25,9 +25,7 @@ TrailerInformation::TrailerInformation()
     mPrev = 0;
 }
 
-TrailerInformation::~TrailerInformation()
-{
-}
+TrailerInformation::~TrailerInformation() = default;
 
 void TrailerInformation::SetInfoDictionaryReference(const ObjectReference &inInfoDictionaryReference)
 {

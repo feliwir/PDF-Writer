@@ -28,9 +28,7 @@ GraphicStateStack::GraphicStateStack()
     mGraphicStateStack.push_back(GraphicState());
 }
 
-GraphicStateStack::~GraphicStateStack()
-{
-}
+GraphicStateStack::~GraphicStateStack() = default;
 
 void GraphicStateStack::Push()
 {

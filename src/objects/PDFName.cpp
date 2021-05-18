@@ -25,9 +25,7 @@ PDFName::PDFName(const std::string &inValue) : PDFObject(eType)
     mValue = inValue;
 }
 
-PDFName::~PDFName()
-{
-}
+PDFName::~PDFName() = default;
 
 const std::string &PDFName::GetValue() const
 {

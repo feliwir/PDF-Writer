@@ -36,9 +36,7 @@ XCryptionCommon::XCryptionCommon()
         mPaddingFiller.push_back(i);
 }
 
-XCryptionCommon::~XCryptionCommon()
-{
-}
+XCryptionCommon::~XCryptionCommon() = default;
 
 void XCryptionCommon::Setup(bool inUsingAES)
 {

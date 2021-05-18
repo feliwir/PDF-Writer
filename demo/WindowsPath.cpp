@@ -2,18 +2,14 @@
 
 #include <sstream>
 
-WindowsPath::WindowsPath()
-{
-}
+WindowsPath::WindowsPath() = default;
 
 WindowsPath::WindowsPath(const string &inPath)
 {
     SetPathFromString(inPath);
 }
 
-WindowsPath::~WindowsPath()
-{
-}
+WindowsPath::~WindowsPath() = default;
 
 void WindowsPath::SetPathFromString(const string &inPath)
 {

@@ -25,13 +25,9 @@
 
 using namespace PDFHummus;
 
-CharStringType1Tracer::CharStringType1Tracer()
-{
-}
+CharStringType1Tracer::CharStringType1Tracer() = default;
 
-CharStringType1Tracer::~CharStringType1Tracer()
-{
-}
+CharStringType1Tracer::~CharStringType1Tracer() = default;
 
 /*
 EStatusCode CharStringType1Tracer::TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input* inType1Input, IByteWriter*

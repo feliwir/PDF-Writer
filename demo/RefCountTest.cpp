@@ -27,13 +27,9 @@
 using namespace std;
 using namespace PDFHummus;
 
-RefCountTest::RefCountTest()
-{
-}
+RefCountTest::RefCountTest() = default;
 
-RefCountTest::~RefCountTest()
-{
-}
+RefCountTest::~RefCountTest() = default;
 
 // this will serve as our sample class
 class MyClass : public RefCountObject

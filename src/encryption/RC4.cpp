@@ -21,9 +21,7 @@ limitations under the License.
 
 #include "RC4.h"
 
-RC4::RC4()
-{
-}
+RC4::RC4() = default;
 
 RC4::RC4(const ByteList &inKey)
 {
@@ -68,9 +66,7 @@ void RC4::Init(const uint8_t *inKey, size_t inLength)
     mI = mJ = 0;
 }
 
-RC4::~RC4()
-{
-}
+RC4::~RC4() = default;
 
 void RC4::Swap(int a, int b)
 {

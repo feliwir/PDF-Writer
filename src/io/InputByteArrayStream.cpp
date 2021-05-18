@@ -33,9 +33,7 @@ InputByteArrayStream::InputByteArrayStream(uint8_t *inByteArray, long long inArr
     mCurrentPosition = 0;
 }
 
-InputByteArrayStream::~InputByteArrayStream()
-{
-}
+InputByteArrayStream::~InputByteArrayStream() = default;
 
 void InputByteArrayStream::Assign(uint8_t *inByteArray, long long inArrayLength)
 {

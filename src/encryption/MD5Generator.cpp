@@ -86,9 +86,7 @@ MD5Generator::MD5Generator()
     mState[3] = 0x10325476;
 }
 
-MD5Generator::~MD5Generator()
-{
-}
+MD5Generator::~MD5Generator() = default;
 
 EStatusCode MD5Generator::Accumulate(const std::string &inString)
 {

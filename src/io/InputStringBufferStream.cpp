@@ -31,9 +31,7 @@ void InputStringBufferStream::Assign(MyStringBuf *inBufferToReadFrom)
     mBufferToReadFrom = inBufferToReadFrom;
 }
 
-InputStringBufferStream::~InputStringBufferStream()
-{
-}
+InputStringBufferStream::~InputStringBufferStream() = default;
 
 size_t InputStringBufferStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {

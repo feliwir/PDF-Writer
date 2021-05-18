@@ -31,9 +31,7 @@ PDFPage::PDFPage()
     mBleedBox.first = false;
 }
 
-PDFPage::~PDFPage()
-{
-}
+PDFPage::~PDFPage() = default;
 
 void PDFPage::SetMediaBox(const PDFRectangle &inMediaBox)
 {

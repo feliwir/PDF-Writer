@@ -36,13 +36,9 @@
 
 using namespace PDFHummus;
 
-CFFANSIFontWriter::CFFANSIFontWriter()
-{
-}
+CFFANSIFontWriter::CFFANSIFontWriter() = default;
 
-CFFANSIFontWriter::~CFFANSIFontWriter()
-{
-}
+CFFANSIFontWriter::~CFFANSIFontWriter() = default;
 
 static const std::string scType1C = "Type1C";
 static const char *scType1Type = "Type 1";

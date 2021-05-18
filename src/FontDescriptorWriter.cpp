@@ -25,13 +25,9 @@
 #include "text/freetype/EFontStretch.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 
-FontDescriptorWriter::FontDescriptorWriter()
-{
-}
+FontDescriptorWriter::FontDescriptorWriter() = default;
 
-FontDescriptorWriter::~FontDescriptorWriter()
-{
-}
+FontDescriptorWriter::~FontDescriptorWriter() = default;
 
 static const std::string scType = "Type";
 static const std::string scFontDescriptor = "FontDescriptor";

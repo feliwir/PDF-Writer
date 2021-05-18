@@ -22,9 +22,7 @@ limitations under the License.
 
 using namespace std;
 
-InputStringStream::InputStringStream()
-{
-}
+InputStringStream::InputStringStream() = default;
 
 InputStringStream::InputStringStream(const string &inString)
 {
@@ -33,9 +31,7 @@ InputStringStream::InputStringStream(const string &inString)
     mCurrentPosition = mStartPosition;
 }
 
-InputStringStream::~InputStringStream()
-{
-}
+InputStringStream::~InputStringStream() = default;
 
 void InputStringStream::Assign(const string &inString)
 {

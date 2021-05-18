@@ -30,13 +30,9 @@
 
 using namespace PDFHummus;
 
-TextUsageBugs::TextUsageBugs()
-{
-}
+TextUsageBugs::TextUsageBugs() = default;
 
-TextUsageBugs::~TextUsageBugs()
-{
-}
+TextUsageBugs::~TextUsageBugs() = default;
 
 EStatusCode TextUsageBugs::Run(const TestConfiguration &inTestConfiguration)
 {

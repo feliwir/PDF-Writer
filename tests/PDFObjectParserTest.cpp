@@ -114,9 +114,7 @@ template <class _resultObjectType> class ExpectedResult
     {
         mTypedObject = object; // addrefs if valid object
     }
-    ~ExpectedResult()
-    {
-    }
+    ~ExpectedResult() = default;
 
     int setResult(const std::string &input, const std::string &expected, PDFObjectParserTestLogHelper &log)
     {

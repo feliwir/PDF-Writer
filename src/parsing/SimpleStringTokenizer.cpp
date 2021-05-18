@@ -30,9 +30,7 @@ SimpleStringTokenizer::SimpleStringTokenizer()
     ResetReadState();
 }
 
-SimpleStringTokenizer::~SimpleStringTokenizer()
-{
-}
+SimpleStringTokenizer::~SimpleStringTokenizer() = default;
 
 void SimpleStringTokenizer::SetReadStream(IByteReader *inSourceStream)
 {

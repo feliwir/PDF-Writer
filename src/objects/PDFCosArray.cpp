@@ -3,10 +3,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "PDFCosArray.h"
+
+#include <utility>
+
 #include "PDFCosDict.h"
 
 PDFCosArray::PDFCosArray(PDFCosDict &parentDict, std::string name)
-    : m_Name(name), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)
+    : m_Name(std::move(name)), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)
 {
     if (!m_Name.empty())
         parentDict.m_DictonaryContext->WriteKey(m_Name);

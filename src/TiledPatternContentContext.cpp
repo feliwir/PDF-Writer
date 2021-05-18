@@ -33,9 +33,7 @@ TiledPatternContentContext::TiledPatternContentContext(PDFHummus::DocumentContex
     SetPDFStreamForWrite(mObjectOfContext->GetContentStream());
 }
 
-TiledPatternContentContext::~TiledPatternContentContext()
-{
-}
+TiledPatternContentContext::~TiledPatternContentContext() = default;
 
 ResourcesDictionary *TiledPatternContentContext::GetResourcesDictionary()
 {
@@ -54,9 +52,7 @@ class TiledPatternImageWritingTask : public ITiledPatternEndWritingTask
         mPDFParsingOptions = inPDFParsingOptions;
     }
 
-    ~TiledPatternImageWritingTask() override
-    {
-    }
+    ~TiledPatternImageWritingTask() override = default;
 
     PDFHummus::EStatusCode Write(PDFTiledPattern * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
                                  PDFHummus::DocumentContext *inDocumentContext) override

@@ -53,9 +53,7 @@ PDFWriter::PDFWriter()
     mIsModified = false;
 }
 
-PDFWriter::~PDFWriter()
-{
-}
+PDFWriter::~PDFWriter() = default;
 
 EPDFVersion thisOrDefaultVersion(EPDFVersion inPDFVersion)
 {

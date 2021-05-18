@@ -28,9 +28,7 @@ PDFRectangle::PDFRectangle()
     UpperRightY = 0;
 }
 
-PDFRectangle::~PDFRectangle()
-{
-}
+PDFRectangle::~PDFRectangle() = default;
 
 PDFRectangle::PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY)
 {

@@ -208,9 +208,7 @@ AbstractContentContext::AbstractContentContext(PDFHummus::DocumentContext *inDoc
     mDocumentContext = inDocumentContext;
 }
 
-AbstractContentContext::~AbstractContentContext()
-{
-}
+AbstractContentContext::~AbstractContentContext() = default;
 
 void AbstractContentContext::SetPDFStreamForWrite(PDFStream *inStream)
 {

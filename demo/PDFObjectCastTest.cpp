@@ -29,13 +29,9 @@
 using namespace std;
 using namespace PDFHummus;
 
-PDFObjectCastTest::PDFObjectCastTest()
-{
-}
+PDFObjectCastTest::PDFObjectCastTest() = default;
 
-PDFObjectCastTest::~PDFObjectCastTest()
-{
-}
+PDFObjectCastTest::~PDFObjectCastTest() = default;
 
 EStatusCode PDFObjectCastTest::Run(const TestConfiguration & /*inTestConfiguration*/)
 {

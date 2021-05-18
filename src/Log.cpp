@@ -84,9 +84,7 @@ Log::Log(IByteWriter *inLogStream)
     mLogMethod = STATIC_LogEntryToStream;
 }
 
-Log::~Log()
-{
-}
+Log::~Log() = default;
 
 void Log::LogEntry(const std::string &inMessage)
 {

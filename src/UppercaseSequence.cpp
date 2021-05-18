@@ -39,9 +39,7 @@ void UppercaseSequence::Reset()
     mSequanceString = "AAAAAA";
 }
 
-UppercaseSequence::~UppercaseSequence()
-{
-}
+UppercaseSequence::~UppercaseSequence() = default;
 
 const std::string &UppercaseSequence::GetNextValue()
 {

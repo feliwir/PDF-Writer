@@ -37,9 +37,7 @@ ResourcesDictionary::ResourcesDictionary()
     mShadingCount = 0;
 }
 
-ResourcesDictionary::~ResourcesDictionary()
-{
-}
+ResourcesDictionary::~ResourcesDictionary() = default;
 
 void ResourcesDictionary::AddProcsetResource(const std::string &inResourceName)
 {
