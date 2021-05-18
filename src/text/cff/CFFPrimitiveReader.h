@@ -27,7 +27,7 @@ class CFFPrimitiveReader
 {
   public:
     CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile = NULL);
-    ~CFFPrimitiveReader(void);
+    ~CFFPrimitiveReader(void) = default;
 
     void SetStream(IByteReaderWithPosition *inCFFFile);
     void SetOffset(long long inNewOffset);

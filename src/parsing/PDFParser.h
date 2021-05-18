@@ -96,7 +96,7 @@ class PDFParser
     DecryptionHelper &GetDecryptionHelper();
 
     // below become available after initial parsing [this level is from the header]
-    double GetPDFLevel();
+    double GetPDFLevel() const;
 
     // GetTrailer, not calling AddRef
     PDFDictionary *GetTrailer();
@@ -107,7 +107,7 @@ class PDFParser
 
     // Creates a new object, use smart pointers to control ownership
     PDFObject *ParseNewObject(ObjectIDType inObjectId);
-    ObjectIDType GetObjectsCount();
+    ObjectIDType GetObjectsCount() const;
 
     // Query a dictinary object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct dictionary value, use PDFDictionary::QueryDirectObject [will AddRef automatically]
@@ -118,7 +118,7 @@ class PDFParser
     // won't]
     PDFObject *QueryArrayObject(PDFArray *inArray, unsigned long inIndex);
 
-    unsigned long GetPagesCount();
+    unsigned long GetPagesCount() const;
     // don't be confused - pass number of pages here. returns the dictionary, and verifies that it's actually a page
     // (via type)
     PDFDictionary *ParsePage(unsigned long inPageIndex);
@@ -171,9 +171,9 @@ class PDFParser
     void SetParserExtender(IPDFParserExtender *inParserExtender);
 
     // advanced, direct xref access
-    ObjectIDType GetXrefSize();
+    ObjectIDType GetXrefSize() const;
     XrefEntryInput *GetXrefEntry(ObjectIDType inObjectID);
-    long long GetXrefPosition();
+    long long GetXrefPosition() const;
 
     IByteReaderWithPosition *GetParserStream();
 

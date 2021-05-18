@@ -39,7 +39,7 @@ class PDFStreamInput : public PDFObject
     // These two calls AddRef on both objects
     PDFDictionary *QueryStreamDictionary();
 
-    long long GetStreamContentStart();
+    long long GetStreamContentStart() const;
 
   private:
     PDFDictionary *mDictionary;

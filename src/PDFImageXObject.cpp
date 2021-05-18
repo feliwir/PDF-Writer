@@ -33,7 +33,7 @@ PDFImageXObject::PDFImageXObject(ObjectIDType inImageObjectID, const std::string
 
 PDFImageXObject::~PDFImageXObject() = default;
 
-ObjectIDType PDFImageXObject::GetImageObjectID()
+ObjectIDType PDFImageXObject::GetImageObjectID() const
 {
     return mImageObjectID;
 }

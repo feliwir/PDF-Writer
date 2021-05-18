@@ -36,10 +36,10 @@ class PageTree
     PageTree(IndirectObjectsReferenceRegistry &inObjectsRegistry);
     ~PageTree(void);
 
-    ObjectIDType GetID();
+    ObjectIDType GetID() const;
     PageTree *GetParent();
-    bool IsLeafParent();
-    int GetNodesCount();
+    bool IsLeafParent() const;
+    int GetNodesCount() const;
     // will return null for improper indexes or if has page IDs as children
     PageTree *GetPageTreeChild(int i);
 

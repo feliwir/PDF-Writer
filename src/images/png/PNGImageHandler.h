@@ -49,7 +49,7 @@ class PNGImageHandler
     };
 
     PNGImageHandler();
-    ~PNGImageHandler(void);
+    ~PNGImageHandler(void) = default;
 
     PDFFormXObject *CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream, ObjectIDType inFormXObjectID);
 

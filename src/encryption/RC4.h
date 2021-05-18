@@ -32,7 +32,7 @@ class RC4
     RC4();
     RC4(const ByteList &inKey);
     RC4(const uint8_t *inKey, size_t inLength);
-    ~RC4(void);
+    ~RC4(void) = default;
 
     void Reset(const ByteList &inKey);
     void Reset(const uint8_t *inKey, size_t inLength);

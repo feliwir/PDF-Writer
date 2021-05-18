@@ -30,7 +30,7 @@ class PrimitiveObjectsWriter
 {
   public:
     PrimitiveObjectsWriter(IByteWriter *inStreamForWriting = NULL);
-    ~PrimitiveObjectsWriter(void);
+    ~PrimitiveObjectsWriter(void) = default;
 
     void SetStreamForWriting(IByteWriter *inStreamForWriting);
 

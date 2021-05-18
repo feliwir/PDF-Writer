@@ -121,5 +121,5 @@ class CFFEmbeddedFontWriter
                                                       long long &outWriteSize, long long &outWritePosition);
     PDFHummus::EStatusCode UpdateIndexesAtTopDict();
 
-    void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs, FontDictInfoToByteMap &outNewFontDictsIndexes);
+    void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs, FontDictInfoToByteMap &outNewFontDictsIndexes) const;
 };

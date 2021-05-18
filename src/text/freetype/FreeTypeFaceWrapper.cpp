@@ -673,7 +673,7 @@ const std::string &FreeTypeFaceWrapper::GetFontFilePath()
     return mFontFilePath;
 }
 
-long FreeTypeFaceWrapper::GetFontIndex()
+long FreeTypeFaceWrapper::GetFontIndex() const
 {
     return mFontIndex;
 }

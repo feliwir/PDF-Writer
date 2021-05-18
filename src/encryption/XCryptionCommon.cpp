@@ -371,7 +371,7 @@ bool XCryptionCommon::algorithm3_7(unsigned int inRevision, unsigned int inLengt
     return algorithm3_6(inRevision, inLength, hashResult, inO, inP, inFileIDPart1, inEncryptMetaData, inU);
 }
 
-bool XCryptionCommon::IsUsingAES()
+bool XCryptionCommon::IsUsingAES() const
 {
     return mUsingAES;
 }

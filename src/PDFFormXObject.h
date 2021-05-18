@@ -39,8 +39,8 @@ class PDFFormXObject
                    PDFStream *inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID);
     ~PDFFormXObject(void);
 
-    ObjectIDType GetObjectID();
-    ObjectIDType GetResourcesDictionaryObjectID();
+    ObjectIDType GetObjectID() const;
+    ObjectIDType GetResourcesDictionaryObjectID() const;
 
     ResourcesDictionary &GetResourcesDictionary();
     XObjectContentContext *GetContentContext();

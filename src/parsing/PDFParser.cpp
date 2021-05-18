@@ -690,7 +690,7 @@ PDFDictionary *PDFParser::GetTrailer()
     return mTrailer.GetPtr();
 }
 
-double PDFParser::GetPDFLevel()
+double PDFParser::GetPDFLevel() const
 {
     return mPDFLevel;
 }
@@ -713,7 +713,7 @@ PDFObject *PDFParser::ParseNewObject(ObjectIDType inObjectId)
         return nullptr;
 }
 
-ObjectIDType PDFParser::GetObjectsCount()
+ObjectIDType PDFParser::GetObjectsCount() const
 {
     return mXrefSize;
 }
@@ -957,7 +957,7 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
     return status;
 }
 
-unsigned long PDFParser::GetPagesCount()
+unsigned long PDFParser::GetPagesCount() const
 {
     return mPagesCount;
 }
@@ -2197,7 +2197,7 @@ bool PDFParser::IsEncryptionSupported()
            ((mParserExtender != nullptr) && mParserExtender->DoesSupportEncryption());
 }
 
-ObjectIDType PDFParser::GetXrefSize()
+ObjectIDType PDFParser::GetXrefSize() const
 {
     return mXrefSize;
 }
@@ -2207,7 +2207,7 @@ XrefEntryInput *PDFParser::GetXrefEntry(ObjectIDType inObjectID)
     return (inObjectID < mXrefSize) ? mXrefTable + inObjectID : nullptr;
 }
 
-long long PDFParser::GetXrefPosition()
+long long PDFParser::GetXrefPosition() const
 {
     return mLastXrefPosition;
 }

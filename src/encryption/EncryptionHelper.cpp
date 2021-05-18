@@ -63,12 +63,12 @@ void EncryptionHelper::Release()
     mXcrypts.clear();
 }
 
-bool EncryptionHelper::SupportsEncryption()
+bool EncryptionHelper::SupportsEncryption() const
 {
     return mSupportsEncryption;
 }
 
-bool EncryptionHelper::IsDocumentEncrypted()
+bool EncryptionHelper::IsDocumentEncrypted() const
 {
     return mIsDocumentEncrypted;
 }

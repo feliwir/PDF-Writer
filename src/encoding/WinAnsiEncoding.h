@@ -30,7 +30,7 @@ class WinAnsiEncoding
 {
   public:
     WinAnsiEncoding(void);
-    ~WinAnsiEncoding(void);
+    ~WinAnsiEncoding(void) = default;
 
     BoolAndByte Encode(unsigned long inUnicodeCharacter);
     const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);

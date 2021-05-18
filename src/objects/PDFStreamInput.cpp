@@ -39,7 +39,7 @@ PDFDictionary *PDFStreamInput::QueryStreamDictionary()
     return mDictionary;
 }
 
-long long PDFStreamInput::GetStreamContentStart()
+long long PDFStreamInput::GetStreamContentStart() const
 {
     return mStreamContentStart;
 }

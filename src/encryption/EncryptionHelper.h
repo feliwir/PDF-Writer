@@ -56,12 +56,12 @@ class EncryptionHelper
         SupportsEncryption will respond true, if the encryption requested is supported. this includes true on the case
        that encryption was not requested
     */
-    bool SupportsEncryption();
+    bool SupportsEncryption() const;
     /*
         IsDocumentEncrypted will respond true, if encryption was requested and is supported. this will return false if
        encryption was not requested
     */
-    bool IsDocumentEncrypted();
+    bool IsDocumentEncrypted() const;
     /*
         IsEncrypting will return true if actually encrypting now. it may be false if encryption was not requested, not
        supported or that the encrytion mechanism is not currently in a state that encrypts (say when writing an

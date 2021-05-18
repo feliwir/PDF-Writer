@@ -24,7 +24,7 @@ class PDFRectangle
 {
   public:
     PDFRectangle(void);
-    ~PDFRectangle(void);
+    ~PDFRectangle(void) = default;
 
     PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY);
     PDFRectangle(const PDFRectangle &inOther);

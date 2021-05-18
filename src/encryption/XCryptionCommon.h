@@ -95,7 +95,7 @@ class XCryptionCommon
     bool algorithm3_7(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword, const ByteList &inO,
                       long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList &inU);
 
-    bool IsUsingAES();
+    bool IsUsingAES() const;
 
   private:
     ByteList mPaddingFiller;

@@ -30,7 +30,7 @@ SimpleStringTokenizer::SimpleStringTokenizer()
     ResetReadState();
 }
 
-SimpleStringTokenizer::~SimpleStringTokenizer() = default;
+
 
 void SimpleStringTokenizer::SetReadStream(IByteReader *inSourceStream)
 {
@@ -164,7 +164,7 @@ void SimpleStringTokenizer::SaveTokenBuffer(uint8_t inToSave)
     --mStreamPositionTracker; // decreasing position trakcer, because it is as if the byte is put back in the stream
 }
 
-long long SimpleStringTokenizer::GetReadBufferSize()
+long long SimpleStringTokenizer::GetReadBufferSize() const
 {
     return mHasTokenBuffer ? 1 : 0;
 }
@@ -178,7 +178,7 @@ bool SimpleStringTokenizer::IsPDFEntityBreaker(uint8_t inCharacter)
     return isEntityBreak;
 }
 
-long long SimpleStringTokenizer::GetRecentTokenPosition()
+long long SimpleStringTokenizer::GetRecentTokenPosition() const
 {
     return mRecentTokenPosition;
 }

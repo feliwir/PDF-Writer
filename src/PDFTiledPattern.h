@@ -39,8 +39,8 @@ class PDFTiledPattern
                     ObjectIDType inResourcesDictionaryID);
     ~PDFTiledPattern(void);
 
-    ObjectIDType GetObjectID();
-    ObjectIDType GetResourcesDictionaryObjectID();
+    ObjectIDType GetObjectID() const;
+    ObjectIDType GetResourcesDictionaryObjectID() const;
 
     ResourcesDictionary &GetResourcesDictionary();
     TiledPatternContentContext *GetContentContext();

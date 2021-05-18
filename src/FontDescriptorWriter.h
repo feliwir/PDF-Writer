@@ -38,7 +38,7 @@ class FontDescriptorWriter
 {
   public:
     FontDescriptorWriter(void);
-    ~FontDescriptorWriter(void);
+    ~FontDescriptorWriter(void) = default;
 
     void WriteFontDescriptor(ObjectIDType inFontDescriptorObjectID, const std::string &inFontPostscriptName,
                              FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,

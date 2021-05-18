@@ -60,10 +60,10 @@ class PDFStream
     // FlushStreamContentForDirectExtentStream() to actually write it.
     void FinalizeStreamWrite();
 
-    bool IsStreamCompressed();
-    ObjectIDType GetExtentObjectID();
+    bool IsStreamCompressed() const;
+    ObjectIDType GetExtentObjectID() const;
 
-    long long GetLength(); // get the stream extent
+    long long GetLength() const; // get the stream extent
 
     // direct extent specific
     DictionaryContext *GetStreamDictionaryForDirectExtentStream();

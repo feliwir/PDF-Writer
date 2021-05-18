@@ -280,7 +280,7 @@ static const char *scGlyphNames[256] = {".notdef",
 
 PDFDocEncoding::PDFDocEncoding() = default;
 
-PDFDocEncoding::~PDFDocEncoding() = default;
+
 
 BoolAndByte PDFDocEncoding::Encode(unsigned long inUnicodeCharacter)
 {

@@ -38,12 +38,12 @@ PDFTiledPattern::~PDFTiledPattern()
     delete mContentContext;
 }
 
-ObjectIDType PDFTiledPattern::GetObjectID()
+ObjectIDType PDFTiledPattern::GetObjectID() const
 {
     return mObjectID;
 }
 
-ObjectIDType PDFTiledPattern::GetResourcesDictionaryObjectID()
+ObjectIDType PDFTiledPattern::GetResourcesDictionaryObjectID() const
 {
     return mResourcesDictionaryID;
 }

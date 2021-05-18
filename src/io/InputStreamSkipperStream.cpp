@@ -55,7 +55,7 @@ bool InputStreamSkipperStream::NotEnded()
     return mStream != nullptr ? mStream->NotEnded() : false;
 }
 
-bool InputStreamSkipperStream::CanSkipTo(long long inPositionInStream)
+bool InputStreamSkipperStream::CanSkipTo(long long inPositionInStream) const
 {
     return mAmountRead <= inPositionInStream;
 }

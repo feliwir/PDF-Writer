@@ -29,7 +29,7 @@ class Type2CharStringWriter
 {
   public:
     Type2CharStringWriter(IByteWriter *inTargetStream);
-    ~Type2CharStringWriter(void);
+    ~Type2CharStringWriter(void) = default;
 
     void Assign(IByteWriter *inTargetStream);
 

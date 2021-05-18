@@ -48,7 +48,7 @@ class JPEGImageParser
 {
   public:
     JPEGImageParser(void);
-    ~JPEGImageParser(void);
+    ~JPEGImageParser(void) = default;
 
     PDFHummus::EStatusCode Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation);
 

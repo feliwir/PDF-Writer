@@ -37,7 +37,7 @@ PDFDate::PDFDate()
     SetTime(-1);
 }
 
-PDFDate::~PDFDate() = default;
+
 
 void PDFDate::SetTime(int inYear, int inMonth, int inDay, int inHour, int inMinute, int inSecond, EUTCRelation inUTC,
                       int inHourFromUTC, int inMinuteFromUTC)
@@ -53,7 +53,7 @@ void PDFDate::SetTime(int inYear, int inMonth, int inDay, int inHour, int inMinu
     MinuteFromUTC = inMinuteFromUTC;
 }
 
-bool PDFDate::IsNull()
+bool PDFDate::IsNull() const
 {
     return -1 == Year;
 }

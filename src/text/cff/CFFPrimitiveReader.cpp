@@ -28,7 +28,7 @@ CFFPrimitiveReader::CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile)
     SetStream(inCFFFile);
 }
 
-CFFPrimitiveReader::~CFFPrimitiveReader() = default;
+
 
 void CFFPrimitiveReader::SetStream(IByteReaderWithPosition *inCFFFile)
 {

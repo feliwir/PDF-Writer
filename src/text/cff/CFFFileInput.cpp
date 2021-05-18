@@ -830,7 +830,7 @@ EStatusCode CFFFileInput::ReadStringIndex()
     return mPrimitivesReader.GetInternalState();
 }
 
-std::string CFFFileInput::GetStringForSID(unsigned short inSID)
+std::string CFFFileInput::GetStringForSID(unsigned short inSID) const
 {
     if (inSID < N_STD_STRINGS)
         return scStandardStrings[inSID];
@@ -1929,7 +1929,7 @@ EStatusCode CFFFileInput::ReadCFFFile(IByteReaderWithPosition *inCFFFile, const 
     return ReadCFFFileByIndexOrName(inCFFFile, inFontName, 0);
 }
 
-unsigned short CFFFileInput::GetFontsCount(unsigned short /*inFontIndex*/)
+unsigned short CFFFileInput::GetFontsCount(unsigned short /*inFontIndex*/) const
 {
     return mFontsCount;
 }

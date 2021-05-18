@@ -100,7 +100,7 @@ class DecryptionHelper
     supported or that the encrytion mechanism is not currently in a state that encrypts (say when writing an encryption
     dictionary).
     */
-    bool IsDecrypting();
+    bool IsDecrypting() const;
 
     //	void HaltDecryption();
     //	void ContinueDecryption();

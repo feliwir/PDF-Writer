@@ -111,7 +111,7 @@ class PFMFileReader
 {
   public:
     PFMFileReader(void);
-    ~PFMFileReader(void);
+    ~PFMFileReader(void) = default;
 
     PDFHummus::EStatusCode Read(const std::string &inPFMFilePath);
 

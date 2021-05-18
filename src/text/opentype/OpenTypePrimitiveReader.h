@@ -27,7 +27,7 @@ class OpenTypePrimitiveReader
 {
   public:
     OpenTypePrimitiveReader(IByteReaderWithPosition *inTrueTypeFile = NULL);
-    ~OpenTypePrimitiveReader(void);
+    ~OpenTypePrimitiveReader(void) = default;
 
     void SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile);
     void SetOffset(long long inNewOffset);

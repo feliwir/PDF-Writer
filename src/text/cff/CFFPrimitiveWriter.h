@@ -27,7 +27,7 @@ class CFFPrimitiveWriter
 {
   public:
     CFFPrimitiveWriter(IByteWriter *inCFFOutput = NULL);
-    ~CFFPrimitiveWriter(void);
+    ~CFFPrimitiveWriter(void) = default;
 
     void SetStream(IByteWriter *inCFFOutput);
 

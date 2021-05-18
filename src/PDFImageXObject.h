@@ -33,7 +33,7 @@ class PDFImageXObject
     PDFImageXObject(ObjectIDType inImageObjectID, const std::string &inRequiredProcsetResourceName);
     ~PDFImageXObject(void);
 
-    ObjectIDType GetImageObjectID();
+    ObjectIDType GetImageObjectID() const;
     const StringList &GetRequiredProcsetResourceNames() const;
 
     void AddRequiredProcset(const std::string &inRequiredProcsetResourceName);

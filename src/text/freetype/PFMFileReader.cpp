@@ -27,7 +27,7 @@ using namespace PDFHummus;
 
 PFMFileReader::PFMFileReader() = default;
 
-PFMFileReader::~PFMFileReader() = default;
+
 
 EStatusCode PFMFileReader::Read(const std::string &inPFMFilePath)
 {

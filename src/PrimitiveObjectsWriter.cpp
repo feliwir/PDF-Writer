@@ -30,7 +30,7 @@ PrimitiveObjectsWriter::PrimitiveObjectsWriter(IByteWriter *inStreamForWriting)
     mStreamForWriting = inStreamForWriting;
 }
 
-PrimitiveObjectsWriter::~PrimitiveObjectsWriter() = default;
+
 
 static const uint8_t scSpace[] = {' '};
 void PrimitiveObjectsWriter::WriteTokenSeparator(ETokenSeparator inSeparate)

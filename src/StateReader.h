@@ -35,7 +35,7 @@ class StateReader
 
     PDFHummus::EStatusCode Start(const std::string &inStateFilePath);
     PDFParser *GetObjectsReader();
-    ObjectIDType GetRootObjectID();
+    ObjectIDType GetRootObjectID() const;
     void Finish();
 
   private:

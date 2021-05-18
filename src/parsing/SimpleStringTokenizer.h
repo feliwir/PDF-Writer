@@ -35,14 +35,14 @@ class SimpleStringTokenizer
 {
   public:
     SimpleStringTokenizer(void);
-    ~SimpleStringTokenizer(void);
+    ~SimpleStringTokenizer(void) = default;
 
     void SetReadStream(IByteReader *inSourceStream);
     BoolAndString GetNextToken();
     void ResetReadState();
     void ResetReadState(const SimpleStringTokenizer &inExternalTokenizer);
-    long long GetRecentTokenPosition();
-    long long GetReadBufferSize();
+    long long GetRecentTokenPosition() const;
+    long long GetReadBufferSize() const;
 
   private:
     IByteReader *mStream;

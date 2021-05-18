@@ -138,17 +138,17 @@ void PDFStream::FinalizeStreamWrite()
     }
 }
 
-long long PDFStream::GetLength()
+long long PDFStream::GetLength() const
 {
     return mStreamLength;
 }
 
-bool PDFStream::IsStreamCompressed()
+bool PDFStream::IsStreamCompressed() const
 {
     return mCompressStream;
 }
 
-ObjectIDType PDFStream::GetExtentObjectID()
+ObjectIDType PDFStream::GetExtentObjectID() const
 {
     return mExtendObjectID;
 }

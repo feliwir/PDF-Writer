@@ -27,7 +27,7 @@ OpenTypePrimitiveReader::OpenTypePrimitiveReader(IByteReaderWithPosition *inOpen
     SetOpenTypeStream(inOpenTypeFile);
 }
 
-OpenTypePrimitiveReader::~OpenTypePrimitiveReader() = default;
+
 
 void OpenTypePrimitiveReader::SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile)
 {

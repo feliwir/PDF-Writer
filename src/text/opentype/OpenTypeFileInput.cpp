@@ -783,7 +783,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
     return mPrimitivesReader.GetInternalState();
 }
 
-unsigned short OpenTypeFileInput::GetGlyphsCount()
+unsigned short OpenTypeFileInput::GetGlyphsCount() const
 {
     return mMaxp.NumGlyphs;
 }

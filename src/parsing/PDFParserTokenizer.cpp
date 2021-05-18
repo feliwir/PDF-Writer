@@ -30,7 +30,7 @@ PDFParserTokenizer::PDFParserTokenizer()
     ResetReadState();
 }
 
-PDFParserTokenizer::~PDFParserTokenizer() = default;
+
 
 void PDFParserTokenizer::SetReadStream(IByteReader *inSourceStream)
 {
@@ -369,7 +369,7 @@ void PDFParserTokenizer::SaveTokenBuffer(uint8_t inToSave)
     --mStreamPositionTracker; // decreasing position trakcer, because it is as if the byte is put back in the stream
 }
 
-long long PDFParserTokenizer::GetReadBufferSize()
+long long PDFParserTokenizer::GetReadBufferSize() const
 {
     return mHasTokenBuffer ? 1 : 0;
 }
@@ -383,7 +383,7 @@ bool PDFParserTokenizer::IsPDFEntityBreaker(uint8_t inCharacter)
     return isEntityBreak;
 }
 
-long long PDFParserTokenizer::GetRecentTokenPosition()
+long long PDFParserTokenizer::GetRecentTokenPosition() const
 {
     return mRecentTokenPosition;
 }

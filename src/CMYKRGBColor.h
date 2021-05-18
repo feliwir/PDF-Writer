@@ -28,7 +28,7 @@ class CMYKRGBColor
     CMYKRGBColor(void);
     CMYKRGBColor(unsigned char inR, unsigned char inG, unsigned char inB);
     CMYKRGBColor(unsigned char inC, unsigned char inM, unsigned char inY, unsigned char inK);
-    ~CMYKRGBColor(void);
+    ~CMYKRGBColor(void) = default;
 
     bool UseCMYK; // toggle RGB or CMYK
     unsigned char RGBComponents[3];

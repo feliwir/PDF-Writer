@@ -431,7 +431,7 @@ EStatusCode Type1Input::ParseEncoding()
     return status;
 }
 
-bool Type1Input::IsCustomEncoding()
+bool Type1Input::IsCustomEncoding() const
 {
     return eType1EncodingTypeCustom == mEncoding.EncodingType;
 }

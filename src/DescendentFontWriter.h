@@ -41,7 +41,7 @@ class DescendentFontWriter : public IFontDescriptorHelper
 {
   public:
     DescendentFontWriter(void);
-    ~DescendentFontWriter(void);
+    ~DescendentFontWriter(void) = default;
 
     // the IDescendentFontWriter input pointer will implement the font specific differences
     virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,

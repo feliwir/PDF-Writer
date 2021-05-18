@@ -38,12 +38,12 @@ PDFFormXObject::~PDFFormXObject()
     delete mContentContext;
 }
 
-ObjectIDType PDFFormXObject::GetObjectID()
+ObjectIDType PDFFormXObject::GetObjectID() const
 {
     return mXObjectID;
 }
 
-ObjectIDType PDFFormXObject::GetResourcesDictionaryObjectID()
+ObjectIDType PDFFormXObject::GetResourcesDictionaryObjectID() const
 {
     return mResourcesDictionaryID;
 }

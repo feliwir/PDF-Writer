@@ -198,7 +198,7 @@ class OpenTypeFileInput
 
     EOpenTypeInputType GetOpenTypeFontType();
 
-    unsigned short GetGlyphsCount();
+    unsigned short GetGlyphsCount() const;
 
     unsigned long mHeaderOffset;
     unsigned long mTableOffset;

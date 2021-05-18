@@ -28,7 +28,7 @@ CFFPrimitiveWriter::CFFPrimitiveWriter(IByteWriter *inCFFOutput)
     SetStream(inCFFOutput);
 }
 
-CFFPrimitiveWriter::~CFFPrimitiveWriter() = default;
+
 
 void CFFPrimitiveWriter::SetStream(IByteWriter *inCFFOutput)
 {

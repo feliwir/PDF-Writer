@@ -48,7 +48,7 @@ class InputStreamSkipperStream : public IByteReader, public IReadPositionProvide
     virtual long long GetCurrentPosition();
 
     // here's the interesting part.
-    bool CanSkipTo(long long inPositionInStream);
+    bool CanSkipTo(long long inPositionInStream) const;
 
     // will skip if can, which is either if not passed position (check with CanSkipTo), or if while skipping will hit
     // EOF

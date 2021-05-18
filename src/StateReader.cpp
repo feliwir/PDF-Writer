@@ -56,7 +56,7 @@ PDFParser *StateReader::GetObjectsReader()
     return &mParser;
 }
 
-ObjectIDType StateReader::GetRootObjectID()
+ObjectIDType StateReader::GetRootObjectID() const
 {
     return mRootObject;
 }

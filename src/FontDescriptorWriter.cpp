@@ -27,7 +27,7 @@
 
 FontDescriptorWriter::FontDescriptorWriter() = default;
 
-FontDescriptorWriter::~FontDescriptorWriter() = default;
+
 
 static const std::string scType = "Type";
 static const std::string scFontDescriptor = "FontDescriptor";

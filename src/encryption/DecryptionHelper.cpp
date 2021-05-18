@@ -398,7 +398,7 @@ IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(PDFStreamInput *i
     return inToWrapStream;
 }
 
-bool DecryptionHelper::IsDecrypting()
+bool DecryptionHelper::IsDecrypting() const
 {
     return IsEncrypted() && CanDecryptDocument() && mDecryptionPauseLevel == 0;
 }

@@ -30,7 +30,7 @@ class PDFDocEncoding
 {
   public:
     PDFDocEncoding(void);
-    ~PDFDocEncoding(void);
+    ~PDFDocEncoding(void) = default;
 
     BoolAndByte Encode(unsigned long inUnicodeCharacter);
     unsigned long Decode(uint8_t inEncodedCharacter);

@@ -755,7 +755,7 @@ typedef std::pair<long long, long long> LongFilePositionTypePair;
 typedef std::map<FontDictInfo *, LongFilePositionTypePair> FontDictInfoToLongFilePositionTypePairMap;
 
 void CFFEmbeddedFontWriter::DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs,
-                                                    FontDictInfoToByteMap &outNewFontDictsIndexes)
+                                                    FontDictInfoToByteMap &outNewFontDictsIndexes) const
 {
     auto itGlyphs = inSubsetGlyphIDs.begin();
     FontDictInfoSet fontDictInfos;

@@ -35,7 +35,7 @@ class PDFParserTokenizer
 {
   public:
     PDFParserTokenizer(void);
-    ~PDFParserTokenizer(void);
+    ~PDFParserTokenizer(void) = default;
 
     // Assign the stream to read from (does not take ownership of the stream)
     void SetReadStream(IByteReader *inSourceStream);
@@ -62,13 +62,13 @@ class PDFParserTokenizer
     // GetNextToken). the implementation counts bytes as it goes, as such any external shifting of the stream will
     // render the method invalid. In other words - use only if the only position movement is through GetNextToken
     // repeated calls. Specifically "ResetReadState" resets the count
-    long long GetRecentTokenPosition();
+    long long GetRecentTokenPosition() const;
 
     // return the current buffer size. may be 1 or 0. if 1, means that the next char for tokenizing will be taken
     // from the buffer rather from the stream and only later the stream read will be resumed.
     // if you are trying to determine the current position reading the stream, take this size into account (substracting
     // from the current position) to get the "virtual" position from the tokenizer point of view.
-    long long GetReadBufferSize();
+    long long GetReadBufferSize() const;
 
   private:
     IByteReader *mStream;

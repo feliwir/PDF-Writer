@@ -106,7 +106,7 @@ PageTree *PageTree::CreateBrotherOrCousin(IndirectObjectsReferenceRegistry &inOb
     return nephew;
 }
 
-ObjectIDType PageTree::GetID()
+ObjectIDType PageTree::GetID() const
 {
     return mPageTreeID;
 }
@@ -116,12 +116,12 @@ PageTree *PageTree::GetParent()
     return mParent;
 }
 
-bool PageTree::IsLeafParent()
+bool PageTree::IsLeafParent() const
 {
     return mIsLeafParent;
 }
 
-int PageTree::GetNodesCount()
+int PageTree::GetNodesCount() const
 {
     return mKidsIndex;
 }

@@ -98,7 +98,7 @@ class FreeTypeFaceWrapper
     bool IsCharachterCodeAdobeStandard(FT_ULong inCharacterCode);
 
     const std::string &GetFontFilePath();
-    long GetFontIndex();
+    long GetFontIndex() const;
 
     // use this method to align measurements from (remember the dreaded point per EM!!!).
     // all measurements in this class are already aligned...so no need to align them

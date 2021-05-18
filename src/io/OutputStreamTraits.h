@@ -31,7 +31,7 @@ class OutputStreamTraits
 {
   public:
     OutputStreamTraits(IByteWriter *inOutputStream);
-    ~OutputStreamTraits(void);
+    ~OutputStreamTraits(void) = default;
 
     PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream);
     PDFHummus::EStatusCode CopyToOutputStream(IByteReader *inInputStream, size_t inLength);

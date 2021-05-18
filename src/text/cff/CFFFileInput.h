@@ -205,7 +205,7 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
                                                              unsigned short inCharStringIndex,
                                                              CharString2Dependencies &ioDependenciesInfo);
 
-    unsigned short GetFontsCount(unsigned short inFontIndex);
+    unsigned short GetFontsCount(unsigned short inFontIndex) const;
     unsigned short GetCharStringsCount(unsigned short inFontIndex);
     std::string GetGlyphName(unsigned short inFontIndex, unsigned short inGlyphIndex);
     unsigned short GetGlyphSID(unsigned short inFontIndex, unsigned short inGlyphIndex);
@@ -265,7 +265,7 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     CharStringList mAdditionalGlyphs;
     CharSetInfo *mCurrentCharsetInfo;
 
-    std::string GetStringForSID(unsigned short inSID);
+    std::string GetStringForSID(unsigned short inSID) const;
     PDFHummus::EStatusCode ReadHeader();
     PDFHummus::EStatusCode ReadNameIndex();
     PDFHummus::EStatusCode ReadIndexHeader(unsigned long **outOffsets, unsigned short &outItemsCount);

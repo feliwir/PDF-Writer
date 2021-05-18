@@ -26,7 +26,7 @@ class StandardEncoding
 {
   public:
     StandardEncoding(void);
-    ~StandardEncoding(void);
+    ~StandardEncoding(void) = default;
 
     const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };

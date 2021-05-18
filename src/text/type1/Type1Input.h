@@ -123,7 +123,7 @@ class Type1Input : public Type1InterpreterImplementationAdapter
     std::string GetGlyphCharStringName(uint8_t inCharStringIndex);
     bool IsValidGlyphIndex(uint8_t inCharStringIndex);
     uint8_t GetEncoding(const std::string &inCharStringName);
-    bool IsCustomEncoding();
+    bool IsCustomEncoding() const;
 
     // some structs for you all laddies and lasses
     Type1FontDictionary mFontDictionary;

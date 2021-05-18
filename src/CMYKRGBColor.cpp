@@ -27,7 +27,7 @@ CMYKRGBColor::CMYKRGBColor()
     CMYKComponents[0] = CMYKComponents[1] = CMYKComponents[2] = CMYKComponents[3] = 0;
 }
 
-CMYKRGBColor::~CMYKRGBColor() = default;
+
 
 CMYKRGBColor::CMYKRGBColor(unsigned char inR, unsigned char inG, unsigned char inB)
 {

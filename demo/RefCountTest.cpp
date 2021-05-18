@@ -47,7 +47,7 @@ class MyClass : public RefCountObject
         --TotalObjectsCount;
     }
 
-    int GetID()
+    int GetID() const
     {
         return mID;
     }

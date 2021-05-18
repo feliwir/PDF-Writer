@@ -30,7 +30,7 @@ class TrueTypePrimitiveWriter
 {
   public:
     TrueTypePrimitiveWriter(OutputStringBufferStream *inTrueTypeFile = NULL);
-    ~TrueTypePrimitiveWriter(void);
+    ~TrueTypePrimitiveWriter(void) = default;
 
     void SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile);
 
