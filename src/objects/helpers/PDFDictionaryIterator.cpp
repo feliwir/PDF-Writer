@@ -15,7 +15,7 @@ PDFArrayIterator PDFDictionaryIterator::Array(const std::string &s)
         return PDFArrayIterator(mParser);
 
     PDFObjectCastPtr<PDFArray> foundArray(mDictonary->QueryDirectObject(s));
-    if (foundArray != nullptr)
+    if (foundArray.GetPtr() != nullptr)
         return PDFArrayIterator(mParser, foundArray);
     return PDFArrayIterator(mParser);
 }

@@ -408,7 +408,7 @@ void AbstractWrittenFont::WriteGlyphEncodingInfoState(ObjectsContext *inStateWri
     inStateWriter->EndIndirectObject();
 }
 
-EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, PDFDictionary *inState)
+EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState)
 {
     PDFObjectCastPtr<PDFDictionary> cidRepresentationState(
         inStateReader->QueryDictionaryObject(inState, "mCIDRepresentation"));
@@ -421,7 +421,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
     if (cidRepresentationState.GetPtr() != nullptr)
     {
         mCIDRepresentation = new WrittenFontRepresentation();
-        ReadWrittenFontState(inStateReader, cidRepresentationState.GetPtr(), mCIDRepresentation);
+        ReadWrittenFontState(inStateReader, cidRepresentationState, mCIDRepresentation);
     }
     else
         mCIDRepresentation = nullptr;
@@ -429,14 +429,14 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, P
     if (ansiRepresentationState.GetPtr() != nullptr)
     {
         mANSIRepresentation = new WrittenFontRepresentation();
-        ReadWrittenFontState(inStateReader, ansiRepresentationState.GetPtr(), mANSIRepresentation);
+        ReadWrittenFontState(inStateReader, ansiRepresentationState, mANSIRepresentation);
     }
     else
         mANSIRepresentation = nullptr;
     return PDFHummus::eSuccess;
 }
 
-void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, PDFDictionary *inState,
+void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState,
                                                WrittenFontRepresentation *inRepresentation)
 {
     PDFObjectCastPtr<PDFArray> glyphIDToEncodedCharState(inState->QueryDirectObject("mGlyphIDToEncodedChar"));

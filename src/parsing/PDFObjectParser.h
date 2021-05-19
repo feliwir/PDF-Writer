@@ -27,9 +27,9 @@
 #include <stdio.h>
 
 #include <list>
+#include <memory>
 #include <string>
 #include <utility>
-#include <memory>
 
 class PDFObject;
 class IByteReader;

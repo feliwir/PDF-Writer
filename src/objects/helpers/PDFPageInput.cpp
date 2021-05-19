@@ -27,7 +27,7 @@
 #include "objects/PDFName.h"
 #include "parsing/PDFParser.h"
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, PDFObject *inPageObject) : mPageObject(inPageObject)
+PDFPageInput::PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject) : mPageObject(inPageObject)
 {
     mParser = inParser;
     AssertPageObjectValid();
@@ -53,13 +53,6 @@ PDFPageInput::PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<PDFDictio
     AssertPageObjectValid();
 }
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, const RefCountPtr<PDFDictionary> &inPageObject)
-{
-    mParser = inParser;
-    mPageObject = inPageObject.GetPtr();
-    AssertPageObjectValid();
-}
-
 PDFPageInput::PDFPageInput(const PDFPageInput &inOtherPage)
 {
     mParser = inOtherPage.mParser;
@@ -77,11 +70,11 @@ bool PDFPageInput::operator!()
 int PDFPageInput::GetRotate()
 {
     int result = 0;
-    RefCountPtr<PDFObject> rotation(QueryInheritedValue(mPageObject.GetPtr(), "Rotate"));
+    std::shared_ptr<PDFObject> rotation(QueryInheritedValue(mPageObject, "Rotate"));
     if (!rotation)
         return result;
 
-    ParsedPrimitiveHelper helper(rotation.GetPtr());
+    ParsedPrimitiveHelper helper(rotation);
     if (!helper.IsNumber())
     {
         TRACE_LOG("PDFPageInput::GetRotate, Exception, pdf page rotation must be numeric value. defaulting to 0");
@@ -103,7 +96,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
 {
     PDFRectangle result;
 
-    PDFObjectCastPtr<PDFArray> mediaBox(QueryInheritedValue(mPageObject.GetPtr(), "MediaBox"));
+    PDFObjectCastPtr<PDFArray> mediaBox(QueryInheritedValue(mPageObject, "MediaBox"));
     if (!mediaBox || mediaBox->GetLength() != 4)
     {
         TRACE_LOG("PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
@@ -111,7 +104,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
     }
     else
     {
-        SetPDFRectangleFromPDFArray(mediaBox.GetPtr(), result);
+        SetPDFRectangleFromPDFArray(mediaBox, result);
     }
 
     return result;
@@ -120,12 +113,12 @@ PDFRectangle PDFPageInput::GetMediaBox()
 PDFRectangle PDFPageInput::GetCropBox()
 {
     PDFRectangle result;
-    PDFObjectCastPtr<PDFArray> cropBox(QueryInheritedValue(mPageObject.GetPtr(), "CropBox"));
+    PDFObjectCastPtr<PDFArray> cropBox(QueryInheritedValue(mPageObject, "CropBox"));
 
     if (!cropBox || cropBox->GetLength() != 4)
         result = GetMediaBox();
     else
-        SetPDFRectangleFromPDFArray(cropBox.GetPtr(), result);
+        SetPDFRectangleFromPDFArray(cropBox, result);
     return result;
 }
 
@@ -137,12 +130,12 @@ PDFRectangle PDFPageInput::GetTrimBox()
 PDFRectangle PDFPageInput::GetBoxAndDefaultWithCrop(const std::string &inBoxName)
 {
     PDFRectangle result;
-    PDFObjectCastPtr<PDFArray> aBox(QueryInheritedValue(mPageObject.GetPtr(), inBoxName));
+    PDFObjectCastPtr<PDFArray> aBox(QueryInheritedValue(mPageObject, inBoxName));
 
     if (!aBox || aBox->GetLength() != 4)
         result = GetCropBox();
     else
-        SetPDFRectangleFromPDFArray(aBox.GetPtr(), result);
+        SetPDFRectangleFromPDFArray(aBox, result);
     return result;
 }
 
@@ -157,7 +150,8 @@ PDFRectangle PDFPageInput::GetArtBox()
 }
 
 static const std::string scParent = "Parent";
-PDFObject *PDFPageInput::QueryInheritedValue(PDFDictionary *inDictionary, const std::string &inName)
+std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(std::shared_ptr<PDFDictionary> inDictionary,
+                                                             const std::string &inName)
 {
     if (inDictionary->Exists(inName))
     {
@@ -168,20 +162,20 @@ PDFObject *PDFPageInput::QueryInheritedValue(PDFDictionary *inDictionary, const 
         PDFObjectCastPtr<PDFDictionary> parent(mParser->QueryDictionaryObject(inDictionary, scParent));
         if (!parent)
             return nullptr;
-        return QueryInheritedValue(parent.GetPtr(), inName);
+        return QueryInheritedValue(parent, inName);
     }
     return nullptr;
 }
 
-void PDFPageInput::SetPDFRectangleFromPDFArray(PDFArray *inPDFArray, PDFRectangle &outPDFRectangle)
+void PDFPageInput::SetPDFRectangleFromPDFArray(std::shared_ptr<PDFArray> inPDFArray, PDFRectangle &outPDFRectangle)
 {
-    RefCountPtr<PDFObject> lowerLeftX(inPDFArray->QueryObject(0));
-    RefCountPtr<PDFObject> lowerLeftY(inPDFArray->QueryObject(1));
-    RefCountPtr<PDFObject> upperRightX(inPDFArray->QueryObject(2));
-    RefCountPtr<PDFObject> upperRightY(inPDFArray->QueryObject(3));
+    std::shared_ptr<PDFObject> lowerLeftX(inPDFArray->QueryObject(0));
+    std::shared_ptr<PDFObject> lowerLeftY(inPDFArray->QueryObject(1));
+    std::shared_ptr<PDFObject> upperRightX(inPDFArray->QueryObject(2));
+    std::shared_ptr<PDFObject> upperRightY(inPDFArray->QueryObject(3));
 
-    outPDFRectangle.LowerLeftX = ParsedPrimitiveHelper(lowerLeftX.GetPtr()).GetAsDouble();
-    outPDFRectangle.LowerLeftY = ParsedPrimitiveHelper(lowerLeftY.GetPtr()).GetAsDouble();
-    outPDFRectangle.UpperRightX = ParsedPrimitiveHelper(upperRightX.GetPtr()).GetAsDouble();
-    outPDFRectangle.UpperRightY = ParsedPrimitiveHelper(upperRightY.GetPtr()).GetAsDouble();
+    outPDFRectangle.LowerLeftX = ParsedPrimitiveHelper(lowerLeftX).GetAsDouble();
+    outPDFRectangle.LowerLeftY = ParsedPrimitiveHelper(lowerLeftY).GetAsDouble();
+    outPDFRectangle.UpperRightX = ParsedPrimitiveHelper(upperRightX).GetAsDouble();
+    outPDFRectangle.UpperRightY = ParsedPrimitiveHelper(upperRightY).GetAsDouble();
 }

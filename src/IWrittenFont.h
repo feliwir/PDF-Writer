@@ -25,6 +25,7 @@
 #include "ObjectsBasicTypes.h"
 
 #include <list>
+#include <memory>
 #include <vector>
 
 typedef std::list<uint16_t> UShortList;

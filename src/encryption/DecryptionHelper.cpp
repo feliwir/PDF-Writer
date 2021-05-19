@@ -19,7 +19,7 @@ limitations under the License.
 
 */
 #include "DecryptionHelper.h"
-#include "RefCountPtr.h"
+
 #include "Trace.h"
 #include "io/InputAESDecodeStream.h"
 #include "io/InputRC4XcodeStream.h"
@@ -73,7 +73,7 @@ void DecryptionHelper::Reset()
     Release();
 }
 
-uint32_t ComputeLength(PDFObject *inLengthObject)
+uint32_t ComputeLength(std::shared_ptr<PDFObject> inLengthObject)
 {
     ParsedPrimitiveHelper lengthHelper(inLengthObject);
     uint32_t value = lengthHelper.IsNumber() ? (uint32_t)lengthHelper.GetAsInteger() : 40;
@@ -99,16 +99,16 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
     mParser = inParser;
 
     // setup encrypted flag through the existance of encryption dict
-    PDFObjectCastPtr<PDFDictionary> encryptionDictionary(
-        inParser->QueryDictionaryObject(inParser->GetTrailer(), "Encrypt"));
-    mIsEncrypted = encryptionDictionary.GetPtr() != nullptr;
+    std::shared_ptr<PDFDictionary> encryptionDictionary =
+        std::static_pointer_cast<PDFDictionary>(inParser->QueryDictionaryObject(inParser->GetTrailer(), "Encrypt"));
+    mIsEncrypted = encryptionDictionary != nullptr;
 
     do
     {
         if (!mIsEncrypted)
             break;
 
-        PDFObjectCastPtr<PDFName> filter(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "Filter"));
+        PDFObjectCastPtr<PDFName> filter(inParser->QueryDictionaryObject(encryptionDictionary, "Filter"));
         if (!filter || filter->GetValue() != "Standard")
         {
             // Supporting only standard filter
@@ -121,14 +121,14 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
             break;
         }
 
-        RefCountPtr<PDFObject> v(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "V"));
+        std::shared_ptr<PDFObject> v(inParser->QueryDictionaryObject(encryptionDictionary, "V"));
         if (!v)
         {
             mV = 0;
         }
         else
         {
-            ParsedPrimitiveHelper vHelper(v.GetPtr());
+            ParsedPrimitiveHelper vHelper(v);
             if (!vHelper.IsNumber())
                 break;
             mV = (uint32_t)vHelper.GetAsInteger();
@@ -143,56 +143,56 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
             break;
         }
 
-        RefCountPtr<PDFObject> revision(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "R"));
+        std::shared_ptr<PDFObject> revision(inParser->QueryDictionaryObject(encryptionDictionary, "R"));
         if (!revision)
         {
             break;
         }
         else
         {
-            ParsedPrimitiveHelper revisionHelper(revision.GetPtr());
+            ParsedPrimitiveHelper revisionHelper(revision);
             if (!revisionHelper.IsNumber())
                 break;
             mRevision = (uint32_t)revisionHelper.GetAsInteger();
         }
 
-        RefCountPtr<PDFObject> o(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "O"));
+        std::shared_ptr<PDFObject> o(inParser->QueryDictionaryObject(encryptionDictionary, "O"));
         if (!o)
         {
             break;
         }
         else
         {
-            ParsedPrimitiveHelper oHelper(o.GetPtr());
+            ParsedPrimitiveHelper oHelper(o);
             mO = XCryptionCommon::stringToByteList(oHelper.ToString());
         }
 
-        RefCountPtr<PDFObject> u(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "U"));
+        std::shared_ptr<PDFObject> u(inParser->QueryDictionaryObject(encryptionDictionary, "U"));
         if (!u)
         {
             break;
         }
         else
         {
-            ParsedPrimitiveHelper uHelper(u.GetPtr());
+            ParsedPrimitiveHelper uHelper(u);
             mU = XCryptionCommon::stringToByteList(uHelper.ToString());
         }
 
-        RefCountPtr<PDFObject> p(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "P"));
+        std::shared_ptr<PDFObject> p(inParser->QueryDictionaryObject(encryptionDictionary, "P"));
         if (!p)
         {
             break;
         }
         else
         {
-            ParsedPrimitiveHelper pHelper(p.GetPtr());
+            ParsedPrimitiveHelper pHelper(p);
             if (!pHelper.IsNumber())
                 break;
             mP = pHelper.GetAsInteger();
         }
 
         PDFObjectCastPtr<PDFBoolean> encryptMetadata(
-            inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "EncryptMetadata"));
+            inParser->QueryDictionaryObject(encryptionDictionary, "EncryptMetadata"));
         if (!encryptMetadata)
         {
             mEncryptMetaData = true;
@@ -207,30 +207,29 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
         PDFObjectCastPtr<PDFArray> idArray(inParser->QueryDictionaryObject(inParser->GetTrailer(), "ID"));
         if (!!idArray && idArray->GetLength() > 0)
         {
-            RefCountPtr<PDFObject> idPart1Object(inParser->QueryArrayObject(idArray.GetPtr(), 0));
+            std::shared_ptr<PDFObject> idPart1Object(inParser->QueryArrayObject(idArray, 0));
             if (!!idPart1Object)
             {
-                ParsedPrimitiveHelper idPart1ObjectHelper(idPart1Object.GetPtr());
+                ParsedPrimitiveHelper idPart1ObjectHelper(idPart1Object);
                 mFileIDPart1 = XCryptionCommon::stringToByteList(idPart1ObjectHelper.ToString());
             }
         }
 
-        RefCountPtr<PDFObject> length(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "Length"));
+        std::shared_ptr<PDFObject> length(inParser->QueryDictionaryObject(encryptionDictionary, "Length"));
         if (!length)
         {
             mLength = 40 / 8;
         }
         else
         {
-            mLength = ComputeLength(length.GetPtr());
+            mLength = ComputeLength(length);
         }
 
         // Setup crypt filters, or a default filter
         if (mV == 4)
         {
             // multiple xcryptions. read crypt filters, determine which does what
-            PDFObjectCastPtr<PDFDictionary> cryptFilters(
-                inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "CF"));
+            PDFObjectCastPtr<PDFDictionary> cryptFilters(inParser->QueryDictionaryObject(encryptionDictionary, "CF"));
             if (!!cryptFilters)
             {
                 MapIterator<PDFNameToPDFObjectMap> cryptFiltersIt = cryptFilters->GetIterator();
@@ -245,10 +244,9 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
                     cryptFilter = cryptFiltersIt.GetValue();
                     if (!!cryptFilter)
                     {
-                        PDFObjectCastPtr<PDFName> cfmName(inParser->QueryDictionaryObject(cryptFilter.GetPtr(), "CFM"));
-                        RefCountPtr<PDFObject> lengthObject(
-                            inParser->QueryDictionaryObject(cryptFilter.GetPtr(), "Length"));
-                        uint32_t length = !lengthObject ? mLength : ComputeLength(lengthObject.GetPtr());
+                        PDFObjectCastPtr<PDFName> cfmName(inParser->QueryDictionaryObject(cryptFilter, "CFM"));
+                        std::shared_ptr<PDFObject> lengthObject(inParser->QueryDictionaryObject(cryptFilter, "Length"));
+                        uint32_t length = !lengthObject ? mLength : ComputeLength(lengthObject);
 
                         auto *encryption = new XCryptionCommon();
                         encryption->Setup(cfmName->GetValue() == "AESV2"); // singe xcryptions are always RC4
@@ -260,9 +258,9 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
                 }
 
                 PDFObjectCastPtr<PDFName> streamsFilterName(
-                    inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "StmF"));
+                    inParser->QueryDictionaryObject(encryptionDictionary, "StmF"));
                 PDFObjectCastPtr<PDFName> stringsFilterName(
-                    inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "StrF"));
+                    inParser->QueryDictionaryObject(encryptionDictionary, "StrF"));
                 mXcryptStreams =
                     GetFilterForName(mXcrypts, !streamsFilterName ? "Identity" : streamsFilterName->GetValue());
                 mXcryptStrings =
@@ -322,12 +320,12 @@ bool DecryptionHelper::DidSucceedOwnerPasswordVerification() const
 
 static const string scEcnryptionKeyMetadataKey = "DecryptionHelper.EncryptionKey";
 
-bool HasCryptFilterDefinition(PDFParser *inParser, PDFStreamInput *inStream)
+bool HasCryptFilterDefinition(PDFParser *inParser, std::shared_ptr<PDFStreamInput> inStream)
 {
-    RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
 
     // check if stream has a crypt filter
-    RefCountPtr<PDFObject> filterObject(inParser->QueryDictionaryObject(streamDictionary.GetPtr(), "Filter"));
+    std::shared_ptr<PDFObject> filterObject(inParser->QueryDictionaryObject(streamDictionary, "Filter"));
     if (!filterObject)
     {
         // no filter, so stop here
@@ -336,7 +334,7 @@ bool HasCryptFilterDefinition(PDFParser *inParser, PDFStreamInput *inStream)
 
     if (filterObject->GetType() == PDFObject::ePDFObjectArray)
     {
-        auto *filterObjectArray = (PDFArray *)filterObject.GetPtr();
+        auto filterObjectArray = std::static_pointer_cast<PDFArray>(filterObject);
         bool foundCrypt = false;
         for (unsigned long i = 0; i < filterObjectArray->GetLength() && !foundCrypt; ++i)
         {
@@ -352,12 +350,12 @@ bool HasCryptFilterDefinition(PDFParser *inParser, PDFStreamInput *inStream)
     }
     if (filterObject->GetType() == PDFObject::ePDFObjectName)
     {
-        return ((PDFName *)(filterObject.GetPtr()))->GetValue() == "Crypt";
+        return std::static_pointer_cast<PDFName>(filterObject)->GetValue() == "Crypt";
     }
     return false; //???
 }
 
-IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(PDFStreamInput *inStream,
+IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
                                                                       IByteReader *inToWrapStream)
 {
     // This will create a decryption filter for streams that dont have their own defined crypt filters. null for no
@@ -375,7 +373,8 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(PDFStreamI
     return nullptr;
 }
 
-IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(PDFStreamInput *inStream, IByteReader *inToWrapStream,
+IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
+                                                               IByteReader *inToWrapStream,
                                                                const std::string &inCryptName)
 {
     // note that here the original stream is returned instead of null
@@ -431,7 +430,7 @@ void DecryptionHelper::OnObjectStart(long long inObjectID, long long inGeneratio
     }
 }
 
-XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
+XCryptionCommon *DecryptionHelper::GetCryptForStream(std::shared_ptr<PDFStreamInput> inStream)
 {
     // Get crypt for stream will return the right crypt filter thats supposed to be used for stream
     // whether its the default stream encryption or a specific filter defined in the stream
@@ -441,12 +440,12 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
     if (HasCryptFilterDefinition(mParser, inStream))
     {
         // find position of crypt filter, and get the name of the crypt filter from the decodeParams
-        RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+        std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
 
-        RefCountPtr<PDFObject> filterObject(mParser->QueryDictionaryObject(streamDictionary.GetPtr(), "Filter"));
+        std::shared_ptr<PDFObject> filterObject(mParser->QueryDictionaryObject(streamDictionary, "Filter"));
         if (filterObject->GetType() == PDFObject::ePDFObjectArray)
         {
-            auto *filterObjectArray = (PDFArray *)filterObject.GetPtr();
+            auto filterObjectArray = std::static_pointer_cast<PDFArray>(filterObject);
             unsigned long i = 0;
             for (; i < filterObjectArray->GetLength(); ++i)
             {
@@ -457,16 +456,15 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
             if (i < filterObjectArray->GetLength())
             {
                 PDFObjectCastPtr<PDFArray> decodeParams(
-                    mParser->QueryDictionaryObject(streamDictionary.GetPtr(), "DecodeParms"));
+                    mParser->QueryDictionaryObject(streamDictionary, "DecodeParms"));
                 if (!decodeParams)
                     return mXcryptStreams;
                 // got index, look for the name in the decode params array
-                PDFObjectCastPtr<PDFDictionary> decodeParamsItem((mParser->QueryArrayObject(decodeParams.GetPtr(), i)));
+                PDFObjectCastPtr<PDFDictionary> decodeParamsItem((mParser->QueryArrayObject(decodeParams, i)));
                 if (!decodeParamsItem)
                     return mXcryptStreams;
 
-                PDFObjectCastPtr<PDFName> cryptFilterName(
-                    mParser->QueryDictionaryObject(decodeParamsItem.GetPtr(), "Name"));
+                PDFObjectCastPtr<PDFName> cryptFilterName(mParser->QueryDictionaryObject(decodeParamsItem, "Name"));
                 return GetFilterForName(mXcrypts, cryptFilterName->GetValue());
             }
             return mXcryptStreams; // this shouldn't realy happen
@@ -475,12 +473,11 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
         {
             // has to be crypt filter, look for the name in decode params
             PDFObjectCastPtr<PDFDictionary> decodeParamsItem(
-                (mParser->QueryDictionaryObject(streamDictionary.GetPtr(), "DecodeParms")));
+                (mParser->QueryDictionaryObject(streamDictionary, "DecodeParms")));
             if (!decodeParamsItem)
                 return mXcryptStreams;
 
-            PDFObjectCastPtr<PDFName> cryptFilterName(
-                mParser->QueryDictionaryObject(decodeParamsItem.GetPtr(), "Name"));
+            PDFObjectCastPtr<PDFName> cryptFilterName(mParser->QueryDictionaryObject(decodeParamsItem, "Name"));
             return GetFilterForName(mXcrypts, cryptFilterName->GetValue());
         }
         else
@@ -492,7 +489,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(PDFStreamInput *inStream)
     }
 }
 
-void DecryptionHelper::OnObjectEnd(PDFObject *inObject)
+void DecryptionHelper::OnObjectEnd(std::shared_ptr<PDFObject> inObject)
 {
     if (inObject == nullptr)
         return;
@@ -500,7 +497,7 @@ void DecryptionHelper::OnObjectEnd(PDFObject *inObject)
     // for streams, retain the encryption key with them, so i can later decrypt them when needed
     if ((inObject->GetType() == PDFObject::ePDFObjectStream) && IsDecrypting())
     {
-        XCryptionCommon *streamCryptFilter = GetCryptForStream((PDFStreamInput *)inObject);
+        XCryptionCommon *streamCryptFilter = GetCryptForStream(std::static_pointer_cast<PDFStreamInput>(inObject));
         if (streamCryptFilter != nullptr)
         {
             auto *savedKey = new ByteList(streamCryptFilter->GetCurrentObjectKey());

@@ -49,7 +49,8 @@ class PDFDictionaryIterator
         : mDictonary(inDict.GetPtr()), mDictonaryRefPtr(inDict), mParser(parser)
     {
     }
-    PDFDictionaryIterator(PDFParser &parser, PDFDictionary *inDict) : mDictonary(inDict), mParser(parser)
+    PDFDictionaryIterator(PDFParser &parser, std::shared_ptr<PDFDictionary> inDict)
+        : mDictonary(inDict), mParser(parser)
     {
     }
     std::string GetStrValue(const std::string &s);
@@ -61,12 +62,12 @@ class PDFDictionaryIterator
     bool WriteStreamToFile(InputFile &pdfFile, const std::string &s, const std::string &filePath);
 
   private:
-    void SetDictRefPtr(PDFDictionary *dictonary)
+    void SetDictRefPtr(std::shared_ptr<PDFDictionary> dictonary)
     {
         mDictonary = dictonary;
         mDictonaryRefPtr = dictonary;
     }
-    PDFDictionary *mDictonary;
+    std::shared_ptr<PDFDictionary> mDictonary;
     PDFObjectCastPtr<PDFDictionary> mDictonaryRefPtr;
     PDFParser &mParser;
 };

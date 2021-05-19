@@ -24,7 +24,7 @@
 #include "objects/PDFStreamInput.h"
 #include "parsing/PDFParser.h"
 
-ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(PDFArray *inArrayOfStreams, PDFParser *inParser)
+ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser)
 {
     mArray = inArrayOfStreams;
     mParser = inParser;
@@ -56,10 +56,10 @@ IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
 
     while ((mCurrentStream == nullptr) && mCurrentIndex < mArray->GetLength())
     {
-        PDFObjectCastPtr<PDFStreamInput> aStream = mParser->QueryArrayObject(mArray.GetPtr(), mCurrentIndex);
+        PDFObjectCastPtr<PDFStreamInput> aStream = mParser->QueryArrayObject(mArray, mCurrentIndex);
         if (!!aStream)
         {
-            mCurrentStream = mParser->StartReadingFromStream(aStream.GetPtr());
+            mCurrentStream = mParser->StartReadingFromStream(aStream);
             // couldn't start, try with next array object
             if (mCurrentStream == nullptr)
                 ++mCurrentIndex;

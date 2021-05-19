@@ -22,7 +22,6 @@
 #include "BoxingBase.h"
 #include "IPDFParserExtender.h"
 #include "PDFParserTokenizer.h"
-#include "RefCountPtr.h"
 #include "Trace.h"
 #include "io/ArrayOfInputStreamsStream.h"
 #include "io/IByteReaderWithPosition.h"
@@ -42,6 +41,7 @@
 #include "objects/PDFName.h"
 #include "objects/PDFObject.h"
 
+#include "objects/PDFObjectCast.h"
 #include "objects/PDFStreamInput.h"
 #include "objects/PDFSymbol.h"
 
@@ -348,11 +348,11 @@ EStatusCode PDFParser::ParseLastXrefPosition()
         mStream->SetPositionFromEnd(GetCurrentPositionFromEnd());
 
         mObjectParser.ResetReadState();
-        RefCountPtr<PDFObject> anObject(mObjectParser.ParseNewObject());
+        std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
 
         if (anObject->GetType() == PDFObject::ePDFObjectInteger)
         {
-            mLastXrefPosition = (long long)((PDFInteger *)anObject.GetPtr())->GetValue();
+            mLastXrefPosition = (long long)((PDFInteger *)anObject)->GetValue();
 
             // find and read startxref keyword
             if (!GoBackTillToken())
@@ -379,12 +379,12 @@ EStatusCode PDFParser::ParseLastXrefPosition()
              // the next would be the number
         {
             bool foundStartXref = (anObject->GetType() == PDFObject::ePDFObjectSymbol) &&
-                                  (((PDFSymbol *)anObject.GetPtr())->GetValue() == scStartxref);
+                                  (((PDFSymbol *)anObject)->GetValue() == scStartxref);
 
             while (!foundStartXref && mStream->NotEnded())
             {
                 PDFObjectCastPtr<PDFSymbol> startxRef(mObjectParser.ParseNewObject());
-                foundStartXref = (startxRef.GetPtr() != nullptr) && (startxRef->GetValue() == scStartxref);
+                foundStartXref = (startxRef != nullptr) && (startxRef->GetValue() == scStartxref);
             }
 
             if (!foundStartXref)
@@ -411,7 +411,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 }
 
 static const std::string scTrailer = "trailer";
-EStatusCode PDFParser::ParseTrailerDictionary(PDFDictionary **outTrailer)
+EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer)
 {
 
     EStatusCode status = PDFHummus::eSuccess;
@@ -448,7 +448,7 @@ EStatusCode PDFParser::ParseTrailerDictionary(PDFDictionary **outTrailer)
         }
 
         trailerDictionary->AddRef();
-        *outTrailer = trailerDictionary.GetPtr();
+        *outTrailer = trailerDictionary;
     } while (false);
 
     return status;
@@ -471,7 +471,7 @@ EStatusCode PDFParser::BuildXrefTableFromTable()
         bool hasPrev = mTrailer->Exists("Prev");
         if (hasPrev)
         {
-            status = ParsePreviousXrefs(mTrailer.GetPtr());
+            status = ParsePreviousXrefs(mTrailer);
             if (status != PDFHummus::eSuccess)
                 break;
         }
@@ -685,9 +685,9 @@ XrefEntryInput *PDFParser::ExtendXrefTableToSize(XrefEntryInput *inXrefTable, Ob
     return newTable;
 }
 
-PDFDictionary *PDFParser::GetTrailer()
+std::shared_ptr<PDFDictionary> PDFParser::GetTrailer()
 {
-    return mTrailer.GetPtr();
+    return mTrailer;
 }
 
 double PDFParser::GetPDFLevel() const
@@ -832,7 +832,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
             break;
         }
 
-        PDFObjectCastPtr<PDFInteger> totalPagesCount(QueryDictionaryObject(pages.GetPtr(), "Count"));
+        PDFObjectCastPtr<PDFInteger> totalPagesCount(QueryDictionaryObject(pages, "Count"));
         if (!totalPagesCount)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages count");
@@ -845,14 +845,14 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
 
         // now iterate through pages objects, and fill up the IDs [don't really need the object ID for the root pages
         // tree...but whatever
-        status = ParsePagesIDs(pages.GetPtr(), pagesReference->mObjectID);
+        status = ParsePagesIDs(pages, pagesReference->mObjectID);
 
     } while (false);
 
     return status;
 }
 
-EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inNodeObjectID)
+EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID)
 {
     unsigned long currentPageIndex = 0;
 
@@ -861,7 +861,7 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
 
 static const std::string scPage = "Page";
 static const std::string scPages = "Pages";
-EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inNodeObjectID,
+EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID,
                                      unsigned long &ioCurrentPageIndex)
 {
     // recursion.
@@ -898,7 +898,7 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
             // a Page tree node
             std::shared_ptr<PDFObject> pKids = inPageNode->QueryDirectObject("Kids");
             if ((pKids != nullptr) && pKids->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
-                pKids = ParseNewObject(((PDFIndirectObjectReference *)pKids)->mObjectID);
+                pKids = ParseNewObject(((std::shared_ptr<PDFIndirectObjectReference>)pKids)->mObjectID);
             PDFObjectCastPtr<PDFArray> kidsObject(pKids);
             if (!kidsObject)
             {
@@ -928,7 +928,7 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
                 }
 
                 PDFObjectCastPtr<PDFDictionary> pageNodeObject(
-                    ParseNewObject(((PDFIndirectObjectReference *)it.GetItem())->mObjectID));
+                    ParseNewObject(((std::shared_ptr<PDFIndirectObjectReference>)it.GetItem())->mObjectID));
                 if (!pageNodeObject)
                 {
                     TRACE_LOG("PDFParser::ParsePagesIDs, unable to parse page node object from kids reference");
@@ -936,7 +936,8 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
                     break;
                 }
 
-                status = ParsePagesIDs(pageNodeObject.GetPtr(), ((PDFIndirectObjectReference *)it.GetItem())->mObjectID,
+                status = ParsePagesIDs(pageNodeObject,
+                                       ((std::shared_ptr<PDFIndirectObjectReference>)it.GetItem())->mObjectID,
                                        ioCurrentPageIndex);
             }
         }
@@ -989,14 +990,15 @@ std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
     if (scPage == objectType->GetValue())
     {
         pageObject->AddRef();
-        return pageObject.GetPtr();
+        return pageObject;
     }
 
     TRACE_LOG1("PDFParser::ParsePage, page object listed in page array for %ld is actually not a page", inPageIndex);
     return nullptr;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary, const std::string &inName)
+std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary,
+                                                            const std::string &inName)
 {
     auto anObject = inDictionary->QueryDirectObject(inName);
 
@@ -1006,32 +1008,32 @@ std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFD
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         std::shared_ptr<PDFObject> theActualObject =
-            ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
+            ParseNewObject(((std::shared_ptr<PDFIndirectObjectReference>)anObject)->mObjectID);
         return theActualObject;
     }
 
     return anObject;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
+std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(std::shared_ptr<PDFArray> inArray, unsigned long inIndex)
 {
-    RefCountPtr<PDFObject> anObject(inArray->QueryObject(inIndex));
+    std::shared_ptr<PDFObject> anObject(inArray->QueryObject(inIndex));
 
-    if (anObject.GetPtr() == nullptr)
+    if (anObject == nullptr)
         return nullptr;
 
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         std::shared_ptr<PDFObject> theActualObject =
-            ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
+            ParseNewObject(((std::shared_ptr<PDFIndirectObjectReference>)anObject)->mObjectID);
         return theActualObject;
     }
 
     anObject->AddRef(); // adding ref to increase owners
-    return anObject.GetPtr();
+    return anObject;
 }
 
-EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
+EStatusCode PDFParser::ParsePreviousXrefs(std::shared_ptr<PDFDictionary> inTrailer)
 {
     PDFObjectCastPtr<PDFInteger> previousPosition(inTrailer->QueryDirectObject("Prev"));
     if (!previousPosition)
@@ -1045,7 +1047,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
     auto *aTable = new XrefEntryInput[mXrefSize];
     do
     {
-        PDFDictionary *trailerP = nullptr;
+        std::shared_ptr<PDFDictionary> trailerP = nullptr;
 
         XrefEntryInput *extendedTable = nullptr;
         ObjectIDType extendedTableSize;
@@ -1053,11 +1055,11 @@ EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
                                             &extendedTableSize);
         if (status != PDFHummus::eSuccess)
             break;
-        RefCountPtr<PDFDictionary> trailer(trailerP);
+        std::shared_ptr<PDFDictionary> trailer(trailerP);
 
         if (trailer->Exists("Prev"))
         {
-            status = ParsePreviousXrefs(trailer.GetPtr());
+            status = ParsePreviousXrefs(trailer);
             if (status != PDFHummus::eSuccess)
                 break;
         }
@@ -1080,7 +1082,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(PDFDictionary *inTrailer)
 }
 
 EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
-                                                  ObjectIDType inXrefSize, PDFDictionary **outTrailer,
+                                                  ObjectIDType inXrefSize, std::shared_ptr<PDFDictionary> *outTrailer,
                                                   XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     EStatusCode status = PDFHummus::eSuccess;
@@ -1090,22 +1092,21 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
     do
     {
         // take the object, so that we can check whether this is an Xref or an Xref stream
-        RefCountPtr<PDFObject> anObject(mObjectParser.ParseNewObject());
+        std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
         if (!anObject)
         {
             status = PDFHummus::eFailure;
             break;
         }
 
-        if (anObject->GetType() == PDFObject::ePDFObjectSymbol &&
-            ((PDFSymbol *)anObject.GetPtr())->GetValue() == scXref)
+        if (anObject->GetType() == PDFObject::ePDFObjectSymbol && ((PDFSymbol *)anObject)->GetValue() == scXref)
         {
             // xref table case
 
             // Parsing trailer. this is not really necessary at this point, but for faulty PDFs which first xref may
             // incorrectly skip 0 entry. A simple correction is possible, but it is required to know whether the
             // to-be-parsed xref is the first one, or not.
-            PDFDictionary *trailerDictionary = nullptr;
+            std::shared_ptr<PDFDictionary> trailerDictionary = nullptr;
             status = ParseTrailerDictionary(&trailerDictionary);
             if (status != PDFHummus::eSuccess)
                 break;
@@ -1128,7 +1129,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
 
             // For hybrids, check also XRefStm entry
             PDFObjectCastPtr<PDFInteger> xrefStmReference(trailerDictionary->QueryDirectObject("XRefStm"));
-            if (xrefStmReference.GetPtr() != nullptr)
+            if (xrefStmReference != nullptr)
             {
                 // if exists, merge update xref
                 status = ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStmReference->GetValue(),
@@ -1142,8 +1143,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
 
             *outTrailer = trailerDictionary;
         }
-        else if (anObject->GetType() == PDFObject::ePDFObjectInteger &&
-                 ((PDFInteger *)anObject.GetPtr())->GetValue() > 0)
+        else if (anObject->GetType() == PDFObject::ePDFObjectInteger && ((PDFInteger *)anObject)->GetValue() > 0)
         {
             // Xref stream case. make some validations, grab the xref stream object details, and parse it
 
@@ -1174,7 +1174,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                 break;
             }
 
-            NotifyIndirectObjectStart(((PDFInteger *)anObject.GetPtr())->GetValue(), versionObject->GetValue());
+            NotifyIndirectObjectStart(((PDFInteger *)anObject)->GetValue(), versionObject->GetValue());
 
             PDFObjectCastPtr<PDFStreamInput> xrefStream(mObjectParser.ParseNewObject());
             if (!xrefStream)
@@ -1184,12 +1184,12 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                 break;
             }
 
-            NotifyIndirectObjectEnd(xrefStream.GetPtr());
+            NotifyIndirectObjectEnd(xrefStream);
 
             *outTrailer = xrefStream->QueryStreamDictionary();
 
-            status = ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStream.GetPtr(), outExtendedTable,
-                                             outExtendedTableSize);
+            status =
+                ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStream, outExtendedTable, outExtendedTableSize);
             if (status != PDFHummus::eSuccess)
                 break;
         }
@@ -1229,23 +1229,22 @@ EStatusCode PDFParser::ParseFileDirectory()
     {
 
         // take the object, so that we can check whether this is an Xref or an Xref stream
-        RefCountPtr<PDFObject> anObject(mObjectParser.ParseNewObject());
+        std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
         if (!anObject)
         {
             status = PDFHummus::eFailure;
             break;
         }
 
-        if (anObject->GetType() == PDFObject::ePDFObjectSymbol &&
-            ((PDFSymbol *)anObject.GetPtr())->GetValue() == scXref)
+        if (anObject->GetType() == PDFObject::ePDFObjectSymbol && ((PDFSymbol *)anObject)->GetValue() == scXref)
         {
             // this would be a normal xref case
             // jump lines till you get to a line where the token is "trailer". then parse.
-            PDFDictionary *trailerP = nullptr;
+            std::shared_ptr<PDFDictionary> trailerP = nullptr;
             status = ParseTrailerDictionary(&trailerP);
             if (status != PDFHummus::eSuccess)
                 break;
-            RefCountPtr<PDFDictionary> trailer(
+            std::shared_ptr<PDFDictionary> trailer(
                 trailerP); // this should take care of the internally added ref...minor technicality
             mTrailer = trailer;
 
@@ -1253,11 +1252,10 @@ EStatusCode PDFParser::ParseFileDirectory()
             if (status != PDFHummus::eSuccess)
                 break;
         }
-        else if (anObject->GetType() == PDFObject::ePDFObjectInteger &&
-                 ((PDFInteger *)anObject.GetPtr())->GetValue() > 0)
+        else if (anObject->GetType() == PDFObject::ePDFObjectInteger && ((PDFInteger *)anObject)->GetValue() > 0)
         {
             // Xref stream case
-            status = BuildXrefTableAndTrailerFromXrefStream(((PDFInteger *)anObject.GetPtr())->GetValue());
+            status = BuildXrefTableAndTrailerFromXrefStream(((PDFInteger *)anObject)->GetValue());
             if (status != PDFHummus::eSuccess)
                 break;
         }
@@ -1322,9 +1320,9 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
             break;
         }
 
-        NotifyIndirectObjectEnd(xrefStream.GetPtr());
+        NotifyIndirectObjectEnd(xrefStream);
 
-        RefCountPtr<PDFDictionary> xrefDictionary(xrefStream->QueryStreamDictionary());
+        std::shared_ptr<PDFDictionary> xrefDictionary(xrefStream->QueryStreamDictionary());
         mTrailer = xrefDictionary;
 
         status = DetermineXrefSize();
@@ -1337,15 +1335,14 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
 
         if (mTrailer->Exists("Prev"))
         {
-            status = ParsePreviousXrefs(mTrailer.GetPtr());
+            status = ParsePreviousXrefs(mTrailer);
             if (status != PDFHummus::eSuccess)
                 break;
         }
 
         XrefEntryInput *extendedTable = nullptr;
         ObjectIDType extendedTableSize;
-        status =
-            ParseXrefFromXrefStream(mXrefTable, mXrefSize, xrefStream.GetPtr(), &extendedTable, &extendedTableSize);
+        status = ParseXrefFromXrefStream(mXrefTable, mXrefSize, xrefStream, &extendedTable, &extendedTableSize);
         if (status != PDFHummus::eSuccess)
             break;
 
@@ -1419,17 +1416,16 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
         }
 
-        NotifyIndirectObjectEnd(xrefStream.GetPtr());
+        NotifyIndirectObjectEnd(xrefStream);
 
-        status = ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStream.GetPtr(), outExtendedTable,
-                                         outExtendedTableSize);
+        status = ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStream, outExtendedTable, outExtendedTableSize);
     } while (false);
     return status;
 }
 
 EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                               PDFStreamInput *inXrefStream, XrefEntryInput **outExtendedTable,
-                                               ObjectIDType *outExtendedTableSize)
+                                               std::shared_ptr<PDFStreamInput> inXrefStream,
+                                               XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     // 1. Setup the stream to read from the stream start location
     // 2. Set it up with an input stream to decode if required
@@ -1453,10 +1449,10 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
         }
 
-        RefCountPtr<PDFDictionary> streamDictionary(inXrefStream->QueryStreamDictionary());
+        std::shared_ptr<PDFDictionary> streamDictionary(inXrefStream->QueryStreamDictionary());
 
         // setup w array
-        PDFObjectCastPtr<PDFArray> wArray(QueryDictionaryObject(streamDictionary.GetPtr(), "W"));
+        PDFObjectCastPtr<PDFArray> wArray(QueryDictionaryObject(streamDictionary, "W"));
         if (!wArray)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, W array not available. failing");
@@ -1481,12 +1477,12 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
 
         // read the segments from the stream
-        PDFObjectCastPtr<PDFArray> subsectionsIndex(QueryDictionaryObject(streamDictionary.GetPtr(), "Index"));
+        PDFObjectCastPtr<PDFArray> subsectionsIndex(QueryDictionaryObject(streamDictionary, "Index"));
         MovePositionInStream(inXrefStream->GetStreamContentStart());
 
         if (!subsectionsIndex)
         {
-            PDFObjectCastPtr<PDFInteger> xrefSize(QueryDictionaryObject(streamDictionary.GetPtr(), "Size"));
+            PDFObjectCastPtr<PDFInteger> xrefSize(QueryDictionaryObject(streamDictionary, "Size"));
             if (!xrefSize)
             {
                 TRACE_LOG("PDFParser::ParseXrefFromXrefStream, xref size does not exist for this stream");
@@ -1689,9 +1685,9 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
             break;
         }
 
-        RefCountPtr<PDFDictionary> streamDictionary(objectStream->QueryStreamDictionary());
+        std::shared_ptr<PDFDictionary> streamDictionary(objectStream->QueryStreamDictionary());
 
-        PDFObjectCastPtr<PDFInteger> streamObjectsCount(QueryDictionaryObject(streamDictionary.GetPtr(), "N"));
+        PDFObjectCastPtr<PDFInteger> streamObjectsCount(QueryDictionaryObject(streamDictionary, "N"));
         if (!streamObjectsCount)
         {
             TRACE_LOG1("PDFParser::ParseExistingInDirectStreamObject, no N key in stream dictionary %ld",
@@ -1701,8 +1697,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
         }
         auto objectsCount = (ObjectIDType)streamObjectsCount->GetValue();
 
-        PDFObjectCastPtr<PDFInteger> firstStreamObjectPosition(
-            QueryDictionaryObject(streamDictionary.GetPtr(), "First"));
+        PDFObjectCastPtr<PDFInteger> firstStreamObjectPosition(QueryDictionaryObject(streamDictionary, "First"));
         if (!streamObjectsCount)
         {
             TRACE_LOG1("PDFParser::ParseExistingInDirectStreamObject, no First key in stream dictionary %ld",
@@ -1711,7 +1706,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
             break;
         }
 
-        objectSource = CreateInputStreamReader(objectStream.GetPtr());
+        objectSource = CreateInputStreamReader(objectStream);
         skipperStream.Assign(objectSource);
         MovePositionInStream(objectStream->GetStreamContentStart());
 
@@ -1819,7 +1814,7 @@ EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeader
     return status;
 }
 
-IByteReader *PDFParser::WrapWithDecryptionFilter(PDFStreamInput *inStream, IByteReader *inToWrapStream)
+IByteReader *PDFParser::WrapWithDecryptionFilter(std::shared_ptr<PDFStreamInput> inStream, IByteReader *inToWrapStream)
 {
     if (IsEncrypted() && IsEncryptionSupported())
     {
@@ -1840,9 +1835,9 @@ IByteReader *PDFParser::WrapWithDecryptionFilter(PDFStreamInput *inStream, IByte
     return inToWrapStream;
 }
 
-IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
+IByteReader *PDFParser::CreateInputStreamReader(std::shared_ptr<PDFStreamInput> inStream)
 {
-    RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -1850,7 +1845,7 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
     {
 
         // setup stream according to length and possible filter
-        PDFObjectCastPtr<PDFInteger> lengthObject(QueryDictionaryObject(streamDictionary.GetPtr(), "Length"));
+        PDFObjectCastPtr<PDFInteger> lengthObject(QueryDictionaryObject(streamDictionary, "Length"));
         if (!lengthObject)
         {
             TRACE_LOG("PDFParser::CreateInputStreamReader, stream does not have length, failing");
@@ -1862,7 +1857,7 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
 
         result = WrapWithDecryptionFilter(inStream, result);
 
-        RefCountPtr<PDFObject> filterObject(QueryDictionaryObject(streamDictionary.GetPtr(), "Filter"));
+        std::shared_ptr<PDFObject> filterObject(QueryDictionaryObject(streamDictionary, "Filter"));
         if (!filterObject)
         {
             // no filter, so stop here
@@ -1871,8 +1866,8 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
 
         if (filterObject->GetType() == PDFObject::ePDFObjectArray)
         {
-            auto *filterObjectArray = (PDFArray *)filterObject.GetPtr();
-            PDFObjectCastPtr<PDFArray> decodeParams(QueryDictionaryObject(streamDictionary.GetPtr(), "DecodeParms"));
+            auto *filterObjectArray = (std::shared_ptr<PDFArray>)filterObject;
+            PDFObjectCastPtr<PDFArray> decodeParams(QueryDictionaryObject(streamDictionary, "DecodeParms"));
             for (unsigned long i = 0; i < filterObjectArray->GetLength() && eSuccess == status; ++i)
             {
                 PDFObjectCastPtr<PDFName> filterObjectItem(filterObjectArray->QueryObject(i));
@@ -1887,15 +1882,14 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
                 EStatusCodeAndIByteReader createStatus;
                 if (!decodeParams)
                 {
-                    createStatus = CreateFilterForStream(result, filterObjectItem.GetPtr(), nullptr, inStream);
+                    createStatus = CreateFilterForStream(result, filterObjectItem, nullptr, inStream);
                 }
                 else
                 {
-                    PDFObjectCastPtr<PDFDictionary> decodeParamsItem(QueryArrayObject(decodeParams.GetPtr(), i));
+                    PDFObjectCastPtr<PDFDictionary> decodeParamsItem(QueryArrayObject(decodeParams, i));
 
-                    createStatus =
-                        CreateFilterForStream(result, (PDFName *)filterObject.GetPtr(),
-                                              !decodeParamsItem ? nullptr : decodeParamsItem.GetPtr(), inStream);
+                    createStatus = CreateFilterForStream(result, std::static_pointer_cast<PDFName>(filterObject),
+                                                         !decodeParamsItem ? nullptr : decodeParamsItem, inStream);
                 }
 
                 if (createStatus.first != eSuccess)
@@ -1908,11 +1902,10 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
         }
         else if (filterObject->GetType() == PDFObject::ePDFObjectName)
         {
-            PDFObjectCastPtr<PDFDictionary> decodeParams(
-                QueryDictionaryObject(streamDictionary.GetPtr(), "DecodeParms"));
+            auto decodeParams = std::static_pointer_cast<PDFDictionary>(QueryDictionaryObject(streamDictionary, "DecodeParms"));
 
-            EStatusCodeAndIByteReader createStatus = CreateFilterForStream(
-                result, (PDFName *)filterObject.GetPtr(), !decodeParams ? nullptr : decodeParams.GetPtr(), inStream);
+            EStatusCodeAndIByteReader createStatus =
+                CreateFilterForStream(result, filterObject, !decodeParams ? nullptr : decodeParams, inStream);
             if (createStatus.first != eSuccess)
             {
                 status = PDFHummus::eFailure;
@@ -1938,8 +1931,9 @@ IByteReader *PDFParser::CreateInputStreamReader(PDFStreamInput *inStream)
     return result;
 }
 
-EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream, PDFName *inFilterName,
-                                                           PDFDictionary *inDecodeParams, PDFStreamInput *inPDFStream)
+EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream, std::shared_ptr<PDFName> inFilterName,
+                                                           std::shared_ptr<PDFDictionary> inDecodeParams,
+                                                           std::shared_ptr<PDFStreamInput> inPDFStream)
 {
     EStatusCode status = eSuccess;
     IByteReader *result = nullptr;
@@ -1987,10 +1981,9 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
             PDFObjectCastPtr<PDFInteger> columns(QueryDictionaryObject(inDecodeParams, "Columns"));
             PDFObjectCastPtr<PDFInteger> colors(QueryDictionaryObject(inDecodeParams, "Colors"));
             PDFObjectCastPtr<PDFInteger> bitsPerComponent(QueryDictionaryObject(inDecodeParams, "BitsPerComponent"));
-            size_t columnsValue = columns.GetPtr() != nullptr ? (size_t)columns->GetValue() : 1;
-            size_t colorsValue = colors.GetPtr() != nullptr ? (size_t)colors->GetValue() : 1;
-            size_t bitsPerComponentValue =
-                bitsPerComponent.GetPtr() != nullptr ? (size_t)bitsPerComponent->GetValue() : 8;
+            size_t columnsValue = columns != nullptr ? (size_t)columns->GetValue() : 1;
+            size_t colorsValue = colors != nullptr ? (size_t)colors->GetValue() : 1;
+            size_t bitsPerComponentValue = bitsPerComponent != nullptr ? (size_t)bitsPerComponent->GetValue() : 8;
 
             switch (predictor->GetValue())
             {
@@ -2066,7 +2059,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
     return EStatusCodeAndIByteReader(status, result);
 }
 
-IByteReader *PDFParser::StartReadingFromStream(PDFStreamInput *inStream)
+IByteReader *PDFParser::StartReadingFromStream(std::shared_ptr<PDFStreamInput> inStream)
 {
     IByteReader *result = CreateInputStreamReader(inStream);
     if (result != nullptr)
@@ -2074,7 +2067,7 @@ IByteReader *PDFParser::StartReadingFromStream(PDFStreamInput *inStream)
     return result;
 }
 
-PDFObjectParser *PDFParser::StartReadingObjectsFromStream(PDFStreamInput *inStream)
+PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream)
 {
     IByteReader *readStream = StartReadingFromStream(inStream);
     if (readStream == nullptr)
@@ -2089,7 +2082,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStream(PDFStreamInput *inStre
     return objectsParser;
 }
 
-PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(PDFArray *inArrayOfStreams)
+PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams)
 {
     IByteReader *readStream = new ArrayOfInputStreamsStream(inArrayOfStreams, this);
 
@@ -2102,17 +2095,16 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(PDFArray *inArrayOfSt
     return objectsParser;
 }
 
-IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(PDFStreamInput *inStream)
+IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(std::shared_ptr<PDFStreamInput> inStream)
 {
-    RefCountPtr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
     EStatusCode status = PDFHummus::eSuccess;
 
     do
     {
-
         // setup stream according to length and possible filter
-        PDFObjectCastPtr<PDFInteger> lengthObject(QueryDictionaryObject(streamDictionary.GetPtr(), "Length"));
+        PDFObjectCastPtr<PDFInteger> lengthObject(QueryDictionaryObject(streamDictionary, "Length"));
         if (!lengthObject)
         {
             TRACE_LOG("PDFParser::CreateInputStreamReaderForPlainCopying, stream does not have length, failing");
@@ -2134,7 +2126,7 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(PDFStreamInput *i
     return result;
 }
 
-IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(PDFStreamInput *inStream)
+IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(std::shared_ptr<PDFStreamInput> inStream)
 {
     IByteReader *result = CreateInputStreamReaderForPlainCopying(inStream);
     if (result != nullptr)

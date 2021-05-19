@@ -584,7 +584,7 @@ EStatusCode ObjectsContext::ReadState(PDFParser *inStateReader, ObjectIDType inO
     mCompressStreams = compressStreams->GetValue();
 
     PDFObjectCastPtr<PDFDictionary> subsetFontsNamesSequance(
-        inStateReader->QueryDictionaryObject(objectsContext.GetPtr(), "mSubsetFontsNamesSequance"));
+        inStateReader->QueryDictionaryObject(objectsContext, "mSubsetFontsNamesSequance"));
     PDFObjectCastPtr<PDFLiteralString> sequanceString(subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
     mSubsetFontsNamesSequance.SetSequanceString(sequanceString->GetValue());
 

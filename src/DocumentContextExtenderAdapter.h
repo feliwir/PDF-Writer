@@ -139,7 +139,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When creating XObjects from pages - before creating a particular page xobject
-    virtual PDFHummus::EStatusCode OnBeforeCreateXObjectFromPage(PDFDictionary *inPageObjectDictionary,
+    virtual PDFHummus::EStatusCode OnBeforeCreateXObjectFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                                  ObjectsContext *inPDFWriterObjectContext,
                                                                  PDFHummus::DocumentContext *inDocumentContext,
                                                                  PDFDocumentHandler *inPDFDocumentHandler)
@@ -153,7 +153,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When creating XObjects from pages - after creating a particular page xobject
     virtual PDFHummus::EStatusCode OnAfterCreateXObjectFromPage(PDFFormXObject *iPageObjectResultXObject,
-                                                                PDFDictionary *inPageObjectDictionary,
+                                                                std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                                 ObjectsContext *inPDFWriterObjectContext,
                                                                 PDFHummus::DocumentContext *inDocumentContext,
                                                                 PDFDocumentHandler *inPDFDocumentHandler)
@@ -167,7 +167,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When appending pages from PDF - before appending a particular page
-    virtual PDFHummus::EStatusCode OnBeforeCreatePageFromPage(PDFDictionary *inPageObjectDictionary,
+    virtual PDFHummus::EStatusCode OnBeforeCreatePageFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                               ObjectsContext *inPDFWriterObjectContext,
                                                               PDFHummus::DocumentContext *inDocumentContext,
                                                               PDFDocumentHandler *inPDFDocumentHandler)
@@ -181,7 +181,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When appending pages from PDF - after appending a particular page
     virtual PDFHummus::EStatusCode OnAfterCreatePageFromPage(PDFPage &iPageObjectResultPage,
-                                                             PDFDictionary *inPageObjectDictionary,
+                                                             std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                              ObjectsContext *inPDFWriterObjectContext,
                                                              PDFHummus::DocumentContext *inDocumentContext,
                                                              PDFDocumentHandler *inPDFDocumentHandler)
@@ -196,7 +196,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When merging pages from PDF - before merging a particular page
     virtual PDFHummus::EStatusCode OnBeforeMergePageFromPage(PDFPage &inTargetPage,
-                                                             PDFDictionary *inPageObjectDictionary,
+                                                             std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                              ObjectsContext *inPDFWriterObjectContext,
                                                              PDFHummus::DocumentContext *inDocumentContext,
                                                              PDFDocumentHandler *inPDFDocumentHandler)
@@ -211,7 +211,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When merging pages from PDF - after merging a particular page
     virtual PDFHummus::EStatusCode OnAfterMergePageFromPage(PDFPage &inTargetPage,
-                                                            PDFDictionary *inPageObjectDictionary,
+                                                            std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                             ObjectsContext *inPDFWriterObjectContext,
                                                             PDFHummus::DocumentContext *inDocumentContext,
                                                             PDFDocumentHandler *inPDFDocumentHandler)

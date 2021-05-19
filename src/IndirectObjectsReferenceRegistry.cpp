@@ -263,8 +263,8 @@ EStatusCode IndirectObjectsReferenceRegistry::ReadState(PDFParser *inStateReader
     while (it.MoveNext())
     {
         ObjectWriteInformation newObjectInformation;
-        PDFObjectCastPtr<PDFDictionary> objectWriteInformationDictionary(
-            inStateReader->ParseNewObject(((PDFIndirectObjectReference *)it.GetItem())->mObjectID));
+        PDFObjectCastPtr<PDFDictionary> objectWriteInformationDictionary(inStateReader->ParseNewObject(
+            std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID));
 
         PDFObjectCastPtr<PDFBoolean> objectWritten(
             objectWriteInformationDictionary->QueryDirectObject("mObjectWritten"));

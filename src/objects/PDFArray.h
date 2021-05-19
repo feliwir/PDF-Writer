@@ -22,8 +22,8 @@
 #include "PDFObject.h"
 #include "SingleValueContainerIterator.h"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 typedef std::vector<std::shared_ptr<PDFObject>> PDFObjectVector;
 

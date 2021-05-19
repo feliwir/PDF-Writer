@@ -42,9 +42,8 @@ class PDFPageInput
 {
   public:
     // simple constructor, not calling addref on inPageObject
-    PDFPageInput(PDFParser *inParser, PDFObject *inPageObject);
+    PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject);
     // constructors from a smart pointer or another page object, will call addref
-    PDFPageInput(PDFParser *inParser, const RefCountPtr<PDFDictionary> &inPageObject);
     PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<PDFDictionary> &inPageObject);
     PDFPageInput(const PDFPageInput &inOtherPage);
 
@@ -64,8 +63,9 @@ class PDFPageInput
     PDFParser *mParser;
     PDFObjectCastPtr<PDFDictionary> mPageObject;
 
-    PDFObject *QueryInheritedValue(PDFDictionary *inDictionary, const std::string &inName);
-    void SetPDFRectangleFromPDFArray(PDFArray *inPDFArray, PDFRectangle &outPDFRectangle);
+    std::shared_ptr<PDFObject> QueryInheritedValue(std::shared_ptr<PDFDictionary> inDictionary,
+                                                   const std::string &inName);
+    void SetPDFRectangleFromPDFArray(std::shared_ptr<PDFArray> inPDFArray, PDFRectangle &outPDFRectangle);
 
     void AssertPageObjectValid();
     PDFRectangle GetBoxAndDefaultWithCrop(const std::string &inBoxName);

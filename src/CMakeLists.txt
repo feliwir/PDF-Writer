@@ -58,7 +58,6 @@ set(PDF_WRITER_SOURCE
     PDFWriter.cpp
     PrimitiveObjectsWriter.cpp
     PSBool.cpp
-    RefCountObject.cpp
     ResourcesDictionary.cpp
     StateReader.cpp
     StateWriter.cpp
@@ -134,8 +133,6 @@ set(PDF_WRITER_HEADERS
     PrimitiveObjectsWriter.h
     ProcsetResourcesConstants.h
     PSBool.h
-    RefCountObject.h
-    RefCountPtr.h
     ResourcesDictionary.h
     SafeBufferMacrosDefs.h
     Singleton.h
