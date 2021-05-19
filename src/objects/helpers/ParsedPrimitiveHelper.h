@@ -26,6 +26,7 @@
  ownership: always addrefs and releases
  */
 
+#include <memory>
 #include <string>
 
 class PDFObject;
@@ -33,8 +34,7 @@ class PDFObject;
 class ParsedPrimitiveHelper
 {
   public:
-    ParsedPrimitiveHelper(PDFObject *inObject);
-    ~ParsedPrimitiveHelper();
+    ParsedPrimitiveHelper(std::shared_ptr<PDFObject> inObject);
 
     // numbers
     double GetAsDouble();
@@ -45,5 +45,5 @@ class ParsedPrimitiveHelper
     std::string ToString();
 
   private:
-    PDFObject *mWrappedObject;
+    std::shared_ptr<PDFObject> mWrappedObject;
 };

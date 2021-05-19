@@ -37,7 +37,7 @@ std::shared_ptr<PDFObject> PDFDictionary::QueryDirectObject(const std::string &i
     return it->second;
 }
 
-void PDFDictionary::Insert(std::shared_ptr<PDFName> inKeyObject, std::shared_ptr<PDFObject> inValueObject);
+void PDFDictionary::Insert(std::shared_ptr<PDFName> inKeyObject, std::shared_ptr<PDFObject> inValueObject)
 {
     mValues.insert({inKeyObject, inValueObject});
 }

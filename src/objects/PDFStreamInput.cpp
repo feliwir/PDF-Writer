@@ -22,7 +22,8 @@
 #include "PDFDictionary.h"
 #include "PDFName.h"
 
-PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart) : PDFObject(eType)
+PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart)
+    : PDFObject(eType)
 {
     mDictionary = inStreamDictionary;
     mStreamContentStart = inStreamContentStart;

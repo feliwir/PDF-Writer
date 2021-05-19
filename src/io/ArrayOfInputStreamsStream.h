@@ -22,15 +22,15 @@
 
 #include "EStatusCode.h"
 #include "IByteReader.h"
-#include "RefCountPtr.h"
 
+#include <memory>
 class PDFArray;
 class PDFParser;
 
 class ArrayOfInputStreamsStream : public IByteReader
 {
   public:
-    ArrayOfInputStreamsStream(PDFArray *inArrayOfStreams, PDFParser *inParser);
+    ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser);
     virtual ~ArrayOfInputStreamsStream(void);
 
     // IByteReader implementation
@@ -42,6 +42,6 @@ class ArrayOfInputStreamsStream : public IByteReader
 
     IByteReader *mCurrentStream;
     PDFParser *mParser;
-    RefCountPtr<PDFArray> mArray;
+    std::shared_ptr<PDFArray> mArray;
     unsigned long mCurrentIndex;
 };

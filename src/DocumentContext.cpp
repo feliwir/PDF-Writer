@@ -1668,12 +1668,12 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
         mNewPDFID = newPDFID->GetValue();
 
     PDFObjectCastPtr<PDFDictionary> trailerInformationState(
-        inStateReader->QueryDictionaryObject(documentState.GetPtr(), "mTrailerInformation"));
-    ReadTrailerState(inStateReader, trailerInformationState.GetPtr());
+        inStateReader->QueryDictionaryObject(documentState, "mTrailerInformation"));
+    ReadTrailerState(inStateReader, trailerInformationState);
 
     PDFObjectCastPtr<PDFDictionary> catalogInformationState(
-        inStateReader->QueryDictionaryObject(documentState.GetPtr(), "mCatalogInformation"));
-    ReadCatalogInformationState(inStateReader, catalogInformationState.GetPtr());
+        inStateReader->QueryDictionaryObject(documentState, "mCatalogInformation"));
+    ReadCatalogInformationState(inStateReader, catalogInformationState);
 
     PDFObjectCastPtr<PDFIndirectObjectReference> usedFontsInformationStateID(
         documentState->QueryDirectObject("mUsedFontsRepository"));
@@ -1686,27 +1686,27 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
     return mEncryptionHelper.ReadState(inStateReader, encrytpionStateID->mObjectID);
 }
 
-void DocumentContext::ReadTrailerState(PDFParser *inStateReader, PDFDictionary *inTrailerState)
+void DocumentContext::ReadTrailerState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerState)
 {
     PDFObjectCastPtr<PDFInteger> prevState(inTrailerState->QueryDirectObject("mPrev"));
     mTrailerInformation.SetPrev(prevState->GetValue());
 
     PDFObjectCastPtr<PDFDictionary> rootReferenceState(inTrailerState->QueryDirectObject("mRootReference"));
-    mTrailerInformation.SetRoot(GetReferenceFromState(rootReferenceState.GetPtr()));
+    mTrailerInformation.SetRoot(GetReferenceFromState(rootReferenceState));
 
     PDFObjectCastPtr<PDFDictionary> encryptReferenceState(inTrailerState->QueryDirectObject("mEncryptReference"));
-    mTrailerInformation.SetEncrypt(GetReferenceFromState(encryptReferenceState.GetPtr()));
+    mTrailerInformation.SetEncrypt(GetReferenceFromState(encryptReferenceState));
 
     PDFObjectCastPtr<PDFDictionary> infoDictionaryState(
         inStateReader->QueryDictionaryObject(inTrailerState, "mInfoDictionary"));
-    ReadTrailerInfoState(inStateReader, infoDictionaryState.GetPtr());
+    ReadTrailerInfoState(inStateReader, infoDictionaryState);
 
     PDFObjectCastPtr<PDFDictionary> infoDictionaryReferenceState(
         inTrailerState->QueryDirectObject("mInfoDictionaryReference"));
-    mTrailerInformation.SetInfoDictionaryReference(GetReferenceFromState(infoDictionaryReferenceState.GetPtr()));
+    mTrailerInformation.SetInfoDictionaryReference(GetReferenceFromState(infoDictionaryReferenceState));
 }
 
-ObjectReference DocumentContext::GetReferenceFromState(PDFDictionary *inDictionary)
+ObjectReference DocumentContext::GetReferenceFromState(std::shared_ptr<PDFDictionary> inDictionary)
 {
     PDFObjectCastPtr<PDFInteger> objectID(inDictionary->QueryDirectObject("ObjectID"));
     PDFObjectCastPtr<PDFInteger> generationNumber(inDictionary->QueryDirectObject("GenerationNumber"));
@@ -1714,7 +1714,8 @@ ObjectReference DocumentContext::GetReferenceFromState(PDFDictionary *inDictiona
     return ObjectReference((ObjectIDType)(objectID->GetValue()), (unsigned long)generationNumber->GetValue());
 }
 
-void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/, PDFDictionary *inTrailerInfoState)
+void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
+                                           std::shared_ptr<PDFDictionary> inTrailerInfoState)
 {
     PDFObjectCastPtr<PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
@@ -1735,10 +1736,10 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/, PDFDic
     mTrailerInformation.GetInfo().Producer = producerState->GetValue();
 
     PDFObjectCastPtr<PDFDictionary> creationDateState(inTrailerInfoState->QueryDirectObject("CreationDate"));
-    ReadDateState(creationDateState.GetPtr(), mTrailerInformation.GetInfo().CreationDate);
+    ReadDateState(creationDateState, mTrailerInformation.GetInfo().CreationDate);
 
     PDFObjectCastPtr<PDFDictionary> modDateState(inTrailerInfoState->QueryDirectObject("ModDate"));
-    ReadDateState(creationDateState.GetPtr(), mTrailerInformation.GetInfo().ModDate);
+    ReadDateState(creationDateState, mTrailerInformation.GetInfo().ModDate);
 
     PDFObjectCastPtr<PDFInteger> trappedState(inTrailerInfoState->QueryDirectObject("Trapped"));
     mTrailerInformation.GetInfo().Trapped = (EInfoTrapped)trappedState->GetValue();
@@ -1761,7 +1762,7 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/, PDFDic
     }
 }
 
-void DocumentContext::ReadDateState(PDFDictionary *inDateState, PDFDate &inDate)
+void DocumentContext::ReadDateState(std::shared_ptr<PDFDictionary> inDateState, PDFDate &inDate)
 {
     PDFObjectCastPtr<PDFInteger> yearState(inDateState->QueryDirectObject("Year"));
     inDate.Year = (int)yearState->GetValue();
@@ -1791,7 +1792,8 @@ void DocumentContext::ReadDateState(PDFDictionary *inDateState, PDFDate &inDate)
     inDate.MinuteFromUTC = (int)minuteFromUTCState->GetValue();
 }
 
-void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader, PDFDictionary *inCatalogInformationState)
+void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
+                                                  std::shared_ptr<PDFDictionary> inCatalogInformationState)
 {
     PDFObjectCastPtr<PDFIndirectObjectReference> pageTreeRootState(
         inCatalogInformationState->QueryDirectObject("PageTreeRoot"));
@@ -1817,10 +1819,11 @@ void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader, PDFD
 
     if (pageTreeRootState->mObjectID == mCurrentPageTreeIDInState)
         mCatalogInformation.SetCurrentPageTreeNode(rootNode);
-    ReadPageTreeState(inStateReader, pageTreeState.GetPtr(), rootNode);
+    ReadPageTreeState(inStateReader, pageTreeState, rootNode);
 }
 
-void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, PDFDictionary *inPageTreeState, PageTree *inPageTree)
+void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inPageTreeState,
+                                        PageTree *inPageTree)
 {
     PDFObjectCastPtr<PDFBoolean> isLeafParentState(inPageTreeState->QueryDirectObject("mIsLeafParent"));
     bool isLeafParent = isLeafParentState->GetValue();
@@ -1844,15 +1847,16 @@ void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, PDFDictionary 
         SingleValueContainerIterator<PDFObjectVector> it = kidsNodesState->GetIterator();
         while (it.MoveNext())
         {
-            PDFObjectCastPtr<PDFDictionary> kidNodeState(
-                inStateReader->ParseNewObject(((PDFIndirectObjectReference *)it.GetItem())->mObjectID));
+            PDFObjectCastPtr<PDFDictionary> kidNodeState(inStateReader->ParseNewObject(
+                std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID));
 
             PDFObjectCastPtr<PDFInteger> pageTreeIDState(kidNodeState->QueryDirectObject("mPageTreeID"));
             auto *kidNode = new PageTree((ObjectIDType)pageTreeIDState->GetValue());
 
-            if (((PDFIndirectObjectReference *)it.GetItem())->mObjectID == mCurrentPageTreeIDInState)
+            if (std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID ==
+                mCurrentPageTreeIDInState)
                 mCatalogInformation.SetCurrentPageTreeNode(kidNode);
-            ReadPageTreeState(inStateReader, kidNodeState.GetPtr(), kidNode);
+            ReadPageTreeState(inStateReader, kidNodeState, kidNode);
 
             inPageTree->AddNodeToTree(kidNode, mObjectsContext->GetInDirectObjectsRegistry());
         }
@@ -2152,10 +2156,10 @@ EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
     mModifiedDocumentIDExists = true;
     mModifiedDocumentID = "";
     PDFObjectCastPtr<PDFArray> idArray = inModifiedFileParser->GetTrailer()->QueryDirectObject("ID");
-    if ((idArray.GetPtr() != nullptr) && idArray->GetLength() == 2)
+    if ((idArray != nullptr) && idArray->GetLength() == 2)
     {
         PDFObjectCastPtr<PDFHexString> firstID = idArray->QueryObject(0);
-        if (firstID.GetPtr() != nullptr)
+        if (firstID != nullptr)
             mModifiedDocumentID = firstID->GetValue();
     }
 
@@ -2416,7 +2420,7 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     DictionaryContext *pagesTreeContext = mObjectsContext->StartDictionary();
 
     PDFObjectCastPtr<PDFInteger> kidsCount = originalTreeRootObject->QueryDirectObject(scCount);
-    long long originalPageTreeKidsCount = kidsCount.GetPtr() != nullptr ? kidsCount->GetValue() : 0;
+    long long originalPageTreeKidsCount = kidsCount != nullptr ? kidsCount->GetValue() : 0;
 
     // copy all but parent key. then add parent as the new root object
 
@@ -2508,14 +2512,14 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
 {
     // Reuse original encryption dict for new modified trailer. for sake of simplicity (with trailer using ref for
     // encrypt), make it indirect if not already
-    RefCountPtr<PDFObject> encrypt(inModifiedFileParser->GetTrailer()->QueryDirectObject("Encrypt"));
-    if (encrypt.GetPtr() == nullptr)
+    std::shared_ptr<PDFObject> encrypt(inModifiedFileParser->GetTrailer()->QueryDirectObject("Encrypt"));
+    if (encrypt == nullptr)
         return;
 
     if (encrypt->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         // just set the reference to the object
-        mTrailerInformation.SetEncrypt(((PDFIndirectObjectReference *)encrypt.GetPtr())->mObjectID);
+        mTrailerInformation.SetEncrypt(std::static_pointer_cast<PDFIndirectObjectReference>(encrypt)->mObjectID);
     }
     else
     {
@@ -2524,7 +2528,7 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
         ObjectIDType encryptionDictionaryID = mObjectsContext->StartNewIndirectObject();
         // copying context, write as is
         PDFDocumentCopyingContext *copyingContext = CreatePDFCopyingContext(inModifiedFileParser);
-        copyingContext->CopyDirectObjectAsIs(encrypt.GetPtr());
+        copyingContext->CopyDirectObjectAsIs(encrypt);
         delete copyingContext;
         mObjectsContext->EndIndirectObject();
         mEncryptionHelper.ReleaseEncryption();

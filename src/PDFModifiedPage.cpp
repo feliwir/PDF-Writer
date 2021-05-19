@@ -25,7 +25,6 @@
 #include "PDFFormXObject.h"
 #include "PDFStream.h"
 #include "PDFWriter.h"
-#include "RefCountPtr.h"
 #include "Trace.h"
 #include "XObjectContentContext.h"
 #include "objects/PDFArray.h"
@@ -62,7 +61,7 @@ AbstractContentContext *PDFModifiedPage::StartContentContext()
 {
     if (mCurrentContext == nullptr)
     {
-        PDFObject *page = mWriter->GetModifiedFileParser().ParsePage(mPageIndex);
+        std::shared_ptr<PDFObject> page = mWriter->GetModifiedFileParser().ParsePage(mPageIndex);
         if (page == nullptr)
         {
             TRACE_LOG("AbstractContentContext::PDFModifiedPage, null page object");
@@ -126,7 +125,8 @@ vector<string> PDFModifiedPage::WriteNewResourcesDictionary(ObjectsContext &inOb
     return formResourcesNames;
 }
 
-PDFObject *PDFModifiedPage::findInheritedResources(PDFParser *inParser, PDFDictionary *inDictionary)
+std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(PDFParser *inParser,
+                                                                   std::shared_ptr<PDFDictionary> inDictionary)
 {
     if (inDictionary->Exists("Resources"))
     {
@@ -140,7 +140,7 @@ PDFObject *PDFModifiedPage::findInheritedResources(PDFParser *inParser, PDFDicti
         return nullptr;
     }
 
-    return findInheritedResources(inParser, parentDict.GetPtr());
+    return findInheritedResources(inParser, parentDict);
 }
 
 PDFHummus::EStatusCode PDFModifiedPage::WritePage()
@@ -166,8 +166,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
 
         // get the page object
         ObjectIDType pageObjectID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(mPageIndex);
-        PDFObjectCastPtr<PDFDictionary> pageDictionaryObject =
-            copyingContext->GetSourceDocumentParser()->ParsePage(mPageIndex);
+        PDFObjectCastPtr<PDFDictionary> pageDictionaryObject(
+            copyingContext->GetSourceDocumentParser()->ParsePage(mPageIndex));
         MapIterator<PDFNameToPDFObjectMap> pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
 
         // create modified page object
@@ -195,8 +195,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             // write old annots, if any exist
             if (pageDictionaryObject->Exists("Annots"))
             {
-                PDFObjectCastPtr<PDFArray> anArray(copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(
-                    pageDictionaryObject.GetPtr(), "Annots"));
+                PDFObjectCastPtr<PDFArray> anArray(
+                    copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Annots"));
                 SingleValueContainerIterator<PDFObjectVector> refs = anArray->GetIterator();
                 while (refs.MoveNext())
                     copyingContext->CopyDirectObjectAsIs(refs.GetItem());
@@ -230,8 +230,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
                 objectContext.WriteNewIndirectObjectReference(newEncapsulatingObjectID);
             }
 
-            RefCountPtr<PDFObject> pageContent(copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(
-                pageDictionaryObject.GetPtr(), "Contents"));
+            std::shared_ptr<PDFObject> pageContent(
+                copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Contents"));
             if (pageContent->GetType() == PDFObject::ePDFObjectStream)
             {
                 // single content stream. must be a refrence which points to it
@@ -240,7 +240,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             }
             else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
             {
-                auto *anArray = (PDFArray *)pageContent.GetPtr();
+                auto anArray = std::static_pointer_cast<PDFArray>(pageContent);
 
                 // multiple content streams
                 SingleValueContainerIterator<PDFObjectVector> refs = anArray->GetIterator();
@@ -273,8 +273,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             // check if there's inherited dict. if so - write directly as a modified version
             PDFObjectCastPtr<PDFDictionary> parentDict(
                 pageDictionaryObject->Exists("Parent")
-                    ? copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject.GetPtr(),
-                                                                                       "Parent")
+                    ? copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Parent")
                     : nullptr);
             if (!parentDict)
             {
@@ -283,16 +282,15 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             else
             {
                 PDFObjectCastPtr<PDFDictionary> inheritedResources =
-                    findInheritedResources(copyingContext->GetSourceDocumentParser(), parentDict.GetPtr());
+                    findInheritedResources(copyingContext->GetSourceDocumentParser(), parentDict);
                 if (!inheritedResources)
                 {
                     formResourcesNames = WriteNewResourcesDictionary(objectContext);
                 }
                 else
                 {
-                    formResourcesNames =
-                        WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(),
-                                                   inheritedResources.GetPtr(), objectContext, copyingContext);
+                    formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(),
+                                                                    inheritedResources, objectContext, copyingContext);
                 }
             }
         }
@@ -305,8 +303,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             if (!resourceDictRef)
             {
                 PDFObjectCastPtr<PDFDictionary> resourceDict(pageDictionaryObject->QueryDirectObject("Resources"));
-                formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(),
-                                                                resourceDict.GetPtr(), objectContext, copyingContext);
+                formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(), resourceDict,
+                                                                objectContext, copyingContext);
             }
             else
             {
@@ -338,8 +336,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
                 objectContext.StartModifiedIndirectObject(resourcesIndirect);
             PDFObjectCastPtr<PDFDictionary> resourceDict(
                 copyingContext->GetSourceDocumentParser()->ParseNewObject(resourcesIndirect));
-            formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(),
-                                                            resourceDict.GetPtr(), objectContext, copyingContext);
+            formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(), resourceDict,
+                                                            objectContext, copyingContext);
             objectContext.EndIndirectObject();
         }
 
@@ -391,7 +389,8 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
     return status;
 }
 
-vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser, PDFDictionary *inResourcesDictionary,
+vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
+                                                           std::shared_ptr<PDFDictionary> inResourcesDictionary,
                                                            ObjectsContext &inObjectContext,
                                                            PDFDocumentCopyingContext *inCopyingContext)
 {

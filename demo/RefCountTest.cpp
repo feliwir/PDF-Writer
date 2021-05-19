@@ -20,7 +20,6 @@
 */
 #include "RefCountTest.h"
 #include "RefCountObject.h"
-#include "RefCountPtr.h"
 
 #include <iostream>
 

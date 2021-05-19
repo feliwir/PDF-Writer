@@ -137,12 +137,13 @@ void PDFDocumentCopyingContext::ReleaseDocumentContextReference()
     mDocumentContext = nullptr;
 }
 
-EStatusCodeAndObjectIDTypeList PDFDocumentCopyingContext::CopyDirectObjectWithDeepCopy(PDFObject *inObject)
+EStatusCodeAndObjectIDTypeList PDFDocumentCopyingContext::CopyDirectObjectWithDeepCopy(
+    std::shared_ptr<PDFObject> inObject)
 {
     return mDocumentHandler.CopyDirectObjectWithDeepCopy(inObject);
 }
 
-EStatusCode PDFDocumentCopyingContext::CopyDirectObjectAsIs(PDFObject *inObject)
+EStatusCode PDFDocumentCopyingContext::CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject)
 {
     return mDocumentHandler.CopyDirectObjectAsIs(inObject);
 }

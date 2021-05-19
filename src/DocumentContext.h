@@ -408,14 +408,16 @@ class DocumentContext
     void WriteTrailerInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteDateState(ObjectsContext *inStateWriter, const PDFDate &inDate);
     void WriteCatalogInformationState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    void ReadTrailerState(PDFParser *inStateReader, PDFDictionary *inTrailerState);
-    ObjectReference GetReferenceFromState(PDFDictionary *inDictionary);
-    void ReadTrailerInfoState(PDFParser *inStateReader, PDFDictionary *inTrailerInfoState);
-    void ReadDateState(PDFDictionary *inDateState, PDFDate &inDate);
-    void ReadCatalogInformationState(PDFParser *inStateReader, PDFDictionary *inCatalogInformationState);
+    void ReadTrailerState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerState);
+    ObjectReference GetReferenceFromState(std::shared_ptr<PDFDictionary> inDictionary);
+    void ReadTrailerInfoState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerInfoState);
+    void ReadDateState(std::shared_ptr<PDFDictionary> inDateState, PDFDate &inDate);
+    void ReadCatalogInformationState(PDFParser *inStateReader,
+                                     std::shared_ptr<PDFDictionary> inCatalogInformationState);
 
     void WritePageTreeState(ObjectsContext *inStateWriter, ObjectIDType inObjectID, PageTree *inPageTree);
-    void ReadPageTreeState(PDFParser *inStateReader, PDFDictionary *inPageTreeState, PageTree *inPageTree);
+    void ReadPageTreeState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inPageTreeState,
+                           PageTree *inPageTree);
 
     ObjectReference GetOriginalDocumentPageTreeRoot(PDFParser *inModifiedFileParser);
     bool DocumentHasNewPages();

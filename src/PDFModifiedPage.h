@@ -21,6 +21,7 @@
 
 #include "EStatusCode.h"
 #include "PDFRectangle.h"
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -64,10 +65,11 @@ class PDFModifiedPage
     PDFFormXObjectVector mContenxts;
     bool mIsDirty;
 
-    std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser, PDFDictionary *inResourcesDictionary,
+    std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser,
+                                                        std::shared_ptr<PDFDictionary> inResourcesDictionary,
                                                         ObjectsContext &inObjectContext,
                                                         PDFDocumentCopyingContext *inCopyingContext);
     unsigned char GetDifferentChar(unsigned char);
     std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
-    PDFObject *findInheritedResources(PDFParser *inParser, PDFDictionary *inDictionary);
+    std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser, std::shared_ptr<PDFDictionary> inDictionary);
 };

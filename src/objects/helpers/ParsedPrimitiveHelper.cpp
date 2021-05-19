@@ -30,27 +30,21 @@
 #include "objects/PDFReal.h"
 #include "objects/PDFSymbol.h"
 
-ParsedPrimitiveHelper::ParsedPrimitiveHelper(PDFObject *inObject)
+ParsedPrimitiveHelper::ParsedPrimitiveHelper(std::shared_ptr<PDFObject> inObject)
 {
     mWrappedObject = inObject;
-    mWrappedObject->AddRef();
-}
-
-ParsedPrimitiveHelper::~ParsedPrimitiveHelper()
-{
-    mWrappedObject->Release();
 }
 
 double ParsedPrimitiveHelper::GetAsDouble()
 {
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
     {
-        auto *anInteger = (PDFInteger *)mWrappedObject;
+        auto anInteger = std::static_pointer_cast<PDFInteger>(mWrappedObject);
         return (double)anInteger->GetValue();
     }
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
     {
-        auto *aReal = (PDFReal *)mWrappedObject;
+        auto aReal = std::static_pointer_cast<PDFReal>(mWrappedObject);
         return aReal->GetValue();
     }
     return 0;
@@ -60,12 +54,12 @@ long long ParsedPrimitiveHelper::GetAsInteger()
 {
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
     {
-        auto *anInteger = (PDFInteger *)mWrappedObject;
+        auto anInteger = std::static_pointer_cast<PDFInteger>(mWrappedObject);
         return anInteger->GetValue();
     }
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
     {
-        auto *aReal = (PDFReal *)mWrappedObject;
+        auto aReal = std::static_pointer_cast<PDFReal>(mWrappedObject);
         return (long long)aReal->GetValue();
     }
     return 0;
@@ -87,25 +81,25 @@ std::string ParsedPrimitiveHelper::ToString()
     switch (mWrappedObject->GetType())
     {
     case PDFObject::ePDFObjectName:
-        result = ((PDFName *)mWrappedObject)->GetValue();
+        result = std::static_pointer_cast<PDFName>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectLiteralString:
-        result = ((PDFLiteralString *)mWrappedObject)->GetValue();
+        result = std::static_pointer_cast<PDFLiteralString>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectHexString:
-        result = ((PDFHexString *)mWrappedObject)->GetValue();
+        result = std::static_pointer_cast<PDFHexString>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectReal:
-        result = Double(((PDFReal *)mWrappedObject)->GetValue()).ToString();
+        result = Double(std::static_pointer_cast<PDFReal>(mWrappedObject)->GetValue()).ToString();
         break;
     case PDFObject::ePDFObjectInteger:
-        result = LongLong(((PDFInteger *)mWrappedObject)->GetValue()).ToString();
+        result = LongLong(std::static_pointer_cast<PDFInteger>(mWrappedObject)->GetValue()).ToString();
         break;
     case PDFObject::ePDFObjectSymbol:
-        result = ((PDFSymbol *)mWrappedObject)->GetValue();
+        result = std::static_pointer_cast<PDFSymbol>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectBoolean:
-        result = ((PDFBoolean *)mWrappedObject)->GetValue() ? "true" : "false";
+        result = std::static_pointer_cast<PDFBoolean>(mWrappedObject)->GetValue() ? "true" : "false";
         break;
     default:
         result = PDFObject::scPDFObjectTypeLabel(mWrappedObject->GetType());

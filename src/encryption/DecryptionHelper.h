@@ -23,6 +23,7 @@ limitations under the License.
 #include "EStatusCode.h"
 #include "XCryptionCommon.h"
 
+#include <memory>
 #include <string>
 
 class PDFParser;
@@ -63,13 +64,14 @@ class DecryptionHelper
     std::string DecryptString(const std::string &inStringToDecrypt);
 
     void OnObjectStart(long long inObjectID, long long inGenerationNumber);
-    void OnObjectEnd(PDFObject *inObject);
+    void OnObjectEnd(std::shared_ptr<PDFObject> inObject);
     // this should be used by parser to grab a default filter for stream. will return null if a stream-specific filter
     // is to be used, or that there's no encryption expected for this stream
-    IByteReader *CreateDefaultDecryptionFilterForStream(PDFStreamInput *inStream, IByteReader *inToWrapStream);
+    IByteReader *CreateDefaultDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
+                                                        IByteReader *inToWrapStream);
 
     // use this for creating a decryption filter for a stream that uses a stream-specific crypt filter
-    IByteReader *CreateDecryptionFilterForStream(PDFStreamInput *inStream, IByteReader *inToWrapStream,
+    IByteReader *CreateDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream, IByteReader *inToWrapStream,
                                                  const std::string &inCryptName);
 
     uint32_t GetLength() const;
@@ -125,7 +127,7 @@ class DecryptionHelper
     uint32_t mLength; // mLength is in bytes!
 
     IByteReader *CreateDecryptionReader(IByteReader *inSourceStream, const ByteList &inEncryptionKey, bool inUsingAES);
-    XCryptionCommon *GetCryptForStream(PDFStreamInput *inStream);
+    XCryptionCommon *GetCryptForStream(std::shared_ptr<PDFStreamInput> inStream);
 
     // Standard filter specific
     bool mFailedPasswordVerification;

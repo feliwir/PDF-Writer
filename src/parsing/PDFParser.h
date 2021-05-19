@@ -99,7 +99,7 @@ class PDFParser
     double GetPDFLevel() const;
 
     // GetTrailer, not calling AddRef
-    PDFDictionary *GetTrailer();
+    std::shared_ptr<PDFDictionary> GetTrailer();
 
     // IMPORTANT! All non "Get" prefix methods below return an object after calling AddRef (or at least make sure
     // reference is added) to handle refcount use the RefCountPtr object, or just make sure to call Release when you are
@@ -111,12 +111,13 @@ class PDFParser
 
     // Query a dictinary object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct dictionary value, use PDFDictionary::QueryDirectObject [will AddRef automatically]
-    std::shared_ptr<PDFObject> QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary, const std::string &inName);
+    std::shared_ptr<PDFObject> QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary,
+                                                     const std::string &inName);
 
     // Query an array object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct array value, use the PDFArray direct access to the vector [and use AddRef, cause it
     // won't]
-    std::shared_ptr<PDFObject> QueryArrayObject(PDFArray *inArray, unsigned long inIndex);
+    std::shared_ptr<PDFObject> QueryArrayObject(std::shared_ptr<PDFArray> inArray, unsigned long inIndex);
 
     unsigned long GetPagesCount() const;
     // don't be confused - pass number of pages here. returns the dictionary, and verifies that it's actually a page
@@ -129,30 +130,30 @@ class PDFParser
     // in the stream definition it will add them. delete the returned object when done.
     // Note that it DOES NOT setup the reading position of the file for reading the stream,
     // so if you want to read it, you have to also move the strem position, or use StartReadingFromStream instead
-    IByteReader *CreateInputStreamReader(PDFStreamInput *inStream);
+    IByteReader *CreateInputStreamReader(std::shared_ptr<PDFStreamInput> inStream);
 
     /*
         Create a reader that will be able to read the stream, but without defiltering it.
         It will only decrypt it, if decryption is supported. This is ideal for copying
     */
-    IByteReader *CreateInputStreamReaderForPlainCopying(PDFStreamInput *inStream);
+    IByteReader *CreateInputStreamReaderForPlainCopying(std::shared_ptr<PDFStreamInput> inStream);
 
     // prepare parser so that you can read from the input stream object.
     // create filters and move the stream to the beginning of the stream position.
     // delete the result when done
-    IByteReader *StartReadingFromStream(PDFStreamInput *inStream);
+    IByteReader *StartReadingFromStream(std::shared_ptr<PDFStreamInput> inStream);
 
     // creates a PDFObjectParser object that you can use for reading objects
     // from the input stream. very userful for reading content streams for
     // interpreting them
-    PDFObjectParser *StartReadingObjectsFromStream(PDFStreamInput *inStream);
+    PDFObjectParser *StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream);
     // same, but for an array of streams, in case of page contents that are arrays. need to count as one
-    PDFObjectParser *StartReadingObjectsFromStreams(PDFArray *inArrayOfStreams);
+    PDFObjectParser *StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams);
 
     /*
         Same as above, but reading only decrypts, but does not defiler. ideal for copying
     */
-    IByteReader *StartReadingFromStreamForPlainCopying(PDFStreamInput *inStream);
+    IByteReader *StartReadingFromStreamForPlainCopying(std::shared_ptr<PDFStreamInput> inStream);
 
     // use this to explictly free used objects. quite obviously this means that you'll have to parse the file again
     void ResetParser();
@@ -204,7 +205,7 @@ class PDFParser
     PDFHummus::EStatusCode ParseHeaderLine();
     PDFHummus::EStatusCode ParseEOFLine();
     PDFHummus::EStatusCode ParseLastXrefPosition();
-    PDFHummus::EStatusCode ParseTrailerDictionary(PDFDictionary **outTrailer);
+    PDFHummus::EStatusCode ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer);
     PDFHummus::EStatusCode BuildXrefTableFromTable();
     PDFHummus::EStatusCode DetermineXrefSize();
     PDFHummus::EStatusCode InitializeXref();
@@ -217,16 +218,17 @@ class PDFParser
     std::shared_ptr<PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
     PDFHummus::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
     PDFHummus::EStatusCode ParsePagesObjectIDs();
-    PDFHummus::EStatusCode ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inNodeObjectID);
-    PDFHummus::EStatusCode ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inNodeObjectID,
+    PDFHummus::EStatusCode ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
+    PDFHummus::EStatusCode ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID,
                                          unsigned long &ioCurrentPageIndex);
-    PDFHummus::EStatusCode ParsePreviousXrefs(PDFDictionary *inTrailer);
+    PDFHummus::EStatusCode ParsePreviousXrefs(std::shared_ptr<PDFDictionary> inTrailer);
     void MergeXrefWithMainXref(XrefEntryInput *inTableToMerge, ObjectIDType inMergedTableSize);
     PDFHummus::EStatusCode ParseFileDirectory();
     PDFHummus::EStatusCode BuildXrefTableAndTrailerFromXrefStream(long long inXrefStreamObjectID);
     // an overload for cases where the xref stream object is already parsed
     PDFHummus::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                   PDFStreamInput *inXrefStream, XrefEntryInput **outExtendedTable,
+                                                   std::shared_ptr<PDFStreamInput> inXrefStream,
+                                                   XrefEntryInput **outExtendedTable,
                                                    ObjectIDType *outExtendedTableSize);
     // an overload for cases where the position should hold a stream object, and it should be parsed
     PDFHummus::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
@@ -238,19 +240,21 @@ class PDFParser
     PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue);
     PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue);
     PDFHummus::EStatusCode ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
-                                                      ObjectIDType inXrefSize, PDFDictionary **outTrailer,
+                                                      ObjectIDType inXrefSize,
+                                                      std::shared_ptr<PDFDictionary> *outTrailer,
                                                       XrefEntryInput **outExtendedTable,
                                                       ObjectIDType *outExtendedTableSize);
     std::shared_ptr<PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
     PDFHummus::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
     void MovePositionInStream(long long inPosition);
-    EStatusCodeAndIByteReader CreateFilterForStream(IByteReader *inStream, PDFName *inFilterName,
-                                                    PDFDictionary *inDecodeParams, PDFStreamInput *inPDFStream);
+    EStatusCodeAndIByteReader CreateFilterForStream(IByteReader *inStream, std::shared_ptr<PDFName> inFilterName,
+                                                    std::shared_ptr<PDFDictionary> inDecodeParams,
+                                                    std::shared_ptr<PDFStreamInput> inPDFStream);
 
     void NotifyIndirectObjectStart(long long inObjectID, long long inGenerationNumber);
     void NotifyIndirectObjectEnd(std::shared_ptr<PDFObject> inObject);
 
-    IByteReader *WrapWithDecryptionFilter(PDFStreamInput *inStream, IByteReader *inToWrapStream);
+    IByteReader *WrapWithDecryptionFilter(std::shared_ptr<PDFStreamInput> inStream, IByteReader *inToWrapStream);
 
     // Backward reading
     bool ReadNextBufferFromEnd();

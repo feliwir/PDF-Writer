@@ -22,7 +22,7 @@
 #include "BoxingBase.h"
 #include "IPDFParserExtender.h"
 #include "PDFStream.h"
-#include "RefCountPtr.h"
+
 #include "Trace.h"
 #include "encryption/DecryptionHelper.h"
 #include "io/IByteReader.h"
@@ -121,7 +121,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
         // this could be an indirect reference in case this is a positive integer
         // and the next one is also, and then there's an "R" keyword
         if ((numberObject != nullptr) && (numberObject->GetType() == PDFObject::ePDFObjectInteger) &&
-            numberObject->GetValue() > 0)
+            std::static_pointer_cast<PDFNumber(numberObject)->GetValue()> 0)
         {
             // try parse version
             std::string numberToken;
@@ -157,8 +157,9 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
             }
 
             // if passed all these, then this is a reference
-            return std::make_shared<PDFIndirectObjectReference>((ObjectIDType)numberObject->GetValue(),
-                                                                (unsigned long)versionObject->GetValue());
+            return std::make_shared<PDFIndirectObjectReference>(
+                std::static_pointer_cast < PDFNumber(numberObject)->GetValue(),
+                std::static_pointer_cast < PDFNumber(versionObject)->GetValue());
         }
     }
     // Array
@@ -173,7 +174,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
         {
             // could be a stream. will be if the next token is the "stream" keyword
             if (!GetNextToken(token))
-                break;
+                return dictObject;
 
             if (scStream == token)
             {
@@ -325,7 +326,6 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseLiteralString(const std::string
     return std::make_shared<PDFLiteralString>(MaybeDecryptString(stringBuffer.str()));
 }
 
-
 std::string PDFObjectParser::MaybeDecryptString(const std::string &inString)
 {
     if ((mDecryptionHelper != nullptr) && mDecryptionHelper->IsEncrypted())
@@ -424,9 +424,8 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
     std::stringbuf stringBuffer;
     BoolAndByte hexResult;
     uint8_t buffer;
-    ++it; // skip initial slash
 
-    for (auto it = inToken.begin();; it != inToken.end() && PDFHummus::eSuccess == status; ++it)
+    for (auto it = inToken.begin() + 1; it != inToken.end() && PDFHummus::eSuccess == status; ++it)
     {
         if (*it == scSharp)
         {
@@ -629,7 +628,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
 
         // all good. i'm gonna be forgiving here and allow skipping duplicate keys. cause it happens
         if (!aDictionary->Exists(aKey->GetValue()))
-            aDictionary->Insert(aKey, aValue);
+            aDictionary->Insert(static_pointer_cast<PDFName>(aKey), aValue);
     }
 
     if (dictionaryEndEncountered && PDFHummus::eSuccess == status)
