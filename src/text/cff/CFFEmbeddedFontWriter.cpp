@@ -108,7 +108,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &inFont
     return status;
 }
 
-static const unsigned short scROS = 0xC1E;
+static const uint16_t scROS = 0xC1E;
 EStatusCode CFFEmbeddedFontWriter::CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                                    UShortVector *inCIDMapping, const std::string &inSubsetFontName,
                                                    bool &outNotEmbedded, MyStringBuf &outFontProgram)
@@ -126,8 +126,7 @@ EStatusCode CFFEmbeddedFontWriter::CreateCFFSubset(FreeTypeFaceWrapper &inFontIn
             break;
         }
 
-        status =
-            mOpenTypeInput.ReadOpenTypeFile(mOpenTypeFile.GetInputStream(), (unsigned short)inFontInfo.GetFontIndex());
+        status = mOpenTypeInput.ReadOpenTypeFile(mOpenTypeFile.GetInputStream(), (uint16_t)inFontInfo.GetFontIndex());
         if (status != PDFHummus::eSuccess)
         {
             TRACE_LOG("CFFEmbeddedFontWriter::CreateCFFSubset, failed to read true type file");
@@ -288,7 +287,7 @@ EStatusCode CFFEmbeddedFontWriter::AddDependentGlyphs(UIntVector &ioSubsetGlyphI
     return status;
 }
 
-EStatusCode CFFEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UIntSet &ioComponents,
+EStatusCode CFFEmbeddedFontWriter::AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents,
                                                       bool &outFoundComponents)
 {
     CharString2Dependencies dependencies;
@@ -422,13 +421,13 @@ EStatusCode CFFEmbeddedFontWriter::WriteTopIndex()
 
 #define N_STD_STRINGS 391
 
-static const unsigned short scCharset = 15;
-static const unsigned short scEncoding = 16;
-static const unsigned short scCharstrings = 17;
-static const unsigned short scPrivate = 18;
-static const unsigned short scFDArray = 0xC24;
-static const unsigned short scFDSelect = 0xC25;
-static const unsigned short scEmbeddedPostscript = 0xC15;
+static const uint16_t scCharset = 15;
+static const uint16_t scEncoding = 16;
+static const uint16_t scCharstrings = 17;
+static const uint16_t scPrivate = 18;
+static const uint16_t scFDArray = 0xC24;
+static const uint16_t scFDSelect = 0xC25;
+static const uint16_t scEmbeddedPostscript = 0xC15;
 EStatusCode CFFEmbeddedFontWriter::WriteTopDictSegment(MyStringBuf &ioTopDictSegment)
 {
     OutputStringBufferStream topDictStream(&ioTopDictSegment);
@@ -564,7 +563,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteGlobalSubrsIndex()
     return mPrimitivesWriter.WriteCard16(0);
 }
 
-typedef std::pair<uint8_t, unsigned short> ByteAndUShort;
+typedef std::pair<uint8_t, uint16_t> ByteAndUShort;
 typedef std::list<ByteAndUShort> ByteAndUShortList;
 
 EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyphIDs)
@@ -595,7 +594,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyp
         for (; it != inSubsetGlyphIDs.end(); ++it)
         {
             // don't be confused! the supplements is by SID! not GID!
-            unsigned short sid = mOpenTypeInput.mCFF.GetGlyphSID(0, *it);
+            uint16_t sid = mOpenTypeInput.mCFF.GetGlyphSID(0, *it);
 
             auto itSupplements = encodingInfo->mSupplements.find(sid);
             if (itSupplements != encodingInfo->mSupplements.end())
@@ -687,7 +686,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteCharStrings(const UIntVector &inSubsetGl
 
     do
     {
-        unsigned short i = 0;
+        uint16_t i = 0;
         for (; itGlyphs != inSubsetGlyphIDs.end() && PDFHummus::eSuccess == status; ++itGlyphs, ++i)
         {
             offsets[i] = (unsigned long)charStringsDataWriteStream.GetCurrentPosition();
@@ -704,7 +703,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteCharStrings(const UIntVector &inSubsetGl
         // write index section
         mCharStringPosition = mFontFileStream.GetCurrentPosition();
         uint8_t sizeOfOffset = GetMostCompressedOffsetSize(offsets[i] + 1);
-        mPrimitivesWriter.WriteCard16((unsigned short)inSubsetGlyphIDs.size());
+        mPrimitivesWriter.WriteCard16((uint16_t)inSubsetGlyphIDs.size());
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
         mPrimitivesWriter.SetOffSize(sizeOfOffset);
         for (i = 0; i <= inSubsetGlyphIDs.size(); ++i)
@@ -722,7 +721,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteCharStrings(const UIntVector &inSubsetGl
     return status;
 }
 
-static const unsigned short scSubrs = 19;
+static const uint16_t scSubrs = 19;
 EStatusCode CFFEmbeddedFontWriter::WritePrivateDictionary()
 {
     return WritePrivateDictionaryBody(mOpenTypeInput.mCFF.mPrivateDicts[0], mPrivateSize, mPrivatePosition);
@@ -845,7 +844,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDArray(const UIntVector & /*inSubsetGly
         // write index section
         mFDArrayPosition = mFontFileStream.GetCurrentPosition();
         uint8_t sizeOfOffset = GetMostCompressedOffsetSize(offsets[i] + 1);
-        mPrimitivesWriter.WriteCard16((unsigned short)inNewFontDictsIndexes.size());
+        mPrimitivesWriter.WriteCard16((uint16_t)inNewFontDictsIndexes.size());
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
         mPrimitivesWriter.SetOffSize(sizeOfOffset);
         for (i = 0; i <= inNewFontDictsIndexes.size(); ++i)
@@ -879,9 +878,9 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDSelect(const UIntVector &inSubsetGlyph
     long long rangesCountPosition = mFontFileStream.GetCurrentPosition();
     mPrimitivesWriter.WriteCard16(1); // temporary. will get back to this later
 
-    unsigned short rangesCount = 1;
+    uint16_t rangesCount = 1;
     uint8_t currentFD, newFD;
-    unsigned short glyphIndex = 1;
+    uint16_t glyphIndex = 1;
     auto itNewIndex = inNewFontDictsIndexes.find(mOpenTypeInput.mCFF.mTopDictIndex[0].mFDSelect[*itGlyphs]);
 
     // k. seems like i probably just imagine exceptions here. i guess there must
@@ -903,7 +902,7 @@ EStatusCode CFFEmbeddedFontWriter::WriteFDSelect(const UIntVector &inSubsetGlyph
             ++rangesCount;
         }
     }
-    mPrimitivesWriter.WriteCard16((unsigned short)inSubsetGlyphIDs.size());
+    mPrimitivesWriter.WriteCard16((uint16_t)inSubsetGlyphIDs.size());
     // go back to ranges count if not equal to what's already written
     if (rangesCount != 1)
     {

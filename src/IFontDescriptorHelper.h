@@ -29,9 +29,9 @@ class DictionaryContext;
 class ObjectsContext;
 class FreeTypeFaceWrapper;
 
-typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
+typedef std::pair<uint32_t, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
-typedef std::vector<unsigned int> UIntVector;
+typedef std::vector<uint32_t> UIntVector;
 
 class IFontDescriptorHelper
 {

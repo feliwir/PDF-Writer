@@ -27,8 +27,6 @@
 
 FontDescriptorWriter::FontDescriptorWriter() = default;
 
-
-
 static const std::string scType = "Type";
 static const std::string scFontDescriptor = "FontDescriptor";
 static const std::string scFontName = "FontName";
@@ -134,10 +132,10 @@ void FontDescriptorWriter::WriteFontDescriptor(ObjectIDType inFontDescriptorObje
     inObjectsContext->EndIndirectObject();
 }
 
-unsigned int FontDescriptorWriter::CalculateFlags(FreeTypeFaceWrapper *inFontInfo,
-                                                  const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
+uint32_t FontDescriptorWriter::CalculateFlags(FreeTypeFaceWrapper *inFontInfo,
+                                              const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
 {
-    unsigned int flags = 0;
+    uint32_t flags = 0;
 
     // see FreeTypeFaceWrapper::GetFontFlags for explanation, if you must
 

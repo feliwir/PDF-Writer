@@ -19,6 +19,7 @@
 
 */
 #pragma once
+#include <stdint.h>
 
 struct JPEGImageInformation
 {
@@ -31,13 +32,13 @@ struct JPEGImageInformation
 
     // JFIF Information
     bool JFIFInformationExists;
-    unsigned int JFIFUnit;
+    uint32_t JFIFUnit;
     double JFIFXDensity;
     double JFIFYDensity;
 
     // Exif Information
     bool ExifInformationExists;
-    unsigned int ExifUnit;
+    uint32_t ExifUnit;
     double ExifXDensity;
     double ExifYDensity;
 

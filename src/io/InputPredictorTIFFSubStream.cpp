@@ -96,7 +96,7 @@ void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, size_t inC
     mRowBuffer = new uint8_t[(inColumns * inColors * inBitsPerComponent) / 8];
 
     mReadColorsCount = inColumns * inColors;
-    mReadColors = new unsigned short[mReadColorsCount];
+    mReadColors = new uint16_t[mReadColorsCount];
     mReadColorsIndex =
         mReadColors + mReadColorsCount; // assign to end of array so will know that should read new buffer
     mIndexInColor = 0;

@@ -21,6 +21,7 @@
 #pragma once
 
 #include "CMYKRGBColor.h"
+#include <stdint.h>
 
 // Options for TIFF image usage.
 // by default the image drawn would be the first page of the input tiff (either one page or multipage)
@@ -76,7 +77,7 @@ struct TIFFUsageParameters
 {
     // PageIndex - For multipage tiffs, use 0 to n-1 index to get the relevant page, where n is the total number of
     // pages in the tiff file.
-    unsigned int PageIndex;
+    uint32_t PageIndex;
 
     //	Black and white options
     TIFFBiLevelBWColorTreatment BWTreatment;
@@ -91,7 +92,7 @@ struct TIFFUsageParameters
         PageIndex = 0;
     }
 
-    TIFFUsageParameters(unsigned int inPageIndex, TIFFBiLevelBWColorTreatment inBWTreatment,
+    TIFFUsageParameters(uint32_t inPageIndex, TIFFBiLevelBWColorTreatment inBWTreatment,
                         TIFFBiLevelGrayscaleColorTreatment inGrayscaleTreatment)
         : BWTreatment(inBWTreatment), GrayscaleTreatment(inGrayscaleTreatment)
     {

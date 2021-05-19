@@ -1113,7 +1113,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     char formattingBuffer[5];
     if (writeAsCID)
     {
-        for (unsigned short &it : encodedCharactersList)
+        for (uint16_t &it : encodedCharactersList)
         {
             formattingBuffer[0] = (it >> 8) & 0x00ff;
             stringStream.Write((const uint8_t *)formattingBuffer, 1);
@@ -1126,7 +1126,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     }
     else
     {
-        for (unsigned short &it : encodedCharactersList)
+        for (uint16_t &it : encodedCharactersList)
         {
             formattingBuffer[0] = it & 0x00ff;
             stringStream.Write((const uint8_t *)formattingBuffer, 1);
@@ -1212,7 +1212,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
             }
             else
             {
-                for (unsigned short &itEncoded : *itEncodedList)
+                for (uint16_t &itEncoded : *itEncodedList)
                 {
                     SAFE_SPRINTF_2(formattingBuffer, 5, "%02x%02x", (itEncoded >> 8) & 0x00ff, itEncoded & 0x00ff);
                     stringStream.Write((const uint8_t *)formattingBuffer, 4);
@@ -1235,7 +1235,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
             }
             else
             {
-                for (unsigned short &itEncoded : *itEncodedList)
+                for (uint16_t &itEncoded : *itEncodedList)
                 {
                     formattingBuffer[0] = itEncoded & 0x00ff;
                     stringStream.Write((const uint8_t *)formattingBuffer, 1);

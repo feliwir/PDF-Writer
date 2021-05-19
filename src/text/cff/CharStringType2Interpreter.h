@@ -38,7 +38,7 @@ class CharStringType2Interpreter
 
   private:
     CharStringOperandList mOperandStack;
-    unsigned short mStemsCount;
+    uint16_t mStemsCount;
     IType2InterpreterImplementation *mImplementationHelper;
     bool mGotEndChar;
     CharStringOperandVector mStorage;
@@ -49,7 +49,7 @@ class CharStringType2Interpreter
     uint8_t *InterpretNumber(uint8_t *inProgramCounter);
     uint8_t *InterpretOperator(uint8_t *inProgramCounter, bool &outGotEndExecutionCommand);
 
-    PDFHummus::EStatusCode ClearNFromStack(unsigned short inCount);
+    PDFHummus::EStatusCode ClearNFromStack(uint16_t inCount);
     void ClearStack();
     void CheckWidth();
 

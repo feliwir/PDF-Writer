@@ -37,8 +37,6 @@ PDFDate::PDFDate()
     SetTime(-1);
 }
 
-
-
 void PDFDate::SetTime(int inYear, int inMonth, int inDay, int inHour, int inMinute, int inSecond, EUTCRelation inUTC,
                       int inHourFromUTC, int inMinuteFromUTC)
 {

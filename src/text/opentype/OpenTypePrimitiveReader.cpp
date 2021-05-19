@@ -27,8 +27,6 @@ OpenTypePrimitiveReader::OpenTypePrimitiveReader(IByteReaderWithPosition *inOpen
     SetOpenTypeStream(inOpenTypeFile);
 }
 
-
-
 void OpenTypePrimitiveReader::SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile)
 {
     mOpenTypeFile = inOpenTypeFile;
@@ -68,7 +66,7 @@ EStatusCode OpenTypePrimitiveReader::ReadCHAR(char &outValue)
     return PDFHummus::eSuccess;
 }
 
-EStatusCode OpenTypePrimitiveReader::ReadUSHORT(unsigned short &outValue)
+EStatusCode OpenTypePrimitiveReader::ReadUSHORT(uint16_t &outValue)
 {
     uint8_t byte1, byte2;
 
@@ -78,14 +76,14 @@ EStatusCode OpenTypePrimitiveReader::ReadUSHORT(unsigned short &outValue)
     if (ReadBYTE(byte2) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
 
-    outValue = ((unsigned short)byte1 << 8) + byte2;
+    outValue = ((uint16_t)byte1 << 8) + byte2;
 
     return PDFHummus::eSuccess;
 }
 
 EStatusCode OpenTypePrimitiveReader::ReadSHORT(short &outValue)
 {
-    unsigned short buffer;
+    uint16_t buffer;
 
     if (ReadUSHORT(buffer) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -180,7 +178,7 @@ EStatusCode OpenTypePrimitiveReader::GetInternalState()
 
 EStatusCode OpenTypePrimitiveReader::ReadFixed(double &outValue)
 {
-    unsigned short integer, fraction;
+    uint16_t integer, fraction;
 
     if (ReadUSHORT(integer) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;

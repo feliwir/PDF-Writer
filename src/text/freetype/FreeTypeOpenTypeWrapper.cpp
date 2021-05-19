@@ -234,19 +234,19 @@ bool FreeTypeOpenTypeWrapper::HasPrivateEncoding()
     return false;
 }
 
-unsigned int FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long /*inChar*/)
+uint32_t FreeTypeOpenTypeWrapper::GetGlyphForUnicodeChar(unsigned long /*inChar*/)
 {
     // emtpy implementation (always false at "GetPrivateEncoding")
     return 0;
 }
 
-std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(unsigned int /*inGlyphIndex*/)
+std::string FreeTypeOpenTypeWrapper::GetPrivateGlyphName(uint32_t /*inGlyphIndex*/)
 {
     // empty implementation (always false at "GetPrivateEncoding);
     return ".notdef";
 }
 
-unsigned int FreeTypeOpenTypeWrapper::GetFreeTypeGlyphIndexFromEncodingGlyphIndex(unsigned int inGlyphIndex)
+uint32_t FreeTypeOpenTypeWrapper::GetFreeTypeGlyphIndexFromEncodingGlyphIndex(uint32_t inGlyphIndex)
 {
     return inGlyphIndex;
 }

@@ -36,8 +36,8 @@
 class FreeTypeFaceWrapper;
 class ObjectsContext;
 
-typedef std::vector<unsigned int> UIntVector;
-typedef std::set<unsigned int> UIntSet;
+typedef std::vector<uint32_t> UIntVector;
+typedef std::set<uint32_t> UIntSet;
 
 class TrueTypeEmbeddedFontWriter
 {
@@ -56,7 +56,7 @@ class TrueTypeEmbeddedFontWriter
     InputStringBufferStream mFontFileReaderStream; // now this might be confusing - i'm using a reader
                                                    // to my output buffer, so i can calculate checksums 'n such
     OpenTypePrimitiveReader mPrimitivesReader;     // same here...
-    unsigned short mSubsetFontGlyphsCount;
+    uint16_t mSubsetFontGlyphsCount;
 
     long long mCVTEntryWritingOffset;
     long long mFPGMEntryWritingOffset;
@@ -77,10 +77,10 @@ class TrueTypeEmbeddedFontWriter
                                                 bool &outNotEmbedded, MyStringBuf &outFontProgram);
 
     void AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs);
-    bool AddComponentGlyphs(unsigned int inGlyphID, UIntSet &ioComponents);
+    bool AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents);
 
     PDFHummus::EStatusCode WriteTrueTypeHeader();
-    unsigned short GetSmallerPower2(unsigned short inNumber);
+    uint16_t GetSmallerPower2(uint16_t inNumber);
     unsigned long GetTag(const char *inTagName);
     void WriteEmptyTableEntry(const char *inTag, long long &outEntryPosition);
     PDFHummus::EStatusCode WriteHead();

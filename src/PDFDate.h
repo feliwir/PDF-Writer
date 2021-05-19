@@ -40,8 +40,8 @@ class PDFDate
     void SetTime(int inYear, int inMonth = -1, int inDay = -1, int inHour = -1, int inMinute = -1, int inSecond = -1,
                  EUTCRelation inUTC = eUndefined, int inHourFromUTC = -1, int inMinuteFromUTC = -1);
 
-    bool IsNull() const;                         // null is signified by having -1 as the year.
-    std::string ToString() const;                // writes only non-null values
+    bool IsNull() const;                   // null is signified by having -1 as the year.
+    std::string ToString() const;          // writes only non-null values
     void ParseString(std::string inValue); // sets date from input string
 
     // set PDF Date to the current time

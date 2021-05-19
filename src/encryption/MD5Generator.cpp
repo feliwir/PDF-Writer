@@ -128,7 +128,7 @@ void MD5Generator::_Accumulate(const uint1 *inBlock, unsigned long inBlockSize)
     uint4 buffer_space; // how much space is left in buffer
 
     // Compute number of bytes mod 64
-    buffer_index = (unsigned int)((mCount[0] >> 3) & 0x3F);
+    buffer_index = (uint32_t)((mCount[0] >> 3) & 0x3F);
 
     // Update number of bits
     if ((mCount[0] += ((uint4)inBlockSize << 3)) < ((uint4)inBlockSize << 3))
@@ -271,7 +271,7 @@ void MD5Generator::Transform(const uint1 *inBuffer)
 void MD5Generator::Decode(const uint1 *inInput, uint4 inInputLen, uint4 *outOutput)
 {
 
-    unsigned int i, j;
+    uint32_t i, j;
 
     for (i = 0, j = 0; j < inInputLen; i++, j += 4)
         outOutput[i] = ((uint4)inInput[j]) | (((uint4)inInput[j + 1]) << 8) | (((uint4)inInput[j + 2]) << 16) |
@@ -280,29 +280,29 @@ void MD5Generator::Decode(const uint1 *inInput, uint4 inInputLen, uint4 *outOutp
 
 // ROTATE_LEFT rotates x left n bits.
 
-unsigned int MD5Generator::RotateLeft(uint4 x, uint4 n)
+uint32_t MD5Generator::RotateLeft(uint4 x, uint4 n)
 {
     return (x << n) | (x >> (32 - n));
 }
 
 // F, G, H and I are basic MD5 functions.
 
-unsigned int MD5Generator::F(uint4 x, uint4 y, uint4 z)
+uint32_t MD5Generator::F(uint4 x, uint4 y, uint4 z)
 {
     return (x & y) | (~x & z);
 }
 
-unsigned int MD5Generator::G(uint4 x, uint4 y, uint4 z)
+uint32_t MD5Generator::G(uint4 x, uint4 y, uint4 z)
 {
     return (x & z) | (y & ~z);
 }
 
-unsigned int MD5Generator::H(uint4 x, uint4 y, uint4 z)
+uint32_t MD5Generator::H(uint4 x, uint4 y, uint4 z)
 {
     return x ^ y ^ z;
 }
 
-unsigned int MD5Generator::I(uint4 x, uint4 y, uint4 z)
+uint32_t MD5Generator::I(uint4 x, uint4 y, uint4 z)
 {
     return y ^ (x | ~z);
 }
@@ -360,7 +360,7 @@ void MD5Generator::Finalize()
     if (!mIsFinalized)
     {
         unsigned char bits[8];
-        unsigned int index, padLen;
+        uint32_t index, padLen;
 
         // Save number of bits
         Encode(bits, mCount, 8);
@@ -387,7 +387,7 @@ void MD5Generator::Finalize()
 void MD5Generator::Encode(uint1 *output, uint4 *input, uint4 len)
 {
 
-    unsigned int i, j;
+    uint32_t i, j;
 
     for (i = 0, j = 0; j < len; i++, j += 4)
     {

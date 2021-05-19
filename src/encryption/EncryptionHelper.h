@@ -115,12 +115,12 @@ class EncryptionHelper
     void Release();
 
     // Generic encryption
-    unsigned int mV;
-    unsigned int mLength; // mLength is in bytes!
+    uint32_t mV;
+    uint32_t mLength; // mLength is in bytes!
 
     // Standard filter specific
 
-    unsigned int mRevision;
+    uint32_t mRevision;
     ByteList mO;
     ByteList mU;
     long long mP;

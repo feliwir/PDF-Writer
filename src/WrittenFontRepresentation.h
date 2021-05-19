@@ -24,34 +24,35 @@
 
 #include <algorithm>
 #include <map>
+#include <stdint.h>
 #include <vector>
 
 typedef std::vector<unsigned long> ULongVector;
 
 struct GlyphEncodingInfo
 {
-    unsigned short mEncodedCharacter;
+    uint16_t mEncodedCharacter;
     ULongVector mUnicodeCharacters;
 
     GlyphEncodingInfo()
     {
     }
 
-    GlyphEncodingInfo(unsigned short inEncodedCharacter, unsigned long inUnicodeCharacter)
+    GlyphEncodingInfo(uint16_t inEncodedCharacter, unsigned long inUnicodeCharacter)
     {
         mEncodedCharacter = inEncodedCharacter;
         mUnicodeCharacters.push_back(inUnicodeCharacter);
     }
 
-    GlyphEncodingInfo(unsigned short inEncodedCharacter, ULongVector inUnicodeCharacters)
+    GlyphEncodingInfo(uint16_t inEncodedCharacter, ULongVector inUnicodeCharacters)
     {
         mEncodedCharacter = inEncodedCharacter;
         mUnicodeCharacters = inUnicodeCharacters;
     }
 };
 
-typedef std::map<unsigned int, GlyphEncodingInfo> UIntToGlyphEncodingInfoMap;
-typedef std::vector<unsigned int> UIntVector;
+typedef std::map<uint32_t, GlyphEncodingInfo> UIntToGlyphEncodingInfoMap;
+typedef std::vector<uint32_t> UIntVector;
 
 static UIntVector GetOrderedKeys(const UIntToGlyphEncodingInfoMap &inMap)
 {

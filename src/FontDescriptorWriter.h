@@ -27,7 +27,7 @@
 #include <utility>
 #include <vector>
 
-typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
+typedef std::pair<uint32_t, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
 
 class FreeTypeFaceWrapper;
@@ -45,6 +45,6 @@ class FontDescriptorWriter
                              ObjectsContext *inObjectsContext, IFontDescriptorHelper *inDescriptorHelper);
 
   private:
-    unsigned int CalculateFlags(FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
+    uint32_t CalculateFlags(FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
     bool IsSymbolic(FreeTypeFaceWrapper *inFontInfo, const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
 };

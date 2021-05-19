@@ -26,8 +26,8 @@
 #include "PDFPage.h"
 #include "PDFWriter.h"
 #include "PageContentContext.h"
-#include "TestsRunner.h"
 #include "PagePresets.h"
+#include "TestsRunner.h"
 
 #include <iostream>
 

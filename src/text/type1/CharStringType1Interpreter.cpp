@@ -86,7 +86,7 @@ EStatusCode CharStringType1Interpreter::InterpretOperator(uint8_t inBuffer,
                                                           bool &outGotEndExecutionCommand)
 {
     EStatusCode status = PDFHummus::eFailure;
-    unsigned short operatorValue;
+    uint16_t operatorValue;
     outGotEndExecutionCommand = false;
     uint8_t buffer;
 

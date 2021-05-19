@@ -28,8 +28,6 @@ TrueTypePrimitiveWriter::TrueTypePrimitiveWriter(OutputStringBufferStream *inTru
     SetOpenTypeStream(inTrueTypeFile);
 }
 
-
-
 void TrueTypePrimitiveWriter::SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile)
 {
     mTrueTypeFile = inTrueTypeFile;
@@ -75,7 +73,7 @@ EStatusCode TrueTypePrimitiveWriter::WriteULONG(unsigned long inValue)
     return PDFHummus::eSuccess;
 }
 
-EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(unsigned short inValue)
+EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(uint16_t inValue)
 {
     uint8_t byte1 = (inValue >> 8) & 0xff;
     uint8_t byte2 = inValue & 0xff;
@@ -91,7 +89,7 @@ EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(unsigned short inValue)
 
 EStatusCode TrueTypePrimitiveWriter::WriteSHORT(short inValue)
 {
-    return WriteUSHORT((unsigned short)inValue);
+    return WriteUSHORT((uint16_t)inValue);
 }
 
 EStatusCode TrueTypePrimitiveWriter::Pad(int inCount)

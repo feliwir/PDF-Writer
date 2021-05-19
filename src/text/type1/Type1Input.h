@@ -51,7 +51,7 @@ struct Type1FontDictionary
     // Metrics ignored
     double StrokeWidth;
     bool FSTypeValid;
-    unsigned short fsType;
+    uint16_t fsType;
 };
 
 struct Type1FontInfoDictionary
@@ -67,7 +67,7 @@ struct Type1FontInfoDictionary
     double UnderlinePosition;
     double UnderlineThickness;
     bool FSTypeValid;
-    unsigned short fsType;
+    uint16_t fsType;
 };
 
 struct Type1PrivateDictionary
@@ -91,7 +91,7 @@ struct Type1PrivateDictionary
 };
 
 typedef std::set<uint8_t> ByteSet;
-typedef std::set<unsigned short> UShortSet;
+typedef std::set<uint16_t> UShortSet;
 
 struct CharString1Dependencies
 {

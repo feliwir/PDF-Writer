@@ -35,7 +35,7 @@ class Type2CharStringWriter
 
     PDFHummus::EStatusCode WriteHintMask(unsigned long inMask, unsigned long inMaskSize);
     PDFHummus::EStatusCode WriteIntegerOperand(long inOperand);
-    PDFHummus::EStatusCode WriteOperator(unsigned short inOperatorCode);
+    PDFHummus::EStatusCode WriteOperator(uint16_t inOperatorCode);
 
   private:
     IByteWriter *mTargetStream;

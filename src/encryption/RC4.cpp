@@ -66,8 +66,6 @@ void RC4::Init(const uint8_t *inKey, size_t inLength)
     mI = mJ = 0;
 }
 
-
-
 void RC4::Swap(int a, int b)
 {
     uint8_t tmp = mBuffer[a];

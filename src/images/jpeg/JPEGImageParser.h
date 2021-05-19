@@ -59,9 +59,9 @@ class JPEGImageParser
     PDFHummus::EStatusCode ReadJPEGID();
     PDFHummus::EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
     TwoLevelStatus ReadStreamToBuffer(unsigned long inAmountToRead, unsigned long &refReadLimit);
-    PDFHummus::EStatusCode ReadJpegTag(unsigned int &outTagID);
+    PDFHummus::EStatusCode ReadJpegTag(uint32_t &outTagID);
     PDFHummus::EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
-    unsigned int GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian = false);
+    uint32_t GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian = false);
     void SkipStream(unsigned long inSkip);
     PDFHummus::EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
     PDFHummus::EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
@@ -73,7 +73,7 @@ class JPEGImageParser
     PDFHummus::EStatusCode ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian);
     PDFHummus::EStatusCode ReadExifID();
     PDFHummus::EStatusCode IsBigEndianExif(bool &outIsBigEndian);
-    PDFHummus::EStatusCode ReadIntValue(unsigned int &outIntValue, bool inUseLittleEndian = false);
+    PDFHummus::EStatusCode ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian = false);
     PDFHummus::EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
     PDFHummus::EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
     TwoLevelStatus ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,

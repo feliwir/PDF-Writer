@@ -38,23 +38,23 @@ class CFFPrimitiveWriter
 
     // basic CFF values
     PDFHummus::EStatusCode WriteCard8(uint8_t inValue);
-    PDFHummus::EStatusCode WriteCard16(unsigned short inValue);
+    PDFHummus::EStatusCode WriteCard16(uint16_t inValue);
     // set offsize to write offsets
     void SetOffSize(uint8_t inOffSize);
     PDFHummus::EStatusCode WriteOffset(unsigned long inValue);
     PDFHummus::EStatusCode WriteOffSize(uint8_t inValue);
-    PDFHummus::EStatusCode WriteSID(unsigned short inValue);
+    PDFHummus::EStatusCode WriteSID(uint16_t inValue);
 
     // dict data
-    PDFHummus::EStatusCode WriteDictOperator(unsigned short inOperator);
+    PDFHummus::EStatusCode WriteDictOperator(uint16_t inOperator);
     PDFHummus::EStatusCode WriteDictOperand(const DictOperand &inOperand);
-    PDFHummus::EStatusCode WriteDictItems(unsigned short inOperator, const DictOperandList &inOperands);
+    PDFHummus::EStatusCode WriteDictItems(uint16_t inOperator, const DictOperandList &inOperands);
     PDFHummus::EStatusCode WriteIntegerOperand(long inValue);
     PDFHummus::EStatusCode Write5ByteDictInteger(long inValue);
     PDFHummus::EStatusCode WriteRealOperand(double inValue, long inFractalLength = 10);
 
     PDFHummus::EStatusCode Pad5Bytes();
-    PDFHummus::EStatusCode PadNBytes(unsigned short inBytesToPad);
+    PDFHummus::EStatusCode PadNBytes(uint16_t inBytesToPad);
 
   private:
     IByteWriter *mCFFOutput;

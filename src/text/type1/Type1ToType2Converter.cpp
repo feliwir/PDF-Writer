@@ -186,7 +186,7 @@ EStatusCode Type1ToType2Converter::Type1Return(const LongList &inOperandList)
     return PDFHummus::eSuccess;
 }
 
-void Type1ToType2Converter::RecordOperatorMarker(unsigned short inMarkerType)
+void Type1ToType2Converter::RecordOperatorMarker(uint16_t inMarkerType)
 {
     ConversionNode node;
     mConversionProgram.push_back(node);
@@ -258,8 +258,7 @@ EStatusCode Type1ToType2Converter::AddVStem(long inOrigin, long inExtent)
     return PDFHummus::eSuccess;
 }
 
-EStatusCode Type1ToType2Converter::RecordOperatorWithParameters(unsigned short inMarkerType,
-                                                                const LongList &inOperandList)
+EStatusCode Type1ToType2Converter::RecordOperatorWithParameters(uint16_t inMarkerType, const LongList &inOperandList)
 {
     ConversionNode node;
     mConversionProgram.push_back(node);
@@ -554,7 +553,7 @@ void Type1ToType2Converter::ConvertStems()
     }
 }
 
-ConversionNodeList::iterator Type1ToType2Converter::InsertOperatorMarker(unsigned short inMarkerType,
+ConversionNodeList::iterator Type1ToType2Converter::InsertOperatorMarker(uint16_t inMarkerType,
                                                                          ConversionNodeList::iterator inInsertPosition)
 {
     ConversionNode node;
@@ -582,7 +581,7 @@ void Type1ToType2Converter::SetupStemHintsInNode(const StemVector &inStems, long
     }
 }
 
-bool Type1ToType2Converter::IsStemHint(unsigned short inMarkerType)
+bool Type1ToType2Converter::IsStemHint(uint16_t inMarkerType)
 {
     return 1 == inMarkerType || 3 == inMarkerType || 0x0c01 == inMarkerType || 0x0c02 == inMarkerType;
 }
@@ -891,7 +890,7 @@ ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(Conversio
 }
 
 ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(ConversionNodeList::iterator inStartingNode,
-                                                                       unsigned short inOpCode)
+                                                                       uint16_t inOpCode)
 {
     auto itNext = inStartingNode;
     ++itNext;
@@ -907,11 +906,11 @@ ConversionNodeList::iterator Type1ToType2Converter::MergeSameOperators(Conversio
 }
 
 ConversionNodeList::iterator Type1ToType2Converter::MergeAltenratingOperators(
-    ConversionNodeList::iterator inStartingNode, unsigned short inAlternatingOpcode)
+    ConversionNodeList::iterator inStartingNode, uint16_t inAlternatingOpcode)
 {
     auto itNext = inStartingNode;
     ++itNext;
-    unsigned short currentMarker = inAlternatingOpcode;
+    uint16_t currentMarker = inAlternatingOpcode;
 
     while (currentMarker == itNext->mMarkerType &&
            (inStartingNode->mOperands.size() + itNext->mOperands.size() < scMergeLimit))

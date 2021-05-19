@@ -83,7 +83,7 @@ bool WrittenFontCFF::HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingList &inGl
     return glyphsToAddCount <= mAvailablePositionsCount;
 }
 
-unsigned short WrittenFontCFF::EncodeGlyph(unsigned int inGlyph, const ULongVector &inCharacters)
+uint16_t WrittenFontCFF::EncodeGlyph(uint32_t inGlyph, const ULongVector &inCharacters)
 {
     // for the first time, add also 0,0 mapping
     if (mANSIRepresentation->mGlyphIDToEncodedChar.size() == 0)
@@ -152,7 +152,7 @@ void WrittenFontCFF::RemoveFromFreeList(unsigned char inAllocatedPosition)
     }
 }
 
-unsigned char WrittenFontCFF::AllocateFromFreeList(unsigned int inGlyph)
+unsigned char WrittenFontCFF::AllocateFromFreeList(uint32_t inGlyph)
 {
     // just allocate the first available position
     UCharAndUCharList::iterator it = mFreeList.begin();
@@ -325,7 +325,7 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
     while (it.MoveNext())
     {
         assignedPositionItem = it.GetItem();
-        mAssignedPositions[i] = (unsigned int)assignedPositionItem->GetValue();
+        mAssignedPositions[i] = (uint32_t)assignedPositionItem->GetValue();
         ++i;
     }
 
@@ -349,7 +349,7 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
     return AbstractWrittenFont::ReadStateFromObject(inStateReader, writtenFontState.GetPtr());
 }
 
-unsigned short WrittenFontCFF::EncodeCIDGlyph(unsigned int inGlyphId)
+uint16_t WrittenFontCFF::EncodeCIDGlyph(uint32_t inGlyphId)
 {
     // Gal 26/8/2017: Most of the times, the glyph IDs are CIDs. this is to retain a few requirements of True type
     // fonts, and the case of fonts when they are not embedded. However, when CFF fonts are embedded, the matching code
@@ -358,5 +358,5 @@ unsigned short WrittenFontCFF::EncodeCIDGlyph(unsigned int inGlyphId)
     if (mFontWillBeEmbedded)
         return mCIDRepresentation->mGlyphIDToEncodedChar.size();
     else
-        return (unsigned short)inGlyphId;
+        return (uint16_t)inGlyphId;
 }

@@ -72,14 +72,14 @@ class IFreeTypeFaceExtender
 
     // if the answer for HasPrivateEncoding is true, this should provide the private encoding (namely what glyph index
     // matches the char)
-    virtual unsigned int GetGlyphForUnicodeChar(unsigned long inChar) = 0;
+    virtual uint32_t GetGlyphForUnicodeChar(unsigned long inChar) = 0;
 
     // if the answer for HasPrivateEncoding is true, this should return the glyph name in the private encoding
-    virtual std::string GetPrivateGlyphName(unsigned int inGlyphIndex) = 0;
+    virtual std::string GetPrivateGlyphName(uint32_t inGlyphIndex) = 0;
 
     // for queries to freetype, in the case of HasPrivateEncoding is true, get the freetype glyph index for a given font
     // glyph index (this will be different in case the 0 glyph index is not .notdef)
-    virtual unsigned int GetFreeTypeGlyphIndexFromEncodingGlyphIndex(unsigned int inGlyphIndex) = 0;
+    virtual uint32_t GetFreeTypeGlyphIndexFromEncodingGlyphIndex(uint32_t inGlyphIndex) = 0;
 
     // implement query of postscript font name which is not the standard free type method.
     // return zero length for no name

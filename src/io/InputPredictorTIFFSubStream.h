@@ -47,10 +47,10 @@ class InputPredictorTIFFSubStream : public IByteReader
 
     uint8_t *mRowBuffer;
     size_t mReadColorsCount;
-    unsigned short *mReadColors;
-    unsigned short *mReadColorsIndex;
+    uint16_t *mReadColors;
+    uint16_t *mReadColorsIndex;
     uint8_t mIndexInColor;
-    unsigned short mBitMask;
+    uint16_t mBitMask;
 
     void ReadByteFromColorsArray(uint8_t &outBuffer);
     void DecodeBufferToColors();

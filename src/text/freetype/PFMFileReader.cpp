@@ -27,8 +27,6 @@ using namespace PDFHummus;
 
 PFMFileReader::PFMFileReader() = default;
 
-
-
 EStatusCode PFMFileReader::Read(const std::string &inPFMFilePath)
 {
     EStatusCode status = PDFHummus::eSuccess;

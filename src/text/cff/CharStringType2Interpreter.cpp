@@ -110,7 +110,7 @@ uint8_t *CharStringType2Interpreter::InterpretNumber(uint8_t *inProgramCounter)
     if (28 == *newPosition)
     {
         operand.IsInteger = true;
-        operand.IntegerValue = (short)(((unsigned short)(*(newPosition + 1)) << 8) + (*(newPosition + 2)));
+        operand.IntegerValue = (short)(((uint16_t)(*(newPosition + 1)) << 8) + (*(newPosition + 2)));
         newPosition += 3;
     }
     else if (32 <= *newPosition && *newPosition <= 246)
@@ -134,13 +134,11 @@ uint8_t *CharStringType2Interpreter::InterpretNumber(uint8_t *inProgramCounter)
     else if (255 == *newPosition)
     {
         operand.IsInteger = false;
-        operand.RealValue = (short)(((unsigned short)(*(newPosition + 1)) << 8) + (*(newPosition + 2)));
+        operand.RealValue = (short)(((uint16_t)(*(newPosition + 1)) << 8) + (*(newPosition + 2)));
         if (operand.RealValue > 0)
-            operand.RealValue +=
-                (double)(((unsigned short)(*(newPosition + 3)) << 8) + (*(newPosition + 4))) / (1 << 16);
+            operand.RealValue += (double)(((uint16_t)(*(newPosition + 3)) << 8) + (*(newPosition + 4))) / (1 << 16);
         else
-            operand.RealValue -=
-                (double)(((unsigned short)(*(newPosition + 3)) << 8) + (*(newPosition + 4))) / (1 << 16);
+            operand.RealValue -= (double)(((uint16_t)(*(newPosition + 3)) << 8) + (*(newPosition + 4))) / (1 << 16);
         newPosition += 5;
     }
     else
@@ -159,7 +157,7 @@ uint8_t *CharStringType2Interpreter::InterpretNumber(uint8_t *inProgramCounter)
 
 uint8_t *CharStringType2Interpreter::InterpretOperator(uint8_t *inProgramCounter, bool &outGotEndExecutionCommand)
 {
-    unsigned short operatorValue;
+    uint16_t operatorValue;
     uint8_t *newPosition = inProgramCounter;
     outGotEndExecutionCommand = false;
 
@@ -348,7 +346,7 @@ void CharStringType2Interpreter::CheckWidth()
 
 uint8_t *CharStringType2Interpreter::InterpretHStem(uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(mOperandStack.size() / 2);
+    mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hstem(mOperandStack);
     if (status != PDFHummus::eSuccess)
@@ -358,11 +356,11 @@ uint8_t *CharStringType2Interpreter::InterpretHStem(uint8_t *inProgramCounter)
     return inProgramCounter;
 }
 
-EStatusCode CharStringType2Interpreter::ClearNFromStack(unsigned short inCount)
+EStatusCode CharStringType2Interpreter::ClearNFromStack(uint16_t inCount)
 {
     if (mOperandStack.size() >= inCount)
     {
-        for (unsigned short i = 0; i < inCount; ++i)
+        for (uint16_t i = 0; i < inCount; ++i)
             mOperandStack.pop_back();
         return PDFHummus::eSuccess;
     }
@@ -376,7 +374,7 @@ void CharStringType2Interpreter::ClearStack()
 
 uint8_t *CharStringType2Interpreter::InterpretVStem(uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(mOperandStack.size() / 2);
+    mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Vstem(mOperandStack);
     if (status != PDFHummus::eSuccess)
@@ -492,7 +490,7 @@ uint8_t *CharStringType2Interpreter::InterpretEndChar(uint8_t *inProgramCounter)
 
 uint8_t *CharStringType2Interpreter::InterpretHStemHM(uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(mOperandStack.size() / 2);
+    mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hstemhm(mOperandStack);
     if (status != PDFHummus::eSuccess)
@@ -504,7 +502,7 @@ uint8_t *CharStringType2Interpreter::InterpretHStemHM(uint8_t *inProgramCounter)
 
 uint8_t *CharStringType2Interpreter::InterpretHintMask(uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(mOperandStack.size() / 2);
+    mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hintmask(mOperandStack, inProgramCounter);
     if (status != PDFHummus::eSuccess)
@@ -546,7 +544,7 @@ uint8_t *CharStringType2Interpreter::InterpretHMoveto(uint8_t *inProgramCounter)
 
 uint8_t *CharStringType2Interpreter::InterpretVStemHM(uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(mOperandStack.size() / 2);
+    mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Vstemhm(mOperandStack);
     if (status != PDFHummus::eSuccess)

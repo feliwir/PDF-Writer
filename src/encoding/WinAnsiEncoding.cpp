@@ -280,8 +280,6 @@ static const char *scGlyphNames[256] = {".notdef",
 
 WinAnsiEncoding::WinAnsiEncoding() = default;
 
-
-
 BoolAndByte WinAnsiEncoding::Encode(unsigned long inUnicodeCharacter)
 {
     BoolAndByte result(true, 0);

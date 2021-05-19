@@ -35,7 +35,7 @@ struct IndexElement
 
     long long mStartPosition;
     long long mEndPosition;
-    unsigned short mIndex;
+    uint16_t mIndex;
 };
 
 typedef IndexElement CharString;

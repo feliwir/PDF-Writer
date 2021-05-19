@@ -38,5 +38,5 @@ class WrittenFontTrueType : public AbstractWrittenFont
     virtual bool AddToANSIRepresentation(const GlyphUnicodeMappingListList &inGlyphsList,
                                          UShortListList &outEncodedCharacters);
 
-    virtual unsigned short EncodeCIDGlyph(unsigned int inGlyphId);
+    virtual uint16_t EncodeCIDGlyph(uint32_t inGlyphId);
 };

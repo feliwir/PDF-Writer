@@ -76,7 +76,7 @@ class InputPFBDecodeStream : public IByteReader
     DecodeMethod mDecodeMethod;
     bool mHasTokenBuffer;
     uint8_t mTokenBuffer;
-    unsigned short mRandomizer;
+    uint16_t mRandomizer;
     bool mFoundEOF;
 
     // error flag. if set, will not allow further reading

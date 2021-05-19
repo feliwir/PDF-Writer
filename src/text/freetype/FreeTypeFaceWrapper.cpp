@@ -249,7 +249,7 @@ BoolAndFTShort FreeTypeFaceWrapper::XHeightFromLowerXHeight()
     return GetYBearingForUnicodeChar(0x78);
 }
 
-BoolAndFTShort FreeTypeFaceWrapper::GetYBearingForUnicodeChar(unsigned short unicodeCharCode)
+BoolAndFTShort FreeTypeFaceWrapper::GetYBearingForUnicodeChar(uint16_t unicodeCharCode)
 {
     if (mFace != nullptr)
     {
@@ -378,9 +378,9 @@ FT_UShort FreeTypeFaceWrapper::WeightFromName()
     return 1000;
 }
 
-unsigned int FreeTypeFaceWrapper::GetFontFlags()
+uint32_t FreeTypeFaceWrapper::GetFontFlags()
 {
-    unsigned int flags = 0;
+    uint32_t flags = 0;
 
     /*
         flags are a combination of:
@@ -555,7 +555,7 @@ std::string FreeTypeFaceWrapper::GetPostscriptName()
     return name;
 }
 
-std::string FreeTypeFaceWrapper::GetGlyphName(unsigned int inGlyphIndex, bool safe)
+std::string FreeTypeFaceWrapper::GetGlyphName(uint32_t inGlyphIndex, bool safe)
 {
     if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
     {
@@ -565,7 +565,7 @@ std::string FreeTypeFaceWrapper::GetGlyphName(unsigned int inGlyphIndex, bool sa
         return glyphName;
     }
 
-    if (inGlyphIndex < (unsigned int)mFace->num_glyphs)
+    if (inGlyphIndex < (uint32_t)mFace->num_glyphs)
     {
         char buffer[100];
         FT_Get_Glyph_Name(mFace, inGlyphIndex, buffer, 100);
@@ -711,22 +711,21 @@ FT_Pos FreeTypeFaceWrapper::GetInPDFMeasurements(FT_Pos inFontMeasurement)
     return 0;
 }
 
-FT_Pos FreeTypeFaceWrapper::GetGlyphWidth(unsigned int inGlyphIndex)
+FT_Pos FreeTypeFaceWrapper::GetGlyphWidth(uint32_t inGlyphIndex)
 {
     if (LoadGlyph(inGlyphIndex) != 0)
         return 0;
     return GetInPDFMeasurements(mFace->glyph->metrics.horiAdvance);
 }
 
-unsigned int FreeTypeFaceWrapper::GetGlyphIndexInFreeTypeIndexes(unsigned int inGlyphIndex)
+uint32_t FreeTypeFaceWrapper::GetGlyphIndexInFreeTypeIndexes(uint32_t inGlyphIndex)
 {
     if ((mFormatParticularWrapper != nullptr) && mFormatParticularWrapper->HasPrivateEncoding())
         return mFormatParticularWrapper->GetFreeTypeGlyphIndexFromEncodingGlyphIndex(inGlyphIndex);
     return inGlyphIndex;
 }
 
-bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex,
-                                          FreeTypeFaceWrapper::IOutlineEnumerator &inEnumerator)
+bool FreeTypeFaceWrapper::GetGlyphOutline(uint32_t inGlyphIndex, FreeTypeFaceWrapper::IOutlineEnumerator &inEnumerator)
 {
     bool status = false;
     if (mFace->glyph->format == FT_GLYPH_FORMAT_OUTLINE &&

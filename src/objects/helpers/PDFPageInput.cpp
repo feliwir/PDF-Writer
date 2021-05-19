@@ -20,12 +20,12 @@
  */
 
 #include "PDFPageInput.h"
+#include "PagePresets.h"
 #include "ParsedPrimitiveHelper.h"
 #include "Trace.h"
 #include "objects/PDFArray.h"
 #include "objects/PDFName.h"
 #include "parsing/PDFParser.h"
-#include "PagePresets.h"
 
 PDFPageInput::PDFPageInput(PDFParser *inParser, PDFObject *inPageObject) : mPageObject(inPageObject)
 {

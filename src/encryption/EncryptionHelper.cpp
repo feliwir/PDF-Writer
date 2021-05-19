@@ -438,13 +438,13 @@ PDFHummus::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, Obj
     bool usingAES = usingAESObject->GetValue();
 
     PDFObjectCastPtr<PDFInteger> length = encryptionObjectState->QueryDirectObject("mLength");
-    mLength = (unsigned int)length->GetValue();
+    mLength = (uint32_t)length->GetValue();
 
     PDFObjectCastPtr<PDFInteger> v = encryptionObjectState->QueryDirectObject("mV");
-    mV = (unsigned int)v->GetValue();
+    mV = (uint32_t)v->GetValue();
 
     PDFObjectCastPtr<PDFInteger> revision = encryptionObjectState->QueryDirectObject("mRevision");
-    mRevision = (unsigned int)revision->GetValue();
+    mRevision = (uint32_t)revision->GetValue();
 
     PDFObjectCastPtr<PDFInteger> p = encryptionObjectState->QueryDirectObject("mP");
     mP = p->GetValue();

@@ -35,9 +35,9 @@
 #include <string>
 #include <vector>
 
-typedef std::vector<unsigned int> UIntVector;
-typedef std::set<unsigned int> UIntSet;
-typedef std::vector<unsigned short> UShortVector;
+typedef std::vector<uint32_t> UIntVector;
+typedef std::set<uint32_t> UIntSet;
+typedef std::vector<uint16_t> UShortVector;
 typedef std::map<FontDictInfo *, uint8_t> FontDictInfoToByteMap;
 
 class FreeTypeFaceWrapper;
@@ -100,7 +100,7 @@ class CFFEmbeddedFontWriter
                                            UShortVector *inCIDMapping, const std::string &inSubsetFontName,
                                            bool &outNotEmbedded, MyStringBuf &outFontProgram);
     PDFHummus::EStatusCode AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs);
-    PDFHummus::EStatusCode AddComponentGlyphs(unsigned int inGlyphID, UIntSet &ioComponents, bool &outFoundComponents);
+    PDFHummus::EStatusCode AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents, bool &outFoundComponents);
     PDFHummus::EStatusCode WriteCFFHeader();
     PDFHummus::EStatusCode WriteName(const std::string &inSubsetFontName);
     PDFHummus::EStatusCode WriteTopIndex();
@@ -121,5 +121,6 @@ class CFFEmbeddedFontWriter
                                                       long long &outWriteSize, long long &outWritePosition);
     PDFHummus::EStatusCode UpdateIndexesAtTopDict();
 
-    void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs, FontDictInfoToByteMap &outNewFontDictsIndexes) const;
+    void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs,
+                                 FontDictInfoToByteMap &outNewFontDictsIndexes) const;
 };

@@ -37,7 +37,7 @@ class InputCharStringDecodeStream : public IByteReader
 
   private:
     IByteReader *mReadFrom;
-    unsigned short mRandomizer;
+    uint16_t mRandomizer;
 
     void InitializeCharStringDecode(unsigned long inLenIV);
     PDFHummus::EStatusCode ReadDecodedByte(uint8_t &outByte);

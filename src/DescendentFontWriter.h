@@ -63,7 +63,6 @@ class DescendentFontWriter : public IFontDescriptorHelper
 
     void WriteWidths(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs, DictionaryContext *inFontContext);
     void WriteCIDSystemInfo(ObjectIDType inCIDSystemInfoObjectID);
-    void WriteWidthsItem(bool inAllWidthsSame, const FTPosList &inWidths, unsigned short inFirstCID,
-                         unsigned short inLastCID);
+    void WriteWidthsItem(bool inAllWidthsSame, const FTPosList &inWidths, uint16_t inFirstCID, uint16_t inLastCID);
     void WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs);
 };

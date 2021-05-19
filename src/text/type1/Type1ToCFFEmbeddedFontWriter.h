@@ -33,11 +33,11 @@
 #include <utility>
 #include <vector>
 
-typedef std::vector<unsigned int> UIntVector;
-typedef std::set<unsigned int> UIntSet;
+typedef std::vector<uint32_t> UIntVector;
+typedef std::set<uint32_t> UIntSet;
 typedef std::vector<std::string> StringVector;
-typedef std::map<std::string, unsigned short> StringToUShortMap;
-typedef std::pair<bool, unsigned short> BoolAndUShort;
+typedef std::map<std::string, uint16_t> StringToUShortMap;
+typedef std::pair<bool, uint16_t> BoolAndUShort;
 typedef std::set<std::string> StringSet;
 
 class FreeTypeFaceWrapper;
@@ -60,7 +60,7 @@ class Type1ToCFFEmbeddedFontWriter
     OutputStringBufferStream mFontFileStream;
     StringVector mStrings;
     StringToUShortMap mNonStandardStringToIndex;
-    unsigned short *mCharset;
+    uint16_t *mCharset;
 
     // placeholders positions
     long long mCharsetPlaceHolderPosition;
@@ -85,18 +85,15 @@ class Type1ToCFFEmbeddedFontWriter
     uint8_t GetMostCompressedOffsetSize(unsigned long inOffset);
     PDFHummus::EStatusCode WriteTopIndex();
     PDFHummus::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
-    unsigned short AddStringToStringsArray(const std::string &inString);
+    uint16_t AddStringToStringsArray(const std::string &inString);
     BoolAndUShort FindStandardString(const std::string &inStringToFind);
-    void AddStringOperandIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::string &inString,
-                                    unsigned short inOperator);
-    void AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, int inOperand, unsigned short inOperator,
-                                      int inDefault);
-    void AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, double inOperand, unsigned short inOperator,
+    void AddStringOperandIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::string &inString, uint16_t inOperator);
+    void AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, int inOperand, uint16_t inOperator, int inDefault);
+    void AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, double inOperand, uint16_t inOperator,
                                       double inDefault);
-    void AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::vector<int> &inArray,
-                                  unsigned short inOperator);
+    void AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::vector<int> &inArray, uint16_t inOperator);
     void AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::vector<double> &inArray,
-                                  unsigned short inOperator);
+                                  uint16_t inOperator);
     PDFHummus::EStatusCode WriteStringIndex();
     PDFHummus::EStatusCode WriteGlobalSubrsIndex();
     PDFHummus::EStatusCode WriteEncodings(const StringVector &inSubsetGlyphIDs);

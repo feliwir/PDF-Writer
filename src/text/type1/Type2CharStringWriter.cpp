@@ -28,8 +28,6 @@ Type2CharStringWriter::Type2CharStringWriter(IByteWriter *inTargetStream)
     mTargetStream = inTargetStream;
 }
 
-
-
 void Type2CharStringWriter::Assign(IByteWriter *inTargetStream)
 {
     mTargetStream = inTargetStream;
@@ -124,7 +122,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
         return PDFHummus::eFailure;
 }
 
-EStatusCode Type2CharStringWriter::WriteOperator(unsigned short inOperatorCode)
+EStatusCode Type2CharStringWriter::WriteOperator(uint16_t inOperatorCode)
 {
     if ((inOperatorCode & 0xff00) == 0x0c00)
     {

@@ -29,7 +29,7 @@
 #include "io/InputFile.h"
 
 typedef unsigned char BYTE;
-typedef unsigned short WORD;
+typedef uint16_t WORD;
 typedef unsigned long DWORD;
 
 struct PFMHeader

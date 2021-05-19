@@ -27,7 +27,7 @@
 
 typedef std::pair<PDFHummus::EStatusCode, std::string> EStatusCodeAndString;
 typedef std::list<unsigned long> ULongList;
-typedef std::list<unsigned short> UShortList;
+typedef std::list<uint16_t> UShortList;
 typedef std::pair<PDFHummus::EStatusCode, UShortList> EStatusCodeAndUShortList;
 
 class UnicodeString
@@ -59,7 +59,7 @@ class UnicodeString
     PDFHummus::EStatusCode FromUTF16LE(const unsigned char *inString, unsigned long inLength);
 
     // convert from unsigned shorts, does not require BOM, assuming that byte ordering is according to OS
-    PDFHummus::EStatusCode FromUTF16UShort(const unsigned short *inShorts, unsigned long inLength);
+    PDFHummus::EStatusCode FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength);
 
     // convert to UTF16 BE
     EStatusCodeAndString ToUTF16BE(bool inPrependWithBom) const;

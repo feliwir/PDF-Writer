@@ -37,7 +37,7 @@ class OpenTypePrimitiveReader
 
     PDFHummus::EStatusCode ReadBYTE(unsigned char &outValue);
     PDFHummus::EStatusCode ReadCHAR(char &outValue);
-    PDFHummus::EStatusCode ReadUSHORT(unsigned short &outValue);
+    PDFHummus::EStatusCode ReadUSHORT(uint16_t &outValue);
     PDFHummus::EStatusCode ReadSHORT(short &outValue);
     PDFHummus::EStatusCode ReadULONG(unsigned long &outValue);
     PDFHummus::EStatusCode ReadLONG(long &outValue);

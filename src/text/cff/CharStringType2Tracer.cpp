@@ -30,9 +30,7 @@ using namespace PDFHummus;
 
 CharStringType2Tracer::CharStringType2Tracer() = default;
 
-
-
-EStatusCode CharStringType2Tracer::TraceGlyphProgram(unsigned short inFontIndex, unsigned short inGlyphIndex,
+EStatusCode CharStringType2Tracer::TraceGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
                                                      CFFFileInput *inCFFFileInput, IByteWriter *inWriter)
 {
     CharStringType2Interpreter interpreter;
@@ -81,7 +79,7 @@ EStatusCode CharStringType2Tracer::Type2InterpretNumber(const CharStringOperand 
 
 EStatusCode CharStringType2Tracer::Type2Hstem(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     mPrimitiveWriter.WriteKeyword("hstem");
     return PDFHummus::eSuccess;
@@ -89,7 +87,7 @@ EStatusCode CharStringType2Tracer::Type2Hstem(const CharStringOperandList &inOpe
 
 EStatusCode CharStringType2Tracer::Type2Vstem(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     mPrimitiveWriter.WriteKeyword("vstem");
     return PDFHummus::eSuccess;
@@ -142,7 +140,7 @@ EStatusCode CharStringType2Tracer::Type2Endchar(const CharStringOperandList & /*
 
 EStatusCode CharStringType2Tracer::Type2Hstemhm(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     mPrimitiveWriter.WriteKeyword("hstemhm");
     return PDFHummus::eSuccess;
@@ -150,7 +148,7 @@ EStatusCode CharStringType2Tracer::Type2Hstemhm(const CharStringOperandList &inO
 
 EStatusCode CharStringType2Tracer::Type2Hintmask(const CharStringOperandList &inOperandList, uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     WriteStemMask(inProgramCounter);
     mPrimitiveWriter.WriteKeyword("hintmask");
@@ -159,11 +157,11 @@ EStatusCode CharStringType2Tracer::Type2Hintmask(const CharStringOperandList &in
 
 void CharStringType2Tracer::WriteStemMask(uint8_t *inProgramCounter)
 {
-    unsigned short maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
+    uint16_t maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
     char buffer[3];
 
     mWriter->Write((const uint8_t *)"(0x", 1);
-    for (unsigned short i = 0; i < maskSize; ++i)
+    for (uint16_t i = 0; i < maskSize; ++i)
     {
         SAFE_SPRINTF_1(buffer, 3, "%X", inProgramCounter[i]);
         mWriter->Write((const uint8_t *)buffer, 2);
@@ -194,7 +192,7 @@ EStatusCode CharStringType2Tracer::Type2Hmoveto(const CharStringOperandList & /*
 
 EStatusCode CharStringType2Tracer::Type2Vstemhm(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     mPrimitiveWriter.WriteKeyword("vstemhm");
     return PDFHummus::eSuccess;

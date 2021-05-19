@@ -72,9 +72,9 @@ class DecryptionHelper
     IByteReader *CreateDecryptionFilterForStream(PDFStreamInput *inStream, IByteReader *inToWrapStream,
                                                  const std::string &inCryptName);
 
-    unsigned int GetLength() const;
-    unsigned int GetV() const;
-    unsigned int GetRevision() const;
+    uint32_t GetLength() const;
+    uint32_t GetV() const;
+    uint32_t GetRevision() const;
     long long GetP() const;
     bool GetEncryptMetaData() const;
     const ByteList &GetFileIDPart1() const;
@@ -121,8 +121,8 @@ class DecryptionHelper
     int mDecryptionPauseLevel;
 
     // Generic encryption
-    unsigned int mV;
-    unsigned int mLength; // mLength is in bytes!
+    uint32_t mV;
+    uint32_t mLength; // mLength is in bytes!
 
     IByteReader *CreateDecryptionReader(IByteReader *inSourceStream, const ByteList &inEncryptionKey, bool inUsingAES);
     XCryptionCommon *GetCryptForStream(PDFStreamInput *inStream);
@@ -131,7 +131,7 @@ class DecryptionHelper
     bool mFailedPasswordVerification;
     bool mDidSucceedOwnerPasswordVerification;
 
-    unsigned int mRevision;
+    uint32_t mRevision;
     ByteList mO;
     ByteList mU;
     long long mP;

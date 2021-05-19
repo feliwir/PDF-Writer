@@ -114,8 +114,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
             break;
         }
 
-        status =
-            mTrueTypeInput.ReadOpenTypeFile(mTrueTypeFile.GetInputStream(), (unsigned short)inFontInfo.GetFontIndex());
+        status = mTrueTypeInput.ReadOpenTypeFile(mTrueTypeFile.GetInputStream(), (uint16_t)inFontInfo.GetFontIndex());
         if (status != PDFHummus::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to read true type file");
@@ -295,7 +294,7 @@ void TrueTypeEmbeddedFontWriter::AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs
     }
 }
 
-bool TrueTypeEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UIntSet &ioComponents)
+bool TrueTypeEmbeddedFontWriter::AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents)
 {
     GlyphEntry *glyfTableEntry;
     UIntList::iterator itComponentGlyphs;
@@ -323,11 +322,11 @@ bool TrueTypeEmbeddedFontWriter::AddComponentGlyphs(unsigned int inGlyphID, UInt
     return isComposite;
 }
 
-unsigned short TrueTypeEmbeddedFontWriter::GetSmallerPower2(unsigned short inNumber)
+uint16_t TrueTypeEmbeddedFontWriter::GetSmallerPower2(uint16_t inNumber)
 {
-    unsigned short comparer = inNumber > 0xff ? 0x8000 : 0x80;
+    uint16_t comparer = inNumber > 0xff ? 0x8000 : 0x80;
     // that's 1 binary at the leftmost of the short or byte (most times there are less than 255 tables)
-    unsigned int i = inNumber > 0xff ? 15 : 7;
+    uint32_t i = inNumber > 0xff ? 15 : 7;
 
     // now basically i'm gonna move the comparer down 1 bit every time, till i hit non 0, which
     // is the highest power
@@ -345,15 +344,15 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteTrueTypeHeader()
     // prepare space for tables to write. will write (at maximum) -
     // cmap, cvt, fpgm, glyf, head, hhea, hmtx, loca, maxp, name, os/2, prep
 
-    unsigned short tableCount = 9 // needs - cmap, glyf, head, hhea, hmtx, loca, maxp, name, OS/2
-                                + (mTrueTypeInput.mCVTExists ? 1 : 0) + // cvt
-                                (mTrueTypeInput.mPREPExists ? 1 : 0) +  // prep
-                                (mTrueTypeInput.mFPGMExists ? 1 : 0);   // fpgm
+    uint16_t tableCount = 9 // needs - cmap, glyf, head, hhea, hmtx, loca, maxp, name, OS/2
+                          + (mTrueTypeInput.mCVTExists ? 1 : 0) + // cvt
+                          (mTrueTypeInput.mPREPExists ? 1 : 0) +  // prep
+                          (mTrueTypeInput.mFPGMExists ? 1 : 0);   // fpgm
 
     // here we go....
     mPrimitivesWriter.WriteULONG(0x10000);
     mPrimitivesWriter.WriteUSHORT(tableCount);
-    unsigned short smallerPowerTwo = GetSmallerPower2(tableCount);
+    uint16_t smallerPowerTwo = GetSmallerPower2(tableCount);
     mPrimitivesWriter.WriteUSHORT(1 << (smallerPowerTwo + 4));
     mPrimitivesWriter.WriteUSHORT(smallerPowerTwo);
     mPrimitivesWriter.WriteUSHORT((tableCount - (1 << smallerPowerTwo)) << 4);
@@ -390,7 +389,7 @@ void TrueTypeEmbeddedFontWriter::WriteEmptyTableEntry(const char *inTag, long lo
 unsigned long TrueTypeEmbeddedFontWriter::GetTag(const char *inTagName)
 {
     uint8_t buffer[4];
-    unsigned short i = 0;
+    uint16_t i = 0;
 
     for (; i < strlen(inTagName); ++i)
         buffer[i] = (uint8_t)inTagName[i];
@@ -515,7 +514,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteHMtx()
     // write the table. write pairs until min(numberofhmetrics,mSubsetFontGlyphsCount)
     // then if mSubsetFontGlyphsCount > numberofhmetrics writh the width metrics as well
     unsigned numberOfHMetrics = std::min(mTrueTypeInput.mHHea.NumberOfHMetrics, mSubsetFontGlyphsCount);
-    unsigned short i = 0;
+    uint16_t i = 0;
     for (; i < numberOfHMetrics; ++i)
     {
         mPrimitivesWriter.WriteUSHORT(mTrueTypeInput.mHMtx[i].AdvanceWidth);
@@ -591,7 +590,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteGlyf(const UIntVector &inSubsetGlyp
     long long startTableOffset = mFontFileStream.GetCurrentPosition();
     auto it = inSubsetGlyphIDs.begin();
     OutputStreamTraits streamCopier(&mFontFileStream);
-    unsigned short glyphIndex, previousGlyphIndexEnd = 0;
+    uint16_t glyphIndex, previousGlyphIndexEnd = 0;
     inLocaTable[0] = 0;
     EStatusCode status = eSuccess;
 
@@ -607,7 +606,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteGlyf(const UIntVector &inSubsetGlyp
             break;
         }
 
-        for (unsigned short i = previousGlyphIndexEnd + 1; i <= glyphIndex; ++i)
+        for (uint16_t i = previousGlyphIndexEnd + 1; i <= glyphIndex; ++i)
             inLocaTable[i] = inLocaTable[previousGlyphIndexEnd];
         if (mTrueTypeInput.mGlyf[glyphIndex] != nullptr)
         {
@@ -640,7 +639,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteLoca(unsigned long *inLocaTable)
 
     // write the table. write pairs until min(numberofhmetrics,mSubsetFontGlyphsCount)
     // then if mSubsetFontGlyphsCount > numberofhmetrics writh the width metrics as well
-    for (unsigned short i = 0; i < mSubsetFontGlyphsCount + 1; ++i)
+    for (uint16_t i = 0; i < mSubsetFontGlyphsCount + 1; ++i)
         mPrimitivesWriter.WriteULONG(inLocaTable[i]);
 
     long long endOfTable = mFontFileStream.GetCurrentPosition();

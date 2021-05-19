@@ -33,8 +33,6 @@ using namespace PDFHummus;
 
 DescendentFontWriter::DescendentFontWriter() = default;
 
-
-
 static const std::string scType = "Type";
 static const std::string scFont = "Font";
 static const std::string scSubtype = "Subtype";
@@ -116,8 +114,8 @@ void DescendentFontWriter::WriteWidths(const UIntAndGlyphEncodingInfoVector &inE
     FTPosList widthsList;
     bool allWidthsSame = true;
     FT_Pos currentWidth;
-    unsigned short firstCIDInList = 0;
-    unsigned short previousCIDInList = 0;
+    uint16_t firstCIDInList = 0;
+    uint16_t previousCIDInList = 0;
 
     // DW
     inFontContext->WriteKey(scDW);
@@ -175,8 +173,8 @@ void DescendentFontWriter::WriteWidths(const UIntAndGlyphEncodingInfoVector &inE
     }
 }
 
-void DescendentFontWriter::WriteWidthsItem(bool inAllWidthsSame, const FTPosList &inWidths, unsigned short inFirstCID,
-                                           unsigned short inLastCID)
+void DescendentFontWriter::WriteWidthsItem(bool inAllWidthsSame, const FTPosList &inWidths, uint16_t inFirstCID,
+                                           uint16_t inLastCID)
 {
     mObjectsContext->WriteInteger(inFirstCID);
     if (inAllWidthsSame)
@@ -262,14 +260,14 @@ void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inE
     IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
     uint8_t buffer;
     auto it = inEncodedGlyphs.begin();
-    unsigned int upperLimit = inEncodedGlyphs.back().first;
+    uint32_t upperLimit = inEncodedGlyphs.back().first;
 
-    for (unsigned int i = 0; i < upperLimit; i += 8)
+    for (uint32_t i = 0; i < upperLimit; i += 8)
     {
         buffer = (it->first == i) ? 1 : 0;
         if (it->first == i)
             ++it;
-        for (unsigned int j = 1; j < 8; ++j)
+        for (uint32_t j = 1; j < 8; ++j)
         {
             buffer = buffer << 1;
             if (it != inEncodedGlyphs.end() && (it->first == i + j))

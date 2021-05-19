@@ -23,7 +23,7 @@
 class FSType
 {
   public:
-    FSType(unsigned short inFSTypeValue)
+    FSType(uint16_t inFSTypeValue)
     {
         mFSTypeValue = inFSTypeValue;
     }
@@ -36,5 +36,5 @@ class FSType
     }
 
   private:
-    unsigned short mFSTypeValue;
+    uint16_t mFSTypeValue;
 };

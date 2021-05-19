@@ -29,8 +29,6 @@ OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
     mOutputStream = inOutputStream;
 }
 
-
-
 #define TENMEGS 10 * 1024 * 1024
 EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
 {

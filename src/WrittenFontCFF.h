@@ -44,18 +44,18 @@ class WrittenFontCFF : public AbstractWrittenFont
     virtual bool AddToANSIRepresentation(const GlyphUnicodeMappingListList &inGlyphsList,
                                          UShortListList &outEncodedCharacters);
 
-    virtual unsigned short EncodeCIDGlyph(unsigned int inGlyphId);
+    virtual uint16_t EncodeCIDGlyph(uint32_t inGlyphId);
 
     bool HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingList &inGlyphsList);
-    unsigned short EncodeGlyph(unsigned int inGlyph, const ULongVector &inCharacters);
+    uint16_t EncodeGlyph(uint32_t inGlyph, const ULongVector &inCharacters);
     void RemoveFromFreeList(unsigned char inAllocatedPosition);
-    unsigned char AllocateFromFreeList(unsigned int inGlyph);
+    unsigned char AllocateFromFreeList(uint32_t inGlyph);
     bool HasEnoughSpaceForGlyphs(const GlyphUnicodeMappingListList &inGlyphsList);
 
     unsigned char mAvailablePositionsCount;
     UCharAndUCharList mFreeList;
     bool mAssignedPositionsAvailable[256];
-    unsigned int mAssignedPositions[256];
+    uint32_t mAssignedPositions[256];
     bool mIsCID;
     bool mFontWillBeEmbedded;
 };

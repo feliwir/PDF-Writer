@@ -73,10 +73,10 @@ void DecryptionHelper::Reset()
     Release();
 }
 
-unsigned int ComputeLength(PDFObject *inLengthObject)
+uint32_t ComputeLength(PDFObject *inLengthObject)
 {
     ParsedPrimitiveHelper lengthHelper(inLengthObject);
-    unsigned int value = lengthHelper.IsNumber() ? (unsigned int)lengthHelper.GetAsInteger() : 40;
+    uint32_t value = lengthHelper.IsNumber() ? (uint32_t)lengthHelper.GetAsInteger() : 40;
     return value < 40 ? value : (value / 8); // this small check here is based on some errors i saw, where the length
                                              // was given in bytes instead of bits
 }
@@ -131,7 +131,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
             ParsedPrimitiveHelper vHelper(v.GetPtr());
             if (!vHelper.IsNumber())
                 break;
-            mV = (unsigned int)vHelper.GetAsInteger();
+            mV = (uint32_t)vHelper.GetAsInteger();
         }
 
         // supporting versions 1,2 and 4
@@ -153,7 +153,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
             ParsedPrimitiveHelper revisionHelper(revision.GetPtr());
             if (!revisionHelper.IsNumber())
                 break;
-            mRevision = (unsigned int)revisionHelper.GetAsInteger();
+            mRevision = (uint32_t)revisionHelper.GetAsInteger();
         }
 
         RefCountPtr<PDFObject> o(inParser->QueryDictionaryObject(encryptionDictionary.GetPtr(), "O"));
@@ -248,7 +248,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
                         PDFObjectCastPtr<PDFName> cfmName(inParser->QueryDictionaryObject(cryptFilter.GetPtr(), "CFM"));
                         RefCountPtr<PDFObject> lengthObject(
                             inParser->QueryDictionaryObject(cryptFilter.GetPtr(), "Length"));
-                        unsigned int length = !lengthObject ? mLength : ComputeLength(lengthObject.GetPtr());
+                        uint32_t length = !lengthObject ? mLength : ComputeLength(lengthObject.GetPtr());
 
                         auto *encryption = new XCryptionCommon();
                         encryption->Setup(cfmName->GetValue() == "AESV2"); // singe xcryptions are always RC4
@@ -540,17 +540,17 @@ bool DecryptionHelper::AuthenticateOwnerPassword(const ByteList &inPassword)
                                                mU);
 }
 
-unsigned int DecryptionHelper::GetLength() const
+uint32_t DecryptionHelper::GetLength() const
 {
     return mLength;
 }
 
-unsigned int DecryptionHelper::GetV() const
+uint32_t DecryptionHelper::GetV() const
 {
     return mV;
 }
 
-unsigned int DecryptionHelper::GetRevision() const
+uint32_t DecryptionHelper::GetRevision() const
 {
     return mRevision;
 }

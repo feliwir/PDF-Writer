@@ -45,9 +45,9 @@ class FreeTypeType1Wrapper : public IFreeTypeFaceExtender
     virtual bool IsScript();
     virtual bool IsForceBold();
     virtual bool HasPrivateEncoding();
-    virtual unsigned int GetGlyphForUnicodeChar(unsigned long inChar);
-    virtual std::string GetPrivateGlyphName(unsigned int inGlyphIndex);
-    virtual unsigned int GetFreeTypeGlyphIndexFromEncodingGlyphIndex(unsigned int inGlyphIndex);
+    virtual uint32_t GetGlyphForUnicodeChar(unsigned long inChar);
+    virtual std::string GetPrivateGlyphName(uint32_t inGlyphIndex);
+    virtual uint32_t GetFreeTypeGlyphIndexFromEncodingGlyphIndex(uint32_t inGlyphIndex);
     virtual std::string GetPostscriptNameNonStandard();
 
   private:

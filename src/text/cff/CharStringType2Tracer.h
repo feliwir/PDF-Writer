@@ -33,8 +33,8 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     CharStringType2Tracer(void);
     ~CharStringType2Tracer(void) = default;
 
-    PDFHummus::EStatusCode TraceGlyphProgram(unsigned short inFontIndex, unsigned short inGlyphIndex,
-                                             CFFFileInput *inCFFFileInput, IByteWriter *inWriter);
+    PDFHummus::EStatusCode TraceGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex, CFFFileInput *inCFFFileInput,
+                                             IByteWriter *inWriter);
 
     // IType2InterpreterImplementation implementation
     virtual PDFHummus::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
@@ -92,7 +92,7 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     IByteWriter *mWriter;
     CFFFileInput *mHelper;
     PrimitiveObjectsWriter mPrimitiveWriter;
-    unsigned short mStemsCount;
+    uint16_t mStemsCount;
 
     void WriteStemMask(uint8_t *inProgramCounter);
 };

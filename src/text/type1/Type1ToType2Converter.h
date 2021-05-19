@@ -33,7 +33,7 @@ class Type1Input;
 
 struct ConversionNode
 {
-    unsigned short mMarkerType;
+    uint16_t mMarkerType;
     LongList mOperands;
 };
 
@@ -135,23 +135,22 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     bool mInFlexCollectionMode;
     LongList mFlexParameters;
 
-    PDFHummus::EStatusCode RecordOperatorWithParameters(unsigned short inMarkerType, const LongList &inOperandList);
-    void RecordOperatorMarker(unsigned short inMarkerType);
+    PDFHummus::EStatusCode RecordOperatorWithParameters(uint16_t inMarkerType, const LongList &inOperandList);
+    void RecordOperatorMarker(uint16_t inMarkerType);
     PDFHummus::EStatusCode AddHStem(long inOrigin, long inExtent);
     PDFHummus::EStatusCode AddVStem(long inOrigin, long inExtent);
     void ConvertStems();
     ConversionNodeList::iterator CollectHintIndexesFromHere(ConversionNodeList::iterator inFirstStemHint);
-    ConversionNodeList::iterator InsertOperatorMarker(unsigned short inMarkerType,
+    ConversionNodeList::iterator InsertOperatorMarker(uint16_t inMarkerType,
                                                       ConversionNodeList::iterator inInsertPosition);
     void SetupStemHintsInNode(const StemVector &inStems, long inOffsetCoordinate, ConversionNode &refNode);
-    bool IsStemHint(unsigned short inMarkerType);
+    bool IsStemHint(uint16_t inMarkerType);
     long GenerateHintMaskFromCollectedHints();
     void ConvertPathConsturction();
     ConversionNodeList::iterator MergeSameOperators(ConversionNodeList::iterator inStartingNode);
-    ConversionNodeList::iterator MergeSameOperators(ConversionNodeList::iterator inStartingNode,
-                                                    unsigned short inOpCode);
+    ConversionNodeList::iterator MergeSameOperators(ConversionNodeList::iterator inStartingNode, uint16_t inOpCode);
     ConversionNodeList::iterator MergeAltenratingOperators(ConversionNodeList::iterator inStartingNode,
-                                                           unsigned short inAlternatingOpcode);
+                                                           uint16_t inAlternatingOpcode);
     void AddInitialWidthParameter();
     PDFHummus::EStatusCode WriteProgramToStream(IByteWriter *inByteWriter);
 };

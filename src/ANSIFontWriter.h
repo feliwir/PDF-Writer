@@ -35,10 +35,10 @@ class DictionaryContext;
 class IANSIFontWriterHelper;
 class IByteWriter;
 
-typedef std::pair<unsigned short, std::string> UShortAndString;
+typedef std::pair<uint16_t, std::string> UShortAndString;
 typedef std::list<UShortAndString> UShortAndStringList;
 
-typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
+typedef std::pair<uint32_t, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
 
 class ANSIFontWriter
@@ -58,7 +58,7 @@ class ANSIFontWriter
     void WriteEncoding(DictionaryContext *inFontContext);
     void WriteEncodingDictionary();
     void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-    void WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter, const ULongVector &inUnicodeValues);
+    void WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter, const ULongVector &inUnicodeValues);
 
     FreeTypeFaceWrapper *mFontInfo;
     WrittenFontRepresentation *mFontOccurrence;

@@ -310,7 +310,7 @@ bool PDFUsedFont::EnumeratePaths(IOutlineEnumerator &target, const UIntList &inG
 {
     bool status = true;
     target.BeginEnum(inFontSize);
-    for (unsigned int it : inGlyphsList)
+    for (uint32_t it : inGlyphsList)
     {
         status = mFaceWrapper.GetGlyphOutline(it, target);
         if (!status)

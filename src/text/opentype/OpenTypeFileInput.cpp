@@ -45,7 +45,7 @@ void OpenTypeFileInput::FreeTables()
     mHMtx = nullptr;
     if (mName.mNameEntries != nullptr)
     {
-        for (unsigned short i = 0; i < mName.mNameEntriesCount; ++i)
+        for (uint16_t i = 0; i < mName.mNameEntriesCount; ++i)
             delete[] mName.mNameEntries[i].String;
     }
     delete[] mName.mNameEntries;
@@ -61,7 +61,7 @@ void OpenTypeFileInput::FreeTables()
     mActualGlyphs.clear();
 }
 
-EStatusCode OpenTypeFileInput::ReadOpenTypeFile(const std::string &inFontFilePath, unsigned short inFaceIndex)
+EStatusCode OpenTypeFileInput::ReadOpenTypeFile(const std::string &inFontFilePath, uint16_t inFaceIndex)
 {
     InputFile fontFile;
 
@@ -78,7 +78,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(const std::string &inFontFilePat
     return status;
 }
 
-EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, unsigned short inFaceIndex)
+EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex)
 {
     EStatusCode status;
 
@@ -210,7 +210,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeHeader()
         // skip the next 6. i don't give a rats...
         mPrimitivesReader.Skip(6);
 
-        for (unsigned short i = 0; i < mTablesCount; ++i)
+        for (uint16_t i = 0; i < mTablesCount; ++i)
         {
             mPrimitivesReader.ReadULONG(tableTag);
             mPrimitivesReader.ReadULONG(tableEntry.CheckSum);
@@ -297,7 +297,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
         mPrimitivesReader.SetOffset(mHeaderOffset);
 
-        for (unsigned short i = 0; i < 16 && status == eSuccess; i++)
+        for (uint16_t i = 0; i < 16 && status == eSuccess; i++)
             status = mPrimitivesReader.ReadBYTE(head[i]);
 
         if (status != eSuccess)
@@ -319,7 +319,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
         // head2[15] = (uint8_t)(head[15]+1); // make it be different
 
-        for (unsigned short i = 0; i < 16 && status == eSuccess; i++)
+        for (uint16_t i = 0; i < 16 && status == eSuccess; i++)
             status = mPrimitivesReader.ReadBYTE(head2[i]);
         if (status != eSuccess)
         {
@@ -347,7 +347,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
                            + 2   /* skip file resource number */
                            + 2); /* skip attributes */
 
-    unsigned short type_list;
+    uint16_t type_list;
     status = mPrimitivesReader.ReadUSHORT(type_list);
     if (status != eSuccess)
         return status;
@@ -358,7 +358,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
     // read the resource type list
 
-    unsigned short cnt;
+    uint16_t cnt;
     status = mPrimitivesReader.ReadUSHORT(cnt);
     if (status != eSuccess)
         return status;
@@ -368,7 +368,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
     for (int i = 0; i < cnt + 1 && status == eSuccess && !foundSfnt; ++i)
     {
         long tag;
-        unsigned short subcnt, rpos;
+        uint16_t subcnt, rpos;
         status = mPrimitivesReader.ReadLONG(tag);
         if (status != eSuccess)
             break;
@@ -387,11 +387,11 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
             // read the reference list for the 'sfnt' resources
             // the map is used to order the references by reference id
 
-            std::map<unsigned short, unsigned long> resOffsetsMap;
+            std::map<uint16_t, unsigned long> resOffsetsMap;
 
             for (int j = 0; j < subcnt + 1 && status == eSuccess; ++j)
             {
-                unsigned short res_id, res_name;
+                uint16_t res_id, res_name;
                 unsigned long temp, mbz, res_offset;
                 status = mPrimitivesReader.ReadUSHORT(res_id);
                 if (status != eSuccess)
@@ -406,7 +406,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
                 if (status != eSuccess)
                     break;
                 res_offset = temp & 0xFFFFFFL;
-                resOffsetsMap.insert(std::pair<unsigned short, unsigned long>(res_id, rdata_pos + res_offset));
+                resOffsetsMap.insert(std::pair<uint16_t, unsigned long>(res_id, rdata_pos + res_offset));
             }
             if (status != eSuccess)
                 break;
@@ -446,7 +446,7 @@ unsigned long OpenTypeFileInput::GetTag(const char *inTagName)
 
 {
     uint8_t buffer[4];
-    unsigned short i = 0;
+    uint16_t i = 0;
 
     for (; i < strlen(inTagName); ++i)
         buffer[i] = (uint8_t)inTagName[i];
@@ -565,7 +565,7 @@ EStatusCode OpenTypeFileInput::ReadHMtx()
 
     mHMtx = new HMtxTableEntry[mMaxp.NumGlyphs];
 
-    unsigned int i = 0;
+    uint32_t i = 0;
 
     for (; i < mHHea.NumberOfHMetrics; ++i)
     {
@@ -659,11 +659,11 @@ EStatusCode OpenTypeFileInput::ReadName()
     mPrimitivesReader.ReadUSHORT(mName.mNameEntriesCount);
     mName.mNameEntries = new NameTableEntry[mName.mNameEntriesCount];
 
-    unsigned short stringOffset;
+    uint16_t stringOffset;
 
     mPrimitivesReader.ReadUSHORT(stringOffset);
 
-    for (unsigned short i = 0; i < mName.mNameEntriesCount; ++i)
+    for (uint16_t i = 0; i < mName.mNameEntriesCount; ++i)
     {
         mPrimitivesReader.ReadUSHORT(mName.mNameEntries[i].PlatformID);
         mPrimitivesReader.ReadUSHORT(mName.mNameEntries[i].EncodingID);
@@ -673,7 +673,7 @@ EStatusCode OpenTypeFileInput::ReadName()
         mPrimitivesReader.ReadUSHORT(mName.mNameEntries[i].Offset);
     }
 
-    for (unsigned short i = 0; i < mName.mNameEntriesCount; ++i)
+    for (uint16_t i = 0; i < mName.mNameEntriesCount; ++i)
     {
         mName.mNameEntries[i].String = new char[mName.mNameEntries[i].Length];
         mPrimitivesReader.SetOffset(it->second.Offset + stringOffset + mName.mNameEntries[i].Offset);
@@ -697,8 +697,8 @@ EStatusCode OpenTypeFileInput::ReadLoca()
 
     if (0 == mHead.IndexToLocFormat)
     {
-        unsigned short buffer;
-        for (unsigned short i = 0; i < mMaxp.NumGlyphs + 1; ++i)
+        uint16_t buffer;
+        for (uint16_t i = 0; i < mMaxp.NumGlyphs + 1; ++i)
         {
             mPrimitivesReader.ReadUSHORT(buffer);
             mLoca[i] = buffer << 1;
@@ -706,7 +706,7 @@ EStatusCode OpenTypeFileInput::ReadLoca()
     }
     else
     {
-        for (unsigned short i = 0; i < mMaxp.NumGlyphs + 1; ++i)
+        for (uint16_t i = 0; i < mMaxp.NumGlyphs + 1; ++i)
             mPrimitivesReader.ReadULONG(mLoca[i]);
     }
     return mPrimitivesReader.GetInternalState();
@@ -724,7 +724,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
     // it->second.Offset, is the offset to the beginning of the table
     mGlyf = new GlyphEntry *[mMaxp.NumGlyphs];
 
-    for (unsigned short i = 0; i < mMaxp.NumGlyphs; ++i)
+    for (uint16_t i = 0; i < mMaxp.NumGlyphs; ++i)
     {
         if (mLoca[i + 1] == mLoca[i])
         {
@@ -745,8 +745,8 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
             if (mGlyf[i]->NumberOfContours < 0)
             {
                 bool hasMoreComponents;
-                unsigned short flags;
-                unsigned short glyphIndex;
+                uint16_t flags;
+                uint16_t glyphIndex;
 
                 do
                 {
@@ -783,7 +783,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
     return mPrimitivesReader.GetInternalState();
 }
 
-unsigned short OpenTypeFileInput::GetGlyphsCount() const
+uint16_t OpenTypeFileInput::GetGlyphsCount() const
 {
     return mMaxp.NumGlyphs;
 }

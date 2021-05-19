@@ -38,7 +38,7 @@ class TrueTypePrimitiveWriter
 
     PDFHummus::EStatusCode WriteBYTE(uint8_t inValue);
     PDFHummus::EStatusCode WriteULONG(unsigned long inValue);
-    PDFHummus::EStatusCode WriteUSHORT(unsigned short inValue);
+    PDFHummus::EStatusCode WriteUSHORT(uint16_t inValue);
     PDFHummus::EStatusCode WriteSHORT(short inValue);
 
     PDFHummus::EStatusCode Pad(int inCount);

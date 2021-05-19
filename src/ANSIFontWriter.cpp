@@ -157,8 +157,8 @@ void ANSIFontWriter::WriteWidths(DictionaryContext *inFontContext)
     mObjectsContext->StartArray();
 
     auto itCharacters = mCharactersVector.begin();
-    for (unsigned short i = itCharacters->second.mEncodedCharacter;
-         i <= mCharactersVector.back().second.mEncodedCharacter; ++i)
+    for (uint16_t i = itCharacters->second.mEncodedCharacter; i <= mCharactersVector.back().second.mEncodedCharacter;
+         ++i)
     {
         if (itCharacters->second.mEncodedCharacter == i)
         {
@@ -232,7 +232,7 @@ void ANSIFontWriter::WriteEncodingDictionary()
     mObjectsContext->StartArray();
 
     auto it = mDifferences.begin();
-    unsigned short previousEncoding;
+    uint16_t previousEncoding;
 
     encodingDictionary->WriteIntegerValue(it->first);
     encodingDictionary->WriteNameValue(it->second);
@@ -330,7 +330,7 @@ void ANSIFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 
 static const uint8_t scEntryEnding[2] = {'>', '\n'};
 static const uint8_t scAllZeros[4] = {'0', '0', '0', '0'};
-void ANSIFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter,
+void ANSIFontWriter::WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter,
                                      const ULongVector &inUnicodeValues)
 {
     UnicodeString unicode;

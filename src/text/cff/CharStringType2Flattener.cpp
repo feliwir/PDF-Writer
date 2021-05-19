@@ -32,8 +32,7 @@ CharStringType2Flattener::CharStringType2Flattener() = default;
 
 CharStringType2Flattener::~CharStringType2Flattener() = default;
 
-EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(unsigned short inFontIndex,
-                                                                 unsigned short inGlyphIndex,
+EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
                                                                  CFFFileInput *inCFFFileInput, IByteWriter *inWriter)
 {
     CharStringType2Interpreter interpreter;
@@ -91,12 +90,12 @@ EStatusCode CharStringType2Flattener::Type2InterpretNumber(const CharStringOpera
 
 EStatusCode CharStringType2Flattener::Type2Hstem(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     return WriteRegularOperator(1);
 }
 
-EStatusCode CharStringType2Flattener::WriteRegularOperator(unsigned short inOperatorCode)
+EStatusCode CharStringType2Flattener::WriteRegularOperator(uint16_t inOperatorCode)
 {
     auto it = mOperandsToWrite.begin();
     EStatusCode status = PDFHummus::eSuccess;
@@ -195,7 +194,7 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
     return PDFHummus::eSuccess;
 }
 
-EStatusCode CharStringType2Flattener::WriteCharStringOperator(unsigned short inOperatorCode)
+EStatusCode CharStringType2Flattener::WriteCharStringOperator(uint16_t inOperatorCode)
 {
     if ((inOperatorCode & 0xff00) == 0x0c00)
     {
@@ -212,7 +211,7 @@ EStatusCode CharStringType2Flattener::WriteByte(uint8_t inValue)
 
 EStatusCode CharStringType2Flattener::Type2Vstem(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     return WriteRegularOperator(3);
 }
@@ -255,7 +254,7 @@ EStatusCode CharStringType2Flattener::Type2Endchar(const CharStringOperandList &
 
 EStatusCode CharStringType2Flattener::Type2Hstemhm(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     return WriteRegularOperator(18);
 }
@@ -263,7 +262,7 @@ EStatusCode CharStringType2Flattener::Type2Hstemhm(const CharStringOperandList &
 EStatusCode CharStringType2Flattener::Type2Hintmask(const CharStringOperandList &inOperandList,
                                                     uint8_t *inProgramCounter)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     if (WriteRegularOperator(19) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
@@ -273,7 +272,7 @@ EStatusCode CharStringType2Flattener::Type2Hintmask(const CharStringOperandList 
 
 EStatusCode CharStringType2Flattener::WriteStemMask(uint8_t *inProgramCounter)
 {
-    unsigned short maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
+    uint16_t maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
 
     return mWriter->Write(inProgramCounter, maskSize) != maskSize ? PDFHummus::eFailure : PDFHummus::eSuccess;
 }
@@ -299,7 +298,7 @@ EStatusCode CharStringType2Flattener::Type2Hmoveto(const CharStringOperandList &
 
 EStatusCode CharStringType2Flattener::Type2Vstemhm(const CharStringOperandList &inOperandList)
 {
-    mStemsCount += (unsigned short)(inOperandList.size() / 2);
+    mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
     return WriteRegularOperator(23);
 }
@@ -462,7 +461,7 @@ CharString *CharStringType2Flattener::GetLocalSubr(long inSubrIndex)
     return mHelper->GetLocalSubr(inSubrIndex);
 }
 
-EStatusCode CharStringType2Flattener::WriteSubrOperator(unsigned short /*inOperatorCode*/)
+EStatusCode CharStringType2Flattener::WriteSubrOperator(uint16_t /*inOperatorCode*/)
 {
     if (!mOperandsToWrite.empty())
     {

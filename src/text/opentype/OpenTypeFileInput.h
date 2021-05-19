@@ -44,16 +44,16 @@ struct HeadTable
     double FontRevision;
     unsigned long CheckSumAdjustment;
     unsigned long MagicNumber;
-    unsigned short Flags;
-    unsigned short UnitsPerEm;
+    uint16_t Flags;
+    uint16_t UnitsPerEm;
     long long Created;
     long long Modified;
     short XMin;
     short YMin;
     short XMax;
     short YMax;
-    unsigned short MacStyle;
-    unsigned short LowerRectPPEM;
+    uint16_t MacStyle;
+    uint16_t LowerRectPPEM;
     short FontDirectionHint;
     short IndexToLocFormat;
     short GlyphDataFormat;
@@ -62,20 +62,20 @@ struct HeadTable
 struct MaxpTable
 {
     double TableVersionNumber;
-    unsigned short NumGlyphs;
-    unsigned short MaxPoints;
-    unsigned short MaxCountours;
-    unsigned short MaxCompositePoints;
-    unsigned short MaxCompositeContours;
-    unsigned short MaxZones;
-    unsigned short MaxTwilightPoints;
-    unsigned short MaxStorage;
-    unsigned short MaxFunctionDefs;
-    unsigned short MaxInstructionDefs;
-    unsigned short MaxStackElements;
-    unsigned short MaxSizeOfInstructions;
-    unsigned short MaxComponentElements;
-    unsigned short MaxCompontentDepth;
+    uint16_t NumGlyphs;
+    uint16_t MaxPoints;
+    uint16_t MaxCountours;
+    uint16_t MaxCompositePoints;
+    uint16_t MaxCompositeContours;
+    uint16_t MaxZones;
+    uint16_t MaxTwilightPoints;
+    uint16_t MaxStorage;
+    uint16_t MaxFunctionDefs;
+    uint16_t MaxInstructionDefs;
+    uint16_t MaxStackElements;
+    uint16_t MaxSizeOfInstructions;
+    uint16_t MaxComponentElements;
+    uint16_t MaxCompontentDepth;
 };
 
 struct HHeaTable
@@ -84,7 +84,7 @@ struct HHeaTable
     short Ascender;
     short Descender;
     short LineGap;
-    unsigned short AdvanceWidthMax;
+    uint16_t AdvanceWidthMax;
     short MinLeftSideBearing;
     short MinRightSideBearing;
     short XMaxExtent;
@@ -92,12 +92,12 @@ struct HHeaTable
     short CaretSlopeRun;
     short CaretOffset;
     short MetricDataFormat;
-    unsigned short NumberOfHMetrics;
+    uint16_t NumberOfHMetrics;
 };
 
 struct HMtxTableEntry
 {
-    unsigned short AdvanceWidth;
+    uint16_t AdvanceWidth;
     short LeftSideBearing;
 };
 
@@ -105,11 +105,11 @@ typedef HMtxTableEntry *HMtxTable;
 
 struct OS2Table
 {
-    unsigned short Version;
+    uint16_t Version;
     short AvgCharWidth;
-    unsigned short WeightClass;
-    unsigned short WidthClass;
-    unsigned short fsType;
+    uint16_t WeightClass;
+    uint16_t WidthClass;
+    uint16_t fsType;
     short SubscriptXSize;
     short SubscriptYSize;
     short SubscriptXOffset;
@@ -127,43 +127,43 @@ struct OS2Table
     unsigned long UnicodeRange3;
     unsigned long UnicodeRange4;
     char AchVendID[4];
-    unsigned short FSSelection;
-    unsigned short FirstCharIndex;
-    unsigned short LastCharIndex;
+    uint16_t FSSelection;
+    uint16_t FirstCharIndex;
+    uint16_t LastCharIndex;
     short TypoAscender;
     short TypoDescender;
     short TypoLineGap;
-    unsigned short WinAscent;
-    unsigned short WinDescent;
+    uint16_t WinAscent;
+    uint16_t WinDescent;
     unsigned long CodePageRange1;
     unsigned long CodePageRange2;
     short XHeight;
     short CapHeight;
-    unsigned short DefaultChar;
-    unsigned short BreakChar;
-    unsigned short MaxContext;
+    uint16_t DefaultChar;
+    uint16_t BreakChar;
+    uint16_t MaxContext;
 };
 
 struct NameTableEntry
 {
-    unsigned short PlatformID;
-    unsigned short EncodingID;
-    unsigned short LanguageID;
-    unsigned short NameID;
-    unsigned short Length;
-    unsigned short Offset;
+    uint16_t PlatformID;
+    uint16_t EncodingID;
+    uint16_t LanguageID;
+    uint16_t NameID;
+    uint16_t Length;
+    uint16_t Offset;
     char *String;
 };
 
 struct NameTable
 {
-    unsigned short mNameEntriesCount;
+    uint16_t mNameEntriesCount;
     NameTableEntry *mNameEntries;
 };
 
 typedef unsigned long *LocaTable;
 typedef std::list<unsigned long> ULongList;
-typedef std::list<unsigned int> UIntList;
+typedef std::list<uint32_t> UIntList;
 
 /* this time it's gonna be just what's intersting for my subsetting purposes - which is the
    dependencies ('n some other stuff) */
@@ -179,7 +179,7 @@ struct GlyphEntry
 
 typedef GlyphEntry **GlyfTable;
 
-typedef std::map<unsigned short, GlyphEntry *> UShortToGlyphEntryMap;
+typedef std::map<uint16_t, GlyphEntry *> UShortToGlyphEntryMap;
 
 enum EOpenTypeInputType
 {
@@ -193,17 +193,17 @@ class OpenTypeFileInput
     OpenTypeFileInput(void);
     ~OpenTypeFileInput(void);
 
-    PDFHummus::EStatusCode ReadOpenTypeFile(const std::string &inFontFilePath, unsigned short inFaceIndex);
-    PDFHummus::EStatusCode ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, unsigned short inFaceIndex);
+    PDFHummus::EStatusCode ReadOpenTypeFile(const std::string &inFontFilePath, uint16_t inFaceIndex);
+    PDFHummus::EStatusCode ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex);
 
     EOpenTypeInputType GetOpenTypeFontType();
 
-    unsigned short GetGlyphsCount() const;
+    uint16_t GetGlyphsCount() const;
 
     unsigned long mHeaderOffset;
     unsigned long mTableOffset;
 
-    unsigned short mFaceIndex;
+    uint16_t mFaceIndex;
 
     // read tables
     HeadTable mHead;
@@ -230,7 +230,7 @@ class OpenTypeFileInput
   private:
     OpenTypePrimitiveReader mPrimitivesReader;
     EOpenTypeInputType mFontType;
-    unsigned short mTablesCount;
+    uint16_t mTablesCount;
     ULongToTableEntryMap mTables;
     UShortToGlyphEntryMap mActualGlyphs; // using actual glyphs to map the glyphs that are not empty
                                          // (yeah, when parsing subset fonts...some glyphs might just

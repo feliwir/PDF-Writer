@@ -32,7 +32,7 @@
 
 using namespace PDFHummus;
 
-EStatusCode SaveCharstringCode(unsigned short inFontIndex, unsigned short inGlyphIndex, CFFFileInput *inCFFFileInput)
+EStatusCode SaveCharstringCode(uint16_t inFontIndex, uint16_t inGlyphIndex, CFFFileInput *inCFFFileInput)
 {
     OutputFile glyphFile;
 
@@ -67,6 +67,6 @@ TEST(OpenType, OpenType)
     // show just abcd and notdef
 
     ASSERT_EQ(SaveCharstringCode(0, 0, &openTypeReader.mCFF), PDFHummus::eSuccess);
-    for (unsigned short i = 66; i < 70; ++i)
+    for (uint16_t i = 66; i < 70; ++i)
         ASSERT_EQ(SaveCharstringCode(0, i, &openTypeReader.mCFF), PDFHummus::eSuccess);
 }

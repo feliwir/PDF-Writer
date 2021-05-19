@@ -437,7 +437,7 @@ static const char *scSortedStandardStrings[N_STD_STRINGS] = {".notdef",
                                                              "zerooldstyle",
                                                              "zerosuperior"};
 
-static unsigned short scSortedStandardStringsPositions[N_STD_STRINGS] = {
+static uint16_t scSortedStandardStringsPositions[N_STD_STRINGS] = {
     0,   379, 380, 381, 382, 34,  138, 353, 171, 348, 172, 349, 234, 173, 351, 174, 347, 175, 352, 274, 176, 350, 35,
     383, 384, 385, 310, 275, 36,  311, 177, 354, 318, 271, 276, 37,  309, 312, 277, 38,  178, 356, 179, 357, 180, 358,
     181, 355, 278, 154, 363, 39,  279, 40,  273, 280, 41,  281, 230, 42,  182, 360, 183, 361, 184, 362, 185, 359, 282,
@@ -807,10 +807,10 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopIndex()
     return status;
 }
 
-static const unsigned short scCharset = 15;
-static const unsigned short scEncoding = 16;
-static const unsigned short scCharstrings = 17;
-static const unsigned short scPrivate = 18;
+static const uint16_t scCharset = 15;
+static const uint16_t scEncoding = 16;
+static const uint16_t scCharstrings = 17;
+static const uint16_t scPrivate = 18;
 
 EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopDictSegment(MyStringBuf &ioTopDictSegment)
 {
@@ -899,7 +899,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteTopDictSegment(MyStringBuf &ioTop
 }
 
 void Type1ToCFFEmbeddedFontWriter::AddStringOperandIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::string &inString,
-                                                              unsigned short inOperator)
+                                                              uint16_t inOperator)
 {
     if (!inString.empty())
     {
@@ -909,7 +909,7 @@ void Type1ToCFFEmbeddedFontWriter::AddStringOperandIfNotEmpty(CFFPrimitiveWriter
 }
 
 void Type1ToCFFEmbeddedFontWriter::AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, int inOperand,
-                                                                unsigned short inOperator, int inDefault)
+                                                                uint16_t inOperator, int inDefault)
 {
     if (inOperand != inDefault)
     {
@@ -919,7 +919,7 @@ void Type1ToCFFEmbeddedFontWriter::AddNumberOperandIfNotDefault(CFFPrimitiveWrit
 }
 
 void Type1ToCFFEmbeddedFontWriter::AddNumberOperandIfNotDefault(CFFPrimitiveWriter &inWriter, double inOperand,
-                                                                unsigned short inOperator, double inDefault)
+                                                                uint16_t inOperator, double inDefault)
 {
     if (inOperand != inDefault)
     {
@@ -928,7 +928,7 @@ void Type1ToCFFEmbeddedFontWriter::AddNumberOperandIfNotDefault(CFFPrimitiveWrit
     }
 }
 
-unsigned short Type1ToCFFEmbeddedFontWriter::AddStringToStringsArray(const std::string &inString)
+uint16_t Type1ToCFFEmbeddedFontWriter::AddStringToStringsArray(const std::string &inString)
 {
     // first - see if this string exists in the standard strings array
     BoolAndUShort findResult = FindStandardString(inString);
@@ -943,8 +943,7 @@ unsigned short Type1ToCFFEmbeddedFontWriter::AddStringToStringsArray(const std::
     auto it = mNonStandardStringToIndex.find(inString);
     if (it == mNonStandardStringToIndex.end())
     {
-        it = mNonStandardStringToIndex.insert(StringToUShortMap::value_type(inString, (unsigned short)mStrings.size()))
-                 .first;
+        it = mNonStandardStringToIndex.insert(StringToUShortMap::value_type(inString, (uint16_t)mStrings.size())).first;
         mStrings.push_back(inString);
     }
     return it->second + N_STD_STRINGS;
@@ -952,9 +951,9 @@ unsigned short Type1ToCFFEmbeddedFontWriter::AddStringToStringsArray(const std::
 
 BoolAndUShort Type1ToCFFEmbeddedFontWriter::FindStandardString(const std::string &inStringToFind)
 {
-    unsigned short upperBound = N_STD_STRINGS - 1;
-    unsigned short lowerBound = 0;
-    unsigned short pivot = upperBound / 2;
+    uint16_t upperBound = N_STD_STRINGS - 1;
+    uint16_t lowerBound = 0;
+    uint16_t pivot = upperBound / 2;
 
     while (upperBound > lowerBound + 1)
     {
@@ -975,7 +974,7 @@ BoolAndUShort Type1ToCFFEmbeddedFontWriter::FindStandardString(const std::string
 EStatusCode Type1ToCFFEmbeddedFontWriter::WriteStringIndex()
 {
 
-    mPrimitivesWriter.WriteCard16((unsigned short)mStrings.size());
+    mPrimitivesWriter.WriteCard16((uint16_t)mStrings.size());
     if (!mStrings.empty())
     {
         // calculate the total data size to determine the required offset size
@@ -1034,7 +1033,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteEncodings(const StringVector &inS
 
 void Type1ToCFFEmbeddedFontWriter::PrepareCharSetArray(const StringVector &inSubsetGlyphIDs)
 {
-    mCharset = new unsigned short[inSubsetGlyphIDs.size() - 1]; // no need to have the 0 glyphs
+    mCharset = new uint16_t[inSubsetGlyphIDs.size() - 1]; // no need to have the 0 glyphs
 
     for (size_t i = 1; i < inSubsetGlyphIDs.size(); ++i)
     {
@@ -1071,7 +1070,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteCharStrings(const StringVector &i
 
     do
     {
-        unsigned short i = 0;
+        uint16_t i = 0;
         for (; itGlyphs != inSubsetGlyphIDs.end() && PDFHummus::eSuccess == status; ++itGlyphs, ++i)
         {
             offsets[i] = (unsigned long)charStringsDataWriteStream.GetCurrentPosition();
@@ -1088,7 +1087,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteCharStrings(const StringVector &i
         // write index section
         mCharStringPosition = mFontFileStream.GetCurrentPosition();
         uint8_t sizeOfOffset = GetMostCompressedOffsetSize(offsets[i] + 1);
-        mPrimitivesWriter.WriteCard16((unsigned short)inSubsetGlyphIDs.size());
+        mPrimitivesWriter.WriteCard16((uint16_t)inSubsetGlyphIDs.size());
         mPrimitivesWriter.WriteOffSize(sizeOfOffset);
         mPrimitivesWriter.SetOffSize(sizeOfOffset);
         for (i = 0; i <= inSubsetGlyphIDs.size(); ++i)
@@ -1134,7 +1133,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WritePrivateDictionary()
 }
 
 void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter,
-                                                            const std::vector<int> &inArray, unsigned short inOperator)
+                                                            const std::vector<int> &inArray, uint16_t inOperator)
 {
     if (inArray.empty())
         return;
@@ -1151,8 +1150,7 @@ void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &
 }
 
 void Type1ToCFFEmbeddedFontWriter::AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter,
-                                                            const std::vector<double> &inArray,
-                                                            unsigned short inOperator)
+                                                            const std::vector<double> &inArray, uint16_t inOperator)
 {
     if (inArray.empty())
         return;

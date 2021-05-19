@@ -3041,7 +3041,7 @@ EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, u
 #ifndef PDFHUMMUS_NO_TIFF
     case eTIFF: {
         TIFFUsageParameters params;
-        params.PageIndex = (unsigned int)inImageIndex;
+        params.PageIndex = (uint32_t)inImageIndex;
 
         PDFFormXObject *form = CreateFormXObjectFromTIFFFile(inImagePath, inObjectID, params);
         status = (form != nullptr ? eSuccess : eFailure);

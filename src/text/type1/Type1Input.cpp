@@ -238,7 +238,7 @@ EStatusCode Type1Input::ReadFontDictionary()
 
         if (token.second.compare("/FSType") == 0)
         {
-            mFontInfoDictionary.fsType = (unsigned short)Int(mPFBDecoder.GetNextToken().second);
+            mFontInfoDictionary.fsType = (uint16_t)Int(mPFBDecoder.GetNextToken().second);
             mFontInfoDictionary.FSTypeValid = true;
         }
     }
@@ -323,7 +323,7 @@ EStatusCode Type1Input::ReadFontInfoDictionary()
 
         if (token.second.compare("/FSType") == 0)
         {
-            mFontInfoDictionary.fsType = (unsigned short)Int(mPFBDecoder.GetNextToken().second);
+            mFontInfoDictionary.fsType = (uint16_t)Int(mPFBDecoder.GetNextToken().second);
             mFontInfoDictionary.FSTypeValid = true;
         }
     }
@@ -809,7 +809,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(const std::string &inC
 Type1CharString *Type1Input::GetSubr(long inSubrIndex)
 {
     if (mCurrentDependencies != nullptr)
-        mCurrentDependencies->mSubrs.insert((unsigned short)inSubrIndex);
+        mCurrentDependencies->mSubrs.insert((uint16_t)inSubrIndex);
 
     if (inSubrIndex >= mSubrsCount)
     {
@@ -832,7 +832,7 @@ EStatusCode Type1Input::Type1Seac(const LongList &inOperandList)
 
 bool Type1Input::IsOtherSubrSupported(long inOtherSubrsIndex)
 {
-    mCurrentDependencies->mOtherSubrs.insert((unsigned short)inOtherSubrsIndex);
+    mCurrentDependencies->mOtherSubrs.insert((uint16_t)inOtherSubrsIndex);
     return false;
 }
 

@@ -27,7 +27,7 @@
 #include <list>
 #include <vector>
 
-typedef std::list<unsigned short> UShortList;
+typedef std::list<uint16_t> UShortList;
 typedef std::list<UShortList> UShortListList;
 typedef std::list<GlyphUnicodeMappingList> GlyphUnicodeMappingListList;
 

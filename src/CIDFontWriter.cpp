@@ -215,7 +215,7 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 
 static const uint8_t scEntryEnding[2] = {'>', '\n'};
 static const uint8_t scAllZeros[4] = {'0', '0', '0', '0'};
-void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter,
+void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter,
                                     const ULongVector &inUnicodeValues)
 {
     UnicodeString unicode;

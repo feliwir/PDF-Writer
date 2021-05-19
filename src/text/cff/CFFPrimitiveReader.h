@@ -40,16 +40,16 @@ class CFFPrimitiveReader
 
     // basic CFF values
     PDFHummus::EStatusCode ReadCard8(uint8_t &outValue);
-    PDFHummus::EStatusCode ReadCard16(unsigned short &outValue);
+    PDFHummus::EStatusCode ReadCard16(uint16_t &outValue);
     // set offsize to read offsets
     void SetOffSize(uint8_t inOffSize);
     PDFHummus::EStatusCode ReadOffset(unsigned long &outValue);
     PDFHummus::EStatusCode ReadOffSize(uint8_t &outValue);
-    PDFHummus::EStatusCode ReadSID(unsigned short &outValue);
+    PDFHummus::EStatusCode ReadSID(uint16_t &outValue);
 
     // dict data
     bool IsDictOperator(uint8_t inCandidate);
-    PDFHummus::EStatusCode ReadDictOperator(uint8_t inFirstByte, unsigned short &outOperator);
+    PDFHummus::EStatusCode ReadDictOperator(uint8_t inFirstByte, uint16_t &outOperator);
     PDFHummus::EStatusCode ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand);
 
   private:

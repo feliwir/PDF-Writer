@@ -28,41 +28,39 @@ using namespace PDFHummus;
 
 JPEGImageParser::JPEGImageParser() = default;
 
-
-
-const unsigned int scSOF0TagID = 0xc0; // baseline format
-const unsigned int scSOF1TagID = 0xc1;
-const unsigned int scSOF2TagID = 0xc2;
-const unsigned int scSOF3TagID = 0xc3;
-const unsigned int scSOF5TagID = 0xc5;
-const unsigned int scSOF6TagID = 0xc6;
-const unsigned int scSOF7TagID = 0xc7;
-const unsigned int scSOF9TagID = 0xc9;
-const unsigned int scSOF10TagID = 0xca;
-const unsigned int scSOF11TagID = 0xcb;
-const unsigned int scSOF13TagID = 0xcd;
-const unsigned int scSOF14TagID = 0xce;
-const unsigned int scSOF15TagID = 0xcf;
-const unsigned int scAPP0TagID = 0xe0;  // JFIF marker
-const unsigned int scAPP1TagID = 0xe1;  // Exif marker
-const unsigned int scAPP13TagID = 0xed; // Photoshop marker
-const unsigned int scTagID = 0xff;
+const uint32_t scSOF0TagID = 0xc0; // baseline format
+const uint32_t scSOF1TagID = 0xc1;
+const uint32_t scSOF2TagID = 0xc2;
+const uint32_t scSOF3TagID = 0xc3;
+const uint32_t scSOF5TagID = 0xc5;
+const uint32_t scSOF6TagID = 0xc6;
+const uint32_t scSOF7TagID = 0xc7;
+const uint32_t scSOF9TagID = 0xc9;
+const uint32_t scSOF10TagID = 0xca;
+const uint32_t scSOF11TagID = 0xcb;
+const uint32_t scSOF13TagID = 0xcd;
+const uint32_t scSOF14TagID = 0xce;
+const uint32_t scSOF15TagID = 0xcf;
+const uint32_t scAPP0TagID = 0xe0;  // JFIF marker
+const uint32_t scAPP1TagID = 0xe1;  // Exif marker
+const uint32_t scAPP13TagID = 0xed; // Photoshop marker
+const uint32_t scTagID = 0xff;
 const unsigned char scJPEGID[2] = {0xff, 0xd8};
 const unsigned char scAPP1ID_1[6] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
 const unsigned char scAPP1ID_2[6] = {0x45, 0x78, 0x69, 0x66, 0x00, 0xFF};
 const unsigned char scEOS = '\0';
 const unsigned char sc8Bim[4] = {'8', 'B', 'I', 'M'};
 const unsigned char scResolutionBIMID[2] = {0x03, 0xed};
-const unsigned int scAPP1BigEndian = 0x4d4d;
-const unsigned int scAPP1LittleEndian = 0x4949;
-const unsigned int scAPP1xResolutionTagID = 0x011a;
-const unsigned int scAPP1yResolutionTagID = 0x011b;
-const unsigned int scAPP1ResolutionUnitTagID = 0x0128;
+const uint32_t scAPP1BigEndian = 0x4d4d;
+const uint32_t scAPP1LittleEndian = 0x4949;
+const uint32_t scAPP1xResolutionTagID = 0x011a;
+const uint32_t scAPP1yResolutionTagID = 0x011b;
+const uint32_t scAPP1ResolutionUnitTagID = 0x0128;
 
 EStatusCode JPEGImageParser::Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation)
 {
     EStatusCode status = PDFHummus::eFailure;
-    unsigned int tagID;
+    uint32_t tagID;
     bool PhotoshopMarkerNotFound = true;
     bool JFIFMarkerNotFound = true;
     bool SOFMarkerNotFound = true;
@@ -173,14 +171,14 @@ EStatusCode JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead)
     return PDFHummus::eFailure;
 }
 
-EStatusCode JPEGImageParser::ReadJpegTag(unsigned int &outTagID)
+EStatusCode JPEGImageParser::ReadJpegTag(uint32_t &outTagID)
 {
     EStatusCode status = ReadStreamToBuffer(2);
 
     if (PDFHummus::eSuccess == status)
     {
-        if (scTagID == (unsigned int)mReadBuffer[0])
-            outTagID = (unsigned int)mReadBuffer[1];
+        if (scTagID == (uint32_t)mReadBuffer[0])
+            outTagID = (uint32_t)mReadBuffer[1];
         else
             status = PDFHummus::eFailure;
     }
@@ -189,7 +187,7 @@ EStatusCode JPEGImageParser::ReadJpegTag(unsigned int &outTagID)
 
 EStatusCode JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformation)
 {
-    unsigned int toSkip;
+    uint32_t toSkip;
     EStatusCode status;
 
     status = ReadStreamToBuffer(8);
@@ -198,25 +196,25 @@ EStatusCode JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformat
         toSkip = GetIntValue(mReadBuffer) - 8;
         outImageInformation.SamplesHeight = GetIntValue(mReadBuffer + 3);
         outImageInformation.SamplesWidth = GetIntValue(mReadBuffer + 5);
-        outImageInformation.ColorComponentsCount = (unsigned int)mReadBuffer[7];
+        outImageInformation.ColorComponentsCount = (uint32_t)mReadBuffer[7];
         SkipStream(toSkip);
     }
     return status;
 }
 
-unsigned int JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian)
+uint32_t JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian)
 {
-    unsigned int value;
+    uint32_t value;
 
     if (inUseLittleEndian)
     {
-        value = (unsigned int)inBuffer[0];
-        value += 0x100 * (unsigned int)inBuffer[1];
+        value = (uint32_t)inBuffer[0];
+        value += 0x100 * (uint32_t)inBuffer[1];
     }
     else
     {
-        value = (unsigned int)inBuffer[1];
-        value += 0x100 * (unsigned int)inBuffer[0];
+        value = (uint32_t)inBuffer[1];
+        value += 0x100 * (uint32_t)inBuffer[0];
     }
 
     return value;
@@ -229,7 +227,7 @@ void JPEGImageParser::SkipStream(unsigned long inSkip)
 
 EStatusCode JPEGImageParser::ReadJFIFData(JPEGImageInformation &outImageInformation)
 {
-    unsigned int toSkip;
+    uint32_t toSkip;
     EStatusCode status;
 
     status = ReadStreamToBuffer(14);
@@ -237,7 +235,7 @@ EStatusCode JPEGImageParser::ReadJFIFData(JPEGImageInformation &outImageInformat
     {
         outImageInformation.JFIFInformationExists = true;
         toSkip = GetIntValue(mReadBuffer) - 14;
-        outImageInformation.JFIFUnit = (unsigned int)mReadBuffer[9];
+        outImageInformation.JFIFUnit = (uint32_t)mReadBuffer[9];
         outImageInformation.JFIFXDensity = GetIntValue(mReadBuffer + 10);
         outImageInformation.JFIFYDensity = GetIntValue(mReadBuffer + 12);
         SkipStream(toSkip);
@@ -283,9 +281,9 @@ EStatusCode JPEGImageParser::ReadPhotoshopData(JPEGImageInformation &outImageInf
     // and simply means the data is logically corrupt and should simply be skipped
 
     TwoLevelStatus twoLevelStatus(eSuccess, eSuccess);
-    unsigned int intSkip;
+    uint32_t intSkip;
     unsigned long toSkip;
-    unsigned int nameSkip;
+    uint32_t nameSkip;
     unsigned long dataLength;
     bool resolutionBimNotFound = true;
 
@@ -351,11 +349,11 @@ EStatusCode JPEGImageParser::ReadExifData(JPEGImageInformation &outImageInformat
 {
     EStatusCode status;
     unsigned long ifdOffset;
-    unsigned int ifdDirectorySize, tagID, toSkip;
+    uint32_t ifdDirectorySize, tagID, toSkip;
     bool isBigEndian;
     unsigned long xResolutionOffset = 0;
     unsigned long yResolutionOffset = 0;
-    unsigned int resolutionUnitValue = 0;
+    uint32_t resolutionUnitValue = 0;
 
     do
     {
@@ -405,7 +403,7 @@ EStatusCode JPEGImageParser::ReadExifData(JPEGImageInformation &outImageInformat
 
         toSkip -= 2;
 
-        for (unsigned int i = 0; i < ifdDirectorySize; i++)
+        for (uint32_t i = 0; i < ifdDirectorySize; i++)
         {
             if (0 != xResolutionOffset && 0 != yResolutionOffset && 0 != resolutionUnitValue)
             {
@@ -569,7 +567,7 @@ EStatusCode JPEGImageParser::ReadExifID()
 
 EStatusCode JPEGImageParser::IsBigEndianExif(bool &outIsBigEndian)
 {
-    unsigned int encodingType;
+    uint32_t encodingType;
     EStatusCode status = ReadIntValue(encodingType);
 
     if (status != PDFHummus::eSuccess)
@@ -585,7 +583,7 @@ EStatusCode JPEGImageParser::IsBigEndianExif(bool &outIsBigEndian)
     return PDFHummus::eSuccess;
 }
 
-EStatusCode JPEGImageParser::ReadIntValue(unsigned int &outIntValue, bool inUseLittleEndian)
+EStatusCode JPEGImageParser::ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian)
 {
     EStatusCode status = ReadStreamToBuffer(2);
 
@@ -627,17 +625,17 @@ unsigned long JPEGImageParser::GetLongValue(const uint8_t *inBuffer, bool inUseL
 
     if (inUseLittleEndian)
     {
-        value = (unsigned int)inBuffer[0];
-        value += 0x100 * (unsigned int)inBuffer[1];
-        value += 0x10000 * (unsigned int)inBuffer[2];
-        value += 0x1000000 * (unsigned int)inBuffer[3];
+        value = (uint32_t)inBuffer[0];
+        value += 0x100 * (uint32_t)inBuffer[1];
+        value += 0x10000 * (uint32_t)inBuffer[2];
+        value += 0x1000000 * (uint32_t)inBuffer[3];
     }
     else
     {
-        value = (unsigned int)inBuffer[3];
-        value += 0x100 * (unsigned int)inBuffer[2];
-        value += 0x10000 * (unsigned int)inBuffer[1];
-        value += 0x1000000 * (unsigned int)inBuffer[0];
+        value = (uint32_t)inBuffer[3];
+        value += 0x100 * (uint32_t)inBuffer[2];
+        value += 0x10000 * (uint32_t)inBuffer[1];
+        value += 0x1000000 * (uint32_t)inBuffer[0];
     }
     return value;
 }
@@ -653,7 +651,7 @@ double JPEGImageParser::GetFractValue(const uint8_t *inBuffer)
 EStatusCode JPEGImageParser::SkipTag()
 {
     EStatusCode status;
-    unsigned int toSkip;
+    uint32_t toSkip;
 
     status = ReadIntValue(toSkip);
     // skipping -2 because int was already read

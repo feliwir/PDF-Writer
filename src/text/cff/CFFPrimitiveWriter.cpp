@@ -28,8 +28,6 @@ CFFPrimitiveWriter::CFFPrimitiveWriter(IByteWriter *inCFFOutput)
     SetStream(inCFFOutput);
 }
 
-
-
 void CFFPrimitiveWriter::SetStream(IByteWriter *inCFFOutput)
 {
     mCFFOutput = inCFFOutput;
@@ -79,7 +77,7 @@ EStatusCode CFFPrimitiveWriter::WriteCard8(uint8_t inValue)
     return WriteByte(inValue);
 }
 
-EStatusCode CFFPrimitiveWriter::WriteCard16(unsigned short inValue)
+EStatusCode CFFPrimitiveWriter::WriteCard16(uint16_t inValue)
 {
     uint8_t byte1 = (inValue >> 8) & 0xff;
     uint8_t byte2 = inValue & 0xff;
@@ -108,7 +106,7 @@ EStatusCode CFFPrimitiveWriter::WriteOffset(unsigned long inValue)
         status = WriteCard8((uint8_t)inValue);
         break;
     case 2:
-        status = WriteCard16((unsigned short)inValue);
+        status = WriteCard16((uint16_t)inValue);
         break;
     case 3:
         status = Write3ByteUnsigned(inValue);
@@ -165,12 +163,12 @@ EStatusCode CFFPrimitiveWriter::WriteOffSize(uint8_t inValue)
     return WriteCard8(inValue);
 }
 
-EStatusCode CFFPrimitiveWriter::WriteSID(unsigned short inValue)
+EStatusCode CFFPrimitiveWriter::WriteSID(uint16_t inValue)
 {
     return WriteCard16(inValue);
 }
 
-EStatusCode CFFPrimitiveWriter::WriteDictOperator(unsigned short inOperator)
+EStatusCode CFFPrimitiveWriter::WriteDictOperator(uint16_t inOperator)
 {
     if (((inOperator >> 8) & 0xff) == 12)
         return WriteCard16(inOperator);
@@ -184,7 +182,7 @@ EStatusCode CFFPrimitiveWriter::WriteDictOperand(const DictOperand &inOperand)
     return WriteRealOperand(inOperand.RealValue, inOperand.RealValueFractalEnd);
 }
 
-EStatusCode CFFPrimitiveWriter::WriteDictItems(unsigned short inOperator, const DictOperandList &inOperands)
+EStatusCode CFFPrimitiveWriter::WriteDictItems(uint16_t inOperator, const DictOperandList &inOperands)
 {
     EStatusCode status = PDFHummus::eSuccess;
     auto it = inOperands.begin();
@@ -289,7 +287,7 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
     bool minusSign = inValue < 0;
     bool minusExponent = false;
     bool plusExponent = false;
-    unsigned short exponentSize = 0;
+    uint16_t exponentSize = 0;
 
     if (minusSign)
         inValue = -inValue;
@@ -416,11 +414,11 @@ EStatusCode CFFPrimitiveWriter::Pad5Bytes()
 }
 
 uint8_t BytePad[1] = {'0'};
-EStatusCode CFFPrimitiveWriter::PadNBytes(unsigned short inBytesToPad)
+EStatusCode CFFPrimitiveWriter::PadNBytes(uint16_t inBytesToPad)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    for (unsigned short i = 0; i < inBytesToPad && PDFHummus::eSuccess == status; ++i)
+    for (uint16_t i = 0; i < inBytesToPad && PDFHummus::eSuccess == status; ++i)
         Write(BytePad, 1);
     return status;
 }

@@ -75,7 +75,7 @@ class AbstractWrittenFont : public IWrittenFont
     // fonts, and the case of fonts when they are not embedded. However, when CFF fonts are embedded, the matching code
     // actually recreates a font from just the subset, and renumbers them based on the order of them joining the font.
     // Hence, we need a slight difference for this case, and an override is provided
-    virtual unsigned short EncodeCIDGlyph(unsigned int inGlyphId) = 0;
+    virtual uint16_t EncodeCIDGlyph(uint32_t inGlyphId) = 0;
 
     PDFHummus::EStatusCode WriteWrittenFontState(WrittenFontRepresentation *inRepresentation,
                                                  ObjectsContext *inStateWriter, ObjectIDType inObjectID);

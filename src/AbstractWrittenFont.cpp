@@ -457,7 +457,7 @@ void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, PDFDict
         GlyphEncodingInfo glyphEncodingInfo;
         ReadGlyphEncodingInfoState(inStateReader, secondState->mObjectID, glyphEncodingInfo);
         inRepresentation->mGlyphIDToEncodedChar.insert(
-            UIntToGlyphEncodingInfoMap::value_type((unsigned int)firstState->GetValue(), glyphEncodingInfo));
+            UIntToGlyphEncodingInfoMap::value_type((uint32_t)firstState->GetValue(), glyphEncodingInfo));
     }
 
     PDFObjectCastPtr<PDFInteger> writtenObjectIDState(inState->QueryDirectObject("mWrittenObjectID"));
@@ -470,7 +470,7 @@ void AbstractWrittenFont::ReadGlyphEncodingInfoState(PDFParser *inStateReader, O
     PDFObjectCastPtr<PDFDictionary> glyphEncodingInfoState(inStateReader->ParseNewObject(inObjectID));
 
     PDFObjectCastPtr<PDFInteger> encodedCharacterState(glyphEncodingInfoState->QueryDirectObject("mEncodedCharacter"));
-    inGlyphEncodingInfo.mEncodedCharacter = (unsigned short)encodedCharacterState->GetValue();
+    inGlyphEncodingInfo.mEncodedCharacter = (uint16_t)encodedCharacterState->GetValue();
 
     PDFObjectCastPtr<PDFArray> unicodeCharactersState(glyphEncodingInfoState->QueryDirectObject("mUnicodeCharacters"));
 

@@ -31,11 +31,11 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-typedef std::list<unsigned short> UShortList;
+typedef std::list<uint16_t> UShortList;
 typedef std::list<UShortList> UShortListList;
 typedef std::list<std::string> StringList;
 typedef std::list<GlyphUnicodeMappingList> GlyphUnicodeMappingListList;
-typedef std::list<unsigned int> UIntList;
+typedef std::list<uint32_t> UIntList;
 
 class IWrittenFont;
 class ObjectsContext;
@@ -130,10 +130,10 @@ class PDFUsedFont
     void GetUnicodeGlyphs(const std::string &inText, UIntList &glyphs);
 
   private:
-    static const unsigned int AdvanceCacheLimit = 200;
+    static const uint32_t AdvanceCacheLimit = 200;
     FreeTypeFaceWrapper mFaceWrapper;
     IWrittenFont *mWrittenFont;
     ObjectsContext *mObjectsContext;
-    std::map<unsigned int, FT_Pos> mAdvanceCache;
+    std::map<uint32_t, FT_Pos> mAdvanceCache;
     bool mEmbedFont;
 };

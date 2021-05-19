@@ -207,12 +207,12 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
 
     for (unsigned long i = 0; i < inLength - 1 && PDFHummus::eSuccess == status; i += 2)
     {
-        unsigned short buffer = (((unsigned short)inString[i]) << 8) + inString[i + 1];
+        uint16_t buffer = (((uint16_t)inString[i]) << 8) + inString[i + 1];
 
         if (0xD800 <= buffer && buffer <= 0xDBFF)
         {
             // Aha! high surrogate! this means that this character requires 2 w_chars
-            unsigned short highSurrogate = buffer;
+            uint16_t highSurrogate = buffer;
             i += 2;
             if (i >= inLength - 1)
             {
@@ -222,7 +222,7 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
                 break;
             }
 
-            unsigned short buffer = (((unsigned short)inString[i]) << 8) + inString[i + 1];
+            uint16_t buffer = (((uint16_t)inString[i]) << 8) + inString[i + 1];
             if (0xDC00 > buffer || buffer > 0xDFFF)
             {
                 TRACE_LOG(
@@ -231,7 +231,7 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
                 break;
             }
 
-            unsigned short lowSurrogate = buffer;
+            uint16_t lowSurrogate = buffer;
 
             mUnicodeCharacters.push_back(0x10000 + ((highSurrogate - 0xD800) << 10) + (lowSurrogate - 0xDC00));
         }
@@ -260,12 +260,12 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
 
     for (unsigned long i = 0; i < inLength - 1 && PDFHummus::eSuccess == status; i += 2)
     {
-        unsigned short buffer = (((unsigned short)inString[i + 1]) << 8) + inString[i];
+        uint16_t buffer = (((uint16_t)inString[i + 1]) << 8) + inString[i];
 
         if (0xD800 <= buffer && buffer <= 0xDBFF)
         {
             // Aha! high surrogate! this means that this character requires 2 w_chars
-            unsigned short highSurrogate = buffer;
+            uint16_t highSurrogate = buffer;
             i += 2;
             if (i >= inLength - 1)
             {
@@ -275,7 +275,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
                 break;
             }
 
-            unsigned short buffer = (((unsigned short)inString[i + 1]) << 8) + inString[i];
+            uint16_t buffer = (((uint16_t)inString[i + 1]) << 8) + inString[i];
             if (0xDC00 > buffer || buffer > 0xDFFF)
             {
                 TRACE_LOG(
@@ -284,7 +284,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
                 break;
             }
 
-            unsigned short lowSurrogate = buffer;
+            uint16_t lowSurrogate = buffer;
 
             mUnicodeCharacters.push_back(0x10000 + ((highSurrogate - 0xD800) << 10) + (lowSurrogate - 0xDC00));
         }
@@ -295,7 +295,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
     return status;
 }
 
-EStatusCode UnicodeString::FromUTF16UShort(const unsigned short *inShorts, unsigned long inLength)
+EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
     EStatusCode status = PDFHummus::eSuccess;
@@ -352,8 +352,8 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (uint16_t)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (uint16_t)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.put((unsigned char)(highSurrogate >> 8));
             result.put((unsigned char)(highSurrogate & 0xFF));
@@ -391,8 +391,8 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (uint16_t)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (uint16_t)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.put((unsigned char)(highSurrogate & 0xFF));
             result.put((unsigned char)(highSurrogate >> 8));
@@ -419,12 +419,12 @@ EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
     {
         if (*it < 0xD7FF || (0xE000 < *it && *it < 0xFFFF))
         {
-            result.push_back((unsigned short)*it);
+            result.push_back((uint16_t)*it);
         }
         else if (0xFFFF < *it && *it <= 0x10FFFF)
         {
-            auto highSurrogate = (unsigned short)(((*it - 0x10000) >> 10) + 0xD800);
-            auto lowSurrogate = (unsigned short)(((*it - 0x10000) & 0x3FF) + 0xDC00);
+            auto highSurrogate = (uint16_t)(((*it - 0x10000) >> 10) + 0xD800);
+            auto lowSurrogate = (uint16_t)(((*it - 0x10000) & 0x3FF) + 0xDC00);
 
             result.push_back(highSurrogate);
             result.push_back(lowSurrogate);

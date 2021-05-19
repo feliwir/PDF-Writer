@@ -28,8 +28,6 @@ CFFPrimitiveReader::CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile)
     SetStream(inCFFFile);
 }
 
-
-
 void CFFPrimitiveReader::SetStream(IByteReaderWithPosition *inCFFFile)
 {
     mCFFFile = inCFFFile;
@@ -101,7 +99,7 @@ EStatusCode CFFPrimitiveReader::ReadCard8(uint8_t &outValue)
     return ReadByte(outValue);
 }
 
-EStatusCode CFFPrimitiveReader::ReadCard16(unsigned short &outValue)
+EStatusCode CFFPrimitiveReader::ReadCard16(uint16_t &outValue)
 {
     uint8_t byte1, byte2;
 
@@ -111,13 +109,13 @@ EStatusCode CFFPrimitiveReader::ReadCard16(unsigned short &outValue)
     if (ReadByte(byte2) != PDFHummus::eSuccess)
         return PDFHummus::eFailure;
 
-    outValue = ((unsigned short)byte1 << 8) + byte2;
+    outValue = ((uint16_t)byte1 << 8) + byte2;
 
     return PDFHummus::eSuccess;
 }
 EStatusCode CFFPrimitiveReader::Read2ByteSigned(short &outValue)
 {
-    unsigned short buffer;
+    uint16_t buffer;
     EStatusCode status = ReadCard16(buffer);
 
     if (status != PDFHummus::eSuccess)
@@ -145,7 +143,7 @@ EStatusCode CFFPrimitiveReader::ReadOffset(unsigned long &outValue)
             outValue = byteBuffer;
         break;
     case 2:
-        unsigned short shortBuffer;
+        uint16_t shortBuffer;
         status = ReadCard16(shortBuffer);
         if (PDFHummus::eSuccess == status)
             outValue = shortBuffer;
@@ -218,7 +216,7 @@ EStatusCode CFFPrimitiveReader::ReadOffSize(uint8_t &outValue)
     return ReadCard8(outValue);
 }
 
-EStatusCode CFFPrimitiveReader::ReadSID(unsigned short &outValue)
+EStatusCode CFFPrimitiveReader::ReadSID(uint16_t &outValue)
 {
     return ReadCard16(outValue);
 }
@@ -346,14 +344,14 @@ bool CFFPrimitiveReader::IsDictOperator(uint8_t inCandidate)
     return (inCandidate <= 27 || 31 == inCandidate);
 }
 
-EStatusCode CFFPrimitiveReader::ReadDictOperator(uint8_t inFirstByte, unsigned short &outOperator)
+EStatusCode CFFPrimitiveReader::ReadDictOperator(uint8_t inFirstByte, uint16_t &outOperator)
 {
     if (12 == inFirstByte)
     {
         uint8_t buffer;
         if (ReadByte(buffer) == PDFHummus::eSuccess)
         {
-            outOperator = ((unsigned short)inFirstByte << 8) | buffer;
+            outOperator = ((uint16_t)inFirstByte << 8) | buffer;
             return PDFHummus::eSuccess;
         }
         return PDFHummus::eFailure;

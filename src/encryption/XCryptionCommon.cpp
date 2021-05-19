@@ -43,8 +43,8 @@ void XCryptionCommon::Setup(bool inUsingAES)
     mUsingAES = inUsingAES;
 }
 
-void XCryptionCommon::SetupInitialEncryptionKey(const std::string &inUserPassword, unsigned int inRevision,
-                                                unsigned int inLength, const ByteList &inO, long long inP,
+void XCryptionCommon::SetupInitialEncryptionKey(const std::string &inUserPassword, uint32_t inRevision,
+                                                uint32_t inLength, const ByteList &inO, long long inP,
                                                 const ByteList &inFileIDPart1, bool inEncryptMetaData)
 {
     ByteList password = stringToByteList(inUserPassword);
@@ -177,7 +177,7 @@ ByteList XCryptionCommon::algorithm3_1(ObjectIDType inObjectNumber, unsigned lon
 }
 
 const uint8_t scFixedEnd[] = {0xFF, 0xFF, 0xFF, 0xFF};
-ByteList XCryptionCommon::algorithm3_2(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
+ByteList XCryptionCommon::algorithm3_2(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword,
                                        const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                        bool inEncryptMetaData)
 {
@@ -217,7 +217,7 @@ ByteList XCryptionCommon::algorithm3_2(unsigned int inRevision, unsigned int inL
     return inRevision == 2 ? substr(hashResult, 0, 5) : substr(hashResult, 0, inLength);
 }
 
-ByteList XCryptionCommon::algorithm3_3(unsigned int inRevision, unsigned int inLength, const ByteList &inOwnerPassword,
+ByteList XCryptionCommon::algorithm3_3(uint32_t inRevision, uint32_t inLength, const ByteList &inOwnerPassword,
                                        const ByteList &inUserPassword)
 {
     ByteList ownerPassword32Chars =
@@ -277,7 +277,7 @@ ByteList XCryptionCommon::RC4Encode(const ByteList &inKey, const ByteList &inToE
     return target;
 }
 
-ByteList XCryptionCommon::algorithm3_4(unsigned int inLength, const ByteList &inUserPassword, const ByteList &inO,
+ByteList XCryptionCommon::algorithm3_4(uint32_t inLength, const ByteList &inUserPassword, const ByteList &inO,
                                        long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData)
 {
     ByteList encryptionKey = algorithm3_2(2, inLength, inUserPassword, inO, inP, inFileIDPart1, inEncryptMetaData);
@@ -285,7 +285,7 @@ ByteList XCryptionCommon::algorithm3_4(unsigned int inLength, const ByteList &in
     return RC4Encode(encryptionKey, mPaddingFiller);
 }
 
-ByteList XCryptionCommon::algorithm3_5(unsigned int inRevision, unsigned int inLength, const ByteList &inUserPassword,
+ByteList XCryptionCommon::algorithm3_5(uint32_t inRevision, uint32_t inLength, const ByteList &inUserPassword,
                                        const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                        bool inEncryptMetaData)
 {
@@ -312,7 +312,7 @@ ByteList XCryptionCommon::algorithm3_5(unsigned int inRevision, unsigned int inL
     return add(hashResult, substr(mPaddingFiller, 0, 16));
 }
 
-bool XCryptionCommon::algorithm3_6(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
+bool XCryptionCommon::algorithm3_6(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword,
                                    const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                    bool inEncryptMetaData, const ByteList &inU)
 {
@@ -323,7 +323,7 @@ bool XCryptionCommon::algorithm3_6(unsigned int inRevision, unsigned int inLengt
     return (inRevision == 2) ? (hashResult == inU) : (substr(hashResult, 0, 16) == substr(inU, 0, 16));
 }
 
-bool XCryptionCommon::algorithm3_7(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
+bool XCryptionCommon::algorithm3_7(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword,
                                    const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                    bool inEncryptMetaData, const ByteList &inU)
 {

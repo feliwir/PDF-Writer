@@ -64,7 +64,7 @@ EStatusCode InputCharStringDecodeStream::ReadDecodedByte(uint8_t &outByte)
 uint8_t InputCharStringDecodeStream::DecodeByte(uint8_t inByteToDecode)
 {
     auto result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
-    mRandomizer = (unsigned short)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
+    mRandomizer = (uint16_t)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
     return result;
 }
 

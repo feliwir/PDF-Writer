@@ -21,6 +21,7 @@
 #pragma once
 
 #include <list>
+#include <stdint.h>
 #include <vector>
 
 typedef std::vector<unsigned long> ULongVector;
@@ -31,13 +32,13 @@ struct GlyphUnicodeMapping
     {
     }
 
-    GlyphUnicodeMapping(unsigned short inGlyphCode, unsigned long inUnicodeValue)
+    GlyphUnicodeMapping(uint16_t inGlyphCode, unsigned long inUnicodeValue)
     {
         mGlyphCode = inGlyphCode;
         mUnicodeValues.push_back(inUnicodeValue);
     }
 
-    GlyphUnicodeMapping(unsigned short inGlyphCode, ULongVector inUnicodeValues)
+    GlyphUnicodeMapping(uint16_t inGlyphCode, ULongVector inUnicodeValues)
     {
         mGlyphCode = inGlyphCode;
         mUnicodeValues = inUnicodeValues;
@@ -47,7 +48,7 @@ struct GlyphUnicodeMapping
     ULongVector mUnicodeValues;
 
     // glyph code
-    unsigned short mGlyphCode;
+    uint16_t mGlyphCode;
 };
 
 typedef std::list<GlyphUnicodeMapping> GlyphUnicodeMappingList;

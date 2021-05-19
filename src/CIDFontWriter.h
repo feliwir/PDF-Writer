@@ -33,7 +33,7 @@ class DictionaryContext;
 class IDescendentFontWriter;
 class IByteWriter;
 
-typedef std::pair<unsigned int, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
+typedef std::pair<uint32_t, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
 
 class CIDFontWriter
@@ -55,5 +55,5 @@ class CIDFontWriter
     void WriteEncoding(DictionaryContext *inFontContext);
     void CalculateCharacterEncodingArray();
     void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-    void WriteGlyphEntry(IByteWriter *inWriter, unsigned short inEncodedCharacter, const ULongVector &inUnicodeValues);
+    void WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter, const ULongVector &inUnicodeValues);
 };

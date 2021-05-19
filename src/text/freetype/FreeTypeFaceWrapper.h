@@ -36,7 +36,7 @@ class IWrittenFont;
 class ObjectsContext;
 
 typedef std::pair<bool, FT_Short> BoolAndFTShort;
-typedef std::list<unsigned int> UIntList;
+typedef std::list<uint32_t> UIntList;
 typedef std::list<UIntList> UIntListList;
 typedef std::list<std::string> StringList;
 typedef std::list<unsigned long> ULongList;
@@ -78,11 +78,11 @@ class FreeTypeFaceWrapper
     EFontStretch GetFontStretch();
     FT_UShort GetFontWeight();
     // these would be flags for the font as a whole. if subsetting, match to the character set
-    unsigned int GetFontFlags();
+    uint32_t GetFontFlags();
     const char *GetTypeString();
-    std::string GetGlyphName(unsigned int inGlyphIndex, bool safe = false);
-    FT_Pos GetGlyphWidth(unsigned int inGlyphIndex);
-    bool GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator &inEnumerator);
+    std::string GetGlyphName(uint32_t inGlyphIndex, bool safe = false);
+    FT_Pos GetGlyphWidth(uint32_t inGlyphIndex);
+    bool GetGlyphOutline(uint32_t inGlyphIndex, IOutlineEnumerator &inEnumerator);
 
     // Create the written font object, matching to write this font in the best way.
     IWrittenFont *CreateWrittenFontObject(ObjectsContext *inObjectsContext, bool inFontIsToBeEmbedded);
@@ -109,7 +109,7 @@ class FreeTypeFaceWrapper
     // translate to freetype glyph index. this may not always be the input, as in the case
     // of type 3 fonts with private encoding. so what actually gets in is the glyph index
     // according to hummus
-    unsigned int GetGlyphIndexInFreeTypeIndexes(unsigned int inGlyphIndex);
+    uint32_t GetGlyphIndexInFreeTypeIndexes(uint32_t inGlyphIndex);
 
     // load glyph, use the freetype load glyph, but add some extra flags that are common to
     // Hummus requirements, which is SPEED SPEED. as i don't normally need rendering
@@ -124,7 +124,7 @@ class FreeTypeFaceWrapper
     long mFontIndex;
     std::string mNotDefGlyphName;
     bool mGlyphIsLoaded;
-    unsigned int mCurrentGlyph;
+    uint32_t mCurrentGlyph;
     bool mDoesOwn;
     bool mUsePUACodes;
 
@@ -136,7 +136,7 @@ class FreeTypeFaceWrapper
     void SetupFormatSpecificExtender(const std::string &inFilePath, const std::string &inPFMFilePath);
     BoolAndFTShort CapHeightFromHHeight();
     BoolAndFTShort XHeightFromLowerXHeight();
-    BoolAndFTShort GetYBearingForUnicodeChar(unsigned short unicodeCharCode);
+    BoolAndFTShort GetYBearingForUnicodeChar(uint16_t unicodeCharCode);
     EFontStretch StretchFromName();
     FT_UShort WeightFromName();
     bool IsSymbolic();
@@ -168,7 +168,7 @@ class FreeTypeFaceWrapper
         virtual bool Close() = 0;
 
       private:
-        friend bool FreeTypeFaceWrapper::GetGlyphOutline(unsigned int inGlyphIndex, IOutlineEnumerator &inEnumerator);
+        friend bool FreeTypeFaceWrapper::GetGlyphOutline(uint32_t inGlyphIndex, IOutlineEnumerator &inEnumerator);
         static int outline_moveto(const FT_Vector *to, void *closure);
         static int outline_lineto(const FT_Vector *to, void *closure);
         static int outline_conicto(const FT_Vector *control, const FT_Vector *to, void *closure);

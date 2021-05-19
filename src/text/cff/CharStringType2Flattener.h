@@ -34,7 +34,7 @@ class CharStringType2Flattener : public IType2InterpreterImplementation
 
     // will write a font program to another stream, flattening the references to subrs and gsubrs, so that
     // the charstring becomes independent (with possible references to other charachters through seac-like endchar)
-    PDFHummus::EStatusCode WriteFlattenedGlyphProgram(unsigned short inFontIndex, unsigned short inGlyphIndex,
+    PDFHummus::EStatusCode WriteFlattenedGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
                                                       CFFFileInput *inCFFFileInput, IByteWriter *inWriter);
 
     // IType2InterpreterImplementation implementation
@@ -92,13 +92,13 @@ class CharStringType2Flattener : public IType2InterpreterImplementation
   private:
     IByteWriter *mWriter;
     CFFFileInput *mHelper;
-    unsigned short mStemsCount;
+    uint16_t mStemsCount;
     CharStringOperandList mOperandsToWrite;
 
-    PDFHummus::EStatusCode WriteRegularOperator(unsigned short inOperatorCode);
+    PDFHummus::EStatusCode WriteRegularOperator(uint16_t inOperatorCode);
     PDFHummus::EStatusCode WriteStemMask(uint8_t *inProgramCounter);
     PDFHummus::EStatusCode WriteCharStringOperand(const CharStringOperand &inOperand);
-    PDFHummus::EStatusCode WriteCharStringOperator(unsigned short inOperatorCode);
+    PDFHummus::EStatusCode WriteCharStringOperator(uint16_t inOperatorCode);
     PDFHummus::EStatusCode WriteByte(uint8_t inValue);
-    PDFHummus::EStatusCode WriteSubrOperator(unsigned short inOperatorCode);
+    PDFHummus::EStatusCode WriteSubrOperator(uint16_t inOperatorCode);
 };

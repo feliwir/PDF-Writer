@@ -56,7 +56,7 @@ class XCryptionCommon
     // call this whenever you first can.
     void Setup(bool inUsingAES);
 
-    void SetupInitialEncryptionKey(const std::string &inUserPassword, unsigned int inRevision, unsigned int inLength,
+    void SetupInitialEncryptionKey(const std::string &inUserPassword, uint32_t inRevision, uint32_t inLength,
                                    const ByteList &inO, long long inP, const ByteList &inFileIDPart1,
                                    bool inEncryptMetaData);
     // Setup key directly
@@ -82,17 +82,17 @@ class XCryptionCommon
     // PDF value / 8)
     ByteList algorithm3_1(ObjectIDType inObjectNumber, unsigned long inGenerationNumber,
                           const ByteList &inEncryptionKey, bool inIsUsingAES);
-    ByteList algorithm3_2(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword,
-                          const ByteList &inO, long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData);
-    ByteList algorithm3_3(unsigned int inRevision, unsigned int inLength, const ByteList &inOwnerPassword,
+    ByteList algorithm3_2(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword, const ByteList &inO,
+                          long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData);
+    ByteList algorithm3_3(uint32_t inRevision, uint32_t inLength, const ByteList &inOwnerPassword,
                           const ByteList &inUserPassword);
-    ByteList algorithm3_4(unsigned int inLength, const ByteList &inUserPassword, const ByteList &inO, long long inP,
+    ByteList algorithm3_4(uint32_t inLength, const ByteList &inUserPassword, const ByteList &inO, long long inP,
                           const ByteList &inFileIDPart1, bool inEncryptMetaData);
-    ByteList algorithm3_5(unsigned int inRevision, unsigned int inLength, const ByteList &inUserPassword,
-                          const ByteList &inO, long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData);
-    bool algorithm3_6(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword, const ByteList &inO,
+    ByteList algorithm3_5(uint32_t inRevision, uint32_t inLength, const ByteList &inUserPassword, const ByteList &inO,
+                          long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData);
+    bool algorithm3_6(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword, const ByteList &inO,
                       long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList &inU);
-    bool algorithm3_7(unsigned int inRevision, unsigned int inLength, const ByteList &inPassword, const ByteList &inO,
+    bool algorithm3_7(uint32_t inRevision, uint32_t inLength, const ByteList &inPassword, const ByteList &inO,
                       long long inP, const ByteList &inFileIDPart1, bool inEncryptMetaData, const ByteList &inU);
 
     bool IsUsingAES() const;

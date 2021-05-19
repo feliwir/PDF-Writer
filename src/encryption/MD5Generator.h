@@ -88,8 +88,8 @@ class MD5Generator
     const std::string &ToHexString();
 
   private:
-    typedef unsigned int uint4;
-    typedef unsigned short int uint2;
+    typedef uint32_t uint4;
+    typedef uint16_t uint2;
     typedef unsigned char uint1;
     std::string MD5FinalHexString;
     ByteList MD5FinalString;
@@ -108,11 +108,11 @@ class MD5Generator
 
     void Decode(const uint1 *inInput, uint4 inInputLen, uint4 *outOutput);
 
-    unsigned int RotateLeft(uint4 x, uint4 n);
-    unsigned int F(uint4 x, uint4 y, uint4 z);
-    unsigned int G(uint4 x, uint4 y, uint4 z);
-    unsigned int H(uint4 x, uint4 y, uint4 z);
-    unsigned int I(uint4 x, uint4 y, uint4 z);
+    uint32_t RotateLeft(uint4 x, uint4 n);
+    uint32_t F(uint4 x, uint4 y, uint4 z);
+    uint32_t G(uint4 x, uint4 y, uint4 z);
+    uint32_t H(uint4 x, uint4 y, uint4 z);
+    uint32_t I(uint4 x, uint4 y, uint4 z);
     void FF(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
     void GG(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
     void HH(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);

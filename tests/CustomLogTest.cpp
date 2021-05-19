@@ -80,7 +80,7 @@ TEST(CustomStreams, CustomLog)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     // place an initial bom (cause the compressed content is unicode)
-    unsigned short bom = (0xFE << 8) + 0xFF;
+    uint16_t bom = (0xFE << 8) + 0xFF;
     decryptedLogFile.GetOutputStream()->Write((const uint8_t *)&bom, 2);
 
     flateDecodeStream.Assign(decryptedLogFile.GetOutputStream());

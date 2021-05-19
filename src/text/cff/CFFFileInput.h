@@ -43,8 +43,8 @@ struct CFFHeader
 };
 
 typedef std::list<std::string> StringList;
-typedef std::map<std::string, unsigned short> StringToUShort;
-typedef std::pair<bool, unsigned short> BoolAndUShort;
+typedef std::map<std::string, uint16_t> StringToUShort;
+typedef std::pair<bool, uint16_t> BoolAndUShort;
 
 typedef std::list<CharString *> CharStringList;
 
@@ -61,7 +61,7 @@ struct CharStrings
     }
 
     uint8_t mCharStringsType;
-    unsigned short mCharStringsCount;
+    uint16_t mCharStringsCount;
     CharStringsIndex mCharStringsIndex;
 };
 
@@ -73,7 +73,7 @@ enum ECharSetType
     eCharSetCustom
 };
 
-typedef std::map<unsigned short, CharString *> UShortToCharStringMap;
+typedef std::map<uint16_t, CharString *> UShortToCharStringMap;
 
 struct CharSetInfo
 {
@@ -84,7 +84,7 @@ struct CharSetInfo
 
     ECharSetType mType;
     UShortToCharStringMap mSIDToGlyphMap;
-    unsigned short *mSIDs; // count is like glyphs count
+    uint16_t *mSIDs; // count is like glyphs count
 };
 
 typedef std::vector<CharSetInfo *> CharSetInfoVector;
@@ -97,9 +97,9 @@ enum EEncodingType
 };
 
 typedef std::list<uint8_t> ByteList;
-typedef std::map<unsigned short, ByteList> UShortToByteList;
+typedef std::map<uint16_t, ByteList> UShortToByteList;
 
-typedef std::pair<uint8_t, unsigned short> ByteAndUShort;
+typedef std::pair<uint8_t, uint16_t> ByteAndUShort;
 
 struct EncodingsInfo
 {
@@ -169,7 +169,7 @@ struct StringLess
     }
 };
 
-typedef std::set<unsigned short> UShortSet;
+typedef std::set<uint16_t> UShortSet;
 
 struct CharString2Dependencies
 {
@@ -178,7 +178,7 @@ struct CharString2Dependencies
     UShortSet mLocalSubrs;  // from callsubr
 };
 
-typedef std::map<const char *, unsigned short, StringLess> CharPToUShortMap;
+typedef std::map<const char *, uint16_t, StringLess> CharPToUShortMap;
 
 class CFFFileInput : public Type2InterpreterImplementationAdapter
 {
@@ -190,7 +190,7 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     PDFHummus::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile);
     // parses the CFF file just for the particular font according to index. Index should be
     // according to how it appears in the CFF
-    PDFHummus::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile, unsigned short inFontIndex);
+    PDFHummus::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile, uint16_t inFontIndex);
     // parses the CFF file just for the particular named font
     PDFHummus::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile, const std::string &inFontName);
 
@@ -201,22 +201,21 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     // apart from the charstring you need to pass also the relevant localsubrs for this font, in case subrs
     // will be required. also the relevnat charstring and charset array should be passed in case
     // the seac flavor of endchar will be encountered.
-    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(unsigned short inFontIndex,
-                                                             unsigned short inCharStringIndex,
+    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(uint16_t inFontIndex, uint16_t inCharStringIndex,
                                                              CharString2Dependencies &ioDependenciesInfo);
 
-    unsigned short GetFontsCount(unsigned short inFontIndex) const;
-    unsigned short GetCharStringsCount(unsigned short inFontIndex);
-    std::string GetGlyphName(unsigned short inFontIndex, unsigned short inGlyphIndex);
-    unsigned short GetGlyphSID(unsigned short inFontIndex, unsigned short inGlyphIndex);
-    CharString *GetGlyphCharString(unsigned short inFontIndex, unsigned short inCharStringIndex);
+    uint16_t GetFontsCount(uint16_t inFontIndex) const;
+    uint16_t GetCharStringsCount(uint16_t inFontIndex);
+    std::string GetGlyphName(uint16_t inFontIndex, uint16_t inGlyphIndex);
+    uint16_t GetGlyphSID(uint16_t inFontIndex, uint16_t inGlyphIndex);
+    CharString *GetGlyphCharString(uint16_t inFontIndex, uint16_t inCharStringIndex);
 
     // use this wonderful little fellow when interpreting a charstring with
     // CharStringType2Intepreter. This will set the CFFFileInput with
     // the right items so that later you can use the IType2InterpreterImplementation
     // implementation here and avoid having to mess with passing gsubrs, lsubrs etc.
     // when interpreting just call these methods instead of yours to perform the relevant actions
-    PDFHummus::EStatusCode PrepareForGlyphIntepretation(unsigned short inFontIndex, unsigned short inCharStringIndex);
+    PDFHummus::EStatusCode PrepareForGlyphIntepretation(uint16_t inFontIndex, uint16_t inCharStringIndex);
 
     void Reset();
 
@@ -234,11 +233,11 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     long long mCFFOffset;
 
     CFFHeader mHeader;
-    unsigned short mFontsCount;
+    uint16_t mFontsCount;
     StringList mName;
     TopDictInfo *mTopDictIndex; // count is same as fonts count
     char **mStrings;
-    unsigned short mStringsCount;
+    uint16_t mStringsCount;
     long long mStringIndexPosition;
     long long mGlobalSubrsPosition;
     PrivateDictInfo *mPrivateDicts; // private dicts are the same as fonts count. refers to the topdict related private
@@ -265,10 +264,10 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     CharStringList mAdditionalGlyphs;
     CharSetInfo *mCurrentCharsetInfo;
 
-    std::string GetStringForSID(unsigned short inSID) const;
+    std::string GetStringForSID(uint16_t inSID) const;
     PDFHummus::EStatusCode ReadHeader();
     PDFHummus::EStatusCode ReadNameIndex();
-    PDFHummus::EStatusCode ReadIndexHeader(unsigned long **outOffsets, unsigned short &outItemsCount);
+    PDFHummus::EStatusCode ReadIndexHeader(unsigned long **outOffsets, uint16_t &outItemsCount);
     PDFHummus::EStatusCode ReadTopDictIndex();
     PDFHummus::EStatusCode ReadDict(unsigned long inReadAmount, UShortToDictOperandListMap &outDict);
     PDFHummus::EStatusCode ReadStringIndex();
@@ -277,42 +276,42 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     PDFHummus::EStatusCode ReadCharsets();
     PDFHummus::EStatusCode ReadEncodings();
     void FreeData();
-    long long GetCharStringsPosition(unsigned short inFontIndex);
-    long GetSingleIntegerValue(unsigned short inFontIndex, unsigned short inKey, long inDefault);
-    PDFHummus::EStatusCode ReadSubrsFromIndex(unsigned short &outSubrsCount, CharStringsIndex *outSubrsIndex);
-    long GetCharStringType(unsigned short inFontIndex);
+    long long GetCharStringsPosition(uint16_t inFontIndex);
+    long GetSingleIntegerValue(uint16_t inFontIndex, uint16_t inKey, long inDefault);
+    PDFHummus::EStatusCode ReadSubrsFromIndex(uint16_t &outSubrsCount, CharStringsIndex *outSubrsIndex);
+    long GetCharStringType(uint16_t inFontIndex);
     PDFHummus::EStatusCode ReadPrivateDicts();
     PDFHummus::EStatusCode ReadLocalSubrs();
-    long GetSingleIntegerValueFromDict(const UShortToDictOperandListMap &inDict, unsigned short inKey, long inDefault);
-    long long GetCharsetPosition(unsigned short inFontIndex);
-    long long GetEncodingPosition(unsigned short inFontIndex);
-    unsigned short GetBiasedIndex(unsigned short inSubroutineCollectionSize, long inSubroutineIndex);
-    PDFHummus::EStatusCode ReadFormat0Charset(bool inIsCID, UShortToCharStringMap &ioCharMap,
-                                              unsigned short **inSIDArray, const CharStrings &inCharStrings);
-    PDFHummus::EStatusCode ReadFormat1Charset(bool inIsCID, UShortToCharStringMap &ioCharMap,
-                                              unsigned short **inSIDArray, const CharStrings &inCharStrings);
-    PDFHummus::EStatusCode ReadFormat2Charset(bool inIsCID, UShortToCharStringMap &ioCharMap,
-                                              unsigned short **inSIDArray, const CharStrings &inCharStrings);
-    void SetupSIDToGlyphMapWithStandard(const unsigned short *inStandardCharSet, unsigned short inStandardCharSetLength,
+    long GetSingleIntegerValueFromDict(const UShortToDictOperandListMap &inDict, uint16_t inKey, long inDefault);
+    long long GetCharsetPosition(uint16_t inFontIndex);
+    long long GetEncodingPosition(uint16_t inFontIndex);
+    uint16_t GetBiasedIndex(uint16_t inSubroutineCollectionSize, long inSubroutineIndex);
+    PDFHummus::EStatusCode ReadFormat0Charset(bool inIsCID, UShortToCharStringMap &ioCharMap, uint16_t **inSIDArray,
+                                              const CharStrings &inCharStrings);
+    PDFHummus::EStatusCode ReadFormat1Charset(bool inIsCID, UShortToCharStringMap &ioCharMap, uint16_t **inSIDArray,
+                                              const CharStrings &inCharStrings);
+    PDFHummus::EStatusCode ReadFormat2Charset(bool inIsCID, UShortToCharStringMap &ioCharMap, uint16_t **inSIDArray,
+                                              const CharStrings &inCharStrings);
+    void SetupSIDToGlyphMapWithStandard(const uint16_t *inStandardCharSet, uint16_t inStandardCharSetLength,
                                         UShortToCharStringMap &ioCharMap, const CharStrings &inCharStrings);
     CharString *GetCharacterFromStandardEncoding(uint8_t inCharacterCode);
     PDFHummus::EStatusCode ReadCIDInformation();
-    PDFHummus::EStatusCode ReadFDArray(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadFDSelect(unsigned short inFontIndex);
-    long long GetFDArrayPosition(unsigned short inFontIndex);
+    PDFHummus::EStatusCode ReadFDArray(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadFDSelect(uint16_t inFontIndex);
+    long long GetFDArrayPosition(uint16_t inFontIndex);
     PDFHummus::EStatusCode ReadPrivateDict(const UShortToDictOperandListMap &inReferencingDict,
                                            PrivateDictInfo *outPrivateDict);
     PDFHummus::EStatusCode ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivateDict, uint8_t inCharStringType);
-    long long GetFDSelectPosition(unsigned short inFontIndex);
+    long long GetFDSelectPosition(uint16_t inFontIndex);
     BoolAndUShort GetIndexForFontName(const std::string &inFontName);
-    PDFHummus::EStatusCode ReadTopDictIndex(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadCharStrings(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadPrivateDicts(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadLocalSubrs(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadCharsets(unsigned short inFontIndex);
+    PDFHummus::EStatusCode ReadTopDictIndex(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadCharStrings(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadPrivateDicts(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadLocalSubrs(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadCharsets(uint16_t inFontIndex);
     void ReadEncoding(EncodingsInfo *inEncoding, long long inEncodingPosition);
-    PDFHummus::EStatusCode ReadEncodings(unsigned short inFontIndex);
-    PDFHummus::EStatusCode ReadCIDInformation(unsigned short inFontIndex);
+    PDFHummus::EStatusCode ReadEncodings(uint16_t inFontIndex);
+    PDFHummus::EStatusCode ReadCIDInformation(uint16_t inFontIndex);
     PDFHummus::EStatusCode ReadCFFFileByIndexOrName(IByteReaderWithPosition *inCFFFile, const std::string &inFontName,
-                                                    unsigned short inFontIndex);
+                                                    uint16_t inFontIndex);
 };

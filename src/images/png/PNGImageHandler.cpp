@@ -51,8 +51,6 @@ PNGImageHandler::PNGImageHandler()
     mDocumentContext = nullptr;
 }
 
-
-
 void PNGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;

@@ -22,6 +22,7 @@
 
 #include <list>
 #include <map>
+#include <stdint.h>
 
 struct DictOperand
 {
@@ -36,4 +37,4 @@ struct DictOperand
 typedef std::list<DictOperand> DictOperandList;
 
 // that would actually be a dictionary
-typedef std::map<unsigned short, DictOperandList> UShortToDictOperandListMap;
+typedef std::map<uint16_t, DictOperandList> UShortToDictOperandListMap;

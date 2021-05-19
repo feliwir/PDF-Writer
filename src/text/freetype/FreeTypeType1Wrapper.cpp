@@ -124,17 +124,17 @@ bool FreeTypeType1Wrapper::HasPrivateEncoding()
     return mIsCustomEncoding;
 }
 
-unsigned int FreeTypeType1Wrapper::GetGlyphForUnicodeChar(unsigned long inChar)
+uint32_t FreeTypeType1Wrapper::GetGlyphForUnicodeChar(unsigned long inChar)
 {
-    return (unsigned int)inChar; // will run only if custom encoding, in which case input value should be output value
+    return (uint32_t)inChar; // will run only if custom encoding, in which case input value should be output value
 }
 
-std::string FreeTypeType1Wrapper::GetPrivateGlyphName(unsigned int inGlyphIndex)
+std::string FreeTypeType1Wrapper::GetPrivateGlyphName(uint32_t inGlyphIndex)
 {
     return mType1File.GetGlyphCharStringName(inGlyphIndex);
 }
 
-unsigned int FreeTypeType1Wrapper::GetFreeTypeGlyphIndexFromEncodingGlyphIndex(unsigned int inGlyphIndex)
+uint32_t FreeTypeType1Wrapper::GetFreeTypeGlyphIndexFromEncodingGlyphIndex(uint32_t inGlyphIndex)
 {
     return FT_Get_Name_Index(mFace, (FT_String *)(GetPrivateGlyphName(inGlyphIndex).c_str()));
 }
