@@ -22,20 +22,14 @@
 #include "PDFDictionary.h"
 #include "PDFName.h"
 
-PDFStreamInput::PDFStreamInput(PDFDictionary *inStreamDictionary, long long inStreamContentStart) : PDFObject(eType)
+PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart) : PDFObject(eType)
 {
     mDictionary = inStreamDictionary;
     mStreamContentStart = inStreamContentStart;
 }
 
-PDFStreamInput::~PDFStreamInput()
+std::shared_ptr<PDFDictionary> PDFStreamInput::QueryStreamDictionary()
 {
-    mDictionary->Release();
-}
-
-PDFDictionary *PDFStreamInput::QueryStreamDictionary()
-{
-    mDictionary->AddRef();
     return mDictionary;
 }
 

@@ -24,7 +24,6 @@
 #include "ObjectsBasicTypes.h"
 #include "PDFObjectParser.h"
 #include "PDFParsingOptions.h"
-#include "RefCountPtr.h"
 #include "encryption/DecryptionHelper.h"
 #include "io/AdapterIByteReaderWithPositionToIReadPositionProvider.h"
 #include "io/IByteReaderWithPosition.h"
@@ -33,6 +32,7 @@
 #include <stdio.h>
 
 #include <map>
+#include <memory>
 #include <utility>
 
 class PDFArray;
@@ -106,22 +106,22 @@ class PDFParser
     // done.
 
     // Creates a new object, use smart pointers to control ownership
-    PDFObject *ParseNewObject(ObjectIDType inObjectId);
+    std::shared_ptr<PDFObject> ParseNewObject(ObjectIDType inObjectId);
     ObjectIDType GetObjectsCount() const;
 
     // Query a dictinary object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct dictionary value, use PDFDictionary::QueryDirectObject [will AddRef automatically]
-    PDFObject *QueryDictionaryObject(PDFDictionary *inDictionary, const std::string &inName);
+    std::shared_ptr<PDFObject> QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary, const std::string &inName);
 
     // Query an array object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct array value, use the PDFArray direct access to the vector [and use AddRef, cause it
     // won't]
-    PDFObject *QueryArrayObject(PDFArray *inArray, unsigned long inIndex);
+    std::shared_ptr<PDFObject> QueryArrayObject(PDFArray *inArray, unsigned long inIndex);
 
     unsigned long GetPagesCount() const;
     // don't be confused - pass number of pages here. returns the dictionary, and verifies that it's actually a page
     // (via type)
-    PDFDictionary *ParsePage(unsigned long inPageIndex);
+    std::shared_ptr<PDFDictionary> ParsePage(unsigned long inPageIndex);
     // get page object ID for an input index
     ObjectIDType GetPageObjectID(unsigned long inPageIndex);
 
@@ -193,7 +193,7 @@ class PDFParser
 
     double mPDFLevel;
     long long mLastXrefPosition;
-    RefCountPtr<PDFDictionary> mTrailer;
+    std::shared_ptr<PDFDictionary> mTrailer;
     ObjectIDType mXrefSize;
     XrefEntryInput *mXrefTable;
     unsigned long mPagesCount;
@@ -214,7 +214,7 @@ class PDFParser
                                                   ObjectIDType *outExtendedTableSize);
     XrefEntryInput *ExtendXrefTableToSize(XrefEntryInput *inXrefTable, ObjectIDType inOldSize, ObjectIDType inNewSize);
     PDFHummus::EStatusCode ReadNextXrefEntry(uint8_t inBuffer[20]);
-    PDFObject *ParseExistingInDirectObject(ObjectIDType inObjectID);
+    std::shared_ptr<PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
     PDFHummus::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
     PDFHummus::EStatusCode ParsePagesObjectIDs();
     PDFHummus::EStatusCode ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inNodeObjectID);
@@ -241,14 +241,14 @@ class PDFParser
                                                       ObjectIDType inXrefSize, PDFDictionary **outTrailer,
                                                       XrefEntryInput **outExtendedTable,
                                                       ObjectIDType *outExtendedTableSize);
-    PDFObject *ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
+    std::shared_ptr<PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
     PDFHummus::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
     void MovePositionInStream(long long inPosition);
     EStatusCodeAndIByteReader CreateFilterForStream(IByteReader *inStream, PDFName *inFilterName,
                                                     PDFDictionary *inDecodeParams, PDFStreamInput *inPDFStream);
 
     void NotifyIndirectObjectStart(long long inObjectID, long long inGenerationNumber);
-    void NotifyIndirectObjectEnd(PDFObject *inObject);
+    void NotifyIndirectObjectEnd(std::shared_ptr<PDFObject> inObject);
 
     IByteReader *WrapWithDecryptionFilter(PDFStreamInput *inStream, IByteReader *inToWrapStream);
 

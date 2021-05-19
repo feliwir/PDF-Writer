@@ -29,6 +29,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include <memory>
 
 class PDFObject;
 class IByteReader;
@@ -36,7 +37,6 @@ class IPDFParserExtender;
 class DecryptionHelper;
 
 typedef std::pair<bool, uint8_t> BoolAndByte;
-typedef std::list<std::string> StringList;
 
 class PDFObjectParser
 {
@@ -49,7 +49,7 @@ class PDFObjectParser
                        bool inOwnsStream = false);
 
     // the important bit - get next object in content stream
-    PDFObject *ParseNewObject();
+    std::shared_ptr<PDFObject> ParseNewObject();
 
     // calls this when changing underlying stream position
     void ResetReadState();
@@ -71,7 +71,7 @@ class PDFObjectParser
 
   private:
     PDFParserTokenizer mTokenizer;
-    StringList mTokenBuffer;
+    std::list<std::string> mTokenBuffer;
     IByteReader *mStream;
     IReadPositionProvider *mCurrentPositionProvider;
     IPDFParserExtender *mParserExtender;
@@ -83,27 +83,27 @@ class PDFObjectParser
     void ReturnTokenToBuffer(std::string &inToken);
 
     bool IsBoolean(const std::string &inToken);
-    PDFObject *ParseBoolean(const std::string &inToken);
+    std::shared_ptr<PDFObject> ParseBoolean(const std::string &inToken);
 
     bool IsLiteralString(const std::string &inToken);
-    PDFObject *ParseLiteralString(const std::string &inToken);
+    std::shared_ptr<PDFObject> ParseLiteralString(const std::string &inToken);
 
     bool IsHexadecimalString(const std::string &inToken);
-    PDFObject *ParseHexadecimalString(const std::string &inToken);
+    std::shared_ptr<PDFObject> ParseHexadecimalString(const std::string &inToken);
 
     bool IsNull(const std::string &inToken);
 
     bool IsName(const std::string &inToken);
-    PDFObject *ParseName(const std::string &inToken);
+    std::shared_ptr<PDFObject> ParseName(const std::string &inToken);
 
     bool IsNumber(const std::string &inToken);
-    PDFObject *ParseNumber(const std::string &inToken);
+    std::shared_ptr<PDFObject> ParseNumber(const std::string &inToken);
 
     bool IsArray(const std::string &inToken);
-    PDFObject *ParseArray();
+    std::shared_ptr<PDFObject> ParseArray();
 
     bool IsDictionary(const std::string &inToken);
-    PDFObject *ParseDictionary();
+    std::shared_ptr<PDFObject> ParseDictionary();
 
     bool IsComment(const std::string &inToken);
 

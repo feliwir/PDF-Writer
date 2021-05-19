@@ -36,7 +36,7 @@
 #include "objects/PDFName.h"
 #include "objects/PDFNull.h"
 #include "objects/PDFObject.h"
-#include "objects/PDFObjectCast.h"
+
 #include "objects/PDFReal.h"
 #include "objects/PDFStreamInput.h"
 #include "objects/PDFSymbol.h"
@@ -88,150 +88,111 @@ void PDFObjectParser::ResetReadState(const PDFParserTokenizer &inExternalTokeniz
 
 static const std::string scR = "R";
 static const std::string scStream = "stream";
-PDFObject *PDFObjectParser::ParseNewObject()
+std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
 {
-    PDFObject *pdfObject = nullptr;
     std::string token;
 
-    do
+    if (!GetNextToken(token))
+        return nullptr;
+
+    // based on the parsed token, and parhaps some more, determine the type of object
+    // and how to parse it.
+
+    // Boolean
+    if (IsBoolean(token))
+        return ParseBoolean(token);
+    // Literal String
+    else if (IsLiteralString(token))
+        return ParseLiteralString(token);
+    // Hexadecimal String
+    else if (IsHexadecimalString(token))
+        return ParseHexadecimalString(token);
+    // NULL
+    else if (IsNull(token))
+        return std::make_shared<PDFNull>();
+    // Name
+    else if (IsName(token))
+        return ParseName(token);
+    // Number (and possibly an indirect reference)
+    else if (IsNumber(token))
     {
-        if (!GetNextToken(token))
-            break;
+        auto numberObject = ParseNumber(token);
 
-        // based on the parsed token, and parhaps some more, determine the type of object
-        // and how to parse it.
+        // this could be an indirect reference in case this is a positive integer
+        // and the next one is also, and then there's an "R" keyword
+        if ((numberObject != nullptr) && (numberObject->GetType() == PDFObject::ePDFObjectInteger) &&
+            numberObject->GetValue() > 0)
+        {
+            // try parse version
+            std::string numberToken;
+            if (!GetNextToken(numberToken)) // k. no next token...cant be reference
+                return pdfObject;
 
-        // Boolean
-        if (IsBoolean(token))
-        {
-            pdfObject = ParseBoolean(token);
-            break;
-        }
-        // Literal String
-        if (IsLiteralString(token))
-        {
-            pdfObject = ParseLiteralString(token);
-            break;
-        }
-        // Hexadecimal String
-        if (IsHexadecimalString(token))
-        {
-            pdfObject = ParseHexadecimalString(token);
-            break;
-        }
-        // NULL
-        else if (IsNull(token))
-        {
-            pdfObject = new PDFNull();
-            break;
-        }
-        // Name
-        else if (IsName(token))
-        {
-            pdfObject = ParseName(token);
-            break;
-        }
-        // Number (and possibly an indirect reference)
-        else if (IsNumber(token))
-        {
-            pdfObject = ParseNumber(token);
-
-            // this could be an indirect reference in case this is a positive integer
-            // and the next one is also, and then there's an "R" keyword
-            if ((pdfObject != nullptr) && (pdfObject->GetType() == PDFObject::ePDFObjectInteger) &&
-                ((PDFInteger *)pdfObject)->GetValue() > 0)
+            if (!IsNumber(numberToken)) // k. no number, cant be reference
             {
-                // try parse version
-                std::string numberToken;
-                if (!GetNextToken(numberToken)) // k. no next token...cant be reference
-                    break;
-
-                if (!IsNumber(numberToken)) // k. no number, cant be reference
-                {
-                    SaveTokenToBuffer(numberToken);
-                    break;
-                }
-
-                PDFObject *versionObject = ParseNumber(numberToken);
-                bool isReference = false;
-                do
-                {
-                    if ((versionObject == nullptr) || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
-                        ((PDFInteger *)versionObject)->GetValue() <
-                            0) // k. failure to parse number, or no non-negative, cant be reference
-                    {
-                        SaveTokenToBuffer(numberToken);
-                        break;
-                    }
-
-                    // try parse R keyword
-                    std::string keywordToken;
-                    if (!GetNextToken(keywordToken)) // k. no next token...cant be reference
-                        break;
-
-                    if (keywordToken != scR) // k. not R...cant be reference
-                    {
-                        SaveTokenToBuffer(numberToken);
-                        SaveTokenToBuffer(keywordToken);
-                        break;
-                    }
-
-                    isReference = true;
-                } while (false);
-
-                // if passed all these, then this is a reference
-                if (isReference)
-                {
-                    PDFObject *referenceObject =
-                        new PDFIndirectObjectReference((ObjectIDType)((PDFInteger *)pdfObject)->GetValue(),
-                                                       (unsigned long)((PDFInteger *)versionObject)->GetValue());
-                    delete pdfObject;
-                    pdfObject = referenceObject;
-                }
-                delete versionObject;
-            }
-            break;
-        }
-        // Array
-        else if (IsArray(token))
-        {
-            pdfObject = ParseArray();
-            break;
-        }
-        // Dictionary
-        else if (IsDictionary(token))
-        {
-            pdfObject = ParseDictionary();
-
-            if (pdfObject != nullptr)
-            {
-                // could be a stream. will be if the next token is the "stream" keyword
-                if (!GetNextToken(token))
-                    break;
-
-                if (scStream == token)
-                {
-                    // yes, found a stream. record current position as the position where the stream starts.
-                    // remove from the current stream position the size of the tokenizer buffer, which is "read", but
-                    // not used
-                    pdfObject =
-                        new PDFStreamInput((PDFDictionary *)pdfObject, mCurrentPositionProvider->GetCurrentPosition() -
-                                                                           mTokenizer.GetReadBufferSize());
-                }
-                else
-                {
-                    SaveTokenToBuffer(token);
-                }
+                SaveTokenToBuffer(numberToken);
+                return pdfObject;
             }
 
-            break;
-        }
-        // Symbol (legitimate keyword or error. determine if error based on semantics)
-        else
-            pdfObject = new PDFSymbol(token);
-    } while (false);
+            auto versionObject = ParseNumber(numberToken);
+            bool isReference = false;
+            if ((versionObject == nullptr) || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
+                ((PDFInteger *)versionObject)->GetValue() <
+                    0) // k. failure to parse number, or no non-negative, cant be reference
+            {
+                SaveTokenToBuffer(numberToken);
+                return pdfObject;
+            }
 
-    return pdfObject;
+            // try parse R keyword
+            std::string keywordToken;
+            if (!GetNextToken(keywordToken)) // k. no next token...cant be reference
+                return pdfObject;
+
+            if (keywordToken != scR) // k. not R...cant be reference
+            {
+                SaveTokenToBuffer(numberToken);
+                SaveTokenToBuffer(keywordToken);
+                return pdfObject;
+            }
+
+            // if passed all these, then this is a reference
+            return std::make_shared<PDFIndirectObjectReference>((ObjectIDType)numberObject->GetValue(),
+                                                                (unsigned long)versionObject->GetValue());
+        }
+    }
+    // Array
+    else if (IsArray(token))
+        return ParseArray();
+    // Dictionary
+    else if (IsDictionary(token))
+    {
+        auto dictObject = ParseDictionary();
+
+        if (dictObject != nullptr)
+        {
+            // could be a stream. will be if the next token is the "stream" keyword
+            if (!GetNextToken(token))
+                break;
+
+            if (scStream == token)
+            {
+                // yes, found a stream. record current position as the position where the stream starts.
+                // remove from the current stream position the size of the tokenizer buffer, which is "read", but
+                // not used
+                return std::make_shared<PDFStreamInput>(dictObject, mCurrentPositionProvider->GetCurrentPosition() -
+                                                                        mTokenizer.GetReadBufferSize());
+            }
+            else
+            {
+                SaveTokenToBuffer(token);
+            }
+        }
+        return dictObject;
+    }
+    // Symbol (legitimate keyword or error. determine if error based on semantics)
+    else
+        return std::make_shared<PDFSymbol>(token);
 }
 
 bool PDFObjectParser::GetNextToken(std::string &outToken)
@@ -260,14 +221,15 @@ bool PDFObjectParser::GetNextToken(std::string &outToken)
 
 static const std::string scTrue = "true";
 static const std::string scFalse = "false";
+
 bool PDFObjectParser::IsBoolean(const std::string &inToken)
 {
     return (scTrue == inToken || scFalse == inToken);
 }
 
-PDFObject *PDFObjectParser::ParseBoolean(const std::string &inToken)
+std::shared_ptr<PDFObject> PDFObjectParser::ParseBoolean(const std::string &inToken)
 {
-    return new PDFBoolean(scTrue == inToken);
+    return std::make_shared<PDFBoolean>(scTrue == inToken);
 }
 
 static const char scLeftParanthesis = '(';
@@ -277,7 +239,7 @@ bool PDFObjectParser::IsLiteralString(const std::string &inToken)
 }
 
 static const char scRightParanthesis = ')';
-PDFObject *PDFObjectParser::ParseLiteralString(const std::string &inToken)
+std::shared_ptr<PDFObject> PDFObjectParser::ParseLiteralString(const std::string &inToken)
 {
     std::stringbuf stringBuffer;
     uint8_t buffer;
@@ -360,19 +322,14 @@ PDFObject *PDFObjectParser::ParseLiteralString(const std::string &inToken)
         stringBuffer.sputn((const char *)&buffer, 1);
     }
 
-    return new PDFLiteralString(MaybeDecryptString(stringBuffer.str()));
+    return std::make_shared<PDFLiteralString>(MaybeDecryptString(stringBuffer.str()));
 }
 
-/*
-
-
-*/
 
 std::string PDFObjectParser::MaybeDecryptString(const std::string &inString)
 {
     if ((mDecryptionHelper != nullptr) && mDecryptionHelper->IsEncrypted())
     {
-
         if (mDecryptionHelper->CanDecryptDocument())
             return mDecryptionHelper->DecryptString(inString);
 
@@ -394,7 +351,7 @@ bool PDFObjectParser::IsHexadecimalString(const std::string &inToken)
 }
 
 static const char scRightAngle = '>';
-PDFObject *PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
+std::shared_ptr<PDFObject> PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
 {
     // verify that last character is '>'
     if (inToken.at(inToken.size() - 1) != scRightAngle)
@@ -405,7 +362,7 @@ PDFObject *PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
         return nullptr;
     }
 
-    return new PDFHexString(MaybeDecryptString(DecodeHexString(inToken.substr(1, inToken.size() - 2))));
+    return std::make_shared<PDFHexString>(MaybeDecryptString(DecodeHexString(inToken.substr(1, inToken.size() - 2))));
 }
 
 std::string PDFObjectParser::DecodeHexString(const std::string &inStringToDecode)
@@ -461,16 +418,15 @@ bool PDFObjectParser::IsName(const std::string &inToken)
 }
 
 static const char scSharp = '#';
-PDFObject *PDFObjectParser::ParseName(const std::string &inToken)
+std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken)
 {
     EStatusCode status = PDFHummus::eSuccess;
     std::stringbuf stringBuffer;
     BoolAndByte hexResult;
     uint8_t buffer;
-    std::string::const_iterator it = inToken.begin();
     ++it; // skip initial slash
 
-    for (; it != inToken.end() && PDFHummus::eSuccess == status; ++it)
+    for (auto it = inToken.begin();; it != inToken.end() && PDFHummus::eSuccess == status; ++it)
     {
         if (*it == scSharp)
         {
@@ -518,7 +474,7 @@ PDFObject *PDFObjectParser::ParseName(const std::string &inToken)
     }
 
     if (PDFHummus::eSuccess == status)
-        return new PDFName(stringBuffer.str());
+        return std::make_shared<PDFName>(stringBuffer.str());
     return nullptr;
 }
 
@@ -563,13 +519,13 @@ bool PDFObjectParser::IsNumber(const std::string &inToken)
 
 typedef BoxingBaseWithRW<long long> LongLong;
 
-PDFObject *PDFObjectParser::ParseNumber(const std::string &inToken)
+std::shared_ptr<PDFObject> PDFObjectParser::ParseNumber(const std::string &inToken)
 {
     // once we know this is a number, then parsing is easy. just determine if it's a real or integer, so as to separate
     // classes for better accuracy
     if (inToken.find(scDot) != inToken.npos)
-        return new PDFReal(Double(inToken));
-    return new PDFInteger(LongLong(inToken));
+        return std::make_shared<PDFReal>(Double(inToken));
+    return std::make_shared<PDFInteger>(LongLong(inToken));
 }
 
 static const std::string scLeftSquare = "[";
@@ -579,9 +535,9 @@ bool PDFObjectParser::IsArray(const std::string &inToken)
 }
 
 static const std::string scRightSquare = "]";
-PDFObject *PDFObjectParser::ParseArray()
+std::shared_ptr<PDFObject> PDFObjectParser::ParseArray()
 {
-    auto *anArray = new PDFArray();
+    auto anArray = std::make_shared<PDFArray>();
     bool arrayEndEncountered = false;
     std::string token;
     EStatusCode status = PDFHummus::eSuccess;
@@ -594,7 +550,7 @@ PDFObject *PDFObjectParser::ParseArray()
             break;
 
         ReturnTokenToBuffer(token);
-        RefCountPtr<PDFObject> anObject(ParseNewObject());
+        auto anObject = ParseNewObject();
         if (!anObject)
         {
             status = PDFHummus::eFailure;
@@ -604,7 +560,7 @@ PDFObject *PDFObjectParser::ParseArray()
         }
         else
         {
-            anArray->AppendObject(anObject.GetPtr());
+            anArray->AppendObject(anObject);
         }
     }
 
@@ -613,7 +569,6 @@ PDFObject *PDFObjectParser::ParseArray()
         return anArray;
     }
 
-    delete anArray;
     TRACE_LOG1("PDFObjectParser::ParseArray, failure to parse array, didn't find end of array or failure to parse "
                "array member object. token = %s",
                token.substr(0, MAX_TRACE_SIZE - 200).c_str());
@@ -637,9 +592,9 @@ bool PDFObjectParser::IsDictionary(const std::string &inToken)
 }
 
 static const std::string scDoubleRightAngle = ">>";
-PDFObject *PDFObjectParser::ParseDictionary()
+std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
 {
-    auto *aDictionary = new PDFDictionary();
+    auto aDictionary = std::make_shared<PDFDictionary>();
     bool dictionaryEndEncountered = false;
     std::string token;
     EStatusCode status = PDFHummus::eSuccess;
@@ -653,7 +608,7 @@ PDFObject *PDFObjectParser::ParseDictionary()
         ReturnTokenToBuffer(token);
 
         // Parse Key
-        PDFObjectCastPtr<PDFName> aKey(ParseNewObject());
+        auto aKey = ParseNewObject();
         if (!aKey)
         {
             status = PDFHummus::eFailure;
@@ -663,7 +618,7 @@ PDFObject *PDFObjectParser::ParseDictionary()
         }
 
         // Parse Value
-        RefCountPtr<PDFObject> aValue = ParseNewObject();
+        auto aValue = ParseNewObject();
         if (!aValue)
         {
             status = PDFHummus::eFailure;
@@ -674,7 +629,7 @@ PDFObject *PDFObjectParser::ParseDictionary()
 
         // all good. i'm gonna be forgiving here and allow skipping duplicate keys. cause it happens
         if (!aDictionary->Exists(aKey->GetValue()))
-            aDictionary->Insert(aKey.GetPtr(), aValue.GetPtr());
+            aDictionary->Insert(aKey, aValue);
     }
 
     if (dictionaryEndEncountered && PDFHummus::eSuccess == status)
@@ -682,7 +637,6 @@ PDFObject *PDFObjectParser::ParseDictionary()
         return aDictionary;
     }
 
-    delete aDictionary;
     TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse dictionary, didn't find end of array or failure "
                "to parse dictionary member object. token = %s",
                token.substr(0, MAX_TRACE_SIZE - 200).c_str());

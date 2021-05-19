@@ -24,43 +24,28 @@ PDFDictionary::PDFDictionary() : PDFObject(eType)
 {
 }
 
-PDFDictionary::~PDFDictionary()
+std::shared_ptr<PDFObject> PDFDictionary::QueryDirectObject(const std::string &inName)
 {
-    auto it = mValues.begin();
-
-    for (; it != mValues.end(); ++it)
-    {
-        it->first->Release();
-        it->second->Release();
-    }
-}
-
-PDFObject *PDFDictionary::QueryDirectObject(const std::string &inName)
-{
-    PDFName key(inName);
-    auto it = mValues.find(&key);
+    auto key = std::make_shared<PDFName>(inName);
+    auto it = mValues.find(key);
 
     if (it == mValues.end())
     {
         return nullptr;
     }
 
-    it->second->AddRef();
     return it->second;
 }
 
-void PDFDictionary::Insert(PDFName *inKeyObject, PDFObject *inValueObject)
+void PDFDictionary::Insert(std::shared_ptr<PDFName> inKeyObject, std::shared_ptr<PDFObject> inValueObject);
 {
-    inKeyObject->AddRef();
-    inValueObject->AddRef();
-
-    mValues.insert(PDFNameToPDFObjectMap::value_type(inKeyObject, inValueObject));
+    mValues.insert({inKeyObject, inValueObject});
 }
 
 bool PDFDictionary::Exists(const std::string &inName)
 {
-    PDFName key(inName);
-    return mValues.find(&key) != mValues.end();
+    auto key = std::make_shared<PDFName>(inName);
+    return mValues.find(key) != mValues.end();
 }
 
 MapIterator<PDFNameToPDFObjectMap> PDFDictionary::GetIterator()

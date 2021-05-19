@@ -20,8 +20,6 @@
 */
 #pragma once
 
-#include "RefCountObject.h"
-
 #include <map>
 #include <string>
 
@@ -29,7 +27,7 @@ class IDeletable;
 
 typedef std::map<std::string, IDeletable *> StringToIDeletable;
 
-class PDFObject : public RefCountObject
+class PDFObject
 {
   public:
     enum EPDFObjectType

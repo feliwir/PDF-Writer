@@ -41,7 +41,7 @@
 #include "objects/PDFInteger.h"
 #include "objects/PDFName.h"
 #include "objects/PDFObject.h"
-#include "objects/PDFObjectCast.h"
+
 #include "objects/PDFStreamInput.h"
 #include "objects/PDFSymbol.h"
 
@@ -695,7 +695,7 @@ double PDFParser::GetPDFLevel() const
     return mPDFLevel;
 }
 
-PDFObject *PDFParser::ParseNewObject(ObjectIDType inObjectId)
+std::shared_ptr<PDFObject> PDFParser::ParseNewObject(ObjectIDType inObjectId)
 {
     if (inObjectId >= mXrefSize)
     {
@@ -719,72 +719,67 @@ ObjectIDType PDFParser::GetObjectsCount() const
 }
 
 static const std::string scObj = "obj";
-PDFObject *PDFParser::ParseExistingInDirectObject(ObjectIDType inObjectID)
+std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectObject(ObjectIDType inObjectID)
 {
-    PDFObject *readObject = nullptr;
-
     MovePositionInStream(mXrefTable[inObjectID].mObjectPosition);
 
-    do
+    // should get us to the ObjectNumber ObjectVersion obj section
+    // verify that it's good and if so continue to parse the object itself
+
+    // verify object ID
+    PDFObjectCastPtr<PDFInteger> idObject(mObjectParser.ParseNewObject());
+
+    if (!idObject)
     {
-        // should get us to the ObjectNumber ObjectVersion obj section
-        // verify that it's good and if so continue to parse the object itself
+        TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, ID");
+        return nullptr;
+    }
 
-        // verify object ID
-        PDFObjectCastPtr<PDFInteger> idObject(mObjectParser.ParseNewObject());
+    if ((ObjectIDType)idObject->GetValue() != inObjectID)
+    {
+        TRACE_LOG2("PDFParser::ParseExistingInDirectObject, failed to read object declaration, exepected ID = %ld, "
+                   "found %ld",
+                   inObjectID, idObject->GetValue());
+        return nullptr;
+    }
 
-        if (!idObject)
-        {
-            TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, ID");
-            break;
-        }
+    // verify object Version
+    PDFObjectCastPtr<PDFInteger> versionObject(mObjectParser.ParseNewObject());
 
-        if ((ObjectIDType)idObject->GetValue() != inObjectID)
-        {
-            TRACE_LOG2("PDFParser::ParseExistingInDirectObject, failed to read object declaration, exepected ID = %ld, "
-                       "found %ld",
-                       inObjectID, idObject->GetValue());
-            break;
-        }
+    if (!versionObject)
+    {
+        TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, Version");
+        return nullptr;
+    }
 
-        // verify object Version
-        PDFObjectCastPtr<PDFInteger> versionObject(mObjectParser.ParseNewObject());
+    if ((unsigned long)versionObject->GetValue() != mXrefTable[inObjectID].mRivision)
+    {
+        TRACE_LOG2("PDFParser::ParseExistingInDirectObject, failed to read object declaration, exepected version = "
+                   "%ld, found %ld",
+                   mXrefTable[inObjectID].mRivision, versionObject->GetValue());
+        return nullptr;
+    }
 
-        if (!versionObject)
-        {
-            TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, Version");
-            break;
-        }
+    // now the obj keyword
+    PDFObjectCastPtr<PDFSymbol> objKeyword(mObjectParser.ParseNewObject());
 
-        if ((unsigned long)versionObject->GetValue() != mXrefTable[inObjectID].mRivision)
-        {
-            TRACE_LOG2("PDFParser::ParseExistingInDirectObject, failed to read object declaration, exepected version = "
-                       "%ld, found %ld",
-                       mXrefTable[inObjectID].mRivision, versionObject->GetValue());
-            break;
-        }
+    if (!objKeyword)
+    {
+        TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, obj keyword");
+        return nullptr;
+    }
 
-        // now the obj keyword
-        PDFObjectCastPtr<PDFSymbol> objKeyword(mObjectParser.ParseNewObject());
+    if (objKeyword->GetValue() != scObj)
+    {
+        TRACE_LOG1("PDFParser::ParseExistingInDirectObject, failed to read object declaration, expected obj "
+                   "keyword found %s",
+                   objKeyword->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
+        return nullptr;
+    }
 
-        if (!objKeyword)
-        {
-            TRACE_LOG("PDFParser::ParseExistingInDirectObject, failed to read object declaration, obj keyword");
-            break;
-        }
-
-        if (objKeyword->GetValue() != scObj)
-        {
-            TRACE_LOG1("PDFParser::ParseExistingInDirectObject, failed to read object declaration, expected obj "
-                       "keyword found %s",
-                       objKeyword->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-            break;
-        }
-
-        NotifyIndirectObjectStart(inObjectID, versionObject->GetValue());
-        readObject = mObjectParser.ParseNewObject();
-        NotifyIndirectObjectEnd(readObject);
-    } while (false);
+    NotifyIndirectObjectStart(inObjectID, versionObject->GetValue());
+    auto readObject = mObjectParser.ParseNewObject();
+    NotifyIndirectObjectEnd(readObject);
 
     return readObject;
 }
@@ -901,7 +896,7 @@ EStatusCode PDFParser::ParsePagesIDs(PDFDictionary *inPageNode, ObjectIDType inN
         else if (scPages == objectType->GetValue())
         {
             // a Page tree node
-            PDFObject *pKids = inPageNode->QueryDirectObject("Kids");
+            std::shared_ptr<PDFObject> pKids = inPageNode->QueryDirectObject("Kids");
             if ((pKids != nullptr) && pKids->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
                 pKids = ParseNewObject(((PDFIndirectObjectReference *)pKids)->mObjectID);
             PDFObjectCastPtr<PDFArray> kidsObject(pKids);
@@ -970,7 +965,7 @@ ObjectIDType PDFParser::GetPageObjectID(unsigned long inPageIndex)
     return mPagesObjectIDs[inPageIndex];
 }
 
-PDFDictionary *PDFParser::ParsePage(unsigned long inPageIndex)
+std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
 {
     if (mPagesCount <= inPageIndex)
         return nullptr;
@@ -1001,24 +996,24 @@ PDFDictionary *PDFParser::ParsePage(unsigned long inPageIndex)
     return nullptr;
 }
 
-PDFObject *PDFParser::QueryDictionaryObject(PDFDictionary *inDictionary, const std::string &inName)
+std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary, const std::string &inName)
 {
-    RefCountPtr<PDFObject> anObject(inDictionary->QueryDirectObject(inName));
+    auto anObject = inDictionary->QueryDirectObject(inName);
 
-    if (anObject.GetPtr() == nullptr)
+    if (anObject == nullptr)
         return nullptr;
 
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
-        PDFObject *theActualObject = ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
+        std::shared_ptr<PDFObject> theActualObject =
+            ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
         return theActualObject;
     }
 
-    anObject->AddRef(); // adding ref to increase owners
-    return anObject.GetPtr();
+    return anObject;
 }
 
-PDFObject *PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
+std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
 {
     RefCountPtr<PDFObject> anObject(inArray->QueryObject(inIndex));
 
@@ -1027,7 +1022,8 @@ PDFObject *PDFParser::QueryArrayObject(PDFArray *inArray, unsigned long inIndex)
 
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
-        PDFObject *theActualObject = ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
+        std::shared_ptr<PDFObject> theActualObject =
+            ParseNewObject(((PDFIndirectObjectReference *)anObject.GetPtr())->mObjectID);
         return theActualObject;
     }
 
@@ -1662,7 +1658,7 @@ EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySi
     return status;
 }
 
-PDFObject *PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
+std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
 {
     // parsing an object in an object stream requires the following:
     // 1. Setting the position to this object stream
@@ -1678,7 +1674,7 @@ PDFObject *PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
 
     InputStreamSkipperStream skipperStream;
     ObjectIDType objectStreamID;
-    PDFObject *anObject = nullptr;
+    std::shared_ptr<PDFObject> anObject = nullptr;
 
     do
     {
@@ -1784,7 +1780,7 @@ void PDFParser::NotifyIndirectObjectStart(long long inObjectID, long long inGene
     mDecryptionHelper.OnObjectStart(inObjectID, inGenerationNumber);
 }
 
-void PDFParser::NotifyIndirectObjectEnd(PDFObject *inObject)
+void PDFParser::NotifyIndirectObjectEnd(std::shared_ptr<PDFObject> inObject)
 {
     if (mParserExtender != nullptr)
         mParserExtender->OnObjectEnd(inObject);

@@ -20,6 +20,7 @@
 */
 #pragma once
 #include "PDFObject.h"
+#include <memory>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -33,15 +34,14 @@ class PDFStreamInput : public PDFObject
         eType = ePDFObjectStream
     };
 
-    PDFStreamInput(PDFDictionary *inStreamDictionary, long long inStreamContentStart);
-    virtual ~PDFStreamInput(void);
+    PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart);
 
     // These two calls AddRef on both objects
-    PDFDictionary *QueryStreamDictionary();
+    std::shared_ptr<PDFDictionary> QueryStreamDictionary();
 
     long long GetStreamContentStart() const;
 
   private:
-    PDFDictionary *mDictionary;
+    std::shared_ptr<PDFDictionary> mDictionary;
     long long mStreamContentStart;
 };
