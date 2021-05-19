@@ -45,7 +45,7 @@ TEST(PDFEmbedding, MergeToPDFForm)
     // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"));

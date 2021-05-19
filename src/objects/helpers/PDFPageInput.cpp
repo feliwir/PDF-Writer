@@ -25,6 +25,7 @@
 #include "objects/PDFArray.h"
 #include "objects/PDFName.h"
 #include "parsing/PDFParser.h"
+#include "PagePresets.h"
 
 PDFPageInput::PDFPageInput(PDFParser *inParser, PDFObject *inPageObject) : mPageObject(inPageObject)
 {
@@ -106,7 +107,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
     if (!mediaBox || mediaBox->GetLength() != 4)
     {
         TRACE_LOG("PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
-        result = PDFRectangle(0, 0, 595, 842);
+        result = PDFHummus::PagePresets::A4_Portrait;
     }
     else
     {

@@ -42,7 +42,7 @@ TEST(PDFImage, JPGImage)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(pageContentContext, nullptr);

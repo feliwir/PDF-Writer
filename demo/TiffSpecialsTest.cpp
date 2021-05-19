@@ -27,6 +27,7 @@
 #include "PDFWriter.h"
 #include "PageContentContext.h"
 #include "TestsRunner.h"
+#include "PagePresets.h"
 
 #include <iostream>
 
@@ -102,7 +103,7 @@ EStatusCode TiffSpecialsTest::CreatePageForImageAndRelease(PDFWriter &inpdfWrite
     do
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -168,7 +169,7 @@ EStatusCode TiffSpecialsTest::CreateBlackAndWhiteMaskImage(const TestConfigurati
         }
 
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)
@@ -281,7 +282,7 @@ EStatusCode TiffSpecialsTest::CreateBiLevelGrayScales(const TestConfiguration &i
 
         // start page
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
         if (nullptr == pageContentContext)

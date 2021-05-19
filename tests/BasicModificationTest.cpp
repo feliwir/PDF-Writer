@@ -48,7 +48,7 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (nullptr == contentContext)
@@ -126,7 +126,7 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)

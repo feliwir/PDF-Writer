@@ -42,7 +42,7 @@ TEST(PDF, ShutDownRestart)
         ASSERT_EQ(status, PDFHummus::eSuccess);
 
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PDFUsedFont *font =
             pdfWriterA.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
@@ -107,7 +107,7 @@ TEST(PDF, ShutDownRestart)
         ASSERT_EQ(status, PDFHummus::eSuccess);
 
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriterB.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);

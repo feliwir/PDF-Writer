@@ -46,7 +46,7 @@ TEST(PDF, FormXObject)
     // First page
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);
@@ -105,7 +105,7 @@ TEST(PDF, FormXObject)
     // 2nd page, just uses the form from the previous page
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);

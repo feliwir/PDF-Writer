@@ -25,6 +25,7 @@
 #include "PageContentContext.h"
 #include "TestsRunner.h"
 #include "Trace.h"
+#include "PagePresets.h"
 
 #include <iostream>
 
@@ -97,7 +98,7 @@ EStatusCode TextUsageBugs::RunKoreanFontTest(const TestConfiguration &inTestConf
         }
 
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
@@ -156,7 +157,7 @@ EStatusCode TextUsageBugs::RunCNRSTest(const TestConfiguration &inTestConfigurat
             break;
         }
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -243,7 +244,7 @@ EStatusCode TextUsageBugs::RunCNRS2SampleTest(const TestConfiguration &inTestCon
             break;
         }
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)
@@ -2358,7 +2359,7 @@ EStatusCode TextUsageBugs::RunCNRS2Test(const TestConfiguration &inTestConfigura
             break;
         }
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (nullptr == contentContext)

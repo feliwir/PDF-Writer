@@ -23,17 +23,16 @@
 class PDFRectangle
 {
   public:
-    PDFRectangle(void);
-    ~PDFRectangle(void) = default;
-
-    PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY);
+    PDFRectangle() = default;
+    PDFRectangle(const double inLowerLeftX, const double inLowerLeftY, const double inUpperRightX,
+                 const double inUpperRightY);
     PDFRectangle(const PDFRectangle &inOther);
 
     bool operator==(const PDFRectangle &inOther) const;
     bool operator!=(const PDFRectangle &inOther) const;
 
-    double LowerLeftX;
-    double LowerLeftY;
-    double UpperRightX;
-    double UpperRightY;
+    double LowerLeftX = 0;
+    double LowerLeftY = 0;
+    double UpperRightX = 0;
+    double UpperRightY = 0;
 };

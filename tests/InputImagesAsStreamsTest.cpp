@@ -24,7 +24,7 @@ TEST(CustomStreams, InputImagesAsStreams)
 
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         // JPG image
 
@@ -59,7 +59,7 @@ TEST(CustomStreams, InputImagesAsStreams)
 #ifndef PDFHUMMUS_NO_TIFF
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         InputFile tiffFile;
         status = tiffFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/FLAG_T24.TIF"));

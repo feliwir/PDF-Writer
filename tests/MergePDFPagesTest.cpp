@@ -40,7 +40,7 @@ EStatusCode TestOnlyMerge()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFPageRange singePageRange;
     singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -69,7 +69,7 @@ EStatusCode TestPrefixGraphicsMerge()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
@@ -119,7 +119,7 @@ EStatusCode TestSuffixGraphicsMerge()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFPageRange singePageRange;
     singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -167,7 +167,7 @@ EStatusCode TestBothGraphicsMerge()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
@@ -227,7 +227,7 @@ EStatusCode MergeTwoPageInSeparatePhases()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -313,7 +313,7 @@ EStatusCode MergeTwoPageWithEvents()
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -379,7 +379,7 @@ EStatusCode MergePagesUsingCopyingContext()
     // now let's begin constructing the pages
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -413,7 +413,7 @@ EStatusCode MergePagesUsingCopyingContext()
     // now let's do the second page. similar, but with the second page as the unique content
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 

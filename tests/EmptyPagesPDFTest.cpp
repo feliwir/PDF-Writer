@@ -38,7 +38,7 @@ TEST(PDF, EmptyPagesPDF)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     for (int i = 0; i < 4 && PDFHummus::eSuccess == status; ++i)
     {

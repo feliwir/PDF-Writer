@@ -44,7 +44,7 @@ TEST(PDFImages, HighLevelImages)
     // First page
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
@@ -62,7 +62,7 @@ TEST(PDFImages, HighLevelImages)
 
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
         AbstractContentContext::ImageOptions opt1;

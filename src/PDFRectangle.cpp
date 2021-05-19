@@ -20,16 +20,6 @@
 */
 #include "PDFRectangle.h"
 
-PDFRectangle::PDFRectangle()
-{
-    LowerLeftX = 0;
-    LowerLeftY = 0;
-    UpperRightX = 0;
-    UpperRightY = 0;
-}
-
-
-
 PDFRectangle::PDFRectangle(double inLowerLeftX, double inLowerLeftY, double inUpperRightX, double inUpperRightY)
 {
     LowerLeftX = inLowerLeftX;

@@ -41,7 +41,7 @@ EStatusCode PrepareSampleEmptyPDF(const std::string &inEmptyFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     status = pdfWriter.WritePage(page);
     if (status != eSuccess)
@@ -70,7 +70,7 @@ PDFHummus::EStatusCode CreateFormFromEmptyPage(const std::string &inEmptyFileNam
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
 
@@ -143,7 +143,7 @@ PDFHummus::EStatusCode MergeEmptyPageToPage(const std::string &inEmptyFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
@@ -212,7 +212,7 @@ PDFHummus::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
     // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     copyingContext = pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, inEmptyFileName));
     if (status != eSuccess)

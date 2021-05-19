@@ -40,7 +40,7 @@ TEST(PDF, Links)
     ASSERT_EQ(status, PDFHummus::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PDFFormXObject *soundCloudLogo = pdfWriter.CreateFormXObjectFromJPGFile(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/soundcloud_logo.jpg"));

@@ -48,7 +48,7 @@ TEST(PDF, RotatedPagesPDF)
     for (int i = 0; i < 6; ++i)
     {
         PDFPage page;
-        page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
         // This is invalid rotation and should not be applied
         page.SetRotate(33);

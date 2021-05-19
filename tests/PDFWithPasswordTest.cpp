@@ -48,7 +48,7 @@ EStatusCode RunTest(bool inUseAES)
 
     // create simple page
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 

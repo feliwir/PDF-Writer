@@ -44,7 +44,7 @@ EStatusCode RunCFFTest(bool inEmbedFonts)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
@@ -116,7 +116,7 @@ EStatusCode RunTrueTypeTest(bool inEmbedFonts)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
@@ -167,7 +167,7 @@ EStatusCode RunType1Test(bool inEmbedFonts)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
@@ -221,7 +221,7 @@ EStatusCode RunNoTextTest(bool inEmbedFonts)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFRectangle(0, 0, 595, 842));
+    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
