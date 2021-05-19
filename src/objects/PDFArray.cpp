@@ -24,17 +24,8 @@ PDFArray::PDFArray() : PDFObject(eType)
 {
 }
 
-PDFArray::~PDFArray()
+void PDFArray::AppendObject(std::shared_ptr<PDFObject> inObject)
 {
-    auto it = mValues.begin();
-
-    for (; it != mValues.end(); ++it)
-        (*it)->Release();
-}
-
-void PDFArray::AppendObject(PDFObject *inObject)
-{
-    inObject->AddRef();
     mValues.push_back(inObject);
 }
 
@@ -43,14 +34,13 @@ SingleValueContainerIterator<PDFObjectVector> PDFArray::GetIterator()
     return SingleValueContainerIterator<PDFObjectVector>(mValues);
 }
 
-PDFObject *PDFArray::QueryObject(unsigned long i)
+std::shared_ptr<PDFObject> PDFArray::QueryObject(unsigned long i)
 {
     if (mValues.size() <= i)
     {
         return nullptr;
     }
 
-    mValues[i]->AddRef();
     return mValues[i];
 }
 

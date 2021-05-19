@@ -24,16 +24,17 @@
 #include "PDFObject.h"
 
 #include <map>
+#include <memory>
 
 struct PDFNameLess
 {
-    bool operator()(const PDFName *left, const PDFName *right) const
+    bool operator()(const std::shared_ptr<PDFName> left, const std::shared_ptr<PDFName> right) const
     {
         return left->GetValue() < right->GetValue();
     }
 };
 
-typedef std::map<PDFName *, PDFObject *, PDFNameLess> PDFNameToPDFObjectMap;
+using PDFNameToPDFObjectMap = std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess>;
 
 class PDFDictionary : public PDFObject
 {
@@ -43,14 +44,13 @@ class PDFDictionary : public PDFObject
         eType = ePDFObjectDictionary
     };
 
-    PDFDictionary(void);
-    virtual ~PDFDictionary(void);
+    PDFDictionary();
 
     // AddRefs on both
-    void Insert(PDFName *inKeyObject, PDFObject *inValueObject);
+    void Insert(std::shared_ptr<PDFName> inKeyObject, std::shared_ptr<PDFObject> inValueObject);
 
     bool Exists(const std::string &inName);
-    PDFObject *QueryDirectObject(const std::string &inName);
+    std::shared_ptr<PDFObject> QueryDirectObject(const std::string &inName);
 
     MapIterator<PDFNameToPDFObjectMap> GetIterator();
 

@@ -23,8 +23,9 @@
 #include "SingleValueContainerIterator.h"
 
 #include <vector>
+#include <memory>
 
-typedef std::vector<PDFObject *> PDFObjectVector;
+typedef std::vector<std::shared_ptr<PDFObject>> PDFObjectVector;
 
 class PDFArray : public PDFObject
 {
@@ -35,16 +36,15 @@ class PDFArray : public PDFObject
     };
 
     PDFArray(void);
-    virtual ~PDFArray(void);
 
     // Will add to end, calls AddRef
-    void AppendObject(PDFObject *inObject);
+    void AppendObject(std::shared_ptr<PDFObject> inObject);
 
     // Returns an object for iterating the array
     SingleValueContainerIterator<PDFObjectVector> GetIterator();
 
     // Returns object at a given index, calls AddRef
-    PDFObject *QueryObject(unsigned long i);
+    std::shared_ptr<PDFObject> QueryObject(unsigned long i);
     unsigned long GetLength();
 
   private:
