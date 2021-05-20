@@ -55,7 +55,7 @@ EStatusCode openPDFForNullPageTest(const std::string &path)
     if (status != eSuccess)
         return status;
 
-    RefCountPtr<PDFDictionary> page = parser.ParsePage(33);
+    auto page = parser.ParsePage(33);
     if (page != nullptr)
         status = eFailure;
 

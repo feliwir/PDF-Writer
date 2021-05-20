@@ -100,7 +100,7 @@ TEST(PDF, RotatedPagesPDF)
 
     for (unsigned long i = 0; i < pdfParser.GetPagesCount(); ++i)
     {
-        RefCountPtr<PDFDictionary> page = pdfParser.ParsePage(i);
+        auto page = pdfParser.ParsePage(i);
         ASSERT_NE(page.GetPtr(), nullptr);
 
         PDFPageInput input(&pdfParser, page);

@@ -47,11 +47,11 @@ EStatusCode decodeStream(const std::string &sourcePath, const std::string &targe
         return status;
 
     // Parse image object
-    PDFObject *streamObj = parser.ParseNewObject(7);
+    auto streamObj = parser.ParseNewObject(7);
     if (streamObj == nullptr || streamObj->GetType() != PDFObject::ePDFObjectStream)
         return eFailure;
 
-    PDFStreamInput *stream = ((PDFStreamInput *)streamObj);
+    auto stream = std::static_pointer_cast<PDFStreamInput>(streamObj);
     IByteReader *reader = parser.StartReadingFromStream(stream);
     if (reader == nullptr)
         return eFailure;
