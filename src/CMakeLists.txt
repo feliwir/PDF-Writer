@@ -149,6 +149,7 @@ set(PDF_WRITER_HEADERS
     XObjectContentContext.h
 )
 
+# Adding our target
 add_library(pdfwriter ${PDF_WRITER_SOURCE} ${PDF_WRITER_HEADERS})
 
 add_subdirectory(encoding)
@@ -162,3 +163,15 @@ add_subdirectory(text)
 target_link_libraries(pdfwriter PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
 target_include_directories(pdfwriter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(pdfwriter PUBLIC ${FREETYPE_INCLUDE_DIRS})
+
+# Installing
+if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
+    install(TARGETS pdfwriter
+        RUNTIME DESTINATION bin
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
+        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif()
+if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL )
+    install(FILES ${ZLIB_PUBLIC_HDRS} DESTINATION include)
+endif()

@@ -21,7 +21,7 @@
 #include "InputFlateDecodeStream.h"
 
 #include "Trace.h"
-#include "zlib.h"
+#include <zlib.h>
 
 InputFlateDecodeStream::InputFlateDecodeStream()
 {

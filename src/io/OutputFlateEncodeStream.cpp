@@ -20,7 +20,7 @@
 */
 #include "io/OutputFlateEncodeStream.h"
 #include "Trace.h"
-#include "zlib.h"
+#include <zlib.h>
 
 #define BUFFER_SIZE 256 * 1024
 

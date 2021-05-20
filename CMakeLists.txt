@@ -1,4 +1,4 @@
-project(pdfwriter)
+project(pdfwriter LANGUAGES CXX C)
 cmake_minimum_required (VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules" ${CMAKE_MODULE_PATH})
 
-option(BUILD_COVERAGE "Build coverage" ON)
+option(BUILD_COVERAGE "Build coverage" OFF)
 option(BUILD_TESTING "Build tests" ON)
 option(BUILD_USE_SANITIZER "Use address sanitizer to find any memory leaks" OFF)
 
@@ -28,3 +28,5 @@ if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
 endif()
+
+include(CPack)

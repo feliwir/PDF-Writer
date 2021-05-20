@@ -21,7 +21,7 @@
 #include "InputLZWDecodeStream.h"
 
 #include "Trace.h"
-#include "zlib.h"
+#include <zlib.h>
 
 InputLZWDecodeStream::InputLZWDecodeStream(int early)
 {

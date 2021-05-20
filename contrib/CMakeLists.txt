@@ -13,4 +13,5 @@ ${CMAKE_CURRENT_SOURCE_DIR}/aes/)
 
 # Googletest
 set(BUILD_GMOCK OFF)
+set(INSTALL_GTEST OFF)
 add_subdirectory(googletest)

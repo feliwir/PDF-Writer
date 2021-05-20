@@ -22,7 +22,7 @@
 #ifndef NO_TRACE
 #include "Trace.h"
 #endif
-#include "zlib.h"
+#include <zlib.h>
 
 #define BUFFER_SIZE 256 * 1024
 
