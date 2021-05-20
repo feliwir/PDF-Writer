@@ -40,6 +40,7 @@
 #include "PrimitiveObjectsWriter.h"
 #include "parsing/PDFParsingOptions.h"
 #include <list>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -327,7 +328,7 @@ class AbstractContentContext
     PDFHummus::DocumentContext *mDocumentContext;
 
     // Derived classes should use this method to update the stream for writing
-    void SetPDFStreamForWrite(PDFStream *inStream);
+    void SetPDFStreamForWrite(std::shared_ptr<PDFStream> inStream);
 
   private:
     // Derived classes should use this method to retrive the content resource dictionary, for updating procsets 'n such

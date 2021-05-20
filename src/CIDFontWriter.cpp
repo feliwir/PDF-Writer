@@ -174,7 +174,7 @@ static const char *scCmapFooter = "endcmap CMapName currentdict /CMap definereso
 void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 {
     mObjectsContext->StartNewIndirectObject(inToUnicodeMap);
-    PDFStream *pdfStream = mObjectsContext->StartPDFStream();
+    std::shared_ptr<PDFStream> pdfStream = mObjectsContext->StartPDFStream();
     IByteWriter *cmapWriteContext = pdfStream->GetWriteStream();
     PrimitiveObjectsWriter primitiveWriter(cmapWriteContext);
     unsigned long i = 1;
@@ -210,7 +210,6 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
     primitiveWriter.WriteKeyword(scEndBFChar);
     cmapWriteContext->Write((const uint8_t *)scCmapFooter, strlen(scCmapFooter));
     mObjectsContext->EndPDFStream(pdfStream);
-    delete pdfStream;
 }
 
 static const uint8_t scEntryEnding[2] = {'>', '\n'};

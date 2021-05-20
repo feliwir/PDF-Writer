@@ -198,7 +198,8 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
         return status;
 
     // start image stream for this dictionary (make sure it's unfiltered)
-    PDFStream *newImageStream = inWriter->GetObjectsContext().StartUnfilteredPDFStream(newImageDictionary);
+    std::shared_ptr<PDFStream> newImageStream =
+        inWriter->GetObjectsContext().StartUnfilteredPDFStream(newImageDictionary);
 
     // copy source stream through read filter
     IByteReader *sourceImage = modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
@@ -210,7 +211,6 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 
     // finalize stream
     inWriter->GetObjectsContext().EndPDFStream(newImageStream);
-    delete newImageStream;
     delete sourceImage;
 
     // late check for status so stream is deleted

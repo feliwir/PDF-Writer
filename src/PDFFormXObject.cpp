@@ -24,7 +24,8 @@
 #include "XObjectContentContext.h"
 
 PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
-                               PDFStream *inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID)
+                               std::shared_ptr<PDFStream> inXObjectStream,
+                               ObjectIDType inFormXObjectResourcesDictionaryID)
 {
     mXObjectID = inFormXObjectID;
     mResourcesDictionaryID = inFormXObjectResourcesDictionaryID;
@@ -34,7 +35,6 @@ PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, Ob
 
 PDFFormXObject::~PDFFormXObject()
 {
-    delete mContentStream;
     delete mContentContext;
 }
 
@@ -53,7 +53,7 @@ ResourcesDictionary &PDFFormXObject::GetResourcesDictionary()
     return mResources;
 }
 
-PDFStream *PDFFormXObject::GetContentStream()
+std::shared_ptr<PDFStream> PDFFormXObject::GetContentStream()
 {
     return mContentStream;
 }

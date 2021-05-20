@@ -22,6 +22,7 @@
 
 #include "ObjectsBasicTypes.h"
 #include "ResourcesDictionary.h"
+#include <memory>
 
 namespace PDFHummus
 {
@@ -35,8 +36,8 @@ class ObjectsContext;
 class PDFTiledPattern
 {
   public:
-    PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID, PDFStream *inStream,
-                    ObjectIDType inResourcesDictionaryID);
+    PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
+                    std::shared_ptr<PDFStream> inStream, ObjectIDType inResourcesDictionaryID);
     ~PDFTiledPattern(void);
 
     ObjectIDType GetObjectID() const;
@@ -44,12 +45,12 @@ class PDFTiledPattern
 
     ResourcesDictionary &GetResourcesDictionary();
     TiledPatternContentContext *GetContentContext();
-    PDFStream *GetContentStream();
+    std::shared_ptr<PDFStream> GetContentStream();
 
   private:
     ObjectIDType mObjectID;
     ObjectIDType mResourcesDictionaryID;
     ResourcesDictionary mResources;
-    PDFStream *mContentStream;
+    std::shared_ptr<PDFStream> mContentStream;
     TiledPatternContentContext *mContentContext;
 };

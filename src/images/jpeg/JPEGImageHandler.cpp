@@ -211,7 +211,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
         if (status != PDFHummus::eSuccess)
             break;
 
-        PDFStream *imageStream = mObjectsContext->StartUnfilteredPDFStream(imageContext);
+        std::shared_ptr<PDFStream> imageStream = mObjectsContext->StartUnfilteredPDFStream(imageContext);
 
         OutputStreamTraits outputTraits(imageStream->GetWriteStream());
         status = outputTraits.CopyToOutputStream(inJPGImageStream);
@@ -219,12 +219,11 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
         {
             TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, failed to "
                       "copy jpg stream to output stream");
-            delete imageStream;
+
             break;
         }
 
         mObjectsContext->EndPDFStream(imageStream);
-        delete imageStream;
 
         imageXObject = new PDFImageXObject(
             inImageXObjectID, 1 == inJPGImageInformation.ColorComponentsCount ? KProcsetImageB : KProcsetImageC);

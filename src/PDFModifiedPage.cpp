@@ -342,7 +342,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
         }
 
         // if required write encapsulation code, so that new stream is independent of graphic context of original
-        PDFStream *newStream;
+        std::shared_ptr<PDFStream> newStream;
         PrimitiveObjectsWriter primitivesWriter;
         if (newEncapsulatingObjectID != 0)
         {
@@ -351,7 +351,6 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
             primitivesWriter.SetStreamForWriting(newStream->GetWriteStream());
             primitivesWriter.WriteKeyword("q");
             objectContext.EndPDFStream(newStream);
-            delete newStream;
         }
 
         // last but not least, create the actual content stream object, placing the form
@@ -381,8 +380,6 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
         }
 
         objectContext.EndPDFStream(newStream);
-
-        delete newStream;
         delete copyingContext;
     } while (false);
 

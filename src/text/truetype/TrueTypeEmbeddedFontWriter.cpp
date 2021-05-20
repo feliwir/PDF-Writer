@@ -76,7 +76,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &i
         fontProgramDictionaryContext->WriteKey(scLength1);
         fontProgramDictionaryContext->WriteIntegerValue(rawFontProgram.GetCurrentWritePosition());
         rawFontProgram.pubseekoff(0, std::ios_base::beg);
-        PDFStream *pdfStream = inObjectsContext->StartPDFStream(fontProgramDictionaryContext);
+        std::shared_ptr<PDFStream> pdfStream = inObjectsContext->StartPDFStream(fontProgramDictionaryContext);
 
         // now copy the created font program to the output stream
         InputStringBufferStream fontProgramStream(&rawFontProgram);
@@ -89,7 +89,6 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &i
         }
 
         inObjectsContext->EndPDFStream(pdfStream);
-        delete pdfStream;
     } while (false);
 
     return status;

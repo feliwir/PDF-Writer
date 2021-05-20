@@ -79,6 +79,7 @@
 #include "images/tiff/TiffUsageParameters.h"
 
 #include <list>
+#include <memory>
 #include <string>
 #include <utility>
 
@@ -179,7 +180,7 @@ class TIFFImageHandler
     void WriteImageXObjectDecode(DictionaryContext *inImageDictionary);
     void WriteImageXObjectFilter(DictionaryContext *inImageDictionary, int inTileIndex);
     void CalculateTiffTileSize(int inTileIndex);
-    PDFHummus::EStatusCode WriteImageTileData(PDFStream *inImageStream, int inTileIndex);
+    PDFHummus::EStatusCode WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex);
     void SamplePlanarSeparateToContig(unsigned char *inBuffer, unsigned char *inSamplebuffer,
                                       tsize_t inSamplebuffersize);
     tsize_t SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount);
@@ -189,12 +190,13 @@ class TIFFImageHandler
                           uint32 inTileLength);
     PDFImageXObject *WriteUntiledImageXObject();
     void WriteCommonImageDictionaryProperties(DictionaryContext *inImageContext);
-    PDFHummus::EStatusCode WriteImageData(PDFStream *inImageStream);
+    PDFHummus::EStatusCode WriteImageData(std::shared_ptr<PDFStream> inImageStream);
     void CalculateTiffSizeNoTiles();
     void SampleRealizePalette(unsigned char *inBuffer);
     tsize_t SampleABGRToRGB(tdata_t inData, uint32 inSampleCount);
-    PDFHummus::EStatusCode WriteImageBufferToStream(PDFStream *inPDFStream, uint32 inImageWidth, uint32 inImageLength,
-                                                    unsigned char *inBuffer, ImageSizeProc inBufferSizeFunction);
+    PDFHummus::EStatusCode WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
+                                                    uint32 inImageLength, unsigned char *inBuffer,
+                                                    ImageSizeProc inBufferSizeFunction);
     PDFFormXObject *WriteImagesFormXObject(const PDFImageXObjectList &inImages, ObjectIDType inFormXObjectID);
     void AddImagesProcsets(PDFImageXObject *inImageXObject);
     void WriteIndexedCSForBiLevelColorMap();

@@ -210,7 +210,7 @@ AbstractContentContext::AbstractContentContext(PDFHummus::DocumentContext *inDoc
 
 AbstractContentContext::~AbstractContentContext() = default;
 
-void AbstractContentContext::SetPDFStreamForWrite(PDFStream *inStream)
+void AbstractContentContext::SetPDFStreamForWrite(std::shared_ptr<PDFStream> inStream)
 {
     mPrimitiveWriter.SetStreamForWriting(inStream->GetWriteStream());
 }

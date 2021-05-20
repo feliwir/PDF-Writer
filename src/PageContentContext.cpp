@@ -74,13 +74,11 @@ PDFPage &PageContentContext::GetAssociatedPage()
 EStatusCode PageContentContext::FinalizeStreamWriteAndRelease()
 {
     mObjectsContext->EndPDFStream(mCurrentStream);
-
-    delete mCurrentStream;
     mCurrentStream = nullptr;
     return PDFHummus::eSuccess;
 }
 
-PDFStream *PageContentContext::GetCurrentPageContentStream()
+std::shared_ptr<PDFStream> PageContentContext::GetCurrentPageContentStream()
 {
     StartAStreamIfRequired();
     return mCurrentStream;
