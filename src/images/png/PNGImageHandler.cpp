@@ -73,7 +73,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
 {
     PDFImageXObjectList listOfImages;
     PDFImageXObject *imageXObject = nullptr;
-    PDFStream *imageStream = nullptr;
+    std::shared_ptr<PDFStream> imageStream = nullptr;
     EStatusCode status = eSuccess;
 
     do
@@ -205,7 +205,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             imageMaskContext->WriteKey(scColorSpace);
             imageMaskContext->WriteNameValue(scDeviceGray);
 
-            PDFStream *imageMaskStream = inObjectsContext->StartPDFStream(imageMaskContext);
+            std::shared_ptr<PDFStream> imageMaskStream = inObjectsContext->StartPDFStream(imageMaskContext);
             IByteWriter *writerMaskStream = imageMaskStream->GetWriteStream();
 
             // write the alpha samples
@@ -214,7 +214,6 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             traits.CopyToOutputStream(&alphaWriteStream);
 
             inObjectsContext->EndPDFStream(imageMaskStream);
-            delete imageMaskStream;
         }
 
         imageXObject =
@@ -226,7 +225,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
         delete imageXObject;
         imageXObject = nullptr;
     }
-    delete imageStream;
+
     return imageXObject;
 }
 

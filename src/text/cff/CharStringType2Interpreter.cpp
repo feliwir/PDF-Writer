@@ -67,7 +67,7 @@ EStatusCode CharStringType2Interpreter::Intepret(const CharString &inCharStringT
 
     } while (false);
 
-    delete charString;
+    delete[] charString;
 
     return status;
 }
@@ -459,7 +459,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallSubr(uint8_t *inProgramCounter
             status = ProcessCharString(charString, aCharString->mEndPosition - aCharString->mStartPosition);
         } while (false);
 
-        delete charString;
+        delete[] charString;
         if (status != PDFHummus::eSuccess)
             return nullptr;
         return inProgramCounter;
@@ -619,7 +619,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallGSubr(uint8_t *inProgramCounte
             status = ProcessCharString(charString, aCharString->mEndPosition - aCharString->mStartPosition);
         } while (false);
 
-        delete charString;
+        delete[] charString;
         if (status != PDFHummus::eSuccess)
             return nullptr;
         return inProgramCounter;

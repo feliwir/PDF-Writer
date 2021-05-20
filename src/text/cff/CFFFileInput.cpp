@@ -496,7 +496,7 @@ void CFFFileInput::FreeData()
     {
         for (unsigned long i = 0; i < mFontsCount; ++i)
             delete[] mCharStrings[i].mCharStringsIndex;
-        delete mCharStrings;
+        delete[] mCharStrings;
         mCharStrings = nullptr;
     }
     delete[] mPrivateDicts;

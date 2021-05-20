@@ -26,6 +26,7 @@
 #include "PrimitiveObjectsWriter.h"
 #include "UppercaseSequence.h"
 #include <list>
+#include <memory>
 #include <string>
 
 class IByteWriterWithPosition;
@@ -119,10 +120,11 @@ class ObjectsContext
     // Create PDF stream and write it's header. note that stream are written with indirect object for Length, to allow
     // one pass writing. inStreamDictionary can be passed in order to include stream generic information in an already
     // written stream dictionary that is type specific. [the method will take care of closing the dictionary.
-    PDFStream *StartPDFStream(DictionaryContext *inStreamDictionary = NULL, bool inForceDirectExtentObject = false);
+    std::shared_ptr<PDFStream> StartPDFStream(DictionaryContext *inStreamDictionary = NULL,
+                                              bool inForceDirectExtentObject = false);
     // same as StartPDFStream but forces the stream to create an unfiltered stream
-    PDFStream *StartUnfilteredPDFStream(DictionaryContext *inStreamDictionary = NULL);
-    void EndPDFStream(PDFStream *inStream);
+    std::shared_ptr<PDFStream> StartUnfilteredPDFStream(DictionaryContext *inStreamDictionary = NULL);
+    void EndPDFStream(std::shared_ptr<PDFStream> inStream);
 
     // Extensibility
     void SetObjectsContextExtender(IObjectsContextExtender *inExtender);
@@ -149,7 +151,7 @@ class ObjectsContext
     DictionaryContextList mDictionaryStack;
 
     void WritePDFStreamEndWithoutExtent();
-    void WritePDFStreamExtent(PDFStream *inStream);
+    void WritePDFStreamExtent(std::shared_ptr<PDFStream> inStream);
     void WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize);
     bool IsEncrypting();
     std::string MaybeEncryptString(const std::string &inString);

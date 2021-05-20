@@ -390,7 +390,8 @@ static const std::string scEndStream = "endstream";
 static const std::string scFilter = "Filter";
 static const std::string scFlateDecode = "FlateDecode";
 
-PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary, bool inForceDirectExtentObject)
+std::shared_ptr<PDFStream> ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
+                                                          bool inForceDirectExtentObject)
 {
     // write stream header and allocate PDF stream.
     // PDF stream will take care of maintaining state for the stream till writing is finished
@@ -407,7 +408,7 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
         streamDictionaryContext->WriteNameValue(scFlateDecode);
     }
 
-    PDFStream *result = nullptr;
+    std::shared_ptr<PDFStream> result = nullptr;
     if (!inForceDirectExtentObject)
     {
 
@@ -421,10 +422,12 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
         // Write Stream Content
         WriteKeyword(scStream);
 
-        result = new PDFStream(mCompressStreams, mOutputStream, mEncryptionHelper, lengthObjectID, mExtender);
+        result =
+            std::make_shared<PDFStream>(mCompressStreams, mOutputStream, mEncryptionHelper, lengthObjectID, mExtender);
     }
     else
-        result = new PDFStream(mCompressStreams, mOutputStream, mEncryptionHelper, streamDictionaryContext, mExtender);
+        result = std::make_shared<PDFStream>(mCompressStreams, mOutputStream, mEncryptionHelper,
+                                             streamDictionaryContext, mExtender);
 
     // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
     // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
@@ -434,7 +437,7 @@ PDFStream *ObjectsContext::StartPDFStream(DictionaryContext *inStreamDictionary,
     return result;
 }
 
-PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamDictionary)
+std::shared_ptr<PDFStream> ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamDictionary)
 {
     // write stream header and allocate PDF stream.
     // PDF stream will take care of maintaining state for the stream till writing is finished
@@ -455,7 +458,7 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
     WriteKeyword(scStream);
 
     // now begin the stream itself
-    auto *result = new PDFStream(false, mOutputStream, mEncryptionHelper, lengthObjectID, nullptr);
+    auto result = std::make_shared<PDFStream>(false, mOutputStream, mEncryptionHelper, lengthObjectID, nullptr);
 
     // break encryption, if any, when writing a stream, cause if encryption is desired, only top level elements should
     // be encrypted. hence - the stream itself is, but its contents do not re-encrypt
@@ -465,7 +468,7 @@ PDFStream *ObjectsContext::StartUnfilteredPDFStream(DictionaryContext *inStreamD
     return result;
 }
 
-void ObjectsContext::EndPDFStream(PDFStream *inStream)
+void ObjectsContext::EndPDFStream(std::shared_ptr<PDFStream> inStream)
 {
     // finalize the stream write to end stream context and calculate length
     inStream->FinalizeStreamWrite();
@@ -507,7 +510,7 @@ void ObjectsContext::WritePDFStreamEndWithoutExtent()
     WriteKeyword(scEndStream);
 }
 
-void ObjectsContext::WritePDFStreamExtent(PDFStream *inStream)
+void ObjectsContext::WritePDFStreamExtent(std::shared_ptr<PDFStream> inStream)
 {
     StartNewIndirectObject(inStream->GetExtentObjectID());
     WriteInteger(inStream->GetLength(), eTokenSeparatorEndLine);
@@ -661,7 +664,7 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
     EndLine();
 
     // start the xref stream itself
-    PDFStream *aStream = StartPDFStream(inDictionaryContext, true);
+    std::shared_ptr<PDFStream> aStream = StartPDFStream(inDictionaryContext, true);
 
     // now write the table data itself
     EStatusCode status = eSuccess;

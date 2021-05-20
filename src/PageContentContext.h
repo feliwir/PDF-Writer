@@ -37,7 +37,7 @@ class PageContentContext : public AbstractContentContext
     PDFHummus::EStatusCode FinalizeCurrentStream();
 
     // Extensibility method, retrieves the current content stream for writing. if one does not exist - creates it.
-    PDFStream *GetCurrentPageContentStream();
+    std::shared_ptr<PDFStream> GetCurrentPageContentStream();
 
     // Extensibility method, forces creation of a new stream, if one does not exist now.
     void StartAStreamIfRequired();
@@ -48,7 +48,7 @@ class PageContentContext : public AbstractContentContext
   private:
     PDFPage &mPageOfContext;
     ObjectsContext *mObjectsContext;
-    PDFStream *mCurrentStream;
+    std::shared_ptr<PDFStream> mCurrentStream;
 
     PDFHummus::EStatusCode FinalizeStreamWriteAndRelease();
     void StartContentStreamDefinition();

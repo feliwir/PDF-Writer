@@ -24,7 +24,7 @@
 #include "TiledPatternContentContext.h"
 
 PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
-                                 PDFStream *inStream, ObjectIDType inResourcesDictionaryID)
+                                 std::shared_ptr<PDFStream> inStream, ObjectIDType inResourcesDictionaryID)
 {
     mObjectID = inObjectID;
     mResourcesDictionaryID = inResourcesDictionaryID;
@@ -34,7 +34,6 @@ PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, 
 
 PDFTiledPattern::~PDFTiledPattern()
 {
-    delete mContentStream;
     delete mContentContext;
 }
 
@@ -53,7 +52,7 @@ ResourcesDictionary &PDFTiledPattern::GetResourcesDictionary()
     return mResources;
 }
 
-PDFStream *PDFTiledPattern::GetContentStream()
+std::shared_ptr<PDFStream> PDFTiledPattern::GetContentStream()
 {
     return mContentStream;
 }

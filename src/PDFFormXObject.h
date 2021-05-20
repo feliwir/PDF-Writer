@@ -22,6 +22,7 @@
 
 #include "ObjectsBasicTypes.h"
 #include "ResourcesDictionary.h"
+#include <memory>
 
 namespace PDFHummus
 {
@@ -36,7 +37,7 @@ class PDFFormXObject
 {
   public:
     PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
-                   PDFStream *inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID);
+                   std::shared_ptr<PDFStream> inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID);
     ~PDFFormXObject(void);
 
     ObjectIDType GetObjectID() const;
@@ -44,12 +45,12 @@ class PDFFormXObject
 
     ResourcesDictionary &GetResourcesDictionary();
     XObjectContentContext *GetContentContext();
-    PDFStream *GetContentStream();
+    std::shared_ptr<PDFStream> GetContentStream();
 
   private:
     ObjectIDType mXObjectID;
     ObjectIDType mResourcesDictionaryID;
     ResourcesDictionary mResources;
-    PDFStream *mContentStream;
+    std::shared_ptr<PDFStream> mContentStream;
     XObjectContentContext *mContentContext;
 };

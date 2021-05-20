@@ -493,7 +493,7 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteEmbeddedFont(
 
         fontProgramDictionaryContext->WriteKey(scSubtype);
         fontProgramDictionaryContext->WriteNameValue(inFontFile3SubType);
-        PDFStream *pdfStream = inObjectsContext->StartPDFStream(fontProgramDictionaryContext);
+        std::shared_ptr<PDFStream> pdfStream = inObjectsContext->StartPDFStream(fontProgramDictionaryContext);
 
         // now copy the created font program to the output stream
         InputStringBufferStream fontProgramStream(&rawFontProgram);
@@ -506,7 +506,6 @@ EStatusCode Type1ToCFFEmbeddedFontWriter::WriteEmbeddedFont(
         }
 
         inObjectsContext->EndPDFStream(pdfStream);
-        delete pdfStream;
     } while (false);
 
     return status;

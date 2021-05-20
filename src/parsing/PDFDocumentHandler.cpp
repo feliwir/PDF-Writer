@@ -2078,21 +2078,20 @@ EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<PDFStrea
         return PDFHummus::eFailure;
     }
 
-    PDFStream *newStream = readingDecrypted ? mObjectsContext->StartPDFStream(newStreamDictionary)
-                                            : mObjectsContext->StartUnfilteredPDFStream(newStreamDictionary);
+    std::shared_ptr<PDFStream> newStream = readingDecrypted
+                                               ? mObjectsContext->StartPDFStream(newStreamDictionary)
+                                               : mObjectsContext->StartUnfilteredPDFStream(newStreamDictionary);
     OutputStreamTraits outputTraits(newStream->GetWriteStream());
 
     status = outputTraits.CopyToOutputStream(streamReader);
     if (status != PDFHummus::eSuccess)
     {
         TRACE_LOG("PDFDocumentHandler::WriteStreamObject, failed to copy stream");
-        delete newStream;
         delete streamReader;
         return PDFHummus::eFailure;
     }
 
     mObjectsContext->EndPDFStream(newStream);
-    delete newStream;
     delete streamReader;
     return status;
 }

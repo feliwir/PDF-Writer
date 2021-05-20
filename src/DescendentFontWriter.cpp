@@ -256,7 +256,7 @@ void DescendentFontWriter::WriteCharSet(DictionaryContext *inDescriptorContext, 
 void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs)
 {
     mObjectsContext->StartNewIndirectObject(mCIDSetObjectID);
-    PDFStream *pdfStream = mObjectsContext->StartPDFStream();
+    std::shared_ptr<PDFStream> pdfStream = mObjectsContext->StartPDFStream();
     IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
     uint8_t buffer;
     auto it = inEncodedGlyphs.begin();
@@ -281,7 +281,6 @@ void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inE
         cidSetWritingContext->Write(&buffer, 1);
     }
     mObjectsContext->EndPDFStream(pdfStream);
-    delete pdfStream;
 }
 
 void DescendentFontWriter::WriteFontFileReference(DictionaryContext *inDescriptorContext,

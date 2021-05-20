@@ -282,7 +282,7 @@ struct T2P
     TIFF *input;
     TIFF *output;
     std::string inputFilePath;
-    PDFStream *pdfStream;
+    std::shared_ptr<PDFStream> pdfStream;
     ObjectIDType pdf_transfer_functions_gstate;
 
     T2P()
@@ -1603,11 +1603,10 @@ ObjectIDType TIFFImageHandler::WriteTransferFunction(int i)
     transferFunctionDictionary->WriteIntegerValue(1 << (mT2p->tiff_bitspersample + 1));
 
     // the stream
-    PDFStream *transferFunctionStream = mObjectsContext->StartPDFStream(transferFunctionDictionary);
+    std::shared_ptr<PDFStream> transferFunctionStream = mObjectsContext->StartPDFStream(transferFunctionDictionary);
     transferFunctionStream->GetWriteStream()->Write((const uint8_t *)mT2p->tiff_transferfunction[i],
                                                     (1 << (mT2p->tiff_bitspersample + 1)));
     mObjectsContext->EndPDFStream(transferFunctionStream);
-    delete transferFunctionStream;
     return transferFunctionID;
 }
 
@@ -1649,10 +1648,9 @@ ObjectIDType TIFFImageHandler::WriteTransferFunctionsExtGState(const ObjectIDTyp
 ObjectIDType TIFFImageHandler::WritePaletteCS()
 {
     ObjectIDType palleteID = mObjectsContext->StartNewIndirectObject();
-    PDFStream *paletteStream = mObjectsContext->StartPDFStream();
+    std::shared_ptr<PDFStream> paletteStream = mObjectsContext->StartPDFStream();
     paletteStream->GetWriteStream()->Write((const uint8_t *)mT2p->pdf_palette, mT2p->pdf_palettesize);
     mObjectsContext->EndPDFStream(paletteStream);
-    delete paletteStream;
     return palleteID;
 }
 
@@ -1677,10 +1675,9 @@ ObjectIDType TIFFImageHandler::WriteICCCS()
     mT2p->pdf_colorspace = (t2p_cs_t)(mT2p->pdf_colorspace | T2P_CS_ICCBASED);
 
     // the stream
-    PDFStream *ICCStream = mObjectsContext->StartPDFStream(ICCDictionary);
+    std::shared_ptr<PDFStream> ICCStream = mObjectsContext->StartPDFStream(ICCDictionary);
     ICCStream->GetWriteStream()->Write((const uint8_t *)mT2p->tiff_iccprofile, mT2p->tiff_iccprofilelength);
     mObjectsContext->EndPDFStream(ICCStream);
-    delete ICCStream;
     return ICCID;
 }
 
@@ -1951,7 +1948,7 @@ static const std::string scInterpolate = "Interpolate";
 PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
 {
     PDFImageXObject *imageXObject = nullptr;
-    PDFStream *imageStream = nullptr;
+    std::shared_ptr<PDFStream> imageStream = nullptr;
 
     do
     {
@@ -2001,7 +1998,6 @@ PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
         AddImagesProcsets(imageXObject);
     } while (false);
 
-    delete imageStream;
     return imageXObject;
 }
 
@@ -2247,7 +2243,7 @@ tsize_t GetSizeFromTIFFDataSize(T2P *inT2p)
     return inT2p->tiff_datasize;
 }
 
-EStatusCode TIFFImageHandler::WriteImageTileData(PDFStream *inImageStream, int inTileIndex)
+EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex)
 {
     EStatusCode status = PDFHummus::eSuccess;
     uint16 edge = 0;
@@ -2466,9 +2462,14 @@ tsize_t TIFFImageHandler::SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount)
 tsize_t TIFFImageHandler::SampleRGBAAToRGB(tdata_t inData, uint32 inSampleCount)
 {
     uint32 i;
+    uint8_t *data = static_cast<uint8_t *>(inData);
 
     for (i = 0; i < inSampleCount; i++)
-        memcpy((uint8 *)inData + i * 3, (uint8 *)inData + i * 4, 3);
+    {
+        data[i * 3] = data[i * 4];
+        data[i * 3 + 1] = data[i * 4 + 1];
+        data[i * 3 + 2] = data[i * 4 + 2];
+    }
 
     return (i * 3);
 }
@@ -2514,7 +2515,7 @@ void TIFFImageHandler::TileCollapseLeft(tdata_t inBuffer, tsize_t inScanWidth, u
 PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
 {
     PDFImageXObject *imageXObject = nullptr;
-    PDFStream *imageStream = nullptr;
+    std::shared_ptr<PDFStream> imageStream = nullptr;
 
     do
     {
@@ -2560,7 +2561,6 @@ PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
         AddImagesProcsets(imageXObject);
     } while (false);
 
-    delete imageStream;
     return imageXObject;
 }
 
@@ -2626,7 +2626,7 @@ void TIFFImageHandler::CalculateTiffSizeNoTiles()
     }
 }
 
-EStatusCode TIFFImageHandler::WriteImageData(PDFStream *inImageStream)
+EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageStream)
 {
     unsigned char *buffer = nullptr;
     unsigned char *samplebuffer = nullptr;
@@ -2894,7 +2894,7 @@ tsize_t TIFFImageHandler::SampleABGRToRGB(tdata_t inData, uint32 inSampleCount)
     return (i * 3);
 }
 
-EStatusCode TIFFImageHandler::WriteImageBufferToStream(PDFStream *inPDFStream, uint32 inImageWidth,
+EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
                                                        uint32 inImageLength, unsigned char *inBuffer,
                                                        ImageSizeProc inBufferSizeFunction)
 {
