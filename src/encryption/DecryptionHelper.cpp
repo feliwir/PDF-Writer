@@ -37,6 +37,7 @@ limitations under the License.
 #include "objects/helpers/ParsedPrimitiveHelper.h"
 #include "parsing/PDFParser.h"
 #include <memory>
+#include <utility>
 
 using namespace std;
 using namespace PDFHummus;
@@ -75,7 +76,7 @@ void DecryptionHelper::Reset()
 
 uint32_t ComputeLength(std::shared_ptr<PDFObject> inLengthObject)
 {
-    ParsedPrimitiveHelper lengthHelper(inLengthObject);
+    ParsedPrimitiveHelper lengthHelper(std::move(inLengthObject));
     uint32_t value = lengthHelper.IsNumber() ? (uint32_t)lengthHelper.GetAsInteger() : 40;
     return value < 40 ? value : (value / 8); // this small check here is based on some errors i saw, where the length
                                              // was given in bytes instead of bits
@@ -320,7 +321,7 @@ bool DecryptionHelper::DidSucceedOwnerPasswordVerification() const
 
 static const string scEcnryptionKeyMetadataKey = "DecryptionHelper.EncryptionKey";
 
-bool HasCryptFilterDefinition(PDFParser *inParser, std::shared_ptr<PDFStreamInput> inStream)
+bool HasCryptFilterDefinition(PDFParser *inParser, const std::shared_ptr<PDFStreamInput> &inStream)
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
 
@@ -355,7 +356,7 @@ bool HasCryptFilterDefinition(PDFParser *inParser, std::shared_ptr<PDFStreamInpu
     return false; //???
 }
 
-IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
+IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
                                                                       IByteReader *inToWrapStream)
 {
     // This will create a decryption filter for streams that dont have their own defined crypt filters. null for no
@@ -373,7 +374,7 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(std::share
     return nullptr;
 }
 
-IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
+IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
                                                                IByteReader *inToWrapStream,
                                                                const std::string &inCryptName)
 {
@@ -430,7 +431,7 @@ void DecryptionHelper::OnObjectStart(long long inObjectID, long long inGeneratio
     }
 }
 
-XCryptionCommon *DecryptionHelper::GetCryptForStream(std::shared_ptr<PDFStreamInput> inStream)
+XCryptionCommon *DecryptionHelper::GetCryptForStream(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     // Get crypt for stream will return the right crypt filter thats supposed to be used for stream
     // whether its the default stream encryption or a specific filter defined in the stream
@@ -480,8 +481,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(std::shared_ptr<PDFStreamIn
             PDFObjectCastPtr<PDFName> cryptFilterName(mParser->QueryDictionaryObject(decodeParamsItem, "Name"));
             return GetFilterForName(mXcrypts, cryptFilterName->GetValue());
         }
-        else
-            return mXcryptStreams; // ???
+        return mXcryptStreams; // ???
     }
     else
     {
@@ -489,7 +489,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(std::shared_ptr<PDFStreamIn
     }
 }
 
-void DecryptionHelper::OnObjectEnd(std::shared_ptr<PDFObject> inObject)
+void DecryptionHelper::OnObjectEnd(const std::shared_ptr<PDFObject> &inObject)
 {
     if (inObject == nullptr)
         return;

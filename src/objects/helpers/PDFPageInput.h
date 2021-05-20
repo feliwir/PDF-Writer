@@ -63,9 +63,9 @@ class PDFPageInput
     PDFParser *mParser;
     PDFObjectCastPtr<PDFDictionary> mPageObject;
 
-    std::shared_ptr<PDFObject> QueryInheritedValue(std::shared_ptr<PDFDictionary> inDictionary,
+    std::shared_ptr<PDFObject> QueryInheritedValue(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                    const std::string &inName);
-    void SetPDFRectangleFromPDFArray(std::shared_ptr<PDFArray> inPDFArray, PDFRectangle &outPDFRectangle);
+    void SetPDFRectangleFromPDFArray(const std::shared_ptr<PDFArray> &inPDFArray, PDFRectangle &outPDFRectangle);
 
     void AssertPageObjectValid();
     PDFRectangle GetBoxAndDefaultWithCrop(const std::string &inBoxName);

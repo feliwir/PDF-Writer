@@ -102,7 +102,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
     if (IsBoolean(token))
         return ParseBoolean(token);
     // Literal String
-    else if (IsLiteralString(token))
+    if (IsLiteralString(token))
         return ParseLiteralString(token);
     // Hexadecimal String
     else if (IsHexadecimalString(token))
@@ -339,10 +339,8 @@ std::string PDFObjectParser::MaybeDecryptString(const std::string &inString)
             return mParserExtender->DecryptString(inString);
         return inString;
     }
-    else
-    {
-        return inString;
-    }
+
+    return inString;
 }
 
 static const char scLeftAngle = '<';
@@ -659,14 +657,12 @@ BoolAndByte PDFObjectParser::GetHexValue(uint8_t inValue)
         return BoolAndByte(true, inValue - 'A' + 10);
     if ('a' <= inValue && inValue <= 'f')
         return BoolAndByte(true, inValue - 'a' + 10);
-    else
+
+    if (isspace(inValue) == 0)
     {
-        if (isspace(inValue) == 0)
-        {
-            TRACE_LOG1("PDFObjectParser::GetHexValue, unrecongnized hex value - %c", inValue);
-        }
-        return BoolAndByte(false, inValue);
+        TRACE_LOG1("PDFObjectParser::GetHexValue, unrecongnized hex value - %c", inValue);
     }
+    return BoolAndByte(false, inValue);
 }
 
 void PDFObjectParser::SetDecryptionHelper(DecryptionHelper *inDecryptionHelper)

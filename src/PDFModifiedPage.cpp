@@ -126,7 +126,7 @@ vector<string> PDFModifiedPage::WriteNewResourcesDictionary(ObjectsContext &inOb
 }
 
 std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(PDFParser *inParser,
-                                                                   std::shared_ptr<PDFDictionary> inDictionary)
+                                                                   const std::shared_ptr<PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))
     {
@@ -390,7 +390,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
 }
 
 vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
-                                                           std::shared_ptr<PDFDictionary> inResourcesDictionary,
+                                                           const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
                                                            ObjectsContext &inObjectContext,
                                                            PDFDocumentCopyingContext *inCopyingContext)
 {

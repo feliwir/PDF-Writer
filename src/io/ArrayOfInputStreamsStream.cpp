@@ -19,14 +19,16 @@
 
 */
 #include "io/ArrayOfInputStreamsStream.h"
+
 #include "objects/PDFArray.h"
 #include "objects/PDFObjectCast.h"
 #include "objects/PDFStreamInput.h"
 #include "parsing/PDFParser.h"
+#include <utility>
 
 ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser)
 {
-    mArray = inArrayOfStreams;
+    mArray = std::move(inArrayOfStreams);
     mParser = inParser;
     mCurrentStream = nullptr;
     mCurrentIndex = 0;

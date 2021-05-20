@@ -38,7 +38,7 @@ class PDFArray : public PDFObject
     PDFArray(void);
 
     // Will add to end, calls AddRef
-    void AppendObject(std::shared_ptr<PDFObject> inObject);
+    void AppendObject(const std::shared_ptr<PDFObject> &inObject);
 
     // Returns an object for iterating the array
     SingleValueContainerIterator<PDFObjectVector> GetIterator();

@@ -408,15 +408,15 @@ class DocumentContext
     void WriteTrailerInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteDateState(ObjectsContext *inStateWriter, const PDFDate &inDate);
     void WriteCatalogInformationState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    void ReadTrailerState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerState);
-    ObjectReference GetReferenceFromState(std::shared_ptr<PDFDictionary> inDictionary);
-    void ReadTrailerInfoState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerInfoState);
-    void ReadDateState(std::shared_ptr<PDFDictionary> inDateState, PDFDate &inDate);
+    void ReadTrailerState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerState);
+    ObjectReference GetReferenceFromState(const std::shared_ptr<PDFDictionary> &inDictionary);
+    void ReadTrailerInfoState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerInfoState);
+    void ReadDateState(const std::shared_ptr<PDFDictionary> &inDateState, PDFDate &inDate);
     void ReadCatalogInformationState(PDFParser *inStateReader,
-                                     std::shared_ptr<PDFDictionary> inCatalogInformationState);
+                                     const std::shared_ptr<PDFDictionary> &inCatalogInformationState);
 
     void WritePageTreeState(ObjectsContext *inStateWriter, ObjectIDType inObjectID, PageTree *inPageTree);
-    void ReadPageTreeState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inPageTreeState,
+    void ReadPageTreeState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inPageTreeState,
                            PageTree *inPageTree);
 
     ObjectReference GetOriginalDocumentPageTreeRoot(PDFParser *inModifiedFileParser);

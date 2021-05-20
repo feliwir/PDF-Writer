@@ -19,13 +19,15 @@
 
 */
 #include "PDFStreamInput.h"
+
 #include "PDFDictionary.h"
 #include "PDFName.h"
+#include <utility>
 
 PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart)
     : PDFObject(eType)
 {
-    mDictionary = inStreamDictionary;
+    mDictionary = std::move(inStreamDictionary);
     mStreamContentStart = inStreamContentStart;
 }
 

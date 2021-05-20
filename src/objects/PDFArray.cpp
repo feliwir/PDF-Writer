@@ -24,7 +24,7 @@ PDFArray::PDFArray() : PDFObject(eType)
 {
 }
 
-void PDFArray::AppendObject(std::shared_ptr<PDFObject> inObject)
+void PDFArray::AppendObject(const std::shared_ptr<PDFObject> &inObject)
 {
     mValues.push_back(inObject);
 }

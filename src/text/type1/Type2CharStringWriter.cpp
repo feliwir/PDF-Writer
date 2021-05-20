@@ -101,7 +101,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
             return PDFHummus::eFailure;
         return PDFHummus::eSuccess;
     }
-    else if (-32768 <= value && value <= 32767)
+    if (-32768 <= value && value <= 32767)
     {
         uint8_t byte1, byte2;
 

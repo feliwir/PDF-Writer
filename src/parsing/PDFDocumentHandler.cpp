@@ -19,6 +19,7 @@
 
 */
 #include "PDFDocumentHandler.h"
+
 #include "DictionaryContext.h"
 #include "DocumentContext.h"
 #include "IFormEndWritingTask.h"
@@ -31,6 +32,7 @@
 #include "PDFStream.h"
 #include "PageContentContext.h"
 #include "PrimitiveObjectsWriter.h"
+#include <utility>
 
 #include "SimpleStringTokenizer.h"
 #include "Trace.h"
@@ -277,7 +279,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                                        inTransformationMatrix, inPredefinedFormId);
 }
 
-PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(std::shared_ptr<PDFDictionary> inPageObject,
+PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(const std::shared_ptr<PDFDictionary> &inPageObject,
                                                                 const PDFRectangle &inFormBox,
                                                                 const double *inTransformationMatrix,
                                                                 ObjectIDType inPredefinedFormId)
@@ -353,7 +355,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(std::shared_ptr<
     return result;
 }
 
-PDFRectangle PDFDocumentHandler::DeterminePageBox(std::shared_ptr<PDFDictionary> inDictionary,
+PDFRectangle PDFDocumentHandler::DeterminePageBox(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                   EPDFPageBox inPageBoxType)
 {
     PDFRectangle result;
@@ -406,7 +408,7 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter *inTa
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(inPageObject, "Contents"));
+    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
 
     // for empty page, simply return
     if (!pageContent)
@@ -460,7 +462,7 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter *inTa
 }
 
 EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTargetStream,
-                                                            std::shared_ptr<PDFStreamInput> inSourceStream)
+                                                            const std::shared_ptr<PDFStreamInput> &inSourceStream)
 {
     IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
@@ -483,7 +485,7 @@ EStatusCode PDFDocumentHandler::CopyResourcesIndirectObjects(std::shared_ptr<PDF
     // if indirect, run CopyInDirectObject on it (passing its ID and a new ID at the target PDF (just allocate as you
     // go)) if direct, let go.
 
-    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, inPage));
+    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
 
     // k. no resources...as wierd as that might be...or just wrong...i'll let it be
     if (!resources)
@@ -529,7 +531,7 @@ EStatusCode PDFDocumentHandler::WriteNewObjects(const ObjectIDTypeList &inSource
     return status;
 }
 
-void PDFDocumentHandler::RegisterInDirectObjects(std::shared_ptr<PDFDictionary> inDictionary,
+void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                  ObjectIDTypeList &outNewObjects)
 {
     MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
@@ -555,7 +557,8 @@ void PDFDocumentHandler::RegisterInDirectObjects(std::shared_ptr<PDFDictionary> 
     }
 }
 
-void PDFDocumentHandler::RegisterInDirectObjects(std::shared_ptr<PDFArray> inArray, ObjectIDTypeList &outNewObjects)
+void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<PDFArray> &inArray,
+                                                 ObjectIDTypeList &outNewObjects)
 {
     SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
 
@@ -842,8 +845,8 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
     return result;
 }
 
-EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(PDFPage &inPage,
-                                                                       std::shared_ptr<PDFDictionary> inPageObject)
+EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
+    PDFPage &inPage, const std::shared_ptr<PDFDictionary> &inPageObject)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -902,7 +905,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(inPageObject, "Contents"));
+    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
 
     // for empty page, do nothing
     if (!pageContent)
@@ -959,8 +962,8 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                                    std::shared_ptr<PDFStreamInput> inContentSource)
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
+    PageContentContext *inContentContext, const std::shared_ptr<PDFStreamInput> &inContentSource)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -1370,7 +1373,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
     // parse each individual resources dictionary separately and copy the resources. the output parameter should be used
     // for old vs. new names
 
-    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, inPage));
+    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
 
     // k. no resources...as wierd as that might be...or just wrong...i'll let it be
     if (!resources)
@@ -1537,7 +1540,7 @@ std::string PDFDocumentHandler::AsEncodedName(const std::string &inName)
     return aStringBuilder.ToString().substr(1); // return without initial forward slash
 }
 
-EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(std::shared_ptr<PDFObject> inObject)
+EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject)
 {
     EStatusCodeAndObjectIDType result;
     if (inObject->GetType() != PDFObject::ePDFObjectIndirectObjectReference)
@@ -1566,7 +1569,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(std::s
     return result;
 }
 
-EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(std::shared_ptr<PDFObject> inObject,
+EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject,
                                                                  ObjectIDType inTargetObjectID)
 {
     EStatusCode status;
@@ -1591,7 +1594,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
 {
     EStatusCode status = PDFHummus::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(inSourcePage, "Contents"));
+    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
 
     // for empty page, return now
     if (!pageContent)
@@ -1644,9 +1647,9 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                                    std::shared_ptr<PDFStreamInput> inContentSource,
-                                                                    const StringToStringMap &inMappedResourcesNames)
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
+    PageContentContext *inContentContext, const std::shared_ptr<PDFStreamInput> &inContentSource,
+    const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -1673,7 +1676,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(PageContentC
 }
 
 EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTargetStream,
-                                                            std::shared_ptr<PDFStreamInput> inSourceStream,
+                                                            const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                             const StringToStringMap &inMappedResourcesNames)
 {
     // as oppose to regular copying, this copying has to replace name references that refer to mapped resources.
@@ -1696,7 +1699,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTarge
 }
 
 static const char scSlash = '/';
-EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(std::shared_ptr<PDFStreamInput> inSourceStream,
+EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                              const StringToStringMap &inMappedResourcesNames,
                                                              ResourceTokenMarkerList &outResourceMarkers)
 {
@@ -1738,7 +1741,7 @@ EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(std::shared_ptr<PDF
 }
 
 EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTargetStream,
-                                                               std::shared_ptr<PDFStreamInput> inSourceStream,
+                                                               const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                                const StringToStringMap &inMappedResourcesNames,
                                                                const ResourceTokenMarkerList &inResourceMarkers)
 {
@@ -1868,7 +1871,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CopyDirectObjectWithDeepCopy(
     ObjectIDTypeList notCopiedReferencedObjects;
     OutWritingPolicy writingPolicy(this, notCopiedReferencedObjects);
 
-    EStatusCode status = WriteObjectByType(inObject, eTokenSeparatorEndLine, &writingPolicy);
+    EStatusCode status = WriteObjectByType(std::move(inObject), eTokenSeparatorEndLine, &writingPolicy);
 
     return EStatusCodeAndObjectIDTypeList(status, notCopiedReferencedObjects);
 }
@@ -1903,7 +1906,7 @@ IByteReaderWithPosition *PDFDocumentHandler::GetSourceDocumentStream()
 EStatusCode PDFDocumentHandler::CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject)
 {
     InWritingPolicy writingPolicy(this);
-    return WriteObjectByType(inObject, eTokenSeparatorEndLine, &writingPolicy);
+    return WriteObjectByType(std::move(inObject), eTokenSeparatorEndLine, &writingPolicy);
 }
 
 void InWritingPolicy::WriteReference(std::shared_ptr<PDFIndirectObjectReference> inReference,
@@ -1930,8 +1933,8 @@ void OutWritingPolicy::WriteReference(std::shared_ptr<PDFIndirectObjectReference
     mDocumentHandler->mObjectsContext->WriteNewIndirectObjectReference(itObjects->second, inSeparator);
 }
 
-EStatusCode PDFDocumentHandler::WriteObjectByType(std::shared_ptr<PDFObject> inObject, ETokenSeparator inSeparator,
-                                                  IObjectWritePolicy *inWritePolicy)
+EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObject> &inObject,
+                                                  ETokenSeparator inSeparator, IObjectWritePolicy *inWritePolicy)
 {
     EStatusCode status = PDFHummus::eSuccess;
 
@@ -1990,7 +1993,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(std::shared_ptr<PDFObject> inO
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteArrayObject(std::shared_ptr<PDFArray> inArray, ETokenSeparator inSeparator,
+EStatusCode PDFDocumentHandler::WriteArrayObject(const std::shared_ptr<PDFArray> &inArray, ETokenSeparator inSeparator,
                                                  IObjectWritePolicy *inWritePolicy)
 {
     SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
@@ -2008,7 +2011,7 @@ EStatusCode PDFDocumentHandler::WriteArrayObject(std::shared_ptr<PDFArray> inArr
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary,
+EStatusCode PDFDocumentHandler::WriteDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                       IObjectWritePolicy *inWritePolicy)
 {
     MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
@@ -2029,7 +2032,7 @@ EStatusCode PDFDocumentHandler::WriteDictionaryObject(std::shared_ptr<PDFDiction
     return PDFHummus::eSuccess;
 }
 
-EStatusCode PDFDocumentHandler::WriteStreamObject(std::shared_ptr<PDFStreamInput> inStream,
+EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<PDFStreamInput> &inStream,
                                                   IObjectWritePolicy *inWritePolicy)
 {
     /*
@@ -2304,7 +2307,7 @@ class PropertyCategoryServices : public ICategoryServicesCommand
 };
 
 EStatusCode PDFDocumentHandler::RegisterResourcesForForm(PDFFormXObject *inTargetFormXObject,
-                                                         std::shared_ptr<PDFDictionary> inPageObject,
+                                                         const std::shared_ptr<PDFDictionary> &inPageObject,
                                                          StringToStringMap &outMappedResourcesNames)
 {
     EStatusCode result = PDFHummus::eSuccess;
@@ -2377,7 +2380,7 @@ class ResourceCopierTask : public IResourceWritingTask
                        std::shared_ptr<PDFObject> inObjectToCopy)
     {
         mCopier = inCopier;
-        mObjectToCopy = inObjectToCopy;
+        mObjectToCopy = std::move(inObjectToCopy);
         mFormXObject = inFormXObject;
     }
 
@@ -2417,7 +2420,7 @@ void PDFDocumentHandler::RegisterResourcesForResourcesCategory(PDFFormXObject *i
                                                                StringToStringMap &ioMappedResourcesNames)
 {
     PDFObjectCastPtr<PDFDictionary> resourcesCategoryDictionary(
-        mParser->QueryDictionaryObject(inResourcesDictionary, inCommand->GetResourcesCategoryName()));
+        mParser->QueryDictionaryObject(std::move(inResourcesDictionary), inCommand->GetResourcesCategoryName()));
     if (resourcesCategoryDictionary != nullptr)
     {
         MapIterator<PDFNameToPDFObjectMap> it(resourcesCategoryDictionary->GetIterator());
@@ -2464,7 +2467,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *
                                                                 const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = PDFHummus::eSuccess;
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(inSourcePage, "Contents"));
+    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
 
     // for empty page, do nothing
     if (!pageContent)
@@ -2548,7 +2551,7 @@ void PDFDocumentHandler::RegisterFormRelatedObjects(PDFFormXObject *inFormXObjec
 }
 
 std::shared_ptr<PDFObject> PDFDocumentHandler::FindPageResources(PDFParser *inParser,
-                                                                 std::shared_ptr<PDFDictionary> inDictionary)
+                                                                 const std::shared_ptr<PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))
     {
