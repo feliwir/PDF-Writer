@@ -107,14 +107,12 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
     if (!firstPage)
         return imageObject;
 
-    PDFObjectCastPtr<PDFDictionary> resourceDictionary(
-        inParser->QueryDictionaryObject(firstPage.GetPtr(), "Resources"));
+    PDFObjectCastPtr<PDFDictionary> resourceDictionary(inParser->QueryDictionaryObject(firstPage, "Resources"));
 
     if (!resourceDictionary)
         return imageObject;
 
-    PDFObjectCastPtr<PDFDictionary> xobjectDictionary(
-        inParser->QueryDictionaryObject(resourceDictionary.GetPtr(), "XObject"));
+    PDFObjectCastPtr<PDFDictionary> xobjectDictionary(inParser->QueryDictionaryObject(resourceDictionary, "XObject"));
 
     if (!xobjectDictionary)
         return imageObject;
@@ -125,8 +123,8 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
     {
         if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            PDFObjectCastPtr<PDFStreamInput> image(
-                inParser->ParseNewObject(((PDFIndirectObjectReference *)it.GetValue())->mObjectID));
+            auto image = std::static_pointer_cast<PDFStreamInput>(inParser->ParseNewObject(
+                std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID));
             auto imageDictionary = image->QueryStreamDictionary();
 
             PDFObjectCastPtr<PDFName> objectType = imageDictionary->QueryDirectObject("Subtype");
@@ -138,13 +136,13 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
                 break;
 
             if (filters->GetType() == PDFObject::ePDFObjectName &&
-                ((PDFName *)filters.GetPtr())->GetValue() == "DCTDecode")
+                std::static_pointer_cast<PDFName>(filters)->GetValue() == "DCTDecode")
             {
-                imageObject = ((PDFIndirectObjectReference *)it.GetValue())->mObjectID;
+                imageObject = std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID;
                 break;
             }
 
-            auto *filtersArray = (PDFArray *)filters.GetPtr();
+            auto filtersArray = std::static_pointer_cast<PDFArray>(filters);
 
             if (filtersArray->GetLength() == 1)
             {
@@ -152,7 +150,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
 
                 if (firstDecoder->GetValue() == "DCTDecode")
                 {
-                    imageObject = ((PDFIndirectObjectReference *)it.GetValue())->mObjectID;
+                    imageObject = std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID;
                     break;
                 }
             }
@@ -203,8 +201,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
     PDFStream *newImageStream = inWriter->GetObjectsContext().StartUnfilteredPDFStream(newImageDictionary);
 
     // copy source stream through read filter
-    IByteReader *sourceImage =
-        modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
+    IByteReader *sourceImage = modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
     if (sourceImage == nullptr)
         return eFailure;
 

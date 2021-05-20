@@ -2,9 +2,7 @@ add_executable(PDFWriterTestPlayground
 
 #sources
 FileURL.cpp
-PDFObjectCastTest.cpp
 PosixPath.cpp
-RefCountTest.cpp
 TestsRunner.cpp
 TextUsageBugs.cpp
 TiffSpecialsTest.cpp
@@ -14,9 +12,7 @@ PDFWriterTestPlayground.cpp
 #headers
 FileURL.h
 ITestUnit.h
-PDFObjectCastTest.h
 PosixPath.h
-RefCountTest.h
 TestsRunner.h
 TextUsageBugs.h
 TiffSpecialsTest.h

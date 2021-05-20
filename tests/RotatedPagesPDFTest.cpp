@@ -101,7 +101,7 @@ TEST(PDF, RotatedPagesPDF)
     for (unsigned long i = 0; i < pdfParser.GetPagesCount(); ++i)
     {
         auto page = pdfParser.ParsePage(i);
-        ASSERT_NE(page.GetPtr(), nullptr);
+        ASSERT_NE(page, nullptr);
 
         PDFPageInput input(&pdfParser, page);
         ASSERT_EQ(input.GetRotate(), i * 90);

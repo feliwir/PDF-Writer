@@ -19,7 +19,9 @@
 
 */
 #include "PDFDocumentCopyingContext.h"
+
 #include "DocumentContext.h"
+#include <utility>
 
 using namespace PDFHummus;
 
@@ -140,12 +142,12 @@ void PDFDocumentCopyingContext::ReleaseDocumentContextReference()
 EStatusCodeAndObjectIDTypeList PDFDocumentCopyingContext::CopyDirectObjectWithDeepCopy(
     std::shared_ptr<PDFObject> inObject)
 {
-    return mDocumentHandler.CopyDirectObjectWithDeepCopy(inObject);
+    return mDocumentHandler.CopyDirectObjectWithDeepCopy(std::move(inObject));
 }
 
 EStatusCode PDFDocumentCopyingContext::CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject)
 {
-    return mDocumentHandler.CopyDirectObjectAsIs(inObject);
+    return mDocumentHandler.CopyDirectObjectAsIs(std::move(inObject));
 }
 
 EStatusCode PDFDocumentCopyingContext::CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects)

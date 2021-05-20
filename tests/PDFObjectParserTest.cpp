@@ -106,15 +106,14 @@ class PDFObjectParserTestLogHelper
 template <class _resultObjectType> class ExpectedResult
 {
   private:
-    RefCountPtr<PDFObject> mObject;
-    PDFObjectCastPtr<_resultObjectType> mTypedObject;
+    std::shared_ptr<PDFObject> mObject;
+    std::shared_ptr<_resultObjectType> mTypedObject;
 
   public:
-    ExpectedResult(PDFObject *object) : mObject(object) // ParseNewObject constructs with refcount 1
+    ExpectedResult(std::shared_ptr<PDFObject> object) : mObject(object) // ParseNewObject constructs with refcount 1
     {
-        mTypedObject = object; // addrefs if valid object
+        mTypedObject = PDFObjectCast<_resultObjectType>(object); // addrefs if valid object
     }
-    ~ExpectedResult() = default;
 
     int setResult(const std::string &input, const std::string &expected, PDFObjectParserTestLogHelper &log)
     {
@@ -136,7 +135,7 @@ template <class _resultObjectType> class ExpectedResult
                 << result_type << "' from input: '" << input << "'\n";
             return 1;
         }
-        std::string result = PDFTextString(ParsedPrimitiveHelper(mTypedObject.GetPtr()).ToString()).ToUTF8String();
+        std::string result = PDFTextString(ParsedPrimitiveHelper(mTypedObject).ToString()).ToUTF8String();
         if (result != expected)
         {
             log << "Failed parse. Expected '" << expected << "' got '" << result << "' from input: '" << input << "'\n";
@@ -151,7 +150,7 @@ EStatusCode ParseCommentedTokens(PDFObjectParser *objectParser, PDFObjectParserT
 {
     int failures = 0;
     InputInterfaceToStream input;
-    RefCountPtr<PDFObject> object;
+    std::shared_ptr<PDFObject> object;
 
     {
         input.setInput("(val%ami)");
@@ -178,7 +177,7 @@ EStatusCode ParseHexStringTokens(PDFObjectParser *objectParser, PDFObjectParserT
 {
     int failures = 0;
     InputInterfaceToStream input;
-    RefCountPtr<PDFObject> object;
+    std::shared_ptr<PDFObject> object;
 
     {
         input.setInput("<>");
@@ -251,7 +250,7 @@ EStatusCode ParseLiteralStringTokens(PDFObjectParser *objectParser, PDFObjectPar
 {
     int failures = 0;
     InputInterfaceToStream input;
-    RefCountPtr<PDFObject> object;
+    std::shared_ptr<PDFObject> object;
 
     {
         input.setInput("()");

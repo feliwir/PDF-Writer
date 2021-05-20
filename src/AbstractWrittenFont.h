@@ -48,7 +48,7 @@ class AbstractWrittenFont : public IWrittenFont
     PDFHummus::EStatusCode WriteStateInDictionary(ObjectsContext *inStateWriter,
                                                   DictionaryContext *inDerivedObjectDictionary);
     PDFHummus::EStatusCode WriteStateAfterDictionary(ObjectsContext *inStateWriter);
-    PDFHummus::EStatusCode ReadStateFromObject(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState);
+    PDFHummus::EStatusCode ReadStateFromObject(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState);
 
   private:
     ObjectIDType mCidRepresentationObjectStateID;
@@ -81,7 +81,7 @@ class AbstractWrittenFont : public IWrittenFont
                                                  ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteGlyphEncodingInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectId,
                                      const GlyphEncodingInfo &inGlyphEncodingInfo);
-    void ReadWrittenFontState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState,
+    void ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,
                               WrittenFontRepresentation *inRepresentation);
     void ReadGlyphEncodingInfoState(PDFParser *inStateReader, ObjectIDType inObjectID,
                                     GlyphEncodingInfo &inGlyphEncodingInfo);

@@ -54,12 +54,12 @@ template <class T> class PDFObjectCastPtr
 
     PDFObjectCastPtr(std::shared_ptr<PDFObject> inPDFObject)
     {
-        mValue = std::static_pointer_cast<T>(inPDFObject);
+        mValue = PDFObjectCast<T>(inPDFObject);
     }
 
     PDFObjectCastPtr<T> &operator=(std::shared_ptr<PDFObject> inValue)
     {
-        mValue = std::static_pointer_cast<T>(inValue);
+        mValue = PDFObjectCast<T>(inValue);
         return *this;
     }
 

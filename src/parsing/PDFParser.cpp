@@ -46,6 +46,7 @@
 #include "objects/PDFSymbol.h"
 
 #include <algorithm>
+#include <utility>
 using namespace PDFHummus;
 
 PDFParser::PDFParser()
@@ -708,8 +709,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseNewObject(ObjectIDType inObjectId)
     {
         return ParseExistingInDirectStreamObject(inObjectId);
     }
-    else
-        return nullptr;
+    return nullptr;
 }
 
 ObjectIDType PDFParser::GetObjectsCount() const
@@ -855,12 +855,12 @@ EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, 
 {
     unsigned long currentPageIndex = 0;
 
-    return ParsePagesIDs(inPageNode, inNodeObjectID, currentPageIndex);
+    return ParsePagesIDs(std::move(inPageNode), inNodeObjectID, currentPageIndex);
 }
 
 static const std::string scPage = "Page";
 static const std::string scPages = "Pages";
-EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID,
+EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPageNode, ObjectIDType inNodeObjectID,
                                      unsigned long &ioCurrentPageIndex)
 {
     // recursion.
@@ -995,7 +995,7 @@ std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
     return nullptr;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFDictionary> inDictionary,
+std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                             const std::string &inName)
 {
     auto anObject = inDictionary->QueryDirectObject(inName);
@@ -1013,7 +1013,7 @@ std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(std::shared_ptr<PDFD
     return anObject;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(std::shared_ptr<PDFArray> inArray, unsigned long inIndex)
+std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<PDFArray> &inArray, unsigned long inIndex)
 {
     auto anObject(inArray->QueryObject(inIndex));
 
@@ -1030,7 +1030,7 @@ std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(std::shared_ptr<PDFArray>
     return anObject;
 }
 
-EStatusCode PDFParser::ParsePreviousXrefs(std::shared_ptr<PDFDictionary> inTrailer)
+EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &inTrailer)
 {
     PDFObjectCastPtr<PDFInteger> previousPosition(inTrailer->QueryDirectObject("Prev"));
     if (!previousPosition)
@@ -1420,7 +1420,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
 }
 
 EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                               std::shared_ptr<PDFStreamInput> inXrefStream,
+                                               const std::shared_ptr<PDFStreamInput> &inXrefStream,
                                                XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     // 1. Setup the stream to read from the stream start location
@@ -1771,7 +1771,7 @@ void PDFParser::NotifyIndirectObjectStart(long long inObjectID, long long inGene
     mDecryptionHelper.OnObjectStart(inObjectID, inGenerationNumber);
 }
 
-void PDFParser::NotifyIndirectObjectEnd(std::shared_ptr<PDFObject> inObject)
+void PDFParser::NotifyIndirectObjectEnd(const std::shared_ptr<PDFObject> &inObject)
 {
     if (mParserExtender != nullptr)
         mParserExtender->OnObjectEnd(inObject);
@@ -1810,7 +1810,8 @@ EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeader
     return status;
 }
 
-IByteReader *PDFParser::WrapWithDecryptionFilter(std::shared_ptr<PDFStreamInput> inStream, IByteReader *inToWrapStream)
+IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<PDFStreamInput> &inStream,
+                                                 IByteReader *inToWrapStream)
 {
     if (IsEncrypted() && IsEncryptionSupported())
     {
@@ -1831,7 +1832,7 @@ IByteReader *PDFParser::WrapWithDecryptionFilter(std::shared_ptr<PDFStreamInput>
     return inToWrapStream;
 }
 
-IByteReader *PDFParser::CreateInputStreamReader(std::shared_ptr<PDFStreamInput> inStream)
+IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
@@ -1929,9 +1930,10 @@ IByteReader *PDFParser::CreateInputStreamReader(std::shared_ptr<PDFStreamInput> 
     return result;
 }
 
-EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream, std::shared_ptr<PDFName> inFilterName,
-                                                           std::shared_ptr<PDFDictionary> inDecodeParams,
-                                                           std::shared_ptr<PDFStreamInput> inPDFStream)
+EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream,
+                                                           const std::shared_ptr<PDFName> &inFilterName,
+                                                           const std::shared_ptr<PDFDictionary> &inDecodeParams,
+                                                           const std::shared_ptr<PDFStreamInput> &inPDFStream)
 {
     EStatusCode status = eSuccess;
     IByteReader *result = nullptr;
@@ -2057,7 +2059,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
     return EStatusCodeAndIByteReader(status, result);
 }
 
-IByteReader *PDFParser::StartReadingFromStream(std::shared_ptr<PDFStreamInput> inStream)
+IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     IByteReader *result = CreateInputStreamReader(inStream);
     if (result != nullptr)
@@ -2067,7 +2069,7 @@ IByteReader *PDFParser::StartReadingFromStream(std::shared_ptr<PDFStreamInput> i
 
 PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream)
 {
-    IByteReader *readStream = StartReadingFromStream(inStream);
+    IByteReader *readStream = StartReadingFromStream(std::move(inStream));
     if (readStream == nullptr)
         return nullptr;
 
@@ -2082,7 +2084,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStr
 
 PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams)
 {
-    IByteReader *readStream = new ArrayOfInputStreamsStream(inArrayOfStreams, this);
+    IByteReader *readStream = new ArrayOfInputStreamsStream(std::move(inArrayOfStreams), this);
 
     auto *objectsParser = new PDFObjectParser();
     auto *source = new InputStreamSkipperStream(readStream);
@@ -2093,7 +2095,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFAr
     return objectsParser;
 }
 
-IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(std::shared_ptr<PDFStreamInput> inStream)
+IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
@@ -2124,7 +2126,7 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(std::shared_ptr<P
     return result;
 }
 
-IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(std::shared_ptr<PDFStreamInput> inStream)
+IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     IByteReader *result = CreateInputStreamReaderForPlainCopying(inStream);
     if (result != nullptr)

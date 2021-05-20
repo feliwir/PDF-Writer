@@ -44,7 +44,7 @@ static const char *scIteratingStreamDict = "Stream . iterating stream dictionary
 static int mTabLevel = 0;
 static std::set<ObjectIDType> mIteratedObjectIDs;
 
-EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWriter *inOutput)
+EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFParser &inParser, IByteWriter *inOutput)
 {
     PrimitiveObjectsWriter primitivesWriter;
 
@@ -56,18 +56,19 @@ EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWr
     if (inObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         inOutput->Write((const uint8_t *)scIndirectStart, strlen(scIndirectStart));
-        if (mIteratedObjectIDs.find(((PDFIndirectObjectReference *)inObject)->mObjectID) == mIteratedObjectIDs.end())
+        if (mIteratedObjectIDs.find(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID) ==
+            mIteratedObjectIDs.end())
         {
-            mIteratedObjectIDs.insert(((PDFIndirectObjectReference *)inObject)->mObjectID);
+            mIteratedObjectIDs.insert(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID);
             auto pointedObject(
-                inParser.ParseNewObject(((PDFIndirectObjectReference *)inObject)->mObjectID));
+                inParser.ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID));
             if (!pointedObject)
             {
                 std::cout << "\nFailed to retreive object of ID ="
-                          << ((PDFIndirectObjectReference *)inObject)->mObjectID << "\n";
+                          << std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID << "\n";
                 return PDFHummus::eFailure;
             }
-            return IterateObjectTypes(pointedObject.GetPtr(), inParser, inOutput);
+            return IterateObjectTypes(pointedObject, inParser, inOutput);
         }
 
         for (int i = 0; i < mTabLevel; ++i)
@@ -75,7 +76,7 @@ EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWr
         inOutput->Write((const uint8_t *)scParsedAlready, strlen(scParsedAlready));
         return PDFHummus::eSuccess;
     }
-    else if (inObject->GetType() == PDFObject::ePDFObjectArray)
+    if (inObject->GetType() == PDFObject::ePDFObjectArray)
     {
         primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
         ++mTabLevel;
@@ -109,8 +110,8 @@ EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWr
     else if (inObject->GetType() == PDFObject::ePDFObjectStream)
     {
         inOutput->Write((const uint8_t *)scIteratingStreamDict, strlen(scIteratingStreamDict));
-        PDFObjectCastPtr<PDFDictionary> aDictionary(((PDFStreamInput *)inObject)->QueryStreamDictionary());
-        return IterateObjectTypes(aDictionary.GetPtr(), inParser, inOutput);
+        auto aDictionary(std::static_pointer_cast<PDFStreamInput>(inObject)->QueryStreamDictionary());
+        return IterateObjectTypes(aDictionary, inParser, inOutput);
     }
     else
     {
@@ -138,12 +139,12 @@ TEST(PDFEmbedding, PDFParser)
     ASSERT_EQ(parser.GetPagesCount(), 2);
 
     // now just iterate, and print the object types
-    PDFObjectCastPtr<PDFDictionary> catalog(parser.QueryDictionaryObject(parser.GetTrailer(), "Root"));
-    ASSERT_NE(catalog.GetPtr(), nullptr);
+    auto catalog(parser.QueryDictionaryObject(parser.GetTrailer(), "Root"));
+    ASSERT_NE(catalog, nullptr);
 
     mTabLevel = 0;
     status = outputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFParserTestOutput.txt"));
 
-    status = IterateObjectTypes(catalog.GetPtr(), parser, outputFile.GetOutputStream());
+    status = IterateObjectTypes(catalog, parser, outputFile.GetOutputStream());
     ASSERT_EQ(status, eSuccess);
 }

@@ -97,8 +97,7 @@ size_t OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
         return DecodeBufferAndWrite(inBuffer, inSize);
     if (mTargetStream != nullptr)
         return mTargetStream->Write(inBuffer, inSize);
-    else
-        return 0;
+    return 0;
 }
 
 size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)

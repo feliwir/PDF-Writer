@@ -138,8 +138,7 @@ EStatusCode TestAddingComments(PDFWriter *inPDFWriter)
 
     // create a new object for the page, copy all but annotations, which will be changed
     ObjectIDType fourthPageID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(3);
-    PDFObjectCastPtr<PDFDictionary> fourthPageObject = copyingContext->GetSourceDocumentParser()->ParsePage(3);
-
+    auto fourthPageObject = copyingContext->GetSourceDocumentParser()->ParsePage(3);
     auto fourthPageObjectIt = fourthPageObject->GetIterator();
 
     inPDFWriter->GetObjectsContext().StartModifiedIndirectObject(fourthPageID);

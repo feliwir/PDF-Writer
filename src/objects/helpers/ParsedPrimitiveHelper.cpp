@@ -20,6 +20,7 @@
  */
 
 #include "ParsedPrimitiveHelper.h"
+
 #include "BoxingBase.h"
 #include "objects/PDFBoolean.h"
 #include "objects/PDFHexString.h"
@@ -29,10 +30,11 @@
 #include "objects/PDFObject.h"
 #include "objects/PDFReal.h"
 #include "objects/PDFSymbol.h"
+#include <utility>
 
 ParsedPrimitiveHelper::ParsedPrimitiveHelper(std::shared_ptr<PDFObject> inObject)
 {
-    mWrappedObject = inObject;
+    mWrappedObject = std::move(inObject);
 }
 
 double ParsedPrimitiveHelper::GetAsDouble()

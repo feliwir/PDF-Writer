@@ -408,7 +408,8 @@ void AbstractWrittenFont::WriteGlyphEncodingInfoState(ObjectsContext *inStateWri
     inStateWriter->EndIndirectObject();
 }
 
-EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState)
+EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader,
+                                                     const std::shared_ptr<PDFDictionary> &inState)
 {
     PDFObjectCastPtr<PDFDictionary> cidRepresentationState(
         inStateReader->QueryDictionaryObject(inState, "mCIDRepresentation"));
@@ -436,7 +437,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader, s
     return PDFHummus::eSuccess;
 }
 
-void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inState,
+void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,
                                                WrittenFontRepresentation *inRepresentation)
 {
     PDFObjectCastPtr<PDFArray> glyphIDToEncodedCharState(inState->QueryDirectObject("mGlyphIDToEncodedChar"));

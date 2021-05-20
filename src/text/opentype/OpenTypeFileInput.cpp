@@ -275,7 +275,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
         mFontType = EOpenTypeCFF;
         return PDFHummus::eSuccess;
     }
-    else if ((ReadOpenTypeSFNTFromDfont() == PDFHummus::eSuccess))
+    if ((ReadOpenTypeSFNTFromDfont() == PDFHummus::eSuccess))
     {
         return PDFHummus::eSuccess;
     }

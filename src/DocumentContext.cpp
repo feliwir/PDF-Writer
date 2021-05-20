@@ -1686,7 +1686,7 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
     return mEncryptionHelper.ReadState(inStateReader, encrytpionStateID->mObjectID);
 }
 
-void DocumentContext::ReadTrailerState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inTrailerState)
+void DocumentContext::ReadTrailerState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerState)
 {
     PDFObjectCastPtr<PDFInteger> prevState(inTrailerState->QueryDirectObject("mPrev"));
     mTrailerInformation.SetPrev(prevState->GetValue());
@@ -1706,7 +1706,7 @@ void DocumentContext::ReadTrailerState(PDFParser *inStateReader, std::shared_ptr
     mTrailerInformation.SetInfoDictionaryReference(GetReferenceFromState(infoDictionaryReferenceState));
 }
 
-ObjectReference DocumentContext::GetReferenceFromState(std::shared_ptr<PDFDictionary> inDictionary)
+ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<PDFDictionary> &inDictionary)
 {
     PDFObjectCastPtr<PDFInteger> objectID(inDictionary->QueryDirectObject("ObjectID"));
     PDFObjectCastPtr<PDFInteger> generationNumber(inDictionary->QueryDirectObject("GenerationNumber"));
@@ -1715,7 +1715,7 @@ ObjectReference DocumentContext::GetReferenceFromState(std::shared_ptr<PDFDictio
 }
 
 void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
-                                           std::shared_ptr<PDFDictionary> inTrailerInfoState)
+                                           const std::shared_ptr<PDFDictionary> &inTrailerInfoState)
 {
     PDFObjectCastPtr<PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
@@ -1762,7 +1762,7 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
     }
 }
 
-void DocumentContext::ReadDateState(std::shared_ptr<PDFDictionary> inDateState, PDFDate &inDate)
+void DocumentContext::ReadDateState(const std::shared_ptr<PDFDictionary> &inDateState, PDFDate &inDate)
 {
     PDFObjectCastPtr<PDFInteger> yearState(inDateState->QueryDirectObject("Year"));
     inDate.Year = (int)yearState->GetValue();
@@ -1793,7 +1793,7 @@ void DocumentContext::ReadDateState(std::shared_ptr<PDFDictionary> inDateState, 
 }
 
 void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
-                                                  std::shared_ptr<PDFDictionary> inCatalogInformationState)
+                                                  const std::shared_ptr<PDFDictionary> &inCatalogInformationState)
 {
     PDFObjectCastPtr<PDFIndirectObjectReference> pageTreeRootState(
         inCatalogInformationState->QueryDirectObject("PageTreeRoot"));
@@ -1822,7 +1822,7 @@ void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
     ReadPageTreeState(inStateReader, pageTreeState, rootNode);
 }
 
-void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, std::shared_ptr<PDFDictionary> inPageTreeState,
+void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inPageTreeState,
                                         PageTree *inPageTree)
 {
     PDFObjectCastPtr<PDFBoolean> isLeafParentState(inPageTreeState->QueryDirectObject("mIsLeafParent"));

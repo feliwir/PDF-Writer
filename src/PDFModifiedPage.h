@@ -66,10 +66,11 @@ class PDFModifiedPage
     bool mIsDirty;
 
     std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser,
-                                                        std::shared_ptr<PDFDictionary> inResourcesDictionary,
+                                                        const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
                                                         ObjectsContext &inObjectContext,
                                                         PDFDocumentCopyingContext *inCopyingContext);
     unsigned char GetDifferentChar(unsigned char);
     std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
-    std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser, std::shared_ptr<PDFDictionary> inDictionary);
+    std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser,
+                                                      const std::shared_ptr<PDFDictionary> &inDictionary);
 };

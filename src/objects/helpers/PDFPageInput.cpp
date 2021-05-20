@@ -20,14 +20,17 @@
  */
 
 #include "PDFPageInput.h"
+
 #include "PagePresets.h"
 #include "ParsedPrimitiveHelper.h"
 #include "Trace.h"
 #include "objects/PDFArray.h"
 #include "objects/PDFName.h"
 #include "parsing/PDFParser.h"
+#include <utility>
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject) : mPageObject(inPageObject)
+PDFPageInput::PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject)
+    : mPageObject(std::move(inPageObject))
 {
     mParser = inParser;
     AssertPageObjectValid();
@@ -150,7 +153,7 @@ PDFRectangle PDFPageInput::GetArtBox()
 }
 
 static const std::string scParent = "Parent";
-std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(std::shared_ptr<PDFDictionary> inDictionary,
+std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_ptr<PDFDictionary> &inDictionary,
                                                              const std::string &inName)
 {
     if (inDictionary->Exists(inName))
@@ -167,7 +170,8 @@ std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(std::shared_ptr<PDF
     return nullptr;
 }
 
-void PDFPageInput::SetPDFRectangleFromPDFArray(std::shared_ptr<PDFArray> inPDFArray, PDFRectangle &outPDFRectangle)
+void PDFPageInput::SetPDFRectangleFromPDFArray(const std::shared_ptr<PDFArray> &inPDFArray,
+                                               PDFRectangle &outPDFRectangle)
 {
     std::shared_ptr<PDFObject> lowerLeftX(inPDFArray->QueryObject(0));
     std::shared_ptr<PDFObject> lowerLeftY(inPDFArray->QueryObject(1));

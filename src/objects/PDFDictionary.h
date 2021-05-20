@@ -47,7 +47,7 @@ class PDFDictionary : public PDFObject
     PDFDictionary();
 
     // AddRefs on both
-    void Insert(std::shared_ptr<PDFName> inKeyObject, std::shared_ptr<PDFObject> inValueObject);
+    void Insert(const std::shared_ptr<PDFName> &inKeyObject, const std::shared_ptr<PDFObject> &inValueObject);
 
     bool Exists(const std::string &inName);
     std::shared_ptr<PDFObject> QueryDirectObject(const std::string &inName);
