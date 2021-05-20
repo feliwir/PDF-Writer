@@ -1,0 +1,12 @@
+set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/IPDFParserExtender.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentCopyingContext.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFDocumentHandler.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFEmbedParameterTypes.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFObjectParser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFPageMergingHelper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFParser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFParserTokenizer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PDFParsingOptions.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/SimpleStringTokenizer.h
+)

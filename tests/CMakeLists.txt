@@ -1,4 +1,4 @@
-add_executable(pdfwriter_tests
+add_executable(libcharta_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/AppendingAndReadingTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AppendPagesTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/AppendSpecialPagesTest.cpp
@@ -65,16 +65,16 @@ add_executable(pdfwriter_tests
 
 if(BUILD_COVERAGE)
     setup_target_for_coverage_lcov(
-        NAME pdfwriter_coverage
+        NAME libcharta_coverage
         EXECUTABLE ctest -j ${n_cores}
         EXCLUDE "demo/*" "contrib/*" "/usr/include/*"
-        DEPENDENCIES pdfwriter_tests)
+        DEPENDENCIES libcharta_tests)
 endif()
 
-target_compile_definitions(pdfwriter_tests PRIVATE "-DPDFWRITE_SOURCE_PATH=\"${CMAKE_SOURCE_DIR}\" ")
-target_compile_definitions(pdfwriter_tests PRIVATE "-DPDFWRITE_BINARY_PATH=\"${CMAKE_CURRENT_BINARY_DIR}\" ")
+target_compile_definitions(libcharta_tests PRIVATE "-DPDFWRITE_SOURCE_PATH=\"${CMAKE_SOURCE_DIR}\" ")
+target_compile_definitions(libcharta_tests PRIVATE "-DPDFWRITE_BINARY_PATH=\"${CMAKE_CURRENT_BINARY_DIR}\" ")
 
-target_link_libraries(pdfwriter_tests PRIVATE gtest gtest_main pdfwriter -lstdc++fs)
+target_link_libraries(libcharta_tests PRIVATE gtest gtest_main libcharta -lstdc++fs)
 
 include(GoogleTest)
-gtest_discover_tests(pdfwriter_tests)
+gtest_discover_tests(libcharta_tests)
