@@ -1,3 +1,4 @@
+#pragma once
 #include "PDFRectangle.h"
 
 // This presets assume 72 pixel per inch

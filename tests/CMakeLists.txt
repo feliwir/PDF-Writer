@@ -54,6 +54,7 @@ add_executable(pdfwriter_tests
     ${CMAKE_CURRENT_SOURCE_DIR}/TestHelper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/TextMeasurementsTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TIFFImageTest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/TIFFSpecialsTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TTCTest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Type1Test.cpp

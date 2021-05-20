@@ -22,7 +22,6 @@ endif()
 
 add_subdirectory(contrib)
 add_subdirectory(src)
-add_subdirectory(demo)
 
 if(BUILD_TESTING)
     enable_testing()
