@@ -35,7 +35,7 @@ TEST(PDFEmbedding, MergeToPDFForm)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = nullptr;
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = nullptr;
 
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.pdf"), ePDFVersion13,
@@ -91,6 +91,4 @@ TEST(PDFEmbedding, MergeToPDFForm)
 
     status = pdfWriter.EndPDF();
     ASSERT_EQ(status, PDFHummus::eSuccess);
-
-    delete copyingContext;
 }

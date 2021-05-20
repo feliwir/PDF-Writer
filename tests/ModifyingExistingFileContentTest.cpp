@@ -39,7 +39,7 @@ EStatusCode TestPageSizeModification(PDFWriter *inPDFWriter)
     EStatusCode status = eSuccess;
 
     // Change 3rd page bbox to landscape by modifying the page object
-    PDFDocumentCopyingContext *copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
+    auto copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
 
     if (copyingContext == nullptr)
         return eFailure;
@@ -76,8 +76,6 @@ EStatusCode TestPageSizeModification(PDFWriter *inPDFWriter)
     inPDFWriter->GetObjectsContext().EndIndirectObject();
 
     // done changing page box (ok...that seemed like a lot of work for this...humff)
-    // cleanup
-    delete copyingContext;
 
     return status;
 }
@@ -131,7 +129,7 @@ EStatusCode TestAddingComments(PDFWriter *inPDFWriter)
         return status;
 
     // now write these comments to the 4th page
-    auto *copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
+    auto copyingContext = inPDFWriter->CreatePDFCopyingContextForModifiedFile();
 
     if (copyingContext == nullptr)
         return eFailure;
@@ -169,7 +167,6 @@ EStatusCode TestAddingComments(PDFWriter *inPDFWriter)
     delete aComment;
     delete bComment;
     delete cComment;
-    delete copyingContext;
     return status;
 }
 

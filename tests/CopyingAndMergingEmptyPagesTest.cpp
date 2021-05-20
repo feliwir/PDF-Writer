@@ -202,7 +202,7 @@ PDFHummus::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = nullptr;
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = nullptr;
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeEmptyPageToForm.pdf"), ePDFVersion13);
@@ -257,8 +257,6 @@ PDFHummus::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
     status = pdfWriter.EndPDF();
     if (status != eSuccess)
         return status;
-
-    delete copyingContext;
 
     return status;
 }

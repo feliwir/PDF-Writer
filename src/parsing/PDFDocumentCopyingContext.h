@@ -43,7 +43,7 @@ class PDFDocumentCopyingContext
 {
   public:
     PDFDocumentCopyingContext();
-    ~PDFDocumentCopyingContext(void);
+    ~PDFDocumentCopyingContext();
 
     PDFHummus::EStatusCode Start(const std::string &inPDFFilePath, DocumentContext *inDocumentContext,
                                  ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,

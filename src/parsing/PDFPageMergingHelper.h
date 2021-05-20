@@ -22,6 +22,7 @@
 
 #include "EStatusCode.h"
 
+#include <memory>
 #include <string>
 
 class PDFPage;
@@ -35,7 +36,8 @@ class PDFPageMergingHelper
     PDFPageMergingHelper(PDFPage *inPage);
     virtual ~PDFPageMergingHelper(void);
 
-    PDFHummus::EStatusCode MergePageContent(PDFDocumentCopyingContext *inCopyingContext, unsigned long inPageIndex);
+    PDFHummus::EStatusCode MergePageContent(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
+                                            unsigned long inPageIndex);
     PDFHummus::EStatusCode MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,
                                             unsigned long inPageIndex);
     PDFHummus::EStatusCode MergePageContent(PDFWriter *inWriter, IByteReaderWithPosition *inPDFStream,

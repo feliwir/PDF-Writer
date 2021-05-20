@@ -74,7 +74,6 @@ typedef std::pair<PDFHummus::EStatusCode, ObjectIDType> EStatusCodeAndObjectIDTy
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 typedef std::set<ObjectIDType> ObjectIDTypeSet;
 typedef std::map<ObjectIDType, std::string> ObjectIDTypeToStringMap;
-typedef std::set<PDFDocumentCopyingContext *> PDFDocumentCopyingContextSet;
 typedef std::pair<ResourcesDictionary *, std::string> ResourcesDictionaryAndString;
 typedef std::list<IResourceWritingTask *> IResourceWritingTaskList;
 typedef std::map<ResourcesDictionaryAndString, IResourceWritingTaskList>
@@ -266,11 +265,11 @@ class DocumentContext
                                                const PDFPageRange &inPageRange,
                                                const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
 
-    PDFDocumentCopyingContext *CreatePDFCopyingContext(const std::string &inPDFFilePath,
-                                                       const PDFParsingOptions &inOptions);
-    PDFDocumentCopyingContext *CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                                       const PDFParsingOptions &inOptions);
-    PDFDocumentCopyingContext *CreatePDFCopyingContext(PDFParser *inPDFParser);
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(const std::string &inPDFFilePath,
+                                                                       const PDFParsingOptions &inOptions);
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
+                                                                       const PDFParsingOptions &inOptions);
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(PDFParser *inPDFParser);
 
     // some public image info services, for users of hummus
     DoubleAndDoublePair GetImageDimensions(
@@ -367,7 +366,7 @@ class DocumentContext
     UsedFontsRepository mUsedFontsRepository;
     ObjectIDTypeSet mAnnotations;
     IPDFParserExtender *mParserExtender;
-    PDFDocumentCopyingContextSet mCopyingContexts;
+    std::set<PDFDocumentCopyingContext *> mCopyingContexts;
     bool mModifiedDocumentIDExists;
     std::string mModifiedDocumentID;
     std::string mNewPDFID;

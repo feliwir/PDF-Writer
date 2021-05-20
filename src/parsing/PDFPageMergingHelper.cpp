@@ -33,7 +33,7 @@ PDFPageMergingHelper::PDFPageMergingHelper(PDFPage *inPage)
 
 PDFPageMergingHelper::~PDFPageMergingHelper() = default;
 
-EStatusCode PDFPageMergingHelper::MergePageContent(PDFDocumentCopyingContext *inCopyingContext,
+EStatusCode PDFPageMergingHelper::MergePageContent(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
                                                    unsigned long inPageIndex)
 {
     return inCopyingContext->MergePDFPageToPage(*mPage, inPageIndex);
@@ -46,7 +46,7 @@ EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, const st
 
     do
     {
-        PDFDocumentCopyingContext *copyingContext = inWriter->CreatePDFCopyingContext(inPDFFilePath);
+        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = inWriter->CreatePDFCopyingContext(inPDFFilePath);
 
         if (copyingContext == nullptr)
         {
@@ -68,7 +68,7 @@ EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, IByteRea
 
     do
     {
-        PDFDocumentCopyingContext *copyingContext = inWriter->CreatePDFCopyingContext(inPDFStream);
+        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = inWriter->CreatePDFCopyingContext(inPDFStream);
 
         if (copyingContext == nullptr)
         {
