@@ -62,7 +62,7 @@ bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, const std::str
     if (!myFile.is_open())
         return false;
 
-    IByteReader *streamReader = mParser.CreateInputStreamReader(foundStreamInput.GetPtr());
+    IByteReader *streamReader = mParser.CreateInputStreamReader(foundStreamInput);
     if (streamReader == nullptr)
         return false;
 

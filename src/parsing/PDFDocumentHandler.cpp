@@ -357,7 +357,6 @@ PDFRectangle PDFDocumentHandler::DeterminePageBox(std::shared_ptr<PDFDictionary>
                                                   EPDFPageBox inPageBoxType)
 {
     PDFRectangle result;
-    inDictionary->AddRef();
     PDFPageInput pageInput(mParser, inDictionary);
 
     switch (inPageBoxType)

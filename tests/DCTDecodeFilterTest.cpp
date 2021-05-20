@@ -103,7 +103,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
     ObjectIDType imageObject = 0;
 
     // find image by looking for the first image in the first page
-    RefCountPtr<PDFDictionary> firstPage = inParser->ParsePage(0);
+    auto firstPage = inParser->ParsePage(0);
     if (!firstPage)
         return imageObject;
 
@@ -127,13 +127,13 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
         {
             PDFObjectCastPtr<PDFStreamInput> image(
                 inParser->ParseNewObject(((PDFIndirectObjectReference *)it.GetValue())->mObjectID));
-            RefCountPtr<PDFDictionary> imageDictionary = image->QueryStreamDictionary();
+            auto imageDictionary = image->QueryStreamDictionary();
 
             PDFObjectCastPtr<PDFName> objectType = imageDictionary->QueryDirectObject("Subtype");
             if (!objectType || objectType->GetValue() != "Image")
                 continue;
 
-            RefCountPtr<PDFObject> filters = imageDictionary->QueryDirectObject("Filter");
+            auto filters = imageDictionary->QueryDirectObject("Filter");
             if (!filters)
                 break;
 
@@ -170,7 +170,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
     // get image source dictionary
     PDFObjectCastPtr<PDFStreamInput> imageStream(inWriter->GetModifiedFileParser().ParseNewObject(inImageObject));
 
-    RefCountPtr<PDFDictionary> imageDictionary(imageStream->QueryStreamDictionary());
+    auto imageDictionary(imageStream->QueryStreamDictionary());
 
     // strt object for modified image
     inWriter->GetObjectsContext().StartModifiedIndirectObject(inImageObject);
@@ -204,7 +204,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 
     // copy source stream through read filter
     IByteReader *sourceImage =
-        modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream.GetPtr());
+        modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
     if (sourceImage == nullptr)
         return eFailure;
 

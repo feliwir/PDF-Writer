@@ -121,46 +121,48 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
         // this could be an indirect reference in case this is a positive integer
         // and the next one is also, and then there's an "R" keyword
         if ((numberObject != nullptr) && (numberObject->GetType() == PDFObject::ePDFObjectInteger) &&
-            std::static_pointer_cast<PDFNumber(numberObject)->GetValue()> 0)
+            std::static_pointer_cast<PDFInteger>(numberObject)->GetValue() > 0)
         {
             // try parse version
             std::string numberToken;
             if (!GetNextToken(numberToken)) // k. no next token...cant be reference
-                return pdfObject;
+                return numberObject;
 
             if (!IsNumber(numberToken)) // k. no number, cant be reference
             {
                 SaveTokenToBuffer(numberToken);
-                return pdfObject;
+                return numberObject;
             }
 
             auto versionObject = ParseNumber(numberToken);
             bool isReference = false;
             if ((versionObject == nullptr) || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
-                ((PDFInteger *)versionObject)->GetValue() <
+                std::static_pointer_cast<PDFInteger>(versionObject)->GetValue() <
                     0) // k. failure to parse number, or no non-negative, cant be reference
             {
                 SaveTokenToBuffer(numberToken);
-                return pdfObject;
+                return numberObject;
             }
 
             // try parse R keyword
             std::string keywordToken;
             if (!GetNextToken(keywordToken)) // k. no next token...cant be reference
-                return pdfObject;
+                return numberObject;
 
             if (keywordToken != scR) // k. not R...cant be reference
             {
                 SaveTokenToBuffer(numberToken);
                 SaveTokenToBuffer(keywordToken);
-                return pdfObject;
+                return numberObject;
             }
 
             // if passed all these, then this is a reference
             return std::make_shared<PDFIndirectObjectReference>(
-                std::static_pointer_cast < PDFNumber(numberObject)->GetValue(),
-                std::static_pointer_cast < PDFNumber(versionObject)->GetValue());
+                std::static_pointer_cast<PDFInteger>(numberObject)->GetValue(),
+                std::static_pointer_cast<PDFInteger>(versionObject)->GetValue());
         }
+
+        return numberObject;
     }
     // Array
     else if (IsArray(token))
@@ -168,7 +170,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
     // Dictionary
     else if (IsDictionary(token))
     {
-        auto dictObject = ParseDictionary();
+        auto dictObject = std::static_pointer_cast<PDFDictionary>(ParseDictionary());
 
         if (dictObject != nullptr)
         {
@@ -625,10 +627,11 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
                        token.substr(0, MAX_TRACE_SIZE - 200).c_str());
             break;
         }
+        auto name = std::static_pointer_cast<PDFName>(aKey);
 
         // all good. i'm gonna be forgiving here and allow skipping duplicate keys. cause it happens
-        if (!aDictionary->Exists(aKey->GetValue()))
-            aDictionary->Insert(static_pointer_cast<PDFName>(aKey), aValue);
+        if (!aDictionary->Exists(name->GetValue()))
+            aDictionary->Insert(name, aValue);
     }
 
     if (dictionaryEndEncountered && PDFHummus::eSuccess == status)

@@ -59,7 +59,7 @@ EStatusCode IterateObjectTypes(PDFObject *inObject, PDFParser &inParser, IByteWr
         if (mIteratedObjectIDs.find(((PDFIndirectObjectReference *)inObject)->mObjectID) == mIteratedObjectIDs.end())
         {
             mIteratedObjectIDs.insert(((PDFIndirectObjectReference *)inObject)->mObjectID);
-            RefCountPtr<PDFObject> pointedObject(
+            auto pointedObject(
                 inParser.ParseNewObject(((PDFIndirectObjectReference *)inObject)->mObjectID));
             if (!pointedObject)
             {

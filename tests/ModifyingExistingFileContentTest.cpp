@@ -46,7 +46,7 @@ EStatusCode TestPageSizeModification(PDFWriter *inPDFWriter)
 
     // create a new object for the page, copy all but media box, which will be changed
     ObjectIDType thirdPageID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(2);
-    PDFObjectCastPtr<PDFDictionary> thirdPageObject = copyingContext->GetSourceDocumentParser()->ParsePage(2);
+    auto thirdPageObject = copyingContext->GetSourceDocumentParser()->ParsePage(2);
 
     MapIterator<PDFNameToPDFObjectMap> thirdPageObjectIt = thirdPageObject->GetIterator();
 

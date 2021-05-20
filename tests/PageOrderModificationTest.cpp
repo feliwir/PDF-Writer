@@ -44,7 +44,7 @@ void addPageToNewTree(unsigned long inPageIndex, PDFWriter &inWriter, PDFDocumen
     ObjectIDType newParent = catalogInformation.AddPageToPageTree(pageObjectId, objectsRegistry);
 
     // now modify the page object to refer to the new parent
-    PDFObjectCastPtr<PDFDictionary> pageDictionaryObject = modifiedFileParser.ParsePage(inPageIndex);
+    auto pageDictionaryObject = modifiedFileParser.ParsePage(inPageIndex);
     MapIterator<PDFNameToPDFObjectMap> pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
     ObjectsContext &objectContext = inWriter.GetObjectsContext();
 
