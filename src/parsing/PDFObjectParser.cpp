@@ -105,7 +105,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
     if (IsLiteralString(token))
         return ParseLiteralString(token);
     // Hexadecimal String
-    else if (IsHexadecimalString(token))
+    if (IsHexadecimalString(token))
         return ParseHexadecimalString(token);
     // NULL
     else if (IsNull(token))

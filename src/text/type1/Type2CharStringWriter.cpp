@@ -118,8 +118,7 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
             return PDFHummus::eFailure;
         return PDFHummus::eSuccess;
     }
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 EStatusCode Type2CharStringWriter::WriteOperator(uint16_t inOperatorCode)

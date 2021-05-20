@@ -2420,72 +2420,62 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     long long originalPageTreeKidsCount = kidsCount != nullptr ? kidsCount->GetValue() : 0;
 
     // copy all but parent key. then add parent as the new root object
-
     MapIterator<PDFNameToPDFObjectMap> pageTreeIt = originalTreeRootObject->GetIterator();
     PDFDocumentCopyingContext aCopyingContext;
 
     EStatusCode status = aCopyingContext.Start(inModifiedFileParser, this, mObjectsContext);
-
-    do
+    if (status != eSuccess)
     {
+        TRACE_LOG("DocumentContext::WriteCombinedPageTree, Unable to copy original page tree. this probably means that "
+                  "the original file is protected - and is therefore unsupported for such activity as adding pages");
+        return 0;
+    }
 
-        if (status != eSuccess)
+    while (pageTreeIt.MoveNext())
+    {
+        if (pageTreeIt.GetKey()->GetValue() != "Parent")
         {
-            TRACE_LOG(
-                "DocumentContext::WriteCombinedPageTree, Unable to copy original page tree. this probably means that "
-                "the original file is protected - and is therefore unsupported for such activity as adding pages");
-            break;
+            pagesTreeContext->WriteKey(pageTreeIt.GetKey()->GetValue());
+            aCopyingContext.CopyDirectObjectAsIs(pageTreeIt.GetValue());
         }
+    }
 
-        while (pageTreeIt.MoveNext())
-        {
-            if (pageTreeIt.GetKey()->GetValue() != "Parent")
-            {
-                pagesTreeContext->WriteKey(pageTreeIt.GetKey()->GetValue());
-                aCopyingContext.CopyDirectObjectAsIs(pageTreeIt.GetValue());
-            }
-        }
+    aCopyingContext.End();
 
-        aCopyingContext.End();
+    // parent
+    pagesTreeContext->WriteKey(scParent);
+    pagesTreeContext->WriteNewObjectReferenceValue(newPageRootTreeID);
 
-        // parent
-        pagesTreeContext->WriteKey(scParent);
-        pagesTreeContext->WriteNewObjectReferenceValue(newPageRootTreeID);
+    mObjectsContext->EndDictionary(pagesTreeContext);
+    mObjectsContext->EndIndirectObject();
 
-        mObjectsContext->EndDictionary(pagesTreeContext);
-        mObjectsContext->EndIndirectObject();
+    // now write the root page tree. 2 kids, the original pages, and new pages
+    mObjectsContext->StartNewIndirectObject(newPageRootTreeID);
 
-        // now write the root page tree. 2 kids, the original pages, and new pages
-        mObjectsContext->StartNewIndirectObject(newPageRootTreeID);
+    pagesTreeContext = mObjectsContext->StartDictionary();
 
-        pagesTreeContext = mObjectsContext->StartDictionary();
+    // type
+    pagesTreeContext->WriteKey(scType);
+    pagesTreeContext->WriteNameValue(scPages);
 
-        // type
-        pagesTreeContext->WriteKey(scType);
-        pagesTreeContext->WriteNameValue(scPages);
+    // count
+    pagesTreeContext->WriteKey(scCount);
+    pagesTreeContext->WriteIntegerValue(originalPageTreeKidsCount + newPagesCount);
 
-        // count
-        pagesTreeContext->WriteKey(scCount);
-        pagesTreeContext->WriteIntegerValue(originalPageTreeKidsCount + newPagesCount);
+    // kids
+    pagesTreeContext->WriteKey(scKids);
+    mObjectsContext->StartArray();
 
-        // kids
-        pagesTreeContext->WriteKey(scKids);
-        mObjectsContext->StartArray();
+    mObjectsContext->WriteIndirectObjectReference(originalTreeRoot);
+    mObjectsContext->WriteNewIndirectObjectReference(newPagesTree->GetID());
 
-        mObjectsContext->WriteIndirectObjectReference(originalTreeRoot);
-        mObjectsContext->WriteNewIndirectObjectReference(newPagesTree->GetID());
+    mObjectsContext->EndArray();
+    mObjectsContext->EndLine();
 
-        mObjectsContext->EndArray();
-        mObjectsContext->EndLine();
+    mObjectsContext->EndDictionary(pagesTreeContext);
+    mObjectsContext->EndIndirectObject();
 
-        mObjectsContext->EndDictionary(pagesTreeContext);
-        mObjectsContext->EndIndirectObject();
-
-    } while (false);
-
-    if (status == eSuccess)
-        return newPageRootTreeID;
-    return 0;
+    return newPageRootTreeID;
 }
 
 bool DocumentContext::IsRequiredVersionHigherThanPDFVersion(PDFParser *inModifiedFileParser,

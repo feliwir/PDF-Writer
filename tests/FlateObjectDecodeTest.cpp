@@ -66,6 +66,7 @@ EStatusCode decodeStream(const std::string &sourcePath, const std::string &targe
         total += readAmount;
     }
 
+    delete reader;
     os.close();
 
     std::cout << "Total read: " << total << "\n";
