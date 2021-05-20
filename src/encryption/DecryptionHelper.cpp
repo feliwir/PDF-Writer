@@ -483,10 +483,8 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(const std::shared_ptr<PDFSt
         }
         return mXcryptStreams; // ???
     }
-    else
-    {
-        return mXcryptStreams;
-    }
+
+    return mXcryptStreams;
 }
 
 void DecryptionHelper::OnObjectEnd(const std::shared_ptr<PDFObject> &inObject)

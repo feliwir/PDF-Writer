@@ -89,7 +89,7 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         --mTabLevel;
         return status;
     }
-    else if (inObject->GetType() == PDFObject::ePDFObjectDictionary)
+    if (inObject->GetType() == PDFObject::ePDFObjectDictionary)
     {
         primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
         ++mTabLevel;

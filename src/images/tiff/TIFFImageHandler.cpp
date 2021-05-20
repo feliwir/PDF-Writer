@@ -2462,7 +2462,7 @@ tsize_t TIFFImageHandler::SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount)
 tsize_t TIFFImageHandler::SampleRGBAAToRGB(tdata_t inData, uint32 inSampleCount)
 {
     uint32 i;
-    uint8_t *data = static_cast<uint8_t *>(inData);
+    auto *data = static_cast<uint8_t *>(inData);
 
     for (i = 0; i < inSampleCount; i++)
     {

@@ -20,6 +20,7 @@
  */
 #include "PDFPage.h"
 #include "PDFRectangle.h"
+#include "PDFUsedFont.h"
 #include "PDFWriter.h"
 #include "PageContentContext.h"
 #include "TestHelper.h"

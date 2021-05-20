@@ -279,8 +279,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
     {
         return PDFHummus::eSuccess;
     }
-    else
-        return PDFHummus::eFailure;
+    return PDFHummus::eFailure;
 }
 
 EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
