@@ -1,0 +1,5 @@
+add_subdirectory(cff)
+add_subdirectory(freetype)
+add_subdirectory(opentype)
+add_subdirectory(truetype)
+add_subdirectory(type1)

@@ -1,0 +1,9 @@
+set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/EFontStretch.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeFaceWrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeOpenTypeWrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeType1Wrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/FreeTypeWrapper.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/IFreeTypeFaceExtender.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/PFMFileReader.h
+)

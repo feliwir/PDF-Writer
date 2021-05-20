@@ -1,0 +1,6 @@
+set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeANSIFontWriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeDescendentFontWriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypeEmbeddedFontWriter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/TrueTypePrimitiveWriter.h
+)

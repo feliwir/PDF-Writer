@@ -24,7 +24,7 @@ else()
 endif()
 
 
-set(PDF_WRITER_SOURCE
+set(LIBCHARTA_SOURCE
     #sources
     AbstractContentContext.cpp
     AbstractWrittenFont.cpp
@@ -70,87 +70,8 @@ set(PDF_WRITER_SOURCE
     XObjectContentContext.cpp
 )
 
-set(PDF_WRITER_HEADERS
-    #headers
-    AbstractContentContext.h
-    AbstractWrittenFont.h
-    ANSIFontWriter.h
-    BetweenIncluding.h
-    BoxingBase.h
-    CatalogInformation.h
-    CIDFontWriter.h
-    CMYKRGBColor.h
-    ContainerIterator.h
-    DescendentFontWriter.h
-    DictionaryContext.h
-    DictOperand.h
-    DocumentContext.h
-    DocumentContextExtenderAdapter.h
-    EHummusImageType.h
-    EPDFVersion.h
-    EStatusCode.h
-    ETokenSeparator.h
-    FontDescriptorWriter.h
-    FSType.h
-    GlyphUnicodeMapping.h
-    GraphicState.h
-    GraphicStateStack.h
-    IANSIFontWriterHelper.h
-    IContentContextListener.h
-    IDescendentFontWriter.h
-    IDocumentContextExtender.h
-    IFontDescriptorHelper.h
-    IFormEndWritingTask.h
-    ITiledPatternEndWritingTask.h
-    IndirectObjectsReferenceRegistry.h
-    InfoDictionary.h
-    IObjectsContextExtender.h
-    IPageEndWritingTask.h
-    IResourceWritingTask.h
-    IType1InterpreterImplementation.h
-    IType2InterpreterImplementation.h
-    IWrittenFont.h
-    Log.h
-    MapIterator.h
-    MyStringBuf.h
-    ObjectsBasicTypes.h
-    ObjectsContext.h
-    ObjectsContextExtenderAdapter.h
-    PageContentContext.h
-    PageTree.h
-    PDFDate.h
-    PDFFormXObject.h
-    PDFTiledPattern.h
-    TiledPatternContentContext.h
-    PDFImageXObject.h
-    PDFModifiedPage.h
-    PDFPage.h
-    PDFRectangle.h
-    PDFStream.h
-    PDFTextString.h
-    PDFUsedFont.h
-    PDFWriter.h
-    PrimitiveObjectsWriter.h
-    ProcsetResourcesConstants.h
-    PSBool.h
-    ResourcesDictionary.h
-    SafeBufferMacrosDefs.h
-    Singleton.h
-    SingleValueContainerIterator.h
-    StateReader.h
-    StateWriter.h
-    Trace.h
-    TrailerInformation.h
-    UppercaseSequence.h
-    UsedFontsRepository.h
-    WrittenFontCFF.h
-    WrittenFontRepresentation.h
-    WrittenFontTrueType.h
-    XObjectContentContext.h
-)
-
 # Adding our target
-add_library(pdfwriter ${PDF_WRITER_SOURCE} ${PDF_WRITER_HEADERS})
+add_library(libcharta ${LIBCHARTA_SOURCE} ${LIBCHARTA_PUBLIC_HEADERS})
 
 add_subdirectory(encoding)
 add_subdirectory(encryption)
@@ -160,17 +81,18 @@ add_subdirectory(objects)
 add_subdirectory(parsing)
 add_subdirectory(text)
 
-target_link_libraries(pdfwriter PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
-target_include_directories(pdfwriter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(pdfwriter PUBLIC ${FREETYPE_INCLUDE_DIRS})
+target_link_libraries(libcharta PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
+target_include_directories(libcharta PUBLIC ${CMAKE_SOURCE_DIR}/include/libcharta) # TODO: just point to include/
+target_include_directories(libcharta PUBLIC ${FREETYPE_INCLUDE_DIRS})
 
 # Installing
-if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
-    install(TARGETS pdfwriter
+if(NOT SKIP_INSTALL_ALL )
+    install(TARGETS libcharta
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
-        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
+        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        PUBLIC_HEADER DESTINATION include/libcharta)
 endif()
 if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL )
     install(FILES ${ZLIB_PUBLIC_HDRS} DESTINATION include)

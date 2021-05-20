@@ -1,0 +1,87 @@
+
+set(LIBCHARTA_PUBLIC_HEADERS
+  # Headers
+  ${CMAKE_CURRENT_SOURCE_DIR}/AbstractContentContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/AbstractWrittenFont.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ANSIFontWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/BetweenIncluding.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/BoxingBase.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/CatalogInformation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/CIDFontWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/CMYKRGBColor.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ContainerIterator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DescendentFontWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DictionaryContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DictOperand.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DocumentContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/DocumentContextExtenderAdapter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/EHummusImageType.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/EPDFVersion.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/EStatusCode.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ETokenSeparator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/FontDescriptorWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/FSType.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/GlyphUnicodeMapping.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphicState.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphicStateStack.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IANSIFontWriterHelper.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IContentContextListener.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IDescendentFontWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IDocumentContextExtender.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IFontDescriptorHelper.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IFormEndWritingTask.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ITiledPatternEndWritingTask.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IndirectObjectsReferenceRegistry.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/InfoDictionary.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IObjectsContextExtender.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IPageEndWritingTask.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IResourceWritingTask.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IType1InterpreterImplementation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IType2InterpreterImplementation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/IWrittenFont.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/Log.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/MyStringBuf.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ObjectsBasicTypes.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ObjectsContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ObjectsContextExtenderAdapter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PageContentContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PageTree.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFDate.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFFormXObject.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFTiledPattern.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/TiledPatternContentContext.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFImageXObject.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFModifiedPage.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFPage.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFRectangle.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFStream.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFTextString.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFUsedFont.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PDFWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PrimitiveObjectsWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ProcsetResourcesConstants.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/PSBool.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ResourcesDictionary.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SafeBufferMacrosDefs.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/Singleton.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/SingleValueContainerIterator.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/StateReader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/StateWriter.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/Trace.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/TrailerInformation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/UppercaseSequence.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/UsedFontsRepository.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/WrittenFontCFF.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/WrittenFontRepresentation.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/WrittenFontTrueType.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/XObjectContentContext.h
+)
+
+add_subdirectory(encoding)
+add_subdirectory(encryption)
+add_subdirectory(io)
+add_subdirectory(images)
+add_subdirectory(objects)
+add_subdirectory(parsing)
+add_subdirectory(text)
