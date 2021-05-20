@@ -1863,14 +1863,13 @@ void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, const std::sha
     }
 }
 
-PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(const std::string &inFilePath,
-                                                                    const PDFParsingOptions &inOptions)
+std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(const std::string &inFilePath,
+                                                                                    const PDFParsingOptions &inOptions)
 {
-    auto *context = new PDFDocumentCopyingContext();
+    auto context = std::make_shared<PDFDocumentCopyingContext>();
 
     if (context->Start(inFilePath, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
     {
-        delete context;
         return nullptr;
     }
     return context;
@@ -2046,14 +2045,13 @@ EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWit
                                                    inCopyAdditionalObjects);
 }
 
-PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                                                    const PDFParsingOptions &inOptions)
+std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(
+    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions)
 {
-    auto *context = new PDFDocumentCopyingContext();
+    auto context = std::make_shared<PDFDocumentCopyingContext>();
 
     if (context->Start(inPDFStream, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
     {
-        delete context;
         return nullptr;
     }
     return context;
@@ -2169,8 +2167,8 @@ EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
 class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
 {
   public:
-    ModifiedDocCatalogWriterExtension(PDFDocumentCopyingContext *inCopyingContext, bool inRequiredVersionUpdate,
-                                      EPDFVersion inPDFVersion)
+    ModifiedDocCatalogWriterExtension(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
+                                      bool inRequiredVersionUpdate, EPDFVersion inPDFVersion)
     {
         mModifiedDocumentCopyingContext = inCopyingContext;
         mRequiresVersionUpdate = inRequiredVersionUpdate;
@@ -2220,7 +2218,7 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
     }
 
   private:
-    PDFDocumentCopyingContext *mModifiedDocumentCopyingContext;
+    std::shared_ptr<PDFDocumentCopyingContext> mModifiedDocumentCopyingContext;
     bool mRequiresVersionUpdate;
     EPDFVersion mPDFVersion;
 };
@@ -2282,11 +2280,10 @@ EStatusCode DocumentContext::FinalizeModifiedPDF(PDFParser *inModifiedFileParser
         if (hasNewPageTreeRoot || requiresVersionUpdate || DoExtendersRequireCatalogUpdate(inModifiedFileParser))
         {
             // use an extender to copy original catalog elements and update version if required
-            PDFDocumentCopyingContext *copyingContext = CreatePDFCopyingContext(inModifiedFileParser);
+            std::shared_ptr<PDFDocumentCopyingContext> copyingContext = CreatePDFCopyingContext(inModifiedFileParser);
             ModifiedDocCatalogWriterExtension catalogUpdate(copyingContext, requiresVersionUpdate,
                                                             inModifiedPDFVersion);
             status = WriteCatalogObject(finalPageRoot, &catalogUpdate);
-            delete copyingContext;
             if (status != eSuccess)
                 break;
         }
@@ -2527,9 +2524,8 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
         mEncryptionHelper.PauseEncryption();
         ObjectIDType encryptionDictionaryID = mObjectsContext->StartNewIndirectObject();
         // copying context, write as is
-        PDFDocumentCopyingContext *copyingContext = CreatePDFCopyingContext(inModifiedFileParser);
+        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = CreatePDFCopyingContext(inModifiedFileParser);
         copyingContext->CopyDirectObjectAsIs(encrypt);
-        delete copyingContext;
         mObjectsContext->EndIndirectObject();
         mEncryptionHelper.ReleaseEncryption();
 
@@ -2586,13 +2582,12 @@ EStatusCode DocumentContext::WriteXrefStream(long long &outXrefPosition)
     return status;
 }
 
-PDFDocumentCopyingContext *DocumentContext::CreatePDFCopyingContext(PDFParser *inPDFParser)
+std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(PDFParser *inPDFParser)
 {
-    auto *context = new PDFDocumentCopyingContext();
+    auto context = std::make_shared<PDFDocumentCopyingContext>();
 
     if (context->Start(inPDFParser, this, mObjectsContext) != PDFHummus::eSuccess)
     {
-        delete context;
         return nullptr;
     }
     return context;

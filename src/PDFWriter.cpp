@@ -517,8 +517,8 @@ EStatusCode PDFWriter::ContinuePDFForStream(IByteWriterWithPosition *inOutputStr
     return SetupState(inStateFilePath);
 }
 
-PDFDocumentCopyingContext *PDFWriter::CreatePDFCopyingContext(const std::string &inPDFFilePath,
-                                                              const PDFParsingOptions &inOptions)
+std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContext(const std::string &inPDFFilePath,
+                                                                              const PDFParsingOptions &inOptions)
 {
     return mDocumentContext.CreatePDFCopyingContext(inPDFFilePath, inOptions);
 }
@@ -631,8 +631,8 @@ EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosit
                                                 inCopyAdditionalObjects);
 }
 
-PDFDocumentCopyingContext *PDFWriter::CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                                              const PDFParsingOptions &inOptions)
+std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
+                                                                              const PDFParsingOptions &inOptions)
 {
     return mDocumentContext.CreatePDFCopyingContext(inPDFStream, inOptions);
 }
@@ -785,7 +785,7 @@ InputFile &PDFWriter::GetModifiedInputFile()
     return mModifiedFile;
 }
 
-PDFDocumentCopyingContext *PDFWriter::CreatePDFCopyingContextForModifiedFile()
+std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContextForModifiedFile()
 {
     return mDocumentContext.CreatePDFCopyingContext(&mModifiedFileParser);
 }
@@ -843,7 +843,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
 {
     PDFWriter pdfWriter;
     EStatusCode status;
-    PDFDocumentCopyingContext *copyingContext = nullptr;
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = nullptr;
 
     /*
     How to recrypt an encrypted or plain PDF. In other words. create a new version that's decrypted, or encrypted with
@@ -891,7 +891,6 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
             break;
         }
 
-        delete copyingContext;
         copyingContext = nullptr;
 
         // set new root object ID as this document root
@@ -900,8 +899,6 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
         // now just end the PDF
         pdfWriter.EndPDF();
     } while (false);
-
-    delete copyingContext;
 
     return status;
 }

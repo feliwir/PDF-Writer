@@ -68,7 +68,7 @@ class PDFModifiedPage
     std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser,
                                                         const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
                                                         ObjectsContext &inObjectContext,
-                                                        PDFDocumentCopyingContext *inCopyingContext);
+                                                        std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext);
     unsigned char GetDifferentChar(unsigned char);
     std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
     std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser,

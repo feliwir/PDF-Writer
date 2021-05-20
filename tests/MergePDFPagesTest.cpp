@@ -365,7 +365,7 @@ EStatusCode MergePagesUsingCopyingContext()
     if (status != PDFHummus::eSuccess)
         return status;
 
-    PDFDocumentCopyingContext *copyingContext =
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"));
     if (status != PDFHummus::eSuccess)
         return status;

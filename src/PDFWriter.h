@@ -255,15 +255,15 @@ class PDFWriter
 
     // Copying context, allowing for a continous flow of copying from multiple sources PDFs (create one per source) to
     // target PDF
-    PDFDocumentCopyingContext *CreatePDFCopyingContext(
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(
         const std::string &inPDFFilePath,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
-    PDFDocumentCopyingContext *CreatePDFCopyingContext(
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(
         IByteReaderWithPosition *inPDFStream,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     // for modified file path, create a copying context for the modified file
-    PDFDocumentCopyingContext *CreatePDFCopyingContextForModifiedFile();
+    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContextForModifiedFile();
 
     // some public image info services, for users of hummus
     DoubleAndDoublePair GetImageDimensions(

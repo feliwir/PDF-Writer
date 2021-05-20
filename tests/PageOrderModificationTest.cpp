@@ -32,7 +32,8 @@ limitations under the License.
 
 using namespace PDFHummus;
 
-void addPageToNewTree(unsigned long inPageIndex, PDFWriter &inWriter, PDFDocumentCopyingContext *inCopyingContext)
+void addPageToNewTree(unsigned long inPageIndex, PDFWriter &inWriter,
+                      std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
 {
     CatalogInformation &catalogInformation = inWriter.GetDocumentContext().GetCatalogInformation();
     IndirectObjectsReferenceRegistry &objectsRegistry = inWriter.GetObjectsContext().GetInDirectObjectsRegistry();
@@ -86,7 +87,7 @@ TEST(Modification, PageOrderModification)
     PDFParser &modifiedFileParser = pdfWriter.GetModifiedFileParser();
 
     // create a shared copying context to be used when re-addig the pages, to share elements
-    PDFDocumentCopyingContext *copyingContext = pdfWriter.CreatePDFCopyingContextForModifiedFile();
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = pdfWriter.CreatePDFCopyingContextForModifiedFile();
 
     // let's re-add the second page and then the first page, in this way changing their order. for this we'll need
     // direct access to the document context catalog information, which holds the page tree

@@ -14,7 +14,7 @@ TEST(Xcryption, EncryptedPDF)
     EStatusCode status = PDFHummus::eSuccess;
     InputFile pdfFile;
     PDFWriter pdfWriter;
-    PDFDocumentCopyingContext *copyingContext = nullptr;
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = nullptr;
 
     PDFParser parser;
 
@@ -34,11 +34,6 @@ TEST(Xcryption, EncryptedPDF)
         ASSERT_EQ(result.first, PDFHummus::eSuccess);
     }
 
-    delete copyingContext;
-    copyingContext = nullptr;
-
     status = pdfWriter.EndPDF();
     ASSERT_EQ(status, PDFHummus::eSuccess);
-
-    delete copyingContext;
 }

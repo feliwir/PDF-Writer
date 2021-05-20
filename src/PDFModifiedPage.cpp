@@ -162,7 +162,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
         ObjectIDType newEncapsulatingObjectID = 0;
 
         // create a copying context, so we can copy the page dictionary, and modify its contents + resources dict
-        PDFDocumentCopyingContext *copyingContext = mWriter->CreatePDFCopyingContextForModifiedFile();
+        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = mWriter->CreatePDFCopyingContextForModifiedFile();
 
         // get the page object
         ObjectIDType pageObjectID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(mPageIndex);
@@ -380,7 +380,6 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
         }
 
         objectContext.EndPDFStream(newStream);
-        delete copyingContext;
     } while (false);
 
     return status;
@@ -389,7 +388,7 @@ PDFHummus::EStatusCode PDFModifiedPage::WritePage()
 vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
                                                            const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
                                                            ObjectsContext &inObjectContext,
-                                                           PDFDocumentCopyingContext *inCopyingContext)
+                                                           std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
 {
     vector<string> formResourcesNames;
 

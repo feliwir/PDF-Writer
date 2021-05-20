@@ -163,7 +163,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
 EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 {
     EStatusCode status = eSuccess;
-    PDFDocumentCopyingContext *modifiedFileContext = inWriter->CreatePDFCopyingContextForModifiedFile();
+    std::shared_ptr<PDFDocumentCopyingContext> modifiedFileContext = inWriter->CreatePDFCopyingContextForModifiedFile();
 
     // get image source dictionary
     PDFObjectCastPtr<PDFStreamInput> imageStream(inWriter->GetModifiedFileParser().ParseNewObject(inImageObject));
@@ -219,8 +219,6 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 
     // copy remaining indirect objects from image stream dictionary
     status = modifiedFileContext->CopyNewObjectsForDirectObject(indirectObjects);
-
-    delete modifiedFileContext;
 
     return status;
 }

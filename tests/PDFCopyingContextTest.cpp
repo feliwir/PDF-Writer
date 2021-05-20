@@ -31,7 +31,7 @@ TEST(PDFEmbedding, PDFCopyingContext)
 {
     EStatusCode status;
     PDFWriter pdfWriter;
-    PDFDocumentCopyingContext *copyingContext = nullptr;
+    std::shared_ptr<PDFDocumentCopyingContext> copyingContext = nullptr;
 
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFCopyingContextTest.pdf"), ePDFVersion13,
@@ -52,12 +52,8 @@ TEST(PDFEmbedding, PDFCopyingContext)
     ASSERT_EQ(result.first, PDFHummus::eSuccess);
 
     copyingContext->End(); // delete will call End() as well...so can avoid
-
-    delete copyingContext;
     copyingContext = nullptr;
 
     status = pdfWriter.EndPDF();
     ASSERT_EQ(status, PDFHummus::eSuccess);
-
-    delete copyingContext;
 }
