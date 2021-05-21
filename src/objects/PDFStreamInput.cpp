@@ -18,10 +18,10 @@
 
 
 */
-#include "PDFStreamInput.h"
+#include "objects/PDFStreamInput.h"
 
-#include "PDFDictionary.h"
-#include "PDFName.h"
+#include "objects/PDFDictionary.h"
+#include "objects/PDFName.h"
 #include <utility>
 
 PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart)

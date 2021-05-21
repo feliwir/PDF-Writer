@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFHexString.h"
+#include "objects/PDFHexString.h"
 
 PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
 {

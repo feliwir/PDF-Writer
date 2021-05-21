@@ -21,6 +21,7 @@ if(BUILD_COVERAGE)
 endif()
 
 add_subdirectory(contrib)
+add_subdirectory(include)
 add_subdirectory(src)
 
 if(BUILD_TESTING)

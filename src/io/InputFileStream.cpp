@@ -18,7 +18,7 @@
 
 
 */
-#include "InputFileStream.h"
+#include "io/InputFileStream.h"
 #include "SafeBufferMacrosDefs.h"
 
 using namespace PDFHummus;

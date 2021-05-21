@@ -20,9 +20,9 @@ limitations under the License.
 */
 
 #include "encryption/EncryptionHelper.h"
-#include "DecryptionHelper.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
+#include "encryption/DecryptionHelper.h"
 #include "io/InputStringStream.h"
 #include "io/OutputAESEncodeStream.h"
 #include "io/OutputRC4XcodeStream.h"

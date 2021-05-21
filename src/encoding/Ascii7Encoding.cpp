@@ -18,7 +18,7 @@
 
 
 */
-#include "Ascii7Encoding.h"
+#include "encoding/Ascii7Encoding.h"
 #include "io/OutputStringBufferStream.h"
 
 BoolAndString Ascii7Encoding::Encode(const std::string &inString)

@@ -2,8 +2,8 @@
 // PDFArrayIterator.cpp    Stefan Woerthmueller 2014  StefanWoe@googlemail.com
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "PDFArrayIterator.h"
-#include "PDFDictionaryIterator.h"
+#include "objects/helpers/PDFArrayIterator.h"
+#include "objects/helpers/PDFDictionaryIterator.h"
 
 PDFDictionaryIterator PDFArrayIterator::DictAt(int ndx)
 {

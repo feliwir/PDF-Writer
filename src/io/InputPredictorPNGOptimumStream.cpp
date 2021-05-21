@@ -18,7 +18,7 @@
 
 
 */
-#include "InputPredictorPNGOptimumStream.h"
+#include "io/InputPredictorPNGOptimumStream.h"
 
 #include "Trace.h"
 #include <stdlib.h>

@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFDocEncoding.h"
+#include "encoding/PDFDocEncoding.h"
 #include "BetweenIncluding.h"
 
 static const char *scGlyphNames[256] = {".notdef",

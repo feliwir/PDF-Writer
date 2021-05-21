@@ -19,7 +19,7 @@ limitations under the License.
 
 */
 
-#include "RC4.h"
+#include "encryption/RC4.h"
 
 RC4::RC4() = default;
 

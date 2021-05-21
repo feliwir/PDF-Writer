@@ -21,7 +21,7 @@ limitations under the License.
 #pragma once
 
 #include "EStatusCode.h"
-#include "XCryptionCommon.h"
+#include "encryption/XCryptionCommon.h"
 
 #include <memory>
 #include <string>

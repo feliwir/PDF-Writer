@@ -18,7 +18,7 @@
 
 
  */
-#include "InputDCTDecodeStream.h"
+#include "io/InputDCTDecodeStream.h"
 #include "Trace.h"
 
 #include <string.h>

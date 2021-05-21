@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFSymbol.h"
+#include "objects/PDFSymbol.h"
 
 PDFSymbol::PDFSymbol(const std::string &inSymbol) : PDFObject(eType)
 {

@@ -18,7 +18,7 @@ limitations under the License.
 
 
 */
-#include "PDFParsingOptions.h"
+#include "parsing/PDFParsingOptions.h"
 
 const PDFParsingOptions &PDFParsingOptions::DefaultPDFParsingOptions()
 {

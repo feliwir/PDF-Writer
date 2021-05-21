@@ -18,8 +18,7 @@
 
 
 */
-#include "CFFEmbeddedFontWriter.h"
-#include "CharStringType2Flattener.h"
+#include "text/cff/CFFEmbeddedFontWriter.h"
 #include "DictionaryContext.h"
 #include "FSType.h"
 #include "ObjectsContext.h"
@@ -28,6 +27,7 @@
 #include "io/IByteReaderWithPosition.h"
 #include "io/InputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
+#include "text/cff/CharStringType2Flattener.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 
 #include <algorithm>

@@ -18,12 +18,12 @@
 
 
 */
-#include "Type1ToType2Converter.h"
-#include "CharStringType1Interpreter.h"
+#include "text/type1/Type1ToType2Converter.h"
 #include "Trace.h"
-#include "Type1Input.h"
-#include "Type2CharStringWriter.h"
 #include "io/IByteWriter.h"
+#include "text/type1/CharStringType1Interpreter.h"
+#include "text/type1/Type1Input.h"
+#include "text/type1/Type2CharStringWriter.h"
 
 #include <algorithm>
 

@@ -18,10 +18,10 @@
 
 
 */
-#include "CharStringType1Tracer.h"
-#include "CharStringType1Interpreter.h"
+#include "text/type1/CharStringType1Tracer.h"
 #include "Trace.h"
-#include "Type1Input.h"
+#include "text/type1/CharStringType1Interpreter.h"
+#include "text/type1/Type1Input.h"
 
 using namespace PDFHummus;
 

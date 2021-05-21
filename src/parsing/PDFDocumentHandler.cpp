@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFDocumentHandler.h"
+#include "parsing/PDFDocumentHandler.h"
 
 #include "DictionaryContext.h"
 #include "DocumentContext.h"
@@ -28,13 +28,12 @@
 #include "ObjectsContext.h"
 #include "PDFFormXObject.h"
 #include "PDFPage.h"
-#include "PDFParserTokenizer.h"
 #include "PDFStream.h"
 #include "PageContentContext.h"
 #include "PrimitiveObjectsWriter.h"
+#include "parsing/PDFParserTokenizer.h"
 #include <utility>
 
-#include "SimpleStringTokenizer.h"
 #include "Trace.h"
 #include "io/InputFlateDecodeStream.h"
 #include "io/InputStreamSkipperStream.h"
@@ -51,6 +50,7 @@
 #include "objects/PDFStreamInput.h"
 #include "objects/PDFSymbol.h"
 #include "objects/helpers/PDFPageInput.h"
+#include "parsing/SimpleStringTokenizer.h"
 
 using namespace PDFHummus;
 

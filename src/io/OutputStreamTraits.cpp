@@ -19,8 +19,8 @@
 
 */
 #include "io/OutputStreamTraits.h"
-#include "IByteReaderWithPosition.h"
-#include "IByteWriter.h"
+#include "io/IByteReaderWithPosition.h"
+#include "io/IByteWriter.h"
 
 using namespace PDFHummus;
 

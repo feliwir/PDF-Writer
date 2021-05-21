@@ -18,14 +18,14 @@
 
 
 */
-#include "TrueTypeANSIFontWriter.h"
+#include "text/truetype/TrueTypeANSIFontWriter.h"
 #include "ANSIFontWriter.h"
 #include "DictionaryContext.h"
 #include "IndirectObjectsReferenceRegistry.h"
 #include "ObjectsContext.h"
 #include "Trace.h"
-#include "TrueTypeEmbeddedFontWriter.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
+#include "text/truetype/TrueTypeEmbeddedFontWriter.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

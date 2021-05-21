@@ -19,10 +19,10 @@
 
  */
 
-#include "PDFPageMergingHelper.h"
-#include "PDFDocumentCopyingContext.h"
+#include "parsing/PDFPageMergingHelper.h"
 #include "PDFPage.h"
 #include "PDFWriter.h"
+#include "parsing/PDFDocumentCopyingContext.h"
 
 using namespace PDFHummus;
 

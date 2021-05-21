@@ -18,7 +18,7 @@
 
 
 */
-#include "CFFPrimitiveReader.h"
+#include "text/cff/CFFPrimitiveReader.h"
 #include <math.h>
 
 using namespace PDFHummus;

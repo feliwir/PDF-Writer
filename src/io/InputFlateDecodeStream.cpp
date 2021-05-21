@@ -18,7 +18,7 @@
 
 
 */
-#include "InputFlateDecodeStream.h"
+#include "io/InputFlateDecodeStream.h"
 
 #include "Trace.h"
 #include <zlib.h>

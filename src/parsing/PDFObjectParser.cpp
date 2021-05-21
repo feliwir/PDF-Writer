@@ -18,10 +18,10 @@
 
 
 */
-#include "PDFObjectParser.h"
+#include "parsing/PDFObjectParser.h"
 #include "BoxingBase.h"
-#include "IPDFParserExtender.h"
 #include "PDFStream.h"
+#include "parsing/IPDFParserExtender.h"
 
 #include "Trace.h"
 #include "encryption/DecryptionHelper.h"

@@ -1,5 +1,12 @@
+add_subdirectory(encoding)
+add_subdirectory(encryption)
+add_subdirectory(io)
+add_subdirectory(images)
+add_subdirectory(objects)
+add_subdirectory(parsing)
+add_subdirectory(text)
 
-set(LIBCHARTA_PUBLIC_HEADERS
+set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
   # Headers
   ${CMAKE_CURRENT_SOURCE_DIR}/AbstractContentContext.h
   ${CMAKE_CURRENT_SOURCE_DIR}/AbstractWrittenFont.h
@@ -76,12 +83,5 @@ set(LIBCHARTA_PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/WrittenFontRepresentation.h
   ${CMAKE_CURRENT_SOURCE_DIR}/WrittenFontTrueType.h
   ${CMAKE_CURRENT_SOURCE_DIR}/XObjectContentContext.h
-)
-
-add_subdirectory(encoding)
-add_subdirectory(encryption)
-add_subdirectory(io)
-add_subdirectory(images)
-add_subdirectory(objects)
-add_subdirectory(parsing)
-add_subdirectory(text)
+  PARENT_SCOPE
+  )

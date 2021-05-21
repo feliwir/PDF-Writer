@@ -18,13 +18,11 @@
 
 
 */
-#include "JPEGImageHandler.h"
+#include "images/jpeg/JPEGImageHandler.h"
 #include "DictionaryContext.h"
 #include "DocumentContext.h"
 #include "EStatusCode.h"
 #include "IDocumentContextExtender.h"
-#include "JPEGImageHandler.h"
-#include "JPEGImageParser.h"
 #include "ObjectsContext.h"
 #include "PDFFormXObject.h"
 #include "PDFImageXObject.h"
@@ -32,6 +30,8 @@
 #include "ProcsetResourcesConstants.h"
 #include "Trace.h"
 #include "XObjectContentContext.h"
+#include "images/jpeg/JPEGImageHandler.h"
+#include "images/jpeg/JPEGImageParser.h"
 #include "io/InputFile.h"
 #include "io/OutputStreamTraits.h"
 

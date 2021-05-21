@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFInteger.h"
+#include "objects/PDFInteger.h"
 
 PDFInteger::PDFInteger(long long inValue) : PDFObject(eType)
 {

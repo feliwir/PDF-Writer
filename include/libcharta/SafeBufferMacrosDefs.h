@@ -21,7 +21,7 @@
 #pragma once
 
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 #include <sstream>
 #include <string>
 static std::wstring UTF8ToUTF16Wide(const std::string &inUTF8String);

@@ -17,7 +17,7 @@
     limitations under the License.
 */
 
-#include "InputRC4XcodeStream.h"
+#include "io/InputRC4XcodeStream.h"
 
 InputRC4XcodeStream::InputRC4XcodeStream()
 {

@@ -2,11 +2,11 @@
 // PDFCosArray.cpp  Stefan Woerthmueller    2014       StefanWoe@googlemail.com
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "PDFCosArray.h"
+#include "objects/PDFCosArray.h"
 
 #include <utility>
 
-#include "PDFCosDict.h"
+#include "objects/PDFCosDict.h"
 
 PDFCosArray::PDFCosArray(PDFCosDict &parentDict, std::string name)
     : m_Name(std::move(name)), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)

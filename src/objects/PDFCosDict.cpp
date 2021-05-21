@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // PDFCosDict.cpp   Stefan Woerthmueller    2014       StefanWoe@googlemail.com
 ///////////////////////////////////////////////////////////////////////////////
-#include "PDFCosDict.h"
+#include "objects/PDFCosDict.h"
 
 #include <utility>
 
-#include "PDFCosArray.h"
+#include "objects/PDFCosArray.h"
 
 PDFCosDict::PDFCosDict(PDFCosDict &parentDict, std::string name)
     : m_Name(std::move(name)), m_DocumentContext(parentDict.m_DocumentContext), m_DidEnd(false), m_ObjID(0)

@@ -2,8 +2,8 @@
 // PDFDictionaryIterator.cpp Stefan Woerthmueller 2014  StefanWoe@googlemail.com
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "PDFDictionaryIterator.h"
-#include "PDFArrayIterator.h"
+#include "objects/helpers/PDFDictionaryIterator.h"
+#include "objects/helpers/PDFArrayIterator.h"
 
 #include <fstream>
 #include <iostream>

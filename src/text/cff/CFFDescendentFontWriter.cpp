@@ -18,12 +18,12 @@
 
 
 */
-#include "CFFDescendentFontWriter.h"
-#include "CFFEmbeddedFontWriter.h"
+#include "text/cff/CFFDescendentFontWriter.h"
 #include "DescendentFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
 #include "Trace.h"
+#include "text/cff/CFFEmbeddedFontWriter.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 
 using namespace PDFHummus;

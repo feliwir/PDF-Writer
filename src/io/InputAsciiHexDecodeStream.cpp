@@ -18,7 +18,7 @@
 
 
 */
-#include "InputAsciiHexDecodeStream.h"
+#include "io/InputAsciiHexDecodeStream.h"
 
 #include <string.h>
 

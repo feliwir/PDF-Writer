@@ -18,9 +18,8 @@
 
 
 */
-#include "CFFANSIFontWriter.h"
+#include "text/cff/CFFANSIFontWriter.h"
 #include "ANSIFontWriter.h"
-#include "CFFEmbeddedFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
 #include "PDFStream.h"
@@ -28,6 +27,7 @@
 #include "SafeBufferMacrosDefs.h"
 #include "Trace.h"
 #include "io/OutputStringBufferStream.h"
+#include "text/cff/CFFEmbeddedFontWriter.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 #include "text/type1/Type1ToCFFEmbeddedFontWriter.h"
 

@@ -18,7 +18,7 @@
 
 
 */
-#include "CharStringType1Interpreter.h"
+#include "text/type1/CharStringType1Interpreter.h"
 #include "Trace.h"
 #include "io/InputByteArrayStream.h"
 

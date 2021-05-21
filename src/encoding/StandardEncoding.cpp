@@ -18,7 +18,7 @@
 
 
 */
-#include "StandardEncoding.h"
+#include "encoding/StandardEncoding.h"
 #include "BetweenIncluding.h"
 
 static const char *scGlyphNames[256] = {".notdef",

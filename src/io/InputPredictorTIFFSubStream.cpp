@@ -18,7 +18,7 @@
 
 
 */
-#include "InputPredictorTIFFSubStream.h"
+#include "io/InputPredictorTIFFSubStream.h"
 #include "Trace.h"
 
 InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()

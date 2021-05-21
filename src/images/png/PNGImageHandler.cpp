@@ -20,7 +20,7 @@
 */
 #ifndef PDFHUMMUS_NO_PNG
 
-#include "PNGImageHandler.h"
+#include "images/png/PNGImageHandler.h"
 #include "DictionaryContext.h"
 #include "DocumentContext.h"
 #include "EStatusCode.h"

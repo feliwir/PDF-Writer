@@ -18,7 +18,7 @@
 
 
 */
-#include "FreeTypeOpenTypeWrapper.h"
+#include "text/freetype/FreeTypeOpenTypeWrapper.h"
 #include "Trace.h"
 
 #include FT_SFNT_NAMES_H

@@ -18,7 +18,7 @@
 
 
 */
-#include "SimpleStringTokenizer.h"
+#include "parsing/SimpleStringTokenizer.h"
 #include "io/IByteReader.h"
 #include "io/OutputStringBufferStream.h"
 

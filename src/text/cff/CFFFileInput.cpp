@@ -18,10 +18,10 @@
 
 
 */
-#include "CFFFileInput.h"
-#include "CharStringType2Interpreter.h"
+#include "text/cff/CFFFileInput.h"
 #include "Trace.h"
 #include "encoding/StandardEncoding.h"
+#include "text/cff/CharStringType2Interpreter.h"
 
 using namespace PDFHummus;
 

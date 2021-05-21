@@ -18,7 +18,7 @@
 
 
 */
-#include "JPEGImageInformation.h"
+#include "images/jpeg/JPEGImageInformation.h"
 
 JPEGImageInformation::JPEGImageInformation()
 {

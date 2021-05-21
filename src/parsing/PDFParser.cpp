@@ -18,10 +18,8 @@
 
 
 */
-#include "PDFParser.h"
+#include "parsing/PDFParser.h"
 #include "BoxingBase.h"
-#include "IPDFParserExtender.h"
-#include "PDFParserTokenizer.h"
 #include "Trace.h"
 #include "io/ArrayOfInputStreamsStream.h"
 #include "io/IByteReaderWithPosition.h"
@@ -40,6 +38,8 @@
 #include "objects/PDFInteger.h"
 #include "objects/PDFName.h"
 #include "objects/PDFObject.h"
+#include "parsing/IPDFParserExtender.h"
+#include "parsing/PDFParserTokenizer.h"
 
 #include "objects/PDFObjectCast.h"
 #include "objects/PDFStreamInput.h"

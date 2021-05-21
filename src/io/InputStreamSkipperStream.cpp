@@ -18,7 +18,7 @@
 
 
 */
-#include "InputStreamSkipperStream.h"
+#include "io/InputStreamSkipperStream.h"
 
 InputStreamSkipperStream::InputStreamSkipperStream()
 {
