@@ -44,10 +44,10 @@ jobs:
       run: ctest -C ${{env.BUILD_TYPE}}
 
     - name: Coverage
-      # Our coverage target is called "pdfwriter_coverage"
-      run: cmake --build build --target pdfwriter_coverage
+      # Our coverage target is called "libcharta_coverage"
+      run: cmake --build build --target libcharta_coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
-        files: ${{github.workspace}}/build/pdfwriter_coverage.info
+        files: ${{github.workspace}}/build/libcharta_coverage.info
