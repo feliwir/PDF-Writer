@@ -23,6 +23,7 @@ endif()
 add_subdirectory(contrib)
 add_subdirectory(include)
 add_subdirectory(src)
+add_subdirectory(apps)
 
 if(BUILD_TESTING)
     enable_testing()
