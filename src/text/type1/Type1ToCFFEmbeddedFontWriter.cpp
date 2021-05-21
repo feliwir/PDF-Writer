@@ -18,17 +18,17 @@
 
 
 */
-#include "Type1ToCFFEmbeddedFontWriter.h"
+#include "text/type1/Type1ToCFFEmbeddedFontWriter.h"
 #include "DictionaryContext.h"
 #include "FSType.h"
 #include "ObjectsContext.h"
 #include "PDFStream.h"
 #include "Trace.h"
-#include "Type1ToType2Converter.h"
 #include "encoding/StandardEncoding.h"
 #include "io/InputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
+#include "text/type1/Type1ToType2Converter.h"
 
 #include <algorithm>
 

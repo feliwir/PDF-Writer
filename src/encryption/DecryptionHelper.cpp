@@ -18,7 +18,7 @@ limitations under the License.
 
 
 */
-#include "DecryptionHelper.h"
+#include "encryption/DecryptionHelper.h"
 
 #include "Trace.h"
 #include "io/InputAESDecodeStream.h"

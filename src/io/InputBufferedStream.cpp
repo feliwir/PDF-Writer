@@ -18,7 +18,7 @@
 
 
 */
-#include "InputBufferedStream.h"
+#include "io/InputBufferedStream.h"
 #include <algorithm>
 #include <memory.h>
 

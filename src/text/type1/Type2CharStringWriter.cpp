@@ -18,7 +18,7 @@
 
 
 */
-#include "Type2CharStringWriter.h"
+#include "text/type1/Type2CharStringWriter.h"
 #include "io/IByteWriter.h"
 
 using namespace PDFHummus;

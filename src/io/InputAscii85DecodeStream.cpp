@@ -18,7 +18,7 @@
 
 
 */
-#include "InputAscii85DecodeStream.h"
+#include "io/InputAscii85DecodeStream.h"
 
 #include <string.h>
 

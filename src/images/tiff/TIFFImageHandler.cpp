@@ -73,7 +73,7 @@
 
 #ifndef PDFHUMMUS_NO_TIFF
 
-#include "TIFFImageHandler.h"
+#include "images/tiff/TIFFImageHandler.h"
 #include "DictionaryContext.h"
 #include "DocumentContext.h"
 #include "IDocumentContextExtender.h"

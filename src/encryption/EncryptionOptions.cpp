@@ -18,7 +18,7 @@ limitations under the License.
 
 
 */
-#include "EncryptionOptions.h"
+#include "encryption/EncryptionOptions.h"
 
 const EncryptionOptions &EncryptionOptions::DefaultEncryptionOptions()
 {

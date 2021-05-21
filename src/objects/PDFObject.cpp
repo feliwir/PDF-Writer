@@ -18,8 +18,8 @@
 
 
 */
-#include "PDFObject.h"
-#include "IDeletable.h"
+#include "objects/PDFObject.h"
+#include "objects/IDeletable.h"
 
 const char *PDFObject::scPDFObjectTypeLabel(int index)
 {

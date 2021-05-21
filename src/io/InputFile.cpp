@@ -18,10 +18,10 @@
 
 
 */
-#include "InputFile.h"
-#include "InputBufferedStream.h"
-#include "InputFileStream.h"
+#include "io/InputFile.h"
 #include "Trace.h"
+#include "io/InputBufferedStream.h"
+#include "io/InputFileStream.h"
 
 using namespace PDFHummus;
 

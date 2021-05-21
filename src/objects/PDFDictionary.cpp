@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFDictionary.h"
+#include "objects/PDFDictionary.h"
 
 PDFDictionary::PDFDictionary() : PDFObject(eType)
 {

@@ -18,8 +18,8 @@
 
 
 */
-#include "JPEGImageParser.h"
-#include "JPEGImageInformation.h"
+#include "images/jpeg/JPEGImageParser.h"
+#include "images/jpeg/JPEGImageInformation.h"
 #include "io/IByteReaderWithPosition.h"
 
 #include <memory.h>

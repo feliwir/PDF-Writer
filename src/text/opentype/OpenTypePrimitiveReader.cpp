@@ -18,7 +18,7 @@
 
 
 */
-#include "OpenTypePrimitiveReader.h"
+#include "text/opentype/OpenTypePrimitiveReader.h"
 
 using namespace PDFHummus;
 

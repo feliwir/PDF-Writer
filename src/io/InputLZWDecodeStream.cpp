@@ -18,7 +18,7 @@
 
 
 */
-#include "InputLZWDecodeStream.h"
+#include "io/InputLZWDecodeStream.h"
 
 #include "Trace.h"
 #include <zlib.h>

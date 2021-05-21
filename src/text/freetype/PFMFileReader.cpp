@@ -18,7 +18,7 @@
 
 
 */
-#include "PFMFileReader.h"
+#include "text/freetype/PFMFileReader.h"
 #include "Trace.h"
 #include "io/IByteReaderWithPosition.h"
 #include "io/InputFile.h"

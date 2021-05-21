@@ -18,7 +18,7 @@
 
 
 */
-#include "InputStringBufferStream.h"
+#include "io/InputStringBufferStream.h"
 #include "SafeBufferMacrosDefs.h"
 
 InputStringBufferStream::InputStringBufferStream(MyStringBuf *inBufferToReadFrom)

@@ -18,7 +18,7 @@
 
 
 */
-#include "OpenTypeFileInput.h"
+#include "text/opentype/OpenTypeFileInput.h"
 #include "Trace.h"
 #include "io/InputFile.h"
 

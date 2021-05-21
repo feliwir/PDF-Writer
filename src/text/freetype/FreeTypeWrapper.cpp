@@ -18,7 +18,7 @@
 
 
 */
-#include "FreeTypeWrapper.h"
+#include "text/freetype/FreeTypeWrapper.h"
 #include "Trace.h"
 #include "io/IByteReaderWithPosition.h"
 #include "io/InputFile.h"

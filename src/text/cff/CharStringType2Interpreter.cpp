@@ -18,7 +18,7 @@
 
 
 */
-#include "CharStringType2Interpreter.h"
+#include "text/cff/CharStringType2Interpreter.h"
 #include "Trace.h"
 #include <math.h>
 #include <stdlib.h>

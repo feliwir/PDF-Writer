@@ -18,13 +18,13 @@
 
 
 */
-#include "Type1Input.h"
+#include "text/type1/Type1Input.h"
 #include "BoxingBase.h"
-#include "CharStringType1Interpreter.h"
 #include "PSBool.h"
 #include "Trace.h"
 #include "encoding/StandardEncoding.h"
 #include "io/IByteReaderWithPosition.h"
+#include "text/type1/CharStringType1Interpreter.h"
 #include <sstream>
 
 using namespace PDFHummus;

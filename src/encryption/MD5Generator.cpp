@@ -63,7 +63,7 @@
 
 
 */
-#include "MD5Generator.h"
+#include "encryption/MD5Generator.h"
 #include "SafeBufferMacrosDefs.h"
 #include "io/OutputStringBufferStream.h"
 

@@ -18,7 +18,7 @@
 
 
 */
-#include "TrueTypePrimitiveWriter.h"
+#include "text/truetype/TrueTypePrimitiveWriter.h"
 #include "io/OutputStringBufferStream.h"
 
 using namespace PDFHummus;

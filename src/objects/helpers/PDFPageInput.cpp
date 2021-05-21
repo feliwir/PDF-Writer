@@ -19,13 +19,13 @@
 
  */
 
-#include "PDFPageInput.h"
+#include "objects/helpers/PDFPageInput.h"
 
 #include "PagePresets.h"
-#include "ParsedPrimitiveHelper.h"
 #include "Trace.h"
 #include "objects/PDFArray.h"
 #include "objects/PDFName.h"
+#include "objects/helpers/ParsedPrimitiveHelper.h"
 #include "parsing/PDFParser.h"
 #include <utility>
 

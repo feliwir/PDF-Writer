@@ -18,7 +18,7 @@
 
 
 */
-#include "TrueTypeEmbeddedFontWriter.h"
+#include "text/truetype/TrueTypeEmbeddedFontWriter.h"
 #include "DictionaryContext.h"
 #include "FSType.h"
 #include "ObjectsContext.h"

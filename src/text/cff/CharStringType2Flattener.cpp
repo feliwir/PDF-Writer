@@ -18,11 +18,11 @@
 
 
 */
-#include "CharStringType2Flattener.h"
-#include "CFFFileInput.h"
-#include "CharStringType2Interpreter.h"
+#include "text/cff/CharStringType2Flattener.h"
 #include "Trace.h"
 #include "io/IByteWriter.h"
+#include "text/cff/CFFFileInput.h"
+#include "text/cff/CharStringType2Interpreter.h"
 
 #include <math.h>
 

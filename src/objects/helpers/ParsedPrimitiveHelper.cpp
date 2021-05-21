@@ -19,7 +19,7 @@
 
  */
 
-#include "ParsedPrimitiveHelper.h"
+#include "objects/helpers/ParsedPrimitiveHelper.h"
 
 #include "BoxingBase.h"
 #include "objects/PDFBoolean.h"

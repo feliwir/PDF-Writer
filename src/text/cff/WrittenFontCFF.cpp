@@ -19,8 +19,6 @@
 
 */
 #include "WrittenFontCFF.h"
-#include "CFFANSIFontWriter.h"
-#include "CFFDescendentFontWriter.h"
 #include "CIDFontWriter.h"
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
@@ -31,6 +29,8 @@
 #include "objects/PDFInteger.h"
 #include "objects/PDFObjectCast.h"
 #include "parsing/PDFParser.h"
+#include "text/cff/CFFANSIFontWriter.h"
+#include "text/cff/CFFDescendentFontWriter.h"
 
 using namespace PDFHummus;
 

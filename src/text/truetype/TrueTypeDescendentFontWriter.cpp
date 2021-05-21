@@ -18,12 +18,12 @@
 
 
 */
-#include "TrueTypeDescendentFontWriter.h"
+#include "text/truetype/TrueTypeDescendentFontWriter.h"
 #include "DescendentFontWriter.h"
 #include "DictionaryContext.h"
 #include "IndirectObjectsReferenceRegistry.h"
 #include "ObjectsContext.h"
-#include "TrueTypeEmbeddedFontWriter.h"
+#include "text/truetype/TrueTypeEmbeddedFontWriter.h"
 
 using namespace PDFHummus;
 

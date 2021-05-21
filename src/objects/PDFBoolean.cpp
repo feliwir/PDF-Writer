@@ -18,7 +18,7 @@
 
 
 */
-#include "PDFBoolean.h"
+#include "objects/PDFBoolean.h"
 
 PDFBoolean::PDFBoolean(bool inValue) : PDFObject(eType)
 {

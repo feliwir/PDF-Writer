@@ -23,7 +23,6 @@ else()
 	add_definitions(-DPDFHUMMUS_NO_PNG=1)
 endif()
 
-
 set(LIBCHARTA_SOURCE
     #sources
     AbstractContentContext.cpp
@@ -70,6 +69,9 @@ set(LIBCHARTA_SOURCE
     XObjectContentContext.cpp
 )
 
+set(LIBCHARTA_PUBLIC_INCLUDE_DIRECTORIES    ${CMAKE_SOURCE_DIR}/include/libcharta) # TODO: just point to include/
+set(LIBCHARTA_PRIVATE_INCLUDE_DIRECTORIES   ${CMAKE_SOURCE_DIR}/src/   )
+
 # Adding our target
 add_library(libcharta ${LIBCHARTA_SOURCE} ${LIBCHARTA_PUBLIC_HEADERS})
 
@@ -81,19 +83,23 @@ add_subdirectory(objects)
 add_subdirectory(parsing)
 add_subdirectory(text)
 
-target_link_libraries(libcharta PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
-target_include_directories(libcharta PUBLIC ${CMAKE_SOURCE_DIR}/include/libcharta) # TODO: just point to include/
+target_include_directories(libcharta PUBLIC ${LIBCHARTA_PUBLIC_INCLUDE_DIRECTORIES})
+target_include_directories(libcharta PRIVATE ${LIBCHARTA_PRIVATE_INCLUDE_DIRECTORIES}) 
 target_include_directories(libcharta PUBLIC ${FREETYPE_INCLUDE_DIRS})
+
+target_link_libraries(libcharta PRIVATE aes JPEG::JPEG ZLIB::ZLIB PNG::PNG TIFF::TIFF Freetype::Freetype)
 
 # Installing
 if(NOT SKIP_INSTALL_ALL )
-    install(TARGETS libcharta
+    install(TARGETS libcharta   
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
-        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION include/libcharta)
-endif()
-if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL )
-    install(FILES ${ZLIB_PUBLIC_HDRS} DESTINATION include)
+        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    foreach ( file ${LIBCHARTA_PUBLIC_HEADERS} )
+        file(RELATIVE_PATH rel_path ${CMAKE_SOURCE_DIR}/include ${file})
+        get_filename_component( dir ${rel_path} DIRECTORY )
+        install( FILES ${file} DESTINATION include/${dir} )
+    endforeach()
+    
 endif()

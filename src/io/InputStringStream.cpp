@@ -18,7 +18,7 @@ limitations under the License.
 
 
 */
-#include "InputStringStream.h"
+#include "io/InputStringStream.h"
 
 using namespace std;
 

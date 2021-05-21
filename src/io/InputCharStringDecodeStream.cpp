@@ -18,7 +18,7 @@
 
 
 */
-#include "InputCharStringDecodeStream.h"
+#include "io/InputCharStringDecodeStream.h"
 
 using namespace PDFHummus;
 

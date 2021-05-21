@@ -18,7 +18,7 @@
 
 
 */
-#include "UnicodeString.h"
+#include "encoding/UnicodeString.h"
 #include "Trace.h"
 #include <sstream>
 

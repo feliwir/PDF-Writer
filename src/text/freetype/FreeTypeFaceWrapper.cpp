@@ -18,14 +18,14 @@
 
 
 */
-#include "FreeTypeFaceWrapper.h"
+#include "text/freetype/FreeTypeFaceWrapper.h"
 #include "BetweenIncluding.h"
-#include "FreeTypeOpenTypeWrapper.h"
-#include "FreeTypeType1Wrapper.h"
-#include "IFreeTypeFaceExtender.h"
 #include "Trace.h"
 #include "WrittenFontCFF.h"
 #include "WrittenFontTrueType.h"
+#include "text/freetype/FreeTypeOpenTypeWrapper.h"
+#include "text/freetype/FreeTypeType1Wrapper.h"
+#include "text/freetype/IFreeTypeFaceExtender.h"
 
 #include <math.h>
 

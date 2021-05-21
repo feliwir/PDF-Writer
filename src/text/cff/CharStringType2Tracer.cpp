@@ -18,13 +18,13 @@
 
 
 */
-#include "CharStringType2Tracer.h"
+#include "text/cff/CharStringType2Tracer.h"
 #include "BoxingBase.h"
-#include "CFFFileInput.h"
-#include "CharStringType2Interpreter.h"
 #include "SafeBufferMacrosDefs.h"
 #include "Trace.h"
 #include "io/IByteWriter.h"
+#include "text/cff/CFFFileInput.h"
+#include "text/cff/CharStringType2Interpreter.h"
 
 using namespace PDFHummus;
 

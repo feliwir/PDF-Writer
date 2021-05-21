@@ -18,7 +18,7 @@
 
 
 */
-#include "InputPFBDecodeStream.h"
+#include "io/InputPFBDecodeStream.h"
 #include "Trace.h"
 #include "io/OutputStringBufferStream.h"
 

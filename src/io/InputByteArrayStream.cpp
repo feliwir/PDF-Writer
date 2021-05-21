@@ -18,7 +18,7 @@
 
 
 */
-#include "InputByteArrayStream.h"
+#include "io/InputByteArrayStream.h"
 #include <memory.h>
 
 InputByteArrayStream::InputByteArrayStream()

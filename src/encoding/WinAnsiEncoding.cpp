@@ -18,7 +18,7 @@
 
 
 */
-#include "WinAnsiEncoding.h"
+#include "encoding/WinAnsiEncoding.h"
 #include "BetweenIncluding.h"
 
 static const char *scGlyphNames[256] = {".notdef",
