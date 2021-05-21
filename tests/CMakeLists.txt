@@ -67,7 +67,7 @@ if(BUILD_COVERAGE)
     setup_target_for_coverage_lcov(
         NAME libcharta_coverage
         EXECUTABLE ctest -j ${n_cores}
-        EXCLUDE "demo/*" "contrib/*" "/usr/include/*"
+        EXCLUDE "contrib/*" "/usr/include/*"
         DEPENDENCIES libcharta_tests)
 endif()
 
