@@ -69,7 +69,7 @@ set(LIBCHARTA_SOURCE
     XObjectContentContext.cpp
 )
 
-set(LIBCHARTA_PUBLIC_INCLUDE_DIRECTORIES    ${CMAKE_SOURCE_DIR}/include/libcharta) # TODO: just point to include/
+set(LIBCHARTA_PUBLIC_INCLUDE_DIRECTORIES    ${CMAKE_SOURCE_DIR}/include/ ${CMAKE_SOURCE_DIR}/include/libcharta) # TODO: just point to include/
 set(LIBCHARTA_PRIVATE_INCLUDE_DIRECTORIES   ${CMAKE_SOURCE_DIR}/src/   )
 
 # Adding our target
