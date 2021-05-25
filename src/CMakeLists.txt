@@ -101,5 +101,4 @@ if(NOT SKIP_INSTALL_ALL )
         get_filename_component( dir ${rel_path} DIRECTORY )
         install( FILES ${file} DESTINATION include/${dir} )
     endforeach()
-    
 endif()
