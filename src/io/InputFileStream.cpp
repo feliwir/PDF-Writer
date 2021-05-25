@@ -23,11 +23,6 @@
 
 using namespace PDFHummus;
 
-InputFileStream::InputFileStream()
-{
-    mStream = nullptr;
-}
-
 InputFileStream::~InputFileStream()
 {
     if (mStream != nullptr)
@@ -36,7 +31,6 @@ InputFileStream::~InputFileStream()
 
 InputFileStream::InputFileStream(const std::string &inFilePath)
 {
-    mStream = nullptr;
     Open(inFilePath);
 }
 

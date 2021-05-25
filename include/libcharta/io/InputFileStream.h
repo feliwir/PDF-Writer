@@ -32,7 +32,7 @@
 class InputFileStream final : public IByteReaderWithPosition
 {
   public:
-    InputFileStream(void);
+    InputFileStream() = default;
     virtual ~InputFileStream(void);
 
     // input file path is in UTF8
@@ -53,5 +53,5 @@ class InputFileStream final : public IByteReaderWithPosition
     long long GetFileSize();
 
   private:
-    FILE *mStream;
+    FILE *mStream = nullptr;
 };

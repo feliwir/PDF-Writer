@@ -24,7 +24,7 @@
 #include "MyStringBuf.h"
 #include <string>
 
-class OutputStringBufferStream : public IByteWriterWithPosition
+class OutputStringBufferStream final : public IByteWriterWithPosition
 {
   public:
     OutputStringBufferStream(void);

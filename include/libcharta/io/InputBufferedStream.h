@@ -22,8 +22,9 @@
 
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
+#include <vector>
 
-#define DEFAULT_BUFFER_SIZE 256 * 1024
+constexpr size_t DEFAULT_BUFFER_SIZE = 256 * 1024;
 
 class InputBufferedStream final : public IByteReaderWithPosition
 {
@@ -66,10 +67,9 @@ class InputBufferedStream final : public IByteReaderWithPosition
     IByteReaderWithPosition *GetSourceStream();
 
   private:
-    uint8_t *mBuffer;
-    size_t mBufferSize;
-    uint8_t *mCurrentBufferIndex;
-    uint8_t *mLastAvailableIndex;
+    std::vector<uint8_t> mBuffer;
+    size_t mCurrentBufferIndex;
+    size_t mLastAvailableIndex;
     IByteReaderWithPosition *mSourceStream;
 
     void Initiate(IByteReaderWithPosition *inSourceReader, size_t inBufferSize);

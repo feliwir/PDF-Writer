@@ -26,7 +26,7 @@ limitations under the License.
 
 typedef std::list<uint8_t> ByteList;
 
-class OutputRC4XcodeStream : public IByteWriterWithPosition
+class OutputRC4XcodeStream final : public IByteWriterWithPosition
 {
   public:
     OutputRC4XcodeStream(void);

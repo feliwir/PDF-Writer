@@ -24,7 +24,7 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
-class OutputFlateDecodeStream : public IByteWriter
+class OutputFlateDecodeStream final : public IByteWriter
 {
   public:
     OutputFlateDecodeStream(void);

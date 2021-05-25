@@ -367,8 +367,8 @@ EStatusCode MergePagesUsingCopyingContext()
 
     std::shared_ptr<PDFDocumentCopyingContext> copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"));
-    if (status != PDFHummus::eSuccess)
-        return status;
+    if (copyingContext == nullptr)
+        return PDFHummus::eFailure;
 
     // create a reusable form xobject from the first page
     EStatusCodeAndObjectIDType result = copyingContext->CreateFormXObjectFromPDFPage(0, ePDFPageBoxMediaBox);

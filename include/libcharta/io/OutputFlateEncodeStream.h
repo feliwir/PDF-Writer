@@ -24,7 +24,7 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
-class OutputFlateEncodeStream : public IByteWriterWithPosition
+class OutputFlateEncodeStream final : public IByteWriterWithPosition
 {
   public:
     OutputFlateEncodeStream(void);

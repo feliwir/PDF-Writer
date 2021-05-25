@@ -29,7 +29,6 @@ InputBufferedStream::InputBufferedStream()
 
 InputBufferedStream::~InputBufferedStream()
 {
-    delete[] mBuffer;
     delete mSourceStream;
 }
 
@@ -46,7 +45,7 @@ InputBufferedStream::InputBufferedStream(IByteReaderWithPosition *inSourceReader
 void InputBufferedStream::Assign(IByteReaderWithPosition *inReader)
 {
     mSourceStream = inReader;
-    mCurrentBufferIndex = mBuffer;
+    mCurrentBufferIndex = 0;
 }
 
 size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
@@ -57,11 +56,11 @@ size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 
         // if there are enough bytes to read from the buffer..just read from the buffer
         // if content to write fits in the buffer write to buffer
-        if (inBufferSize <= (size_t)(mLastAvailableIndex - mCurrentBufferIndex))
+        if (inBufferSize <= mLastAvailableIndex - mCurrentBufferIndex)
         {
             if (inBufferSize > 0)
             {
-                memcpy(inBuffer, mCurrentBufferIndex, inBufferSize);
+                memcpy(inBuffer, mBuffer.data() + mCurrentBufferIndex, inBufferSize);
                 mCurrentBufferIndex += inBufferSize;
             }
             bytesRead = inBufferSize;
@@ -72,7 +71,7 @@ size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
             // then read some leftovers to the buffer, and read from the buffer to the output
 
             // read what's currently in the buffer into the output buffer
-            memcpy(inBuffer, mCurrentBufferIndex, mLastAvailableIndex - mCurrentBufferIndex);
+            memcpy(inBuffer, mBuffer.data() + mCurrentBufferIndex, mLastAvailableIndex - mCurrentBufferIndex);
             bytesRead = mLastAvailableIndex - mCurrentBufferIndex;
             mCurrentBufferIndex = mLastAvailableIndex;
 
@@ -82,18 +81,20 @@ size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
             if (mSourceStream->NotEnded())
             {
                 inBufferSize -= bytesRead;
-                size_t bytesToReadToBuffer = inBufferSize % mBufferSize;
+                // We can't read more than the internal buffersize
+                size_t bytesToReadToBuffer = inBufferSize % mBuffer.size();
 
+                // Read what we can read now
                 bytesRead += mSourceStream->Read(inBuffer + bytesRead, inBufferSize - bytesToReadToBuffer);
 
                 if (mSourceStream->NotEnded())
                 {
-                    mLastAvailableIndex = mBuffer + mSourceStream->Read(mBuffer, mBufferSize);
-                    mCurrentBufferIndex = mBuffer;
-                    bytesToReadToBuffer = std::min<size_t>(bytesToReadToBuffer, mLastAvailableIndex - mBuffer);
+                    mLastAvailableIndex = mSourceStream->Read(mBuffer.data(), mBuffer.size());
+                    mCurrentBufferIndex = 0;
+                    bytesToReadToBuffer = std::min<size_t>(bytesToReadToBuffer, mLastAvailableIndex);
                     if (bytesToReadToBuffer > 0)
                     {
-                        memcpy(inBuffer + bytesRead, mCurrentBufferIndex, bytesToReadToBuffer);
+                        memcpy(inBuffer + bytesRead, mBuffer.data() + mCurrentBufferIndex, bytesToReadToBuffer);
                         mCurrentBufferIndex += bytesToReadToBuffer;
                         bytesRead += bytesToReadToBuffer;
                     }
@@ -112,21 +113,20 @@ bool InputBufferedStream::NotEnded()
 
 void InputBufferedStream::Initiate(IByteReaderWithPosition *inSourceReader, size_t inBufferSize)
 {
-    mBufferSize = inBufferSize;
-    mBuffer = new uint8_t[mBufferSize];
-    mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
+    mBuffer.resize(inBufferSize);
+    mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream = inSourceReader;
 }
 
 void InputBufferedStream::Skip(size_t inSkipSize)
 {
-    if (inSkipSize <= (size_t)(mLastAvailableIndex - mCurrentBufferIndex))
+    if (inSkipSize <= mLastAvailableIndex - mCurrentBufferIndex)
     {
         mCurrentBufferIndex += inSkipSize;
     }
     else
     {
-        inSkipSize -= (size_t)(mLastAvailableIndex - mCurrentBufferIndex);
+        inSkipSize -= mLastAvailableIndex - mCurrentBufferIndex;
         mCurrentBufferIndex = mLastAvailableIndex;
         mSourceStream->Skip(inSkipSize);
     }
@@ -134,13 +134,13 @@ void InputBufferedStream::Skip(size_t inSkipSize)
 
 void InputBufferedStream::SetPosition(long long inOffsetFromStart)
 {
-    mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
+    mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream->SetPosition(inOffsetFromStart);
 }
 
 void InputBufferedStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
-    mLastAvailableIndex = mCurrentBufferIndex = mBuffer;
+    mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream->SetPositionFromEnd(inOffsetFromEnd);
 }
 
