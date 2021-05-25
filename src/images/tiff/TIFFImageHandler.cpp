@@ -3254,8 +3254,8 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWit
     return imageFormXObject;
 }
 
-DoubleAndDoublePair TIFFImageHandler::ReadImageDimensions(IByteReaderWithPosition *inTIFFStream,
-                                                          unsigned long inImageIndex)
+std::pair<double, double> TIFFImageHandler::ReadImageDimensions(IByteReaderWithPosition *inTIFFStream,
+                                                                unsigned long inImageIndex)
 {
     return ReadImageInfo(inTIFFStream, inImageIndex).dimensions;
 }

@@ -26,7 +26,7 @@
 
 typedef std::list<uint8_t> ByteList;
 
-class InputRC4XcodeStream : public IByteReader
+class InputRC4XcodeStream final : public IByteReader
 {
   public:
     InputRC4XcodeStream(void);

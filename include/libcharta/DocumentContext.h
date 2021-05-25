@@ -272,10 +272,10 @@ class DocumentContext
     std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(PDFParser *inPDFParser);
 
     // some public image info services, for users of hummus
-    DoubleAndDoublePair GetImageDimensions(
+    std::pair<double, double> GetImageDimensions(
         const std::string &inImageFile, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
-    DoubleAndDoublePair GetImageDimensions(
+    std::pair<double, double> GetImageDimensions(
         IByteReaderWithPosition *inImageStream, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
     EHummusImageType GetImageType(const std::string &inImageFile, unsigned long inImageIndex);

@@ -106,8 +106,6 @@ using namespace PDFHummus;
 
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 typedef std::list<PDFImageXObject *> PDFImageXObjectList;
-typedef std::list<std::string> StringList;
-typedef std::pair<double, double> DoubleAndDoublePair;
 
 typedef tsize_t (*ImageSizeProc)(T2P *inT2p);
 
@@ -116,7 +114,7 @@ class TIFFImageHandler
   public:
     struct TiffImageInfo
     {
-        DoubleAndDoublePair dimensions;
+        std::pair<double, double> dimensions;
         int colorComponents;
     };
 
@@ -145,7 +143,7 @@ class TIFFImageHandler
     void Reset();
 
     // utility for tiffs, to get what tiff dimensions hummus will use
-    DoubleAndDoublePair ReadImageDimensions(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
+    std::pair<double, double> ReadImageDimensions(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
     // retrieves some image data, see struct for info
     TiffImageInfo ReadImageInfo(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
     // get number of images in the tiff collection

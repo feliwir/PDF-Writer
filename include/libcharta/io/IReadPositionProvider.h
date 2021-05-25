@@ -26,10 +26,6 @@
 class IReadPositionProvider
 {
   public:
-    virtual ~IReadPositionProvider()
-    {
-    }
-
     /*
         Get the current read position
     */

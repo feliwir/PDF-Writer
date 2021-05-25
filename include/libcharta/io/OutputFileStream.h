@@ -29,7 +29,7 @@
 #include <share.h>
 #endif
 
-class OutputFileStream : public IByteWriterWithPosition
+class OutputFileStream final : public IByteWriterWithPosition
 {
   public:
     OutputFileStream(void);

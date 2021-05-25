@@ -75,6 +75,8 @@ target_compile_definitions(libcharta_tests PRIVATE "-DPDFWRITE_SOURCE_PATH=\"${C
 target_compile_definitions(libcharta_tests PRIVATE "-DPDFWRITE_BINARY_PATH=\"${CMAKE_CURRENT_BINARY_DIR}\" ")
 
 target_link_libraries(libcharta_tests PRIVATE gtest gtest_main libcharta -lstdc++fs)
+# Tests may also use the private API
+target_include_directories(libcharta_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 include(GoogleTest)
 gtest_discover_tests(libcharta_tests)

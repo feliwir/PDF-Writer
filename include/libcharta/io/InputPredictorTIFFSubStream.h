@@ -22,7 +22,7 @@
 
 #include "IByteReader.h"
 
-class InputPredictorTIFFSubStream : public IByteReader
+class InputPredictorTIFFSubStream final : public IByteReader
 {
   public:
     InputPredictorTIFFSubStream(void);

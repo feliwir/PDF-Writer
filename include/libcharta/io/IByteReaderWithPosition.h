@@ -28,8 +28,6 @@
 class IByteReaderWithPosition : public IByteReader
 {
   public:
-    virtual ~IByteReaderWithPosition(void){};
-
     /*
         Set read position.always set from start
     */

@@ -29,7 +29,7 @@
    the skipped to position
 */
 
-class InputStreamSkipperStream : public IByteReader, public IReadPositionProvider
+class InputStreamSkipperStream final : public IByteReader, public IReadPositionProvider
 {
   public:
     InputStreamSkipperStream();

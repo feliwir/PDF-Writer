@@ -23,7 +23,7 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
-class InputLZWDecodeStream : public IByteReader
+class InputLZWDecodeStream final : public IByteReader
 {
   public:
     InputLZWDecodeStream(int early);

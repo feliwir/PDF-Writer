@@ -23,7 +23,7 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
-class InputAsciiHexDecodeStream : public IByteReader
+class InputAsciiHexDecodeStream final : public IByteReader
 {
   public:
     InputAsciiHexDecodeStream(void);

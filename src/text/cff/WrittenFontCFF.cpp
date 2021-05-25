@@ -50,10 +50,6 @@ WrittenFontCFF::WrittenFontCFF(ObjectsContext *inObjectsContext, bool inIsCID, b
     mFontWillBeEmbedded = inFontWillBeEmbedded;
 }
 
-WrittenFontCFF::~WrittenFontCFF(void)
-{
-}
-
 bool WrittenFontCFF::AddToANSIRepresentation(const GlyphUnicodeMappingList &inGlyphsList,
                                              UShortList &outEncodedCharacters)
 {

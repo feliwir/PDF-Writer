@@ -56,12 +56,12 @@ TEST(Text, TextMeasurements)
 
     cxt->WriteText(10, 100, "Hello World", textOptions);
     DoubleAndDoublePairList pathPoints;
-    pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMin, 98 + textDimensions.yMin));
-    pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMax, 98 + textDimensions.yMin));
+    pathPoints.push_back({10 + textDimensions.xMin, 98 + textDimensions.yMin});
+    pathPoints.push_back({10 + textDimensions.xMax, 98 + textDimensions.yMin});
     cxt->DrawPath(pathPoints, pathStrokeOptions);
     pathPoints.clear();
-    pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMin, 102 + textDimensions.yMax));
-    pathPoints.push_back(DoubleAndDoublePair(10 + textDimensions.xMax, 102 + textDimensions.yMax));
+    pathPoints.push_back({10 + textDimensions.xMin, 102 + textDimensions.yMax});
+    pathPoints.push_back({10 + textDimensions.xMax, 102 + textDimensions.yMax});
     cxt->DrawPath(pathPoints, pathStrokeOptions);
 
     status = pdfWriter.EndPageContentContext(cxt);

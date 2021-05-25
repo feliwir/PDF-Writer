@@ -24,7 +24,7 @@ limitations under the License.
 
 #include <string>
 
-class InputStringStream : public IByteReaderWithPosition
+class InputStringStream final : public IByteReaderWithPosition
 {
   public:
     InputStringStream();

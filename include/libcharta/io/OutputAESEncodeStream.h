@@ -26,7 +26,7 @@ limitations under the License.
 
 typedef std::list<uint8_t> ByteList;
 
-class OutputAESEncodeStream : public IByteWriterWithPosition
+class OutputAESEncodeStream final : public IByteWriterWithPosition
 {
   public:
     OutputAESEncodeStream(void);

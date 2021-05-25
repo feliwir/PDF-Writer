@@ -30,7 +30,5 @@
 class IByteWriterWithPosition : public IByteWriter
 {
   public:
-    virtual ~IByteWriterWithPosition(void){};
-
     virtual long long GetCurrentPosition() = 0;
 };

@@ -26,7 +26,7 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
-class InputFlateDecodeStream : public IByteReader
+class InputFlateDecodeStream final : public IByteReader
 {
   public:
     InputFlateDecodeStream();

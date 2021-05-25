@@ -62,8 +62,7 @@ template <class T> using SomethingOrDouble = std::variant<T, double>;
 typedef SomethingOrDouble<std::string> StringOrDouble;
 typedef SomethingOrDouble<GlyphUnicodeMappingList> GlyphUnicodeMappingListOrDouble;
 
-typedef std::pair<double, double> DoubleAndDoublePair;
-typedef std::list<DoubleAndDoublePair> DoubleAndDoublePairList;
+typedef std::list<std::pair<double, double>> DoubleAndDoublePairList;
 
 class AbstractContentContext
 {

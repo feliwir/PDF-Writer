@@ -24,8 +24,6 @@
 #include <list>
 #include <string>
 
-typedef std::list<std::string> StringList;
-
 class PDFImageXObject
 {
   public:
@@ -34,11 +32,11 @@ class PDFImageXObject
     ~PDFImageXObject(void);
 
     ObjectIDType GetImageObjectID() const;
-    const StringList &GetRequiredProcsetResourceNames() const;
+    const std::list<std::string> &GetRequiredProcsetResourceNames() const;
 
     void AddRequiredProcset(const std::string &inRequiredProcsetResourceName);
 
   private:
     ObjectIDType mImageObjectID;
-    StringList mRequiredProcsetResourceNames;
+    std::list<std::string> mRequiredProcsetResourceNames;
 };

@@ -22,7 +22,7 @@
 
 #include "IByteReader.h"
 
-class InputPredictorPNGOptimumStream : public IByteReader
+class InputPredictorPNGOptimumStream final : public IByteReader
 {
   public:
     InputPredictorPNGOptimumStream(void);

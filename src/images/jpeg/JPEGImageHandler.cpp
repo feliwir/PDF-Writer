@@ -378,7 +378,7 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
             break;
         }
 
-        DoubleAndDoublePair dimensions = GetImageDimensions(inJPGImageInformation);
+        std::pair<double, double> dimensions = GetImageDimensions(inJPGImageInformation);
 
         formXObject = mDocumentContext->StartFormXObject(PDFRectangle(0, 0, dimensions.first, dimensions.second),
                                                          inFormXObjectID);
@@ -403,9 +403,9 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
     return formXObject;
 }
 
-DoubleAndDoublePair JPEGImageHandler::GetImageDimensions(const JPEGImageInformation &inJPGImageInformation)
+std::pair<double, double> JPEGImageHandler::GetImageDimensions(const JPEGImageInformation &inJPGImageInformation)
 {
-    DoubleAndDoublePair returnResult(1, 1);
+    std::pair<double, double> returnResult(1, 1);
 
     do
     {

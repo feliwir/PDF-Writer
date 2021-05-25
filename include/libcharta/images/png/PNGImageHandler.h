@@ -36,14 +36,12 @@ class DocumentContext;
 
 using namespace PDFHummus;
 
-typedef std::pair<double, double> DoubleAndDoublePair;
-
 class PNGImageHandler
 {
   public:
     struct PNGImageInfo
     {
-        DoubleAndDoublePair dimensions;
+        std::pair<double, double> dimensions;
         int colorComponents;
         bool hasAlpha;
     };
@@ -55,7 +53,7 @@ class PNGImageHandler
 
     void SetOperationsContexts(PDFHummus::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
 
-    DoubleAndDoublePair ReadImageDimensions(IByteReaderWithPosition *inPNGStream);
+    std::pair<double, double> ReadImageDimensions(IByteReaderWithPosition *inPNGStream);
     PNGImageInfo ReadImageInfo(IByteReaderWithPosition *inPNGStream);
 
   private:

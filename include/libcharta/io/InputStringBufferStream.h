@@ -26,7 +26,7 @@
 #include <sstream>
 #include <string>
 
-class InputStringBufferStream : public IByteReaderWithPosition
+class InputStringBufferStream final : public IByteReaderWithPosition
 {
   public:
     InputStringBufferStream(MyStringBuf *inBufferToReadFrom);

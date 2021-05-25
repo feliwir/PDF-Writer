@@ -459,7 +459,7 @@ PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(IByteReaderWithP
     return imageFormXObject;
 }
 
-DoubleAndDoublePair PNGImageHandler::ReadImageDimensions(IByteReaderWithPosition *inPNGStream)
+std::pair<double, double> PNGImageHandler::ReadImageDimensions(IByteReaderWithPosition *inPNGStream)
 {
     return ReadImageInfo(inPNGStream).dimensions;
 }

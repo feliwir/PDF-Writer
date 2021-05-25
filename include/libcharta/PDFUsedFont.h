@@ -33,7 +33,6 @@
 
 typedef std::list<uint16_t> UShortList;
 typedef std::list<UShortList> UShortListList;
-typedef std::list<std::string> StringList;
 typedef std::list<GlyphUnicodeMappingList> GlyphUnicodeMappingListList;
 typedef std::list<uint32_t> UIntList;
 

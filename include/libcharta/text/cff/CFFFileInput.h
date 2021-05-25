@@ -42,7 +42,6 @@ struct CFFHeader
     uint8_t offSize;
 };
 
-typedef std::list<std::string> StringList;
 typedef std::map<std::string, uint16_t> StringToUShort;
 typedef std::pair<bool, uint16_t> BoolAndUShort;
 
@@ -234,7 +233,7 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
 
     CFFHeader mHeader;
     uint16_t mFontsCount;
-    StringList mName;
+    std::list<std::string> mName;
     TopDictInfo *mTopDictIndex; // count is same as fonts count
     char **mStrings;
     uint16_t mStringsCount;

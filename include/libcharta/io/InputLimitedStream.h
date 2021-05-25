@@ -22,7 +22,7 @@
 
 #include "IByteReader.h"
 
-class InputLimitedStream : public IByteReader
+class InputLimitedStream final : public IByteReader
 {
   public:
     InputLimitedStream();

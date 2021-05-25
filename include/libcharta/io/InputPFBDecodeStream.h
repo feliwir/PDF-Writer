@@ -37,7 +37,7 @@ typedef PDFHummus::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, uin
 
 typedef std::pair<bool, std::string> BoolAndString;
 
-class InputPFBDecodeStream : public IByteReader
+class InputPFBDecodeStream final : public IByteReader
 {
   public:
     InputPFBDecodeStream(void);

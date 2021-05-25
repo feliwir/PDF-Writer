@@ -25,7 +25,7 @@
 
 #define DEFAULT_BUFFER_SIZE 256 * 1024
 
-class InputBufferedStream : public IByteReaderWithPosition
+class InputBufferedStream final : public IByteReaderWithPosition
 {
   public:
     /*

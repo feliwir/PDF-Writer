@@ -43,7 +43,6 @@ using namespace PDFHummus;
 
 typedef std::map<std::string, JPEGImageInformation> StringToJPEGImageInformationMap;
 typedef std::pair<bool, JPEGImageInformation> BoolAndJPEGImageInformation;
-typedef std::pair<double, double> DoubleAndDoublePair;
 typedef std::set<IDocumentContextExtender *> IDocumentContextExtenderSet;
 
 class JPEGImageHandler
@@ -77,7 +76,7 @@ class JPEGImageHandler
 
     // use the top RetrieveImageInformation to get a JPEGImageInformation, and then get to here to get the dimensions
     // that PDFHummus will use if asked to place "as is"
-    DoubleAndDoublePair GetImageDimensions(const JPEGImageInformation &inJPGImageInformation);
+    std::pair<double, double> GetImageDimensions(const JPEGImageInformation &inJPGImageInformation);
     int GetColorComponents(const JPEGImageInformation &inJPGImageInformation);
 
   private:

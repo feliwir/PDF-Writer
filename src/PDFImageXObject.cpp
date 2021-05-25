@@ -38,7 +38,7 @@ ObjectIDType PDFImageXObject::GetImageObjectID() const
     return mImageObjectID;
 }
 
-const StringList &PDFImageXObject::GetRequiredProcsetResourceNames() const
+const std::list<std::string> &PDFImageXObject::GetRequiredProcsetResourceNames() const
 {
     return mRequiredProcsetResourceNames;
 }

@@ -87,7 +87,7 @@ TEST(PDFImages, HighLevelImages)
         cxt->DrawRectangle(0, 0, 100, 100, pathStrokeOptions);
         cxt->DrawRectangle(100, 100, 100, 100, pathStrokeOptions);
 
-        DoubleAndDoublePair jpgDimensions = pdfWriter.GetImageDimensions(
+        auto jpgDimensions = pdfWriter.GetImageDimensions(
             RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/soundcloud_logo.jpg"));
         cxt->DrawRectangle(10, 10, jpgDimensions.first / 4, jpgDimensions.second / 4, pathStrokeOptions);
 

@@ -56,16 +56,16 @@ TEST(PDF, HighLevelContentContext)
     DoubleAndDoublePairList pathPoints;
 
     // draw path
-    pathPoints.push_back(DoubleAndDoublePair(75, 640));
-    pathPoints.push_back(DoubleAndDoublePair(149, 800));
-    pathPoints.push_back(DoubleAndDoublePair(225, 640));
+    pathPoints.push_back({75, 640});
+    pathPoints.push_back({149, 800});
+    pathPoints.push_back({225, 640});
     cxt->DrawPath(pathPoints, pathFillOptions);
     pathPoints.clear();
-    pathPoints.push_back(DoubleAndDoublePair(75, 540));
-    pathPoints.push_back(DoubleAndDoublePair(110, 440));
-    pathPoints.push_back(DoubleAndDoublePair(149, 540));
-    pathPoints.push_back(DoubleAndDoublePair(188, 440));
-    pathPoints.push_back(DoubleAndDoublePair(223, 540));
+    pathPoints.push_back({75, 540});
+    pathPoints.push_back({110, 440});
+    pathPoints.push_back({149, 540});
+    pathPoints.push_back({188, 440});
+    pathPoints.push_back({223, 540});
     cxt->DrawPath(pathPoints, pathStrokeOptions);
 
     // draw square

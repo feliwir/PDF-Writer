@@ -38,7 +38,6 @@ class ObjectsContext;
 typedef std::pair<bool, FT_Short> BoolAndFTShort;
 typedef std::list<uint32_t> UIntList;
 typedef std::list<UIntList> UIntListList;
-typedef std::list<std::string> StringList;
 typedef std::list<unsigned long> ULongList;
 typedef std::list<ULongList> ULongListList;
 

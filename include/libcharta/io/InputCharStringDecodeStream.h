@@ -22,7 +22,7 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
-class InputCharStringDecodeStream : public IByteReader
+class InputCharStringDecodeStream final : public IByteReader
 {
   public:
     InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV = 4);

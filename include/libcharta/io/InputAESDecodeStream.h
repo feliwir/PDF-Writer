@@ -26,13 +26,13 @@
 
 #include <list>
 
-typedef std::list<uint8_t> ByteList;
+using ByteList = std::list<uint8_t>;
 
-class InputAESDecodeStream : public IByteReader
+class InputAESDecodeStream final : public IByteReader
 {
   public:
-    InputAESDecodeStream(void);
-    ~InputAESDecodeStream(void);
+    InputAESDecodeStream();
+    ~InputAESDecodeStream();
 
     // Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
     InputAESDecodeStream(IByteReader *inSourceReader, const ByteList &inKey);

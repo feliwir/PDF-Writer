@@ -31,8 +31,6 @@
 class IByteReader
 {
   public:
-    virtual ~IByteReader(void){};
-
     /*
         Read inSize bytes of inBuffer, returning the number of bytes actually read
     */

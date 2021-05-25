@@ -30,8 +30,6 @@
 class IByteWriter
 {
   public:
-    virtual ~IByteWriter(void){};
-
     /*
         Write inSize bytes of inBuffer, returning the number of written bytes
     */

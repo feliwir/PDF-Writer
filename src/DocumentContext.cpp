@@ -2692,8 +2692,9 @@ void DocumentContext::RegisterTiledPatternEndWritingTask(PDFTiledPattern *inPatt
     it->second.push_back(inWritingTask);
 }
 
-DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition *inImageStream,
-                                                        unsigned long inImageIndex, const PDFParsingOptions &inOptions)
+std::pair<double, double> DocumentContext::GetImageDimensions(IByteReaderWithPosition *inImageStream,
+                                                              unsigned long inImageIndex,
+                                                              const PDFParsingOptions &inOptions)
 {
     double imageWidth = 0.0;
     double imageHeight = 0.0;
@@ -2723,7 +2724,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition 
         if (!jpgImageInformation.first)
             break;
 
-        DoubleAndDoublePair dimensions = GetJPEGImageHandler().GetImageDimensions(jpgImageInformation.second);
+        std::pair<double, double> dimensions = GetJPEGImageHandler().GetImageDimensions(jpgImageInformation.second);
 
         imageWidth = dimensions.first;
         imageHeight = dimensions.second;
@@ -2733,7 +2734,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition 
     case eTIFF: {
         TIFFImageHandler hummusTiffHandler;
 
-        DoubleAndDoublePair dimensions = hummusTiffHandler.ReadImageDimensions(inImageStream, inImageIndex);
+        std::pair<double, double> dimensions = hummusTiffHandler.ReadImageDimensions(inImageStream, inImageIndex);
 
         imageWidth = dimensions.first;
         imageHeight = dimensions.second;
@@ -2744,7 +2745,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition 
     case ePNG: {
         PNGImageHandler hummusPngHandler;
 
-        DoubleAndDoublePair dimensions = hummusPngHandler.ReadImageDimensions(inImageStream);
+        std::pair<double, double> dimensions = hummusPngHandler.ReadImageDimensions(inImageStream);
 
         imageWidth = dimensions.first;
         imageHeight = dimensions.second;
@@ -2760,11 +2761,12 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(IByteReaderWithPosition 
     // restore stream position to initial state
     inImageStream->SetPosition(recordedPosition);
 
-    return DoubleAndDoublePair(imageWidth, imageHeight);
+    return std::pair<double, double>(imageWidth, imageHeight);
 }
 
-DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inImageFile, unsigned long inImageIndex,
-                                                        const PDFParsingOptions &inOptions)
+std::pair<double, double> DocumentContext::GetImageDimensions(const std::string &inImageFile,
+                                                              unsigned long inImageIndex,
+                                                              const PDFParsingOptions &inOptions)
 {
     HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
 
@@ -2801,7 +2803,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inIma
             if (!jpgImageInformation.first)
                 break;
 
-            DoubleAndDoublePair dimensions = GetJPEGImageHandler().GetImageDimensions(jpgImageInformation.second);
+            std::pair<double, double> dimensions = GetJPEGImageHandler().GetImageDimensions(jpgImageInformation.second);
 
             imageWidth = dimensions.first;
             imageHeight = dimensions.second;
@@ -2817,7 +2819,8 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inIma
                 break;
             }
 
-            DoubleAndDoublePair dimensions = hummusTiffHandler.ReadImageDimensions(file.GetInputStream(), inImageIndex);
+            std::pair<double, double> dimensions =
+                hummusTiffHandler.ReadImageDimensions(file.GetInputStream(), inImageIndex);
 
             imageWidth = dimensions.first;
             imageHeight = dimensions.second;
@@ -2834,7 +2837,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inIma
                 break;
             }
 
-            DoubleAndDoublePair dimensions = hummusPngHandler.ReadImageDimensions(file.GetInputStream());
+            std::pair<double, double> dimensions = hummusPngHandler.ReadImageDimensions(file.GetInputStream());
 
             imageWidth = dimensions.first;
             imageHeight = dimensions.second;
@@ -2851,7 +2854,7 @@ DoubleAndDoublePair DocumentContext::GetImageDimensions(const std::string &inIma
         imageInformation.imageWidth = imageWidth;
     }
 
-    return DoubleAndDoublePair(imageInformation.imageWidth, imageInformation.imageHeight);
+    return std::pair<double, double>(imageInformation.imageWidth, imageInformation.imageHeight);
 }
 
 static const uint8_t scPDFMagic[] = {0x25, 0x50, 0x44, 0x46};

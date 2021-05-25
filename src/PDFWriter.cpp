@@ -53,8 +53,6 @@ PDFWriter::PDFWriter()
     mIsModified = false;
 }
 
-PDFWriter::~PDFWriter() = default;
-
 EPDFVersion thisOrDefaultVersion(EPDFVersion inPDFVersion)
 {
     return ePDFVersionUndefined == inPDFVersion ? ePDFVersion14 : inPDFVersion;
@@ -178,21 +176,6 @@ void PDFWriter::SetupCreationSettings(const PDFCreationSettings &inPDFCreationSe
 void PDFWriter::ReleaseLog()
 {
     // Singleton<Trace>::Reset();
-}
-
-DocumentContext &PDFWriter::GetDocumentContext()
-{
-    return mDocumentContext;
-}
-
-ObjectsContext &PDFWriter::GetObjectsContext()
-{
-    return mObjectsContext;
-}
-
-OutputFile &PDFWriter::GetOutputFile()
-{
-    return mOutputFile;
 }
 
 PageContentContext *PDFWriter::StartPageContentContext(PDFPage &inPage)
@@ -775,29 +758,20 @@ EStatusCode PDFWriter::SetupStateFromModifiedFile(const std::string &inModifiedF
     return status;
 }
 
-PDFParser &PDFWriter::GetModifiedFileParser()
-{
-    return mModifiedFileParser;
-}
-
-InputFile &PDFWriter::GetModifiedInputFile()
-{
-    return mModifiedFile;
-}
-
 std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContextForModifiedFile()
 {
     return mDocumentContext.CreatePDFCopyingContext(&mModifiedFileParser);
 }
 
-DoubleAndDoublePair PDFWriter::GetImageDimensions(const std::string &inImageFile, unsigned long inImageIndex,
-                                                  const PDFParsingOptions &inParsingOptions)
+std::pair<double, double> PDFWriter::GetImageDimensions(const std::string &inImageFile, unsigned long inImageIndex,
+                                                        const PDFParsingOptions &inParsingOptions)
 {
     return mDocumentContext.GetImageDimensions(inImageFile, inImageIndex, inParsingOptions);
 }
 
-DoubleAndDoublePair PDFWriter::GetImageDimensions(IByteReaderWithPosition *inImageStream, unsigned long inImageIndex,
-                                                  const PDFParsingOptions &inParsingOptions)
+std::pair<double, double> PDFWriter::GetImageDimensions(IByteReaderWithPosition *inImageStream,
+                                                        unsigned long inImageIndex,
+                                                        const PDFParsingOptions &inParsingOptions)
 {
     return mDocumentContext.GetImageDimensions(inImageStream, inImageIndex, inParsingOptions);
 }

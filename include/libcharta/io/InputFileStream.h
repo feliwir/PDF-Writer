@@ -29,7 +29,7 @@
 #include <share.h>
 #endif
 
-class InputFileStream : public IByteReaderWithPosition
+class InputFileStream final : public IByteReaderWithPosition
 {
   public:
     InputFileStream(void);

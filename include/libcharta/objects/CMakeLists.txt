@@ -17,9 +17,5 @@ set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFReal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFStreamInput.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFSymbol.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/ParsedPrimitiveHelper.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFArrayIterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFDictionaryIterator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/helpers/PDFPageInput.h
     PARENT_SCOPE
 )

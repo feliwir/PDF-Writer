@@ -26,7 +26,7 @@
 #include "IByteReader.h"
 #include <jpeglib.h>
 
-class InputDCTDecodeStream : public IByteReader
+class InputDCTDecodeStream final : public IByteReader
 {
   public:
     InputDCTDecodeStream();

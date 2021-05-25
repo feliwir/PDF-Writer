@@ -38,8 +38,6 @@
 #include <string>
 #include <utility>
 
-typedef std::pair<double, double> DoubleAndDoublePair;
-
 struct LogConfiguration
 {
     bool ShouldLog;
@@ -88,8 +86,7 @@ class IByteWriterWithPosition;
 class PDFWriter
 {
   public:
-    PDFWriter(void);
-    ~PDFWriter(void);
+    PDFWriter();
 
     // output to file
     PDFHummus::EStatusCode StartPDF(
@@ -266,10 +263,10 @@ class PDFWriter
     std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContextForModifiedFile();
 
     // some public image info services, for users of hummus
-    DoubleAndDoublePair GetImageDimensions(
+    std::pair<double, double> GetImageDimensions(
         const std::string &inImageFile, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
-    DoubleAndDoublePair GetImageDimensions(
+    std::pair<double, double> GetImageDimensions(
         IByteReaderWithPosition *inImageStream, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
     EHummusImageType GetImageType(const std::string &inImageFile, unsigned long inImageIndex);
@@ -288,13 +285,31 @@ class PDFWriter
     PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
     // Extensibility, reaching to lower levels
-    PDFHummus::DocumentContext &GetDocumentContext();
-    ObjectsContext &GetObjectsContext();
-    OutputFile &GetOutputFile();
+    inline DocumentContext &GetDocumentContext()
+    {
+        return mDocumentContext;
+    }
+
+    inline ObjectsContext &GetObjectsContext()
+    {
+        return mObjectsContext;
+    }
+
+    inline OutputFile &GetOutputFile()
+    {
+        return mOutputFile; 
+    }
 
     // Extensibiility, for modified files workflow
-    PDFParser &GetModifiedFileParser();
-    InputFile &GetModifiedInputFile();
+    inline PDFParser &GetModifiedFileParser()
+    {
+        return mModifiedFileParser;
+    }
+
+    inline InputFile &GetModifiedInputFile()
+    {
+        return mModifiedFile;
+    }
 
     // Recryption statics. create new version of an existing document encrypted with new password or decrypted
     static PDFHummus::EStatusCode RecryptPDF(const std::string &inOriginalPDFPath,

@@ -31,7 +31,6 @@ class WrittenFontCFF : public AbstractWrittenFont
 {
   public:
     WrittenFontCFF(ObjectsContext *inObjectsContext, bool inIsCID, bool inFontWillBeEmbedded);
-    virtual ~WrittenFontCFF(void);
 
     virtual PDFHummus::EStatusCode WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo, bool inEmbedFont);
 

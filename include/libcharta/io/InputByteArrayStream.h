@@ -22,7 +22,7 @@
 
 #include "IByteReaderWithPosition.h"
 
-class InputByteArrayStream : public IByteReaderWithPosition
+class InputByteArrayStream final : public IByteReaderWithPosition
 {
   public:
     InputByteArrayStream();

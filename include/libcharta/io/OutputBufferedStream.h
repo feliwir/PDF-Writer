@@ -24,7 +24,7 @@
 
 #define DEFAULT_BUFFER_SIZE 256 * 1024
 
-class OutputBufferedStream : public IByteWriterWithPosition
+class OutputBufferedStream final : public IByteWriterWithPosition
 {
   public:
     /*
