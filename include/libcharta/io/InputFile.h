@@ -31,8 +31,8 @@ class InputFileStream;
 class InputFile
 {
   public:
-    InputFile(void);
-    ~InputFile(void);
+    InputFile();
+    ~InputFile();
 
     PDFHummus::EStatusCode OpenFile(const std::string &inFilePath);
     PDFHummus::EStatusCode CloseFile();

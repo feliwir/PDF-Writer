@@ -22,7 +22,7 @@ limitations under the License.
 #include "TestHelper.h"
 #include "Trace.h"
 #include "io/InputFile.h"
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 #include "parsing/PDFParser.h"
 
 #include <fstream>

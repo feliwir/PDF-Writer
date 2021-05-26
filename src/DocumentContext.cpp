@@ -47,7 +47,7 @@
 #include "objects/PDFLiteralString.h"
 #include "objects/PDFName.h"
 #include "objects/PDFObjectCast.h"
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 #include "parsing/PDFParser.h"
 

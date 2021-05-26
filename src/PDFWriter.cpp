@@ -33,7 +33,7 @@
 #include "objects/PDFIndirectObjectReference.h"
 #include "objects/PDFInteger.h"
 #include "objects/PDFObjectCast.h"
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 
 using namespace PDFHummus;

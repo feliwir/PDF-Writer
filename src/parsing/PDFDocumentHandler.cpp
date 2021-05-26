@@ -49,7 +49,7 @@
 #include "objects/PDFReal.h"
 #include "objects/PDFStreamInput.h"
 #include "objects/PDFSymbol.h"
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 #include "parsing/SimpleStringTokenizer.h"
 
 using namespace PDFHummus;

@@ -9,20 +9,19 @@ int main(int argc, char **argv)
 
     // clang-format off
     options.add_options()
-    ("d,debug", "Enable debugging", cxxopts::value<bool>()->default_value("false")) // a bool parameter
     ("o,output", "Output for the generated PDF", cxxopts::value<std::string>())
-    ("v,version", "Version output")
+    ("version", "Version output")
     ("h,help", "Print usage");
     // clang-format on
 
     auto result = options.parse(argc, argv);
-    if (result.arguments().empty() || result.count("help"))
+    if (result.unmatched().empty() || result.count("help") > 0u)
     {
         std::cout << options.help() << std::endl;
         return EXIT_SUCCESS;
     }
 
-    if (result.count("version"))
+    if (result.count("version") > 0u)
     {
         std::cout << "TODO: print version info" << std::endl;
         return EXIT_SUCCESS;

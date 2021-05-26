@@ -25,10 +25,8 @@
 
 using namespace PDFHummus;
 
-InputFile::InputFile()
-{
-}
-
+InputFile::InputFile() = default;
+ 
 InputFile::~InputFile()
 {
     CloseFile();

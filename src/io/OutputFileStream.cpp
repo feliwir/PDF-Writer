@@ -23,10 +23,6 @@
 
 using namespace PDFHummus;
 
-OutputFileStream::OutputFileStream()
-{
-}
-
 OutputFileStream::~OutputFileStream()
 {
     Close();

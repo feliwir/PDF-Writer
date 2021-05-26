@@ -107,7 +107,7 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         --mTabLevel;
         return status;
     }
-    else if (inObject->GetType() == PDFObject::ePDFObjectStream)
+    if (inObject->GetType() == PDFObject::ePDFObjectStream)
     {
         inOutput->Write((const uint8_t *)scIteratingStreamDict, strlen(scIteratingStreamDict));
         auto aDictionary(std::static_pointer_cast<PDFStreamInput>(inObject)->QueryStreamDictionary());

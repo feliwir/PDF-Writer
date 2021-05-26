@@ -28,8 +28,8 @@
 class OutputFileStream final : public IByteWriterWithPosition
 {
   public:
-    OutputFileStream(void);
-    virtual ~OutputFileStream(void);
+    OutputFileStream() = default;
+    virtual ~OutputFileStream();
 
     // input file path is in UTF8
     OutputFileStream(const std::string &inFilePath, bool inAppend = false);

@@ -23,7 +23,7 @@
 #include "PDFWriter.h"
 #include "PageContentContext.h"
 #include "TestHelper.h"
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 
 #include <gtest/gtest.h>
 #include <iostream>

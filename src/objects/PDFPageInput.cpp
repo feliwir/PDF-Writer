@@ -19,7 +19,7 @@
 
  */
 
-#include "objects/helpers/PDFPageInput.h"
+#include "objects/PDFPageInput.h"
 
 #include "PagePresets.h"
 #include "Trace.h"
