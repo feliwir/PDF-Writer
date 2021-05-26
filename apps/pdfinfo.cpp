@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     // clang-format on
 
     auto result = options.parse(argc, argv);
-    if (result.count("help") > 0u)
+    if (result.unmatched().empty() || result.count("help") > 0u)
     {
         std::cout << options.help() << std::endl;
         return EXIT_SUCCESS;

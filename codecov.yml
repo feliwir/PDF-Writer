@@ -1,5 +1,6 @@
 ignore:
   - "contrib/*"
+  - "apps/*"
 coverage:
   status:
     project:
