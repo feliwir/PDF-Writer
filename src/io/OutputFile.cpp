@@ -28,7 +28,6 @@ using namespace PDFHummus;
 OutputFile::OutputFile()
 {
     mOutputStream = nullptr;
-    mFileStream = nullptr;
 }
 
 OutputFile::~OutputFile()
@@ -49,18 +48,16 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
             break;
         }
 
-        auto *outputFileStream = new OutputFileStream();
+        auto outputFileStream = std::make_unique<OutputFileStream>();
         status = outputFileStream->Open(inFilePath, inAppend); // explicitly open, so status may be retrieved
         if (status != PDFHummus::eSuccess)
         {
             TRACE_LOG1("OutputFile::OpenFile, Unexpected Failure. Cannot open file for writing - %s",
                        inFilePath.c_str());
-            delete outputFileStream;
             break;
         }
 
-        mOutputStream = new OutputBufferedStream(outputFileStream);
-        mFileStream = outputFileStream;
+        mOutputStream = new OutputBufferedStream(std::move(outputFileStream));
         mFilePath = inFilePath;
     } while (false);
     return status;
@@ -74,11 +71,11 @@ EStatusCode OutputFile::CloseFile()
     }
 
     mOutputStream->Flush();
-    EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
+    auto *outputStream = (OutputFileStream *)mOutputStream->GetTargetStream();
+    EStatusCode status = outputStream->Close(); // explicitly close, so status may be retrieved
 
     delete mOutputStream; // will delete the referenced file stream as well
     mOutputStream = nullptr;
-    mFileStream = nullptr;
     return status;
 }
 

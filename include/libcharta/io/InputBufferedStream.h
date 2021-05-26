@@ -23,8 +23,9 @@
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
 #include <vector>
+#include <memory>
 
-constexpr size_t DEFAULT_BUFFER_SIZE = 256 * 1024;
+constexpr size_t DEFAULT_INPUT_BUFFER_SIZE = 256 * 1024;
 
 class InputBufferedStream final : public IByteReaderWithPosition
 {
@@ -32,12 +33,8 @@ class InputBufferedStream final : public IByteReaderWithPosition
     /*
         default constructor with default buffer size
     */
-    InputBufferedStream(void);
+    InputBufferedStream();
 
-    /*
-        Destroys an owned buffer
-    */
-    virtual ~InputBufferedStream(void);
 
     /*
         consturctor with buffer size setup
@@ -47,14 +44,14 @@ class InputBufferedStream final : public IByteReaderWithPosition
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    InputBufferedStream(IByteReaderWithPosition *inSourceReader, size_t inBufferSize = DEFAULT_BUFFER_SIZE);
+    InputBufferedStream(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize = DEFAULT_INPUT_BUFFER_SIZE);
 
     /*
         Assigns a reader stream for buffered reading. from the moment of assigning the
         buffer assumes control of the stream.
         Assign a NULL or a different reader to release ownership.
     */
-    void Assign(IByteReaderWithPosition *inReader);
+    void Assign(std::unique_ptr<IByteReaderWithPosition> inReader);
 
     // IByteReaderWithPosition implementation
     virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
@@ -70,7 +67,7 @@ class InputBufferedStream final : public IByteReaderWithPosition
     std::vector<uint8_t> mBuffer;
     size_t mCurrentBufferIndex;
     size_t mLastAvailableIndex;
-    IByteReaderWithPosition *mSourceStream;
+    std::unique_ptr<IByteReaderWithPosition> mSourceStream;
 
-    void Initiate(IByteReaderWithPosition *inSourceReader, size_t inBufferSize);
+    void Initiate(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize);
 };

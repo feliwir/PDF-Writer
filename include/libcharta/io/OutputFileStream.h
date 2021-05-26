@@ -23,11 +23,7 @@
 #include "EStatusCode.h"
 #include "IByteWriterWithPosition.h"
 
-#include <stdio.h>
-#include <string>
-#ifdef __MINGW32__
-#include <share.h>
-#endif
+#include <fstream>
 
 class OutputFileStream final : public IByteWriterWithPosition
 {
@@ -49,5 +45,5 @@ class OutputFileStream final : public IByteWriterWithPosition
     virtual long long GetCurrentPosition();
 
   private:
-    FILE *mStream;
+    std::ofstream mStream;
 };

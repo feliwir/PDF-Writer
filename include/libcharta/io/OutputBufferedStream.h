@@ -21,8 +21,10 @@
 #pragma once
 
 #include "IByteWriterWithPosition.h"
+#include <memory>
+#include <vector>
 
-#define DEFAULT_BUFFER_SIZE 256 * 1024
+constexpr size_t DEFAULT_OUTPUT_BUFFER_SIZE = 256 * 1024;
 
 class OutputBufferedStream final : public IByteWriterWithPosition
 {
@@ -45,7 +47,7 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize = DEFAULT_BUFFER_SIZE);
+    OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize = DEFAULT_OUTPUT_BUFFER_SIZE);
 
     /*
         Assigns a writer for buffered writing. from the moment of assigning the
@@ -53,7 +55,7 @@ class OutputBufferedStream final : public IByteWriterWithPosition
         Assign a NULL or a different writer to release ownership.
         replacing a current stream automatically Flushes the buffer.
     */
-    void Assign(IByteWriterWithPosition *inWriter);
+    void Assign(std::unique_ptr<IByteWriterWithPosition> inWriter);
 
     // IByteWriter implementation
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
@@ -64,11 +66,12 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     // force buffer flush to underlying stream
     void Flush();
 
-  private:
-    uint8_t *mBuffer;
-    size_t mBufferSize;
-    uint8_t *mCurrentBufferIndex;
-    IByteWriterWithPosition *mTargetStream;
+    IByteWriterWithPosition* GetTargetStream();
 
-    void Initiate(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize);
+  private:
+    std::vector<uint8_t> mBuffer;
+    size_t mCurrentBufferIndex;
+    std::unique_ptr<IByteWriterWithPosition> mTargetStream;
+
+    void Initiate(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize);
 };

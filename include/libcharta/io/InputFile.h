@@ -23,6 +23,7 @@
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
 #include <string>
+#include <memory>
 
 class InputBufferedStream;
 class InputFileStream;
@@ -43,6 +44,5 @@ class InputFile
 
   private:
     std::string mFilePath;
-    InputBufferedStream *mInputStream;
-    InputFileStream *mFileStream;
+    std::unique_ptr<InputBufferedStream> mInputStream;
 };

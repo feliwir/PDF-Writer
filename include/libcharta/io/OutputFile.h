@@ -42,5 +42,4 @@ class OutputFile
   private:
     std::string mFilePath;
     OutputBufferedStream *mOutputStream;
-    OutputFileStream *mFileStream;
 };

@@ -27,8 +27,6 @@ using namespace PDFHummus;
 
 InputFile::InputFile()
 {
-    mInputStream = nullptr;
-    mFileStream = nullptr;
 }
 
 InputFile::~InputFile()
@@ -38,31 +36,26 @@ InputFile::~InputFile()
 
 EStatusCode InputFile::OpenFile(const std::string &inFilePath)
 {
-    EStatusCode status;
-    do
+
+    EStatusCode status = CloseFile();
+    if (status != PDFHummus::eSuccess)
     {
-        status = CloseFile();
-        if (status != PDFHummus::eSuccess)
-        {
-            TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
-                       mFilePath.c_str());
-            break;
-        }
+        TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
+                   mFilePath.c_str());
+        return status;
+    }
 
-        auto *inputFileStream = new InputFileStream();
-        status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
-        if (status != PDFHummus::eSuccess)
-        {
-            TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s",
-                       inFilePath.c_str());
-            delete inputFileStream;
-            break;
-        }
+    auto inputFileStream = std::make_unique<InputFileStream>();
+    status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
+    if (status != PDFHummus::eSuccess)
+    {
+        TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s", inFilePath.c_str());
+        return status;
+    }
 
-        mInputStream = new InputBufferedStream(inputFileStream);
-        mFileStream = inputFileStream;
-        mFilePath = inFilePath;
-    } while (false);
+    mInputStream = std::make_unique<InputBufferedStream>(std::move(inputFileStream));
+    mFilePath = inFilePath;
+
     return status;
 }
 
@@ -73,17 +66,16 @@ EStatusCode InputFile::CloseFile()
         return PDFHummus::eSuccess;
     }
 
-    EStatusCode status = mFileStream->Close(); // explicitly close, so status may be retrieved
+    auto *inputFileStream = (InputFileStream *)mInputStream->GetSourceStream();
+    EStatusCode status = inputFileStream->Close(); // explicitly close, so status may be retrieved
 
-    delete mInputStream; // will delete the referenced file stream as well
     mInputStream = nullptr;
-    mFileStream = nullptr;
     return status;
 }
 
 IByteReaderWithPosition *InputFile::GetInputStream()
 {
-    return mInputStream;
+    return mInputStream.get();
 }
 
 const std::string &InputFile::GetFilePath()

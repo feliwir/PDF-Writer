@@ -24,22 +24,19 @@
 
 OutputBufferedStream::OutputBufferedStream()
 {
-    Initiate(nullptr, DEFAULT_BUFFER_SIZE);
+    Initiate(nullptr, DEFAULT_OUTPUT_BUFFER_SIZE);
 }
 
-void OutputBufferedStream::Initiate(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize)
+void OutputBufferedStream::Initiate(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize)
 {
-    mBufferSize = inBufferSize;
-    mBuffer = new uint8_t[mBufferSize];
-    mCurrentBufferIndex = mBuffer;
-    mTargetStream = inTargetWriter;
+    mBuffer.resize(inBufferSize);
+    mCurrentBufferIndex = 0;
+    mTargetStream = std::move(inTargetWriter);
 }
 
 OutputBufferedStream::~OutputBufferedStream()
 {
     Flush();
-    delete[] mBuffer;
-    delete mTargetStream;
 }
 
 OutputBufferedStream::OutputBufferedStream(size_t inBufferSize)
@@ -47,15 +44,15 @@ OutputBufferedStream::OutputBufferedStream(size_t inBufferSize)
     Initiate(nullptr, inBufferSize);
 }
 
-OutputBufferedStream::OutputBufferedStream(IByteWriterWithPosition *inTargetWriter, size_t inBufferSize)
+OutputBufferedStream::OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize)
 {
-    Initiate(inTargetWriter, inBufferSize);
+    Initiate(std::move(inTargetWriter), inBufferSize);
 }
 
-void OutputBufferedStream::Assign(IByteWriterWithPosition *inWriter)
+void OutputBufferedStream::Assign(std::unique_ptr<IByteWriterWithPosition> inWriter)
 {
     Flush();
-    mTargetStream = inWriter;
+    mTargetStream = std::move(inWriter);
 }
 
 size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
@@ -65,11 +62,11 @@ size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
         size_t bytesWritten;
 
         // if content to write fits in the buffer write to buffer
-        if (inSize <= mBufferSize - (mCurrentBufferIndex - mBuffer))
+        if (inSize <= mBuffer.size() - mCurrentBufferIndex)
         {
             if (inSize > 0)
             {
-                memcpy(mCurrentBufferIndex, inBuffer, inSize);
+                std::copy(inBuffer, inBuffer + inSize, mBuffer.begin() + mCurrentBufferIndex);
                 mCurrentBufferIndex += inSize;
             }
             bytesWritten = inSize;
@@ -78,13 +75,15 @@ size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
         {
             // if not, flush the buffer. if now won't fit in the buffer write directly to underlying stream
             // all but what size will fit in the buffer - then write to buffer what leftover will fit in.
-            size_t bytesToWriteToBuffer = inSize % mBufferSize;
+            size_t bytesToWriteToBuffer = inSize % mBuffer.size();
             Flush();
 
             bytesWritten = mTargetStream->Write(inBuffer, inSize - bytesToWriteToBuffer);
             if ((inSize - bytesToWriteToBuffer == bytesWritten) && bytesToWriteToBuffer > 0) // all well, continue
             {
-                memcpy(mCurrentBufferIndex, inBuffer + (inSize - bytesToWriteToBuffer), bytesToWriteToBuffer);
+                std::copy(inBuffer + (inSize - bytesToWriteToBuffer),
+                          inBuffer + (inSize - bytesToWriteToBuffer) + bytesToWriteToBuffer,
+                          mBuffer.begin() + mCurrentBufferIndex);
                 mCurrentBufferIndex += bytesToWriteToBuffer;
                 bytesWritten += bytesToWriteToBuffer;
             }
@@ -96,12 +95,17 @@ size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
 
 void OutputBufferedStream::Flush()
 {
-    if ((mTargetStream != nullptr) && mCurrentBufferIndex != mBuffer)
-        mTargetStream->Write(mBuffer, mCurrentBufferIndex - mBuffer);
-    mCurrentBufferIndex = mBuffer;
+    if ((mTargetStream != nullptr) && mCurrentBufferIndex != 0)
+        mTargetStream->Write(mBuffer.data(), mCurrentBufferIndex);
+    mCurrentBufferIndex = 0;
 }
 
 long long OutputBufferedStream::GetCurrentPosition()
 {
-    return mTargetStream != nullptr ? mTargetStream->GetCurrentPosition() + (mCurrentBufferIndex - mBuffer) : 0;
+    return mTargetStream != nullptr ? mTargetStream->GetCurrentPosition() + mCurrentBufferIndex : 0;
+}
+
+IByteWriterWithPosition *OutputBufferedStream::GetTargetStream()
+{
+    return mTargetStream.get();
 }

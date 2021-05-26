@@ -25,50 +25,51 @@ using namespace PDFHummus;
 
 OutputFileStream::OutputFileStream()
 {
-    mStream = nullptr;
 }
 
 OutputFileStream::~OutputFileStream()
 {
-    if (mStream != nullptr)
-        Close();
+    Close();
 }
 
 OutputFileStream::OutputFileStream(const std::string &inFilePath, bool inAppend)
 {
-    mStream = nullptr;
     Open(inFilePath, inAppend);
 }
 
 EStatusCode OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
 {
-    SAFE_FOPEN(mStream, inFilePath.c_str(), inAppend ? "ab" : "wb")
-
-    if (mStream == nullptr)
-        return PDFHummus::eFailure;
-
     // seek to end, so position reading gets the correct file position, even before first write
-    SAFE_FSEEK64(mStream, 0, SEEK_END);
+    mStream.open(inFilePath, std::ios::binary | std::ios::ate | (inAppend ? std::ios::app : std::ios::trunc));
+
+    if (mStream.fail())
+        return PDFHummus::eFailure;
 
     return PDFHummus::eSuccess;
 };
 
 EStatusCode OutputFileStream::Close()
 {
-    EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    mStream.close();
+    EStatusCode result = mStream.fail() ? PDFHummus::eFailure : PDFHummus::eSuccess;
 
-    mStream = nullptr;
     return result;
 }
 
 size_t OutputFileStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
+    if (!mStream.is_open())
+        return 0;
 
-    size_t writtenItems = mStream != nullptr ? fwrite(static_cast<const void *>(inBuffer), 1, inSize, mStream) : 0;
-    return writtenItems;
+    auto before = mStream.tellp();
+    mStream.write((const char *)inBuffer, inSize);
+    return mStream.tellp() - before;
 }
 
 long long OutputFileStream::GetCurrentPosition()
 {
-    return mStream != nullptr ? SAFE_FTELL64(mStream) : 0;
+    if (!mStream.is_open())
+        return 0;
+
+    return mStream.tellp();
 }
