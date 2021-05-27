@@ -22,40 +22,42 @@
 
 #include <memory.h>
 
-OutputBufferedStream::OutputBufferedStream()
+charta::OutputBufferedStream::OutputBufferedStream()
 {
     Initiate(nullptr, DEFAULT_OUTPUT_BUFFER_SIZE);
 }
 
-void OutputBufferedStream::Initiate(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize)
+void charta::OutputBufferedStream::Initiate(std::unique_ptr<IByteWriterWithPosition> inTargetWriter,
+                                            size_t inBufferSize)
 {
     mBuffer.resize(inBufferSize);
     mCurrentBufferIndex = 0;
     mTargetStream = std::move(inTargetWriter);
 }
 
-OutputBufferedStream::~OutputBufferedStream()
+charta::OutputBufferedStream::~OutputBufferedStream()
 {
     Flush();
 }
 
-OutputBufferedStream::OutputBufferedStream(size_t inBufferSize)
+charta::OutputBufferedStream::OutputBufferedStream(size_t inBufferSize)
 {
     Initiate(nullptr, inBufferSize);
 }
 
-OutputBufferedStream::OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize)
+charta::OutputBufferedStream::OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter,
+                                                   size_t inBufferSize)
 {
     Initiate(std::move(inTargetWriter), inBufferSize);
 }
 
-void OutputBufferedStream::Assign(std::unique_ptr<IByteWriterWithPosition> inWriter)
+void charta::OutputBufferedStream::Assign(std::unique_ptr<IByteWriterWithPosition> inWriter)
 {
     Flush();
     mTargetStream = std::move(inWriter);
 }
 
-size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream != nullptr)
     {
@@ -93,19 +95,19 @@ size_t OutputBufferedStream::Write(const uint8_t *inBuffer, size_t inSize)
     return 0;
 }
 
-void OutputBufferedStream::Flush()
+void charta::OutputBufferedStream::Flush()
 {
     if ((mTargetStream != nullptr) && mCurrentBufferIndex != 0)
         mTargetStream->Write(mBuffer.data(), mCurrentBufferIndex);
     mCurrentBufferIndex = 0;
 }
 
-long long OutputBufferedStream::GetCurrentPosition()
+long long charta::OutputBufferedStream::GetCurrentPosition()
 {
     return mTargetStream != nullptr ? mTargetStream->GetCurrentPosition() + mCurrentBufferIndex : 0;
 }
 
-IByteWriterWithPosition *OutputBufferedStream::GetTargetStream()
+charta::IByteWriterWithPosition *charta::OutputBufferedStream::GetTargetStream()
 {
     return mTargetStream.get();
 }

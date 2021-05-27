@@ -48,7 +48,7 @@ ObjectsContext::ObjectsContext()
 
 ObjectsContext::~ObjectsContext() = default;
 
-void ObjectsContext::SetOutputStream(IByteWriterWithPosition *inOutputStream)
+void ObjectsContext::SetOutputStream(charta::IByteWriterWithPosition *inOutputStream)
 {
     mOutputStream = inOutputStream;
     mPrimitiveWriter.SetStreamForWriting(inOutputStream);
@@ -133,7 +133,7 @@ void ObjectsContext::WriteIndirectObjectReference(ObjectIDType inIndirectObjectI
     mPrimitiveWriter.WriteTokenSeparator(inSeparate);
 }
 
-IByteWriterWithPosition *ObjectsContext::StartFreeContext()
+charta::IByteWriterWithPosition *ObjectsContext::StartFreeContext()
 {
     return mOutputStream;
 }
@@ -732,7 +732,7 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
     return status;
 }
 
-void ObjectsContext::WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize)
+void ObjectsContext::WriteXrefNumber(charta::IByteWriter *inStream, long long inElement, size_t inElementSize)
 {
     // xref numbers are written high order byte first (big endian)
     auto *buffer = new uint8_t[inElementSize];

@@ -21,44 +21,44 @@
 #include "io/InputStringBufferStream.h"
 #include "SafeBufferMacrosDefs.h"
 
-InputStringBufferStream::InputStringBufferStream(MyStringBuf *inBufferToReadFrom)
+charta::InputStringBufferStream::InputStringBufferStream(MyStringBuf *inBufferToReadFrom)
 {
     mBufferToReadFrom = inBufferToReadFrom;
 }
 
-void InputStringBufferStream::Assign(MyStringBuf *inBufferToReadFrom)
+void charta::InputStringBufferStream::Assign(MyStringBuf *inBufferToReadFrom)
 {
     mBufferToReadFrom = inBufferToReadFrom;
 }
 
-InputStringBufferStream::~InputStringBufferStream() = default;
+charta::InputStringBufferStream::~InputStringBufferStream() = default;
 
-size_t InputStringBufferStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputStringBufferStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     return (size_t)mBufferToReadFrom->SAFE_SGETN((char *)inBuffer, inBufferSize, inBufferSize);
 }
 
-bool InputStringBufferStream::NotEnded()
+bool charta::InputStringBufferStream::NotEnded()
 {
     return mBufferToReadFrom->in_avail() != 0;
 }
 
-void InputStringBufferStream::Skip(size_t inSkipSize)
+void charta::InputStringBufferStream::Skip(size_t inSkipSize)
 {
     mBufferToReadFrom->pubseekoff(inSkipSize, std::ios_base::cur);
 }
 
-void InputStringBufferStream::SetPosition(long long inOffsetFromStart)
+void charta::InputStringBufferStream::SetPosition(long long inOffsetFromStart)
 {
     mBufferToReadFrom->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }
 
-void InputStringBufferStream::SetPositionFromEnd(long long inOffsetFromEnd)
+void charta::InputStringBufferStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     mBufferToReadFrom->pubseekoff((long)inOffsetFromEnd, std::ios_base::end);
 }
 
-long long InputStringBufferStream::GetCurrentPosition()
+long long charta::InputStringBufferStream::GetCurrentPosition()
 {
     return mBufferToReadFrom->GetCurrentReadPosition();
 }

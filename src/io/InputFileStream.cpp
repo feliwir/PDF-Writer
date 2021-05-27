@@ -23,24 +23,24 @@
 
 using namespace charta;
 
-InputFileStream::~InputFileStream()
+charta::InputFileStream::~InputFileStream()
 {
     if (mStream != nullptr)
         Close();
 }
 
-InputFileStream::InputFileStream(const std::string &inFilePath)
+charta::InputFileStream::InputFileStream(const std::string &inFilePath)
 {
     Open(inFilePath);
 }
 
-EStatusCode InputFileStream::Open(const std::string &inFilePath)
+EStatusCode charta::InputFileStream::Open(const std::string &inFilePath)
 {
     SAFE_FOPEN(mStream, inFilePath.c_str(), "rb");
     return nullptr == mStream ? charta::eFailure : charta::eSuccess;
 }
 
-EStatusCode InputFileStream::Close()
+EStatusCode charta::InputFileStream::Close()
 {
     EStatusCode result = fclose(mStream) == 0 ? charta::eSuccess : charta::eFailure;
 
@@ -48,39 +48,39 @@ EStatusCode InputFileStream::Close()
     return result;
 }
 
-size_t InputFileStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputFileStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t readItems = mStream != nullptr ? fread(static_cast<void *>(inBuffer), 1, inBufferSize, mStream) : 0;
     return readItems;
 }
 
-bool InputFileStream::NotEnded()
+bool charta::InputFileStream::NotEnded()
 {
     if (mStream != nullptr)
         return feof(mStream) == 0;
     return false;
 }
 
-void InputFileStream::Skip(size_t inSkipSize)
+void charta::InputFileStream::Skip(size_t inSkipSize)
 {
     if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inSkipSize, SEEK_CUR);
 }
 
-void InputFileStream::SetPosition(long long inOffsetFromStart)
+void charta::InputFileStream::SetPosition(long long inOffsetFromStart)
 {
     if (mStream != nullptr)
         SAFE_FSEEK64(mStream, inOffsetFromStart, SEEK_SET);
 }
 
-long long InputFileStream::GetCurrentPosition()
+long long charta::InputFileStream::GetCurrentPosition()
 {
     if (mStream != nullptr)
         return SAFE_FTELL64(mStream);
     return 0;
 }
 
-long long InputFileStream::GetFileSize()
+long long charta::InputFileStream::GetFileSize()
 {
     if (mStream != nullptr)
     {
@@ -96,7 +96,7 @@ long long InputFileStream::GetFileSize()
     return 0;
 }
 
-void InputFileStream::SetPositionFromEnd(long long inOffsetFromEnd)
+void charta::InputFileStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     if (mStream != nullptr)
     {

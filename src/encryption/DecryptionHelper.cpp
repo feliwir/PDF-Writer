@@ -356,8 +356,8 @@ bool HasCryptFilterDefinition(PDFParser *inParser, const std::shared_ptr<PDFStre
     return false; //???
 }
 
-IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
-                                                                      IByteReader *inToWrapStream)
+charta::IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(
+    const std::shared_ptr<PDFStreamInput> &inStream, charta::IByteReader *inToWrapStream)
 {
     // This will create a decryption filter for streams that dont have their own defined crypt filters. null for no
     // decryption filter
@@ -374,9 +374,9 @@ IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(const std:
     return nullptr;
 }
 
-IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
-                                                               IByteReader *inToWrapStream,
-                                                               const std::string &inCryptName)
+charta::IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
+                                                                       charta::IByteReader *inToWrapStream,
+                                                                       const std::string &inCryptName)
 {
     // note that here the original stream is returned instead of null
     if (!IsEncrypted() || !CanDecryptDocument())
@@ -408,7 +408,7 @@ std::string DecryptionHelper::DecryptString(const std::string &inStringToDecrypt
     if (!IsDecrypting() || (mXcryptStrings == nullptr))
         return inStringToDecrypt;
 
-    IByteReader *decryptStream = CreateDecryptionReader(
+    charta::IByteReader *decryptStream = CreateDecryptionReader(
         new InputStringStream(inStringToDecrypt), mXcryptStrings->GetCurrentObjectKey(), mXcryptStrings->IsUsingAES());
     if (decryptStream != nullptr)
     {
@@ -510,8 +510,8 @@ void DecryptionHelper::OnObjectEnd(const std::shared_ptr<PDFObject> &inObject)
     }
 }
 
-IByteReader *DecryptionHelper::CreateDecryptionReader(IByteReader *inSourceStream, const ByteList &inEncryptionKey,
-                                                      bool inIsUsingAES)
+charta::IByteReader *DecryptionHelper::CreateDecryptionReader(charta::IByteReader *inSourceStream,
+                                                              const ByteList &inEncryptionKey, bool inIsUsingAES)
 {
     if (inIsUsingAES)
         return new InputAESDecodeStream(inSourceStream, inEncryptionKey);

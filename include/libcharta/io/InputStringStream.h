@@ -24,12 +24,14 @@ limitations under the License.
 
 #include <string>
 
+namespace charta
+{
 class InputStringStream final : public IByteReaderWithPosition
 {
   public:
-    InputStringStream();
+    InputStringStream() = default;
     InputStringStream(const std::string &inString);
-    ~InputStringStream(void);
+    ~InputStringStream();
 
     void Assign(const std::string &inString);
 
@@ -46,3 +48,4 @@ class InputStringStream final : public IByteReaderWithPosition
     std::string::const_iterator mEndPosition;
     std::string::const_iterator mCurrentPosition;
 };
+} // namespace charta

@@ -22,6 +22,8 @@
 
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputPredictorPNGOptimumStream final : public IByteReader
 {
   public:
@@ -51,3 +53,4 @@ class InputPredictorPNGOptimumStream final : public IByteReader
     void DecodeNextByte(uint8_t &outDecodedByte);
     char PaethPredictor(char inLeft, char inUp, char inUpLeft);
 };
+} // namespace charta

@@ -24,6 +24,9 @@
 #include <memory>
 #include <vector>
 
+namespace charta
+{
+
 constexpr size_t DEFAULT_OUTPUT_BUFFER_SIZE = 256 * 1024;
 
 class OutputBufferedStream final : public IByteWriterWithPosition
@@ -58,7 +61,7 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     */
     void Assign(std::unique_ptr<IByteWriterWithPosition> inWriter);
 
-    // IByteWriter implementation
+    // charta::IByteWriter implementation
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
@@ -67,7 +70,7 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     // force buffer flush to underlying stream
     void Flush();
 
-    IByteWriterWithPosition *GetTargetStream();
+    charta::IByteWriterWithPosition *GetTargetStream();
 
   private:
     std::vector<uint8_t> mBuffer;
@@ -76,3 +79,4 @@ class OutputBufferedStream final : public IByteWriterWithPosition
 
     void Initiate(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize);
 };
+} // namespace charta

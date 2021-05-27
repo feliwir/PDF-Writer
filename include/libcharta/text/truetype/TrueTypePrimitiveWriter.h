@@ -24,15 +24,18 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class OutputStringBufferStream;
+}
 
 class TrueTypePrimitiveWriter
 {
   public:
-    TrueTypePrimitiveWriter(OutputStringBufferStream *inTrueTypeFile = NULL);
-    ~TrueTypePrimitiveWriter(void) = default;
+    TrueTypePrimitiveWriter(charta::OutputStringBufferStream *inTrueTypeFile = NULL);
+    ~TrueTypePrimitiveWriter() = default;
 
-    void SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile);
+    void SetOpenTypeStream(charta::OutputStringBufferStream *inTrueTypeFile);
 
     charta::EStatusCode GetInternalState();
 
@@ -45,6 +48,6 @@ class TrueTypePrimitiveWriter
     charta::EStatusCode PadTo4();
 
   private:
-    OutputStringBufferStream *mTrueTypeFile;
+    charta::OutputStringBufferStream *mTrueTypeFile;
     charta::EStatusCode mInternalState;
 };

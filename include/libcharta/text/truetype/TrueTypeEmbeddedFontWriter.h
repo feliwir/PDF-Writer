@@ -50,12 +50,12 @@ class TrueTypeEmbeddedFontWriter
 
   private:
     OpenTypeFileInput mTrueTypeInput;
-    InputFile mTrueTypeFile;
-    OutputStringBufferStream mFontFileStream;
+    charta::InputFile mTrueTypeFile;
+    charta::OutputStringBufferStream mFontFileStream;
     TrueTypePrimitiveWriter mPrimitivesWriter;
-    InputStringBufferStream mFontFileReaderStream; // now this might be confusing - i'm using a reader
-                                                   // to my output buffer, so i can calculate checksums 'n such
-    OpenTypePrimitiveReader mPrimitivesReader;     // same here...
+    charta::InputStringBufferStream mFontFileReaderStream; // now this might be confusing - i'm using a reader
+                                                           // to my output buffer, so i can calculate checksums 'n such
+    OpenTypePrimitiveReader mPrimitivesReader;             // same here...
     uint16_t mSubsetFontGlyphsCount;
 
     long long mCVTEntryWritingOffset;

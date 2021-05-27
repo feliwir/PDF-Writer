@@ -22,15 +22,13 @@
 #include "io/IByteReaderWithPosition.h"
 #include "io/IByteWriter.h"
 
-using namespace charta;
-
-OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
+charta::OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
 {
     mOutputStream = inOutputStream;
 }
 
 #define TENMEGS 10 * 1024 * 1024
-EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
+charta::EStatusCode charta::OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
 {
     auto *buffer = new uint8_t[TENMEGS];
     size_t readBytes, writeBytes;
@@ -50,7 +48,7 @@ EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
     return status;
 }
 
-EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, size_t inLength)
+charta::EStatusCode charta::OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, size_t inLength)
 {
     auto *buffer = new uint8_t[inLength];
     size_t readBytes, writeBytes;

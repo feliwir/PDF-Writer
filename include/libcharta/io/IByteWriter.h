@@ -27,6 +27,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class IByteWriter
 {
   public:
@@ -36,3 +38,4 @@ class IByteWriter
     */
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize) = 0;
 };
+} // namespace charta

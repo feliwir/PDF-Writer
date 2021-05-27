@@ -22,12 +22,12 @@
 
 using namespace charta;
 
-OpenTypePrimitiveReader::OpenTypePrimitiveReader(IByteReaderWithPosition *inOpenTypeFile)
+OpenTypePrimitiveReader::OpenTypePrimitiveReader(charta::IByteReaderWithPosition *inOpenTypeFile)
 {
     SetOpenTypeStream(inOpenTypeFile);
 }
 
-void OpenTypePrimitiveReader::SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile)
+void OpenTypePrimitiveReader::SetOpenTypeStream(charta::IByteReaderWithPosition *inOpenTypeFile)
 {
     mOpenTypeFile = inOpenTypeFile;
     if (inOpenTypeFile != nullptr)
@@ -211,7 +211,7 @@ EStatusCode OpenTypePrimitiveReader::Read(uint8_t *inBuffer, size_t inBufferSize
     return status;
 }
 
-IByteReaderWithPosition *OpenTypePrimitiveReader::GetReadStream()
+charta::IByteReaderWithPosition *OpenTypePrimitiveReader::GetReadStream()
 {
     return mOpenTypeFile;
 }

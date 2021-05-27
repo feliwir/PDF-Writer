@@ -51,7 +51,6 @@ class DictionaryContext;
 class ObjectsContext;
 class PDFPage;
 class PageTree;
-class OutputFile;
 class IDocumentContextExtender;
 class PageContentContext;
 class ResourcesDictionary;
@@ -89,6 +88,8 @@ typedef std::pair<std::string, unsigned long> StringAndULongPair;
 
 namespace charta
 {
+class OutputFile;
+
 struct HummusImageInformation
 {
     HummusImageInformation()

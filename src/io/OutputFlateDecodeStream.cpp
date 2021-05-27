@@ -24,9 +24,9 @@
 #endif
 #include <zlib.h>
 
-#define BUFFER_SIZE 256 * 1024
+constexpr size_t BUFFER_SIZE = 256 * 1024;
 
-OutputFlateDecodeStream::OutputFlateDecodeStream()
+charta::OutputFlateDecodeStream::OutputFlateDecodeStream()
 {
     mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
@@ -34,7 +34,7 @@ OutputFlateDecodeStream::OutputFlateDecodeStream()
     mCurrentlyEncoding = false;
 }
 
-OutputFlateDecodeStream::~OutputFlateDecodeStream()
+charta::OutputFlateDecodeStream::~OutputFlateDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -44,14 +44,14 @@ OutputFlateDecodeStream::~OutputFlateDecodeStream()
     delete mZLibState;
 }
 
-void OutputFlateDecodeStream::FinalizeEncoding()
+void charta::OutputFlateDecodeStream::FinalizeEncoding()
 {
     // no need for flushing here, there's no notion of Z_FINISH. so just end the library work
     inflateEnd(mZLibState);
     mCurrentlyEncoding = false;
 }
 
-OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter *inTargetWriter, bool inInitiallyOn)
+charta::OutputFlateDecodeStream::OutputFlateDecodeStream(charta::IByteWriter *inTargetWriter, bool inInitiallyOn)
 {
     mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
@@ -61,7 +61,7 @@ OutputFlateDecodeStream::OutputFlateDecodeStream(IByteWriter *inTargetWriter, bo
     Assign(inTargetWriter, inInitiallyOn);
 }
 
-void OutputFlateDecodeStream::StartEncoding()
+void charta::OutputFlateDecodeStream::StartEncoding()
 {
     mZLibState->zalloc = Z_NULL;
     mZLibState->zfree = Z_NULL;
@@ -72,7 +72,8 @@ void OutputFlateDecodeStream::StartEncoding()
     int inflateStatus = inflateInit(mZLibState);
 #ifndef NO_TRACE
     if (inflateStatus != Z_OK)
-        TRACE_LOG1("OutputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate library. status "
+        TRACE_LOG1("charta::OutputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate "
+                   "library. status "
                    "code = %d",
                    inflateStatus);
     else
@@ -84,14 +85,14 @@ void OutputFlateDecodeStream::StartEncoding()
 #endif
 }
 
-void OutputFlateDecodeStream::Assign(IByteWriter *inWriter, bool inInitiallyOn)
+void charta::OutputFlateDecodeStream::Assign(charta::IByteWriter *inWriter, bool inInitiallyOn)
 {
     mTargetStream = inWriter;
     if (inInitiallyOn && (mTargetStream != nullptr))
         StartEncoding();
 }
 
-size_t OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndWrite(inBuffer, inSize);
@@ -100,7 +101,7 @@ size_t OutputFlateDecodeStream::Write(const uint8_t *inBuffer, size_t inSize)
     return 0;
 }
 
-size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
 {
     if (0 == inSize)
         return 0; // inflate kinda touchy about getting 0 lengths
@@ -119,9 +120,10 @@ size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, si
             Z_MEM_ERROR == inflateResult)
         {
 #ifndef NO_TRACE
-            TRACE_LOG1("OutputFlateDecodeStream::DecodeBufferAndWrite, failed to write zlib information. returned "
-                       "error code = %d",
-                       inflateResult);
+            TRACE_LOG1(
+                "charta::OutputFlateDecodeStream::DecodeBufferAndWrite, failed to write zlib information. returned "
+                "error code = %d",
+                inflateResult);
 #endif
             inflateEnd(mZLibState);
             break;
@@ -132,9 +134,10 @@ size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, si
         if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
 #ifndef NO_TRACE
-            TRACE_LOG2("OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib "
-                       "bytes to underlying stream. supposed to write %lld, wrote %lld",
-                       BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
+            TRACE_LOG2(
+                "charta::OutputFlateDecodeStream::DecodeBufferAndWrite, Failed to write the desired amount of zlib "
+                "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
 #endif
             inflateEnd(mZLibState);
             inflateResult = Z_STREAM_ERROR;
@@ -149,13 +152,13 @@ size_t OutputFlateDecodeStream::DecodeBufferAndWrite(const uint8_t *inBuffer, si
     return 0;
 }
 
-void OutputFlateDecodeStream::TurnOnEncoding()
+void charta::OutputFlateDecodeStream::TurnOnEncoding()
 {
     if (!mCurrentlyEncoding)
         StartEncoding();
 }
 
-void OutputFlateDecodeStream::TurnOffEncoding()
+void charta::OutputFlateDecodeStream::TurnOffEncoding()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();

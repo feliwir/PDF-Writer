@@ -22,32 +22,33 @@
 
 #include <algorithm>
 
-InputLimitedStream::InputLimitedStream()
+charta::InputLimitedStream::InputLimitedStream()
 {
     mStream = nullptr;
     mMoreToRead = 0;
     mOwnsStream = false;
 }
 
-InputLimitedStream::~InputLimitedStream()
+charta::InputLimitedStream::~InputLimitedStream()
 {
     if ((mStream != nullptr) && mOwnsStream)
         delete mStream;
 }
 
-InputLimitedStream::InputLimitedStream(IByteReader *inSourceStream, long long inReadLimit, bool inOwnsStream)
+charta::InputLimitedStream::InputLimitedStream(charta::IByteReader *inSourceStream, long long inReadLimit,
+                                               bool inOwnsStream)
 {
     Assign(inSourceStream, inReadLimit, inOwnsStream);
 }
 
-void InputLimitedStream::Assign(IByteReader *inSourceStream, long long inReadLimit, bool inOwnsStream)
+void charta::InputLimitedStream::Assign(charta::IByteReader *inSourceStream, long long inReadLimit, bool inOwnsStream)
 {
     mStream = inSourceStream;
     mMoreToRead = inReadLimit;
     mOwnsStream = inOwnsStream;
 }
 
-size_t InputLimitedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputLimitedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t readBytes = mStream->Read(inBuffer, (size_t)std::min<long long>((long long)inBufferSize, mMoreToRead));
 
@@ -55,7 +56,7 @@ size_t InputLimitedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return readBytes;
 }
 
-bool InputLimitedStream::NotEnded()
+bool charta::InputLimitedStream::NotEnded()
 {
     return mStream->NotEnded() && mMoreToRead > 0;
 }

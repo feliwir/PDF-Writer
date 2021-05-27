@@ -28,7 +28,10 @@
 #include <string>
 #include <vector>
 
+namespace charta
+{
 class IByteWriter;
+}
 class Type1Input;
 
 struct ConversionNode
@@ -84,7 +87,7 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     ~Type1ToType2Converter(void);
 
     charta::EStatusCode WriteConvertedFontProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                                  IByteWriter *inByteWriter);
+                                                  charta::IByteWriter *inByteWriter);
 
     // IType1InterpreterImplementation
     virtual charta::EStatusCode Type1Hstem(const LongList &inOperandList);
@@ -152,5 +155,5 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     ConversionNodeList::iterator MergeAltenratingOperators(ConversionNodeList::iterator inStartingNode,
                                                            uint16_t inAlternatingOpcode);
     void AddInitialWidthParameter();
-    charta::EStatusCode WriteProgramToStream(IByteWriter *inByteWriter);
+    charta::EStatusCode WriteProgramToStream(charta::IByteWriter *inByteWriter);
 };

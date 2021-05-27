@@ -2,7 +2,10 @@
 
 #include <string>
 
+namespace charta
+{
 class IByteReader;
+};
 class PDFName;
 class PDFDictionary;
 class PDFStreamInput;
@@ -15,17 +18,18 @@ class IPDFParserExtender
     }
 
     // for extending fliter support in stream read
-    virtual IByteReader *CreateFilterForStream(IByteReader *inStream, std::shared_ptr<PDFName> inFilterName,
-                                               std::shared_ptr<PDFDictionary> inDecodeParams,
-                                               std::shared_ptr<PDFStreamInput> inPDFStream) = 0;
+    virtual charta::IByteReader *CreateFilterForStream(charta::IByteReader *inStream,
+                                                       std::shared_ptr<PDFName> inFilterName,
+                                                       std::shared_ptr<PDFDictionary> inDecodeParams,
+                                                       std::shared_ptr<PDFStreamInput> inPDFStream) = 0;
 
     // for decryption extension
 
     // DoesSupportEncryption should return true if encryption is supported
     virtual bool DoesSupportEncryption() = 0;
     // return input stream if did nothing, or a filter stream owning the input stream if encryption is required
-    virtual IByteReader *CreateDefaultDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
-                                                                IByteReader *inToWrapStream) = 0;
+    virtual charta::IByteReader *CreateDefaultDecryptionFilterForStream(std::shared_ptr<PDFStreamInput> inStream,
+                                                                        charta::IByteReader *inToWrapStream) = 0;
     // decrypt input string. this serves both literal and hexadecimal strings
     virtual std::string DecryptString(std::string inStringToDecrypt) = 0;
     // event for indirect object parsing start

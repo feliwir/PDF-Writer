@@ -20,29 +20,29 @@
 */
 #include "io/InputStreamSkipperStream.h"
 
-InputStreamSkipperStream::InputStreamSkipperStream()
+charta::InputStreamSkipperStream::InputStreamSkipperStream()
 {
     mStream = nullptr;
 }
 
-InputStreamSkipperStream::~InputStreamSkipperStream()
+charta::InputStreamSkipperStream::~InputStreamSkipperStream()
 {
     if (mStream != nullptr)
         delete mStream;
 }
 
-InputStreamSkipperStream::InputStreamSkipperStream(IByteReader *inSourceStream)
+charta::InputStreamSkipperStream::InputStreamSkipperStream(IByteReader *inSourceStream)
 {
     Assign(inSourceStream);
 }
 
-void InputStreamSkipperStream::Assign(IByteReader *inSourceStream)
+void charta::InputStreamSkipperStream::Assign(IByteReader *inSourceStream)
 {
     mStream = inSourceStream;
     mAmountRead = 0;
 }
 
-size_t InputStreamSkipperStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputStreamSkipperStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t readThisTime = mStream->Read(inBuffer, inBufferSize);
     mAmountRead += readThisTime;
@@ -50,17 +50,17 @@ size_t InputStreamSkipperStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return readThisTime;
 }
 
-bool InputStreamSkipperStream::NotEnded()
+bool charta::InputStreamSkipperStream::NotEnded()
 {
     return mStream != nullptr ? mStream->NotEnded() : false;
 }
 
-bool InputStreamSkipperStream::CanSkipTo(long long inPositionInStream) const
+bool charta::InputStreamSkipperStream::CanSkipTo(long long inPositionInStream) const
 {
     return mAmountRead <= inPositionInStream;
 }
 
-void InputStreamSkipperStream::SkipTo(long long inPositionInStream)
+void charta::InputStreamSkipperStream::SkipTo(long long inPositionInStream)
 {
     if (!CanSkipTo(inPositionInStream))
         return;
@@ -69,7 +69,7 @@ void InputStreamSkipperStream::SkipTo(long long inPositionInStream)
 }
 
 // will skip by, or hit EOF
-void InputStreamSkipperStream::SkipBy(long long inAmountToSkipBy)
+void charta::InputStreamSkipperStream::SkipBy(long long inAmountToSkipBy)
 {
     uint8_t buffer;
 
@@ -80,12 +80,12 @@ void InputStreamSkipperStream::SkipBy(long long inAmountToSkipBy)
     }
 }
 
-void InputStreamSkipperStream::Reset()
+void charta::InputStreamSkipperStream::Reset()
 {
     mAmountRead = 0;
 }
 
-long long InputStreamSkipperStream::GetCurrentPosition()
+long long charta::InputStreamSkipperStream::GetCurrentPosition()
 {
     return mAmountRead;
 }

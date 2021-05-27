@@ -49,13 +49,13 @@
 namespace charta
 {
 class DocumentContext;
-};
+class IByteReader;
+}; // namespace charta
 class ObjectsContext;
 class PDFStream;
 class ResourcesDictionary;
 class PDFImageXObject;
 class ITextCommand;
-class IByteReader;
 class IContentContextListener;
 
 template <class T> using SomethingOrDouble = std::variant<T, double>;
@@ -312,7 +312,7 @@ class AbstractContentContext
 
     // introduce free code
     void WriteFreeCode(const std::string &inFreeCode);
-    void WriteFreeCode(IByteReader *inFreeCodeSource);
+    void WriteFreeCode(charta::IByteReader *inFreeCodeSource);
 
     // Extensibility
     void AddContentContextListener(IContentContextListener *inExtender);

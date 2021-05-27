@@ -102,7 +102,7 @@ void Type1Input::Reset()
     Type1PrivateDictionary mPrivateDictionary;
 }
 
-EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
+EStatusCode Type1Input::ReadType1File(charta::IByteReaderWithPosition *inType1)
 {
     EStatusCode status = charta::eSuccess;
     BoolAndString token;

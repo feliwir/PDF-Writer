@@ -23,7 +23,7 @@
 #include "Trace.h"
 #include <zlib.h>
 
-InputFlateDecodeStream::InputFlateDecodeStream()
+charta::InputFlateDecodeStream::InputFlateDecodeStream()
 {
     mZLibState = new z_stream;
     mSourceStream = nullptr;
@@ -31,7 +31,7 @@ InputFlateDecodeStream::InputFlateDecodeStream()
     mEndOfCompressionEoncountered = false;
 }
 
-InputFlateDecodeStream::~InputFlateDecodeStream()
+charta::InputFlateDecodeStream::~InputFlateDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -40,14 +40,14 @@ InputFlateDecodeStream::~InputFlateDecodeStream()
     delete mZLibState;
 }
 
-void InputFlateDecodeStream::FinalizeEncoding()
+void charta::InputFlateDecodeStream::FinalizeEncoding()
 {
     // no need for flushing here, there's no notion of Z_FINISH. so just end the library work
     inflateEnd(mZLibState);
     mCurrentlyEncoding = false;
 }
 
-InputFlateDecodeStream::InputFlateDecodeStream(IByteReader *inSourceReader)
+charta::InputFlateDecodeStream::InputFlateDecodeStream(IByteReader *inSourceReader)
 {
     mZLibState = new z_stream;
     mSourceStream = nullptr;
@@ -56,14 +56,14 @@ InputFlateDecodeStream::InputFlateDecodeStream(IByteReader *inSourceReader)
     Assign(inSourceReader);
 }
 
-void InputFlateDecodeStream::Assign(IByteReader *inSourceReader)
+void charta::InputFlateDecodeStream::Assign(IByteReader *inSourceReader)
 {
     mSourceStream = inSourceReader;
     if (mSourceStream != nullptr)
         StartEncoding();
 }
 
-void InputFlateDecodeStream::StartEncoding()
+void charta::InputFlateDecodeStream::StartEncoding()
 {
     mZLibState->zalloc = Z_NULL;
     mZLibState->zfree = Z_NULL;
@@ -74,9 +74,10 @@ void InputFlateDecodeStream::StartEncoding()
 
     int inflateStatus = inflateInit(mZLibState);
     if (inflateStatus != Z_OK)
-        TRACE_LOG1("InputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate library. status "
-                   "code = %d",
-                   inflateStatus);
+        TRACE_LOG1(
+            "charta::InputFlateDecodeStream::StartEncoding, Unexpected failure in initializating flate library. status "
+            "code = %d",
+            inflateStatus);
     else
         mCurrentlyEncoding = true;
 }
@@ -95,7 +96,7 @@ static bool isError(int inflateResult)
     }
 }
 
-size_t InputFlateDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputFlateDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mCurrentlyEncoding)
         return DecodeBufferAndRead(inBuffer, inBufferSize);
@@ -104,7 +105,7 @@ size_t InputFlateDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return 0;
 }
 
-size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize)
+size_t charta::InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize)
 {
     if (0 == inSize)
         return 0; // inflate kinda touchy about getting 0 lengths
@@ -122,9 +123,10 @@ size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size
             inflateResult = inflate(mZLibState, Z_NO_FLUSH);
             if (isError(inflateResult))
             {
-                TRACE_LOG1("InputFlateDecodeStream::DecodeBufferAndRead, failed to read zlib information. returned "
-                           "error code = %d",
-                           inflateResult);
+                TRACE_LOG1(
+                    "charta::InputFlateDecodeStream::DecodeBufferAndRead, failed to read zlib information. returned "
+                    "error code = %d",
+                    inflateResult);
                 inflateEnd(mZLibState);
                 break;
             }
@@ -139,7 +141,7 @@ size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size
             {
                 if (mSourceStream->NotEnded())
                 {
-                    TRACE_LOG("InputFlateDecodeStream::DecodeBufferAndRead, failed to read from source stream");
+                    TRACE_LOG("charta::InputFlateDecodeStream::DecodeBufferAndRead, failed to read from source stream");
                     inflateResult = Z_STREAM_ERROR;
                 }
                 else
@@ -160,7 +162,8 @@ size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size
                 inflateResult = inflate(mZLibState, Z_NO_FLUSH);
                 if (isError(inflateResult))
                 {
-                    TRACE_LOG1("InputFlateDecodeStream::DecodeBufferAndRead, failed to read zlib information. returned "
+                    TRACE_LOG1("charta::InputFlateDecodeStream::DecodeBufferAndRead, failed to read zlib information. "
+                               "returned "
                                "error code = %d",
                                inflateResult);
                     inflateEnd(mZLibState);
@@ -179,7 +182,7 @@ size_t InputFlateDecodeStream::DecodeBufferAndRead(const uint8_t *inBuffer, size
     return 0;
 }
 
-bool InputFlateDecodeStream::NotEnded()
+bool charta::InputFlateDecodeStream::NotEnded()
 {
     if (mSourceStream != nullptr)
         return (mSourceStream->NotEnded() || mZLibState->avail_in != 0) && !mEndOfCompressionEoncountered;

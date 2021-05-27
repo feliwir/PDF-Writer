@@ -23,7 +23,7 @@
 
 BoolAndString Ascii7Encoding::Encode(const std::string &inString)
 {
-    OutputStringBufferStream asciiString;
+    charta::OutputStringBufferStream asciiString;
     bool encodingGood = true;
     uint8_t buffer;
     std::string::const_iterator it = inString.begin();

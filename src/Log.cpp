@@ -76,7 +76,7 @@ Log::Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom)
     mLogMethod = STATIC_LogEntryToFile;
 }
 
-Log::Log(IByteWriter *inLogStream)
+Log::Log(charta::IByteWriter *inLogStream)
 {
     // when writing stream, no bom is written. assuming that the input will take care, because most chances are that
     // this is a non-file stream, and may be part of something else.
@@ -114,7 +114,7 @@ void Log::LogEntryToStream(const uint8_t *inMessage, size_t inMessageSize)
         WriteLogEntryToStream(inMessage, inMessageSize, mLogStream);
 }
 
-void Log::WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, IByteWriter *inStream)
+void Log::WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, charta::IByteWriter *inStream)
 {
     std::string formattedTimeString = GetFormattedTimeString();
     inStream->Write((const uint8_t *)formattedTimeString.c_str(), formattedTimeString.length());

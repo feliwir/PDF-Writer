@@ -136,7 +136,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
 
         // now for the image
         imageStream = inObjectsContext->StartPDFStream(imageContext);
-        IByteWriter *writerStream = imageStream->GetWriteStream();
+        charta::IByteWriter *writerStream = imageStream->GetWriteStream();
 
         png_uint_32 y = transformed_height;
 
@@ -206,7 +206,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             imageMaskContext->WriteNameValue(scDeviceGray);
 
             std::shared_ptr<PDFStream> imageMaskStream = inObjectsContext->StartPDFStream(imageMaskContext);
-            IByteWriter *writerMaskStream = imageMaskStream->GetWriteStream();
+            charta::IByteWriter *writerMaskStream = imageMaskStream->GetWriteStream();
 
             // write the alpha samples
             InputStringBufferStream alphaWriteStream(&alphaComponentsData);
@@ -271,7 +271,7 @@ void ReadDataFromStream(png_structp png_ptr, png_bytep data, png_size_t length)
     if (png_ptr == nullptr)
         return;
 
-    auto *reader = (IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
+    auto *reader = (charta::IByteReaderWithPosition *)png_get_io_ptr(png_ptr);
     long long readBytes = reader->Read((uint8_t *)(data), length);
 
     if (readBytes != (long long)length)
@@ -293,8 +293,9 @@ void HandlePngWarning(png_structp /*png_ptr*/, png_const_charp warning_message)
         TRACE_LOG1("LibPNG Warning: %s", warning_message);
 }
 
-PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStream, DocumentContext *inDocumentContext,
-                                              ObjectsContext *inObjectsContext, ObjectIDType inFormXObjectID)
+PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *inPNGStream,
+                                              DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext,
+                                              ObjectIDType inFormXObjectID)
 {
     // Start reading image to get dimension. we'll then create the form, and then the image
     PDFFormXObject *formXObject = nullptr;
@@ -438,7 +439,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(IByteReaderWithPosition *inPNGStre
     return formXObject;
 }
 
-PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream,
+PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
                                                                 ObjectIDType inFormXObjectID)
 {
     PDFFormXObject *imageFormXObject = nullptr;
@@ -459,12 +460,12 @@ PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(IByteReaderWithP
     return imageFormXObject;
 }
 
-std::pair<double, double> PNGImageHandler::ReadImageDimensions(IByteReaderWithPosition *inPNGStream)
+std::pair<double, double> PNGImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inPNGStream)
 {
     return ReadImageInfo(inPNGStream).dimensions;
 }
 
-PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(IByteReaderWithPosition *inPNGStream)
+PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(charta::IByteReaderWithPosition *inPNGStream)
 {
     // reading as is set by internal reader (meaning, post transformations)
 

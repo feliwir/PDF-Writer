@@ -24,23 +24,23 @@
 
 #include <algorithm>
 
-InputAsciiHexDecodeStream::InputAsciiHexDecodeStream()
+charta::InputAsciiHexDecodeStream::InputAsciiHexDecodeStream()
 {
     mSourceStream = nullptr;
 }
 
-InputAsciiHexDecodeStream::~InputAsciiHexDecodeStream()
+charta::InputAsciiHexDecodeStream::~InputAsciiHexDecodeStream()
 {
     if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
-InputAsciiHexDecodeStream::InputAsciiHexDecodeStream(IByteReader *inSourceReader)
+charta::InputAsciiHexDecodeStream::InputAsciiHexDecodeStream(charta::IByteReader *inSourceReader)
 {
     Assign(inSourceReader);
 }
 
-void InputAsciiHexDecodeStream::Assign(IByteReader *inSourceReader)
+void charta::InputAsciiHexDecodeStream::Assign(charta::IByteReader *inSourceReader)
 {
     mSourceStream = inSourceReader;
     mHitEnd = false;
@@ -49,13 +49,13 @@ void InputAsciiHexDecodeStream::Assign(IByteReader *inSourceReader)
     mReadBufferIndex = 0;
 }
 
-bool InputAsciiHexDecodeStream::NotEnded()
+bool charta::InputAsciiHexDecodeStream::NotEnded()
 {
     return (mSourceStream != nullptr) &&
            ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
-size_t InputAsciiHexDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputAsciiHexDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t mCurrentIndex = 0;
 
@@ -79,7 +79,7 @@ size_t InputAsciiHexDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return mCurrentIndex;
 }
 
-void InputAsciiHexDecodeStream::ReadNextBuffer()
+void charta::InputAsciiHexDecodeStream::ReadNextBuffer()
 {
     uint8_t buffer[2];
     uint8_t aByte = 0;

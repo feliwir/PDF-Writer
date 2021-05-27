@@ -24,11 +24,14 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
+namespace charta
+{
+
 class OutputFlateEncodeStream final : public IByteWriterWithPosition
 {
   public:
-    OutputFlateEncodeStream(void);
-    virtual ~OutputFlateEncodeStream(void);
+    OutputFlateEncodeStream();
+    virtual ~OutputFlateEncodeStream();
 
     /* passing the target writer to OutputFlateEncodeStream makes it its owner. so if you don't want it to try and
      * delete it on destructor - use Assign(NULL) */
@@ -54,3 +57,4 @@ class OutputFlateEncodeStream final : public IByteWriterWithPosition
     void StartEncoding();
     size_t EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize);
 };
+} // namespace charta

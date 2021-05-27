@@ -23,19 +23,17 @@
 #include "io/OutputBufferedStream.h"
 #include "io/OutputFileStream.h"
 
-using namespace charta;
-
-OutputFile::OutputFile()
+charta::OutputFile::OutputFile()
 {
     mOutputStream = nullptr;
 }
 
-OutputFile::~OutputFile()
+charta::OutputFile::~OutputFile()
 {
     CloseFile();
 }
 
-EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
+charta::EStatusCode charta::OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
 {
     EStatusCode status;
     do
@@ -43,7 +41,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
         status = CloseFile();
         if (status != charta::eSuccess)
         {
-            TRACE_LOG1("OutputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
+            TRACE_LOG1("charta::OutputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
                        mFilePath.c_str());
             break;
         }
@@ -52,7 +50,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
         status = outputFileStream->Open(inFilePath, inAppend); // explicitly open, so status may be retrieved
         if (status != charta::eSuccess)
         {
-            TRACE_LOG1("OutputFile::OpenFile, Unexpected Failure. Cannot open file for writing - %s",
+            TRACE_LOG1("charta::OutputFile::OpenFile, Unexpected Failure. Cannot open file for writing - %s",
                        inFilePath.c_str());
             break;
         }
@@ -63,7 +61,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
     return status;
 }
 
-EStatusCode OutputFile::CloseFile()
+charta::EStatusCode charta::OutputFile::CloseFile()
 {
     if (nullptr == mOutputStream)
     {
@@ -79,12 +77,12 @@ EStatusCode OutputFile::CloseFile()
     return status;
 }
 
-IByteWriterWithPosition *OutputFile::GetOutputStream()
+charta::IByteWriterWithPosition *charta::OutputFile::GetOutputStream()
 {
     return mOutputStream;
 }
 
-const std::string &OutputFile::GetFilePath()
+const std::string &charta::OutputFile::GetFilePath()
 {
     return mFilePath;
 }

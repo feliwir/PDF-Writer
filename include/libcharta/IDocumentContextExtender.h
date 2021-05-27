@@ -42,8 +42,6 @@ namespace charta
 class DocumentContext;
 }
 
-using namespace charta;
-
 class IDocumentContextExtender
 {
   public:

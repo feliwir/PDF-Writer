@@ -84,13 +84,13 @@ charta::EStatusCode PDFModifiedPage::EndContentContext()
     if (mCurrentContext != nullptr)
     {
         mIsDirty = true;
-        EStatusCode status = mWriter->EndFormXObject(mCurrentContext);
+        auto status = mWriter->EndFormXObject(mCurrentContext);
         mContenxts.push_back(mCurrentContext);
         mCurrentContext = nullptr;
         return status;
     }
 
-    return eSuccess;
+    return charta::eSuccess;
 }
 
 AbstractContentContext *PDFModifiedPage::GetContentContext()
@@ -145,11 +145,11 @@ std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(PDFParser *in
 
 charta::EStatusCode PDFModifiedPage::WritePage()
 {
-    EStatusCode status = EndContentContext(); // just in case someone forgot to close the latest content context
+    charta::EStatusCode status = EndContentContext(); // just in case someone forgot to close the latest content context
 
     do
     {
-        if (status != eSuccess || !mIsDirty)
+        if (status != charta::eSuccess || !mIsDirty)
         {
             break;
         }

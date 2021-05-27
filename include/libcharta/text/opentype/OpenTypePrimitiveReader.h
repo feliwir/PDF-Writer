@@ -26,10 +26,10 @@
 class OpenTypePrimitiveReader
 {
   public:
-    OpenTypePrimitiveReader(IByteReaderWithPosition *inTrueTypeFile = NULL);
+    OpenTypePrimitiveReader(charta::IByteReaderWithPosition *inTrueTypeFile = NULL);
     ~OpenTypePrimitiveReader(void) = default;
 
-    void SetOpenTypeStream(IByteReaderWithPosition *inOpenTypeFile);
+    void SetOpenTypeStream(charta::IByteReaderWithPosition *inOpenTypeFile);
     void SetOffset(long long inNewOffset);
     void Skip(size_t inToSkip);
     long long GetCurrentPosition();
@@ -45,10 +45,10 @@ class OpenTypePrimitiveReader
     charta::EStatusCode ReadFixed(double &outValue);
     charta::EStatusCode Read(uint8_t *inBuffer, size_t inBufferSize);
 
-    IByteReaderWithPosition *GetReadStream();
+    charta::IByteReaderWithPosition *GetReadStream();
 
   private:
-    IByteReaderWithPosition *mOpenTypeFile;
+    charta::IByteReaderWithPosition *mOpenTypeFile;
     long long mInitialPosition;
     charta::EStatusCode mInternalState;
 };

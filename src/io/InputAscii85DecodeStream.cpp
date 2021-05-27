@@ -24,23 +24,23 @@
 
 #include <algorithm>
 
-InputAscii85DecodeStream::InputAscii85DecodeStream()
+charta::InputAscii85DecodeStream::InputAscii85DecodeStream()
 {
     mSourceStream = nullptr;
 }
 
-InputAscii85DecodeStream::~InputAscii85DecodeStream()
+charta::InputAscii85DecodeStream::~InputAscii85DecodeStream()
 {
     if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
-InputAscii85DecodeStream::InputAscii85DecodeStream(IByteReader *inSourceReader)
+charta::InputAscii85DecodeStream::InputAscii85DecodeStream(IByteReader *inSourceReader)
 {
     Assign(inSourceReader);
 }
 
-void InputAscii85DecodeStream::Assign(IByteReader *inSourceReader)
+void charta::InputAscii85DecodeStream::Assign(IByteReader *inSourceReader)
 {
     mSourceStream = inSourceReader;
     mHitEnd = false;
@@ -49,13 +49,13 @@ void InputAscii85DecodeStream::Assign(IByteReader *inSourceReader)
     mReadBufferIndex = 0;
 }
 
-bool InputAscii85DecodeStream::NotEnded()
+bool charta::InputAscii85DecodeStream::NotEnded()
 {
     return (mSourceStream != nullptr) &&
            ((!mHitEnd && mSourceStream->NotEnded()) || mReadBufferIndex < mReadBufferSize);
 }
 
-size_t InputAscii85DecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputAscii85DecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t mCurrentIndex = 0;
 
@@ -79,7 +79,7 @@ size_t InputAscii85DecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return mCurrentIndex;
 }
 
-void InputAscii85DecodeStream::ReadNextBuffer()
+void charta::InputAscii85DecodeStream::ReadNextBuffer()
 {
     uint8_t buffer[5];
     int readIndex = 0;

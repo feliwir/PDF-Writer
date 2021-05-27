@@ -27,7 +27,10 @@
 #include <string>
 #include <utility>
 
+namespace charta
+{
 class IByteReader;
+};
 
 typedef std::pair<bool, std::string> BoolAndString;
 
@@ -38,7 +41,7 @@ class PDFParserTokenizer
     ~PDFParserTokenizer(void) = default;
 
     // Assign the stream to read from (does not take ownership of the stream)
-    void SetReadStream(IByteReader *inSourceStream);
+    void SetReadStream(charta::IByteReader *inSourceStream);
 
     // Get the next avialable PDF token. return result returns whether
     // token retreive was successful and the token. Token retrieval may be unsuccesful if
@@ -71,7 +74,7 @@ class PDFParserTokenizer
     long long GetReadBufferSize() const;
 
   private:
-    IByteReader *mStream;
+    charta::IByteReader *mStream;
     bool mHasTokenBuffer;
     uint8_t mTokenBuffer;
     long long mStreamPositionTracker;

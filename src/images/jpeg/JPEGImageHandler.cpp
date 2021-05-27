@@ -118,7 +118,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
 }
 
 PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
-    IByteReaderWithPosition *inJPGImageStream, ObjectIDType inImageXObjectID,
+    charta::IByteReaderWithPosition *inJPGImageStream, ObjectIDType inImageXObjectID,
     const JPEGImageInformation &inJPGImageInformation)
 {
     PDFImageXObject *imageXObject = nullptr;
@@ -232,7 +232,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     return imageXObject;
 }
 
-BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(IByteReaderWithPosition *inJPGStream)
+BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(charta::IByteReaderWithPosition *inJPGStream)
 {
     BoolAndJPEGImageInformation imageInformationResult(false, mNullInformation);
 
@@ -504,7 +504,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
                                         mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     if (mObjectsContext == nullptr)
     {
@@ -517,7 +517,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
                                            mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                                    ObjectIDType inImageXObjectID)
 {
     PDFImageXObject *imageXObject = nullptr;
@@ -553,7 +553,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
     return imageXObject;
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     if (mObjectsContext == nullptr)
     {
@@ -566,7 +566,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWith
                                           mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                                  ObjectIDType inFormXObjectID)
 {
     PDFFormXObject *imageFormXObject = nullptr;

@@ -105,7 +105,10 @@ struct PFMExtendedFontMetrics
     WORD KernTracks;
 };
 
+namespace charta
+{
 class IByteReaderWithPosition;
+};
 
 class PFMFileReader
 {
@@ -122,7 +125,7 @@ class PFMFileReader
     // as i said, read just what i need
 
   private:
-    IByteReaderWithPosition *mReaderStream;
+    charta::IByteReaderWithPosition *mReaderStream;
     charta::EStatusCode mInternalReadStatus;
 
     charta::EStatusCode ReadByte(BYTE &outByte);

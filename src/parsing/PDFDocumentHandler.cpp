@@ -403,7 +403,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
     return CreatePDFFormXObjectForPage(pageObject, inCropBox, inTransformationMatrix, inPredefinedFormId);
 }
 
-EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter *inTargetStream,
+EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWriter *inTargetStream,
                                                                std::shared_ptr<PDFDictionary> inPageObject)
 {
     EStatusCode status = charta::eSuccess;
@@ -461,10 +461,10 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(IByteWriter *inTa
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
                                                             const std::shared_ptr<PDFStreamInput> &inSourceStream)
 {
-    IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
+    charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
     if (streamReader == nullptr)
         return charta::eFailure;
@@ -1025,7 +1025,7 @@ EStatusCode PDFDocumentHandler::StartCopyingContext(PDFParser *inPDFParser)
     return status;
 }
 
-EStatusCode PDFDocumentHandler::StartCopyingContext(IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFDocumentHandler::StartCopyingContext(charta::IByteReaderWithPosition *inPDFStream,
                                                     const PDFParsingOptions &inOptions)
 {
     EStatusCode status;
@@ -1675,7 +1675,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
                                                             const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                             const StringToStringMap &inMappedResourcesNames)
 {
@@ -1703,7 +1703,7 @@ EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(const std::shared_p
                                                              const StringToStringMap &inMappedResourcesNames,
                                                              ResourceTokenMarkerList &outResourceMarkers)
 {
-    IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
+    charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
     if (streamReader == nullptr)
         return charta::eFailure;
@@ -1740,12 +1740,12 @@ EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(const std::shared_p
     return charta::eSuccess;
 }
 
-EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(IByteWriter *inTargetStream,
+EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(charta::IByteWriter *inTargetStream,
                                                                const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                                const StringToStringMap &inMappedResourcesNames,
                                                                const ResourceTokenMarkerList &inResourceMarkers)
 {
-    IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
+    charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
     if (streamReader == nullptr)
         return charta::eFailure;
@@ -1803,8 +1803,8 @@ EStatusCode PDFDocumentHandler::MergePDFPageToPage(PDFPage &inTargetPage, unsign
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
 {
     PageEmbedInFormWithPageBox embedCommand(inPageBoxToUseAsFormBox);
@@ -1813,8 +1813,8 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    const PDFRectangle &inCropBox, const double *inTransformationMatrix,
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, const PDFRectangle &inCropBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
 {
     PageEmbedInFormWithCropBox embedCommand(inCropBox);
@@ -1823,8 +1823,8 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    IPageEmbedInFormCommand *inPageEmbedCommand, const double *inTransformationMatrix,
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, IPageEmbedInFormCommand *inPageEmbedCommand, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
 {
     if (StartStreamCopyingContext(inPDFStream, inParsingOptions) != charta::eSuccess)
@@ -1835,8 +1835,8 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CreateFormXObjectsFromPDF(
 }
 
 EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    const ObjectIDTypeList &inCopyAdditionalObjects)
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     if (StartStreamCopyingContext(inPDFStream, inParsingOptions) != charta::eSuccess)
         return EStatusCodeAndObjectIDTypeList(charta::eFailure, ObjectIDTypeList());
@@ -1844,7 +1844,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDF(
     return AppendPDFPagesFromPDFInContext(inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream,
                                                     const PDFParsingOptions &inParsingOptions,
                                                     const PDFPageRange &inPageRange,
                                                     const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -1855,7 +1855,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPage(PDFPage &inPage, IByteReader
     return MergePDFPagesToPageInContext(inPage, inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFDocumentHandler::StartStreamCopyingContext(IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFDocumentHandler::StartStreamCopyingContext(charta::IByteReaderWithPosition *inPDFStream,
                                                           const PDFParsingOptions &inOptions)
 {
     return StartCopyingContext(inPDFStream, inOptions);
@@ -1897,7 +1897,7 @@ void PDFDocumentHandler::ReplaceSourceObjects(const ObjectIDTypeToObjectIDTypeMa
     }
 }
 
-IByteReaderWithPosition *PDFDocumentHandler::GetSourceDocumentStream()
+charta::IByteReaderWithPosition *PDFDocumentHandler::GetSourceDocumentStream()
 {
     return mPDFStream;
 }
@@ -2046,7 +2046,7 @@ EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<PDFStrea
     MapIterator<PDFNameToPDFObjectMap> it(streamDictionary->GetIterator());
     EStatusCode status = charta::eSuccess;
     bool readingDecrypted = false;
-    IByteReader *streamReader = nullptr;
+    charta::IByteReader *streamReader = nullptr;
 
     /*
      *	To support unencrypted pdf output, mostly used for debugging, (and maybe i should put a general flag there),

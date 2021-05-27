@@ -124,7 +124,7 @@ static const uint8_t scEOF[] = {'%', '%', 'E', 'O', 'F'};
 
 void StateWriter::WriteFinalEOF()
 {
-    IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
+    charta::IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
     freeContextOutput->Write(scEOF, 5);
     mObjectsContext->EndFreeContext();
 }

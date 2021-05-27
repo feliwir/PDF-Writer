@@ -22,13 +22,13 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
-class InputCharStringDecodeStream final : public IByteReader
+class InputCharStringDecodeStream final : public charta::IByteReader
 {
   public:
-    InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV = 4);
+    InputCharStringDecodeStream(charta::IByteReader *inReadFrom, unsigned long inLenIV = 4);
     ~InputCharStringDecodeStream(void);
 
-    void Assign(IByteReader *inReadFrom, unsigned long inLenIV = 4);
+    void Assign(charta::IByteReader *inReadFrom, unsigned long inLenIV = 4);
 
     // IByteReader implementation
 
@@ -36,7 +36,7 @@ class InputCharStringDecodeStream final : public IByteReader
     virtual bool NotEnded();
 
   private:
-    IByteReader *mReadFrom;
+    charta::IByteReader *mReadFrom;
     uint16_t mRandomizer;
 
     void InitializeCharStringDecode(unsigned long inLenIV);

@@ -194,7 +194,7 @@ class OpenTypeFileInput
     ~OpenTypeFileInput(void);
 
     charta::EStatusCode ReadOpenTypeFile(const std::string &inFontFilePath, uint16_t inFaceIndex);
-    charta::EStatusCode ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex);
+    charta::EStatusCode ReadOpenTypeFile(charta::IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex);
 
     EOpenTypeInputType GetOpenTypeFontType();
 

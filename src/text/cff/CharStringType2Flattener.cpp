@@ -33,7 +33,8 @@ CharStringType2Flattener::CharStringType2Flattener() = default;
 CharStringType2Flattener::~CharStringType2Flattener() = default;
 
 EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
-                                                                 CFFFileInput *inCFFFileInput, IByteWriter *inWriter)
+                                                                 CFFFileInput *inCFFFileInput,
+                                                                 charta::IByteWriter *inWriter)
 {
     CharStringType2Interpreter interpreter;
     EStatusCode status = inCFFFileInput->PrepareForGlyphIntepretation(inFontIndex, inGlyphIndex);

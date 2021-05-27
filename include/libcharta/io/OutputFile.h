@@ -23,6 +23,8 @@
 #include "EStatusCode.h"
 #include <string>
 
+namespace charta
+{
 class IByteWriterWithPosition;
 class OutputBufferedStream;
 class OutputFileStream;
@@ -33,13 +35,14 @@ class OutputFile
     OutputFile(void);
     ~OutputFile(void);
 
-    charta::EStatusCode OpenFile(const std::string &inFilePath, bool inAppend = false);
-    charta::EStatusCode CloseFile();
+    EStatusCode OpenFile(const std::string &inFilePath, bool inAppend = false);
+    EStatusCode CloseFile();
 
-    IByteWriterWithPosition *GetOutputStream(); // returns buffered output stream
+    charta::IByteWriterWithPosition *GetOutputStream(); // returns buffered output stream
     const std::string &GetFilePath();
 
   private:
     std::string mFilePath;
     OutputBufferedStream *mOutputStream;
 };
+} // namespace charta

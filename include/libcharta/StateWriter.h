@@ -43,7 +43,7 @@ class StateWriter
 
   private:
     ObjectsContext *mObjectsContext;
-    OutputFile mOutputFile;
+    charta::OutputFile mOutputFile;
     ObjectIDType mRootObject;
 
     void WriteTrailerDictionary();

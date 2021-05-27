@@ -29,7 +29,10 @@
 #include <memory>
 #include <string>
 
+namespace charta
+{
 class IByteWriterWithPosition;
+}
 class DictionaryContext;
 class PDFStream;
 class IObjectsContextExtender;
@@ -48,7 +51,7 @@ class ObjectsContext
     // Cleanup method. called in order to reset the object context for another production
     void Cleanup();
 
-    void SetOutputStream(IByteWriterWithPosition *inOutputStream);
+    void SetOutputStream(charta::IByteWriterWithPosition *inOutputStream);
     void SetEncryptionHelper(EncryptionHelper *inEncryptionHelper);
 
     // pre 1.5 xref writing
@@ -57,7 +60,7 @@ class ObjectsContext
     charta::EStatusCode WriteXrefStream(DictionaryContext *inDictionaryContext);
 
     // Free Context, for direct writing to output stream
-    IByteWriterWithPosition *StartFreeContext();
+    charta::IByteWriterWithPosition *StartFreeContext();
     void EndFreeContext();
 
     // Get current output stream position
@@ -141,7 +144,7 @@ class ObjectsContext
 
   private:
     IObjectsContextExtender *mExtender;
-    IByteWriterWithPosition *mOutputStream;
+    charta::IByteWriterWithPosition *mOutputStream;
     IndirectObjectsReferenceRegistry mReferencesRegistry;
     PrimitiveObjectsWriter mPrimitiveWriter;
     bool mCompressStreams;
@@ -152,7 +155,7 @@ class ObjectsContext
 
     void WritePDFStreamEndWithoutExtent();
     void WritePDFStreamExtent(std::shared_ptr<PDFStream> inStream);
-    void WriteXrefNumber(IByteWriter *inStream, long long inElement, size_t inElementSize);
+    void WriteXrefNumber(charta::IByteWriter *inStream, long long inElement, size_t inElementSize);
     bool IsEncrypting();
     std::string MaybeEncryptString(const std::string &inString);
     std::string DecodeHexString(const std::string &inString);

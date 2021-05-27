@@ -23,6 +23,8 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputAscii85DecodeStream final : public IByteReader
 {
   public:
@@ -44,7 +46,7 @@ class InputAscii85DecodeStream final : public IByteReader
     virtual bool NotEnded();
 
   private:
-    IByteReader *mSourceStream;
+    charta::IByteReader *mSourceStream;
 
     bool mHitEnd;
     uint8_t mBuffer[4];
@@ -53,3 +55,4 @@ class InputAscii85DecodeStream final : public IByteReader
 
     void ReadNextBuffer();
 };
+} // namespace charta

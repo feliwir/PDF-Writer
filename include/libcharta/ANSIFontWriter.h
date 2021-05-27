@@ -33,7 +33,10 @@ class FreeTypeFaceWrapper;
 class ObjectsContext;
 class DictionaryContext;
 class IANSIFontWriterHelper;
+namespace charta
+{
 class IByteWriter;
+}
 
 typedef std::pair<uint16_t, std::string> UShortAndString;
 typedef std::list<UShortAndString> UShortAndStringList;
@@ -58,7 +61,8 @@ class ANSIFontWriter
     void WriteEncoding(DictionaryContext *inFontContext);
     void WriteEncodingDictionary();
     void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-    void WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter, const ULongVector &inUnicodeValues);
+    void WriteGlyphEntry(charta::IByteWriter *inWriter, uint16_t inEncodedCharacter,
+                         const ULongVector &inUnicodeValues);
 
     FreeTypeFaceWrapper *mFontInfo;
     WrittenFontRepresentation *mFontOccurrence;

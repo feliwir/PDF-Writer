@@ -59,8 +59,8 @@ PDFObjectParser::~PDFObjectParser()
         delete mStream;
 }
 
-void PDFObjectParser::SetReadStream(IByteReader *inSourceStream, IReadPositionProvider *inCurrentPositionProvider,
-                                    bool inOwnsStream)
+void PDFObjectParser::SetReadStream(charta::IByteReader *inSourceStream,
+                                    IReadPositionProvider *inCurrentPositionProvider, bool inOwnsStream)
 {
     if (mOwnsStream)
     {
@@ -675,7 +675,7 @@ void PDFObjectParser::SetParserExtender(IPDFParserExtender *inParserExtender)
     mParserExtender = inParserExtender;
 }
 
-IByteReader *PDFObjectParser::StartExternalRead()
+charta::IByteReader *PDFObjectParser::StartExternalRead()
 {
     return mStream;
 }

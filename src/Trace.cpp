@@ -58,7 +58,7 @@ void Trace::SetLogSettings(const std::string &inLogFilePath, bool inShouldLog, b
     }
 }
 
-void Trace::SetLogSettings(IByteWriter *inLogStream, bool inShouldLog)
+void Trace::SetLogSettings(charta::IByteWriter *inLogStream, bool inShouldLog)
 {
     mShouldLog = inShouldLog;
     mLogStream = inLogStream;

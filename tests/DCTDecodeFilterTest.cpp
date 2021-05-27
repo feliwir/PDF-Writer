@@ -202,7 +202,8 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
         inWriter->GetObjectsContext().StartUnfilteredPDFStream(newImageDictionary);
 
     // copy source stream through read filter
-    IByteReader *sourceImage = modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
+    charta::IByteReader *sourceImage =
+        modifiedFileContext->GetSourceDocumentParser()->StartReadingFromStream(imageStream);
     if (sourceImage == nullptr)
         return eFailure;
 

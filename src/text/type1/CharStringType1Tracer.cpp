@@ -28,8 +28,8 @@ using namespace charta;
 CharStringType1Tracer::CharStringType1Tracer() = default;
 
 /*
-EStatusCode CharStringType1Tracer::TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input* inType1Input, IByteWriter*
-inWriter)
+EStatusCode CharStringType1Tracer::TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input* inType1Input,
+charta::IByteWriter* inWriter)
 {
     CharStringType1Interpreter interpreter;
 
@@ -48,7 +48,7 @@ inWriter)
 }*/
 
 EStatusCode CharStringType1Tracer::TraceGlyphProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                                     IByteWriter *inWriter)
+                                                     charta::IByteWriter *inWriter)
 {
     CharStringType1Interpreter interpreter;
 

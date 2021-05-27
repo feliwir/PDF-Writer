@@ -39,16 +39,16 @@ TEST(IO, FlateEncryption)
     // Create encrypted copy of the message
     std::string aString = "encryptedMessage";
 
-    IByteWriter *encoderStream = new OutputFlateEncodeStream(new OutputBufferedStream(
+    charta::IByteWriter *encoderStream = new OutputFlateEncodeStream(new OutputBufferedStream(
         std::make_unique<OutputFileStream>(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "encrypted.txt"))));
 
     size_t writtenSize = encoderStream->Write((const uint8_t *)aString.c_str(), aString.length());
     delete encoderStream;
     ASSERT_EQ(writtenSize, aString.length());
 
-    IByteReader *encoderReaderStream = new InputBufferedStream(
+    charta::IByteReader *encoderReaderStream = new InputBufferedStream(
         std::make_unique<InputFileStream>(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "encrypted.txt")));
-    IByteWriter *decoderWriterStream = new OutputFlateDecodeStream(new OutputBufferedStream(
+    charta::IByteWriter *decoderWriterStream = new OutputFlateDecodeStream(new OutputBufferedStream(
         std::make_unique<OutputFileStream>(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "decrypted.txt"))));
 
     OutputStreamTraits outputTraits(decoderWriterStream);
@@ -59,7 +59,7 @@ TEST(IO, FlateEncryption)
     delete decoderWriterStream;
 
     // now read again decrypted and compare to original message
-    IByteReader *decoderReaderStream = new InputBufferedStream(
+    charta::IByteReader *decoderReaderStream = new InputBufferedStream(
         std::make_unique<InputFileStream>(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "decrypted.txt")));
     char buffer[256];
 

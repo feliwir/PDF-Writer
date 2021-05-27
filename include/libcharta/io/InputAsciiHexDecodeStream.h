@@ -23,11 +23,13 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputAsciiHexDecodeStream final : public IByteReader
 {
   public:
-    InputAsciiHexDecodeStream(void);
-    ~InputAsciiHexDecodeStream(void);
+    InputAsciiHexDecodeStream();
+    ~InputAsciiHexDecodeStream();
 
     // Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
     InputAsciiHexDecodeStream(IByteReader *inSourceReader);
@@ -44,7 +46,7 @@ class InputAsciiHexDecodeStream final : public IByteReader
     virtual bool NotEnded();
 
   private:
-    IByteReader *mSourceStream;
+    charta::IByteReader *mSourceStream;
 
     bool mHitEnd;
     uint8_t mBuffer[4];
@@ -53,3 +55,4 @@ class InputAsciiHexDecodeStream final : public IByteReader
 
     void ReadNextBuffer();
 };
+} // namespace charta

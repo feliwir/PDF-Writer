@@ -34,7 +34,7 @@ Type1ToType2Converter::Type1ToType2Converter() = default;
 Type1ToType2Converter::~Type1ToType2Converter() = default;
 
 EStatusCode Type1ToType2Converter::WriteConvertedFontProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                                             IByteWriter *inByteWriter)
+                                                             charta::IByteWriter *inByteWriter)
 {
     EStatusCode status;
 
@@ -950,7 +950,7 @@ void Type1ToType2Converter::AddInitialWidthParameter()
     }
 }
 
-EStatusCode Type1ToType2Converter::WriteProgramToStream(IByteWriter *inByteWriter)
+EStatusCode Type1ToType2Converter::WriteProgramToStream(charta::IByteWriter *inByteWriter)
 {
     Type2CharStringWriter commandWriter(inByteWriter);
     EStatusCode status = charta::eSuccess;

@@ -26,10 +26,10 @@
 class CFFPrimitiveWriter
 {
   public:
-    CFFPrimitiveWriter(IByteWriter *inCFFOutput = NULL);
+    CFFPrimitiveWriter(charta::IByteWriter *inCFFOutput = NULL);
     ~CFFPrimitiveWriter(void) = default;
 
-    void SetStream(IByteWriter *inCFFOutput);
+    void SetStream(charta::IByteWriter *inCFFOutput);
 
     charta::EStatusCode GetInternalState();
 
@@ -57,7 +57,7 @@ class CFFPrimitiveWriter
     charta::EStatusCode PadNBytes(uint16_t inBytesToPad);
 
   private:
-    IByteWriter *mCFFOutput;
+    charta::IByteWriter *mCFFOutput;
     charta::EStatusCode mInternalState;
     uint8_t mCurrentOffsize;
 

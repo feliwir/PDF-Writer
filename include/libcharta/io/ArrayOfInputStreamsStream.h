@@ -27,7 +27,7 @@
 class PDFArray;
 class PDFParser;
 
-class ArrayOfInputStreamsStream : public IByteReader
+class ArrayOfInputStreamsStream : public charta::IByteReader
 {
   public:
     ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser);
@@ -38,9 +38,9 @@ class ArrayOfInputStreamsStream : public IByteReader
     virtual bool NotEnded();
 
   private:
-    IByteReader *GetActiveStream();
+    charta::IByteReader *GetActiveStream();
 
-    IByteReader *mCurrentStream;
+    charta::IByteReader *mCurrentStream;
     PDFParser *mParser;
     std::shared_ptr<PDFArray> mArray;
     unsigned long mCurrentIndex;

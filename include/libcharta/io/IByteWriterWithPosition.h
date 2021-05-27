@@ -21,15 +21,18 @@
 #pragma once
 /*
     IByteWriterWithPosition.
-    extension of IByteWriter that also allows for retrieving the current position
+    extension of charta::IByteWriter that also allows for retrieving the current position
 
 */
 
 #include "IByteWriter.h"
 
+namespace charta
+{
 class IByteWriterWithPosition : public IByteWriter
 {
   public:
     virtual ~IByteWriterWithPosition(){};
     virtual long long GetCurrentPosition() = 0;
 };
+} // namespace charta

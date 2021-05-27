@@ -40,6 +40,6 @@ class StateReader
 
   private:
     PDFParser mParser;
-    InputFile mInputFile;
+    charta::InputFile mInputFile;
     ObjectIDType mRootObject;
 };

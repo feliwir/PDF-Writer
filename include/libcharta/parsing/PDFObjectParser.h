@@ -32,7 +32,10 @@
 #include <utility>
 
 class PDFObject;
+namespace charta
+{
 class IByteReader;
+};
 class IPDFParserExtender;
 class DecryptionHelper;
 
@@ -45,7 +48,7 @@ class PDFObjectParser
     ~PDFObjectParser(void);
 
     // Assign the stream to read from (does not take ownership of the stream, unless told so)
-    void SetReadStream(IByteReader *inSourceStream, IReadPositionProvider *inCurrentPositionProvider,
+    void SetReadStream(charta::IByteReader *inSourceStream, IReadPositionProvider *inCurrentPositionProvider,
                        bool inOwnsStream = false);
 
     // the important bit - get next object in content stream
@@ -66,13 +69,13 @@ class PDFObjectParser
 
     // External reading. use to temporarily get access to the internal stream, instead of reading objects with
     // ParseNewObject. when done mark with FinishExternalReading to commence reading
-    IByteReader *StartExternalRead();
+    charta::IByteReader *StartExternalRead();
     void EndExternalRead();
 
   private:
     PDFParserTokenizer mTokenizer;
     std::list<std::string> mTokenBuffer;
-    IByteReader *mStream;
+    charta::IByteReader *mStream;
     IReadPositionProvider *mCurrentPositionProvider;
     IPDFParserExtender *mParserExtender;
     DecryptionHelper *mDecryptionHelper;

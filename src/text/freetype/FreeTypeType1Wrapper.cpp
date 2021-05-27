@@ -51,7 +51,7 @@ FreeTypeType1Wrapper::FreeTypeType1Wrapper(FT_Face inFace, const std::string &in
     // parse type 1 input file (my own parsing), to get extra info about encoding
     if (!inFontFilePath.empty())
     {
-        InputFile type1File;
+        charta::InputFile type1File;
 
         type1File.OpenFile(inFontFilePath);
         mType1File.ReadType1File(type1File.GetInputStream());

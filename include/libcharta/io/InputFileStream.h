@@ -29,6 +29,8 @@
 #include <share.h>
 #endif
 
+namespace charta
+{
 class InputFileStream final : public IByteReaderWithPosition
 {
   public:
@@ -39,8 +41,8 @@ class InputFileStream final : public IByteReaderWithPosition
     InputFileStream(const std::string &inFilePath);
 
     // input file path is in UTF8
-    charta::EStatusCode Open(const std::string &inFilePath);
-    charta::EStatusCode Close();
+    EStatusCode Open(const std::string &inFilePath);
+    EStatusCode Close();
 
     // IByteReaderWithPosition implementation
     virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
@@ -55,3 +57,4 @@ class InputFileStream final : public IByteReaderWithPosition
   private:
     FILE *mStream = nullptr;
 };
+} // namespace charta

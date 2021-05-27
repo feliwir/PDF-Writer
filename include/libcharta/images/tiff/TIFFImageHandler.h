@@ -95,14 +95,12 @@ class PDFStream;
 class PDFFormXObject;
 class ObjectsContext;
 class IDocumentContextExtender;
-class IByteReaderWithPosition;
 
 namespace charta
 {
 class DocumentContext;
-}
-
-using namespace charta;
+class IByteReaderWithPosition;
+} // namespace charta
 
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 typedef std::list<PDFImageXObject *> PDFImageXObjectList;
@@ -127,13 +125,13 @@ class TIFFImageHandler
         const std::string &inTIFFFilePath,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        IByteReaderWithPosition *inTIFFStream,
+        charta::IByteReaderWithPosition *inTIFFStream,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFFile(
         const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
+        charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 
     void SetOperationsContexts(charta::DocumentContext *inContainerDocumentContext, ObjectsContext *inObjectsContext);
@@ -142,11 +140,12 @@ class TIFFImageHandler
     void Reset();
 
     // utility for tiffs, to get what tiff dimensions hummus will use
-    std::pair<double, double> ReadImageDimensions(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
+    std::pair<double, double> ReadImageDimensions(charta::IByteReaderWithPosition *inTIFFStream,
+                                                  unsigned long inImageIndex);
     // retrieves some image data, see struct for info
-    TiffImageInfo ReadImageInfo(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
+    TiffImageInfo ReadImageInfo(charta::IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
     // get number of images in the tiff collection
-    unsigned long ReadImagePageCount(IByteReaderWithPosition *inTIFFStream);
+    unsigned long ReadImagePageCount(charta::IByteReaderWithPosition *inTIFFStream);
 
   private:
     charta::DocumentContext *mContainerDocumentContext;

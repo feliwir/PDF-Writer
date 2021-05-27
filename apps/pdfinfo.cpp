@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     auto input = input_files.front();
 
     PDFParser parser;
-    InputFile pdfFile;
+    charta::InputFile pdfFile;
     auto status = pdfFile.OpenFile(input);
     if (status != charta::eSuccess)
     {

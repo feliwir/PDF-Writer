@@ -31,7 +31,7 @@ using namespace charta;
 CharStringType2Tracer::CharStringType2Tracer() = default;
 
 EStatusCode CharStringType2Tracer::TraceGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
-                                                     CFFFileInput *inCFFFileInput, IByteWriter *inWriter)
+                                                     CFFFileInput *inCFFFileInput, charta::IByteWriter *inWriter)
 {
     CharStringType2Interpreter interpreter;
     EStatusCode status = inCFFFileInput->PrepareForGlyphIntepretation(inFontIndex, inGlyphIndex);

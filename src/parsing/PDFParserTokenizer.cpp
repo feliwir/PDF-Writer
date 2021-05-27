@@ -30,7 +30,7 @@ PDFParserTokenizer::PDFParserTokenizer()
     ResetReadState();
 }
 
-void PDFParserTokenizer::SetReadStream(IByteReader *inSourceStream)
+void PDFParserTokenizer::SetReadStream(charta::IByteReader *inSourceStream)
 {
     mStream = inSourceStream;
     ResetReadState();

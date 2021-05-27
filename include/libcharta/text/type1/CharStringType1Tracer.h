@@ -25,7 +25,10 @@
 #include <string>
 
 class Type1Input;
+namespace charta
+{
 class IByteWriter;
+}
 
 class CharStringType1Tracer : public IType1InterpreterImplementation
 {
@@ -33,9 +36,10 @@ class CharStringType1Tracer : public IType1InterpreterImplementation
     CharStringType1Tracer(void);
     ~CharStringType1Tracer(void) = default;
 
-    charta::EStatusCode TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input *inType1Input, IByteWriter *inWriter);
+    charta::EStatusCode TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input *inType1Input,
+                                          charta::IByteWriter *inWriter);
     charta::EStatusCode TraceGlyphProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                          IByteWriter *inWriter);
+                                          charta::IByteWriter *inWriter);
 
     // IType1InterpreterImplementation
     virtual charta::EStatusCode Type1Hstem(const LongList &inOperandList);
@@ -68,7 +72,7 @@ class CharStringType1Tracer : public IType1InterpreterImplementation
     virtual unsigned long GetLenIV();
 
   private:
-    IByteWriter *mWriter;
+    charta::IByteWriter *mWriter;
     Type1Input *mHelper;
     PrimitiveObjectsWriter mPrimitiveWriter;
 };

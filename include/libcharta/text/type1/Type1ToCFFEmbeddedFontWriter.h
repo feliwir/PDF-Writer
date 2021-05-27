@@ -46,8 +46,8 @@ class ObjectsContext;
 class Type1ToCFFEmbeddedFontWriter
 {
   public:
-    Type1ToCFFEmbeddedFontWriter(void);
-    ~Type1ToCFFEmbeddedFontWriter(void);
+    Type1ToCFFEmbeddedFontWriter();
+    ~Type1ToCFFEmbeddedFontWriter();
 
     charta::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                           const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
@@ -55,9 +55,9 @@ class Type1ToCFFEmbeddedFontWriter
 
   private:
     Type1Input mType1Input;
-    InputFile mType1File;
+    charta::InputFile mType1File;
     CFFPrimitiveWriter mPrimitivesWriter;
-    OutputStringBufferStream mFontFileStream;
+    charta::OutputStringBufferStream mFontFileStream;
     StringVector mStrings;
     StringToUShortMap mNonStandardStringToIndex;
     uint16_t *mCharset;

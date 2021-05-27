@@ -64,7 +64,7 @@ PDFTextString &PDFTextString::operator=(const PDFTextString &inString) = default
 
 void PDFTextString::ConvertFromUTF8(const std::string &inStringToConvert)
 {
-    OutputStringBufferStream aStringStream;
+    charta::OutputStringBufferStream aStringStream;
 
     if (!ConvertUTF8ToPDFDocEncoding(inStringToConvert, aStringStream))
     {
@@ -83,7 +83,7 @@ void PDFTextString::ConvertFromUTF8(const std::string &inStringToConvert)
 }
 
 bool PDFTextString::ConvertUTF8ToPDFDocEncoding(const std::string &inStringToConvert,
-                                                OutputStringBufferStream &refResult)
+                                                charta::OutputStringBufferStream &refResult)
 {
     BoolAndByte encodingResult;
     PDFDocEncoding pdfDocEncoding;

@@ -49,8 +49,8 @@ struct HummusSourceManager
 {
     struct jpeg_source_mgr pub; /* public fields */
 
-    IByteReader *mReader; /* source stream */
-    JOCTET *buffer;       /* start of buffer */
+    charta::IByteReader *mReader; /* source stream */
+    JOCTET *buffer;               /* start of buffer */
 };
 
 #define INPUT_BUF_SIZE 4096 /* choose an efficiently fread'able size */
@@ -101,7 +101,7 @@ METHODDEF(void) HummusNoOp(j_decompress_ptr cinfo)
     /* no work necessary here */
 }
 
-METHODDEF(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, IByteReader *inSourceStream)
+METHODDEF(void) HummusJPGSourceInitialization(j_decompress_ptr cinfo, charta::IByteReader *inSourceStream)
 {
     HummusSourceManager *src;
 
@@ -158,7 +158,7 @@ void InputDCTDecodeStream::FinalizeDecoding()
     mIsHeaderRead = false;
 }
 
-InputDCTDecodeStream::InputDCTDecodeStream(IByteReader *inSourceReader)
+InputDCTDecodeStream::InputDCTDecodeStream(charta::IByteReader *inSourceReader)
 {
     mStream = nullptr;
     mIsDecoding = false;
@@ -167,7 +167,7 @@ InputDCTDecodeStream::InputDCTDecodeStream(IByteReader *inSourceReader)
     Assign(inSourceReader);
 }
 
-void InputDCTDecodeStream::Assign(IByteReader *inSourceReader)
+void InputDCTDecodeStream::Assign(charta::IByteReader *inSourceReader)
 {
     mStream = inSourceReader;
     if (mStream != nullptr)

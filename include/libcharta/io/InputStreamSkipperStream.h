@@ -23,6 +23,8 @@
 #include "IByteReader.h"
 #include "IReadPositionProvider.h"
 
+namespace charta
+{
 /*
     This class is to help with decoder/encoder class, that don't really have "SetPosition" kind of capabilities,
     but sometimes you just want to skip. It does skip by recording the amount already read. then, if possible, reads to
@@ -65,3 +67,4 @@ class InputStreamSkipperStream final : public IByteReader, public IReadPositionP
     IByteReader *mStream;
     long long mAmountRead;
 };
+} // namespace charta

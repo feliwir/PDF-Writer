@@ -24,7 +24,7 @@
 
 constexpr size_t BUFFER_SIZE = 256 * 1024;
 
-OutputFlateEncodeStream::OutputFlateEncodeStream()
+charta::OutputFlateEncodeStream::OutputFlateEncodeStream()
 {
     mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
@@ -32,7 +32,7 @@ OutputFlateEncodeStream::OutputFlateEncodeStream()
     mCurrentlyEncoding = false;
 }
 
-OutputFlateEncodeStream::~OutputFlateEncodeStream()
+charta::OutputFlateEncodeStream::~OutputFlateEncodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -42,7 +42,7 @@ OutputFlateEncodeStream::~OutputFlateEncodeStream()
     delete mZLibState;
 }
 
-void OutputFlateEncodeStream::FinalizeEncoding()
+void charta::OutputFlateEncodeStream::FinalizeEncoding()
 {
     // flush leftovers by repeatedly calling with Z_FINISH parameter
     int deflateResult;
@@ -57,9 +57,9 @@ void OutputFlateEncodeStream::FinalizeEncoding()
         deflateResult = deflate(mZLibState, Z_FINISH);
         if (Z_STREAM_ERROR == deflateResult)
         {
-            TRACE_LOG1(
-                "OutputFlateEncodeStream::FinalizeEncoding, failed to flush zlib information. returned error code = %d",
-                deflateResult);
+            TRACE_LOG1("charta::OutputFlateEncodeStream::FinalizeEncoding, failed to flush zlib information. returned "
+                       "error code = %d",
+                       deflateResult);
             break;
         }
 
@@ -67,7 +67,7 @@ void OutputFlateEncodeStream::FinalizeEncoding()
         writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
         if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
-            TRACE_LOG2("OutputFlateEncodeStream::FinalizeEncoding, Failed to write the desired amount of zlib "
+            TRACE_LOG2("charta::OutputFlateEncodeStream::FinalizeEncoding, Failed to write the desired amount of zlib "
                        "bytes to underlying stream. supposed to write %lld, wrote %lld",
                        BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
             break;
@@ -78,7 +78,8 @@ void OutputFlateEncodeStream::FinalizeEncoding()
     mCurrentlyEncoding = false;
 }
 
-OutputFlateEncodeStream::OutputFlateEncodeStream(IByteWriterWithPosition *inTargetWriter, bool inInitiallyOn)
+charta::OutputFlateEncodeStream::OutputFlateEncodeStream(charta::IByteWriterWithPosition *inTargetWriter,
+                                                         bool inInitiallyOn)
 {
     mBuffer = new uint8_t[BUFFER_SIZE];
     mZLibState = new z_stream;
@@ -88,7 +89,7 @@ OutputFlateEncodeStream::OutputFlateEncodeStream(IByteWriterWithPosition *inTarg
     Assign(inTargetWriter, inInitiallyOn);
 }
 
-void OutputFlateEncodeStream::StartEncoding()
+void charta::OutputFlateEncodeStream::StartEncoding()
 {
     mZLibState->zalloc = Z_NULL;
     mZLibState->zfree = Z_NULL;
@@ -96,14 +97,15 @@ void OutputFlateEncodeStream::StartEncoding()
 
     int deflateStatus = deflateInit(mZLibState, Z_DEFAULT_COMPRESSION);
     if (deflateStatus != Z_OK)
-        TRACE_LOG1("OutputFlateEncodeStream::StartEncoding, Unexpected failure in initializating flate library. status "
+        TRACE_LOG1("charta::OutputFlateEncodeStream::StartEncoding, Unexpected failure in initializating flate "
+                   "library. status "
                    "code = %d",
                    deflateStatus);
     else
         mCurrentlyEncoding = true;
 }
 
-void OutputFlateEncodeStream::Assign(IByteWriterWithPosition *inWriter, bool inInitiallyOn)
+void charta::OutputFlateEncodeStream::Assign(charta::IByteWriterWithPosition *inWriter, bool inInitiallyOn)
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -112,7 +114,7 @@ void OutputFlateEncodeStream::Assign(IByteWriterWithPosition *inWriter, bool inI
         StartEncoding();
 }
 
-size_t OutputFlateEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputFlateEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mCurrentlyEncoding)
         return EncodeBufferAndWrite(inBuffer, inSize);
@@ -121,7 +123,7 @@ size_t OutputFlateEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
     return 0;
 }
 
-size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize)
 {
     int deflateResult;
 
@@ -135,9 +137,10 @@ size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, si
         deflateResult = deflate(mZLibState, Z_NO_FLUSH);
         if (Z_STREAM_ERROR == deflateResult)
         {
-            TRACE_LOG1("OutputFlateEncodeStream::EncodeBufferAndWrite, failed to write zlib information. returned "
-                       "error code = %d",
-                       deflateResult);
+            TRACE_LOG1(
+                "charta::OutputFlateEncodeStream::EncodeBufferAndWrite, failed to write zlib information. returned "
+                "error code = %d",
+                deflateResult);
             break;
         }
 
@@ -145,9 +148,10 @@ size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, si
         writtenBytes = mTargetStream->Write(mBuffer, BUFFER_SIZE - mZLibState->avail_out);
         if (writtenBytes != BUFFER_SIZE - mZLibState->avail_out)
         {
-            TRACE_LOG2("OutputFlateEncodeStream::EncodeBufferAndWrite, Failed to write the desired amount of zlib "
-                       "bytes to underlying stream. supposed to write %lld, wrote %lld",
-                       BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
+            TRACE_LOG2(
+                "charta::OutputFlateEncodeStream::EncodeBufferAndWrite, Failed to write the desired amount of zlib "
+                "bytes to underlying stream. supposed to write %lld, wrote %lld",
+                BUFFER_SIZE - mZLibState->avail_out, writtenBytes);
             deflateEnd(mZLibState);
             deflateResult = Z_STREAM_ERROR;
             mCurrentlyEncoding = false;
@@ -161,20 +165,20 @@ size_t OutputFlateEncodeStream::EncodeBufferAndWrite(const uint8_t *inBuffer, si
     return 0;
 }
 
-long long OutputFlateEncodeStream::GetCurrentPosition()
+long long charta::OutputFlateEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
     return 0;
 }
 
-void OutputFlateEncodeStream::TurnOnEncoding()
+void charta::OutputFlateEncodeStream::TurnOnEncoding()
 {
     if (!mCurrentlyEncoding)
         StartEncoding();
 }
 
-void OutputFlateEncodeStream::TurnOffEncoding()
+void charta::OutputFlateEncodeStream::TurnOffEncoding()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();

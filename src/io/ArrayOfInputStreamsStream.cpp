@@ -39,7 +39,7 @@ ArrayOfInputStreamsStream::~ArrayOfInputStreamsStream()
     delete mCurrentStream;
 }
 
-IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
+charta::IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
 {
 
     if ((mCurrentStream != nullptr) && mCurrentStream->NotEnded())
@@ -86,7 +86,7 @@ size_t ArrayOfInputStreamsStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     while (NotEnded() && readAmount < inBufferSize)
     {
         // read from current stream
-        IByteReader *reader = GetActiveStream();
+        charta::IByteReader *reader = GetActiveStream();
         if ((reader != nullptr) && reader->NotEnded())
         {
             readAmount += reader->Read(inBuffer + readAmount, inBufferSize - readAmount);

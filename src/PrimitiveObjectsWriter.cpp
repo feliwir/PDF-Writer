@@ -25,7 +25,7 @@
 #include <locale>
 #include <sstream>
 
-PrimitiveObjectsWriter::PrimitiveObjectsWriter(IByteWriter *inStreamForWriting)
+PrimitiveObjectsWriter::PrimitiveObjectsWriter(charta::IByteWriter *inStreamForWriting)
 {
     mStreamForWriting = inStreamForWriting;
 }
@@ -193,7 +193,7 @@ void PrimitiveObjectsWriter::WriteNull(ETokenSeparator inSeparate)
     WriteTokenSeparator(inSeparate);
 }
 
-void PrimitiveObjectsWriter::SetStreamForWriting(IByteWriter *inStreamForWriting)
+void PrimitiveObjectsWriter::SetStreamForWriting(charta::IByteWriter *inStreamForWriting)
 {
     mStreamForWriting = inStreamForWriting;
 }
@@ -244,7 +244,7 @@ void PrimitiveObjectsWriter::WriteEncodedHexString(const std::string &inString, 
     WriteTokenSeparator(inSeparate);
 }
 
-IByteWriter *PrimitiveObjectsWriter::GetWritingStream()
+charta::IByteWriter *PrimitiveObjectsWriter::GetWritingStream()
 {
     return mStreamForWriting;
 }

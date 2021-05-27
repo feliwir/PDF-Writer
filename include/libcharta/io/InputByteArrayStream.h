@@ -22,7 +22,7 @@
 
 #include "IByteReaderWithPosition.h"
 
-class InputByteArrayStream final : public IByteReaderWithPosition
+class InputByteArrayStream final : public charta::IByteReaderWithPosition
 {
   public:
     InputByteArrayStream();

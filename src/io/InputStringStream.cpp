@@ -20,27 +20,23 @@ limitations under the License.
 */
 #include "io/InputStringStream.h"
 
-using namespace std;
-
-InputStringStream::InputStringStream() = default;
-
-InputStringStream::InputStringStream(const string &inString)
+charta::InputStringStream::InputStringStream(const std::string &inString)
 {
     mStartPosition = inString.begin();
     mEndPosition = inString.end();
     mCurrentPosition = mStartPosition;
 }
 
-InputStringStream::~InputStringStream() = default;
+charta::InputStringStream::~InputStringStream() = default;
 
-void InputStringStream::Assign(const string &inString)
+void charta::InputStringStream::Assign(const std::string &inString)
 {
     mStartPosition = inString.begin();
     mEndPosition = inString.end();
     mCurrentPosition = mStartPosition;
 }
 
-size_t InputStringStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputStringStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t amountRead = 0;
 
@@ -49,33 +45,34 @@ size_t InputStringStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return amountRead;
 }
 
-bool InputStringStream::NotEnded()
+bool charta::InputStringStream::NotEnded()
 {
     return mCurrentPosition != mEndPosition;
 }
 
-void InputStringStream::Skip(size_t inSkipSize)
+void charta::InputStringStream::Skip(size_t inSkipSize)
 {
     mCurrentPosition =
         (inSkipSize > (size_t)(mEndPosition - mCurrentPosition)) ? mEndPosition : (mCurrentPosition + inSkipSize);
     ;
 }
 
-void InputStringStream::SetPosition(long long inOffsetFromStart)
+void charta::InputStringStream::SetPosition(long long inOffsetFromStart)
 {
     mCurrentPosition = inOffsetFromStart > (long long)(mEndPosition - mStartPosition)
                            ? mEndPosition
-                           : (mStartPosition + (string::size_type)inOffsetFromStart);
+                           : (mStartPosition + (std::string::size_type)inOffsetFromStart);
 }
 
-void InputStringStream::SetPositionFromEnd(long long inOffsetFromEnd)
+void charta::InputStringStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
-    mCurrentPosition = inOffsetFromEnd > (long long)(mEndPosition - mStartPosition)
-                           ? mStartPosition
-                           : (mStartPosition + (mEndPosition - mStartPosition - (string::size_type)inOffsetFromEnd));
+    mCurrentPosition =
+        inOffsetFromEnd > (long long)(mEndPosition - mStartPosition)
+            ? mStartPosition
+            : (mStartPosition + (mEndPosition - mStartPosition - (std::string::size_type)inOffsetFromEnd));
 }
 
-long long InputStringStream::GetCurrentPosition()
+long long charta::InputStringStream::GetCurrentPosition()
 {
     return mCurrentPosition - mStartPosition;
 }

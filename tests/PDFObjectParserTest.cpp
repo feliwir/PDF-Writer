@@ -36,7 +36,7 @@ limitations under the License.
 
 using namespace charta;
 
-class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
+class InputInterfaceToStream : public charta::IByteReader, public IReadPositionProvider
 {
   private:
     std::string mInput;

@@ -29,9 +29,9 @@ using namespace charta;
 
 TEST(IO, BufferedOutputStream)
 {
-    IByteWriter *stream = new OutputBufferedStream(std::make_unique<OutputFileStream>(RelativeURLToLocalPath(
-                                                       PDFWRITE_BINARY_PATH, "BufferedOutputStreamTest.txt")),
-                                                   2);
+    charta::IByteWriter *stream = new OutputBufferedStream(std::make_unique<OutputFileStream>(RelativeURLToLocalPath(
+                                                               PDFWRITE_BINARY_PATH, "BufferedOutputStreamTest.txt")),
+                                                           2);
     uint8_t buffer[5] = {'a', 'b', 'c', 'd', 'e'};
 
     stream->Write(buffer, 5);

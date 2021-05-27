@@ -25,7 +25,10 @@ limitations under the License.
 
 #include <string>
 
+namespace charta
+{
 class IByteWriterWithPosition;
+}
 class ObjectsContext;
 class DecryptionHelper;
 class PDFParser;
@@ -85,7 +88,7 @@ class EncryptionHelper
     std::string EncryptString(const std::string &inStringToEncrypt);
 
     // create encryption wrapper for a stream (all stream filter shoud be placed to wrap the encryption wrapper)
-    IByteWriterWithPosition *CreateEncryptionStream(IByteWriterWithPosition *inToWrapStream);
+    charta::IByteWriterWithPosition *CreateEncryptionStream(charta::IByteWriterWithPosition *inToWrapStream);
 
     // when finalizing the document call this to write the encryption dictionary. If you want
     // it as an indirect object make sure to start and end one before and after calling this method
@@ -110,8 +113,8 @@ class EncryptionHelper
     int mEncryptionPauseLevel;
     bool mSupportsEncryption;
 
-    IByteWriterWithPosition *CreateEncryptionWriter(IByteWriterWithPosition *inToWrapStream,
-                                                    const ByteList &inEncryptionKey, bool inUsingAES);
+    charta::IByteWriterWithPosition *CreateEncryptionWriter(charta::IByteWriterWithPosition *inToWrapStream,
+                                                            const ByteList &inEncryptionKey, bool inUsingAES);
     void Release();
 
     // Generic encryption

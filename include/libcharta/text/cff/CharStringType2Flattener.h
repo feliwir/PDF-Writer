@@ -24,7 +24,10 @@
 #include "IType2InterpreterImplementation.h"
 
 class CFFFileInput;
+namespace charta
+{
 class IByteWriter;
+}
 
 class CharStringType2Flattener : public IType2InterpreterImplementation
 {
@@ -35,7 +38,7 @@ class CharStringType2Flattener : public IType2InterpreterImplementation
     // will write a font program to another stream, flattening the references to subrs and gsubrs, so that
     // the charstring becomes independent (with possible references to other charachters through seac-like endchar)
     charta::EStatusCode WriteFlattenedGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex,
-                                                   CFFFileInput *inCFFFileInput, IByteWriter *inWriter);
+                                                   CFFFileInput *inCFFFileInput, charta::IByteWriter *inWriter);
 
     // IType2InterpreterImplementation implementation
     virtual charta::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
@@ -90,7 +93,7 @@ class CharStringType2Flattener : public IType2InterpreterImplementation
     virtual CharString *GetGlobalSubr(long inSubrIndex);
 
   private:
-    IByteWriter *mWriter;
+    charta::IByteWriter *mWriter;
     CFFFileInput *mHelper;
     uint16_t mStemsCount;
     CharStringOperandList mOperandsToWrite;

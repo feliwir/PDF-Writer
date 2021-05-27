@@ -1255,7 +1255,7 @@ void AbstractContentContext::WriteFreeCode(const std::string &inFreeCode)
     RenewStreamConnection();
     mPrimitiveWriter.GetWritingStream()->Write((const uint8_t *)(inFreeCode.c_str()), inFreeCode.length());
 }
-void AbstractContentContext::WriteFreeCode(IByteReader *inFreeCodeSource)
+void AbstractContentContext::WriteFreeCode(charta::IByteReader *inFreeCodeSource)
 {
     RenewStreamConnection();
 

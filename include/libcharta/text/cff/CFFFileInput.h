@@ -186,12 +186,12 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     ~CFFFileInput(void);
 
     // parses the whole CFF file, with all contained fonts
-    charta::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile);
+    charta::EStatusCode ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile);
     // parses the CFF file just for the particular font according to index. Index should be
     // according to how it appears in the CFF
-    charta::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile, uint16_t inFontIndex);
+    charta::EStatusCode ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile, uint16_t inFontIndex);
     // parses the CFF file just for the particular named font
-    charta::EStatusCode ReadCFFFile(IByteReaderWithPosition *inCFFFile, const std::string &inFontName);
+    charta::EStatusCode ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile, const std::string &inFontName);
 
     // call only <i> after </i> calling the read method...got it?
     // calculate dependencies for a given charstring [it can be char, gsubr or localsubr].
@@ -311,6 +311,6 @@ class CFFFileInput : public Type2InterpreterImplementationAdapter
     void ReadEncoding(EncodingsInfo *inEncoding, long long inEncodingPosition);
     charta::EStatusCode ReadEncodings(uint16_t inFontIndex);
     charta::EStatusCode ReadCIDInformation(uint16_t inFontIndex);
-    charta::EStatusCode ReadCFFFileByIndexOrName(IByteReaderWithPosition *inCFFFile, const std::string &inFontName,
-                                                 uint16_t inFontIndex);
+    charta::EStatusCode ReadCFFFileByIndexOrName(charta::IByteReaderWithPosition *inCFFFile,
+                                                 const std::string &inFontName, uint16_t inFontIndex);
 };

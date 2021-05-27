@@ -238,13 +238,13 @@ PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFFile(const std::string &inTI
     return mDocumentContext.CreateFormXObjectFromTIFFFile(inTIFFFilePath, inFormXObjectID, inTIFFUsageParameters);
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                            const TIFFUsageParameters &inTIFFUsageParameters)
 {
     return mDocumentContext.CreateFormXObjectFromTIFFStream(inTIFFStream, inTIFFUsageParameters);
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                            ObjectIDType inFormXObjectID,
                                                            const TIFFUsageParameters &inTIFFUsageParameters)
 {
@@ -271,13 +271,13 @@ PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGFile(const std::string &inPNG
     return CreateFormXObjectFromPNGStream(inputFile.GetInputStream(), inFormXObjectId);
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream)
+PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream)
 {
     return CreateFormXObjectFromPNGStream(inPNGStream,
                                           mObjectsContext.GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream,
+PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
                                                           ObjectIDType inFormXObjectId)
 {
     return mDocumentContext.CreateFormXObjectFromPNGStream(inPNGStream, inFormXObjectId);
@@ -485,8 +485,9 @@ EStatusCode PDFWriter::SetupState(const std::string &inStateFilePath)
     return status;
 }
 
-EStatusCode PDFWriter::ContinuePDFForStream(IByteWriterWithPosition *inOutputStream, const std::string &inStateFilePath,
-                                            IByteReaderWithPosition *inModifiedSourceStream,
+EStatusCode PDFWriter::ContinuePDFForStream(charta::IByteWriterWithPosition *inOutputStream,
+                                            const std::string &inStateFilePath,
+                                            charta::IByteReaderWithPosition *inModifiedSourceStream,
                                             const LogConfiguration &inLogConfiguration)
 {
     SetupLog(inLogConfiguration);
@@ -520,7 +521,7 @@ EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, const std::string &i
                                                 inCopyAdditionalObjects);
 }
 
-EStatusCode PDFWriter::StartPDFForStream(IByteWriterWithPosition *inOutputStream, EPDFVersion inPDFVersion,
+EStatusCode PDFWriter::StartPDFForStream(charta::IByteWriterWithPosition *inOutputStream, EPDFVersion inPDFVersion,
                                          const LogConfiguration &inLogConfiguration,
                                          const PDFCreationSettings &inPDFCreationSettings)
 {
@@ -552,29 +553,29 @@ EStatusCode PDFWriter::EndPDFForStream()
     return status;
 }
 
-PDFImageXObject *PDFWriter::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFImageXObject *PDFWriter::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mDocumentContext.CreateImageXObjectFromJPGStream(inJPGStream);
 }
 
-PDFImageXObject *PDFWriter::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFImageXObject *PDFWriter::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                             ObjectIDType inImageXObjectID)
 {
     return mDocumentContext.CreateImageXObjectFromJPGStream(inJPGStream, inImageXObjectID);
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFFormXObject *PDFWriter::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mDocumentContext.CreateFormXObjectFromJPGStream(inJPGStream);
 }
 
-PDFFormXObject *PDFWriter::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFFormXObject *PDFWriter::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                           ObjectIDType inFormXObjectID)
 {
     return mDocumentContext.CreateFormXObjectFromJPGStream(inJPGStream, inFormXObjectID);
 }
 
-EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderWithPosition *inPDFStream,
+EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                                     const PDFPageRange &inPageRange,
                                                                     EPDFPageBox inPageBoxToUseAsFormBox,
                                                                     const double *inTransformationMatrix,
@@ -586,7 +587,7 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderW
                                                       inCopyAdditionalObjects);
 }
 
-EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderWithPosition *inPDFStream,
+EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                                     const PDFPageRange &inPageRange,
                                                                     const PDFRectangle &inCropBox,
                                                                     const double *inTransformationMatrix,
@@ -597,7 +598,7 @@ EStatusCodeAndObjectIDTypeList PDFWriter::CreateFormXObjectsFromPDF(IByteReaderW
                                                       inTransformationMatrix, inCopyAdditionalObjects);
 }
 
-EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(IByteReaderWithPosition *inPDFStream,
+EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                                 const PDFPageRange &inPageRange,
                                                                 const ObjectIDTypeList &inCopyAdditionalObjects,
                                                                 const PDFParsingOptions &inParsingOptions)
@@ -605,7 +606,7 @@ EStatusCodeAndObjectIDTypeList PDFWriter::AppendPDFPagesFromPDF(IByteReaderWithP
     return mDocumentContext.AppendPDFPagesFromPDF(inPDFStream, inParsingOptions, inPageRange, inCopyAdditionalObjects);
 }
 
-EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream,
                                            const PDFPageRange &inPageRange,
                                            const ObjectIDTypeList &inCopyAdditionalObjects,
                                            const PDFParsingOptions &inParsingOptions)
@@ -614,8 +615,8 @@ EStatusCode PDFWriter::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosit
                                                 inCopyAdditionalObjects);
 }
 
-std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                                                              const PDFParsingOptions &inOptions)
+std::shared_ptr<PDFDocumentCopyingContext> PDFWriter::CreatePDFCopyingContext(
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions)
 {
     return mDocumentContext.CreatePDFCopyingContext(inPDFStream, inOptions);
 }
@@ -672,9 +673,10 @@ EStatusCode PDFWriter::ModifyPDF(const std::string &inModifiedFile, EPDFVersion 
     return status;
 }
 
-EStatusCode PDFWriter::ModifyPDFForStream(IByteReaderWithPosition *inModifiedSourceStream,
-                                          IByteWriterWithPosition *inModifiedDestinationStream, bool inAppendOnly,
-                                          EPDFVersion inPDFVersion, const LogConfiguration &inLogConfiguration,
+EStatusCode PDFWriter::ModifyPDFForStream(charta::IByteReaderWithPosition *inModifiedSourceStream,
+                                          charta::IByteWriterWithPosition *inModifiedDestinationStream,
+                                          bool inAppendOnly, EPDFVersion inPDFVersion,
+                                          const LogConfiguration &inLogConfiguration,
                                           const PDFCreationSettings &inPDFCreationSettings)
 {
     SetupLog(inLogConfiguration);
@@ -698,7 +700,7 @@ EStatusCode PDFWriter::ModifyPDFForStream(IByteReaderWithPosition *inModifiedSou
                                         inPDFCreationSettings);
 }
 
-EStatusCode PDFWriter::SetupStateFromModifiedStream(IByteReaderWithPosition *inModifiedSourceStream,
+EStatusCode PDFWriter::SetupStateFromModifiedStream(charta::IByteReaderWithPosition *inModifiedSourceStream,
                                                     EPDFVersion inPDFVersion,
                                                     const PDFCreationSettings &inPDFCreationSettings)
 {
@@ -769,7 +771,7 @@ std::pair<double, double> PDFWriter::GetImageDimensions(const std::string &inIma
     return mDocumentContext.GetImageDimensions(inImageFile, inImageIndex, inParsingOptions);
 }
 
-std::pair<double, double> PDFWriter::GetImageDimensions(IByteReaderWithPosition *inImageStream,
+std::pair<double, double> PDFWriter::GetImageDimensions(charta::IByteReaderWithPosition *inImageStream,
                                                         unsigned long inImageIndex,
                                                         const PDFParsingOptions &inParsingOptions)
 {
@@ -808,9 +810,9 @@ charta::EStatusCode PDFWriter::RecryptPDF(const std::string &inOriginalPDFPath,
                                  inLogConfiguration, inPDFCreationSettings, inOveridePDFVersion);
 }
 
-charta::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
+charta::EStatusCode PDFWriter::RecryptPDF(charta::IByteReaderWithPosition *inOriginalPDFStream,
                                           const std::string &inOriginalPDFPassword,
-                                          IByteWriterWithPosition *inNewPDFStream,
+                                          charta::IByteWriterWithPosition *inNewPDFStream,
                                           const LogConfiguration &inLogConfiguration,
                                           const PDFCreationSettings &inPDFCreationSettings,
                                           EPDFVersion inOveridePDFVersion)

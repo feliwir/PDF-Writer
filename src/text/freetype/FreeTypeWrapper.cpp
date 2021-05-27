@@ -206,7 +206,7 @@ FT_Library FreeTypeWrapper::operator->()
 static unsigned long InputFileReadSeek(FT_Stream stream, unsigned long offset, unsigned char *buffer,
                                        unsigned long count)
 {
-    IByteReaderWithPosition *inputFileStream = ((InputFile *)(stream->descriptor.pointer))->GetInputStream();
+    charta::IByteReaderWithPosition *inputFileStream = ((InputFile *)(stream->descriptor.pointer))->GetInputStream();
     unsigned long readBytes = 0;
 
     inputFileStream->SetPosition(offset);

@@ -27,12 +27,10 @@
 
 TEST(Xcryption, RecryptPDF)
 {
-    EStatusCode status;
-
     // recrypt a document with AES encryption, and remove it
-    status = PDFWriter::RecryptPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/china.pdf"), "",
-                                   RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "chinaWithoutEncryption.pdf"),
-                                   LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
+    auto status = PDFWriter::RecryptPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/china.pdf"), "",
+                                        RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "chinaWithoutEncryption.pdf"),
+                                        LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
     ASSERT_EQ(status, charta::eSuccess);
 
     // recrypt an encrypted document with no password

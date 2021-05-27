@@ -26,18 +26,18 @@
 #include "IByteReader.h"
 #include <jpeglib.h>
 
-class InputDCTDecodeStream final : public IByteReader
+class InputDCTDecodeStream final : public charta::IByteReader
 {
   public:
     InputDCTDecodeStream();
     virtual ~InputDCTDecodeStream();
 
     // Note that assigning passes ownership on the stream, use Assign(NULL) to remove ownership
-    InputDCTDecodeStream(IByteReader *inSourceReader);
+    InputDCTDecodeStream(charta::IByteReader *inSourceReader);
 
     // Assigning passes ownership of the input stream to the decoder stream.
     // if you don't care for that, then after finishing with the decode, Assign(NULL).
-    void Assign(IByteReader *inSourceReader);
+    void Assign(charta::IByteReader *inSourceReader);
 
     // IByteReader implementation. note that "inBufferSize" determines how many
     // bytes will be placed in the Buffer...not how many are actually read from the underlying
@@ -50,7 +50,7 @@ class InputDCTDecodeStream final : public IByteReader
     jpeg_decompress_struct mJPGState;
     jpeg_error_mgr mJPGError;
 
-    IByteReader *mStream;
+    charta::IByteReader *mStream;
     JSAMPARRAY mSamplesBuffer;
     bool mIsDecoding;
     size_t mIndexInRow;

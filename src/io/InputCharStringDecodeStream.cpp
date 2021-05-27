@@ -22,14 +22,14 @@
 
 using namespace charta;
 
-InputCharStringDecodeStream::InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV)
+InputCharStringDecodeStream::InputCharStringDecodeStream(charta::IByteReader *inReadFrom, unsigned long inLenIV)
 {
     Assign(inReadFrom, inLenIV);
 }
 
 InputCharStringDecodeStream::~InputCharStringDecodeStream() = default;
 
-void InputCharStringDecodeStream::Assign(IByteReader *inReadFrom, unsigned long inLenIV)
+void InputCharStringDecodeStream::Assign(charta::IByteReader *inReadFrom, unsigned long inLenIV)
 {
     mReadFrom = inReadFrom;
     InitializeCharStringDecode(inLenIV);

@@ -28,15 +28,14 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
+#include <functional>
 #include <string>
 #include <utility>
 
-class InputPFBDecodeStream;
-
-typedef charta::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, uint8_t &outByte);
-
 typedef std::pair<bool, std::string> BoolAndString;
 
+namespace charta
+{
 class InputPFBDecodeStream final : public IByteReader
 {
   public:
@@ -45,7 +44,7 @@ class InputPFBDecodeStream final : public IByteReader
 
     // Assign will set the stream to decode. it also takes ownership of the stream. if you
     // don't want the ownership make sure to Assign(NULL) when done using the decoder.
-    charta::EStatusCode Assign(IByteReader *inStreamToDecode);
+    EStatusCode Assign(IByteReader *inStreamToDecode);
 
     // IByteReader implementation
     virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
@@ -62,18 +61,20 @@ class InputPFBDecodeStream final : public IByteReader
     // will stop tokenizer as well
     void SkipTillToken();
 
-    charta::EStatusCode GetInternalState();
+    EStatusCode GetInternalState();
 
     // internal usage.
-    charta::EStatusCode ReadDecodedByte(uint8_t &outByte);
-    charta::EStatusCode ReadRegularByte(uint8_t &outByte);
+    EStatusCode ReadDecodedByte(uint8_t &outByte);
+    EStatusCode ReadRegularByte(uint8_t &outByte);
 
   private:
+    using DecodeMethod = std::function<EStatusCode(uint8_t &out)>;
+    DecodeMethod mDecodeMethod;
+
     IByteReader *mStreamToDecode;
     long long mInSegmentReadIndex;
     long long mSegmentSize;
     uint8_t mCurrentType;
-    DecodeMethod mDecodeMethod;
     bool mHasTokenBuffer;
     uint8_t mTokenBuffer;
     uint16_t mRandomizer;
@@ -96,3 +97,4 @@ class InputPFBDecodeStream final : public IByteReader
 
     charta::EStatusCode GetNextByteForToken(uint8_t &outByte);
 };
+} // namespace charta

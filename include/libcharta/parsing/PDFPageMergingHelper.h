@@ -26,7 +26,10 @@
 #include <string>
 
 class PDFPage;
+namespace charta
+{
 class IByteReaderWithPosition;
+};
 class PDFDocumentCopyingContext;
 class PDFWriter;
 
@@ -40,7 +43,7 @@ class PDFPageMergingHelper
                                          unsigned long inPageIndex);
     charta::EStatusCode MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,
                                          unsigned long inPageIndex);
-    charta::EStatusCode MergePageContent(PDFWriter *inWriter, IByteReaderWithPosition *inPDFStream,
+    charta::EStatusCode MergePageContent(PDFWriter *inWriter, charta::IByteReaderWithPosition *inPDFStream,
                                          unsigned long inPageIndex);
 
   private:

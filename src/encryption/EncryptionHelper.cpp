@@ -118,7 +118,7 @@ std::string EncryptionHelper::EncryptString(const std::string &inStringToEncrypt
 
     OutputStringBufferStream buffer;
 
-    IByteWriterWithPosition *encryptStream =
+    charta::IByteWriterWithPosition *encryptStream =
         CreateEncryptionWriter(&buffer, mXcryptStrings->GetCurrentObjectKey(), mXcryptStrings->IsUsingAES());
     if (encryptStream != nullptr)
     {
@@ -132,13 +132,14 @@ std::string EncryptionHelper::EncryptString(const std::string &inStringToEncrypt
     return inStringToEncrypt;
 }
 
-IByteWriterWithPosition *EncryptionHelper::CreateEncryptionStream(IByteWriterWithPosition *inToWrapStream)
+charta::IByteWriterWithPosition *EncryptionHelper::CreateEncryptionStream(
+    charta::IByteWriterWithPosition *inToWrapStream)
 {
     return CreateEncryptionWriter(inToWrapStream, mXcryptStreams->GetCurrentObjectKey(), mXcryptStreams->IsUsingAES());
 }
 
-IByteWriterWithPosition *EncryptionHelper::CreateEncryptionWriter(IByteWriterWithPosition *inToWrapStream,
-                                                                  const ByteList &inEncryptionKey, bool inIsUsingAES)
+charta::IByteWriterWithPosition *EncryptionHelper::CreateEncryptionWriter(
+    charta::IByteWriterWithPosition *inToWrapStream, const ByteList &inEncryptionKey, bool inIsUsingAES)
 {
     if (inIsUsingAES)
     {

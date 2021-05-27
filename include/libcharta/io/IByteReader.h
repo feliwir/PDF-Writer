@@ -28,6 +28,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class IByteReader
 {
   public:
@@ -42,3 +44,4 @@ class IByteReader
     */
     virtual bool NotEnded() = 0;
 };
+} // namespace charta

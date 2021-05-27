@@ -27,7 +27,10 @@
 #include <string>
 #include <utility>
 
+namespace charta
+{
 class IByteReader;
+};
 
 typedef std::pair<bool, std::string> BoolAndString;
 
@@ -37,7 +40,7 @@ class SimpleStringTokenizer
     SimpleStringTokenizer(void);
     ~SimpleStringTokenizer(void) = default;
 
-    void SetReadStream(IByteReader *inSourceStream);
+    void SetReadStream(charta::IByteReader *inSourceStream);
     BoolAndString GetNextToken();
     void ResetReadState();
     void ResetReadState(const SimpleStringTokenizer &inExternalTokenizer);
@@ -45,7 +48,7 @@ class SimpleStringTokenizer
     long long GetReadBufferSize() const;
 
   private:
-    IByteReader *mStream;
+    charta::IByteReader *mStream;
     bool mHasTokenBuffer;
     uint8_t mTokenBuffer;
     long long mStreamPositionTracker;

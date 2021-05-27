@@ -26,6 +26,8 @@
 
 #include <list>
 
+namespace charta
+{
 using ByteList = std::list<uint8_t>;
 
 class InputAESDecodeStream final : public IByteReader
@@ -61,6 +63,7 @@ class InputAESDecodeStream final : public IByteReader
     bool mIsIvInit;
     bool mHitEnd;
 
-    IByteReader *mSourceStream;
+    charta::IByteReader *mSourceStream;
     AESdecrypt mDecrypt;
 };
+} // namespace charta

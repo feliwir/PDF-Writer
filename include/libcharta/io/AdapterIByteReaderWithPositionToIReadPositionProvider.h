@@ -30,12 +30,12 @@ class AdapterIByteReaderWithPositionToIReadPositionProvider : public IReadPositi
     {
         mStream = NULL;
     }
-    AdapterIByteReaderWithPositionToIReadPositionProvider(IByteReaderWithPosition *inStream)
+    AdapterIByteReaderWithPositionToIReadPositionProvider(charta::IByteReaderWithPosition *inStream)
     {
         mStream = inStream;
     }
 
-    void Assign(IByteReaderWithPosition *inStream)
+    void Assign(charta::IByteReaderWithPosition *inStream)
     {
         mStream = inStream;
     }
@@ -47,5 +47,5 @@ class AdapterIByteReaderWithPositionToIReadPositionProvider : public IReadPositi
     };
 
   private:
-    IByteReaderWithPosition *mStream;
+    charta::IByteReaderWithPosition *mStream;
 };

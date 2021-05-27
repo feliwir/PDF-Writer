@@ -257,7 +257,7 @@ void DescendentFontWriter::WriteCIDSet(const UIntAndGlyphEncodingInfoVector &inE
 {
     mObjectsContext->StartNewIndirectObject(mCIDSetObjectID);
     std::shared_ptr<PDFStream> pdfStream = mObjectsContext->StartPDFStream();
-    IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
+    charta::IByteWriter *cidSetWritingContext = pdfStream->GetWriteStream();
     uint8_t buffer;
     auto it = inEncodedGlyphs.begin();
     uint32_t upperLimit = inEncodedGlyphs.back().first;

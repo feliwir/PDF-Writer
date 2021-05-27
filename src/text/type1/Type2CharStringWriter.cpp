@@ -23,12 +23,12 @@
 
 using namespace charta;
 
-Type2CharStringWriter::Type2CharStringWriter(IByteWriter *inTargetStream)
+Type2CharStringWriter::Type2CharStringWriter(charta::IByteWriter *inTargetStream)
 {
     mTargetStream = inTargetStream;
 }
 
-void Type2CharStringWriter::Assign(IByteWriter *inTargetStream)
+void Type2CharStringWriter::Assign(charta::IByteWriter *inTargetStream)
 {
     mTargetStream = inTargetStream;
 }

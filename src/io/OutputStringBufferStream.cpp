@@ -20,25 +20,25 @@
 */
 #include "io/OutputStringBufferStream.h"
 
-OutputStringBufferStream::OutputStringBufferStream()
+charta::OutputStringBufferStream::OutputStringBufferStream()
 {
     mBuffer = new MyStringBuf();
     mOwnsBuffer = true;
 }
 
-OutputStringBufferStream::~OutputStringBufferStream()
+charta::OutputStringBufferStream::~OutputStringBufferStream()
 {
     if (mOwnsBuffer)
         delete mBuffer;
 }
 
-OutputStringBufferStream::OutputStringBufferStream(MyStringBuf *inControlledBuffer)
+charta::OutputStringBufferStream::OutputStringBufferStream(MyStringBuf *inControlledBuffer)
 {
     mBuffer = inControlledBuffer;
     mOwnsBuffer = false;
 }
 
-void OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
+void charta::OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
 {
     if (inControlledBuffer != nullptr)
     {
@@ -55,29 +55,29 @@ void OutputStringBufferStream::Assign(MyStringBuf *inControlledBuffer)
     }
 }
 
-size_t OutputStringBufferStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputStringBufferStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     return (size_t)mBuffer->sputn((const char *)inBuffer, inSize);
 }
 
-long long OutputStringBufferStream::GetCurrentPosition()
+long long charta::OutputStringBufferStream::GetCurrentPosition()
 {
     return mBuffer->GetCurrentWritePosition();
 }
 
-std::string OutputStringBufferStream::ToString() const
+std::string charta::OutputStringBufferStream::ToString() const
 {
     return mBuffer->str();
 }
 
 static const std::string scEmpty;
 
-void OutputStringBufferStream::Reset()
+void charta::OutputStringBufferStream::Reset()
 {
     mBuffer->str(scEmpty);
 }
 
-void OutputStringBufferStream::SetPosition(long long inOffsetFromStart)
+void charta::OutputStringBufferStream::SetPosition(long long inOffsetFromStart)
 {
     mBuffer->pubseekoff((long)inOffsetFromStart, std::ios_base::beg);
 }

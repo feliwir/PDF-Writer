@@ -25,6 +25,8 @@
 
 #include <fstream>
 
+namespace charta
+{
 class OutputFileStream final : public IByteWriterWithPosition
 {
   public:
@@ -38,7 +40,7 @@ class OutputFileStream final : public IByteWriterWithPosition
     charta::EStatusCode Open(const std::string &inFilePath, bool inAppend = false);
     charta::EStatusCode Close();
 
-    // IByteWriter implementation
+    // charta::IByteWriter implementation
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
@@ -47,3 +49,4 @@ class OutputFileStream final : public IByteWriterWithPosition
   private:
     std::ofstream mStream;
 };
+} // namespace charta

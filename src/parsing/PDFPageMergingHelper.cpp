@@ -61,7 +61,7 @@ EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, const st
     return status;
 }
 
-EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, IByteReaderWithPosition *inPDFStream,
+EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, charta::IByteReaderWithPosition *inPDFStream,
                                                    unsigned long inPageIndex)
 {
     EStatusCode status = eSuccess;

@@ -30,14 +30,17 @@ class Log;
 
 typedef void (*LogFileMethod)(Log *inThis, const uint8_t *inMessage, size_t inMessageSize);
 
+namespace charta
+{
 class IByteWriter;
+}
 
 class Log
 {
   public:
     // log writes are in UTF8. so i'm asking here if you want a bom
     Log(const std::string &inLogFilePath, bool inPlaceUTF8Bom);
-    Log(IByteWriter *inLogStream);
+    Log(charta::IByteWriter *inLogStream);
     ~Log(void);
 
     void LogEntry(const std::string &inMessage);
@@ -49,10 +52,10 @@ class Log
 
   private:
     std::string mFilePath;
-    OutputFile mLogFile;
-    IByteWriter *mLogStream;
+    charta::OutputFile mLogFile;
+    charta::IByteWriter *mLogStream;
     LogFileMethod mLogMethod;
 
     std::string GetFormattedTimeString();
-    void WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, IByteWriter *inStream);
+    void WriteLogEntryToStream(const uint8_t *inMessage, size_t inMessageSize, charta::IByteWriter *inStream);
 };

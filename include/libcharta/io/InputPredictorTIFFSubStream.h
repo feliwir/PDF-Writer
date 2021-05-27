@@ -22,6 +22,8 @@
 
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputPredictorTIFFSubStream final : public IByteReader
 {
   public:
@@ -55,3 +57,4 @@ class InputPredictorTIFFSubStream final : public IByteReader
     void ReadByteFromColorsArray(uint8_t &outBuffer);
     void DecodeBufferToColors();
 };
+} // namespace charta

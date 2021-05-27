@@ -43,7 +43,7 @@ struct LogConfiguration
     bool ShouldLog;
     bool StartWithBOM;
     std::string LogFileLocation;
-    IByteWriter *LogStream;
+    charta::IByteWriter *LogStream;
 
     LogConfiguration(bool inShouldLog, bool inStartWithBOM, const std::string &inLogFileLocation)
     {
@@ -52,7 +52,7 @@ struct LogConfiguration
         LogFileLocation = inLogFileLocation;
         LogStream = NULL;
     }
-    LogConfiguration(bool inShouldLog, IByteWriter *inLogStream)
+    LogConfiguration(bool inShouldLog, charta::IByteWriter *inLogStream)
     {
         ShouldLog = inShouldLog;
         LogStream = inLogStream;
@@ -81,7 +81,10 @@ class PageContentContext;
 class PDFFormXObject;
 class PDFImageXObject;
 class PDFUsedFont;
+namespace charta
+{
 class IByteWriterWithPosition;
+}
 
 class PDFWriter
 {
@@ -98,7 +101,7 @@ class PDFWriter
 
     // output to stream
     charta::EStatusCode StartPDFForStream(
-        IByteWriterWithPosition *inOutputStream, EPDFVersion inPDFVersion,
+        charta::IByteWriterWithPosition *inOutputStream, EPDFVersion inPDFVersion,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
     charta::EStatusCode EndPDFForStream();
@@ -113,8 +116,8 @@ class PDFWriter
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
     charta::EStatusCode ModifyPDFForStream(
-        IByteReaderWithPosition *inModifiedSourceStream, IByteWriterWithPosition *inModifiedDestinationStream,
-        bool inAppendOnly, EPDFVersion inPDFVersion,
+        charta::IByteReaderWithPosition *inModifiedSourceStream,
+        charta::IByteWriterWithPosition *inModifiedDestinationStream, bool inAppendOnly, EPDFVersion inPDFVersion,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
 
@@ -126,8 +129,8 @@ class PDFWriter
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration());
     // Continue PDF in output stream workflow (optional input stream is for modification scenarios)
     charta::EStatusCode ContinuePDFForStream(
-        IByteWriterWithPosition *inOutputStream, const std::string &inStateFilePath,
-        IByteReaderWithPosition *inModifiedSourceStream = NULL,
+        charta::IByteWriterWithPosition *inOutputStream, const std::string &inStateFilePath,
+        charta::IByteReaderWithPosition *inModifiedSourceStream = NULL,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration());
 
     // Page context, for drwaing page content
@@ -158,9 +161,9 @@ class PDFWriter
     // jpeg - two variants
     // will return image xobject sized at 1X1
     PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath);
-    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
+    PDFImageXObject *CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream);
     PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inImageXObjectID);
-    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+    PDFImageXObject *CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                      ObjectIDType inImageXObjectID);
 
     // will return form XObject, which will include the xobject at it's size.
@@ -170,9 +173,10 @@ class PDFWriter
     // - if not found. Photoshop resolution information is looked for. if found used to determine the size
     // - otherwise aspect ratio is assumed, and so size is determined trivially from the samples width and height.
     PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath);
-    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream);
     PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inFormXObjectID);
-    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream, ObjectIDType inFormXObjectID);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+                                                   ObjectIDType inFormXObjectID);
 
     // tiff
 #ifndef PDFHUMMUS_NO_TIFF
@@ -180,13 +184,13 @@ class PDFWriter
         const std::string &inTIFFFilePath,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        IByteReaderWithPosition *inTIFFStream,
+        charta::IByteReaderWithPosition *inTIFFStream,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFFile(
         const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
+        charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 #endif
 
@@ -194,8 +198,9 @@ class PDFWriter
 #ifndef PDFHUMMUS_NO_PNG
     PDFFormXObject *CreateFormXObjectFromPNGFile(const std::string &inPNGFilePath);
     PDFFormXObject *CreateFormXObjectFromPNGFile(const std::string &inPNGFilePath, ObjectIDType inFormXObjectID);
-    PDFFormXObject *CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream);
-    PDFFormXObject *CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream, ObjectIDType inFormXObjectID);
+    PDFFormXObject *CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream);
+    PDFFormXObject *CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
+                                                   ObjectIDType inFormXObjectID);
 #endif
 
     // PDF
@@ -209,8 +214,8 @@ class PDFWriter
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(
-        IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange, EPDFPageBox inPageBoxToUseAsFormBox,
-        const double *inTransformationMatrix = NULL,
+        charta::IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
+        EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix = NULL,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
@@ -222,7 +227,7 @@ class PDFWriter
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(
-        IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange, const PDFRectangle &inCropBox,
+        charta::IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange, const PDFRectangle &inCropBox,
         const double *inTransformationMatrix = NULL,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
@@ -234,7 +239,7 @@ class PDFWriter
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDF(
-        IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
+        charta::IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
@@ -246,7 +251,7 @@ class PDFWriter
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     charta::EStatusCode MergePDFPagesToPage(
-        PDFPage &inPage, IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
+        PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
@@ -256,7 +261,7 @@ class PDFWriter
         const std::string &inPDFFilePath,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
     std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(
-        IByteReaderWithPosition *inPDFStream,
+        charta::IByteReaderWithPosition *inPDFStream,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     // for modified file path, create a copying context for the modified file
@@ -267,9 +272,9 @@ class PDFWriter
         const std::string &inImageFile, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
     std::pair<double, double> GetImageDimensions(
-        IByteReaderWithPosition *inImageStream, unsigned long inImageIndex = 0,
+        charta::IByteReaderWithPosition *inImageStream, unsigned long inImageIndex = 0,
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
-    EHummusImageType GetImageType(const std::string &inImageFile, unsigned long inImageIndex);
+    charta::EHummusImageType GetImageType(const std::string &inImageFile, unsigned long inImageIndex);
     unsigned long GetImagePagesCount(const std::string &inImageFile, const PDFParsingOptions &inOptions =
                                                                          PDFParsingOptions::DefaultPDFParsingOptions());
 
@@ -285,7 +290,7 @@ class PDFWriter
     charta::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
     // Extensibility, reaching to lower levels
-    inline DocumentContext &GetDocumentContext()
+    inline charta::DocumentContext &GetDocumentContext()
     {
         return mDocumentContext;
     }
@@ -295,7 +300,7 @@ class PDFWriter
         return mObjectsContext;
     }
 
-    inline OutputFile &GetOutputFile()
+    inline charta::OutputFile &GetOutputFile()
     {
         return mOutputFile;
     }
@@ -306,7 +311,7 @@ class PDFWriter
         return mModifiedFileParser;
     }
 
-    inline InputFile &GetModifiedInputFile()
+    inline charta::InputFile &GetModifiedInputFile()
     {
         return mModifiedFile;
     }
@@ -318,9 +323,9 @@ class PDFWriter
                                           const PDFCreationSettings &inPDFCreationSettings,
                                           EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
 
-    static charta::EStatusCode RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
+    static charta::EStatusCode RecryptPDF(charta::IByteReaderWithPosition *inOriginalPDFStream,
                                           const std::string &inOriginalPDFPassword,
-                                          IByteWriterWithPosition *inNewPDFStream,
+                                          charta::IByteWriterWithPosition *inNewPDFStream,
                                           const LogConfiguration &inLogConfiguration,
                                           const PDFCreationSettings &inPDFCreationSettings,
                                           EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
@@ -330,10 +335,10 @@ class PDFWriter
     charta::DocumentContext mDocumentContext;
 
     // for output file workflow, this will be the valid output [stream workflow does not have a file]
-    OutputFile mOutputFile;
+    charta::OutputFile mOutputFile;
 
     // for modified workflow, the next two will hold the input file data
-    InputFile mModifiedFile;
+    charta::InputFile mModifiedFile;
     PDFParser mModifiedFileParser;
     EPDFVersion mModifiedFileVersion;
     bool mIsModified;
@@ -345,7 +350,7 @@ class PDFWriter
     void Cleanup();
     charta::EStatusCode SetupStateFromModifiedFile(const std::string &inModifiedFile, EPDFVersion inPDFVersion,
                                                    const PDFCreationSettings &inPDFCreationSettings);
-    charta::EStatusCode SetupStateFromModifiedStream(IByteReaderWithPosition *inModifiedSourceStream,
+    charta::EStatusCode SetupStateFromModifiedStream(charta::IByteReaderWithPosition *inModifiedSourceStream,
                                                      EPDFVersion inPDFVersion,
                                                      const PDFCreationSettings &inPDFCreationSettings);
 };

@@ -21,19 +21,17 @@
 #include "io/OutputFileStream.h"
 #include "SafeBufferMacrosDefs.h"
 
-using namespace charta;
-
-OutputFileStream::~OutputFileStream()
+charta::OutputFileStream::~OutputFileStream()
 {
     Close();
 }
 
-OutputFileStream::OutputFileStream(const std::string &inFilePath, bool inAppend)
+charta::OutputFileStream::OutputFileStream(const std::string &inFilePath, bool inAppend)
 {
     Open(inFilePath, inAppend);
 }
 
-EStatusCode OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
+charta::EStatusCode charta::OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
 {
     // seek to end, so position reading gets the correct file position, even before first write
     mStream.open(inFilePath, std::ios::binary | std::ios::ate | (inAppend ? std::ios::app : std::ios::trunc));
@@ -44,7 +42,7 @@ EStatusCode OutputFileStream::Open(const std::string &inFilePath, bool inAppend)
     return charta::eSuccess;
 };
 
-EStatusCode OutputFileStream::Close()
+charta::EStatusCode charta::OutputFileStream::Close()
 {
     mStream.close();
     EStatusCode result = mStream.fail() ? charta::eFailure : charta::eSuccess;
@@ -52,7 +50,7 @@ EStatusCode OutputFileStream::Close()
     return result;
 }
 
-size_t OutputFileStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputFileStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (!mStream.is_open())
         return 0;
@@ -62,7 +60,7 @@ size_t OutputFileStream::Write(const uint8_t *inBuffer, size_t inSize)
     return mStream.tellp() - before;
 }
 
-long long OutputFileStream::GetCurrentPosition()
+long long charta::OutputFileStream::GetCurrentPosition()
 {
     if (!mStream.is_open())
         return 0;

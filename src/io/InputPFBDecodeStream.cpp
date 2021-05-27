@@ -22,21 +22,19 @@
 #include "Trace.h"
 #include "io/OutputStringBufferStream.h"
 
-using namespace charta;
-
-InputPFBDecodeStream::InputPFBDecodeStream()
+charta::InputPFBDecodeStream::InputPFBDecodeStream()
 {
     mStreamToDecode = nullptr;
     mDecodeMethod = nullptr;
     mInternalState = charta::eFailure;
 }
 
-InputPFBDecodeStream::~InputPFBDecodeStream()
+charta::InputPFBDecodeStream::~InputPFBDecodeStream()
 {
     delete mStreamToDecode;
 }
 
-EStatusCode InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
+charta::EStatusCode charta::InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
 {
     mStreamToDecode = inStreamToDecode;
 
@@ -51,7 +49,7 @@ EStatusCode InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
     return charta::eSuccess;
 }
 
-void InputPFBDecodeStream::ResetReadStatus()
+void charta::InputPFBDecodeStream::ResetReadStatus()
 {
     mInSegmentReadIndex = 0;
     mSegmentSize = 0;
@@ -61,12 +59,7 @@ void InputPFBDecodeStream::ResetReadStatus()
     mInternalState = (mStreamToDecode != nullptr) ? charta::eSuccess : charta::eFailure;
 }
 
-EStatusCode STATIC_NoDecodeRead(InputPFBDecodeStream *inThis, uint8_t &outByte)
-{
-    return inThis->ReadRegularByte(outByte);
-}
-
-EStatusCode InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
+charta::EStatusCode charta::InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
 {
     if (mInSegmentReadIndex >= mSegmentSize)
     {
@@ -77,7 +70,7 @@ EStatusCode InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
     return (mStreamToDecode->Read(&outByte, 1) != 1) ? charta::eFailure : charta::eSuccess;
 }
 
-EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
+charta::EStatusCode charta::InputPFBDecodeStream::InitializeStreamSegment()
 {
     EStatusCode status = charta::eSuccess;
     uint8_t buffer;
@@ -92,13 +85,13 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         if (mStreamToDecode->Read(&buffer, 1) != 1)
         {
             status = charta::eFailure;
-            TRACE_LOG("InputPFBDecodeStream::InitializeStreamSegment, unable to read segment header");
+            TRACE_LOG("charta::InputPFBDecodeStream::InitializeStreamSegment, unable to read segment header");
             break;
         }
 
         if (buffer != 0x80)
         {
-            TRACE_LOG("InputPFBDecodeStream::InitializeStreamSegment, wrong segment header");
+            TRACE_LOG("charta::InputPFBDecodeStream::InitializeStreamSegment, wrong segment header");
             break;
         }
 
@@ -106,7 +99,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         if (mStreamToDecode->Read(&buffer, 1) != 1)
         {
             status = charta::eFailure;
-            TRACE_LOG("InputPFBDecodeStream::InitializeStreamSegment, unable to read segment type");
+            TRACE_LOG("charta::InputPFBDecodeStream::InitializeStreamSegment, unable to read segment type");
             break;
         }
 
@@ -117,7 +110,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
             status = StoreSegmentLength();
             if (status != charta::eSuccess)
                 break;
-            mDecodeMethod = STATIC_NoDecodeRead;
+            mDecodeMethod = [this](uint8_t &outByte) { return ReadRegularByte(outByte); };
             // if previous type was binary, flush also the trailing 0's and cleartomark
             if (2 == mCurrentType)
             {
@@ -146,7 +139,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
             break;
         }
         default: {
-            TRACE_LOG1("InputPFBDecodeStream::InitializeStreamSegment, unrecognized segment type - %d", buffer);
+            TRACE_LOG1("charta::InputPFBDecodeStream::InitializeStreamSegment, unrecognized segment type - %d", buffer);
             status = charta::eFailure;
             break;
         }
@@ -159,7 +152,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
     return status;
 }
 
-EStatusCode InputPFBDecodeStream::StoreSegmentLength()
+charta::EStatusCode charta::InputPFBDecodeStream::StoreSegmentLength()
 {
     uint8_t byte1, byte2, byte3, byte4;
 
@@ -176,7 +169,7 @@ EStatusCode InputPFBDecodeStream::StoreSegmentLength()
     return charta::eSuccess;
 }
 
-EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
+charta::EStatusCode charta::InputPFBDecodeStream::FlushBinarySectionTrailingCode()
 {
     int zeroesCount = 512;
     EStatusCode status = charta::eSuccess;
@@ -205,7 +198,7 @@ EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
 }
 
 static const uint8_t scWhiteSpaces[] = {0, 0x9, 0xA, 0xC, 0xD, 0x20};
-bool InputPFBDecodeStream::IsPostScriptWhiteSpace(uint8_t inCharacter)
+bool charta::InputPFBDecodeStream::IsPostScriptWhiteSpace(uint8_t inCharacter)
 {
     bool isWhiteSpace = false;
     for (int i = 0; i < 6 && !isWhiteSpace; ++i)
@@ -214,7 +207,7 @@ bool InputPFBDecodeStream::IsPostScriptWhiteSpace(uint8_t inCharacter)
 }
 
 static const uint8_t scEntityBreakers[] = {'(', ')', '<', '>', ']', '[', '{', '}', '/', '%'};
-bool InputPFBDecodeStream::IsPostScriptEntityBreaker(uint8_t inCharacter)
+bool charta::InputPFBDecodeStream::IsPostScriptEntityBreaker(uint8_t inCharacter)
 {
     bool isEntityBreak = false;
     for (int i = 0; i < 10 && !isEntityBreak; ++i)
@@ -223,7 +216,7 @@ bool InputPFBDecodeStream::IsPostScriptEntityBreaker(uint8_t inCharacter)
 }
 
 static const uint8_t scBackSlash[] = {'\\'};
-BoolAndString InputPFBDecodeStream::GetNextToken()
+BoolAndString charta::InputPFBDecodeStream::GetNextToken()
 {
     BoolAndString result;
     uint8_t buffer;
@@ -454,7 +447,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
     return result;
 }
 
-EStatusCode InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
+charta::EStatusCode charta::InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
 {
     if (mHasTokenBuffer)
     {
@@ -462,21 +455,21 @@ EStatusCode InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
         mHasTokenBuffer = false;
         return charta::eSuccess;
     }
-    return mDecodeMethod(this, outByte);
+    return mDecodeMethod(outByte);
 }
 
-void InputPFBDecodeStream::SaveTokenBuffer(uint8_t inToSave)
+void charta::InputPFBDecodeStream::SaveTokenBuffer(uint8_t inToSave)
 {
     mHasTokenBuffer = true;
     mTokenBuffer = inToSave;
 }
 
-bool InputPFBDecodeStream::IsSegmentNotEnded()
+bool charta::InputPFBDecodeStream::IsSegmentNotEnded()
 {
     return mHasTokenBuffer || (mInSegmentReadIndex < mSegmentSize && mStreamToDecode->NotEnded());
 }
 
-void InputPFBDecodeStream::SkipTillToken()
+void charta::InputPFBDecodeStream::SkipTillToken()
 {
     uint8_t buffer = 0;
 
@@ -496,23 +489,17 @@ void InputPFBDecodeStream::SkipTillToken()
         }
     }
 }
-
-EStatusCode STATIC_DecodeRead(InputPFBDecodeStream *inThis, uint8_t &outByte)
-{
-    return inThis->ReadDecodedByte(outByte);
-}
-
 static const int CONSTANT_1 = 52845;
 static const int CONSTANT_2 = 22719;
 static const int RANDOMIZER_INIT = 55665;
 static const int RANDOMIZER_MODULU_VAL = 65536;
 
-EStatusCode InputPFBDecodeStream::InitializeBinaryDecode()
+charta::EStatusCode charta::InputPFBDecodeStream::InitializeBinaryDecode()
 {
     uint8_t dummyByte;
     EStatusCode status = charta::eSuccess;
 
-    mDecodeMethod = STATIC_DecodeRead;
+    mDecodeMethod = [this](uint8_t &outByte) { return ReadDecodedByte(outByte); };
     mRandomizer = RANDOMIZER_INIT;
 
     // decode first 4 bytes, which are just a prefix
@@ -521,7 +508,7 @@ EStatusCode InputPFBDecodeStream::InitializeBinaryDecode()
     return status;
 }
 
-EStatusCode InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
+charta::EStatusCode charta::InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
 {
     uint8_t buffer;
 
@@ -538,14 +525,14 @@ EStatusCode InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
     return charta::eSuccess;
 }
 
-uint8_t InputPFBDecodeStream::DecodeByte(uint8_t inByteToDecode)
+uint8_t charta::InputPFBDecodeStream::DecodeByte(uint8_t inByteToDecode)
 {
     auto result = (uint8_t)(inByteToDecode ^ (mRandomizer >> 8));
     mRandomizer = (uint16_t)(((inByteToDecode + mRandomizer) * CONSTANT_1 + CONSTANT_2) % RANDOMIZER_MODULU_VAL);
     return result;
 }
 
-size_t InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t bufferIndex = 0;
 
@@ -560,7 +547,7 @@ size_t InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     {
         while (mSegmentSize > mInSegmentReadIndex && inBufferSize > bufferIndex && charta::eSuccess == mInternalState)
         {
-            mInternalState = mDecodeMethod(this, inBuffer[bufferIndex]);
+            mInternalState = mDecodeMethod(inBuffer[bufferIndex]);
             ++bufferIndex;
         }
 
@@ -571,12 +558,12 @@ size_t InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return bufferIndex;
 }
 
-bool InputPFBDecodeStream::NotEnded()
+bool charta::InputPFBDecodeStream::NotEnded()
 {
     return (mStreamToDecode != nullptr) && mStreamToDecode->NotEnded() && !mFoundEOF;
 }
 
-EStatusCode InputPFBDecodeStream::GetInternalState()
+charta::EStatusCode charta::InputPFBDecodeStream::GetInternalState()
 {
     return mInternalState;
 }

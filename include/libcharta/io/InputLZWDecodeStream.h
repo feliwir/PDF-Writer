@@ -23,6 +23,8 @@
 #include "EStatusCode.h"
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputLZWDecodeStream final : public IByteReader
 {
   public:
@@ -74,3 +76,4 @@ class InputLZWDecodeStream final : public IByteReader
     void FinalizeEncoding();
     void StartEncoding();
 };
+} // namespace charta

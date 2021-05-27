@@ -70,7 +70,7 @@ bool DictionaryContext::HasKey(const std::string &inKey)
 static const uint8_t scTab[1] = {'\t'};
 void DictionaryContext::WriteIndents()
 {
-    IByteWriterWithPosition *outputStream = mObjectsContext->StartFreeContext();
+    charta::IByteWriterWithPosition *outputStream = mObjectsContext->StartFreeContext();
     for (size_t i = 0; i <= mIndentLevel; ++i)
         outputStream->Write(scTab, 1);
     mObjectsContext->EndFreeContext();

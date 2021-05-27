@@ -24,6 +24,9 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
+namespace charta
+{
+
 class OutputFlateDecodeStream final : public IByteWriter
 {
   public:
@@ -53,3 +56,4 @@ class OutputFlateDecodeStream final : public IByteWriter
     void StartEncoding();
     size_t DecodeBufferAndWrite(const uint8_t *inBuffer, size_t inSize);
 };
+} // namespace charta

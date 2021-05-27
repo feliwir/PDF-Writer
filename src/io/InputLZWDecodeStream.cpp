@@ -23,7 +23,7 @@
 #include "Trace.h"
 #include <zlib.h>
 
-InputLZWDecodeStream::InputLZWDecodeStream(int early)
+charta::InputLZWDecodeStream::InputLZWDecodeStream(int early)
 {
     mSourceStream = nullptr;
     mCurrentlyEncoding = false;
@@ -31,7 +31,7 @@ InputLZWDecodeStream::InputLZWDecodeStream(int early)
     inputBuf = 0;
 }
 
-InputLZWDecodeStream::~InputLZWDecodeStream()
+charta::InputLZWDecodeStream::~InputLZWDecodeStream()
 {
     if (mCurrentlyEncoding)
         FinalizeEncoding();
@@ -39,12 +39,12 @@ InputLZWDecodeStream::~InputLZWDecodeStream()
         delete mSourceStream;
 }
 
-void InputLZWDecodeStream::FinalizeEncoding()
+void charta::InputLZWDecodeStream::FinalizeEncoding()
 {
     mCurrentlyEncoding = false;
 }
 
-InputLZWDecodeStream::InputLZWDecodeStream(IByteReader *inSourceReader)
+charta::InputLZWDecodeStream::InputLZWDecodeStream(charta::IByteReader *inSourceReader)
 {
     mSourceStream = nullptr;
     mCurrentlyEncoding = false;
@@ -52,14 +52,14 @@ InputLZWDecodeStream::InputLZWDecodeStream(IByteReader *inSourceReader)
     Assign(inSourceReader);
 }
 
-void InputLZWDecodeStream::Assign(IByteReader *inSourceReader)
+void charta::InputLZWDecodeStream::Assign(charta::IByteReader *inSourceReader)
 {
     mSourceStream = inSourceReader;
     if (mSourceStream != nullptr)
         StartEncoding();
 }
 
-void InputLZWDecodeStream::StartEncoding()
+void charta::InputLZWDecodeStream::StartEncoding()
 {
     mCurrentlyEncoding = true;
 
@@ -67,7 +67,7 @@ void InputLZWDecodeStream::StartEncoding()
     ClearTable();
 }
 
-size_t InputLZWDecodeStream::Read(uint8_t *inBuffer, size_t /*inBufferSize*/)
+size_t charta::InputLZWDecodeStream::Read(uint8_t *inBuffer, size_t /*inBufferSize*/)
 {
     if (mCurrentlyEncoding)
     {
@@ -83,7 +83,7 @@ size_t InputLZWDecodeStream::Read(uint8_t *inBuffer, size_t /*inBufferSize*/)
     return 0;
 }
 
-bool InputLZWDecodeStream::ProcessNextCode()
+bool charta::InputLZWDecodeStream::ProcessNextCode()
 {
     int code;
     int nextLength;
@@ -176,7 +176,7 @@ bool InputLZWDecodeStream::ProcessNextCode()
     return ret;
 }
 
-void InputLZWDecodeStream::ClearTable()
+void charta::InputLZWDecodeStream::ClearTable()
 {
     nextCode = 258;
     nextBits = 9;
@@ -184,7 +184,7 @@ void InputLZWDecodeStream::ClearTable()
     first = true;
 }
 
-int InputLZWDecodeStream::GetCode()
+int charta::InputLZWDecodeStream::GetCode()
 {
     int c;
     int code;
@@ -206,7 +206,7 @@ int InputLZWDecodeStream::GetCode()
     return code;
 }
 
-bool InputLZWDecodeStream::NotEnded()
+bool charta::InputLZWDecodeStream::NotEnded()
 {
     return mCurrentlyEncoding;
 }

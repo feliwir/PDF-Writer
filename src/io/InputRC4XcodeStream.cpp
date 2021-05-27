@@ -19,34 +19,35 @@
 
 #include "io/InputRC4XcodeStream.h"
 
-InputRC4XcodeStream::InputRC4XcodeStream()
+charta::InputRC4XcodeStream::InputRC4XcodeStream()
 {
     mSourceStream = nullptr;
 }
 
-InputRC4XcodeStream::InputRC4XcodeStream(IByteReader *inSourceReader, const ByteList &inKey) : mRC4(inKey)
+charta::InputRC4XcodeStream::InputRC4XcodeStream(charta::IByteReader *inSourceReader, const ByteList &inKey)
+    : mRC4(inKey)
 {
     mSourceStream = inSourceReader;
 }
 
-InputRC4XcodeStream::~InputRC4XcodeStream()
+charta::InputRC4XcodeStream::~InputRC4XcodeStream()
 {
     if (mSourceStream != nullptr)
         delete mSourceStream;
 }
 
-void InputRC4XcodeStream::Assign(IByteReader *inSourceReader, const ByteList &inKey)
+void charta::InputRC4XcodeStream::Assign(charta::IByteReader *inSourceReader, const ByteList &inKey)
 {
     mSourceStream = inSourceReader;
     mRC4.Reset(inKey);
 }
 
-bool InputRC4XcodeStream::NotEnded()
+bool charta::InputRC4XcodeStream::NotEnded()
 {
     return (mSourceStream != nullptr) && mSourceStream->NotEnded();
 }
 
-size_t InputRC4XcodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputRC4XcodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t mCurrentIndex = 0;
     uint8_t buffer;

@@ -175,7 +175,7 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 {
     mObjectsContext->StartNewIndirectObject(inToUnicodeMap);
     std::shared_ptr<PDFStream> pdfStream = mObjectsContext->StartPDFStream();
-    IByteWriter *cmapWriteContext = pdfStream->GetWriteStream();
+    charta::IByteWriter *cmapWriteContext = pdfStream->GetWriteStream();
     PrimitiveObjectsWriter primitiveWriter(cmapWriteContext);
     unsigned long i = 1;
     auto it = mCharactersVector.begin() + 1;                                // skip 0 glyph
@@ -214,7 +214,7 @@ void CIDFontWriter::WriteToUnicodeMap(ObjectIDType inToUnicodeMap)
 
 static const uint8_t scEntryEnding[2] = {'>', '\n'};
 static const uint8_t scAllZeros[4] = {'0', '0', '0', '0'};
-void CIDFontWriter::WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter,
+void CIDFontWriter::WriteGlyphEntry(charta::IByteWriter *inWriter, uint16_t inEncodedCharacter,
                                     const ULongVector &inUnicodeValues)
 {
     UnicodeString unicode;

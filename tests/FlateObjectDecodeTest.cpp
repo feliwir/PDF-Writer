@@ -52,7 +52,7 @@ EStatusCode decodeStream(const std::string &sourcePath, const std::string &targe
         return eFailure;
 
     auto stream = std::static_pointer_cast<PDFStreamInput>(streamObj);
-    IByteReader *reader = parser.StartReadingFromStream(stream);
+    charta::IByteReader *reader = parser.StartReadingFromStream(stream);
     if (reader == nullptr)
         return eFailure;
 

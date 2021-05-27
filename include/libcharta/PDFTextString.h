@@ -60,8 +60,8 @@ class PDFTextString
     std::string mTextString;
 
     void ConvertFromUTF8(const std::string &inStringToConvert);
-    bool ConvertUTF8ToPDFDocEncoding(const std::string &inStringToConvert, OutputStringBufferStream &refResult);
-    void ConvertUTF8ToUTF16BE(const std::string &inStringToConvert, OutputStringBufferStream &refResult);
+    bool ConvertUTF8ToPDFDocEncoding(const std::string &inStringToConvert, charta::OutputStringBufferStream &refResult);
+    void ConvertUTF8ToUTF16BE(const std::string &inStringToConvert, charta::OutputStringBufferStream &refResult);
     std::string ToUTF8FromUTF16BE() const;
     std::string ToUTF8FromPDFDocEncoding() const;
 };

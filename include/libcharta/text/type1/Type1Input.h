@@ -104,7 +104,10 @@ typedef std::vector<Type1CharString> Type1CharStringVector;
 typedef std::map<std::string, Type1CharString> StringToType1CharStringMap;
 typedef std::map<std::string, uint8_t> StringToByteMap;
 
+namespace charta
+{
 class IByteReaderWithPosition;
+};
 
 class Type1Input : public Type1InterpreterImplementationAdapter
 {
@@ -112,7 +115,7 @@ class Type1Input : public Type1InterpreterImplementationAdapter
     Type1Input(void);
     ~Type1Input(void);
 
-    charta::EStatusCode ReadType1File(IByteReaderWithPosition *inType1File);
+    charta::EStatusCode ReadType1File(charta::IByteReaderWithPosition *inType1File);
     charta::EStatusCode CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
                                                           CharString1Dependencies &ioDependenciesInfo);
     charta::EStatusCode CalculateDependenciesForCharIndex(const std::string &inCharStringName,
@@ -143,7 +146,7 @@ class Type1Input : public Type1InterpreterImplementationAdapter
     Type1CharString *mSubrs;
     StringToType1CharStringMap mCharStrings;
 
-    InputPFBDecodeStream mPFBDecoder;
+    charta::InputPFBDecodeStream mPFBDecoder;
 
     CharString1Dependencies *mCurrentDependencies;
 

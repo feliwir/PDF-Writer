@@ -74,9 +74,9 @@ class CFFEmbeddedFontWriter
 
   private:
     OpenTypeFileInput mOpenTypeInput;
-    InputFile mOpenTypeFile;
+    charta::InputFile mOpenTypeFile;
     CFFPrimitiveWriter mPrimitivesWriter;
-    OutputStringBufferStream mFontFileStream;
+    charta::OutputStringBufferStream mFontFileStream;
     bool mIsCID;
     std::string mOptionalEmbeddedPostscript;
 

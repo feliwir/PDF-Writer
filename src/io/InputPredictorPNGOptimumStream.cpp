@@ -28,7 +28,7 @@
    byte in the line holds the algo - even if the whole stream is declared as a single algo.
 */
 
-InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream()
+charta::InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream()
 {
     mSourceStream = nullptr;
     mBuffer = nullptr;
@@ -37,15 +37,16 @@ InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream()
     mUpValues = nullptr;
 }
 
-InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream()
+charta::InputPredictorPNGOptimumStream::~InputPredictorPNGOptimumStream()
 {
     delete[] mBuffer;
     delete[] mUpValues;
     delete mSourceStream;
 }
 
-InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSourceStream, size_t inColors,
-                                                               uint8_t inBitsPerComponent, size_t inColumns)
+charta::InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(charta::IByteReader *inSourceStream,
+                                                                       size_t inColors, uint8_t inBitsPerComponent,
+                                                                       size_t inColumns)
 {
     mSourceStream = nullptr;
     mBuffer = nullptr;
@@ -56,7 +57,7 @@ InputPredictorPNGOptimumStream::InputPredictorPNGOptimumStream(IByteReader *inSo
     Assign(inSourceStream, inColors, inBitsPerComponent, inColumns);
 }
 
-size_t InputPredictorPNGOptimumStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputPredictorPNGOptimumStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t readBytes = 0;
 
@@ -78,7 +79,8 @@ size_t InputPredictorPNGOptimumStream::Read(uint8_t *inBuffer, size_t inBufferSi
         }
         if (readFromSource != mBufferSize)
         {
-            TRACE_LOG("InputPredictorPNGOptimumStream::Read, problem, expected columns number read. didn't make it");
+            TRACE_LOG(
+                "charta::InputPredictorPNGOptimumStream::Read, problem, expected columns number read. didn't make it");
             break;
         }
         mFunctionType = *mBuffer;
@@ -94,12 +96,12 @@ size_t InputPredictorPNGOptimumStream::Read(uint8_t *inBuffer, size_t inBufferSi
     return readBytes;
 }
 
-bool InputPredictorPNGOptimumStream::NotEnded()
+bool charta::InputPredictorPNGOptimumStream::NotEnded()
 {
     return mSourceStream->NotEnded() || (size_t)(mIndex - mBuffer) < mBufferSize;
 }
 
-void InputPredictorPNGOptimumStream::DecodeNextByte(uint8_t &outDecodedByte)
+void charta::InputPredictorPNGOptimumStream::DecodeNextByte(uint8_t &outDecodedByte)
 {
     // decoding function is determined by mFunctionType
     switch (mFunctionType)
@@ -129,8 +131,8 @@ void InputPredictorPNGOptimumStream::DecodeNextByte(uint8_t &outDecodedByte)
     ++mIndex;
 }
 
-void InputPredictorPNGOptimumStream::Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
-                                            size_t inColumns)
+void charta::InputPredictorPNGOptimumStream::Assign(charta::IByteReader *inSourceStream, size_t inColors,
+                                                    uint8_t inBitsPerComponent, size_t inColumns)
 {
     mSourceStream = inSourceStream;
 
@@ -147,7 +149,7 @@ void InputPredictorPNGOptimumStream::Assign(IByteReader *inSourceStream, size_t 
     mFunctionType = 0;
 }
 
-char InputPredictorPNGOptimumStream::PaethPredictor(char inLeft, char inUp, char inUpLeft)
+char charta::InputPredictorPNGOptimumStream::PaethPredictor(char inLeft, char inUp, char inUpLeft)
 {
     int p = inLeft + inUp - inUpLeft;
     int pLeft = abs(p - inLeft);

@@ -29,8 +29,10 @@
 // good for tracing upto 5K wide chars messages
 
 class Log;
+namespace charta
+{
 class IByteWriter;
-
+}
 #define MAX_TRACE_SIZE 50001
 
 class Trace
@@ -40,7 +42,7 @@ class Trace
     ~Trace(void);
 
     void SetLogSettings(const std::string &inLogFilePath, bool inShouldLog, bool inPlaceUTF8Bom);
-    void SetLogSettings(IByteWriter *inLogStream, bool inShouldLog);
+    void SetLogSettings(charta::IByteWriter *inLogStream, bool inShouldLog);
 
     void TraceToLog(const char *inFormat, ...);
     void TraceToLog(const char *inFormat, va_list inList);
@@ -52,7 +54,7 @@ class Trace
     Log *mLog;
 
     std::string mLogFilePath;
-    IByteWriter *mLogStream;
+    charta::IByteWriter *mLogStream;
     bool mShouldLog;
     bool mPlaceUTF8Bom;
 

@@ -78,7 +78,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(const std::string &inFontFilePat
     return status;
 }
 
-EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex)
+EStatusCode OpenTypeFileInput::ReadOpenTypeFile(charta::IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex)
 {
     EStatusCode status;
 

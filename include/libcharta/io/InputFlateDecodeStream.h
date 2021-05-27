@@ -26,6 +26,8 @@
 struct z_stream_s;
 typedef z_stream_s z_stream;
 
+namespace charta
+{
 class InputFlateDecodeStream final : public IByteReader
 {
   public:
@@ -57,3 +59,4 @@ class InputFlateDecodeStream final : public IByteReader
     size_t DecodeBufferAndRead(const uint8_t *inBuffer, size_t inSize);
     void StartEncoding();
 };
+} // namespace charta

@@ -86,7 +86,8 @@ void PDFParser::ResetParser()
     mDecryptionHelper.Reset();
 }
 
-EStatusCode PDFParser::StartPDFParsing(IByteReaderWithPosition *inSourceStream, const PDFParsingOptions &inOptions)
+EStatusCode PDFParser::StartPDFParsing(charta::IByteReaderWithPosition *inSourceStream,
+                                       const PDFParsingOptions &inOptions)
 {
     EStatusCode status;
 
@@ -1434,7 +1435,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
 
     outExtendedTable = nullptr;
 
-    IByteReader *xrefStreamSource = CreateInputStreamReader(inXrefStream);
+    charta::IByteReader *xrefStreamSource = CreateInputStreamReader(inXrefStream);
     int *widthsArray = nullptr;
 
     do
@@ -1571,8 +1572,8 @@ void PDFParser::MovePositionInStream(long long inPosition)
 }
 
 EStatusCode PDFParser::ReadXrefStreamSegment(XrefEntryInput *inXrefTable, ObjectIDType inSegmentStartObject,
-                                             ObjectIDType inSegmentCount, IByteReader *inReadFrom, int *inEntryWidths,
-                                             unsigned long inEntryWidthsSize)
+                                             ObjectIDType inSegmentCount, charta::IByteReader *inReadFrom,
+                                             int *inEntryWidths, unsigned long inEntryWidthsSize)
 {
     ObjectIDType objectToRead = inSegmentStartObject;
     EStatusCode status = charta::eSuccess;
@@ -1620,7 +1621,7 @@ EStatusCode PDFParser::ReadXrefStreamSegment(XrefEntryInput *inXrefTable, Object
     return status;
 }
 
-EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue)
+EStatusCode PDFParser::ReadXrefSegmentValue(charta::IByteReader *inSource, int inEntrySize, long long &outValue)
 {
     outValue = 0;
     uint8_t buffer;
@@ -1635,7 +1636,7 @@ EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySi
     return status;
 }
 
-EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue)
+EStatusCode PDFParser::ReadXrefSegmentValue(charta::IByteReader *inSource, int inEntrySize, ObjectIDType &outValue)
 {
     outValue = 0;
     uint8_t buffer;
@@ -1662,7 +1663,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
 
     EStatusCode status = charta::eSuccess;
     ObjectStreamHeaderEntry *objectStreamHeader;
-    IByteReader *objectSource = nullptr;
+    charta::IByteReader *objectSource = nullptr;
 
     InputStreamSkipperStream skipperStream;
     ObjectIDType objectStreamID;
@@ -1810,13 +1811,14 @@ EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeader
     return status;
 }
 
-IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<PDFStreamInput> &inStream,
-                                                 IByteReader *inToWrapStream)
+charta::IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<PDFStreamInput> &inStream,
+                                                         charta::IByteReader *inToWrapStream)
 {
     if (IsEncrypted() && IsEncryptionSupported())
     {
         // try with decryption helper
-        IByteReader *result = mDecryptionHelper.CreateDefaultDecryptionFilterForStream(inStream, inToWrapStream);
+        charta::IByteReader *result =
+            mDecryptionHelper.CreateDefaultDecryptionFilterForStream(inStream, inToWrapStream);
         if (result != nullptr)
             return result;
 
@@ -1832,10 +1834,10 @@ IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<PDFStream
     return inToWrapStream;
 }
 
-IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
-    IByteReader *result = nullptr;
+    charta::IByteReader *result = nullptr;
     EStatusCode status = charta::eSuccess;
 
     do
@@ -1930,13 +1932,13 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
     return result;
 }
 
-EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream,
+EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *inStream,
                                                            const std::shared_ptr<PDFName> &inFilterName,
                                                            const std::shared_ptr<PDFDictionary> &inDecodeParams,
                                                            const std::shared_ptr<PDFStreamInput> &inPDFStream)
 {
     EStatusCode status = eSuccess;
-    IByteReader *result = nullptr;
+    charta::IByteReader *result = nullptr;
 
     do
     {
@@ -2059,9 +2061,9 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
     return EStatusCodeAndIByteReader(status, result);
 }
 
-IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDFStreamInput> &inStream)
 {
-    IByteReader *result = CreateInputStreamReader(inStream);
+    charta::IByteReader *result = CreateInputStreamReader(inStream);
     if (result != nullptr)
         MovePositionInStream(inStream->GetStreamContentStart());
     return result;
@@ -2069,7 +2071,7 @@ IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDFStreamIn
 
 PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream)
 {
-    IByteReader *readStream = StartReadingFromStream(std::move(inStream));
+    charta::IByteReader *readStream = StartReadingFromStream(std::move(inStream));
     if (readStream == nullptr)
         return nullptr;
 
@@ -2084,7 +2086,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStr
 
 PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams)
 {
-    IByteReader *readStream = new ArrayOfInputStreamsStream(std::move(inArrayOfStreams), this);
+    charta::IByteReader *readStream = new ArrayOfInputStreamsStream(std::move(inArrayOfStreams), this);
 
     auto *objectsParser = new PDFObjectParser();
     auto *source = new InputStreamSkipperStream(readStream);
@@ -2095,10 +2097,10 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFAr
     return objectsParser;
 }
 
-IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
-    IByteReader *result = nullptr;
+    charta::IByteReader *result = nullptr;
     EStatusCode status = charta::eSuccess;
 
     do
@@ -2126,15 +2128,15 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared
     return result;
 }
 
-IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
 {
-    IByteReader *result = CreateInputStreamReaderForPlainCopying(inStream);
+    charta::IByteReader *result = CreateInputStreamReaderForPlainCopying(inStream);
     if (result != nullptr)
         MovePositionInStream(inStream->GetStreamContentStart());
     return result;
 }
 
-EStatusCode PDFParser::StartStateFileParsing(IByteReaderWithPosition *inSourceStream)
+EStatusCode PDFParser::StartStateFileParsing(charta::IByteReaderWithPosition *inSourceStream)
 {
     EStatusCode status;
 
@@ -2200,7 +2202,7 @@ long long PDFParser::GetXrefPosition() const
     return mLastXrefPosition;
 }
 
-IByteReaderWithPosition *PDFParser::GetParserStream()
+charta::IByteReaderWithPosition *PDFParser::GetParserStream()
 {
     return mStream;
 }

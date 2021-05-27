@@ -21,7 +21,7 @@
 #include "io/InputPredictorTIFFSubStream.h"
 #include "Trace.h"
 
-InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
+charta::InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
 {
     mSourceStream = nullptr;
     mRowBuffer = nullptr;
@@ -29,8 +29,8 @@ InputPredictorTIFFSubStream::InputPredictorTIFFSubStream()
     mReadColorsCount = 0;
 }
 
-InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(IByteReader *inSourceStream, size_t inColors,
-                                                         uint8_t inBitsPerComponent, size_t inColumns)
+charta::InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(charta::IByteReader *inSourceStream, size_t inColors,
+                                                                 uint8_t inBitsPerComponent, size_t inColumns)
 {
     mSourceStream = nullptr;
     mRowBuffer = nullptr;
@@ -39,14 +39,14 @@ InputPredictorTIFFSubStream::InputPredictorTIFFSubStream(IByteReader *inSourceSt
     Assign(inSourceStream, inColors, inBitsPerComponent, inColumns);
 }
 
-InputPredictorTIFFSubStream::~InputPredictorTIFFSubStream()
+charta::InputPredictorTIFFSubStream::~InputPredictorTIFFSubStream()
 {
     delete mSourceStream;
     delete[] mRowBuffer;
     delete[] mReadColors;
 }
 
-size_t InputPredictorTIFFSubStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputPredictorTIFFSubStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t readBytes = 0;
 
@@ -79,13 +79,13 @@ size_t InputPredictorTIFFSubStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return readBytes;
 }
 
-bool InputPredictorTIFFSubStream::NotEnded()
+bool charta::InputPredictorTIFFSubStream::NotEnded()
 {
     return mSourceStream->NotEnded() || (size_t)(mReadColorsIndex - mReadColors) < mReadColorsCount;
 }
 
-void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, size_t inColors, uint8_t inBitsPerComponent,
-                                         size_t inColumns)
+void charta::InputPredictorTIFFSubStream::Assign(charta::IByteReader *inSourceStream, size_t inColors,
+                                                 uint8_t inBitsPerComponent, size_t inColumns)
 {
     mSourceStream = inSourceStream;
     mColors = inColors;
@@ -106,7 +106,7 @@ void InputPredictorTIFFSubStream::Assign(IByteReader *inSourceStream, size_t inC
         mBitMask = (mBitMask << 1) + 1;
 }
 
-void InputPredictorTIFFSubStream::ReadByteFromColorsArray(uint8_t &outBuffer)
+void charta::InputPredictorTIFFSubStream::ReadByteFromColorsArray(uint8_t &outBuffer)
 {
     if (8 == mBitsPerComponent)
     {
@@ -134,7 +134,7 @@ void InputPredictorTIFFSubStream::ReadByteFromColorsArray(uint8_t &outBuffer)
     }
 }
 
-void InputPredictorTIFFSubStream::DecodeBufferToColors()
+void charta::InputPredictorTIFFSubStream::DecodeBufferToColors()
 {
     // 1. Split to colors. Use array of colors (should be columns * colors). Each time take BitsPerComponent of the
     // buffer

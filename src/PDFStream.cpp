@@ -24,7 +24,7 @@
 #include "io/InputStringBufferStream.h"
 #include "io/OutputStreamTraits.h"
 
-PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStream,
+PDFStream::PDFStream(bool inCompressStream, charta::IByteWriterWithPosition *inOutputStream,
                      EncryptionHelper *inEncryptionHelper, ObjectIDType inExtentObjectID,
                      IObjectsContextExtender *inObjectsContextExtender)
 {
@@ -62,7 +62,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
         mWriteStream = mEncryptionStream != nullptr ? mEncryptionStream : inOutputStream;
 }
 
-PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStream,
+PDFStream::PDFStream(bool inCompressStream, charta::IByteWriterWithPosition *inOutputStream,
                      EncryptionHelper *inEncryptionHelper,
                      DictionaryContext *inStreamDictionaryContextForDirectExtentStream,
                      IObjectsContextExtender *inObjectsContextExtender)
@@ -104,7 +104,7 @@ PDFStream::PDFStream(bool inCompressStream, IByteWriterWithPosition *inOutputStr
 
 PDFStream::~PDFStream() = default;
 
-IByteWriter *PDFStream::GetWriteStream()
+charta::IByteWriter *PDFStream::GetWriteStream()
 {
     return mWriteStream;
 }
@@ -163,8 +163,8 @@ void PDFStream::FlushStreamContentForDirectExtentStream()
     mTemporaryStream.pubseekoff(0, std::ios_base::beg);
 
     // copy internal temporary stream to output
-    InputStringBufferStream inputStreamForWrite(&mTemporaryStream);
-    OutputStreamTraits streamCopier(mOutputStream);
+    charta::InputStringBufferStream inputStreamForWrite(&mTemporaryStream);
+    charta::OutputStreamTraits streamCopier(mOutputStream);
     streamCopier.CopyToOutputStream(&inputStreamForWrite);
 
     mTemporaryStream.str();

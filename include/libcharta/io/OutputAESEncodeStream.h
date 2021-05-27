@@ -24,34 +24,38 @@ limitations under the License.
 
 #include <list>
 
+namespace charta
+{
 typedef std::list<uint8_t> ByteList;
 
 class OutputAESEncodeStream final : public IByteWriterWithPosition
 {
   public:
-    OutputAESEncodeStream(void);
-    virtual ~OutputAESEncodeStream(void);
+    OutputAESEncodeStream();
+    virtual ~OutputAESEncodeStream();
 
-    OutputAESEncodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey, bool inOwnsStream);
+    OutputAESEncodeStream(charta::IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey,
+                          bool inOwnsStream);
 
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
     virtual long long GetCurrentPosition();
 
   private:
     bool mOwnsStream;
-    IByteWriterWithPosition *mTargetStream;
+    charta::IByteWriterWithPosition *mTargetStream;
 
     bool mWroteIV;
 
     // inEncryptionKey in array form, for aes
-    unsigned char *mEncryptionKey;
+    uint8_t *mEncryptionKey;
     std::size_t mEncryptionKeyLength;
-    unsigned char mIV[AES_BLOCK_SIZE];
-    unsigned char mIn[AES_BLOCK_SIZE];
-    unsigned char mOut[AES_BLOCK_SIZE];
-    unsigned char *mInIndex;
+    uint8_t mIV[AES_BLOCK_SIZE];
+    uint8_t mIn[AES_BLOCK_SIZE];
+    uint8_t mOut[AES_BLOCK_SIZE];
+    uint8_t *mInIndex;
 
     AESencrypt mEncrypt;
 
     void Flush();
 };
+} // namespace charta

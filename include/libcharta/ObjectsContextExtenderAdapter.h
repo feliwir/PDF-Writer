@@ -30,12 +30,12 @@ class ObjectsContextExtenderAdapter : public IObjectsContextExtender
         return false;
     }
 
-    virtual IByteWriter *GetCompressionWriteStream(IByteWriterWithPosition *inOutputStream)
+    virtual charta::IByteWriter *GetCompressionWriteStream(charta::IByteWriterWithPosition *inOutputStream)
     {
         return inOutputStream;
     }
 
-    virtual void FinalizeCompressedStreamWrite(IByteWriter *inCompressedStream)
+    virtual void FinalizeCompressedStreamWrite(charta::IByteWriter *inCompressedStream)
     {
     }
 

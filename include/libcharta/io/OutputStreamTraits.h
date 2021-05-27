@@ -24,6 +24,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class IByteWriter;
 class IByteReader;
 
@@ -31,11 +33,12 @@ class OutputStreamTraits
 {
   public:
     OutputStreamTraits(IByteWriter *inOutputStream);
-    ~OutputStreamTraits(void) = default;
+    ~OutputStreamTraits() = default;
 
-    charta::EStatusCode CopyToOutputStream(IByteReader *inInputStream);
-    charta::EStatusCode CopyToOutputStream(IByteReader *inInputStream, size_t inLength);
+    EStatusCode CopyToOutputStream(IByteReader *inInputStream);
+    EStatusCode CopyToOutputStream(IByteReader *inInputStream, size_t inLength);
 
   private:
     IByteWriter *mOutputStream;
 };
+}; // namespace charta

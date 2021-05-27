@@ -23,22 +23,25 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class IByteWriter;
+}
 
 class Type2CharStringWriter
 {
   public:
-    Type2CharStringWriter(IByteWriter *inTargetStream);
+    Type2CharStringWriter(charta::IByteWriter *inTargetStream);
     ~Type2CharStringWriter(void) = default;
 
-    void Assign(IByteWriter *inTargetStream);
+    void Assign(charta::IByteWriter *inTargetStream);
 
     charta::EStatusCode WriteHintMask(unsigned long inMask, unsigned long inMaskSize);
     charta::EStatusCode WriteIntegerOperand(long inOperand);
     charta::EStatusCode WriteOperator(uint16_t inOperatorCode);
 
   private:
-    IByteWriter *mTargetStream;
+    charta::IByteWriter *mTargetStream;
 
     charta::EStatusCode WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize);
     charta::EStatusCode WriteByte(uint8_t inValue);

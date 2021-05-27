@@ -26,6 +26,8 @@
 #include <sstream>
 #include <string>
 
+namespace charta
+{
 class InputStringBufferStream final : public IByteReaderWithPosition
 {
   public:
@@ -45,3 +47,4 @@ class InputStringBufferStream final : public IByteReaderWithPosition
   private:
     MyStringBuf *mBufferToReadFrom;
 };
+} // namespace charta

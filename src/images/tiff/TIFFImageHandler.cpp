@@ -3128,7 +3128,7 @@ void TIFFImageHandler::SetDocumentContextExtender(IDocumentContextExtender *inEx
     mExtender = inExtender;
 }
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                                   const TIFFUsageParameters &inTIFFUsageParameters)
 {
     if (mObjectsContext == nullptr)
@@ -3144,7 +3144,7 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWit
 
 struct StreamWithPos
 {
-    IByteReaderWithPosition *mStream;
+    charta::IByteReaderWithPosition *mStream;
     long long mOriginalPosition;
 };
 
@@ -3204,7 +3204,7 @@ int STATIC_tiffMap(thandle_t, tdata_t *, toff_t *)
 
 void STATIC_tiffUnmap(thandle_t, tdata_t, toff_t){};
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                                   ObjectIDType inFormXObjectID,
                                                                   const TIFFUsageParameters &inTIFFUsageParameters)
 {
@@ -3254,13 +3254,13 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(IByteReaderWit
     return imageFormXObject;
 }
 
-std::pair<double, double> TIFFImageHandler::ReadImageDimensions(IByteReaderWithPosition *inTIFFStream,
+std::pair<double, double> TIFFImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inTIFFStream,
                                                                 unsigned long inImageIndex)
 {
     return ReadImageInfo(inTIFFStream, inImageIndex).dimensions;
 }
 
-TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(IByteReaderWithPosition *inTIFFStream,
+TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(charta::IByteReaderWithPosition *inTIFFStream,
                                                                 unsigned long inImageIndex)
 {
     TIFF *input = nullptr;
@@ -3323,7 +3323,7 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(IByteReaderWithP
     return imageInfo;
 }
 
-unsigned long TIFFImageHandler::ReadImagePageCount(IByteReaderWithPosition *inTIFFStream)
+unsigned long TIFFImageHandler::ReadImagePageCount(charta::IByteReaderWithPosition *inTIFFStream)
 {
     TIFF *input = nullptr;
     unsigned long result = 0;

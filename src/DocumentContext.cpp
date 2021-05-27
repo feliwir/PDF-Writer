@@ -176,7 +176,7 @@ static const uint8_t scBinaryBytesArray[] = {
 
 void DocumentContext::Write4BinaryBytes()
 {
-    IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
+    charta::IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
     freeContextOutput->Write(scBinaryBytesArray, 6);
     mObjectsContext->EndFreeContext();
 }
@@ -242,7 +242,7 @@ static const uint8_t scEOF[] = {'%', '%', 'E', 'O', 'F'};
 
 void DocumentContext::WriteFinalEOF()
 {
-    IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
+    charta::IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
     freeContextOutput->Write(scEOF, 5);
     mObjectsContext->EndFreeContext();
 }
@@ -1269,7 +1269,7 @@ PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGFile(const std::string 
 }
 
 #ifndef PDFHUMMUS_NO_PNG
-PDFFormXObject *DocumentContext::CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream,
+PDFFormXObject *DocumentContext::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
                                                                 ObjectIDType inFormXObjectId)
 {
     return mPNGImageHandler.CreateFormXObjectFromPNGStream(inPNGStream, inFormXObjectId);
@@ -1301,13 +1301,13 @@ PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFFile(const std::string
     return mTIFFImageHandler.CreateFormXObjectFromTIFFFile(inTIFFFilePath, inFormXObjectID, inTIFFUsageParameters);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                                  const TIFFUsageParameters &inTIFFUsageParameters)
 {
     return mTIFFImageHandler.CreateFormXObjectFromTIFFStream(inTIFFStream, inTIFFUsageParameters);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(IByteReaderWithPosition *inTIFFStream,
+PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
                                                                  ObjectIDType inFormXObjectID,
                                                                  const TIFFUsageParameters &inTIFFUsageParameters)
 {
@@ -1985,31 +1985,31 @@ EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, const std::str
                                                    inCopyAdditionalObjects);
 }
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGStream(inJPGStream);
 }
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                                   ObjectIDType inImageXObjectID)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGStream(inJPGStream, inImageXObjectID);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream)
+PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGStream(inJPGStream);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
+PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
                                                                 ObjectIDType inFormXObjectID)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGStream(inJPGStream, inFormXObjectID);
 }
 
 EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
 {
     return mPDFDocumentHandler.CreateFormXObjectsFromPDF(inPDFStream, inParsingOptions, inPageRange,
@@ -2018,8 +2018,8 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
 }
 
 EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
-    const PDFRectangle &inCropBox, const double *inTransformationMatrix,
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, const PDFRectangle &inCropBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
 {
     return mPDFDocumentHandler.CreateFormXObjectsFromPDF(inPDFStream, inParsingOptions, inPageRange, inCropBox,
@@ -2027,7 +2027,7 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
                                                          inPredefinedFormIDs);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(IByteReaderWithPosition *inPDFStream,
+EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                                       const PDFParsingOptions &inParsingOptions,
                                                                       const PDFPageRange &inPageRange,
                                                                       const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -2036,7 +2036,7 @@ EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(IByteReade
                                                      inCopyAdditionalObjects);
 }
 
-EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream,
                                                  const PDFParsingOptions &inParsingOptions,
                                                  const PDFPageRange &inPageRange,
                                                  const ObjectIDTypeList &inCopyAdditionalObjects)
@@ -2046,7 +2046,7 @@ EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, IByteReaderWit
 }
 
 std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(
-    IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions)
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions)
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
@@ -2692,7 +2692,7 @@ void DocumentContext::RegisterTiledPatternEndWritingTask(PDFTiledPattern *inPatt
     it->second.push_back(inWritingTask);
 }
 
-std::pair<double, double> DocumentContext::GetImageDimensions(IByteReaderWithPosition *inImageStream,
+std::pair<double, double> DocumentContext::GetImageDimensions(charta::IByteReaderWithPosition *inImageStream,
                                                               unsigned long inImageIndex,
                                                               const PDFParsingOptions &inOptions)
 {
@@ -2865,7 +2865,7 @@ static const uint8_t scMagicTIFFLittleEndianTiff[] = {0x49, 0x49, 0x2A, 0x00};
 static const uint8_t scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
 static const uint8_t scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
-charta::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPosition *inImageStream,
+charta::EHummusImageType DocumentContext::GetImageType(charta::IByteReaderWithPosition *inImageStream,
                                                        unsigned long /*inImageIndex*/)
 {
     // The types of images that are discovered here are those familiar to Hummus - JPG, TIFF and PDF.

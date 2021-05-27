@@ -24,18 +24,21 @@
 #include "MyStringBuf.h"
 #include <string>
 
+namespace charta
+{
+
 class OutputStringBufferStream final : public IByteWriterWithPosition
 {
   public:
-    OutputStringBufferStream(void);
-    ~OutputStringBufferStream(void);
+    OutputStringBufferStream();
+    ~OutputStringBufferStream();
 
     // override for having the stream control an external buffer. NOT taking ownership
     OutputStringBufferStream(MyStringBuf *inControlledBuffer);
 
     void Assign(MyStringBuf *inControlledBuffer); // can assign a new one after creation
 
-    // IByteWriter implementation
+    // charta::IByteWriter implementation
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);
 
     // IByteWriterWithPosition implementation
@@ -49,3 +52,4 @@ class OutputStringBufferStream final : public IByteWriterWithPosition
     MyStringBuf *mBuffer;
     bool mOwnsBuffer;
 };
+} // namespace charta

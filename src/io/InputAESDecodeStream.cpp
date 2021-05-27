@@ -22,17 +22,17 @@ limitations under the License.
 #include <algorithm>
 #include <string.h>
 
-InputAESDecodeStream::InputAESDecodeStream()
+charta::InputAESDecodeStream::InputAESDecodeStream()
 {
     mSourceStream = nullptr;
 }
 
-InputAESDecodeStream::InputAESDecodeStream(IByteReader *inSourceReader, const ByteList &inKey)
+charta::InputAESDecodeStream::InputAESDecodeStream(IByteReader *inSourceReader, const ByteList &inKey)
 {
     Assign(inSourceReader, inKey);
 }
 
-InputAESDecodeStream::~InputAESDecodeStream()
+charta::InputAESDecodeStream::~InputAESDecodeStream()
 {
     if (mSourceStream != nullptr)
         delete mSourceStream;
@@ -41,7 +41,7 @@ InputAESDecodeStream::~InputAESDecodeStream()
         delete[] mKey;
 }
 
-void InputAESDecodeStream::Assign(IByteReader *inSourceReader, const ByteList &inKey)
+void charta::InputAESDecodeStream::Assign(IByteReader *inSourceReader, const ByteList &inKey)
 {
     mSourceStream = inSourceReader;
 
@@ -59,13 +59,13 @@ void InputAESDecodeStream::Assign(IByteReader *inSourceReader, const ByteList &i
     mHitEnd = false;
 }
 
-bool InputAESDecodeStream::NotEnded()
+bool charta::InputAESDecodeStream::NotEnded()
 {
     return ((mSourceStream != nullptr) && mSourceStream->NotEnded()) || !mHitEnd ||
            ((mOutIndex - mOut) < mReadBlockSize);
 }
 
-size_t InputAESDecodeStream::Read(uint8_t *inBuffer, size_t inSize)
+size_t charta::InputAESDecodeStream::Read(uint8_t *inBuffer, size_t inSize)
 {
     if (mSourceStream == nullptr)
         return 0;

@@ -25,7 +25,10 @@
 #include <stdio.h>
 
 struct JPEGImageInformation;
+namespace charta
+{
 class IByteReaderWithPosition;
+};
 
 struct TwoLevelStatus
 {
@@ -50,10 +53,11 @@ class JPEGImageParser
     JPEGImageParser(void);
     ~JPEGImageParser(void) = default;
 
-    charta::EStatusCode Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation);
+    charta::EStatusCode Parse(charta::IByteReaderWithPosition *inImageStream,
+                              JPEGImageInformation &outImageInformation);
 
   private:
-    IByteReaderWithPosition *mImageStream;
+    charta::IByteReaderWithPosition *mImageStream;
     uint8_t mReadBuffer[500];
 
     charta::EStatusCode ReadJPEGID();

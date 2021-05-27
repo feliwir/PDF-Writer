@@ -19,27 +19,27 @@ limitations under the License.
 
 #include "io/OutputRC4XcodeStream.h"
 
-OutputRC4XcodeStream::OutputRC4XcodeStream()
+charta::OutputRC4XcodeStream::OutputRC4XcodeStream()
 {
     mTargetStream = nullptr;
     mOwnsStream = false;
 }
 
-OutputRC4XcodeStream::~OutputRC4XcodeStream()
+charta::OutputRC4XcodeStream::~OutputRC4XcodeStream()
 {
     if (mOwnsStream)
         delete mTargetStream;
 }
 
-OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey,
-                                           bool inOwnsStream)
+charta::OutputRC4XcodeStream::OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStream,
+                                                   const ByteList &inEncryptionKey, bool inOwnsStream)
     : mRC4(inEncryptionKey)
 {
     mTargetStream = inTargetStream;
     mOwnsStream = inOwnsStream;
 }
 
-size_t OutputRC4XcodeStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputRC4XcodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream == nullptr)
         return 0;
@@ -57,7 +57,7 @@ size_t OutputRC4XcodeStream::Write(const uint8_t *inBuffer, size_t inSize)
     return mCurrentIndex;
 }
 
-long long OutputRC4XcodeStream::GetCurrentPosition()
+long long charta::OutputRC4XcodeStream::GetCurrentPosition()
 {
     if (mTargetStream == nullptr)
         return 0;

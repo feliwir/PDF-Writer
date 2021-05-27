@@ -59,7 +59,7 @@ class PDFDictionaryIterator
 
     PDFArrayIterator Array(const std::string &s);
 
-    bool WriteStreamToFile(InputFile &pdfFile, const std::string &s, const std::string &filePath);
+    bool WriteStreamToFile(charta::InputFile &pdfFile, const std::string &s, const std::string &filePath);
 
   private:
     void SetDictRefPtr(std::shared_ptr<PDFDictionary> dictonary)

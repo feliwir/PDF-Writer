@@ -23,14 +23,14 @@ limitations under the License.
 
 #include <string.h>
 
-OutputAESEncodeStream::OutputAESEncodeStream()
+charta::OutputAESEncodeStream::OutputAESEncodeStream()
 {
     mTargetStream = nullptr;
     mOwnsStream = false;
     mWroteIV = false;
 }
 
-OutputAESEncodeStream::~OutputAESEncodeStream()
+charta::OutputAESEncodeStream::~OutputAESEncodeStream()
 {
     Flush();
     if (mEncryptionKey != nullptr)
@@ -39,8 +39,8 @@ OutputAESEncodeStream::~OutputAESEncodeStream()
         delete mTargetStream;
 }
 
-OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey,
-                                             bool inOwnsStream)
+charta::OutputAESEncodeStream::OutputAESEncodeStream(charta::IByteWriterWithPosition *inTargetStream,
+                                                     const ByteList &inEncryptionKey, bool inOwnsStream)
 {
     mTargetStream = inTargetStream;
     mOwnsStream = inOwnsStream;
@@ -62,14 +62,14 @@ OutputAESEncodeStream::OutputAESEncodeStream(IByteWriterWithPosition *inTargetSt
     mWroteIV = false;
 }
 
-long long OutputAESEncodeStream::GetCurrentPosition()
+long long charta::OutputAESEncodeStream::GetCurrentPosition()
 {
     if (mTargetStream != nullptr)
         return mTargetStream->GetCurrentPosition();
     return 0;
 }
 
-size_t OutputAESEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
+size_t charta::OutputAESEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
 {
     if (mTargetStream == nullptr)
         return 0;
@@ -121,7 +121,7 @@ size_t OutputAESEncodeStream::Write(const uint8_t *inBuffer, size_t inSize)
     return inSize;
 }
 
-void OutputAESEncodeStream::Flush()
+void charta::OutputAESEncodeStream::Flush()
 {
     // if there's a full buffer waiting, write it now.
     if (mInIndex - mIn == AES_BLOCK_SIZE)

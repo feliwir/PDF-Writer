@@ -23,12 +23,12 @@
 
 using namespace charta;
 
-CFFPrimitiveWriter::CFFPrimitiveWriter(IByteWriter *inCFFOutput)
+CFFPrimitiveWriter::CFFPrimitiveWriter(charta::IByteWriter *inCFFOutput)
 {
     SetStream(inCFFOutput);
 }
 
-void CFFPrimitiveWriter::SetStream(IByteWriter *inCFFOutput)
+void CFFPrimitiveWriter::SetStream(charta::IByteWriter *inCFFOutput)
 {
     mCFFOutput = inCFFOutput;
     if (inCFFOutput != nullptr)

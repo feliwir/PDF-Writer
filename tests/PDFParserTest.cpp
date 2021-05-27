@@ -44,7 +44,8 @@ static const char *scIteratingStreamDict = "Stream . iterating stream dictionary
 static int mTabLevel = 0;
 static std::set<ObjectIDType> mIteratedObjectIDs;
 
-EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFParser &inParser, IByteWriter *inOutput)
+EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFParser &inParser,
+                               charta::IByteWriter *inOutput)
 {
     PrimitiveObjectsWriter primitivesWriter;
 

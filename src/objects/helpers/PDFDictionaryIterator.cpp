@@ -45,7 +45,8 @@ std::string PDFDictionaryIterator::GetStrValue(const std::string &s)
     return foundReference->GetValue();
 }
 
-bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, const std::string &s, const std::string &filePath)
+bool PDFDictionaryIterator::WriteStreamToFile(charta::InputFile &pdfFile, const std::string &s,
+                                              const std::string &filePath)
 {
     if (mDictonary == nullptr)
         return false;
@@ -62,7 +63,7 @@ bool PDFDictionaryIterator::WriteStreamToFile(InputFile &pdfFile, const std::str
     if (!myFile.is_open())
         return false;
 
-    IByteReader *streamReader = mParser.CreateInputStreamReader(foundStreamInput);
+    charta::IByteReader *streamReader = mParser.CreateInputStreamReader(foundStreamInput);
     if (streamReader == nullptr)
         return false;
 

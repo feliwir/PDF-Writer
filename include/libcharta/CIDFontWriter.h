@@ -31,7 +31,10 @@ class FreeTypeFaceWrapper;
 class ObjectsContext;
 class DictionaryContext;
 class IDescendentFontWriter;
+namespace charta
+{
 class IByteWriter;
+}
 
 typedef std::pair<uint32_t, GlyphEncodingInfo> UIntAndGlyphEncodingInfo;
 typedef std::vector<UIntAndGlyphEncodingInfo> UIntAndGlyphEncodingInfoVector;
@@ -55,5 +58,6 @@ class CIDFontWriter
     void WriteEncoding(DictionaryContext *inFontContext);
     void CalculateCharacterEncodingArray();
     void WriteToUnicodeMap(ObjectIDType inToUnicodeMap);
-    void WriteGlyphEntry(IByteWriter *inWriter, uint16_t inEncodedCharacter, const ULongVector &inUnicodeValues);
+    void WriteGlyphEntry(charta::IByteWriter *inWriter, uint16_t inEncodedCharacter,
+                         const ULongVector &inUnicodeValues);
 };

@@ -25,6 +25,8 @@
 #include <memory>
 #include <string>
 
+namespace charta
+{
 class InputBufferedStream;
 class InputFileStream;
 
@@ -34,8 +36,8 @@ class InputFile
     InputFile();
     ~InputFile();
 
-    charta::EStatusCode OpenFile(const std::string &inFilePath);
-    charta::EStatusCode CloseFile();
+    EStatusCode OpenFile(const std::string &inFilePath);
+    EStatusCode CloseFile();
 
     IByteReaderWithPosition *GetInputStream(); // returns buffered input stream
     const std::string &GetFilePath();
@@ -46,3 +48,4 @@ class InputFile
     std::string mFilePath;
     std::unique_ptr<InputBufferedStream> mInputStream;
 };
+} // namespace charta

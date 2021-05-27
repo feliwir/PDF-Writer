@@ -24,13 +24,15 @@ limitations under the License.
 
 #include <list>
 
-typedef std::list<uint8_t> ByteList;
+namespace charta
+{
+using ByteList = std::list<uint8_t>;
 
 class OutputRC4XcodeStream final : public IByteWriterWithPosition
 {
   public:
-    OutputRC4XcodeStream(void);
-    virtual ~OutputRC4XcodeStream(void);
+    OutputRC4XcodeStream();
+    virtual ~OutputRC4XcodeStream();
 
     OutputRC4XcodeStream(IByteWriterWithPosition *inTargetStream, const ByteList &inEncryptionKey, bool inOwnsStream);
 
@@ -42,3 +44,4 @@ class OutputRC4XcodeStream final : public IByteWriterWithPosition
     IByteWriterWithPosition *mTargetStream;
     RC4 mRC4;
 };
+} // namespace charta

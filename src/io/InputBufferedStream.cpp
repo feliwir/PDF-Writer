@@ -22,28 +22,29 @@
 #include <algorithm>
 #include <memory.h>
 
-InputBufferedStream::InputBufferedStream()
+charta::InputBufferedStream::InputBufferedStream()
 {
     Initiate(nullptr, DEFAULT_INPUT_BUFFER_SIZE);
 }
 
-InputBufferedStream::InputBufferedStream(size_t inBufferSize)
+charta::InputBufferedStream::InputBufferedStream(size_t inBufferSize)
 {
     Initiate(nullptr, inBufferSize);
 }
 
-InputBufferedStream::InputBufferedStream(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize)
+charta::InputBufferedStream::InputBufferedStream(std::unique_ptr<IByteReaderWithPosition> inSourceReader,
+                                                 size_t inBufferSize)
 {
     Initiate(std::move(inSourceReader), inBufferSize);
 }
 
-void InputBufferedStream::Assign(std::unique_ptr<IByteReaderWithPosition> inReader)
+void charta::InputBufferedStream::Assign(std::unique_ptr<IByteReaderWithPosition> inReader)
 {
     mSourceStream = std::move(inReader);
     mCurrentBufferIndex = 0;
 }
 
-size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
+size_t charta::InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     if (mSourceStream != nullptr)
     {
@@ -104,19 +105,19 @@ size_t InputBufferedStream::Read(uint8_t *inBuffer, size_t inBufferSize)
     return 0;
 }
 
-bool InputBufferedStream::NotEnded()
+bool charta::InputBufferedStream::NotEnded()
 {
     return mSourceStream->NotEnded() || (mCurrentBufferIndex != mLastAvailableIndex);
 }
 
-void InputBufferedStream::Initiate(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize)
+void charta::InputBufferedStream::Initiate(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize)
 {
     mBuffer.resize(inBufferSize);
     mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream = std::move(inSourceReader);
 }
 
-void InputBufferedStream::Skip(size_t inSkipSize)
+void charta::InputBufferedStream::Skip(size_t inSkipSize)
 {
     if (inSkipSize <= mLastAvailableIndex - mCurrentBufferIndex)
     {
@@ -130,24 +131,24 @@ void InputBufferedStream::Skip(size_t inSkipSize)
     }
 }
 
-void InputBufferedStream::SetPosition(long long inOffsetFromStart)
+void charta::InputBufferedStream::SetPosition(long long inOffsetFromStart)
 {
     mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream->SetPosition(inOffsetFromStart);
 }
 
-void InputBufferedStream::SetPositionFromEnd(long long inOffsetFromEnd)
+void charta::InputBufferedStream::SetPositionFromEnd(long long inOffsetFromEnd)
 {
     mLastAvailableIndex = mCurrentBufferIndex = 0;
     mSourceStream->SetPositionFromEnd(inOffsetFromEnd);
 }
 
-IByteReaderWithPosition *InputBufferedStream::GetSourceStream()
+charta::IByteReaderWithPosition *charta::InputBufferedStream::GetSourceStream()
 {
     return mSourceStream.get();
 }
 
-long long InputBufferedStream::GetCurrentPosition()
+long long charta::InputBufferedStream::GetCurrentPosition()
 {
     // when reading the current position is the current stream position minus how much is left
     // to read from the buffer

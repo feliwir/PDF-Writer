@@ -23,12 +23,12 @@
 
 using namespace charta;
 
-CFFPrimitiveReader::CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile)
+CFFPrimitiveReader::CFFPrimitiveReader(charta::IByteReaderWithPosition *inCFFFile)
 {
     SetStream(inCFFFile);
 }
 
-void CFFPrimitiveReader::SetStream(IByteReaderWithPosition *inCFFFile)
+void CFFPrimitiveReader::SetStream(charta::IByteReaderWithPosition *inCFFFile)
 {
     mCFFFile = inCFFFile;
     if (inCFFFile != nullptr)

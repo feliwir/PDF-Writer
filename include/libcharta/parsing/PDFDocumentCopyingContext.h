@@ -37,23 +37,21 @@ namespace charta
 class DocumentContext;
 }
 
-using namespace charta;
-
 class PDFDocumentCopyingContext
 {
   public:
     PDFDocumentCopyingContext();
     ~PDFDocumentCopyingContext();
 
-    charta::EStatusCode Start(const std::string &inPDFFilePath, DocumentContext *inDocumentContext,
+    charta::EStatusCode Start(const std::string &inPDFFilePath, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
                               IPDFParserExtender *inParserExtender);
 
-    charta::EStatusCode Start(IByteReaderWithPosition *inPDFStream, DocumentContext *inDocumentContext,
+    charta::EStatusCode Start(charta::IByteReaderWithPosition *inPDFStream, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
                               IPDFParserExtender *inParserExtender);
 
-    charta::EStatusCode Start(PDFParser *inPDFParser, DocumentContext *inDocumentContext,
+    charta::EStatusCode Start(PDFParser *inPDFParser, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext);
 
     EStatusCodeAndObjectIDType CreateFormXObjectFromPDFPage(unsigned long inPageIndex,
@@ -93,7 +91,7 @@ class PDFDocumentCopyingContext
     charta::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
 
     PDFParser *GetSourceDocumentParser();
-    IByteReaderWithPosition *GetSourceDocumentStream();
+    charta::IByteReaderWithPosition *GetSourceDocumentStream();
     EStatusCodeAndObjectIDType GetCopiedObjectID(ObjectIDType inSourceObjectID);
     MapIterator<ObjectIDTypeToObjectIDTypeMap> GetCopiedObjectsMappingIterator();
 

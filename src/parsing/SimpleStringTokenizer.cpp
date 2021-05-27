@@ -30,7 +30,7 @@ SimpleStringTokenizer::SimpleStringTokenizer()
     ResetReadState();
 }
 
-void SimpleStringTokenizer::SetReadStream(IByteReader *inSourceStream)
+void SimpleStringTokenizer::SetReadStream(charta::IByteReader *inSourceStream)
 {
     mStream = inSourceStream;
     ResetReadState();

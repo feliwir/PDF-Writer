@@ -25,6 +25,8 @@
 
 #include "IByteReader.h"
 
+namespace charta
+{
 class IByteReaderWithPosition : public IByteReader
 {
   public:
@@ -48,3 +50,4 @@ class IByteReaderWithPosition : public IByteReader
     */
     virtual void Skip(size_t inSkipSize) = 0;
 };
+} // namespace charta

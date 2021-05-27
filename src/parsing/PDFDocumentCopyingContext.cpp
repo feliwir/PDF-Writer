@@ -48,9 +48,9 @@ EStatusCode PDFDocumentCopyingContext::Start(const std::string &inPDFFilePath, D
     return status;
 }
 
-EStatusCode PDFDocumentCopyingContext::Start(IByteReaderWithPosition *inPDFStream, DocumentContext *inDocumentContext,
-                                             ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
-                                             IPDFParserExtender *inParserExtender)
+EStatusCode PDFDocumentCopyingContext::Start(charta::IByteReaderWithPosition *inPDFStream,
+                                             DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext,
+                                             const PDFParsingOptions &inOptions, IPDFParserExtender *inParserExtender)
 {
     mDocumentContext = inDocumentContext;
     inDocumentContext->RegisterCopyingContext(this);
@@ -171,7 +171,7 @@ void PDFDocumentCopyingContext::RemoveDocumentContextExtender(IDocumentContextEx
     mDocumentHandler.RemoveDocumentContextExtender(inExtender);
 }
 
-IByteReaderWithPosition *PDFDocumentCopyingContext::GetSourceDocumentStream()
+charta::IByteReaderWithPosition *PDFDocumentCopyingContext::GetSourceDocumentStream()
 {
     return mDocumentHandler.GetSourceDocumentStream();
 }

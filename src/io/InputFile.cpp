@@ -23,22 +23,20 @@
 #include "io/InputBufferedStream.h"
 #include "io/InputFileStream.h"
 
-using namespace charta;
+charta::InputFile::InputFile() = default;
 
-InputFile::InputFile() = default;
-
-InputFile::~InputFile()
+charta::InputFile::~InputFile()
 {
     CloseFile();
 }
 
-EStatusCode InputFile::OpenFile(const std::string &inFilePath)
+charta::EStatusCode charta::InputFile::OpenFile(const std::string &inFilePath)
 {
 
     EStatusCode status = CloseFile();
     if (status != charta::eSuccess)
     {
-        TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
+        TRACE_LOG1("charta::InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
                    mFilePath.c_str());
         return status;
     }
@@ -47,7 +45,8 @@ EStatusCode InputFile::OpenFile(const std::string &inFilePath)
     status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
     if (status != charta::eSuccess)
     {
-        TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s", inFilePath.c_str());
+        TRACE_LOG1("charta::InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s",
+                   inFilePath.c_str());
         return status;
     }
 
@@ -57,7 +56,7 @@ EStatusCode InputFile::OpenFile(const std::string &inFilePath)
     return status;
 }
 
-EStatusCode InputFile::CloseFile()
+charta::EStatusCode charta::InputFile::CloseFile()
 {
     if (nullptr == mInputStream)
     {
@@ -71,17 +70,17 @@ EStatusCode InputFile::CloseFile()
     return status;
 }
 
-IByteReaderWithPosition *InputFile::GetInputStream()
+charta::IByteReaderWithPosition *charta::InputFile::GetInputStream()
 {
     return mInputStream.get();
 }
 
-const std::string &InputFile::GetFilePath()
+const std::string &charta::InputFile::GetFilePath()
 {
     return mFilePath;
 }
 
-long long InputFile::GetFileSize()
+long long charta::InputFile::GetFileSize()
 {
     if (mInputStream != nullptr)
     {

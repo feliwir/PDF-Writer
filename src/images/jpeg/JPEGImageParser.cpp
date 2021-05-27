@@ -57,7 +57,8 @@ const uint32_t scAPP1xResolutionTagID = 0x011a;
 const uint32_t scAPP1yResolutionTagID = 0x011b;
 const uint32_t scAPP1ResolutionUnitTagID = 0x0128;
 
-EStatusCode JPEGImageParser::Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation)
+EStatusCode JPEGImageParser::Parse(charta::IByteReaderWithPosition *inImageStream,
+                                   JPEGImageInformation &outImageInformation)
 {
     EStatusCode status = charta::eFailure;
     uint32_t tagID;

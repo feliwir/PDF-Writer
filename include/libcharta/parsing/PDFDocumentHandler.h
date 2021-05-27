@@ -35,7 +35,10 @@
 #include <set>
 
 class ObjectsContext;
+namespace charta
+{
 class IByteWriter;
+}
 class PDFDictionary;
 class PDFArray;
 class PDFStreamInput;
@@ -54,7 +57,6 @@ namespace charta
 class DocumentContext;
 }
 
-using namespace charta;
 typedef std::map<ObjectIDType, ObjectIDType> ObjectIDTypeToObjectIDTypeMap;
 typedef std::map<std::string, std::string> StringToStringMap;
 typedef std::set<ObjectIDType> ObjectIDTypeSet;
@@ -131,7 +133,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
         const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs);
 
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(
-        IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+        charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
         const PDFPageRange &inPageRange, EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
         const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs);
 
@@ -141,7 +143,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
         const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs);
 
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(
-        IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+        charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
         const PDFPageRange &inPageRange, const PDFRectangle &inCropBox, const double *inTransformationMatrix,
         const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs);
 
@@ -151,7 +153,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                          const PDFPageRange &inPageRange,
                                                          const ObjectIDTypeList &inCopyAdditionalObjects);
 
-    EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDF(IByteReaderWithPosition *inPDFStream,
+    EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                          const PDFParsingOptions &inParsingOptions,
                                                          const PDFPageRange &inPageRange,
                                                          const ObjectIDTypeList &inCopyAdditionalObjects);
@@ -162,7 +164,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                             const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
                                             const ObjectIDTypeList &inCopyAdditionalObjects);
 
-    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream,
                                             const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
                                             const ObjectIDTypeList &inCopyAdditionalObjects);
 
@@ -178,7 +180,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
 
     // copying context handling
     charta::EStatusCode StartFileCopyingContext(const std::string &inPDFFilePath, const PDFParsingOptions &inOptions);
-    charta::EStatusCode StartStreamCopyingContext(IByteReaderWithPosition *inPDFStream,
+    charta::EStatusCode StartStreamCopyingContext(charta::IByteReaderWithPosition *inPDFStream,
                                                   const PDFParsingOptions &inOptions);
     charta::EStatusCode StartParserCopyingContext(PDFParser *inPDFParser);
     EStatusCodeAndObjectIDType CreateFormXObjectFromPDFPage(unsigned long inPageIndex,
@@ -200,7 +202,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
     void StopCopyingContext();
     void ReplaceSourceObjects(const ObjectIDTypeToObjectIDTypeMap &inSourceObjectsToNewTargetObjects);
-    IByteReaderWithPosition *GetSourceDocumentStream();
+    charta::IByteReaderWithPosition *GetSourceDocumentStream();
 
     // Internal implementation. do not use directly
     PDFFormXObject *CreatePDFFormXObjectForPage(unsigned long inPageIndex, EPDFPageBox inPageBoxToUseAsFormBox,
@@ -219,17 +221,17 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::DocumentContext *mDocumentContext;
     IDocumentContextExtenderSet mExtenders;
 
-    InputFile mPDFFile;
-    IByteReaderWithPosition *mPDFStream;
+    charta::InputFile mPDFFile;
+    charta::IByteReaderWithPosition *mPDFStream;
     PDFParser *mParser;
     bool mParserOwned;
     ObjectIDTypeToObjectIDTypeMap mSourceToTarget;
     std::shared_ptr<PDFDictionary> mWrittenPage;
 
     PDFRectangle DeterminePageBox(const std::shared_ptr<PDFDictionary> &inDictionary, EPDFPageBox inPageBoxType);
-    charta::EStatusCode WritePageContentToSingleStream(IByteWriter *inTargetStream,
+    charta::EStatusCode WritePageContentToSingleStream(charta::IByteWriter *inTargetStream,
                                                        std::shared_ptr<PDFDictionary> inPageObject);
-    charta::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+    charta::EStatusCode WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
                                                     const std::shared_ptr<PDFStreamInput> &inSourceStream);
     charta::EStatusCode CopyResourcesIndirectObjects(std::shared_ptr<PDFDictionary> inPage);
     void RegisterInDirectObjects(const std::shared_ptr<PDFDictionary> &inDictionary, ObjectIDTypeList &outNewObjects);
@@ -276,13 +278,13 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
                                                             const std::shared_ptr<PDFStreamInput> &inContentSource,
                                                             const StringToStringMap &inMappedResourcesNames);
-    charta::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+    charta::EStatusCode WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
                                                     const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                     const StringToStringMap &inMappedResourcesNames);
     charta::EStatusCode ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                      const StringToStringMap &inMappedResourcesNames,
                                                      ResourceTokenMarkerList &outResourceMarkers);
-    charta::EStatusCode MergeAndReplaceResourcesTokens(IByteWriter *inTargetStream,
+    charta::EStatusCode MergeAndReplaceResourcesTokens(charta::IByteWriter *inTargetStream,
                                                        const std::shared_ptr<PDFStreamInput> &inSourceStream,
                                                        const StringToStringMap &inMappedResourcesNames,
                                                        const ResourceTokenMarkerList &inResourceMarkers);
@@ -292,7 +294,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                                       const double *inTransformationMatrix,
                                                                       const ObjectIDTypeList &inCopyAdditionalObjects,
                                                                       const ObjectIDTypeList &inPredefinedFormIDs);
-    EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(IByteReaderWithPosition *inPDFStream,
+    EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(charta::IByteReaderWithPosition *inPDFStream,
                                                              const PDFParsingOptions &inParsingOptions,
                                                              const PDFPageRange &inPageRange,
                                                              IPageEmbedInFormCommand *inPageEmbedCommand,
@@ -303,12 +305,13 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                                   const ObjectIDTypeList &inCopyAdditionalObjects);
     charta::EStatusCode MergePDFPagesToPageInContext(PDFPage &inPage, const PDFPageRange &inPageRange,
                                                      const ObjectIDTypeList &inCopyAdditionalObjects);
-    charta::EStatusCode StartCopyingContext(IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions);
+    charta::EStatusCode StartCopyingContext(charta::IByteReaderWithPosition *inPDFStream,
+                                            const PDFParsingOptions &inOptions);
     charta::EStatusCode StartCopyingContext(PDFParser *inPDFParser);
-    EStatusCode MergePDFPageForXObject(PDFFormXObject *inTargetFormXObject, unsigned long inSourcePageIndex);
-    EStatusCode RegisterResourcesForForm(PDFFormXObject *inTargetFormXObject,
-                                         const std::shared_ptr<PDFDictionary> &inPageObject,
-                                         StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode MergePDFPageForXObject(PDFFormXObject *inTargetFormXObject, unsigned long inSourcePageIndex);
+    charta::EStatusCode RegisterResourcesForForm(PDFFormXObject *inTargetFormXObject,
+                                                 const std::shared_ptr<PDFDictionary> &inPageObject,
+                                                 StringToStringMap &inMappedResourcesNames);
 
     std::string AsEncodedName(const std::string &inName);
     void RegisterResourcesForResourcesCategory(PDFFormXObject *inTargetFormXObject, ICategoryServicesCommand *inCommand,

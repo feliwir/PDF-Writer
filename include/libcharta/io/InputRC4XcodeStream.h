@@ -24,7 +24,9 @@
 
 #include <list>
 
-typedef std::list<uint8_t> ByteList;
+namespace charta
+{
+using ByteList = std::list<uint8_t>;
 
 class InputRC4XcodeStream final : public IByteReader
 {
@@ -50,3 +52,4 @@ class InputRC4XcodeStream final : public IByteReader
     IByteReader *mSourceStream;
     RC4 mRC4;
 };
+} // namespace charta

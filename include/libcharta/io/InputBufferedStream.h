@@ -25,6 +25,8 @@
 #include <memory>
 #include <vector>
 
+namespace charta
+{
 constexpr size_t DEFAULT_INPUT_BUFFER_SIZE = 256 * 1024;
 
 class InputBufferedStream final : public IByteReaderWithPosition
@@ -61,7 +63,7 @@ class InputBufferedStream final : public IByteReaderWithPosition
     virtual void SetPositionFromEnd(long long inOffsetFromEnd);
     virtual long long GetCurrentPosition();
 
-    IByteReaderWithPosition *GetSourceStream();
+    charta::IByteReaderWithPosition *GetSourceStream();
 
   private:
     std::vector<uint8_t> mBuffer;
@@ -71,3 +73,4 @@ class InputBufferedStream final : public IByteReaderWithPosition
 
     void Initiate(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize);
 };
+} // namespace charta

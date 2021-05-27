@@ -532,7 +532,7 @@ void CFFFileInput::Reset()
     FreeData();
 }
 
-EStatusCode CFFFileInput::ReadCFFFile(IByteReaderWithPosition *inCFFFile)
+EStatusCode CFFFileInput::ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile)
 {
     EStatusCode status;
 
@@ -1648,8 +1648,8 @@ long long CFFFileInput::GetFDSelectPosition(uint16_t inFontIndex)
     return GetSingleIntegerValue(inFontIndex, scFDSelect, 0);
 }
 
-EStatusCode CFFFileInput::ReadCFFFileByIndexOrName(IByteReaderWithPosition *inCFFFile, const std::string &inFontName,
-                                                   uint16_t inFontIndex)
+EStatusCode CFFFileInput::ReadCFFFileByIndexOrName(charta::IByteReaderWithPosition *inCFFFile,
+                                                   const std::string &inFontName, uint16_t inFontIndex)
 {
     // read either by font name or index. read by font name if not empty, otherwise by index
     EStatusCode status;
@@ -1916,12 +1916,12 @@ EStatusCode CFFFileInput::ReadCIDInformation(uint16_t inFontIndex)
     return status;
 }
 
-EStatusCode CFFFileInput::ReadCFFFile(IByteReaderWithPosition *inCFFFile, uint16_t inFontIndex)
+EStatusCode CFFFileInput::ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile, uint16_t inFontIndex)
 {
     return ReadCFFFileByIndexOrName(inCFFFile, "", inFontIndex);
 }
 
-EStatusCode CFFFileInput::ReadCFFFile(IByteReaderWithPosition *inCFFFile, const std::string &inFontName)
+EStatusCode CFFFileInput::ReadCFFFile(charta::IByteReaderWithPosition *inCFFFile, const std::string &inFontName)
 {
     return ReadCFFFileByIndexOrName(inCFFFile, inFontName, 0);
 }

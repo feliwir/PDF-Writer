@@ -25,7 +25,10 @@
 #include "PrimitiveObjectsWriter.h"
 
 class CFFFileInput;
+namespace charta
+{
 class IByteWriter;
+}
 
 class CharStringType2Tracer : public IType2InterpreterImplementation
 {
@@ -34,7 +37,7 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     ~CharStringType2Tracer(void) = default;
 
     charta::EStatusCode TraceGlyphProgram(uint16_t inFontIndex, uint16_t inGlyphIndex, CFFFileInput *inCFFFileInput,
-                                          IByteWriter *inWriter);
+                                          charta::IByteWriter *inWriter);
 
     // IType2InterpreterImplementation implementation
     virtual charta::EStatusCode ReadCharString(long long inCharStringStart, long long inCharStringEnd,
@@ -89,7 +92,7 @@ class CharStringType2Tracer : public IType2InterpreterImplementation
     virtual CharString *GetGlobalSubr(long inSubrIndex);
 
   private:
-    IByteWriter *mWriter;
+    charta::IByteWriter *mWriter;
     CFFFileInput *mHelper;
     PrimitiveObjectsWriter mPrimitiveWriter;
     uint16_t mStemsCount;

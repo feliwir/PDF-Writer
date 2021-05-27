@@ -26,10 +26,10 @@
 class CFFPrimitiveReader
 {
   public:
-    CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile = NULL);
+    CFFPrimitiveReader(charta::IByteReaderWithPosition *inCFFFile = NULL);
     ~CFFPrimitiveReader(void) = default;
 
-    void SetStream(IByteReaderWithPosition *inCFFFile);
+    void SetStream(charta::IByteReaderWithPosition *inCFFFile);
     void SetOffset(long long inNewOffset);
     void Skip(size_t inToSkip);
     long long GetCurrentPosition();
@@ -53,7 +53,7 @@ class CFFPrimitiveReader
     charta::EStatusCode ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand);
 
   private:
-    IByteReaderWithPosition *mCFFFile;
+    charta::IByteReaderWithPosition *mCFFFile;
     long long mInitialPosition;
     charta::EStatusCode mInternalState;
     uint8_t mCurrentOffsize;

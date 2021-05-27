@@ -22,6 +22,8 @@
 
 #include "IByteReader.h"
 
+namespace charta
+{
 class InputLimitedStream final : public IByteReader
 {
   public:
@@ -42,3 +44,4 @@ class InputLimitedStream final : public IByteReader
     IByteReader *mStream;
     long long mMoreToRead;
 };
+} // namespace charta

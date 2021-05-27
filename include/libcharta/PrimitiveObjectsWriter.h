@@ -24,15 +24,18 @@
 #include <string.h>
 #include <string>
 
+namespace charta
+{
 class IByteWriter;
+}
 
 class PrimitiveObjectsWriter
 {
   public:
-    PrimitiveObjectsWriter(IByteWriter *inStreamForWriting = NULL);
+    PrimitiveObjectsWriter(charta::IByteWriter *inStreamForWriting = NULL);
     ~PrimitiveObjectsWriter(void) = default;
 
-    void SetStreamForWriting(IByteWriter *inStreamForWriting);
+    void SetStreamForWriting(charta::IByteWriter *inStreamForWriting);
 
     // Token Writing
     void WriteTokenSeparator(ETokenSeparator inSeparate);
@@ -52,10 +55,10 @@ class PrimitiveObjectsWriter
     void StartArray();
     void EndArray(ETokenSeparator inSeparate = eTokenSepratorNone);
 
-    IByteWriter *GetWritingStream();
+    charta::IByteWriter *GetWritingStream();
 
   private:
-    IByteWriter *mStreamForWriting;
+    charta::IByteWriter *mStreamForWriting;
 
     size_t DetermineDoubleTrimmedLength(const std::string &inString);
 };
