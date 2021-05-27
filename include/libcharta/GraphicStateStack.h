@@ -36,7 +36,7 @@ class GraphicStateStack
     void Push();
 
     // pop one level. following a "grestore" command. returns error if stack is underflow.
-    PDFHummus::EStatusCode Pop();
+    charta::EStatusCode Pop();
 
     GraphicState &GetCurrentState();
 

@@ -25,7 +25,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, EmptyPagesPDF)
 {
@@ -35,17 +35,17 @@ TEST(PDF, EmptyPagesPDF)
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "EmptyPages.pdf"), ePDFVersion13,
                                 logConfiguration);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
-    for (int i = 0; i < 4 && PDFHummus::eSuccess == status; ++i)
+    for (int i = 0; i < 4 && charta::eSuccess == status; ++i)
     {
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

@@ -41,7 +41,7 @@ class DecryptionHelper
     /*
         Setup will fail for case of bad password, for decryption that can be handled.
     */
-    PDFHummus::EStatusCode Setup(PDFParser *inParser, const std::string &inPassword);
+    charta::EStatusCode Setup(PDFParser *inParser, const std::string &inPassword);
 
     /*
         Queries.

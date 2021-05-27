@@ -24,7 +24,7 @@
 
 class PDFFormXObject;
 class ObjectsContext;
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,6 +36,6 @@ class IFormEndWritingTask
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFFormXObject *inFormXObject, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext) = 0;
+    virtual charta::EStatusCode Write(PDFFormXObject *inFormXObject, ObjectsContext *inObjectsContext,
+                                      charta::DocumentContext *inDocumentContext) = 0;
 };

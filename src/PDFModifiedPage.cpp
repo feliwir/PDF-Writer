@@ -73,13 +73,13 @@ AbstractContentContext *PDFModifiedPage::StartContentContext()
     return mCurrentContext->GetContentContext();
 }
 
-PDFHummus::EStatusCode PDFModifiedPage::PauseContentContext()
+charta::EStatusCode PDFModifiedPage::PauseContentContext()
 {
     // does the same
     return EndContentContext();
 }
 
-PDFHummus::EStatusCode PDFModifiedPage::EndContentContext()
+charta::EStatusCode PDFModifiedPage::EndContentContext()
 {
     if (mCurrentContext != nullptr)
     {
@@ -98,8 +98,8 @@ AbstractContentContext *PDFModifiedPage::GetContentContext()
     return mCurrentContext != nullptr ? mCurrentContext->GetContentContext() : nullptr;
 }
 
-PDFHummus::EStatusCode PDFModifiedPage::AttachURLLinktoCurrentPage(const std::string &inURL,
-                                                                   const PDFRectangle &inLinkClickArea)
+charta::EStatusCode PDFModifiedPage::AttachURLLinktoCurrentPage(const std::string &inURL,
+                                                                const PDFRectangle &inLinkClickArea)
 {
     mIsDirty = true;
     return mWriter->GetDocumentContext().AttachURLLinktoCurrentPage(inURL, inLinkClickArea);
@@ -143,7 +143,7 @@ std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(PDFParser *in
     return findInheritedResources(inParser, parentDict);
 }
 
-PDFHummus::EStatusCode PDFModifiedPage::WritePage()
+charta::EStatusCode PDFModifiedPage::WritePage()
 {
     EStatusCode status = EndContentContext(); // just in case someone forgot to close the latest content context
 

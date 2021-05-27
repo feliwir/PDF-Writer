@@ -27,7 +27,7 @@
 #include "text/type1/CharStringType1Interpreter.h"
 #include <sstream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 Type1Input::Type1Input()
 {
@@ -104,7 +104,7 @@ void Type1Input::Reset()
 
 EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     BoolAndString token;
 
     Reset();
@@ -112,11 +112,11 @@ EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
     do
     {
         status = mPFBDecoder.Assign(inType1);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // the fun about pfb decoding is that it's pretty much token based...so let's do some tokening
-        while (mPFBDecoder.NotEnded() && PDFHummus::eSuccess == status)
+        while (mPFBDecoder.NotEnded() && charta::eSuccess == status)
         {
             token = mPFBDecoder.GetNextToken();
             status = mPFBDecoder.GetInternalState();
@@ -134,7 +134,7 @@ EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
             if (token.second.compare("begin") == 0)
             {
                 status = ReadFontDictionary();
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                     break;
             }
 
@@ -144,7 +144,7 @@ EStatusCode Type1Input::ReadType1File(IByteReaderWithPosition *inType1)
             if (token.second.compare("/Private") == 0)
             {
                 status = ReadPrivateDictionary();
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                     break;
             }
         }
@@ -166,10 +166,10 @@ bool Type1Input::IsComment(const std::string &inToken)
 
 EStatusCode Type1Input::ReadFontDictionary()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     BoolAndString token;
 
-    while (mPFBDecoder.NotEnded() && PDFHummus::eSuccess == status)
+    while (mPFBDecoder.NotEnded() && charta::eSuccess == status)
     {
         token = mPFBDecoder.GetNextToken();
         status = mPFBDecoder.GetInternalState();
@@ -231,7 +231,7 @@ EStatusCode Type1Input::ReadFontDictionary()
         if (token.second.compare("/Encoding") == 0)
         {
             status = ParseEncoding();
-            if (PDFHummus::eSuccess == status)
+            if (charta::eSuccess == status)
                 CalculateReverseEncoding();
             continue;
         }
@@ -247,7 +247,7 @@ EStatusCode Type1Input::ReadFontDictionary()
 
 EStatusCode Type1Input::ReadFontInfoDictionary()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     BoolAndString token;
 
     // initialize some values to defaults
@@ -255,7 +255,7 @@ EStatusCode Type1Input::ReadFontInfoDictionary()
     mFontInfoDictionary.UnderlinePosition = 0.0;
     mFontInfoDictionary.UnderlineThickness = 0.0;
 
-    while (mPFBDecoder.NotEnded() && PDFHummus::eSuccess == status)
+    while (mPFBDecoder.NotEnded() && charta::eSuccess == status)
     {
         token = mPFBDecoder.GetNextToken();
         status = mPFBDecoder.GetInternalState();
@@ -337,24 +337,24 @@ std::string Type1Input::FromPSName(const std::string &inPostScriptName)
 
 EStatusCode Type1Input::ParseDoubleArray(double *inArray, int inArraySize)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     // skip the [ or {
     BoolAndString token = mPFBDecoder.GetNextToken();
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
-    for (int i = 0; i < inArraySize && PDFHummus::eSuccess == status; ++i)
+    for (int i = 0; i < inArraySize && charta::eSuccess == status; ++i)
     {
         token = mPFBDecoder.GetNextToken();
-        status = token.first ? PDFHummus::eSuccess : PDFHummus::eFailure;
+        status = token.first ? charta::eSuccess : charta::eFailure;
         inArray[i] = Double(token.second);
     }
 
     // skip the last ] or }
     token = mPFBDecoder.GetNextToken();
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     return status;
 }
@@ -362,11 +362,11 @@ EStatusCode Type1Input::ParseDoubleArray(double *inArray, int inArraySize)
 EStatusCode Type1Input::ParseEncoding()
 {
     BoolAndString token = mPFBDecoder.GetNextToken();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     int encodingIndex = 0;
 
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // checking for standard encoding
     if (token.second.compare("StandardEncoding") == 0)
@@ -376,8 +376,8 @@ EStatusCode Type1Input::ParseEncoding()
         // skip the def
         BoolAndString token = mPFBDecoder.GetNextToken();
         if (!token.first)
-            return PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
+            return charta::eFailure;
+        return charta::eSuccess;
     }
 
     // not standard encoding, parse custom encoding
@@ -391,7 +391,7 @@ EStatusCode Type1Input::ParseEncoding()
             break;
     }
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // k. now parse the repeats of "dup index charactername put"
     // till the first occurence of "readonly" or "def".
@@ -407,7 +407,7 @@ EStatusCode Type1Input::ParseEncoding()
         encodingIndex = Int(token.second);
         if (encodingIndex < 0 || encodingIndex > 255)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -425,8 +425,8 @@ EStatusCode Type1Input::ParseEncoding()
         // get next row first token [dup or end]
         token = mPFBDecoder.GetNextToken();
     }
-    if (!token.first || status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (!token.first || status != charta::eSuccess)
+        return charta::eFailure;
 
     return status;
 }
@@ -467,11 +467,11 @@ void Type1Input::CalculateReverseEncoding()
 EStatusCode Type1Input::ReadPrivateDictionary()
 {
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     bool readCharString = false; // don't leave before you read CharStrings. so i'm having a little flag
     BoolAndString token;
 
-    while (mPFBDecoder.NotEnded() && PDFHummus::eSuccess == status)
+    while (mPFBDecoder.NotEnded() && charta::eSuccess == status)
     {
         token = mPFBDecoder.GetNextToken();
         status = mPFBDecoder.GetInternalState();
@@ -592,7 +592,7 @@ EStatusCode Type1Input::ParseIntVector(std::vector<int> &inVector)
     // skip the [ or {
     BoolAndString token = mPFBDecoder.GetNextToken();
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     while (token.first)
     {
@@ -602,7 +602,7 @@ EStatusCode Type1Input::ParseIntVector(std::vector<int> &inVector)
 
         inVector.push_back(Int(token.second));
     }
-    return token.first ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    return token.first ? charta::eSuccess : charta::eFailure;
 }
 
 EStatusCode Type1Input::ParseDoubleVector(std::vector<double> &inVector)
@@ -610,7 +610,7 @@ EStatusCode Type1Input::ParseDoubleVector(std::vector<double> &inVector)
     // skip the [ or {
     BoolAndString token = mPFBDecoder.GetNextToken();
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     while (token.first)
     {
@@ -620,7 +620,7 @@ EStatusCode Type1Input::ParseDoubleVector(std::vector<double> &inVector)
 
         inVector.push_back(Double(token.second));
     }
-    return token.first ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    return token.first ? charta::eSuccess : charta::eFailure;
 }
 
 EStatusCode Type1Input::ParseSubrs()
@@ -630,13 +630,13 @@ EStatusCode Type1Input::ParseSubrs()
     // get the subrs count
     BoolAndString token = mPFBDecoder.GetNextToken();
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     mSubrsCount = Long(token.second);
     if (mSubrsCount == 0)
     {
         mSubrs = nullptr;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
     mSubrs = new Type1CharString[mSubrsCount];
 
@@ -651,7 +651,7 @@ EStatusCode Type1Input::ParseSubrs()
             break;
     }
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     for (long i = 0; i < mSubrsCount && token.first; ++i)
     {
@@ -688,7 +688,7 @@ EStatusCode Type1Input::ParseSubrs()
         }
     }
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     return mPFBDecoder.GetInternalState();
 }
@@ -707,11 +707,11 @@ EStatusCode Type1Input::ParseCharstrings()
             break;
     }
     if (!token.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Charstrings look like this:
     // charactername nbytes RD ~n~binary~bytes~ ND
-    while (token.first && mPFBDecoder.GetInternalState() == PDFHummus::eSuccess)
+    while (token.first && mPFBDecoder.GetInternalState() == charta::eSuccess)
     {
         token = mPFBDecoder.GetNextToken();
 
@@ -779,7 +779,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(uint8_t inCharStringIn
     if (charString == nullptr)
     {
         TRACE_LOG("Type1Input::CalculateDependenciesForCharIndex, Exception, cannot find glyph index");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mCurrentDependencies = &ioDependenciesInfo;
@@ -797,7 +797,7 @@ EStatusCode Type1Input::CalculateDependenciesForCharIndex(const std::string &inC
     if (it == mCharStrings.end())
     {
         TRACE_LOG("Type1Input::CalculateDependenciesForCharIndex, Exception, cannot find glyph from name");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mCurrentDependencies = &ioDependenciesInfo;
@@ -827,7 +827,7 @@ EStatusCode Type1Input::Type1Seac(const LongList &inOperandList)
     mCurrentDependencies->mCharCodes.insert((uint8_t)*it);
     ++it;
     mCurrentDependencies->mCharCodes.insert((uint8_t)*it);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 bool Type1Input::IsOtherSubrSupported(long inOtherSubrsIndex)

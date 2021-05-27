@@ -79,9 +79,9 @@ class MD5Generator
     MD5Generator(void);
     ~MD5Generator(void);
 
-    PDFHummus::EStatusCode Accumulate(const std::string &inString);
-    PDFHummus::EStatusCode Accumulate(const ByteList &inString);
-    PDFHummus::EStatusCode Accumulate(const uint8_t *inArray, size_t inLength);
+    charta::EStatusCode Accumulate(const std::string &inString);
+    charta::EStatusCode Accumulate(const ByteList &inString);
+    charta::EStatusCode Accumulate(const uint8_t *inArray, size_t inLength);
 
     const ByteList &ToString();
     const std::string &ToStringAsString();

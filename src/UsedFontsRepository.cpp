@@ -39,7 +39,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 UsedFontsRepository::UsedFontsRepository()
 {
@@ -119,9 +119,9 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
 EStatusCode UsedFontsRepository::WriteUsedFontsDefinitions()
 {
     auto it = mUsedFonts.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (; it != mUsedFonts.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mUsedFonts.end() && charta::eSuccess == status; ++it)
         status = it->second != nullptr ? it->second->WriteFontDefinition() : eFailure;
 
     return status;
@@ -135,7 +135,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     ObjectIDTypeList usedFontsObjects;
 
     inStateWriter->StartNewIndirectObject(inObjectID);
@@ -189,7 +189,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
         it = mUsedFonts.begin();
         auto itIDs = usedFontsObjects.begin();
 
-        for (; it != mUsedFonts.end() && PDFHummus::eSuccess == status; ++it, ++itIDs)
+        for (; it != mUsedFonts.end() && charta::eSuccess == status; ++it, ++itIDs)
             status = it->second->WriteState(inStateWriter, *itIDs);
     }
 
@@ -198,7 +198,7 @@ EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, Objec
 
 EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     // clear current state
     auto itUsedFonts = mUsedFonts.begin();
@@ -243,7 +243,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
     if (mInputFontsInformation == nullptr)
         mInputFontsInformation = new FreeTypeWrapper();
 
-    while (it.MoveNext() && PDFHummus::eSuccess == status)
+    while (it.MoveNext() && charta::eSuccess == status)
     {
         keyStringItem = it.GetItem();
         it.MoveNext();
@@ -262,7 +262,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
         {
             TRACE_LOG2("UsedFontsRepository::ReadState, Failed to load font from %s at index %ld", filePath.c_str(),
                        fontIndex);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -280,7 +280,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
                        filePath.c_str(), fontIndex);
             delete usedFont;
             usedFont = nullptr;
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 

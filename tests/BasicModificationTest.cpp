@@ -31,7 +31,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
 {
@@ -45,19 +45,19 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
         LogConfiguration(true, true,
                          RelativeURLToLocalPath(PDFWRITE_BINARY_PATH,
                                                 std::string("Modified") + inSourceFileName + std::string(".log"))));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (nullptr == contentContext)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/couri.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -68,18 +68,18 @@ EStatusCode TestBasicFileModification(const std::string &inSourceFileName)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("about");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         std::cout << "Could not find some of the glyphs for this font";
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -95,19 +95,19 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
 
         status = sourceFile.OpenFile(RelativeURLToLocalPath(
             PDFWRITE_SOURCE_PATH, std::string("data/") + inSourceFileName + std::string(".pdf")));
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         OutputFile targetFile;
 
         status = targetFile.OpenFile(RelativeURLToLocalPath(
             PDFWRITE_BINARY_PATH, std::string("InPlaceModified") + inSourceFileName + std::string(".pdf")));
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         OutputStreamTraits traits(targetFile.GetOutputStream());
         status = traits.CopyToOutputStream(sourceFile.GetInputStream());
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         sourceFile.CloseFile();
@@ -123,19 +123,19 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
         LogConfiguration(true, true,
                          RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, std::string("InPlaceModified") +
                                                                           inSourceFileName + std::string(".log"))));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/couri.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -146,18 +146,18 @@ EStatusCode TestInPlaceFileModification(const std::string &inSourceFileName)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("about");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         std::cout << "Could not find some of the glyphs for this font";
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.EndPDF();

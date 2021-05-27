@@ -36,7 +36,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 ObjectsContext::ObjectsContext()
 {
@@ -155,7 +155,7 @@ static const uint8_t scXref[] = {'x', 'r', 'e', 'f'};
 
 EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     outWritePosition = mOutputStream->GetCurrentPosition();
 
     // write xref keyword
@@ -167,7 +167,7 @@ EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
     ObjectIDType nextFreeObject = 0;
 
     // write subsections
-    while ((startID < mReferencesRegistry.GetObjectsCount()) && (PDFHummus::eSuccess == status))
+    while ((startID < mReferencesRegistry.GetObjectsCount()) && (charta::eSuccess == status))
     {
         firstIDNotInRange = startID;
 
@@ -183,7 +183,7 @@ EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
         // write used/free objects
         char entryBuffer[21];
 
-        for (ObjectIDType i = startID; i < firstIDNotInRange && (PDFHummus::eSuccess == status); ++i)
+        for (ObjectIDType i = startID; i < firstIDNotInRange && (charta::eSuccess == status); ++i)
         {
             const ObjectWriteInformation &objectReference = mReferencesRegistry.GetNthObjectReference(i);
             if (objectReference.mObjectReferenceType == ObjectWriteInformation::Used)
@@ -199,7 +199,7 @@ EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
                 else
                 {
                     // object not written. at this point this should not happen, and indicates a failure
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     TRACE_LOG1("ObjectsContext::WriteXrefTable, Unexpected Failure. Object of ID = %ld was not "
                                "registered as written. probably means it was not written",
                                i);
@@ -227,7 +227,7 @@ EStatusCode ObjectsContext::WriteXrefTable(long long &outWritePosition)
             }
         }
 
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         startID = firstIDNotInRange;
@@ -257,17 +257,17 @@ EStatusCode ObjectsContext::EndDictionary(DictionaryContext *ObjectsContext)
         {
             delete mDictionaryStack.back();
             mDictionaryStack.pop_back();
-            return PDFHummus::eSuccess;
+            return charta::eSuccess;
         }
 
         TRACE_LOG("ObjectsContext::EndDictionary, nesting violation. Trying to close a dictionary while one of "
                   "it's children is still open. First End the children");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     TRACE_LOG("ObjectsContext::EndDictionary, stack underflow. Trying to end a dictionary when there's no open "
               "dictionaries");
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 IndirectObjectsReferenceRegistry &ObjectsContext::GetInDirectObjectsRegistry()
@@ -557,7 +557,7 @@ EStatusCode ObjectsContext::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
         inStateWriter->EndIndirectObject();
 
         status = mReferencesRegistry.WriteState(inStateWriter, referencesRegistryObjectID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // write subset fonts names sequance
@@ -693,7 +693,7 @@ EStatusCode ObjectsContext::WriteXrefStream(DictionaryContext *inDictionaryConte
                 else
                 {
                     // object not written. at this point this should not happen, and indicates a failure
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     TRACE_LOG1("ObjectsContext::WriteXrefStream, Unexpected Failure. Object of ID = %ld was not "
                                "registered as written. probably means it was not written",
                                i);

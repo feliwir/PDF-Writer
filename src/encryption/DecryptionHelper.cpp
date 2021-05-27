@@ -40,7 +40,7 @@ limitations under the License.
 #include <utility>
 
 using namespace std;
-using namespace PDFHummus;
+using namespace charta;
 
 DecryptionHelper::DecryptionHelper()
 {

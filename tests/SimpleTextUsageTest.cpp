@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode RunCFFTest(bool inEmbedFonts)
 {
@@ -40,20 +40,20 @@ EStatusCode RunCFFTest(bool inEmbedFonts)
         ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleTextUsage.log")),
         PDFCreationSettings(true, inEmbedFonts));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFUsedFont *font =
         pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/BrushScriptStd.otf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -64,7 +64,7 @@ EStatusCode RunCFFTest(bool inEmbedFonts)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("abcd");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         return encodingStatus;
 
     // continue even if failed...want to see how it looks like
@@ -77,25 +77,25 @@ EStatusCode RunCFFTest(bool inEmbedFonts)
     PDFUsedFont *fontK =
         pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/KozGoPro-Regular.otf"));
     if (fontK == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     contentContext->Tf(fontK, 1);
 
     contentContext->Tm(30, 0, 0, 30, 78.4252, 400.8997);
 
     encodingStatus = contentContext->Tj("abcd");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         return encodingStatus;
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -112,19 +112,19 @@ EStatusCode RunTrueTypeTest(bool inEmbedFonts)
         ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleTextUsage.log")),
         PDFCreationSettings(true, inEmbedFonts));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -135,18 +135,18 @@ EStatusCode RunTrueTypeTest(bool inEmbedFonts)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("hello world");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         return encodingStatus;
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -163,21 +163,21 @@ EStatusCode RunType1Test(bool inEmbedFonts)
         ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleTextUsage.log")),
         PDFCreationSettings(true, inEmbedFonts));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFUsedFont *font =
         pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFB"),
                                  RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFM"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -188,18 +188,18 @@ EStatusCode RunType1Test(bool inEmbedFonts)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("abcd \xC3\xA1"); // ending char is LATIN SMALL LETTER A WITH ACUTE
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         return encodingStatus;
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -217,21 +217,21 @@ EStatusCode RunNoTextTest(bool inEmbedFonts)
         ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleTextUsage.log")),
         PDFCreationSettings(true, inEmbedFonts));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     if (contentContext == nullptr)
-        status = PDFHummus::eFailure;
+        status = charta::eFailure;
 
     PDFUsedFont *font =
         pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFB"),
                                  RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFM"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // Draw some text
     contentContext->BT();
@@ -247,11 +247,11 @@ EStatusCode RunNoTextTest(bool inEmbedFonts)
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -264,26 +264,26 @@ TEST(PDF, SimpleTextUsage)
     // running two versions of the tests, one with font embedding, one without
 
     status = RunCFFTest(true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunCFFTest(false);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunTrueTypeTest(true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunTrueTypeTest(false);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunType1Test(true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunType1Test(false);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunNoTextTest(true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = RunNoTextTest(true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

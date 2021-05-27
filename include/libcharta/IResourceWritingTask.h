@@ -24,7 +24,7 @@
 
 class DictionaryContext;
 class ObjectsContext;
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,6 +36,6 @@ class IResourceWritingTask
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(DictionaryContext *inResoruceCategoryContext, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext) = 0;
+    virtual charta::EStatusCode Write(DictionaryContext *inResoruceCategoryContext, ObjectsContext *inObjectsContext,
+                                      charta::DocumentContext *inDocumentContext) = 0;
 };

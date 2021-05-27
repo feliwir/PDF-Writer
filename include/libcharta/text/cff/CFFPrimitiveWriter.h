@@ -31,38 +31,38 @@ class CFFPrimitiveWriter
 
     void SetStream(IByteWriter *inCFFOutput);
 
-    PDFHummus::EStatusCode GetInternalState();
+    charta::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode WriteByte(uint8_t inValue);
-    PDFHummus::EStatusCode Write(const uint8_t *inBuffer, size_t inBufferSize);
+    charta::EStatusCode WriteByte(uint8_t inValue);
+    charta::EStatusCode Write(const uint8_t *inBuffer, size_t inBufferSize);
 
     // basic CFF values
-    PDFHummus::EStatusCode WriteCard8(uint8_t inValue);
-    PDFHummus::EStatusCode WriteCard16(uint16_t inValue);
+    charta::EStatusCode WriteCard8(uint8_t inValue);
+    charta::EStatusCode WriteCard16(uint16_t inValue);
     // set offsize to write offsets
     void SetOffSize(uint8_t inOffSize);
-    PDFHummus::EStatusCode WriteOffset(unsigned long inValue);
-    PDFHummus::EStatusCode WriteOffSize(uint8_t inValue);
-    PDFHummus::EStatusCode WriteSID(uint16_t inValue);
+    charta::EStatusCode WriteOffset(unsigned long inValue);
+    charta::EStatusCode WriteOffSize(uint8_t inValue);
+    charta::EStatusCode WriteSID(uint16_t inValue);
 
     // dict data
-    PDFHummus::EStatusCode WriteDictOperator(uint16_t inOperator);
-    PDFHummus::EStatusCode WriteDictOperand(const DictOperand &inOperand);
-    PDFHummus::EStatusCode WriteDictItems(uint16_t inOperator, const DictOperandList &inOperands);
-    PDFHummus::EStatusCode WriteIntegerOperand(long inValue);
-    PDFHummus::EStatusCode Write5ByteDictInteger(long inValue);
-    PDFHummus::EStatusCode WriteRealOperand(double inValue, long inFractalLength = 10);
+    charta::EStatusCode WriteDictOperator(uint16_t inOperator);
+    charta::EStatusCode WriteDictOperand(const DictOperand &inOperand);
+    charta::EStatusCode WriteDictItems(uint16_t inOperator, const DictOperandList &inOperands);
+    charta::EStatusCode WriteIntegerOperand(long inValue);
+    charta::EStatusCode Write5ByteDictInteger(long inValue);
+    charta::EStatusCode WriteRealOperand(double inValue, long inFractalLength = 10);
 
-    PDFHummus::EStatusCode Pad5Bytes();
-    PDFHummus::EStatusCode PadNBytes(uint16_t inBytesToPad);
+    charta::EStatusCode Pad5Bytes();
+    charta::EStatusCode PadNBytes(uint16_t inBytesToPad);
 
   private:
     IByteWriter *mCFFOutput;
-    PDFHummus::EStatusCode mInternalState;
+    charta::EStatusCode mInternalState;
     uint8_t mCurrentOffsize;
 
-    PDFHummus::EStatusCode Write3ByteUnsigned(unsigned long inValue);
-    PDFHummus::EStatusCode Write4ByteUnsigned(unsigned long inValue);
-    PDFHummus::EStatusCode WriteIntegerOfReal(double inIntegerValue, uint8_t &ioBuffer, bool &ioUsedFirst);
-    PDFHummus::EStatusCode SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuffer, bool &ioUsedFirst);
+    charta::EStatusCode Write3ByteUnsigned(unsigned long inValue);
+    charta::EStatusCode Write4ByteUnsigned(unsigned long inValue);
+    charta::EStatusCode WriteIntegerOfReal(double inIntegerValue, uint8_t &ioBuffer, bool &ioUsedFirst);
+    charta::EStatusCode SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuffer, bool &ioUsedFirst);
 };

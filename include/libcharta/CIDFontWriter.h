@@ -42,9 +42,9 @@ class CIDFontWriter
     CIDFontWriter(void);
     virtual ~CIDFontWriter(void);
 
-    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
-                                     ObjectsContext *inObjectsContext, IDescendentFontWriter *inDescendentFontWriter,
-                                     bool inEmbedFont);
+    charta::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                  ObjectsContext *inObjectsContext, IDescendentFontWriter *inDescendentFontWriter,
+                                  bool inEmbedFont);
 
   private:
     FreeTypeFaceWrapper *mFontInfo;

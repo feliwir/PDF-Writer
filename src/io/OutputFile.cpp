@@ -23,7 +23,7 @@
 #include "io/OutputBufferedStream.h"
 #include "io/OutputFileStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 OutputFile::OutputFile()
 {
@@ -41,7 +41,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
     do
     {
         status = CloseFile();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG1("OutputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
                        mFilePath.c_str());
@@ -50,7 +50,7 @@ EStatusCode OutputFile::OpenFile(const std::string &inFilePath, bool inAppend)
 
         auto outputFileStream = std::make_unique<OutputFileStream>();
         status = outputFileStream->Open(inFilePath, inAppend); // explicitly open, so status may be retrieved
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG1("OutputFile::OpenFile, Unexpected Failure. Cannot open file for writing - %s",
                        inFilePath.c_str());
@@ -67,7 +67,7 @@ EStatusCode OutputFile::CloseFile()
 {
     if (nullptr == mOutputStream)
     {
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     mOutputStream->Flush();

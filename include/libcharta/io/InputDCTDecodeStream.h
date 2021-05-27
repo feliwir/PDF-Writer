@@ -59,7 +59,7 @@ class InputDCTDecodeStream final : public IByteReader
     bool mIsHeaderRead;
 
     void InitializeDecodingState();
-    PDFHummus::EStatusCode StartRead();
+    charta::EStatusCode StartRead();
     void FinalizeDecoding();
     uint8_t *CopySamplesArrayToBuffer(uint8_t *inBuffer, size_t inBufferSize);
 };

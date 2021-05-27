@@ -50,7 +50,7 @@ class FreeTypeWrapper
     FTFaceToFTStreamListMap mOpenStreams;
 
     FT_Stream CreateFTStreamForPath(const std::string &inFilePath);
-    PDFHummus::EStatusCode FillOpenFaceArgumentsForUTF8String(const std::string &inFilePath, FT_Open_Args &ioArgs);
+    charta::EStatusCode FillOpenFaceArgumentsForUTF8String(const std::string &inFilePath, FT_Open_Args &ioArgs);
     void CloseOpenFaceArgumentsStream(FT_Open_Args &ioArgs);
     void RegisterStreamForFace(FT_Face inFace, FT_Stream inStream);
     void CleanStreamsForFace(FT_Face inFace);

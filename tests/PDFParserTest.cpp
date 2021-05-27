@@ -35,7 +35,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 static const char *scIndirectStart = "Indirect object reference:\r\n";
 static const char *scParsedAlready = "was parsed already\r\n";
@@ -66,7 +66,7 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
             {
                 std::cout << "\nFailed to retreive object of ID ="
                           << std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID << "\n";
-                return PDFHummus::eFailure;
+                return charta::eFailure;
             }
             return IterateObjectTypes(pointedObject, inParser, inOutput);
         }
@@ -74,7 +74,7 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         for (int i = 0; i < mTabLevel; ++i)
             inOutput->Write((const uint8_t *)"  ", 2);
         inOutput->Write((const uint8_t *)scParsedAlready, strlen(scParsedAlready));
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
     if (inObject->GetType() == PDFObject::ePDFObjectArray)
     {
@@ -83,8 +83,8 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         PDFObjectCastPtr<PDFArray> anArray;
         anArray = inObject; // do assignment here, otherwise it's considered constructor...which won't addref
         SingleValueContainerIterator<PDFObjectVector> it = anArray->GetIterator();
-        EStatusCode status = PDFHummus::eSuccess;
-        while (it.MoveNext() && PDFHummus::eSuccess == status)
+        EStatusCode status = charta::eSuccess;
+        while (it.MoveNext() && charta::eSuccess == status)
             status = IterateObjectTypes(it.GetItem(), inParser, inOutput);
         --mTabLevel;
         return status;
@@ -97,11 +97,11 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         aDictionary = inObject; // do assignment here, otherwise it's considered constructor...which won't addref
         MapIterator<PDFNameToPDFObjectMap> it = aDictionary->GetIterator();
 
-        EStatusCode status = PDFHummus::eSuccess;
-        while (it.MoveNext() && PDFHummus::eSuccess == status)
+        EStatusCode status = charta::eSuccess;
+        while (it.MoveNext() && charta::eSuccess == status)
         {
             status = IterateObjectTypes(it.GetKey(), inParser, inOutput);
-            if (PDFHummus::eSuccess == status)
+            if (charta::eSuccess == status)
                 status = IterateObjectTypes(it.GetValue(), inParser, inOutput);
         }
         --mTabLevel;
@@ -116,13 +116,13 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
     else
     {
         primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 }
 
 TEST(PDFEmbedding, PDFParser)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     InputFile pdfFile;
     PDFParser parser;
     OutputFile outputFile;

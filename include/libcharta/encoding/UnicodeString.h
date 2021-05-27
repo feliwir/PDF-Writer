@@ -25,10 +25,10 @@
 #include <list>
 #include <string>
 
-typedef std::pair<PDFHummus::EStatusCode, std::string> EStatusCodeAndString;
+typedef std::pair<charta::EStatusCode, std::string> EStatusCodeAndString;
 typedef std::list<unsigned long> ULongList;
 typedef std::list<uint16_t> UShortList;
-typedef std::pair<PDFHummus::EStatusCode, UShortList> EStatusCodeAndUShortList;
+typedef std::pair<charta::EStatusCode, UShortList> EStatusCodeAndUShortList;
 
 class UnicodeString
 {
@@ -43,23 +43,23 @@ class UnicodeString
 
     bool operator==(const UnicodeString &inOtherString) const;
 
-    PDFHummus::EStatusCode FromUTF8(const std::string &inString);
+    charta::EStatusCode FromUTF8(const std::string &inString);
     EStatusCodeAndString ToUTF8() const;
 
     // convert from UTF16 string, requires BOM
-    PDFHummus::EStatusCode FromUTF16(const std::string &inString);
-    PDFHummus::EStatusCode FromUTF16(const unsigned char *inString, unsigned long inLength);
+    charta::EStatusCode FromUTF16(const std::string &inString);
+    charta::EStatusCode FromUTF16(const unsigned char *inString, unsigned long inLength);
 
     // convert from UTF16BE, do not include BOM
-    PDFHummus::EStatusCode FromUTF16BE(const std::string &inString);
-    PDFHummus::EStatusCode FromUTF16BE(const unsigned char *inString, unsigned long inLength);
+    charta::EStatusCode FromUTF16BE(const std::string &inString);
+    charta::EStatusCode FromUTF16BE(const unsigned char *inString, unsigned long inLength);
 
     // convert from UTF16LE do not include BOM
-    PDFHummus::EStatusCode FromUTF16LE(const std::string &inString);
-    PDFHummus::EStatusCode FromUTF16LE(const unsigned char *inString, unsigned long inLength);
+    charta::EStatusCode FromUTF16LE(const std::string &inString);
+    charta::EStatusCode FromUTF16LE(const unsigned char *inString, unsigned long inLength);
 
     // convert from unsigned shorts, does not require BOM, assuming that byte ordering is according to OS
-    PDFHummus::EStatusCode FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength);
+    charta::EStatusCode FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength);
 
     // convert to UTF16 BE
     EStatusCodeAndString ToUTF16BE(bool inPrependWithBom) const;

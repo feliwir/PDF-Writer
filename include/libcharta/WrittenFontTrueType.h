@@ -27,10 +27,10 @@ class WrittenFontTrueType : public AbstractWrittenFont
     WrittenFontTrueType(ObjectsContext *inObjectsContext);
     ~WrittenFontTrueType(void);
 
-    virtual PDFHummus::EStatusCode WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo, bool inEmbedFont);
+    virtual charta::EStatusCode WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo, bool inEmbedFont);
 
-    virtual PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectId);
-    virtual PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    virtual charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectId);
+    virtual charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
   private:
     virtual bool AddToANSIRepresentation(const GlyphUnicodeMappingList &inGlyphsList, UShortList &outEncodedCharacters);

@@ -45,8 +45,8 @@ class TrueTypeEmbeddedFontWriter
     TrueTypeEmbeddedFontWriter(void);
     ~TrueTypeEmbeddedFontWriter(void);
 
-    PDFHummus::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                             ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
+    charta::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                          ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
 
   private:
     OpenTypeFileInput mTrueTypeInput;
@@ -73,30 +73,30 @@ class TrueTypeEmbeddedFontWriter
 
     long long mHeadCheckSumOffset;
 
-    PDFHummus::EStatusCode CreateTrueTypeSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                                bool &outNotEmbedded, MyStringBuf &outFontProgram);
+    charta::EStatusCode CreateTrueTypeSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                             bool &outNotEmbedded, MyStringBuf &outFontProgram);
 
     void AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs);
     bool AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents);
 
-    PDFHummus::EStatusCode WriteTrueTypeHeader();
+    charta::EStatusCode WriteTrueTypeHeader();
     uint16_t GetSmallerPower2(uint16_t inNumber);
     unsigned long GetTag(const char *inTagName);
     void WriteEmptyTableEntry(const char *inTag, long long &outEntryPosition);
-    PDFHummus::EStatusCode WriteHead();
+    charta::EStatusCode WriteHead();
     void WriteTableEntryData(long long inTableEntryOffset, long long inTableOffset, unsigned long inTableLength);
-    PDFHummus::EStatusCode WriteHHea();
-    PDFHummus::EStatusCode WriteHMtx();
-    PDFHummus::EStatusCode WriteMaxp();
-    PDFHummus::EStatusCode WriteCVT();
-    PDFHummus::EStatusCode WriteFPGM();
-    PDFHummus::EStatusCode WritePREP();
-    PDFHummus::EStatusCode WriteNAME();
-    PDFHummus::EStatusCode WriteOS2();
-    PDFHummus::EStatusCode WriteGlyf(const UIntVector &inSubsetGlyphIDs, unsigned long *inLocaTable);
-    PDFHummus::EStatusCode WriteLoca(unsigned long *inLocaTable);
-    PDFHummus::EStatusCode WriteCMAP();
+    charta::EStatusCode WriteHHea();
+    charta::EStatusCode WriteHMtx();
+    charta::EStatusCode WriteMaxp();
+    charta::EStatusCode WriteCVT();
+    charta::EStatusCode WriteFPGM();
+    charta::EStatusCode WritePREP();
+    charta::EStatusCode WriteNAME();
+    charta::EStatusCode WriteOS2();
+    charta::EStatusCode WriteGlyf(const UIntVector &inSubsetGlyphIDs, unsigned long *inLocaTable);
+    charta::EStatusCode WriteLoca(unsigned long *inLocaTable);
+    charta::EStatusCode WriteCMAP();
     unsigned long GetCheckSum(long long inOffset, unsigned long inLength);
-    PDFHummus::EStatusCode CreateHeadTableCheckSumAdjustment();
-    PDFHummus::EStatusCode CreateTableCopy(const char *inTableName, long long inTableEntryLocation);
+    charta::EStatusCode CreateHeadTableCheckSumAdjustment();
+    charta::EStatusCode CreateTableCopy(const char *inTableName, long long inTableEntryLocation);
 };

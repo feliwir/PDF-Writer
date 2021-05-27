@@ -51,7 +51,7 @@
 #include "parsing/PDFDocumentCopyingContext.h"
 #include "parsing/PDFParser.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 DocumentContext::DocumentContext()
 {
@@ -123,9 +123,9 @@ EStatusCode DocumentContext::WriteHeader(EPDFVersion inPDFVersion)
     {
         WriteHeaderComment(inPDFVersion);
         Write4BinaryBytes();
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 static const std::string scPDFVersion10 = "PDF-1.0";
@@ -298,7 +298,7 @@ EStatusCode DocumentContext::WriteTrailerDictionaryValues(DictionaryContext *inD
         {
             TRACE_LOG("DocumentContext::WriteTrailerDictionaryValues, Unexpected Failure. Didn't find catalog object "
                       "while writing trailer");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -494,7 +494,7 @@ EStatusCode DocumentContext::WriteCatalogObjectOfNewPDF()
 EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTreeRootObjectReference,
                                                 IDocumentContextExtender *inModifiedFileCopyContext)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     ObjectIDType catalogID = mObjectsContext->StartNewIndirectObject();
     mTrailerInformation.SetRoot(catalogID); // set the catalog reference as root in the trailer
 
@@ -510,10 +510,10 @@ EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTre
     }
 
     auto it = mExtenders.begin();
-    for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mExtenders.end() && charta::eSuccess == status; ++it)
     {
         status = (*it)->OnCatalogWrite(&mCatalogInformation, catalogContext, mObjectsContext, this);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             TRACE_LOG("DocumentContext::WriteCatalogObject, unexpected failure. extender declared failure when writing "
                       "catalog.");
     }
@@ -521,7 +521,7 @@ EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTre
     if (inModifiedFileCopyContext != nullptr)
     {
         status = inModifiedFileCopyContext->OnCatalogWrite(&mCatalogInformation, catalogContext, mObjectsContext, this);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             TRACE_LOG("DocumentContext::WriteCatalogObject, unexpected failure. Copying extender declared failure when "
                       "writing catalog.");
     }
@@ -636,7 +636,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
 {
     EStatusCodeAndObjectIDType result;
 
-    result.first = PDFHummus::eSuccess;
+    result.first = charta::eSuccess;
     result.second = mObjectsContext->StartNewIndirectObject();
 
     DictionaryContext *pageContext = mObjectsContext->StartDictionary();
@@ -698,7 +698,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
         // Resource dict
         pageContext->WriteKey(scResources);
         result.first = WriteResourcesDictionary(inPage.GetResourcesDictionary());
-        if (result.first != PDFHummus::eSuccess)
+        if (result.first != charta::eSuccess)
         {
             TRACE_LOG("DocumentContext::WritePage, failed to write resources dictionary");
             break;
@@ -740,10 +740,10 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
         }
 
         auto it = mExtenders.begin();
-        for (; it != mExtenders.end() && PDFHummus::eSuccess == result.first; ++it)
+        for (; it != mExtenders.end() && charta::eSuccess == result.first; ++it)
         {
             result.first = (*it)->OnPageWrite(inPage, pageContext, mObjectsContext, this);
-            if (result.first != PDFHummus::eSuccess)
+            if (result.first != charta::eSuccess)
             {
                 TRACE_LOG(
                     "DocumentContext::WritePage, unexpected failure. extender declared failure when writing page.");
@@ -751,7 +751,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
             }
         }
         result.first = mObjectsContext->EndDictionary(pageContext);
-        if (result.first != PDFHummus::eSuccess)
+        if (result.first != charta::eSuccess)
         {
             TRACE_LOG("DocumentContext::WritePage, unexpected failure. Failed to end dictionary in page write.");
             break;
@@ -990,19 +990,19 @@ PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBounding
         xobjectContext->WriteNewObjectReferenceValue(formXObjectResourcesDictionaryID);
 
         auto it = mExtenders.begin();
-        EStatusCode status = PDFHummus::eSuccess;
-        for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
+        EStatusCode status = charta::eSuccess;
+        for (; it != mExtenders.end() && charta::eSuccess == status; ++it)
         {
             if ((*it)->OnFormXObjectWrite(inFormXObjectID, formXObjectResourcesDictionaryID, xobjectContext,
-                                          mObjectsContext, this) != PDFHummus::eSuccess)
+                                          mObjectsContext, this) != charta::eSuccess)
             {
                 TRACE_LOG("DocumentContext::StartFormXObject, unexpected failure. extender declared failure when "
                           "writing form xobject.");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // Now start the stream and the form XObject state
@@ -1109,7 +1109,7 @@ static const std::string scShadings = "Shading";
 static const std::string scProperties = "Properties";
 EStatusCode DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inResourcesDictionary)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -1171,11 +1171,11 @@ EStatusCode DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inRes
             break;
 
         auto itExtenders = mExtenders.begin();
-        for (; itExtenders != mExtenders.end() && PDFHummus::eSuccess == status; ++itExtenders)
+        for (; itExtenders != mExtenders.end() && charta::eSuccess == status; ++itExtenders)
         {
             status =
                 (*itExtenders)->OnResourcesWrite(&(inResourcesDictionary), resourcesContext, mObjectsContext, this);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("DocumentContext::WriteResourcesDictionary, unexpected failure. extender declared failure "
                           "when writing resources.");
@@ -1231,12 +1231,12 @@ EStatusCode DocumentContext::WriteResourceDictionary(ResourcesDictionary *inReso
             }
 
             auto it = mExtenders.begin();
-            EStatusCode status = PDFHummus::eSuccess;
+            EStatusCode status = charta::eSuccess;
             for (; it != mExtenders.end() && eSuccess == status; ++it)
             {
                 status =
                     (*it)->OnResourceDictionaryWrite(resourceContext, inResourceDictionaryLabel, mObjectsContext, this);
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                 {
                     TRACE_LOG("DocumentContext::WriteResourceDictionary, unexpected failure. extender declared failure "
                               "when writing a resource dictionary.");
@@ -1424,11 +1424,11 @@ EStatusCode DocumentContext::WriteState(ObjectsContext *inStateWriter, ObjectIDT
         WriteCatalogInformationState(inStateWriter, catalogInformationID);
 
         status = mUsedFontsRepository.WriteState(inStateWriter, usedFontsRepositoryID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = mEncryptionHelper.WriteState(inStateWriter, encryptionHelperID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
     } while (false);
 
@@ -1868,7 +1868,7 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
-    if (context->Start(inFilePath, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
+    if (context->Start(inFilePath, this, mObjectsContext, inOptions, mParserExtender) != charta::eSuccess)
     {
         return nullptr;
     }
@@ -1879,11 +1879,11 @@ EStatusCode DocumentContext::AttachURLLinktoCurrentPage(const std::string &inURL
 {
     EStatusCodeAndObjectIDType writeResult = WriteAnnotationAndLinkForURL(inURL, inLinkClickArea);
 
-    if (writeResult.first != PDFHummus::eSuccess)
+    if (writeResult.first != charta::eSuccess)
         return writeResult.first;
 
     RegisterAnnotationReferenceForNextPageWrite(writeResult.second);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 static const std::string scAnnot = "Annot";
@@ -1898,7 +1898,7 @@ static const std::string scURI = "URI";
 EStatusCodeAndObjectIDType DocumentContext::WriteAnnotationAndLinkForURL(const std::string &inURL,
                                                                          const PDFRectangle &inLinkClickArea)
 {
-    EStatusCodeAndObjectIDType result(PDFHummus::eFailure, 0);
+    EStatusCodeAndObjectIDType result(charta::eFailure, 0);
 
     do
     {
@@ -1960,7 +1960,7 @@ EStatusCodeAndObjectIDType DocumentContext::WriteAnnotationAndLinkForURL(const s
 
         mObjectsContext->EndDictionary(linkAnnotationContext);
         mObjectsContext->EndIndirectObject();
-        result.first = PDFHummus::eSuccess;
+        result.first = charta::eSuccess;
     } while (false);
 
     return result;
@@ -2050,7 +2050,7 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
-    if (context->Start(inPDFStream, this, mObjectsContext, inOptions, mParserExtender) != PDFHummus::eSuccess)
+    if (context->Start(inPDFStream, this, mObjectsContext, inOptions, mParserExtender) != charta::eSuccess)
     {
         return nullptr;
     }
@@ -2177,10 +2177,10 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
     ~ModifiedDocCatalogWriterExtension() override = default;
 
     // IDocumentContextExtender implementation
-    PDFHummus::EStatusCode OnCatalogWrite(CatalogInformation * /*inCatalogInformation*/,
-                                          DictionaryContext *inCatalogDictionaryContext,
-                                          ObjectsContext * /*inPDFWriterObjectContext*/,
-                                          PDFHummus::DocumentContext * /*inDocumentContext*/) override
+    charta::EStatusCode OnCatalogWrite(CatalogInformation * /*inCatalogInformation*/,
+                                       DictionaryContext *inCatalogDictionaryContext,
+                                       ObjectsContext * /*inPDFWriterObjectContext*/,
+                                       charta::DocumentContext * /*inDocumentContext*/) override
     {
 
         // update version
@@ -2576,7 +2576,7 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
-    if (context->Start(inPDFParser, this, mObjectsContext) != PDFHummus::eSuccess)
+    if (context->Start(inPDFParser, this, mObjectsContext) != charta::eSuccess)
     {
         return nullptr;
     }
@@ -2865,8 +2865,8 @@ static const uint8_t scMagicTIFFLittleEndianTiff[] = {0x49, 0x49, 0x2A, 0x00};
 static const uint8_t scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
 static const uint8_t scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
-PDFHummus::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPosition *inImageStream,
-                                                          unsigned long /*inImageIndex*/)
+charta::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPosition *inImageStream,
+                                                       unsigned long /*inImageIndex*/)
 {
     // The types of images that are discovered here are those familiar to Hummus - JPG, TIFF and PDF.
     // PDF is recognized by starting with "%PDF"
@@ -2879,35 +2879,35 @@ PDFHummus::EHummusImageType DocumentContext::GetImageType(IByteReaderWithPositio
 
     uint8_t magic[8];
     unsigned long readLength = 8;
-    PDFHummus::EHummusImageType imageType;
+    charta::EHummusImageType imageType;
 
     long long recordedPosition = inImageStream->GetCurrentPosition();
 
     inImageStream->Read(magic, readLength);
 
     if (readLength >= 4 && memcmp(scPDFMagic, magic, 4) == 0)
-        imageType = PDFHummus::ePDF;
+        imageType = charta::ePDF;
     else if (readLength >= 2 && memcmp(scMagicJPG, magic, 2) == 0)
-        imageType = PDFHummus::eJPG;
+        imageType = charta::eJPG;
     else if (readLength >= 4 && memcmp(scMagicTIFFBigEndianTiff, magic, 4) == 0)
-        imageType = PDFHummus::eTIFF;
+        imageType = charta::eTIFF;
     else if (readLength >= 4 && memcmp(scMagicTIFFBigEndianBigTiff, magic, 4) == 0)
-        imageType = PDFHummus::eTIFF;
+        imageType = charta::eTIFF;
     else if (readLength >= 4 && memcmp(scMagicTIFFLittleEndianTiff, magic, 4) == 0)
-        imageType = PDFHummus::eTIFF;
+        imageType = charta::eTIFF;
     else if (readLength >= 4 && memcmp(scMagicTIFFLittleEndianBigTiff, magic, 4) == 0)
-        imageType = PDFHummus::eTIFF;
+        imageType = charta::eTIFF;
     else if (readLength >= 8 && memcmp(scMagicPng, magic, 8) == 0)
-        imageType = PDFHummus::ePNG;
+        imageType = charta::ePNG;
     else
-        imageType = PDFHummus::eUndefined;
+        imageType = charta::eUndefined;
 
     inImageStream->SetPosition(recordedPosition);
 
     return imageType;
 }
 
-PDFHummus::EHummusImageType DocumentContext::GetImageType(const std::string &inImageFile, unsigned long inImageIndex)
+charta::EHummusImageType DocumentContext::GetImageType(const std::string &inImageFile, unsigned long inImageIndex)
 {
 
     HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
@@ -2927,30 +2927,30 @@ PDFHummus::EHummusImageType DocumentContext::GetImageType(const std::string &inI
         uint8_t magic[8];
         unsigned long readLength = 8;
         InputFile inputFile;
-        PDFHummus::EHummusImageType imageType;
+        charta::EHummusImageType imageType;
         if (inputFile.OpenFile(inImageFile) == eSuccess)
         {
             inputFile.GetInputStream()->Read(magic, readLength);
 
             if (readLength >= 4 && memcmp(scPDFMagic, magic, 4) == 0)
-                imageType = PDFHummus::ePDF;
+                imageType = charta::ePDF;
             else if (readLength >= 2 && memcmp(scMagicJPG, magic, 2) == 0)
-                imageType = PDFHummus::eJPG;
+                imageType = charta::eJPG;
             else if (readLength >= 4 && memcmp(scMagicTIFFBigEndianTiff, magic, 4) == 0)
-                imageType = PDFHummus::eTIFF;
+                imageType = charta::eTIFF;
             else if (readLength >= 4 && memcmp(scMagicTIFFBigEndianBigTiff, magic, 4) == 0)
-                imageType = PDFHummus::eTIFF;
+                imageType = charta::eTIFF;
             else if (readLength >= 4 && memcmp(scMagicTIFFLittleEndianTiff, magic, 4) == 0)
-                imageType = PDFHummus::eTIFF;
+                imageType = charta::eTIFF;
             else if (readLength >= 4 && memcmp(scMagicTIFFLittleEndianBigTiff, magic, 4) == 0)
-                imageType = PDFHummus::eTIFF;
+                imageType = charta::eTIFF;
             else if (readLength >= 8 && memcmp(scMagicPng, magic, 8) == 0)
-                imageType = PDFHummus::ePNG;
+                imageType = charta::ePNG;
             else
-                imageType = PDFHummus::eUndefined;
+                imageType = charta::eUndefined;
         }
         else
-            imageType = PDFHummus::eUndefined;
+            imageType = charta::eUndefined;
 
         imageInformation.imageType = imageType;
     }

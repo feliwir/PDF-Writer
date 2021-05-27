@@ -25,7 +25,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFEmbedding, PDFCopyingContext)
 {
@@ -36,24 +36,24 @@ TEST(PDFEmbedding, PDFCopyingContext)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFCopyingContextTest.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFCopyingContextTest.txt")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"));
     ASSERT_NE(copyingContext, nullptr);
 
     EStatusCodeAndObjectIDType result = copyingContext->AppendPDFPageFromPDF(1);
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     result = copyingContext->AppendPDFPageFromPDF(18);
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     result = copyingContext->AppendPDFPageFromPDF(4);
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     copyingContext->End(); // delete will call End() as well...so can avoid
     copyingContext = nullptr;
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

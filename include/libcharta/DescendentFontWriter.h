@@ -44,11 +44,11 @@ class DescendentFontWriter : public IFontDescriptorHelper
     ~DescendentFontWriter(void) = default;
 
     // the IDescendentFontWriter input pointer will implement the font specific differences
-    virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
-                                             FreeTypeFaceWrapper &inFontInfo,
-                                             const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
-                                             ObjectsContext *inObjectsContext,
-                                             IDescendentFontWriter *inDescendentFontWriterHelper);
+    virtual charta::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
+                                          FreeTypeFaceWrapper &inFontInfo,
+                                          const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                                          ObjectsContext *inObjectsContext,
+                                          IDescendentFontWriter *inDescendentFontWriterHelper);
 
     // IFontDescriptorHelper implementation [would probably evolve at some point to IDescriptorWriterHelper...
     virtual void WriteCharSet(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext,

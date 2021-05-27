@@ -6,7 +6,7 @@
 #include "SafeBufferMacrosDefs.h"
 #include "Trace.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 PDFCommentWriter::PDFCommentWriter(PDFWriter *inPDFWriter)
 {

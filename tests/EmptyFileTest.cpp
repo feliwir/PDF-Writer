@@ -23,7 +23,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, EmptyFile)
 {
@@ -33,8 +33,8 @@ TEST(PDF, EmptyFile)
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "test.txt"), ePDFVersion13, logConfiguration);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

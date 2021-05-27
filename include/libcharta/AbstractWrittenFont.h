@@ -45,10 +45,10 @@ class AbstractWrittenFont : public IWrittenFont
     WrittenFontRepresentation *mANSIRepresentation;
     ObjectsContext *mObjectsContext;
 
-    PDFHummus::EStatusCode WriteStateInDictionary(ObjectsContext *inStateWriter,
-                                                  DictionaryContext *inDerivedObjectDictionary);
-    PDFHummus::EStatusCode WriteStateAfterDictionary(ObjectsContext *inStateWriter);
-    PDFHummus::EStatusCode ReadStateFromObject(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState);
+    charta::EStatusCode WriteStateInDictionary(ObjectsContext *inStateWriter,
+                                               DictionaryContext *inDerivedObjectDictionary);
+    charta::EStatusCode WriteStateAfterDictionary(ObjectsContext *inStateWriter);
+    charta::EStatusCode ReadStateFromObject(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState);
 
   private:
     ObjectIDType mCidRepresentationObjectStateID;
@@ -77,8 +77,8 @@ class AbstractWrittenFont : public IWrittenFont
     // Hence, we need a slight difference for this case, and an override is provided
     virtual uint16_t EncodeCIDGlyph(uint32_t inGlyphId) = 0;
 
-    PDFHummus::EStatusCode WriteWrittenFontState(WrittenFontRepresentation *inRepresentation,
-                                                 ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode WriteWrittenFontState(WrittenFontRepresentation *inRepresentation,
+                                              ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteGlyphEncodingInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectId,
                                      const GlyphEncodingInfo &inGlyphEncodingInfo);
     void ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,

@@ -26,7 +26,7 @@
 #include "text/cff/CFFEmbeddedFontWriter.h"
 #include "text/freetype/FreeTypeFaceWrapper.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 CFFDescendentFontWriter::CFFDescendentFontWriter() = default;
 
@@ -58,7 +58,7 @@ EStatusCode CFFDescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID,
         TRACE_LOG1("CFFDescendentFontWriter::WriteFont, Exception. identified type1 font when writing CFF CID font, "
                    "font name - %s. type 1 CIDs are not supported.",
                    inFontName.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (inEmbedFont)
@@ -83,7 +83,7 @@ EStatusCode CFFDescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID,
         EStatusCode status =
             embeddedFontWriter.WriteEmbeddedFont(inFontInfo, orderedGlyphs, scCIDFontType0C, inFontName,
                                                  inObjectsContext, &cidMapping, mEmbeddedFontFileObjectID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 

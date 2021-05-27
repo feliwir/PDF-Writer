@@ -26,7 +26,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(Modification, PageModifier)
 {
@@ -40,7 +40,7 @@ TEST(Modification, PageModifier)
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), ePDFVersion13,
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentModified.pdf"),
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentModified.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFModifiedPage modifiedPage(&pdfWriter, 0);
 
@@ -55,5 +55,5 @@ TEST(Modification, PageModifier)
     modifiedPage.WritePage();
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

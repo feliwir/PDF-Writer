@@ -21,7 +21,7 @@
 #include "text/cff/CFFPrimitiveWriter.h"
 #include <math.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 CFFPrimitiveWriter::CFFPrimitiveWriter(IByteWriter *inCFFOutput)
 {
@@ -34,11 +34,11 @@ void CFFPrimitiveWriter::SetStream(IByteWriter *inCFFOutput)
     if (inCFFOutput != nullptr)
     {
         mCurrentOffsize = 1;
-        mInternalState = PDFHummus::eSuccess;
+        mInternalState = charta::eSuccess;
     }
     else
     {
-        mInternalState = PDFHummus::eFailure;
+        mInternalState = charta::eFailure;
     }
 }
 
@@ -49,26 +49,26 @@ EStatusCode CFFPrimitiveWriter::GetInternalState()
 
 EStatusCode CFFPrimitiveWriter::WriteByte(uint8_t inValue)
 {
-    if (PDFHummus::eFailure == mInternalState)
-        return PDFHummus::eFailure;
+    if (charta::eFailure == mInternalState)
+        return charta::eFailure;
 
-    EStatusCode status = (mCFFOutput->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    EStatusCode status = (mCFFOutput->Write(&inValue, 1) == 1 ? charta::eSuccess : charta::eFailure);
 
-    if (PDFHummus::eFailure == status)
-        mInternalState = PDFHummus::eFailure;
+    if (charta::eFailure == status)
+        mInternalState = charta::eFailure;
     return status;
 }
 
 EStatusCode CFFPrimitiveWriter::Write(const uint8_t *inBuffer, size_t inBufferSize)
 {
-    if (PDFHummus::eFailure == mInternalState)
-        return PDFHummus::eFailure;
+    if (charta::eFailure == mInternalState)
+        return charta::eFailure;
 
     EStatusCode status =
-        (mCFFOutput->Write(inBuffer, inBufferSize) == inBufferSize ? PDFHummus::eSuccess : PDFHummus::eFailure);
+        (mCFFOutput->Write(inBuffer, inBufferSize) == inBufferSize ? charta::eSuccess : charta::eFailure);
 
-    if (PDFHummus::eFailure == status)
-        mInternalState = PDFHummus::eFailure;
+    if (charta::eFailure == status)
+        mInternalState = charta::eFailure;
     return status;
 }
 
@@ -82,13 +82,13 @@ EStatusCode CFFPrimitiveWriter::WriteCard16(uint16_t inValue)
     uint8_t byte1 = (inValue >> 8) & 0xff;
     uint8_t byte2 = inValue & 0xff;
 
-    if (WriteByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void CFFPrimitiveWriter::SetOffSize(uint8_t inOffSize)
@@ -98,7 +98,7 @@ void CFFPrimitiveWriter::SetOffSize(uint8_t inOffSize)
 
 EStatusCode CFFPrimitiveWriter::WriteOffset(unsigned long inValue)
 {
-    EStatusCode status = PDFHummus::eFailure;
+    EStatusCode status = charta::eFailure;
 
     switch (mCurrentOffsize)
     {
@@ -124,16 +124,16 @@ EStatusCode CFFPrimitiveWriter::Write3ByteUnsigned(unsigned long inValue)
     uint8_t byte2 = (inValue >> 8) & 0xff;
     uint8_t byte3 = inValue & 0xff;
 
-    if (WriteByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveWriter::Write4ByteUnsigned(unsigned long inValue)
@@ -143,19 +143,19 @@ EStatusCode CFFPrimitiveWriter::Write4ByteUnsigned(unsigned long inValue)
     uint8_t byte3 = (inValue >> 8) & 0xff;
     uint8_t byte4 = inValue & 0xff;
 
-    if (WriteByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte4) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte4) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveWriter::WriteOffSize(uint8_t inValue)
@@ -184,12 +184,12 @@ EStatusCode CFFPrimitiveWriter::WriteDictOperand(const DictOperand &inOperand)
 
 EStatusCode CFFPrimitiveWriter::WriteDictItems(uint16_t inOperator, const DictOperandList &inOperands)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     auto it = inOperands.begin();
 
-    for (; it != inOperands.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != inOperands.end() && charta::eSuccess == status; ++it)
         status = WriteDictOperand(*it);
-    if (PDFHummus::eSuccess == status)
+    if (charta::eSuccess == status)
         status = WriteDictOperator(inOperator);
 
     return status;
@@ -209,11 +209,11 @@ EStatusCode CFFPrimitiveWriter::WriteIntegerOperand(long inValue)
         byte0 = ((inValue >> 8) & 0xff) + 247;
         byte1 = inValue & 0xff;
 
-        if (WriteByte(byte0) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte0) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
     }
     else if (-1131 <= inValue && inValue <= -108)
     {
@@ -224,11 +224,11 @@ EStatusCode CFFPrimitiveWriter::WriteIntegerOperand(long inValue)
         byte0 = ((inValue >> 8) & 0xff) + 251;
         byte1 = inValue & 0xff;
 
-        if (WriteByte(byte0) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte0) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
     }
     else if (-32768 <= inValue && inValue <= 32767)
     {
@@ -237,20 +237,20 @@ EStatusCode CFFPrimitiveWriter::WriteIntegerOperand(long inValue)
         byte1 = (inValue >> 8) & 0xff;
         byte2 = inValue & 0xff;
 
-        if (WriteByte(28) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(28) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte2) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte2) != charta::eSuccess)
+            return charta::eFailure;
     }
     else //  -2^31 <= inValue <= 2^31 - 1
     {
         return Write5ByteDictInteger(inValue);
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveWriter::Write5ByteDictInteger(long inValue)
@@ -262,22 +262,22 @@ EStatusCode CFFPrimitiveWriter::Write5ByteDictInteger(long inValue)
     byte3 = (inValue >> 8) & 0xff;
     byte4 = inValue & 0xff;
 
-    if (WriteByte(29) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(29) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteByte(byte4) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(byte4) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalLength)
@@ -321,8 +321,8 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
     }
 
     // now let's get to work
-    if (WriteByte(30) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteByte(30) != charta::eSuccess)
+        return charta::eFailure;
 
     // first, take care of minus sign
     uint8_t buffer = minusSign ? 0xe0 : 0;
@@ -331,25 +331,25 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
     // Integer part
     if (integerValue != 0)
     {
-        if (WriteIntegerOfReal(integerValue, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteIntegerOfReal(integerValue, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
     }
     else
     {
-        if (SetOrWriteNibble(0, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (SetOrWriteNibble(0, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
     }
 
     // Fractal part (if there was an integer or not)
     if (fractalValue != 0 && inFractalLength > 0)
     {
-        if (SetOrWriteNibble(0xa, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (SetOrWriteNibble(0xa, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
 
         while (fractalValue != 0 && inFractalLength > 0)
         {
-            if (SetOrWriteNibble((uint8_t)floor(fractalValue * 10), buffer, usedFirst) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (SetOrWriteNibble((uint8_t)floor(fractalValue * 10), buffer, usedFirst) != charta::eSuccess)
+                return charta::eFailure;
             fractalValue = fractalValue * 10 - floor(fractalValue * 10);
             --inFractalLength;
         }
@@ -358,17 +358,17 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
     // now, if there's any exponent, write it
     if (minusExponent)
     {
-        if (SetOrWriteNibble(0xc, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        if (WriteIntegerOfReal(exponentSize, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (SetOrWriteNibble(0xc, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
+        if (WriteIntegerOfReal(exponentSize, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
     }
     if (plusExponent)
     {
-        if (SetOrWriteNibble(0xb, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        if (WriteIntegerOfReal(exponentSize, buffer, usedFirst) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (SetOrWriteNibble(0xb, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
+        if (WriteIntegerOfReal(exponentSize, buffer, usedFirst) != charta::eSuccess)
+            return charta::eFailure;
     }
 
     // final f or ff
@@ -379,7 +379,7 @@ EStatusCode CFFPrimitiveWriter::WriteRealOperand(double inValue, long inFractalL
 
 EStatusCode CFFPrimitiveWriter::SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuffer, bool &ioUsedFirst)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     if (ioUsedFirst)
     {
         ioBuffer |= inValue;
@@ -398,11 +398,11 @@ EStatusCode CFFPrimitiveWriter::SetOrWriteNibble(uint8_t inValue, uint8_t &ioBuf
 EStatusCode CFFPrimitiveWriter::WriteIntegerOfReal(double inIntegerValue, uint8_t &ioBuffer, bool &ioUsedFirst)
 {
     if (0 == inIntegerValue)
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
 
     EStatusCode status = WriteIntegerOfReal(floor(inIntegerValue / 10), ioBuffer, ioUsedFirst);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     return SetOrWriteNibble((uint8_t)(long(inIntegerValue) % 10), ioBuffer, ioUsedFirst);
 }
@@ -416,9 +416,9 @@ EStatusCode CFFPrimitiveWriter::Pad5Bytes()
 uint8_t BytePad[1] = {'0'};
 EStatusCode CFFPrimitiveWriter::PadNBytes(uint16_t inBytesToPad)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (uint16_t i = 0; i < inBytesToPad && PDFHummus::eSuccess == status; ++i)
+    for (uint16_t i = 0; i < inBytesToPad && charta::eSuccess == status; ++i)
         Write(BytePad, 1);
     return status;
 }

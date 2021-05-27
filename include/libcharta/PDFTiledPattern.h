@@ -24,7 +24,7 @@
 #include "ResourcesDictionary.h"
 #include <memory>
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,7 +36,7 @@ class ObjectsContext;
 class PDFTiledPattern
 {
   public:
-    PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
+    PDFTiledPattern(charta::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
                     std::shared_ptr<PDFStream> inStream, ObjectIDType inResourcesDictionaryID);
     ~PDFTiledPattern(void);
 

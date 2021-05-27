@@ -6,7 +6,7 @@
 
     PDFParser parser;
     InputFile pdfFile;
-    if(pdfFile.OpenFile(Path) != PDFHummus::eSuccess)
+    if(pdfFile.OpenFile(Path) != charta::eSuccess)
         return;
     parser.StartPDFParsing(pdfFile.GetInputStream());
 

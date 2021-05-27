@@ -103,7 +103,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
     if (!mediaBox || mediaBox->GetLength() != 4)
     {
         TRACE_LOG("PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
-        result = PDFHummus::PagePresets::A4_Portrait;
+        result = charta::PagePresets::A4_Portrait;
     }
     else
     {

@@ -49,12 +49,12 @@ class ICategoryServicesCommand;
 class PDFIndirectObjectReference;
 class PDFObject;
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 }
 
-using namespace PDFHummus;
+using namespace charta;
 typedef std::map<ObjectIDType, ObjectIDType> ObjectIDTypeToObjectIDTypeMap;
 typedef std::map<std::string, std::string> StringToStringMap;
 typedef std::set<ObjectIDType> ObjectIDTypeSet;
@@ -120,7 +120,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     PDFDocumentHandler(void);
     virtual ~PDFDocumentHandler(void);
 
-    void SetOperationsContexts(PDFHummus::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(charta::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
 
     // Create a list of XObjects from a PDF file.
     // the list of objects can then be used to place the "pages" in various locations on the written
@@ -158,32 +158,29 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
 
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
-                                               const PDFParsingOptions &inParsingOptions,
-                                               const PDFPageRange &inPageRange,
-                                               const ObjectIDTypeList &inCopyAdditionalObjects);
+    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
+                                            const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
+                                            const ObjectIDTypeList &inCopyAdditionalObjects);
 
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
-                                               const PDFParsingOptions &inParsingOptions,
-                                               const PDFPageRange &inPageRange,
-                                               const ObjectIDTypeList &inCopyAdditionalObjects);
+    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+                                            const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
+                                            const ObjectIDTypeList &inCopyAdditionalObjects);
 
     // Event listeners for CreateFormXObjectsFromPDF and AppendPDFPagesFromPDF
     void AddDocumentContextExtender(IDocumentContextExtender *inExtender);
     void RemoveDocumentContextExtender(IDocumentContextExtender *inExtender);
 
     // IDocumentContextExtender implementation
-    virtual PDFHummus::EStatusCode OnResourcesWrite(ResourcesDictionary *inResources,
-                                                    DictionaryContext *inPageResourcesDictionaryContext,
-                                                    ObjectsContext *inPDFWriterObjectContext,
-                                                    PDFHummus::DocumentContext *inPDFWriterDocumentContext);
+    virtual charta::EStatusCode OnResourcesWrite(ResourcesDictionary *inResources,
+                                                 DictionaryContext *inPageResourcesDictionaryContext,
+                                                 ObjectsContext *inPDFWriterObjectContext,
+                                                 charta::DocumentContext *inPDFWriterDocumentContext);
 
     // copying context handling
-    PDFHummus::EStatusCode StartFileCopyingContext(const std::string &inPDFFilePath,
-                                                   const PDFParsingOptions &inOptions);
-    PDFHummus::EStatusCode StartStreamCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                                     const PDFParsingOptions &inOptions);
-    PDFHummus::EStatusCode StartParserCopyingContext(PDFParser *inPDFParser);
+    charta::EStatusCode StartFileCopyingContext(const std::string &inPDFFilePath, const PDFParsingOptions &inOptions);
+    charta::EStatusCode StartStreamCopyingContext(IByteReaderWithPosition *inPDFStream,
+                                                  const PDFParsingOptions &inOptions);
+    charta::EStatusCode StartParserCopyingContext(PDFParser *inPDFParser);
     EStatusCodeAndObjectIDType CreateFormXObjectFromPDFPage(unsigned long inPageIndex,
                                                             EPDFPageBox inPageBoxToUseAsFormBox,
                                                             const double *inTransformationMatrix,
@@ -192,16 +189,15 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                             const double *inTransformationMatrix,
                                                             ObjectIDType inPredefinedFormId);
     EStatusCodeAndObjectIDType AppendPDFPageFromPDF(unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
-    PDFHummus::EStatusCode MergePDFPageToFormXObject(PDFFormXObject *inTargetFormXObject,
-                                                     unsigned long inSourcePageIndex);
+    charta::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
+    charta::EStatusCode MergePDFPageToFormXObject(PDFFormXObject *inTargetFormXObject, unsigned long inSourcePageIndex);
     EStatusCodeAndObjectIDType CopyObject(ObjectIDType inSourceObjectID);
     PDFParser *GetSourceDocumentParser();
     EStatusCodeAndObjectIDType GetCopiedObjectID(ObjectIDType inSourceObjectID);
     MapIterator<ObjectIDTypeToObjectIDTypeMap> GetCopiedObjectsMappingIterator();
     EStatusCodeAndObjectIDTypeList CopyDirectObjectWithDeepCopy(std::shared_ptr<PDFObject> inObject);
-    PDFHummus::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
-    PDFHummus::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
+    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
+    charta::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
     void StopCopyingContext();
     void ReplaceSourceObjects(const ObjectIDTypeToObjectIDTypeMap &inSourceObjectsToNewTargetObjects);
     IByteReaderWithPosition *GetSourceDocumentStream();
@@ -220,7 +216,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
 
   private:
     ObjectsContext *mObjectsContext;
-    PDFHummus::DocumentContext *mDocumentContext;
+    charta::DocumentContext *mDocumentContext;
     IDocumentContextExtenderSet mExtenders;
 
     InputFile mPDFFile;
@@ -231,17 +227,17 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     std::shared_ptr<PDFDictionary> mWrittenPage;
 
     PDFRectangle DeterminePageBox(const std::shared_ptr<PDFDictionary> &inDictionary, EPDFPageBox inPageBoxType);
-    PDFHummus::EStatusCode WritePageContentToSingleStream(IByteWriter *inTargetStream,
-                                                          std::shared_ptr<PDFDictionary> inPageObject);
-    PDFHummus::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
-                                                       const std::shared_ptr<PDFStreamInput> &inSourceStream);
-    PDFHummus::EStatusCode CopyResourcesIndirectObjects(std::shared_ptr<PDFDictionary> inPage);
+    charta::EStatusCode WritePageContentToSingleStream(IByteWriter *inTargetStream,
+                                                       std::shared_ptr<PDFDictionary> inPageObject);
+    charta::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+                                                    const std::shared_ptr<PDFStreamInput> &inSourceStream);
+    charta::EStatusCode CopyResourcesIndirectObjects(std::shared_ptr<PDFDictionary> inPage);
     void RegisterInDirectObjects(const std::shared_ptr<PDFDictionary> &inDictionary, ObjectIDTypeList &outNewObjects);
     void RegisterInDirectObjects(const std::shared_ptr<PDFArray> &inArray, ObjectIDTypeList &outNewObjects);
-    PDFHummus::EStatusCode WriteNewObjects(const ObjectIDTypeList &inSourceObjectIDs);
-    PDFHummus::EStatusCode WriteNewObjects(const ObjectIDTypeList &inSourceObjectIDs, ObjectIDTypeSet &ioCopiedObjects);
-    PDFHummus::EStatusCode CopyInDirectObject(ObjectIDType inSourceObjectID, ObjectIDType inTargetObjectID,
-                                              ObjectIDTypeSet &ioCopiedObjects);
+    charta::EStatusCode WriteNewObjects(const ObjectIDTypeList &inSourceObjectIDs);
+    charta::EStatusCode WriteNewObjects(const ObjectIDTypeList &inSourceObjectIDs, ObjectIDTypeSet &ioCopiedObjects);
+    charta::EStatusCode CopyInDirectObject(ObjectIDType inSourceObjectID, ObjectIDType inTargetObjectID,
+                                           ObjectIDTypeSet &ioCopiedObjects);
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDF(
         const std::string &inPDFFilePath, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
         IPageEmbedInFormCommand *inPageEmbedCommand, const double *inTransformationMatrix,
@@ -249,48 +245,47 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     PDFFormXObject *CreatePDFFormXObjectForPage(const std::shared_ptr<PDFDictionary> &inPageObject,
                                                 const PDFRectangle &inCropBox, const double *inTransformationMatrix,
                                                 ObjectIDType inPredefinedObjectId);
-    PDFHummus::EStatusCode CopyInDirectObject(ObjectIDType inSourceObjectID, ObjectIDType inTargetObjectID);
+    charta::EStatusCode CopyInDirectObject(ObjectIDType inSourceObjectID, ObjectIDType inTargetObjectID);
 
-    PDFHummus::EStatusCode WriteObjectByType(const std::shared_ptr<PDFObject> &inObject, ETokenSeparator inSeparator,
-                                             IObjectWritePolicy *inWritePolicy);
-    PDFHummus::EStatusCode WriteArrayObject(const std::shared_ptr<PDFArray> &inArray, ETokenSeparator inSeparator,
-                                            IObjectWritePolicy *inWritePolicy);
-    PDFHummus::EStatusCode WriteDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
-                                                 IObjectWritePolicy *inWritePolicy);
-    PDFHummus::EStatusCode WriteStreamObject(const std::shared_ptr<PDFStreamInput> &inStream,
-                                             IObjectWritePolicy *inWritePolicy);
+    charta::EStatusCode WriteObjectByType(const std::shared_ptr<PDFObject> &inObject, ETokenSeparator inSeparator,
+                                          IObjectWritePolicy *inWritePolicy);
+    charta::EStatusCode WriteArrayObject(const std::shared_ptr<PDFArray> &inArray, ETokenSeparator inSeparator,
+                                         IObjectWritePolicy *inWritePolicy);
+    charta::EStatusCode WriteDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
+                                              IObjectWritePolicy *inWritePolicy);
+    charta::EStatusCode WriteStreamObject(const std::shared_ptr<PDFStreamInput> &inStream,
+                                          IObjectWritePolicy *inWritePolicy);
 
     EStatusCodeAndObjectIDType CreatePDFPageForPage(unsigned long inPageIndex);
 
-    PDFHummus::EStatusCode CopyPageContentToTargetPagePassthrough(PDFPage &inPage,
-                                                                  const std::shared_ptr<PDFDictionary> &inPageObject);
-    PDFHummus::EStatusCode CopyPageContentToTargetPageRecoded(PDFPage &inPage,
-                                                              std::shared_ptr<PDFDictionary> inPageObject);
+    charta::EStatusCode CopyPageContentToTargetPagePassthrough(PDFPage &inPage,
+                                                               const std::shared_ptr<PDFDictionary> &inPageObject);
+    charta::EStatusCode CopyPageContentToTargetPageRecoded(PDFPage &inPage,
+                                                           std::shared_ptr<PDFDictionary> inPageObject);
 
-    PDFHummus::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                               const std::shared_ptr<PDFStreamInput> &inContentSource);
-    PDFHummus::EStatusCode MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
-    PDFHummus::EStatusCode MergeResourcesToPage(PDFPage &inTargetPage, std::shared_ptr<PDFDictionary> inPage,
-                                                StringToStringMap &outMappedResourcesNames);
+    charta::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
+                                                            const std::shared_ptr<PDFStreamInput> &inContentSource);
+    charta::EStatusCode MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
+    charta::EStatusCode MergeResourcesToPage(PDFPage &inTargetPage, std::shared_ptr<PDFDictionary> inPage,
+                                             StringToStringMap &outMappedResourcesNames);
     EStatusCodeAndObjectIDType CopyObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject);
-    PDFHummus::EStatusCode CopyDirectObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject,
-                                                            ObjectIDType inTargetObjectID);
-    PDFHummus::EStatusCode MergePageContentToTargetPage(PDFPage &inTargetPage,
-                                                        std::shared_ptr<PDFDictionary> inSourcePage,
-                                                        const StringToStringMap &inMappedResourcesNames);
-    PDFHummus::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                               const std::shared_ptr<PDFStreamInput> &inContentSource,
-                                                               const StringToStringMap &inMappedResourcesNames);
-    PDFHummus::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+    charta::EStatusCode CopyDirectObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject,
+                                                         ObjectIDType inTargetObjectID);
+    charta::EStatusCode MergePageContentToTargetPage(PDFPage &inTargetPage, std::shared_ptr<PDFDictionary> inSourcePage,
+                                                     const StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
+                                                            const std::shared_ptr<PDFStreamInput> &inContentSource,
+                                                            const StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode WritePDFStreamInputToStream(IByteWriter *inTargetStream,
+                                                    const std::shared_ptr<PDFStreamInput> &inSourceStream,
+                                                    const StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
+                                                     const StringToStringMap &inMappedResourcesNames,
+                                                     ResourceTokenMarkerList &outResourceMarkers);
+    charta::EStatusCode MergeAndReplaceResourcesTokens(IByteWriter *inTargetStream,
                                                        const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                       const StringToStringMap &inMappedResourcesNames);
-    PDFHummus::EStatusCode ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                        const StringToStringMap &inMappedResourcesNames,
-                                                        ResourceTokenMarkerList &outResourceMarkers);
-    PDFHummus::EStatusCode MergeAndReplaceResourcesTokens(IByteWriter *inTargetStream,
-                                                          const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                          const StringToStringMap &inMappedResourcesNames,
-                                                          const ResourceTokenMarkerList &inResourceMarkers);
+                                                       const StringToStringMap &inMappedResourcesNames,
+                                                       const ResourceTokenMarkerList &inResourceMarkers);
 
     EStatusCodeAndObjectIDTypeList CreateFormXObjectsFromPDFInContext(const PDFPageRange &inPageRange,
                                                                       IPageEmbedInFormCommand *inPageEmbedCommand,
@@ -306,11 +301,10 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                              const ObjectIDTypeList &inPredefinedFormIDs);
     EStatusCodeAndObjectIDTypeList AppendPDFPagesFromPDFInContext(const PDFPageRange &inPageRange,
                                                                   const ObjectIDTypeList &inCopyAdditionalObjects);
-    PDFHummus::EStatusCode MergePDFPagesToPageInContext(PDFPage &inPage, const PDFPageRange &inPageRange,
-                                                        const ObjectIDTypeList &inCopyAdditionalObjects);
-    PDFHummus::EStatusCode StartCopyingContext(IByteReaderWithPosition *inPDFStream,
-                                               const PDFParsingOptions &inOptions);
-    PDFHummus::EStatusCode StartCopyingContext(PDFParser *inPDFParser);
+    charta::EStatusCode MergePDFPagesToPageInContext(PDFPage &inPage, const PDFPageRange &inPageRange,
+                                                     const ObjectIDTypeList &inCopyAdditionalObjects);
+    charta::EStatusCode StartCopyingContext(IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions);
+    charta::EStatusCode StartCopyingContext(PDFParser *inPDFParser);
     EStatusCode MergePDFPageForXObject(PDFFormXObject *inTargetFormXObject, unsigned long inSourcePageIndex);
     EStatusCode RegisterResourcesForForm(PDFFormXObject *inTargetFormXObject,
                                          const std::shared_ptr<PDFDictionary> &inPageObject,
@@ -321,9 +315,9 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                std::shared_ptr<PDFDictionary> inResourcesDictionary,
                                                ObjectIDTypeList &ioObjectsToLaterCopy,
                                                StringToStringMap &ioMappedResourcesNames);
-    PDFHummus::EStatusCode MergePageContentToTargetXObject(PDFFormXObject *inTargetFormXObject,
-                                                           std::shared_ptr<PDFDictionary> inSourcePage,
-                                                           const StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode MergePageContentToTargetXObject(PDFFormXObject *inTargetFormXObject,
+                                                        std::shared_ptr<PDFDictionary> inSourcePage,
+                                                        const StringToStringMap &inMappedResourcesNames);
     std::shared_ptr<PDFObject> FindPageResources(PDFParser *inParser,
                                                  const std::shared_ptr<PDFDictionary> &inDictionary);
 };

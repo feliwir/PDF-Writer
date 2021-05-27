@@ -32,7 +32,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode TestPageSizeModification(PDFWriter *inPDFWriter)
 {

@@ -35,8 +35,8 @@ class TrueTypeANSIFontWriter : public IANSIFontWriterHelper, IFontDescriptorHelp
     TrueTypeANSIFontWriter(void);
     ~TrueTypeANSIFontWriter(void);
 
-    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
-                                     ObjectsContext *inObjectsContext, bool inEmbedFont);
+    charta::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                  ObjectsContext *inObjectsContext, bool inEmbedFont);
 
     // IANSIFontWriterHelper implementation
     virtual void WriteSubTypeValue(DictionaryContext *inDictionary);

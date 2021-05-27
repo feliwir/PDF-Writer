@@ -28,7 +28,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode RunTest(PDFWriter &pdfWriter)
 {
@@ -56,21 +56,21 @@ EStatusCode RunTest(PDFWriter &pdfWriter)
     // add new page with an image
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
         if (contentContext == nullptr)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
 
         contentContext->DrawImage(10, 300,
                                   RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/soundcloud_logo.jpg"));
 
         status = pdfWriter.EndPageContentContext(contentContext);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         status = pdfWriter.WritePage(page);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 

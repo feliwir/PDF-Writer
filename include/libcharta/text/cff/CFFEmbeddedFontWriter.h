@@ -58,19 +58,19 @@ class CFFEmbeddedFontWriter
      *	and single character encoding, per the internal charset and encoding vectors.
      */
 
-    PDFHummus::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                             const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
-                                             ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
+    charta::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                          const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
+                                          ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
 
     // the optional inCIDMapping parameter provides a vector ordered in the same
     // way as the glyph IDs. for each position in the CID mapping vector there's the matching CID
     // for the GID in the same position in the subset glyph IDs.
     // use it when the CFF origin is from a subset font, and the GID->CID mapping is not simply
     // identity
-    PDFHummus::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                             const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
-                                             ObjectsContext *inObjectsContext, UShortVector *inCIDMapping,
-                                             ObjectIDType &outEmbeddedFontObjectID);
+    charta::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                          const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
+                                          ObjectsContext *inObjectsContext, UShortVector *inCIDMapping,
+                                          ObjectIDType &outEmbeddedFontObjectID);
 
   private:
     OpenTypeFileInput mOpenTypeInput;
@@ -96,30 +96,30 @@ class CFFEmbeddedFontWriter
     long long mFDArrayPosition;
     long long mFDSelectPosition;
 
-    PDFHummus::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                           UShortVector *inCIDMapping, const std::string &inSubsetFontName,
-                                           bool &outNotEmbedded, MyStringBuf &outFontProgram);
-    PDFHummus::EStatusCode AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs);
-    PDFHummus::EStatusCode AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents, bool &outFoundComponents);
-    PDFHummus::EStatusCode WriteCFFHeader();
-    PDFHummus::EStatusCode WriteName(const std::string &inSubsetFontName);
-    PDFHummus::EStatusCode WriteTopIndex();
+    charta::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                        UShortVector *inCIDMapping, const std::string &inSubsetFontName,
+                                        bool &outNotEmbedded, MyStringBuf &outFontProgram);
+    charta::EStatusCode AddDependentGlyphs(UIntVector &ioSubsetGlyphIDs);
+    charta::EStatusCode AddComponentGlyphs(uint32_t inGlyphID, UIntSet &ioComponents, bool &outFoundComponents);
+    charta::EStatusCode WriteCFFHeader();
+    charta::EStatusCode WriteName(const std::string &inSubsetFontName);
+    charta::EStatusCode WriteTopIndex();
     uint8_t GetMostCompressedOffsetSize(unsigned long inOffset);
-    PDFHummus::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
-    PDFHummus::EStatusCode WriteStringIndex();
-    PDFHummus::EStatusCode WriteGlobalSubrsIndex();
-    PDFHummus::EStatusCode WriteEncodings(const UIntVector &inSubsetGlyphIDs);
-    PDFHummus::EStatusCode WriteCharsets(const UIntVector &inSubsetGlyphIDs, UShortVector *inCIDMapping);
-    PDFHummus::EStatusCode WriteCharStrings(const UIntVector &inSubsetGlyphIDs);
-    PDFHummus::EStatusCode WritePrivateDictionary();
+    charta::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
+    charta::EStatusCode WriteStringIndex();
+    charta::EStatusCode WriteGlobalSubrsIndex();
+    charta::EStatusCode WriteEncodings(const UIntVector &inSubsetGlyphIDs);
+    charta::EStatusCode WriteCharsets(const UIntVector &inSubsetGlyphIDs, UShortVector *inCIDMapping);
+    charta::EStatusCode WriteCharStrings(const UIntVector &inSubsetGlyphIDs);
+    charta::EStatusCode WritePrivateDictionary();
 
-    PDFHummus::EStatusCode WriteFDArray(const UIntVector &inSubsetGlyphIDs,
-                                        const FontDictInfoToByteMap &inNewFontDictsIndexes);
-    PDFHummus::EStatusCode WriteFDSelect(const UIntVector &inSubsetGlyphIDs,
-                                         const FontDictInfoToByteMap &inNewFontDictsIndexes);
-    PDFHummus::EStatusCode WritePrivateDictionaryBody(const PrivateDictInfo &inPrivateDictionary,
-                                                      long long &outWriteSize, long long &outWritePosition);
-    PDFHummus::EStatusCode UpdateIndexesAtTopDict();
+    charta::EStatusCode WriteFDArray(const UIntVector &inSubsetGlyphIDs,
+                                     const FontDictInfoToByteMap &inNewFontDictsIndexes);
+    charta::EStatusCode WriteFDSelect(const UIntVector &inSubsetGlyphIDs,
+                                      const FontDictInfoToByteMap &inNewFontDictsIndexes);
+    charta::EStatusCode WritePrivateDictionaryBody(const PrivateDictInfo &inPrivateDictionary, long long &outWriteSize,
+                                                   long long &outWritePosition);
+    charta::EStatusCode UpdateIndexesAtTopDict();
 
     void DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs,
                                  FontDictInfoToByteMap &outNewFontDictsIndexes) const;

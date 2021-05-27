@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, FormXObject)
 {
@@ -37,7 +37,7 @@ TEST(PDF, FormXObject)
     EStatusCode status;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContent.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // define an xobject form to draw a 200X100 points red rectangle
     PDFFormXObject *xobjectForm = pdfWriter.StartFormXObject(PDFRectangle(0, 0, 200, 100));
@@ -46,7 +46,7 @@ TEST(PDF, FormXObject)
     // First page
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);
@@ -60,7 +60,7 @@ TEST(PDF, FormXObject)
 
         // pause stream to start writing a form xobject
         status = pdfWriter.PausePageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         XObjectContentContext *xobjectContentContext = xobjectForm->GetContentContext();
         xobjectContentContext->q();
@@ -70,7 +70,7 @@ TEST(PDF, FormXObject)
         xobjectContentContext->Q();
 
         status = pdfWriter.EndFormXObjectAndRelease(xobjectForm);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         std::string formXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(formObjectID);
 
@@ -96,16 +96,16 @@ TEST(PDF, FormXObject)
         pageContentContext->Q();
 
         status = pdfWriter.EndPageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     // 2nd page, just uses the form from the previous page
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);
@@ -119,12 +119,12 @@ TEST(PDF, FormXObject)
         pageContentContext->Q();
 
         status = pdfWriter.EndPageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.EndPDF();
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 }

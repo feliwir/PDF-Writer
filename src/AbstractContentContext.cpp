@@ -33,7 +33,7 @@
 #include <algorithm>
 #include <ctype.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 std::map<std::string, unsigned long> kCSSColors = {{"aliceblue", 0xF0F8FF},
                                                    {"antiquewhite", 0xFAEBD7},
@@ -203,7 +203,7 @@ unsigned long AbstractContentContext::ColorValueForName(const std::string &inCol
     return sColorMap.GetRGBForColorName(inColorName);
 }
 
-AbstractContentContext::AbstractContentContext(PDFHummus::DocumentContext *inDocumentContext)
+AbstractContentContext::AbstractContentContext(charta::DocumentContext *inDocumentContext)
 {
     mDocumentContext = inDocumentContext;
 }
@@ -933,14 +933,14 @@ EStatusCode AbstractContentContext::WriteTextCommandWithEncoding(const std::stri
     {
         TRACE_LOG(
             "AbstractContentContext::WriteTextCommandWithEncoding, Cannot write text, no current font is defined");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     GlyphUnicodeMappingList glyphsAndUnicode;
     EStatusCode encodingStatus = currentFont->TranslateStringToGlyphs(inUnicodeText, glyphsAndUnicode);
 
     // encoding returns false if was unable to encode some of the glyphs. will display as missing characters
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         TRACE_LOG("AbstractContextContext::WriteTextCommandWithEncoding, was unable to find glyphs for all characters, "
                   "some will appear as missing");
 
@@ -1039,7 +1039,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<StringOrDouble> &inString
     if (currentFont == nullptr)
     {
         TRACE_LOG("AbstractContentContext::TJ, Cannot write text, no current font is defined");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     std::list<GlyphUnicodeMappingListOrDouble> parameters;
@@ -1058,7 +1058,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<StringOrDouble> &inString
                 currentFont->TranslateStringToGlyphs(std::get<std::string>(stringOrSpacing), glyphsAndUnicode);
 
             // encoding returns false if was unable to encode some of the glyphs. will display as missing characters
-            if (encodingStatus != PDFHummus::eSuccess)
+            if (encodingStatus != charta::eSuccess)
                 TRACE_LOG("AbstractContextContext::TJ, was unable to find glyphs for all characters, some will appear "
                           "as missing");
             parameters.emplace_back(glyphsAndUnicode);
@@ -1082,7 +1082,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     {
         TRACE_LOG("AbstractContentContext::WriteTextCommandWithDirectGlyphSelection, Cannot write text, no current "
                   "font is defined");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     ObjectIDType fontObjectID;
@@ -1090,16 +1090,16 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
     bool writeAsCID;
 
     if (currentFont->EncodeStringForShowing(inText, fontObjectID, encodedCharactersList, writeAsCID) !=
-        PDFHummus::eSuccess)
+        charta::eSuccess)
     {
         TRACE_LOG("AbstractcontextContext::WriteTextCommandWithDirectGlyphSelection, Unexepcted failure, Cannot encode "
                   "characters");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // skip if there's no text going to be written (also means no font ID)
     if (encodedCharactersList.empty() || 0 == fontObjectID)
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
 
     // Write the font reference (only if required)
     std::string fontName = GetResourcesDictionary()->AddFontMapping(fontObjectID);
@@ -1133,7 +1133,7 @@ EStatusCode AbstractContentContext::WriteTextCommandWithDirectGlyphSelection(con
         }
         inTextCommand->WriteLiteralStringCommand(stringStream.ToString());
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode AbstractContentContext::Quote(const GlyphUnicodeMappingList &inText)
@@ -1155,7 +1155,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
     if (currentFont == nullptr)
     {
         TRACE_LOG("AbstractContentContext::TJ, Cannot write text, no current font is defined");
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     // TJ is a bit different. i want to encode all strings in the array to the same font, so that at most a single
@@ -1176,16 +1176,16 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
     bool writeAsCID;
 
     if (currentFont->EncodeStringsForShowing(stringsList, fontObjectID, encodedCharachtersListsList, writeAsCID) !=
-        PDFHummus::eSuccess)
+        charta::eSuccess)
     {
         TRACE_LOG("AbstractContentContext::TJ, Unexepcted failure, cannot include characters for writing final "
                   "representation");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // skip if there's no text going to be written (also means no font ID)
     if (encodedCharachtersListsList.empty() || 0 == fontObjectID)
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
 
     // status only returns if strings can be coded or not. so continue with writing regardless
 
@@ -1247,7 +1247,7 @@ EStatusCode AbstractContentContext::TJ(const std::list<GlyphUnicodeMappingListOr
         }
         TJLow(stringOrDoubleList);
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void AbstractContentContext::WriteFreeCode(const std::string &inFreeCode)

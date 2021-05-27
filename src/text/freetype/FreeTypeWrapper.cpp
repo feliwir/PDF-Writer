@@ -23,7 +23,7 @@
 #include "io/IByteReaderWithPosition.h"
 #include "io/InputFile.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 #undef __FTERRORS_H__
 #define FT_ERRORDEF(e, v, s) {e, s},
@@ -76,7 +76,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, FT_Long inFontIn
 
     do
     {
-        if (FillOpenFaceArgumentsForUTF8String(inFilePath, openFaceArguments) != PDFHummus::eSuccess)
+        if (FillOpenFaceArgumentsForUTF8String(inFilePath, openFaceArguments) != charta::eSuccess)
         {
             face = nullptr;
             break;
@@ -115,12 +115,12 @@ EStatusCode FreeTypeWrapper::FillOpenFaceArgumentsForUTF8String(const std::strin
 
     if (ioArgs.stream != nullptr)
     {
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     TRACE_LOG1("FreeTypeWrapper::FillOpenFaceArgumentsForWideString, Cannot Open file for reading %s",
                inFilePath.c_str());
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 void FreeTypeWrapper::CloseOpenFaceArgumentsStream(FT_Open_Args &ioArgs)
@@ -150,7 +150,7 @@ FT_Face FreeTypeWrapper::NewFace(const std::string &inFilePath, const std::strin
     {
         do
         {
-            if (FillOpenFaceArgumentsForUTF8String(inSecondaryFilePath, attachStreamArguments) != PDFHummus::eSuccess)
+            if (FillOpenFaceArgumentsForUTF8String(inSecondaryFilePath, attachStreamArguments) != charta::eSuccess)
             {
                 DoneFace(face);
                 face = nullptr;
@@ -225,7 +225,7 @@ FT_Stream FreeTypeWrapper::CreateFTStreamForPath(const std::string &inFilePath)
 {
     auto *inputFile = new InputFile;
 
-    if (inputFile->OpenFile(inFilePath) != PDFHummus::eSuccess)
+    if (inputFile->OpenFile(inFilePath) != charta::eSuccess)
         return nullptr;
 
     auto *aStream = new FT_StreamRec();

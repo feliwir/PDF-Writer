@@ -34,12 +34,12 @@ class IDocumentContextExtender;
 class PDFFormXObject;
 class IByteReaderWithPosition;
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 }
 
-using namespace PDFHummus;
+using namespace charta;
 
 typedef std::map<std::string, JPEGImageInformation> StringToJPEGImageInformationMap;
 typedef std::pair<bool, JPEGImageInformation> BoolAndJPEGImageInformation;
@@ -68,7 +68,7 @@ class JPEGImageHandler
     PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inFormXObjectID);
     PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream, ObjectIDType inFormXObjectID);
 
-    void SetOperationsContexts(PDFHummus::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(charta::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
     void AddDocumentContextExtender(IDocumentContextExtender *inExtender);
     void RemoveDocumentContextExtender(IDocumentContextExtender *inExtender);
 
@@ -83,7 +83,7 @@ class JPEGImageHandler
     JPEGImageInformation mNullInformation;
     StringToJPEGImageInformationMap mImagesInformationMap;
     ObjectsContext *mObjectsContext;
-    PDFHummus::DocumentContext *mDocumentContext;
+    charta::DocumentContext *mDocumentContext;
     IDocumentContextExtenderSet mExtenders;
 
     PDFImageXObject *CreateAndWriteImageXObjectFromJPGInformation(const std::string &inJPGFilePath,

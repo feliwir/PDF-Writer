@@ -43,14 +43,14 @@ class EncryptionHelper
        for this input, call SupportsEncryption later. No need to call this setup prior to creating the first object. so
        you can delay till you are ready to create the file id.
     */
-    PDFHummus::EStatusCode Setup(bool inShouldEncrypt, double inPDFLevel, const std::string &inUserPassword,
-                                 const std::string &inOwnerPassword, long long inUserProtectionOptionsFlag,
-                                 bool inEncryptMetadata, const std::string &inFileIDPart1);
+    charta::EStatusCode Setup(bool inShouldEncrypt, double inPDFLevel, const std::string &inUserPassword,
+                              const std::string &inOwnerPassword, long long inUserProtectionOptionsFlag,
+                              bool inEncryptMetadata, const std::string &inFileIDPart1);
     // short one for setting up no ecnryption
     void SetupNoEncryption();
     // Setup with existing decryption helper. This can be used to setup encryption with another PDF existing setup, or
     // in modified PDF scenarios
-    PDFHummus::EStatusCode Setup(const DecryptionHelper &inDecryptionSource);
+    charta::EStatusCode Setup(const DecryptionHelper &inDecryptionSource);
 
     /*
         SupportsEncryption will respond true, if the encryption requested is supported. this includes true on the case
@@ -90,11 +90,11 @@ class EncryptionHelper
     // when finalizing the document call this to write the encryption dictionary. If you want
     // it as an indirect object make sure to start and end one before and after calling this method
     // [remember to pause encryption internally]
-    PDFHummus::EStatusCode WriteEncryptionDictionary(ObjectsContext *inObjectsContext);
+    charta::EStatusCode WriteEncryptionDictionary(ObjectsContext *inObjectsContext);
 
     // state read/write support
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
   private:
     // named xcrypts, for V4

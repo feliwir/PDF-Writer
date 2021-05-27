@@ -21,7 +21,7 @@
 #include "io/InputFileStream.h"
 #include "SafeBufferMacrosDefs.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 InputFileStream::~InputFileStream()
 {
@@ -37,12 +37,12 @@ InputFileStream::InputFileStream(const std::string &inFilePath)
 EStatusCode InputFileStream::Open(const std::string &inFilePath)
 {
     SAFE_FOPEN(mStream, inFilePath.c_str(), "rb");
-    return nullptr == mStream ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return nullptr == mStream ? charta::eFailure : charta::eSuccess;
 }
 
 EStatusCode InputFileStream::Close()
 {
-    EStatusCode result = fclose(mStream) == 0 ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    EStatusCode result = fclose(mStream) == 0 ? charta::eSuccess : charta::eFailure;
 
     mStream = nullptr;
     return result;

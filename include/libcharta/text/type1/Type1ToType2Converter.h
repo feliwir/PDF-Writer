@@ -83,37 +83,37 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     Type1ToType2Converter(void);
     ~Type1ToType2Converter(void);
 
-    PDFHummus::EStatusCode WriteConvertedFontProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                                     IByteWriter *inByteWriter);
+    charta::EStatusCode WriteConvertedFontProgram(const std::string &inGlyphName, Type1Input *inType1Input,
+                                                  IByteWriter *inByteWriter);
 
     // IType1InterpreterImplementation
-    virtual PDFHummus::EStatusCode Type1Hstem(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Vstem(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RRCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1ClosePath(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Hstem(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Vstem(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RRCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1ClosePath(const LongList &inOperandList);
     virtual Type1CharString *GetSubr(long inSubrIndex);
-    virtual PDFHummus::EStatusCode Type1Return(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Hsbw(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Endchar(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VHCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HVCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1DotSection(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VStem3(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HStem3(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Seac(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Sbw(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Div(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Return(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Hsbw(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Endchar(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VHCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HVCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1DotSection(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VStem3(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HStem3(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Seac(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Sbw(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Div(const LongList &inOperandList);
     virtual bool IsOtherSubrSupported(long inOtherSubrsIndex);
-    virtual PDFHummus::EStatusCode CallOtherSubr(const LongList &inOperandList, LongList &outPostScriptOperandStack);
-    virtual PDFHummus::EStatusCode Type1Pop(const LongList &inOperandList, const LongList &inPostScriptOperandStack);
-    virtual PDFHummus::EStatusCode Type1SetCurrentPoint(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1InterpretNumber(long inOperand);
+    virtual charta::EStatusCode CallOtherSubr(const LongList &inOperandList, LongList &outPostScriptOperandStack);
+    virtual charta::EStatusCode Type1Pop(const LongList &inOperandList, const LongList &inPostScriptOperandStack);
+    virtual charta::EStatusCode Type1SetCurrentPoint(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1InterpretNumber(long inOperand);
     virtual unsigned long GetLenIV();
 
   private:
@@ -135,10 +135,10 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     bool mInFlexCollectionMode;
     LongList mFlexParameters;
 
-    PDFHummus::EStatusCode RecordOperatorWithParameters(uint16_t inMarkerType, const LongList &inOperandList);
+    charta::EStatusCode RecordOperatorWithParameters(uint16_t inMarkerType, const LongList &inOperandList);
     void RecordOperatorMarker(uint16_t inMarkerType);
-    PDFHummus::EStatusCode AddHStem(long inOrigin, long inExtent);
-    PDFHummus::EStatusCode AddVStem(long inOrigin, long inExtent);
+    charta::EStatusCode AddHStem(long inOrigin, long inExtent);
+    charta::EStatusCode AddVStem(long inOrigin, long inExtent);
     void ConvertStems();
     ConversionNodeList::iterator CollectHintIndexesFromHere(ConversionNodeList::iterator inFirstStemHint);
     ConversionNodeList::iterator InsertOperatorMarker(uint16_t inMarkerType,
@@ -152,5 +152,5 @@ class Type1ToType2Converter : IType1InterpreterImplementation
     ConversionNodeList::iterator MergeAltenratingOperators(ConversionNodeList::iterator inStartingNode,
                                                            uint16_t inAlternatingOpcode);
     void AddInitialWidthParameter();
-    PDFHummus::EStatusCode WriteProgramToStream(IByteWriter *inByteWriter);
+    charta::EStatusCode WriteProgramToStream(IByteWriter *inByteWriter);
 };

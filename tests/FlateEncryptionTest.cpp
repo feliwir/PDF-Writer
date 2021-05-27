@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(IO, FlateEncryption)
 {
@@ -53,7 +53,7 @@ TEST(IO, FlateEncryption)
 
     OutputStreamTraits outputTraits(decoderWriterStream);
     status = outputTraits.CopyToOutputStream(encoderReaderStream);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     delete encoderReaderStream;
     delete decoderWriterStream;

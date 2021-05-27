@@ -43,7 +43,7 @@
 
 #include <sstream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 PDFObjectParser::PDFObjectParser()
 {
@@ -420,12 +420,12 @@ bool PDFObjectParser::IsName(const std::string &inToken)
 static const char scSharp = '#';
 std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     std::stringbuf stringBuffer;
     BoolAndByte hexResult;
     uint8_t buffer;
 
-    for (auto it = inToken.begin() + 1; it != inToken.end() && PDFHummus::eSuccess == status; ++it)
+    for (auto it = inToken.begin() + 1; it != inToken.end() && charta::eSuccess == status; ++it)
     {
         if (*it == scSharp)
         {
@@ -435,7 +435,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
             {
                 TRACE_LOG1("PDFObjectParser::ParseName, exception in parsing hex value for a name token. token = %s",
                            inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             hexResult = GetHexValue(*it);
@@ -443,7 +443,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
             {
                 TRACE_LOG1("PDFObjectParser::ParseName, exception in parsing hex value for a name token. token = %s",
                            inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             buffer = (hexResult.second << 4);
@@ -452,7 +452,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
             {
                 TRACE_LOG1("PDFObjectParser::ParseName, exception in parsing hex value for a name token. token = %s",
                            inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             hexResult = GetHexValue(*it);
@@ -460,7 +460,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
             {
                 TRACE_LOG1("PDFObjectParser::ParseName, exception in parsing hex value for a name token. token = %s",
                            inToken.substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             buffer += hexResult.second;
@@ -472,7 +472,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
         stringBuffer.sputn((const char *)&buffer, 1);
     }
 
-    if (PDFHummus::eSuccess == status)
+    if (charta::eSuccess == status)
         return std::make_shared<PDFName>(stringBuffer.str());
     return nullptr;
 }
@@ -539,10 +539,10 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseArray()
     auto anArray = std::make_shared<PDFArray>();
     bool arrayEndEncountered = false;
     std::string token;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     // easy one. just loop till you get to a closing bracket token and recurse
-    while (GetNextToken(token) && PDFHummus::eSuccess == status)
+    while (GetNextToken(token) && charta::eSuccess == status)
     {
         arrayEndEncountered = (scRightSquare == token);
         if (arrayEndEncountered)
@@ -552,7 +552,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseArray()
         auto anObject = ParseNewObject();
         if (!anObject)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG1(
                 "PDFObjectParser::ParseArray, failure to parse array, failed to parse a member object. token = %s",
                 token.substr(0, MAX_TRACE_SIZE - 200).c_str());
@@ -563,7 +563,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseArray()
         }
     }
 
-    if (arrayEndEncountered && PDFHummus::eSuccess == status)
+    if (arrayEndEncountered && charta::eSuccess == status)
     {
         return anArray;
     }
@@ -596,9 +596,9 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
     auto aDictionary = std::make_shared<PDFDictionary>();
     bool dictionaryEndEncountered = false;
     std::string token;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    while (GetNextToken(token) && PDFHummus::eSuccess == status)
+    while (GetNextToken(token) && charta::eSuccess == status)
     {
         dictionaryEndEncountered = (scDoubleRightAngle == token);
         if (dictionaryEndEncountered)
@@ -610,7 +610,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
         auto aKey = ParseNewObject();
         if (!aKey)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse key for a dictionary. token = %s",
                        token.substr(0, MAX_TRACE_SIZE - 200).c_str());
             break;
@@ -620,7 +620,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
         auto aValue = ParseNewObject();
         if (!aValue)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG1("PDFObjectParser::ParseDictionary, failure to parse value for a dictionary. token = %s",
                        token.substr(0, MAX_TRACE_SIZE - 200).c_str());
             break;
@@ -632,7 +632,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
             aDictionary->Insert(name, aValue);
     }
 
-    if (dictionaryEndEncountered && PDFHummus::eSuccess == status)
+    if (dictionaryEndEncountered && charta::eSuccess == status)
     {
         return aDictionary;
     }

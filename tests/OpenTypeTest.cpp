@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode SaveCharstringCode(uint16_t inFontIndex, uint16_t inGlyphIndex, CFFFileInput *inCFFFileInput)
 {
@@ -39,7 +39,7 @@ EStatusCode SaveCharstringCode(uint16_t inFontIndex, uint16_t inGlyphIndex, CFFF
     EStatusCode status = glyphFile.OpenFile(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, std::string("glyphCFF") + Long(inFontIndex).ToString() + "_" +
                                                          inCFFFileInput->GetGlyphName(0, inGlyphIndex) + ".txt"));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     CharStringType2Tracer tracer;
@@ -57,16 +57,16 @@ TEST(OpenType, OpenType)
     InputFile otfFile;
 
     status = otfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/BrushScriptStd.otf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     OpenTypeFileInput openTypeReader;
 
     status = openTypeReader.ReadOpenTypeFile(otfFile.GetInputStream(), 0);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // show just abcd and notdef
 
-    ASSERT_EQ(SaveCharstringCode(0, 0, &openTypeReader.mCFF), PDFHummus::eSuccess);
+    ASSERT_EQ(SaveCharstringCode(0, 0, &openTypeReader.mCFF), charta::eSuccess);
     for (uint16_t i = 66; i < 70; ++i)
-        ASSERT_EQ(SaveCharstringCode(0, i, &openTypeReader.mCFF), PDFHummus::eSuccess);
+        ASSERT_EQ(SaveCharstringCode(0, i, &openTypeReader.mCFF), charta::eSuccess);
 }

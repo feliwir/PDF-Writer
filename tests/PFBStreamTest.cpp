@@ -28,7 +28,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(Type1, PFBStream)
 {

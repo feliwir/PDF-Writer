@@ -36,10 +36,10 @@ class StateWriter
     StateWriter(void);
     virtual ~StateWriter(void);
 
-    PDFHummus::EStatusCode Start(const std::string &inStateFilePath);
+    charta::EStatusCode Start(const std::string &inStateFilePath);
     ObjectsContext *GetObjectsWriter();
     void SetRootObject(ObjectIDType inRootObjectID);
-    PDFHummus::EStatusCode Finish();
+    charta::EStatusCode Finish();
 
   private:
     ObjectsContext *mObjectsContext;

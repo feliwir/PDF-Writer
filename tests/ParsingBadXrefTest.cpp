@@ -28,7 +28,7 @@ limitations under the License.
 #include <iostream>
 #include <string>
 
-using namespace PDFHummus;
+using namespace charta;
 
 static EStatusCode openPDF(const std::string &path)
 {
@@ -45,5 +45,5 @@ TEST(Parsing, ParsingBadXref)
 {
     EStatusCode status = openPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/test_bad_xref.pdf"));
     // This should be a failure
-    ASSERT_EQ(status, PDFHummus::eFailure);
+    ASSERT_EQ(status, charta::eFailure);
 }

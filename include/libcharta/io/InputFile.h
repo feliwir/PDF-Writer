@@ -22,8 +22,8 @@
 
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
-#include <string>
 #include <memory>
+#include <string>
 
 class InputBufferedStream;
 class InputFileStream;
@@ -34,8 +34,8 @@ class InputFile
     InputFile();
     ~InputFile();
 
-    PDFHummus::EStatusCode OpenFile(const std::string &inFilePath);
-    PDFHummus::EStatusCode CloseFile();
+    charta::EStatusCode OpenFile(const std::string &inFilePath);
+    charta::EStatusCode CloseFile();
 
     IByteReaderWithPosition *GetInputStream(); // returns buffered input stream
     const std::string &GetFilePath();

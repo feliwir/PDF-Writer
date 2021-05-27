@@ -31,22 +31,22 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode AddPageForTIFF(PDFWriter &inpdfWriter, const std::string &inTiffFilePath)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFFormXObject *imageFormXObject = inpdfWriter.CreateFormXObjectFromTIFFFile(inTiffFilePath);
     if (imageFormXObject == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     std::string imageXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(imageFormXObject->GetObjectID());
 
@@ -59,7 +59,7 @@ EStatusCode AddPageForTIFF(PDFWriter &inpdfWriter, const std::string &inTiffFile
     delete imageFormXObject;
 
     status = inpdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return inpdfWriter.WritePage(page);
@@ -73,101 +73,101 @@ TEST(PDFImages, TIFFImage)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "BasicTIFFImagesTest.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TiffImageTestLog.txt")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
-    for (int i = 1; i < 9 && status != PDFHummus::eFailure; ++i)
+    for (int i = 1; i < 9 && status != charta::eFailure; ++i)
         status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
 
                                                                               "data/images/tiff/CCITT_")) +
 
                                                Int(i).ToString() + ".TIF");
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/FLAG_T24.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/G4.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/G4S.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/G31D.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/G31DS.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/G32D.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/GMARBLES.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/MARBIBM.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/MARBLES.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/XING_T24.TIF"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // tiled image
     status =
         AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/cramps-tile.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/cramps.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Looks corrupted by the tool. on mine looks good
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/dscf0013.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Creates bad PDF by tool. on mine looks good
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/fax2d.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/g3test.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jello.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___ah.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___cg.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___dg.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___gg.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/oxford.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/quad-lzw.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/quad-tile.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/strike.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/ycbcr-cat.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     for (int i = 2; i < 9; i = i * 2)
     {
         status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
                                                                               "data/images/tiff/flower-minisblack-")) +
                                                Int(i).ToString() + ".tif");
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     for (int i = 2; i < 9; i = i * 2)
@@ -175,7 +175,7 @@ TEST(PDFImages, TIFFImage)
         status = AddPageForTIFF(
             pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-palette-")) +
                            Int(i).ToString() + ".tif");
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     for (int i = 2; i < 9; i = i * 2)
@@ -183,23 +183,23 @@ TEST(PDFImages, TIFFImage)
         status = AddPageForTIFF(pdfWriter, std::string(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH,
                                                                               "data/images/tiff/flower-rgb-contig-")) +
                                                Int(i).ToString() + ".tif");
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     status = AddPageForTIFF(pdfWriter,
                             RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-rgb-planar-8.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(
         pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-separated-contig-8.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = AddPageForTIFF(
         pdfWriter, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/flower-separated-planar-8.tif"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }
 
 #endif

@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 /*
     Creates a single page PDF with some drawings
@@ -37,10 +37,10 @@ TEST(PDF, SimpleContentPage)
     PDFWriter pdfWriter;
     EStatusCode status;
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleContent.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(contentContext, nullptr);
@@ -54,7 +54,7 @@ TEST(PDF, SimpleContentPage)
 
     // force stream change
     status = pdfWriter.PausePageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // draw a 200X100 points red rectangle
     contentContext->q();
@@ -73,11 +73,11 @@ TEST(PDF, SimpleContentPage)
     contentContext->Q();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

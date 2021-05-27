@@ -24,7 +24,7 @@
 
 class PDFTiledPattern;
 class ObjectsContext;
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,6 +36,6 @@ class ITiledPatternEndWritingTask
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFTiledPattern *inTiledPattern, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext) = 0;
+    virtual charta::EStatusCode Write(PDFTiledPattern *inTiledPattern, ObjectsContext *inObjectsContext,
+                                      charta::DocumentContext *inDocumentContext) = 0;
 };

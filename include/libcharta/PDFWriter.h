@@ -89,55 +89,55 @@ class PDFWriter
     PDFWriter();
 
     // output to file
-    PDFHummus::EStatusCode StartPDF(
+    charta::EStatusCode StartPDF(
         const std::string &inOutputFilePath, EPDFVersion inPDFVersion,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
 
-    PDFHummus::EStatusCode EndPDF();
+    charta::EStatusCode EndPDF();
 
     // output to stream
-    PDFHummus::EStatusCode StartPDFForStream(
+    charta::EStatusCode StartPDFForStream(
         IByteWriterWithPosition *inOutputStream, EPDFVersion inPDFVersion,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
-    PDFHummus::EStatusCode EndPDFForStream();
+    charta::EStatusCode EndPDFForStream();
 
     // in case of internal or external error, call this function to cleanup, in order to allow reuse of the PDFWriter
     // class
     void Reset();
 
     // modify PDF (use EndPDF to finish)
-    PDFHummus::EStatusCode ModifyPDF(
+    charta::EStatusCode ModifyPDF(
         const std::string &inModifiedFile, EPDFVersion inPDFVersion, const std::string &inOptionalAlternativeOutputFile,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
-    PDFHummus::EStatusCode ModifyPDFForStream(
+    charta::EStatusCode ModifyPDFForStream(
         IByteReaderWithPosition *inModifiedSourceStream, IByteWriterWithPosition *inModifiedDestinationStream,
         bool inAppendOnly, EPDFVersion inPDFVersion,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration(),
         const PDFCreationSettings &inPDFCreationSettings = PDFCreationSettings(true, true));
 
     // Ending and Restarting writing session (optional input file is for modification scenarios)
-    PDFHummus::EStatusCode Shutdown(const std::string &inStateFilePath);
-    PDFHummus::EStatusCode ContinuePDF(
+    charta::EStatusCode Shutdown(const std::string &inStateFilePath);
+    charta::EStatusCode ContinuePDF(
         const std::string &inOutputFilePath, const std::string &inStateFilePath,
         const std::string &inOptionalModifiedFile = "",
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration());
     // Continue PDF in output stream workflow (optional input stream is for modification scenarios)
-    PDFHummus::EStatusCode ContinuePDFForStream(
+    charta::EStatusCode ContinuePDFForStream(
         IByteWriterWithPosition *inOutputStream, const std::string &inStateFilePath,
         IByteReaderWithPosition *inModifiedSourceStream = NULL,
         const LogConfiguration &inLogConfiguration = LogConfiguration::DefaultLogConfiguration());
 
     // Page context, for drwaing page content
     PageContentContext *StartPageContentContext(PDFPage &inPage);
-    PDFHummus::EStatusCode PausePageContentContext(PageContentContext *inPageContext);
-    PDFHummus::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
+    charta::EStatusCode PausePageContentContext(PageContentContext *inPageContext);
+    charta::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
 
     // Page Writing [create a new Page by creating a new instance of PDFPage. instances may be reused.
-    PDFHummus::EStatusCode WritePage(PDFPage &inPage);
-    PDFHummus::EStatusCode WritePageAndRelease(PDFPage *inPage);
+    charta::EStatusCode WritePage(PDFPage &inPage);
+    charta::EStatusCode WritePageAndRelease(PDFPage *inPage);
 
     // same as above page writing, but also return page ID. good for extensibility, when you want to refer to the
     // written page form some other place
@@ -148,8 +148,8 @@ class PDFWriter
     PDFFormXObject *StartFormXObject(const PDFRectangle &inBoundingBox, const double *inMatrix = NULL);
     PDFFormXObject *StartFormXObject(const PDFRectangle &inBoundingBox, ObjectIDType inFormXObjectID,
                                      const double *inMatrix = NULL);
-    PDFHummus::EStatusCode EndFormXObject(PDFFormXObject *inFormXObject);
-    PDFHummus::EStatusCode EndFormXObjectAndRelease(PDFFormXObject *inFormXObject);
+    charta::EStatusCode EndFormXObject(PDFFormXObject *inFormXObject);
+    charta::EStatusCode EndFormXObjectAndRelease(PDFFormXObject *inFormXObject);
 
     // Image XObject creating [for TIFF nad JPG files].
     // note that as oppose to other methods, create the image xobject also writes it, so there's no
@@ -240,12 +240,12 @@ class PDFWriter
 
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
-    PDFHummus::EStatusCode MergePDFPagesToPage(
+    charta::EStatusCode MergePDFPagesToPage(
         PDFPage &inPage, const std::string &inPDFFilePath, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
-    PDFHummus::EStatusCode MergePDFPagesToPage(
+    charta::EStatusCode MergePDFPagesToPage(
         PDFPage &inPage, IByteReaderWithPosition *inPDFStream, const PDFPageRange &inPageRange,
         const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList(),
         const PDFParsingOptions &inParsingOptions = PDFParsingOptions::DefaultPDFParsingOptions());
@@ -282,7 +282,7 @@ class PDFWriter
 
     // URL links
     // URL should be encoded to be a valid URL, ain't gonna be checking that!
-    PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
+    charta::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
     // Extensibility, reaching to lower levels
     inline DocumentContext &GetDocumentContext()
@@ -297,7 +297,7 @@ class PDFWriter
 
     inline OutputFile &GetOutputFile()
     {
-        return mOutputFile; 
+        return mOutputFile;
     }
 
     // Extensibiility, for modified files workflow
@@ -312,22 +312,22 @@ class PDFWriter
     }
 
     // Recryption statics. create new version of an existing document encrypted with new password or decrypted
-    static PDFHummus::EStatusCode RecryptPDF(const std::string &inOriginalPDFPath,
-                                             const std::string &inOriginalPDFPassword, const std::string &inNewPDFPath,
-                                             const LogConfiguration &inLogConfiguration,
-                                             const PDFCreationSettings &inPDFCreationSettings,
-                                             EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
+    static charta::EStatusCode RecryptPDF(const std::string &inOriginalPDFPath,
+                                          const std::string &inOriginalPDFPassword, const std::string &inNewPDFPath,
+                                          const LogConfiguration &inLogConfiguration,
+                                          const PDFCreationSettings &inPDFCreationSettings,
+                                          EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
 
-    static PDFHummus::EStatusCode RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
-                                             const std::string &inOriginalPDFPassword,
-                                             IByteWriterWithPosition *inNewPDFStream,
-                                             const LogConfiguration &inLogConfiguration,
-                                             const PDFCreationSettings &inPDFCreationSettings,
-                                             EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
+    static charta::EStatusCode RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
+                                          const std::string &inOriginalPDFPassword,
+                                          IByteWriterWithPosition *inNewPDFStream,
+                                          const LogConfiguration &inLogConfiguration,
+                                          const PDFCreationSettings &inPDFCreationSettings,
+                                          EPDFVersion inOveridePDFVersion = ePDFVersionUndefined);
 
   private:
     ObjectsContext mObjectsContext;
-    PDFHummus::DocumentContext mDocumentContext;
+    charta::DocumentContext mDocumentContext;
 
     // for output file workflow, this will be the valid output [stream workflow does not have a file]
     OutputFile mOutputFile;
@@ -341,11 +341,11 @@ class PDFWriter
     void SetupLog(const LogConfiguration &inLogConfiguration);
     void SetupCreationSettings(const PDFCreationSettings &inPDFCreationSettings);
     void ReleaseLog();
-    PDFHummus::EStatusCode SetupState(const std::string &inStateFilePath);
+    charta::EStatusCode SetupState(const std::string &inStateFilePath);
     void Cleanup();
-    PDFHummus::EStatusCode SetupStateFromModifiedFile(const std::string &inModifiedFile, EPDFVersion inPDFVersion,
-                                                      const PDFCreationSettings &inPDFCreationSettings);
-    PDFHummus::EStatusCode SetupStateFromModifiedStream(IByteReaderWithPosition *inModifiedSourceStream,
-                                                        EPDFVersion inPDFVersion,
-                                                        const PDFCreationSettings &inPDFCreationSettings);
+    charta::EStatusCode SetupStateFromModifiedFile(const std::string &inModifiedFile, EPDFVersion inPDFVersion,
+                                                   const PDFCreationSettings &inPDFCreationSettings);
+    charta::EStatusCode SetupStateFromModifiedStream(IByteReaderWithPosition *inModifiedSourceStream,
+                                                     EPDFVersion inPDFVersion,
+                                                     const PDFCreationSettings &inPDFCreationSettings);
 };

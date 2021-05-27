@@ -24,7 +24,7 @@
 #include "PDFWriter.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 PDFPageMergingHelper::PDFPageMergingHelper(PDFPage *inPage)
 {

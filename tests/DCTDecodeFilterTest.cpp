@@ -44,7 +44,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
 {
@@ -52,11 +52,11 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     EStatusCode status;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, inTestFileName), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
@@ -71,7 +71,7 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
 
     // pause stream to start writing the image
     status = pdfWriter.PausePageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     // Create image xobject from
@@ -88,10 +88,10 @@ EStatusCode CreateFileWithJPGImage(const std::string &inTestFileName)
     delete imageXObject;
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
     status = pdfWriter.EndPDF();
 
@@ -194,7 +194,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
         }
         indirectObjects.insert(indirectObjects.end(), result.second.begin(), result.second.end());
     }
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     // start image stream for this dictionary (make sure it's unfiltered)
@@ -214,7 +214,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
     delete sourceImage;
 
     // late check for status so stream is deleted
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     // copy remaining indirect objects from image stream dictionary
@@ -246,23 +246,23 @@ TEST(DCTDecode, DCTDecodeFilter)
 
     // ceate file
     status = CreateFileWithJPGImage(testFileName);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // open file for modification
     PDFWriter pdfWriter;
 
     status = pdfWriter.ModifyPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, testFileName), ePDFVersion13,
                                  RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, std::string("mod") + testFileName));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     ObjectIDType imageObject = FindDCTDecodedImageObject(&pdfWriter.GetModifiedFileParser());
     ASSERT_NE(imageObject, 0);
 
     status = ModifyImageObject(&pdfWriter, imageObject);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }
 
 #endif

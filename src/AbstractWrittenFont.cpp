@@ -32,7 +32,7 @@
 
 #include <list>
 
-using namespace PDFHummus;
+using namespace charta;
 
 AbstractWrittenFont::AbstractWrittenFont(ObjectsContext *inObjectsContext)
 {
@@ -313,24 +313,24 @@ EStatusCode AbstractWrittenFont::WriteStateInDictionary(ObjectsContext *inStateW
         inDerivedObjectDictionary->WriteKey("mANSIRepresentation");
         inDerivedObjectDictionary->WriteNewObjectReferenceValue(mAnsiRepresentationObjectStateID);
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode AbstractWrittenFont::WriteStateAfterDictionary(ObjectsContext *inStateWriter)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     if (mCIDRepresentation != nullptr)
     {
         status = WriteWrittenFontState(mCIDRepresentation, inStateWriter, mCidRepresentationObjectStateID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 
     if (mANSIRepresentation != nullptr)
     {
         status = WriteWrittenFontState(mANSIRepresentation, inStateWriter, mAnsiRepresentationObjectStateID);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 
@@ -380,7 +380,7 @@ EStatusCode AbstractWrittenFont::WriteWrittenFontState(WrittenFontRepresentation
             WriteGlyphEncodingInfoState(inStateWriter, *itIDs, it->second);
     }
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void AbstractWrittenFont::WriteGlyphEncodingInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID,
@@ -434,7 +434,7 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader,
     }
     else
         mANSIRepresentation = nullptr;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,

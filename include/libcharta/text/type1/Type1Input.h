@@ -112,11 +112,11 @@ class Type1Input : public Type1InterpreterImplementationAdapter
     Type1Input(void);
     ~Type1Input(void);
 
-    PDFHummus::EStatusCode ReadType1File(IByteReaderWithPosition *inType1File);
-    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
-                                                             CharString1Dependencies &ioDependenciesInfo);
-    PDFHummus::EStatusCode CalculateDependenciesForCharIndex(const std::string &inCharStringName,
-                                                             CharString1Dependencies &ioDependenciesInfo);
+    charta::EStatusCode ReadType1File(IByteReaderWithPosition *inType1File);
+    charta::EStatusCode CalculateDependenciesForCharIndex(uint8_t inCharStringIndex,
+                                                          CharString1Dependencies &ioDependenciesInfo);
+    charta::EStatusCode CalculateDependenciesForCharIndex(const std::string &inCharStringName,
+                                                          CharString1Dependencies &ioDependenciesInfo);
     void Reset();
     Type1CharString *GetGlyphCharString(const std::string &inCharStringName);
     Type1CharString *GetGlyphCharString(uint8_t inCharStringIndex);
@@ -132,7 +132,7 @@ class Type1Input : public Type1InterpreterImplementationAdapter
 
     // IType1InterpreterImplementation overrides
     virtual Type1CharString *GetSubr(long inSubrIndex);
-    virtual PDFHummus::EStatusCode Type1Seac(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Seac(const LongList &inOperandList);
     virtual bool IsOtherSubrSupported(long inOtherSubrsIndex);
     virtual unsigned long GetLenIV();
 
@@ -149,16 +149,16 @@ class Type1Input : public Type1InterpreterImplementationAdapter
 
     void FreeTables();
     bool IsComment(const std::string &inToken);
-    PDFHummus::EStatusCode ReadFontDictionary();
-    PDFHummus::EStatusCode ReadFontInfoDictionary();
+    charta::EStatusCode ReadFontDictionary();
+    charta::EStatusCode ReadFontInfoDictionary();
     std::string FromPSName(const std::string &inPostScriptName);
-    PDFHummus::EStatusCode ParseEncoding();
-    PDFHummus::EStatusCode ReadPrivateDictionary();
-    PDFHummus::EStatusCode ParseIntVector(std::vector<int> &inVector);
-    PDFHummus::EStatusCode ParseDoubleVector(std::vector<double> &inVector);
-    PDFHummus::EStatusCode ParseSubrs();
-    PDFHummus::EStatusCode ParseCharstrings();
-    PDFHummus::EStatusCode ParseDoubleArray(double *inArray, int inArraySize);
+    charta::EStatusCode ParseEncoding();
+    charta::EStatusCode ReadPrivateDictionary();
+    charta::EStatusCode ParseIntVector(std::vector<int> &inVector);
+    charta::EStatusCode ParseDoubleVector(std::vector<double> &inVector);
+    charta::EStatusCode ParseSubrs();
+    charta::EStatusCode ParseCharstrings();
+    charta::EStatusCode ParseDoubleArray(double *inArray, int inArraySize);
     std::string FromPSString(const std::string &inPSString);
     void CalculateReverseEncoding();
 };

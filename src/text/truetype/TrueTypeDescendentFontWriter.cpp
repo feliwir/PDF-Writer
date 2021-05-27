@@ -25,7 +25,7 @@
 #include "ObjectsContext.h"
 #include "text/truetype/TrueTypeEmbeddedFontWriter.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 TrueTypeDescendentFontWriter::TrueTypeDescendentFontWriter() = default;
 
@@ -55,7 +55,7 @@ EStatusCode TrueTypeDescendentFontWriter::WriteFont(ObjectIDType inDecendentObje
         EStatusCode status = embeddedFontWriter.WriteEmbeddedFont(inFontInfo, GetOrderedKeys(inEncodedGlyphs),
                                                                   inObjectsContext, mEmbeddedFontFileObjectID);
 
-        if (PDFHummus::eFailure == status)
+        if (charta::eFailure == status)
             return status;
     }
 

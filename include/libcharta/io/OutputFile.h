@@ -33,8 +33,8 @@ class OutputFile
     OutputFile(void);
     ~OutputFile(void);
 
-    PDFHummus::EStatusCode OpenFile(const std::string &inFilePath, bool inAppend = false);
-    PDFHummus::EStatusCode CloseFile();
+    charta::EStatusCode OpenFile(const std::string &inFilePath, bool inAppend = false);
+    charta::EStatusCode CloseFile();
 
     IByteWriterWithPosition *GetOutputStream(); // returns buffered output stream
     const std::string &GetFilePath();

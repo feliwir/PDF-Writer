@@ -49,9 +49,9 @@ class Type1ToCFFEmbeddedFontWriter
     Type1ToCFFEmbeddedFontWriter(void);
     ~Type1ToCFFEmbeddedFontWriter(void);
 
-    PDFHummus::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                             const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
-                                             ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
+    charta::EStatusCode WriteEmbeddedFont(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                          const std::string &inFontFile3SubType, const std::string &inSubsetFontName,
+                                          ObjectsContext *inObjectsContext, ObjectIDType &outEmbeddedFontObjectID);
 
   private:
     Type1Input mType1Input;
@@ -74,17 +74,17 @@ class Type1ToCFFEmbeddedFontWriter
     long long mPrivateSize;
     long long mPrivatePosition;
 
-    PDFHummus::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
-                                           const std::string &inSubsetFontName, bool &outNotEmbedded,
-                                           MyStringBuf &outFontProgram);
-    PDFHummus::EStatusCode AddDependentGlyphs(StringVector &ioSubsetGlyphIDs);
-    PDFHummus::EStatusCode AddComponentGlyphs(const std::string &inGlyphID, StringSet &ioComponents,
-                                              bool &outFoundComponents);
-    PDFHummus::EStatusCode WriteCFFHeader();
-    PDFHummus::EStatusCode WriteName(const std::string &inSubsetFontName);
+    charta::EStatusCode CreateCFFSubset(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
+                                        const std::string &inSubsetFontName, bool &outNotEmbedded,
+                                        MyStringBuf &outFontProgram);
+    charta::EStatusCode AddDependentGlyphs(StringVector &ioSubsetGlyphIDs);
+    charta::EStatusCode AddComponentGlyphs(const std::string &inGlyphID, StringSet &ioComponents,
+                                           bool &outFoundComponents);
+    charta::EStatusCode WriteCFFHeader();
+    charta::EStatusCode WriteName(const std::string &inSubsetFontName);
     uint8_t GetMostCompressedOffsetSize(unsigned long inOffset);
-    PDFHummus::EStatusCode WriteTopIndex();
-    PDFHummus::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
+    charta::EStatusCode WriteTopIndex();
+    charta::EStatusCode WriteTopDictSegment(MyStringBuf &ioTopDictSegment);
     uint16_t AddStringToStringsArray(const std::string &inString);
     BoolAndUShort FindStandardString(const std::string &inStringToFind);
     void AddStringOperandIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::string &inString, uint16_t inOperator);
@@ -94,15 +94,15 @@ class Type1ToCFFEmbeddedFontWriter
     void AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::vector<int> &inArray, uint16_t inOperator);
     void AddDeltaVectorIfNotEmpty(CFFPrimitiveWriter &inWriter, const std::vector<double> &inArray,
                                   uint16_t inOperator);
-    PDFHummus::EStatusCode WriteStringIndex();
-    PDFHummus::EStatusCode WriteGlobalSubrsIndex();
-    PDFHummus::EStatusCode WriteEncodings(const StringVector &inSubsetGlyphIDs);
+    charta::EStatusCode WriteStringIndex();
+    charta::EStatusCode WriteGlobalSubrsIndex();
+    charta::EStatusCode WriteEncodings(const StringVector &inSubsetGlyphIDs);
     void FreeTemporaryStructs();
     void PrepareCharSetArray(const StringVector &inSubsetGlyphIDs);
-    PDFHummus::EStatusCode WriteCharsets(const StringVector &inSubsetGlyphIDs);
-    PDFHummus::EStatusCode WriteCharStrings(const StringVector &inSubsetGlyphIDs);
-    PDFHummus::EStatusCode WritePrivateDictionary();
-    PDFHummus::EStatusCode UpdateIndexesAtTopDict();
+    charta::EStatusCode WriteCharsets(const StringVector &inSubsetGlyphIDs);
+    charta::EStatusCode WriteCharStrings(const StringVector &inSubsetGlyphIDs);
+    charta::EStatusCode WritePrivateDictionary();
+    charta::EStatusCode UpdateIndexesAtTopDict();
     void TranslateFromFreeTypeToType1(FreeTypeFaceWrapper &inFontInfo, const UIntVector &inSubsetGlyphIDs,
                                       StringVector &outGlyphNames);
 };

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     PDFWriter pdfWriter;
     auto status = pdfWriter.StartPDF(output, ePDFVersion13, LogConfiguration(true, true, "AppendPagesTestLog.txt"));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         std::cerr << "Failed to start PDF: " << output << std::endl;
         return EXIT_FAILURE;
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
         std::cout << "Appending: " << input << std::endl;
 
         auto result = pdfWriter.AppendPDFPagesFromPDF(input, PDFPageRange());
-        if (result.first != PDFHummus::eSuccess)
+        if (result.first != charta::eSuccess)
         {
             std::cerr << "Failed to append PDF: " << input << std::endl;
             return EXIT_FAILURE;
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     }
 
     status = pdfWriter.EndPDF();
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         std::cerr << "Failed to end PDF: " << output << std::endl;
         return EXIT_FAILURE;

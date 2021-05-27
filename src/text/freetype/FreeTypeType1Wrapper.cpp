@@ -46,7 +46,7 @@ FreeTypeType1Wrapper::FreeTypeType1Wrapper(FT_Face inFace, const std::string &in
     FT_Get_PS_Font_Value(inFace, PS_DICT_ENCODING_TYPE, 0, (void *)&encodingType, sizeof(encodingType));
     mIsCustomEncoding = encodingType == T1_ENCODING_TYPE_ARRAY;
 
-    mPFMFileInfoRelevant = (!inPFMFilePath.empty() && mPFMReader.Read(inPFMFilePath) != PDFHummus::eFailure);
+    mPFMFileInfoRelevant = (!inPFMFilePath.empty() && mPFMReader.Read(inPFMFilePath) != charta::eFailure);
 
     // parse type 1 input file (my own parsing), to get extra info about encoding
     if (!inFontFilePath.empty())

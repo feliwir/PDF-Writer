@@ -52,9 +52,9 @@ class ObjectsContext
     void SetEncryptionHelper(EncryptionHelper *inEncryptionHelper);
 
     // pre 1.5 xref writing
-    PDFHummus::EStatusCode WriteXrefTable(long long &outWritePosition);
+    charta::EStatusCode WriteXrefTable(long long &outWritePosition);
     // post 1.5 xref writing (only used now for modified files)
-    PDFHummus::EStatusCode WriteXrefStream(DictionaryContext *inDictionaryContext);
+    charta::EStatusCode WriteXrefStream(DictionaryContext *inDictionaryContext);
 
     // Free Context, for direct writing to output stream
     IByteWriterWithPosition *StartFreeContext();
@@ -97,7 +97,7 @@ class ObjectsContext
     // this context enforces some simple values
     DictionaryContext *StartDictionary();
     // ends dictionary context, releases the dictionary started in "StartDictionary", and now returned
-    PDFHummus::EStatusCode EndDictionary(DictionaryContext *inDictionaryContext);
+    charta::EStatusCode EndDictionary(DictionaryContext *inDictionaryContext);
 
     // Array writing, currently just writing begin and end brackets
     void StartArray();
@@ -136,8 +136,8 @@ class ObjectsContext
     // setup for modified file workflow
     void SetupModifiedFile(PDFParser *inModifiedFileParser);
 
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
   private:
     IObjectsContextExtender *mExtender;

@@ -39,8 +39,8 @@ class InputFileStream final : public IByteReaderWithPosition
     InputFileStream(const std::string &inFilePath);
 
     // input file path is in UTF8
-    PDFHummus::EStatusCode Open(const std::string &inFilePath);
-    PDFHummus::EStatusCode Close();
+    charta::EStatusCode Open(const std::string &inFilePath);
+    charta::EStatusCode Close();
 
     // IByteReaderWithPosition implementation
     virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);

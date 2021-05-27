@@ -45,13 +45,13 @@ class PDFModifiedPage
     ~PDFModifiedPage(void);
 
     AbstractContentContext *StartContentContext();
-    PDFHummus::EStatusCode PauseContentContext();
-    PDFHummus::EStatusCode EndContentContext();
+    charta::EStatusCode PauseContentContext();
+    charta::EStatusCode EndContentContext();
     AbstractContentContext *GetContentContext();
 
-    PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
+    charta::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
-    PDFHummus::EStatusCode WritePage();
+    charta::EStatusCode WritePage();
 
     // advanced
     ResourcesDictionary *GetCurrentResourcesDictionary();

@@ -39,10 +39,10 @@ class IDescendentFontWriter
   public:
     virtual ~IDescendentFontWriter(){};
 
-    virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
-                                             FreeTypeFaceWrapper &inFontInfo,
-                                             const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
-                                             ObjectsContext *inObjectsContext, bool inEmbedFont) = 0;
+    virtual charta::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
+                                          FreeTypeFaceWrapper &inFontInfo,
+                                          const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                                          ObjectsContext *inObjectsContext, bool inEmbedFont) = 0;
 
     virtual void WriteSubTypeValue(DictionaryContext *inDescendentFontContext) = 0;
 

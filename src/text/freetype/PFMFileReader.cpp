@@ -23,18 +23,18 @@
 #include "io/IByteReaderWithPosition.h"
 #include "io/InputFile.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 PFMFileReader::PFMFileReader() = default;
 
 EStatusCode PFMFileReader::Read(const std::string &inPFMFilePath)
 {
-    EStatusCode status = PDFHummus::eSuccess;
-    mInternalReadStatus = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
+    mInternalReadStatus = charta::eSuccess;
     InputFile pfmFile;
 
     status = pfmFile.OpenFile(inPFMFilePath);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG1("PFMFileReader::Read, unable to open PFM file in %s", inPFMFilePath.c_str());
         return status;
@@ -45,15 +45,15 @@ EStatusCode PFMFileReader::Read(const std::string &inPFMFilePath)
         mReaderStream = pfmFile.GetInputStream();
 
         status = ReadHeader();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ReadExtension();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ReadExtendedFontMetrics();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
     } while (false);
@@ -102,10 +102,10 @@ EStatusCode PFMFileReader::ReadByte(BYTE &outByte)
 {
     uint8_t buffer;
 
-    if (mInternalReadStatus != PDFHummus::eFailure)
+    if (mInternalReadStatus != charta::eFailure)
     {
         if (mReaderStream->Read(&buffer, 1) != 1)
-            mInternalReadStatus = PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
         else
             outByte = buffer;
     }
@@ -117,20 +117,20 @@ EStatusCode PFMFileReader::ReadWord(WORD &outWord)
     uint8_t buffer;
     outWord = 0;
 
-    if (mInternalReadStatus != PDFHummus::eFailure)
+    if (mInternalReadStatus != charta::eFailure)
     {
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outWord = buffer;
 
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outWord |= (((WORD)buffer) << 8);
@@ -144,36 +144,36 @@ EStatusCode PFMFileReader::ReadDWord(DWORD &outDWORD)
     uint8_t buffer;
     outDWORD = 0;
 
-    if (mInternalReadStatus != PDFHummus::eFailure)
+    if (mInternalReadStatus != charta::eFailure)
     {
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outDWORD = buffer;
 
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outDWORD |= (((DWORD)buffer) << 8);
 
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outDWORD |= (((DWORD)buffer) << 16);
 
         if (mReaderStream->Read(&buffer, 1) != 1)
         {
-            mInternalReadStatus = PDFHummus::eFailure;
-            return PDFHummus::eFailure;
+            mInternalReadStatus = charta::eFailure;
+            return charta::eFailure;
         }
 
         outDWORD |= (((DWORD)buffer) << 24);

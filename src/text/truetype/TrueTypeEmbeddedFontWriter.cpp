@@ -32,7 +32,7 @@
 #include <algorithm>
 #include <sstream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TrueTypeEmbeddedFontWriter::TrueTypeEmbeddedFontWriter() : mFontFileReaderStream(nullptr)
 {
@@ -53,7 +53,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &i
     do
     {
         status = CreateTrueTypeSubset(inFontInfo, inSubsetGlyphIDs, notEmbedded, rawFontProgram);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::WriteEmbeddedFont, failed to write embedded font program");
             break;
@@ -64,7 +64,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &i
             // can't embed. mark succesful, and go back empty
             outEmbeddedFontObjectID = 0;
             TRACE_LOG("TrueTypeEmbeddedFontWriter::WriteEmbeddedFont, font may not be embedded. so not embedding");
-            return PDFHummus::eSuccess;
+            return charta::eSuccess;
         }
 
         outEmbeddedFontObjectID = inObjectsContext->StartNewIndirectObject();
@@ -82,7 +82,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::WriteEmbeddedFont(FreeTypeFaceWrapper &i
         InputStringBufferStream fontProgramStream(&rawFontProgram);
         OutputStreamTraits streamCopier(pdfStream->GetWriteStream());
         status = streamCopier.CopyToOutputStream(&fontProgramStream);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::WriteEmbeddedFont, failed to copy font program into pdf stream");
             break;
@@ -106,7 +106,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         UIntVector subsetGlyphIDs = inSubsetGlyphIDs;
 
         status = mTrueTypeFile.OpenFile(inFontInfo.GetFontFilePath());
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG1("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, cannot open true type font file at %s",
                        inFontInfo.GetFontFilePath().c_str());
@@ -114,7 +114,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         }
 
         status = mTrueTypeInput.ReadOpenTypeFile(mTrueTypeFile.GetInputStream(), (uint16_t)inFontInfo.GetFontIndex());
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to read true type file");
             break;
@@ -131,7 +131,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         if (mTrueTypeInput.mOS2Exists && !FSType(mTrueTypeInput.mOS2.fsType).CanEmbed())
         {
             outNotEmbedded = true;
-            return PDFHummus::eSuccess;
+            return charta::eSuccess;
         }
         outNotEmbedded = false;
 
@@ -157,35 +157,35 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         mPrimitivesReader.SetOpenTypeStream(&mFontFileReaderStream);
 
         status = WriteTrueTypeHeader();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write true type header");
             break;
         }
 
         status = WriteHead();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write head table");
             break;
         }
 
         status = WriteHHea();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write hhea table");
             break;
         }
 
         status = WriteHMtx();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write hmtx table");
             break;
         }
 
         status = WriteMaxp();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write Maxp table");
             break;
@@ -194,7 +194,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         if (mTrueTypeInput.mCVTExists)
         {
             status = WriteCVT();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write cvt table");
                 break;
@@ -204,7 +204,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         if (mTrueTypeInput.mFPGMExists)
         {
             status = WriteFPGM();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write fpgm table");
                 break;
@@ -214,7 +214,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         if (mTrueTypeInput.mPREPExists)
         {
             status = WritePREP();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write prep table");
                 break;
@@ -222,7 +222,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         }
 
         status = WriteNAME();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write name table");
             break;
@@ -231,7 +231,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         if (mTrueTypeInput.mOS2Exists)
         {
             status = WriteOS2();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write os2 table");
                 break;
@@ -239,7 +239,7 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         }
 
         status = WriteCMAP();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write cmap table");
             break;
@@ -248,14 +248,14 @@ EStatusCode TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset(
         locaTable = new unsigned long[mSubsetFontGlyphsCount + 1];
 
         status = WriteGlyf(subsetGlyphIDs, locaTable);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write prep table");
             break;
         }
 
         status = WriteLoca(locaTable);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("TrueTypeEmbeddedFontWriter::CreateTrueTypeSubset, failed to write loca table");
             break;

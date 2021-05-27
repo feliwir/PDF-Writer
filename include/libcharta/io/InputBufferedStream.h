@@ -22,8 +22,8 @@
 
 #include "EStatusCode.h"
 #include "IByteReaderWithPosition.h"
-#include <vector>
 #include <memory>
+#include <vector>
 
 constexpr size_t DEFAULT_INPUT_BUFFER_SIZE = 256 * 1024;
 
@@ -35,7 +35,6 @@ class InputBufferedStream final : public IByteReaderWithPosition
     */
     InputBufferedStream();
 
-
     /*
         consturctor with buffer size setup
     */
@@ -44,7 +43,8 @@ class InputBufferedStream final : public IByteReaderWithPosition
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    InputBufferedStream(std::unique_ptr<IByteReaderWithPosition> inSourceReader, size_t inBufferSize = DEFAULT_INPUT_BUFFER_SIZE);
+    InputBufferedStream(std::unique_ptr<IByteReaderWithPosition> inSourceReader,
+                        size_t inBufferSize = DEFAULT_INPUT_BUFFER_SIZE);
 
     /*
         Assigns a reader stream for buffered reading. from the moment of assigning the

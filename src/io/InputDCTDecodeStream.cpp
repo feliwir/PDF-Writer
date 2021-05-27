@@ -25,7 +25,7 @@
 
 #ifndef PDFHUMMUS_NO_DCT
 
-using namespace PDFHummus;
+using namespace charta;
 
 class HummusJPGException
 {

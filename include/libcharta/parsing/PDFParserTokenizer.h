@@ -82,7 +82,7 @@ class PDFParserTokenizer
     bool CanGetNextByte();
     // failure in GetNextByteForToken actually marks a true read failure, if you checked end of file before calling
     // it...
-    PDFHummus::EStatusCode GetNextByteForToken(uint8_t &outByte);
+    charta::EStatusCode GetNextByteForToken(uint8_t &outByte);
 
     bool IsPDFWhiteSpace(uint8_t inCharacter);
     void SaveTokenBuffer(uint8_t inToSave);

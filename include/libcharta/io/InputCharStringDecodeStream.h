@@ -40,6 +40,6 @@ class InputCharStringDecodeStream final : public IByteReader
     uint16_t mRandomizer;
 
     void InitializeCharStringDecode(unsigned long inLenIV);
-    PDFHummus::EStatusCode ReadDecodedByte(uint8_t &outByte);
+    charta::EStatusCode ReadDecodedByte(uint8_t &outByte);
     uint8_t DecodeByte(uint8_t inByteToDecode);
 };

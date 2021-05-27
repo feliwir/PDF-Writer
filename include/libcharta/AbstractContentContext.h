@@ -46,7 +46,7 @@
 #include <utility>
 #include <variant>
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -155,7 +155,7 @@ class AbstractContentContext
         }
     };
 
-    AbstractContentContext(PDFHummus::DocumentContext *inDocumentContext);
+    AbstractContentContext(charta::DocumentContext *inDocumentContext);
     virtual ~AbstractContentContext(void);
 
     // High level methods
@@ -196,7 +196,7 @@ class AbstractContentContext
 
     // graphic state
     void q();
-    PDFHummus::EStatusCode Q(); // Status code returned, in case there's inbalance in "q-Q"s
+    charta::EStatusCode Q(); // Status code returned, in case there's inbalance in "q-Q"s
     void cm(double inA, double inB, double inC, double inD, double inE, double inF);
     void w(double inLineWidth);
     void J(int inLineCapStyle);
@@ -262,12 +262,12 @@ class AbstractContentContext
     // will return error if no font was set, or that one of the glyphs
     // didn't succeed in encoding.
     // input parameter is UTF-8 encoded
-    PDFHummus::EStatusCode Tj(const std::string &inText);
+    charta::EStatusCode Tj(const std::string &inText);
 
     // The rest of the text operators, handled by the library handing of font. text is in UTF8
-    PDFHummus::EStatusCode Quote(const std::string &inText);
-    PDFHummus::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing, const std::string &inText);
-    PDFHummus::EStatusCode TJ(const std::list<StringOrDouble> &inStringsAndSpacing);
+    charta::EStatusCode Quote(const std::string &inText);
+    charta::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing, const std::string &inText);
+    charta::EStatusCode TJ(const std::list<StringOrDouble> &inStringsAndSpacing);
 
     //
     // Text showing operators using the library handling of fonts with direct glyph selection
@@ -277,11 +277,11 @@ class AbstractContentContext
     // each command accepts a list of glyphs. each glyph is mapped to its matching unicode values.
     // a glyph may have more than one unicode value in case it reperesents a series of Characters.
 
-    PDFHummus::EStatusCode Tj(const GlyphUnicodeMappingList &inText);
-    PDFHummus::EStatusCode Quote(const GlyphUnicodeMappingList &inText);
-    PDFHummus::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing,
-                                       const GlyphUnicodeMappingList &inText);
-    PDFHummus::EStatusCode TJ(const std::list<GlyphUnicodeMappingListOrDouble> &inStringsAndSpacing);
+    charta::EStatusCode Tj(const GlyphUnicodeMappingList &inText);
+    charta::EStatusCode Quote(const GlyphUnicodeMappingList &inText);
+    charta::EStatusCode DoubleQuote(double inWordSpacing, double inCharacterSpacing,
+                                    const GlyphUnicodeMappingList &inText);
+    charta::EStatusCode TJ(const std::list<GlyphUnicodeMappingListOrDouble> &inStringsAndSpacing);
 
     //
     // Text showing operators overriding library behavior
@@ -324,7 +324,7 @@ class AbstractContentContext
     }
 
   protected:
-    PDFHummus::DocumentContext *mDocumentContext;
+    charta::DocumentContext *mDocumentContext;
 
     // Derived classes should use this method to update the stream for writing
     void SetPDFStreamForWrite(std::shared_ptr<PDFStream> inStream);
@@ -348,9 +348,9 @@ class AbstractContentContext
 
     void AssertProcsetAvailable(const std::string &inProcsetName);
 
-    PDFHummus::EStatusCode WriteTextCommandWithEncoding(const std::string &inUnicodeText, ITextCommand *inTextCommand);
-    PDFHummus::EStatusCode WriteTextCommandWithDirectGlyphSelection(const GlyphUnicodeMappingList &inText,
-                                                                    ITextCommand *inTextCommand);
+    charta::EStatusCode WriteTextCommandWithEncoding(const std::string &inUnicodeText, ITextCommand *inTextCommand);
+    charta::EStatusCode WriteTextCommandWithDirectGlyphSelection(const GlyphUnicodeMappingList &inText,
+                                                                 ITextCommand *inTextCommand);
 
     void SetupColor(const GraphicOptions &inOptions);
     void SetupColor(const TextOptions &inOptions);

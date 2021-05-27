@@ -91,7 +91,7 @@
 #include <search.h>
 #include <stdlib.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 #define PS_UNIT_SIZE 72.0F
 
@@ -429,7 +429,7 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFFile(const std::strin
 {
     InputFile tiffFile;
 
-    if (tiffFile.OpenFile(inTIFFFilePath) != PDFHummus::eSuccess)
+    if (tiffFile.OpenFile(inTIFFFilePath) != charta::eSuccess)
     {
         TRACE_LOG1("TIFFImageHandler::CreateFormXObjectFromTIFFFile. cannot open file for reading - %s",
                    inTIFFFilePath.c_str());
@@ -490,7 +490,7 @@ PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
     do
     {
         status = ReadTopLevelTiffInformation();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (mT2p->pdf_page >= mT2p->tiff_pagecount)
@@ -498,11 +498,11 @@ PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
             TRACE_LOG3("TIFFImageHandler::ConvertTiff2PDF, Requested tiff page %u where the tiff only has %u pages. "
                        "Tiff file name - %s",
                        mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         status = ReadTIFFPageInformation();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // Write Transfer functions
@@ -533,7 +533,7 @@ PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
                     imagesImageXObject.push_back(anImage);
                 else
                 {
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
             }
@@ -544,9 +544,9 @@ PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
             if (anImage != nullptr)
                 imagesImageXObject.push_back(anImage);
             else
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // now...write the final XObject to posit all images in their right size
@@ -575,7 +575,7 @@ static int t2p_cmp_t2p_page(const void *e1, const void *e2)
 
 EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     tdir_t directorycount = TIFFNumberOfDirectories(mT2p->input);
     tdir_t i = 0;
     uint16 pagen = 0;
@@ -590,7 +590,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
         {
             TRACE_LOG2("Can't allocate %u bytes of memory for tiff_pages array, %s", directorycount * sizeof(T2P_PAGE),
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         _TIFFmemset(mT2p->tiff_pages, 0x00, directorycount * sizeof(T2P_PAGE));
@@ -601,7 +601,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
         {
             TRACE_LOG2("Can't allocate %u bytes of memory for tiff_tiles array, %s", directorycount * sizeof(T2P_PAGE),
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         _TIFFmemset(mT2p->tiff_tiles, 0x00, directorycount * sizeof(T2P_TILES));
@@ -615,7 +615,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
             {
                 TRACE_LOG2("Can't set directory %u of input file %s", directorycount * sizeof(T2P_PAGE),
                            mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -650,7 +650,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
             }
             mT2p->tiff_pagecount++;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         qsort((void *)mT2p->tiff_pages, mT2p->tiff_pagecount, sizeof(T2P_PAGE), t2p_cmp_t2p_page);
@@ -703,7 +703,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
 
                     TRACE_LOG2("Can't allocate %u bytes of memory for tiles, %s",
                                mT2p->tiff_tiles[i].tiles_tilecount * sizeof(T2P_TILE), mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
             }
@@ -715,7 +715,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
 
 EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint16 xuint16;
     uint16 *xuint16p;
     float *xfloatp;
@@ -731,7 +731,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         {
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero width",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -740,7 +740,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         {
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero length",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -748,7 +748,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         {
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no compression tag",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -757,7 +757,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with compression type %u:  not "
                        "configured",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_compression);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -777,10 +777,10 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         default:
             TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u bits per sample",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_bitspersample);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         TIFFGetFieldDefaulted(mT2p->input, TIFFTAG_SAMPLESPERPIXEL, &(mT2p->tiff_samplesperpixel));
@@ -788,7 +788,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         {
             TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u samples per pixel",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -810,11 +810,11 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             default:
                 TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with sample format %u",
                            mT2p->inputFilePath.c_str(), xuint16);
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         TIFFGetFieldDefaulted(mT2p->input, TIFFTAG_FILLORDER, &(mT2p->tiff_fillorder));
@@ -823,7 +823,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             TRACE_LOG1(
                 "TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no photometric interpretation tag",
                 mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -892,14 +892,14 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                 TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
                            "per pixel",
                            mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
             TRACE_LOG2(
                 "TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples per pixel",
                 mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
 
         case PHOTOMETRIC_PALETTE:
@@ -918,7 +918,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                     TRACE_LOG1(
                         "TIFFImageHandler::ReadTIFFPageInformation, No support for %s because its inkset is not CMYK",
                         mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
             }
@@ -931,7 +931,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                 TRACE_LOG2(
                     "TIFFImageHandler::ReadTIFFPageInformation, No support for %s because it has %u samples per pixel",
                     mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             break;
@@ -973,16 +973,16 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric interpretation "
                        "LogL/LogLuv",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         default:
             TRACE_LOG1(
                 "TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric interpretation %u",
                 mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (TIFFGetField(mT2p->input, TIFFTAG_PLANARCONFIG, &(mT2p->tiff_planar)) != 0)
@@ -1002,17 +1002,17 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                     TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with separated planar "
                                "configuration and %u bits per sample",
                                mT2p->inputFilePath.c_str(), mT2p->tiff_bitspersample);
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 break;
             default:
                 TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with planar configuration %u",
                            mT2p->inputFilePath.c_str(), mT2p->tiff_planar);
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
 
@@ -1163,7 +1163,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 
 EStatusCode TIFFImageHandler::ReadPhotometricPalette()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint16 *r;
     uint16 *g;
     uint16 *b;
@@ -1175,7 +1175,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for palettized image %s with not one "
                        "sample per pixel",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         mT2p->pdf_colorspace = (t2p_cs_t)(T2P_CS_RGB | T2P_CS_PALETTE);
@@ -1184,7 +1184,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
         {
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         if (mT2p->pdf_palette != nullptr)
@@ -1198,7 +1198,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
             TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
                        "t2p_read_tiff_image, %s",
                        mT2p->pdf_palettesize, mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         for (int i = 0; i < mT2p->pdf_palettesize; i++)
@@ -1215,7 +1215,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
 
 EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint16 *r;
     uint16 *g;
     uint16 *b;
@@ -1228,7 +1228,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for palettized CMYK image %s with not "
                        "one sample per pixel",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         mT2p->pdf_colorspace = t2p_cs_t(T2P_CS_CMYK | T2P_CS_PALETTE);
@@ -1237,7 +1237,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
         {
             TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
                        mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         if (mT2p->pdf_palette != nullptr)
@@ -1251,7 +1251,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
             TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
                        "t2p_read_tiff_image, %s",
                        mT2p->pdf_palettesize, mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         for (int i = 0; i < mT2p->pdf_palettesize; i++)
@@ -1975,7 +1975,7 @@ PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
         if (mExtender != nullptr)
         {
             if (mExtender->OnTIFFImageXObjectWrite(imageXObjectID, imageContext, mObjectsContext,
-                                                   mContainerDocumentContext, this) != PDFHummus::eSuccess)
+                                                   mContainerDocumentContext, this) != charta::eSuccess)
             {
                 TRACE_LOG("TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared failure when "
                           "writing image xobject.");
@@ -1987,7 +1987,7 @@ PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
 
         CalculateTiffTileSize(inTileIndex);
 
-        if (WriteImageTileData(imageStream, inTileIndex) != PDFHummus::eSuccess)
+        if (WriteImageTileData(imageStream, inTileIndex) != charta::eSuccess)
             break;
 
         mObjectsContext->EndPDFStream(imageStream);
@@ -2245,7 +2245,7 @@ tsize_t GetSizeFromTIFFDataSize(T2P *inT2p)
 
 EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint16 edge = 0;
     unsigned char *buffer = nullptr;
 
@@ -2273,7 +2273,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             {
                 TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
                            mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             TIFFReadRawTile(mT2p->input, inTileIndex, (tdata_t)buffer, mT2p->tiff_datasize);
@@ -2291,7 +2291,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             {
                 TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
                            mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             read = TIFFReadEncodedTile(mT2p->input, inTileIndex, (tdata_t)&buffer[bufferoffset], mT2p->tiff_datasize);
@@ -2299,7 +2299,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             {
                 TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s", inTileIndex,
                            mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
         }
@@ -2317,7 +2317,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                 {
                     TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
                                mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 samplebuffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
@@ -2325,7 +2325,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                 {
                     TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
                                mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 samplebufferoffset = 0;
@@ -2339,7 +2339,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                                    inTileIndex + i * tilecount, mT2p->inputFilePath.c_str());
                         _TIFFfree(samplebuffer);
                         _TIFFfree(buffer);
-                        status = PDFHummus::eFailure;
+                        status = charta::eFailure;
                         break;
                     }
                     samplebufferoffset += read;
@@ -2356,7 +2356,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                 {
                     TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
                                mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 read =
@@ -2366,7 +2366,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                     TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s", inTileIndex,
                                mT2p->inputFilePath.c_str());
                     _TIFFfree(buffer);
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
             }
@@ -2388,7 +2388,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             if ((mT2p->pdf_sample & T2P_SAMPLE_YCBCR_TO_RGB) != 0)
             {
                 TRACE_LOG1("No support for YCbCr to RGB in tile for %s", mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -2538,7 +2538,7 @@ PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
         if (mExtender != nullptr)
         {
             if (mExtender->OnTIFFImageXObjectWrite(imageXObjectID, imageContext, mObjectsContext,
-                                                   mContainerDocumentContext, this) != PDFHummus::eSuccess)
+                                                   mContainerDocumentContext, this) != charta::eSuccess)
             {
                 TRACE_LOG("TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared failure when "
                           "writing image xobject.");
@@ -2550,7 +2550,7 @@ PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
 
         CalculateTiffSizeNoTiles();
 
-        if (WriteImageData(imageStream) != PDFHummus::eSuccess)
+        if (WriteImageData(imageStream) != charta::eSuccess)
             break;
 
         mObjectsContext->EndPDFStream(imageStream);
@@ -2640,7 +2640,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
     tsize_t sepstripcount = 0;
     tsize_t sepstripsize = 0;
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -2653,7 +2653,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 TIFFReadRawStrip(mT2p->input, 0, (tdata_t)buffer, mT2p->tiff_datasize);
@@ -2672,7 +2672,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
             {
                 TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                            mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             memset(buffer, 0, mT2p->tiff_datasize);
@@ -2685,14 +2685,14 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Error on decoding strip %u of %s", i, mT2p->inputFilePath.c_str());
                     _TIFFfree(buffer);
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 bufferoffset += read;
                 stripsize =
                     (stripsize > mT2p->tiff_datasize - bufferoffset) ? (mT2p->tiff_datasize - bufferoffset) : stripsize;
             }
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
         else
@@ -2711,7 +2711,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 memset(buffer, 0, mT2p->tiff_datasize);
@@ -2720,7 +2720,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 for (i = 0; i < stripcount; i++)
@@ -2735,18 +2735,18 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                             TRACE_LOG2("Error on decoding strip %u of %s", i + j * stripcount,
                                        mT2p->inputFilePath.c_str());
                             _TIFFfree(buffer);
-                            status = PDFHummus::eFailure;
+                            status = charta::eFailure;
                             break;
                         }
                         samplebufferoffset += read;
                     }
-                    if (status != PDFHummus::eSuccess)
+                    if (status != charta::eSuccess)
                         break;
                     SamplePlanarSeparateToContig(&(buffer[bufferoffset]), samplebuffer, samplebufferoffset);
                     bufferoffset += samplebufferoffset;
                 }
                 _TIFFfree(samplebuffer);
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                     break;
                 status = WriteImageBufferToStream(inImageStream, mT2p->tiff_width, mT2p->tiff_length, buffer,
                                                   GetSizeFromTIFFDataSize);
@@ -2763,7 +2763,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
             {
                 TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                            mT2p->inputFilePath.c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             memset(buffer, 0, mT2p->tiff_datasize);
@@ -2777,14 +2777,14 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                     TRACE_LOG2("Error on decoding strip %u of %s", i, mT2p->inputFilePath.c_str());
                     _TIFFfree(samplebuffer);
                     _TIFFfree(buffer);
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 bufferoffset += read;
                 stripsize =
                     (stripsize > mT2p->tiff_datasize - bufferoffset) ? (mT2p->tiff_datasize - bufferoffset) : stripsize;
             }
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
 
             if ((mT2p->pdf_sample & T2P_SAMPLE_REALIZE_PALETTE) != 0)
@@ -2795,7 +2795,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     _TIFFfree(buffer);
                 }
                 else
@@ -2823,7 +2823,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG2("Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", mT2p->tiff_datasize,
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     _TIFFfree(buffer);
                     break;
                 }
@@ -2835,7 +2835,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
                 {
                     TRACE_LOG1("Can't use TIFFReadRGBAImageOriented to extract RGB image from %s",
                                mT2p->inputFilePath.c_str());
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 mT2p->tiff_datasize = SampleABGRToRGB((tdata_t)buffer, mT2p->tiff_width * mT2p->tiff_length);
@@ -2898,7 +2898,7 @@ EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream
                                                        uint32 inImageLength, unsigned char *inBuffer,
                                                        ImageSizeProc inBufferSizeFunction)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     do
     {
         mT2p->pdfStream = nullptr;
@@ -2952,7 +2952,7 @@ EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream
         if (bufferoffset == (tsize_t)-1)
         {
             TRACE_LOG1("Error writing encoded strip to output PDF %s", mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     } while (false);
@@ -2963,7 +2963,7 @@ EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream
 PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectList &inImages,
                                                          ObjectIDType inFormXObjectID)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     auto it = inImages.begin();
     ttile_t i = 0;
     T2P_BOX box;
@@ -3021,7 +3021,7 @@ PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectLi
             xobjectContentContext->Q();
 
         status = mContainerDocumentContext->EndFormXObjectNoRelease(xobjectForm);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG1("TIFFImageHandler::WriteImagesFormXObject, Error in writing form XObject for image %s",
                        mT2p->inputFilePath.c_str());
@@ -3030,7 +3030,7 @@ PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectLi
 
     } while (false);
 
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         delete xobjectForm;
         xobjectForm = nullptr;
@@ -3295,7 +3295,7 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(IByteReaderWithP
         mT2p->pdf_page = (tdir_t)inImageIndex;
 
         status = ReadTopLevelTiffInformation();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (mT2p->pdf_page >= mT2p->tiff_pagecount)
@@ -3303,12 +3303,12 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(IByteReaderWithP
             TRACE_LOG3("TIFFImageHandler::ReadImageDimensions, Requested tiff page %u where the tiff only has %u "
                        "pages. Tiff file name - %s",
                        mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
         status = ReadTIFFPageInformation();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
         imageInfo.dimensions.first = mT2p->pdf_mediabox.x2 - mT2p->pdf_mediabox.x1;
         imageInfo.dimensions.second = mT2p->pdf_mediabox.y2 - mT2p->pdf_mediabox.y1;
@@ -3352,7 +3352,7 @@ unsigned long TIFFImageHandler::ReadImagePageCount(IByteReaderWithPosition *inTI
         mT2p->inputFilePath = "";
 
         status = ReadTopLevelTiffInformation();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         result = mT2p->tiff_pagecount;

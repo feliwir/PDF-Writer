@@ -28,7 +28,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode TestOnlyMerge()
 {
@@ -36,11 +36,11 @@ EStatusCode TestOnlyMerge()
     EStatusCode status;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TestOnlyMerge.pdf"), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFPageRange singePageRange;
     singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -48,11 +48,11 @@ EStatusCode TestOnlyMerge()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), singePageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -65,15 +65,15 @@ EStatusCode TestPrefixGraphicsMerge()
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TestPrefixGraphicsMerge.pdf"), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -82,7 +82,7 @@ EStatusCode TestPrefixGraphicsMerge()
     pageContent->Tf(font, 30);
     pageContent->Tm(1, 0, 0, 1, 10, 600);
     status = pageContent->Tj("Testing file merge");
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
     pageContent->ET();
 
@@ -94,15 +94,15 @@ EStatusCode TestPrefixGraphicsMerge()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), singePageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.EndPageContentContext(pageContent);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -115,11 +115,11 @@ EStatusCode TestSuffixGraphicsMerge()
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TestSuffixGraphicsMerge.pdf"), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFPageRange singePageRange;
     singePageRange.mType = PDFPageRange::eRangeTypeSpecific;
@@ -127,12 +127,12 @@ EStatusCode TestSuffixGraphicsMerge()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), singePageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -141,16 +141,16 @@ EStatusCode TestSuffixGraphicsMerge()
     pageContent->Tf(font, 30);
     pageContent->Tm(1, 0, 0, 1, 10, 600);
     status = pageContent->Tj("Testing file merge");
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
     pageContent->ET();
 
     status = pdfWriter.EndPageContentContext(pageContent);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -163,15 +163,15 @@ EStatusCode TestBothGraphicsMerge()
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TestBothGraphicsMerge.pdf"), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -180,7 +180,7 @@ EStatusCode TestBothGraphicsMerge()
     pageContent->Tf(font, 30);
     pageContent->Tm(1, 0, 0, 1, 10, 600);
     status = pageContent->Tj("Testing file merge");
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
     pageContent->ET();
 
@@ -193,7 +193,7 @@ EStatusCode TestBothGraphicsMerge()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), singePageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     pageContent->Q();
@@ -206,11 +206,11 @@ EStatusCode TestBothGraphicsMerge()
     pageContent->Q();
 
     status = pdfWriter.EndPageContentContext(pageContent);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -223,11 +223,11 @@ EStatusCode MergeTwoPageInSeparatePhases()
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeTwoPageInSeparatePhases.pdf"),
                                 ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -240,7 +240,7 @@ EStatusCode MergeTwoPageInSeparatePhases()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), firstPageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     pageContent->Q();
@@ -254,17 +254,17 @@ EStatusCode MergeTwoPageInSeparatePhases()
 
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), secondPageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     pageContent->Q();
 
     status = pdfWriter.EndPageContentContext(pageContent);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -295,7 +295,7 @@ class MyPDFMergingHandler : public DocumentContextExtenderAdapter
             mPageContentContext->cm(0.5, 0, 0, 0.5, 0, 421);
         }
         ++mPageIndex;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
   private:
@@ -310,11 +310,11 @@ EStatusCode MergeTwoPageWithEvents()
 
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeTwoPageWithEvents.pdf"), ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -333,7 +333,7 @@ EStatusCode MergeTwoPageWithEvents()
     pdfWriter.GetDocumentContext().AddDocumentContextExtender(&mergingHandler);
     status = pdfWriter.MergePDFPagesToPage(
         page, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), twoPageRange);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     pdfWriter.GetDocumentContext().RemoveDocumentContextExtender(&mergingHandler);
@@ -341,11 +341,11 @@ EStatusCode MergeTwoPageWithEvents()
     pageContent->Q();
 
     status = pdfWriter.EndPageContentContext(pageContent);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();
@@ -362,17 +362,17 @@ EStatusCode MergePagesUsingCopyingContext()
     // be reusables.
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergePagesUsingCopyingContext.pdf"),
                                 ePDFVersion13);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     std::shared_ptr<PDFDocumentCopyingContext> copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"));
     if (copyingContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // create a reusable form xobject from the first page
     EStatusCodeAndObjectIDType result = copyingContext->CreateFormXObjectFromPDFPage(0, ePDFPageBoxMediaBox);
-    if (result.first != PDFHummus::eSuccess)
+    if (result.first != charta::eSuccess)
         return result.first;
 
     ObjectIDType reusableObjectID = result.second;
@@ -380,7 +380,7 @@ EStatusCode MergePagesUsingCopyingContext()
     // now let's begin constructing the pages
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -389,7 +389,7 @@ EStatusCode MergePagesUsingCopyingContext()
 
         // merge unique page at lower left
         status = copyingContext->MergePDFPageToPage(page, 1);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         pageContent->Q();
@@ -403,18 +403,18 @@ EStatusCode MergePagesUsingCopyingContext()
         pageContent->Q();
 
         status = pdfWriter.EndPageContentContext(pageContent);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         status = pdfWriter.WritePage(page);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 
     // now let's do the second page. similar, but with the second page as the unique content
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
 
@@ -423,7 +423,7 @@ EStatusCode MergePagesUsingCopyingContext()
 
         // merge unique page at lower left
         status = copyingContext->MergePDFPageToPage(page, 2);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         pageContent->Q();
@@ -437,11 +437,11 @@ EStatusCode MergePagesUsingCopyingContext()
         pageContent->Q();
 
         status = pdfWriter.EndPageContentContext(pageContent);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
 
         status = pdfWriter.WritePage(page);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
 
@@ -467,11 +467,11 @@ TEST(PDFEmbedding, MergePDFPages)
     Importing two pages, merge one and user the other as xobject, with graphics between them
     */
 
-    EXPECT_EQ(TestOnlyMerge(), PDFHummus::eSuccess);
-    EXPECT_EQ(TestPrefixGraphicsMerge(), PDFHummus::eSuccess);
-    EXPECT_EQ(TestSuffixGraphicsMerge(), PDFHummus::eSuccess);
-    EXPECT_EQ(TestBothGraphicsMerge(), PDFHummus::eSuccess);
-    EXPECT_EQ(MergeTwoPageInSeparatePhases(), PDFHummus::eSuccess);
-    EXPECT_EQ(MergeTwoPageWithEvents(), PDFHummus::eSuccess);
-    EXPECT_EQ(MergePagesUsingCopyingContext(), PDFHummus::eSuccess);
+    EXPECT_EQ(TestOnlyMerge(), charta::eSuccess);
+    EXPECT_EQ(TestPrefixGraphicsMerge(), charta::eSuccess);
+    EXPECT_EQ(TestSuffixGraphicsMerge(), charta::eSuccess);
+    EXPECT_EQ(TestBothGraphicsMerge(), charta::eSuccess);
+    EXPECT_EQ(MergeTwoPageInSeparatePhases(), charta::eSuccess);
+    EXPECT_EQ(MergeTwoPageWithEvents(), charta::eSuccess);
+    EXPECT_EQ(MergePagesUsingCopyingContext(), charta::eSuccess);
 }

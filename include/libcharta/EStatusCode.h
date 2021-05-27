@@ -1,5 +1,5 @@
 /*
-   Source File : PDFHummus::EStatusCode.h
+   Source File : charta::EStatusCode.h
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -20,11 +20,11 @@
 */
 #pragma once
 
-namespace PDFHummus
+namespace charta
 {
 enum EStatusCode
 {
     eFailure = -1,
     eSuccess = 0
 };
-} // namespace PDFHummus
+} // namespace charta

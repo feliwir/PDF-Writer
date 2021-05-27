@@ -33,38 +33,38 @@ class CharStringType1Tracer : public IType1InterpreterImplementation
     CharStringType1Tracer(void);
     ~CharStringType1Tracer(void) = default;
 
-    PDFHummus::EStatusCode TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input *inType1Input, IByteWriter *inWriter);
-    PDFHummus::EStatusCode TraceGlyphProgram(const std::string &inGlyphName, Type1Input *inType1Input,
-                                             IByteWriter *inWriter);
+    charta::EStatusCode TraceGlyphProgram(uint8_t inGlyphIndex, Type1Input *inType1Input, IByteWriter *inWriter);
+    charta::EStatusCode TraceGlyphProgram(const std::string &inGlyphName, Type1Input *inType1Input,
+                                          IByteWriter *inWriter);
 
     // IType1InterpreterImplementation
-    virtual PDFHummus::EStatusCode Type1Hstem(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Vstem(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VLineto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RRCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1ClosePath(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Hstem(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Vstem(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VLineto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RRCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1ClosePath(const LongList &inOperandList);
     virtual Type1CharString *GetSubr(long inSubrIndex);
-    virtual PDFHummus::EStatusCode Type1Return(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Hsbw(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Endchar(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1RMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HMoveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VHCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HVCurveto(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1DotSection(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1VStem3(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1HStem3(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Seac(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Sbw(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1Div(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Return(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Hsbw(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Endchar(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1RMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HMoveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VHCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HVCurveto(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1DotSection(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1VStem3(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1HStem3(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Seac(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Sbw(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1Div(const LongList &inOperandList);
     virtual bool IsOtherSubrSupported(long inOtherSubrsIndex);
-    virtual PDFHummus::EStatusCode CallOtherSubr(const LongList &inOperandList, LongList &outPostScriptOperandStack);
-    virtual PDFHummus::EStatusCode Type1Pop(const LongList &inOperandList, const LongList &inPostScriptOperandStack);
-    virtual PDFHummus::EStatusCode Type1SetCurrentPoint(const LongList &inOperandList);
-    virtual PDFHummus::EStatusCode Type1InterpretNumber(long inOperand);
+    virtual charta::EStatusCode CallOtherSubr(const LongList &inOperandList, LongList &outPostScriptOperandStack);
+    virtual charta::EStatusCode Type1Pop(const LongList &inOperandList, const LongList &inPostScriptOperandStack);
+    virtual charta::EStatusCode Type1SetCurrentPoint(const LongList &inOperandList);
+    virtual charta::EStatusCode Type1InterpretNumber(long inOperand);
     virtual unsigned long GetLenIV();
 
   private:

@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFEmbedding, InputFlateDecode)
 {

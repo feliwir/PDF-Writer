@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 static const uint8_t scTest[5] = {'T', 'e', 's', 't', '\n'};
 static const uint8_t scTest1[6] = {'T', 'e', 's', 't', '1', '\n'};
@@ -46,7 +46,7 @@ TEST(Modification, AppendingAndReading)
         OutputFile outputFile;
 
         status = outputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ReadAndWrite.txt"));
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         outputFile.GetOutputStream()->Write(scTest, 5);
         outputFile.GetOutputStream()->Write(scTest1, 6);
@@ -58,12 +58,12 @@ TEST(Modification, AppendingAndReading)
     InputFile inputFile;
 
     status = inputFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ReadAndWrite.txt"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     OutputFile appendToFile;
 
     status = appendToFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ReadAndWrite.txt"), true);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // check reading 1
     inputFile.GetInputStream()->SetPosition(5);

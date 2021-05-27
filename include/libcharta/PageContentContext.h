@@ -29,12 +29,12 @@ class PDFStream;
 class PageContentContext : public AbstractContentContext
 {
   public:
-    PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
+    PageContentContext(charta::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
                        ObjectsContext *inObjectsContext);
     virtual ~PageContentContext(void);
 
     // Finish writing a current stream, if exists and flush to the main PDF stream
-    PDFHummus::EStatusCode FinalizeCurrentStream();
+    charta::EStatusCode FinalizeCurrentStream();
 
     // Extensibility method, retrieves the current content stream for writing. if one does not exist - creates it.
     std::shared_ptr<PDFStream> GetCurrentPageContentStream();
@@ -50,7 +50,7 @@ class PageContentContext : public AbstractContentContext
     ObjectsContext *mObjectsContext;
     std::shared_ptr<PDFStream> mCurrentStream;
 
-    PDFHummus::EStatusCode FinalizeStreamWriteAndRelease();
+    charta::EStatusCode FinalizeStreamWriteAndRelease();
     void StartContentStreamDefinition();
 
     // AbstractContentContext implementation

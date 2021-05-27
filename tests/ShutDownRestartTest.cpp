@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, ShutDownRestart)
 {
@@ -39,10 +39,10 @@ TEST(PDF, ShutDownRestart)
         PDFWriter pdfWriterA;
         status = pdfWriterA.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleContentShutdownRestart.pdf"),
                                      ePDFVersion13);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PDFUsedFont *font =
             pdfWriterA.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
@@ -60,7 +60,7 @@ TEST(PDF, ShutDownRestart)
 
         // force stream change
         status = pdfWriterA.PausePageContentContext(contentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         // draw a 200X100 points red rectangle
         contentContext->q();
@@ -85,29 +85,29 @@ TEST(PDF, ShutDownRestart)
         contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
         EStatusCode encodingStatus = contentContext->Tj("hello world");
-        ASSERT_EQ(encodingStatus, PDFHummus::eSuccess);
+        ASSERT_EQ(encodingStatus, charta::eSuccess);
 
         // continue even if failed...want to see how it looks like
         contentContext->ET();
 
         status = pdfWriterA.EndPageContentContext(contentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriterA.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriterA.Shutdown(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ShutDownRestartState.txt"));
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
     {
         PDFWriter pdfWriterB;
         status =
             pdfWriterB.ContinuePDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "SimpleContentShutdownRestart.pdf"),
                                    RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ShutDownRestartState.txt"));
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *pageContentContext = pdfWriterB.StartPageContentContext(page);
         ASSERT_NE(pageContentContext, nullptr);
@@ -121,7 +121,7 @@ TEST(PDF, ShutDownRestart)
 
         // pause stream to start writing a form xobject
         status = pdfWriterB.PausePageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         // define an xobject form to draw a 200X100 points red rectangle
         PDFFormXObject *xobjectForm = pdfWriterB.StartFormXObject(PDFRectangle(0, 0, 200, 100));
@@ -135,7 +135,7 @@ TEST(PDF, ShutDownRestart)
         xobjectContentContext->Q();
 
         status = pdfWriterB.EndFormXObjectAndRelease(xobjectForm);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         auto formXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(formObjectID);
 
@@ -161,12 +161,12 @@ TEST(PDF, ShutDownRestart)
         pageContentContext->Q();
 
         status = pdfWriterB.EndPageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriterB.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriterB.EndPDF();
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 }

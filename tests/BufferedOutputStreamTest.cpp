@@ -25,7 +25,7 @@
 
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(IO, BufferedOutputStream)
 {

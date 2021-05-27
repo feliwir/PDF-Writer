@@ -29,8 +29,8 @@ class CharStringType1Interpreter
     CharStringType1Interpreter(void);
     ~CharStringType1Interpreter(void);
 
-    PDFHummus::EStatusCode Intepret(const Type1CharString &inCharStringToIntepret,
-                                    IType1InterpreterImplementation *inImplementationHelper);
+    charta::EStatusCode Intepret(const Type1CharString &inCharStringToIntepret,
+                                 IType1InterpreterImplementation *inImplementationHelper);
 
   private:
     LongList mOperandStack;
@@ -38,37 +38,37 @@ class CharStringType1Interpreter
     bool mGotEndChar;
     LongList mPostScriptOperandStack;
 
-    PDFHummus::EStatusCode ProcessCharString(InputCharStringDecodeStream *inCharStringToIntepret);
+    charta::EStatusCode ProcessCharString(InputCharStringDecodeStream *inCharStringToIntepret);
     bool IsOperator(uint8_t inBuffer);
-    PDFHummus::EStatusCode InterpretOperator(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret,
-                                             bool &outGotEndExecutionCommand);
-    PDFHummus::EStatusCode InterpretNumber(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret);
+    charta::EStatusCode InterpretOperator(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret,
+                                          bool &outGotEndExecutionCommand);
+    charta::EStatusCode InterpretNumber(uint8_t inBuffer, InputCharStringDecodeStream *inCharStringToIntepret);
     void ClearStack();
-    PDFHummus::EStatusCode DefaultCallOtherSubr();
+    charta::EStatusCode DefaultCallOtherSubr();
 
-    PDFHummus::EStatusCode InterpretHStem();
-    PDFHummus::EStatusCode InterpretVStem();
-    PDFHummus::EStatusCode InterpretVMoveto();
-    PDFHummus::EStatusCode InterpretRLineto();
-    PDFHummus::EStatusCode InterpretHLineto();
-    PDFHummus::EStatusCode InterpretVLineto();
-    PDFHummus::EStatusCode InterpretRRCurveto();
-    PDFHummus::EStatusCode InterpretClosePath();
-    PDFHummus::EStatusCode InterpretCallSubr();
-    PDFHummus::EStatusCode InterpretReturn();
-    PDFHummus::EStatusCode InterpretHsbw();
-    PDFHummus::EStatusCode InterpretEndChar();
-    PDFHummus::EStatusCode InterpretRMoveto();
-    PDFHummus::EStatusCode InterpretHMoveto();
-    PDFHummus::EStatusCode InterpretVHCurveto();
-    PDFHummus::EStatusCode InterpretHVCurveto();
-    PDFHummus::EStatusCode InterpretDotSection();
-    PDFHummus::EStatusCode InterpretVStem3();
-    PDFHummus::EStatusCode InterpretHStem3();
-    PDFHummus::EStatusCode InterpretSeac();
-    PDFHummus::EStatusCode InterpretSbw();
-    PDFHummus::EStatusCode InterpretDiv();
-    PDFHummus::EStatusCode InterpretCallOtherSubr();
-    PDFHummus::EStatusCode InterpretPop();
-    PDFHummus::EStatusCode InterpretSetCurrentPoint();
+    charta::EStatusCode InterpretHStem();
+    charta::EStatusCode InterpretVStem();
+    charta::EStatusCode InterpretVMoveto();
+    charta::EStatusCode InterpretRLineto();
+    charta::EStatusCode InterpretHLineto();
+    charta::EStatusCode InterpretVLineto();
+    charta::EStatusCode InterpretRRCurveto();
+    charta::EStatusCode InterpretClosePath();
+    charta::EStatusCode InterpretCallSubr();
+    charta::EStatusCode InterpretReturn();
+    charta::EStatusCode InterpretHsbw();
+    charta::EStatusCode InterpretEndChar();
+    charta::EStatusCode InterpretRMoveto();
+    charta::EStatusCode InterpretHMoveto();
+    charta::EStatusCode InterpretVHCurveto();
+    charta::EStatusCode InterpretHVCurveto();
+    charta::EStatusCode InterpretDotSection();
+    charta::EStatusCode InterpretVStem3();
+    charta::EStatusCode InterpretHStem3();
+    charta::EStatusCode InterpretSeac();
+    charta::EStatusCode InterpretSbw();
+    charta::EStatusCode InterpretDiv();
+    charta::EStatusCode InterpretCallOtherSubr();
+    charta::EStatusCode InterpretPop();
+    charta::EStatusCode InterpretSetCurrentPoint();
 };

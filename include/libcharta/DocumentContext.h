@@ -70,7 +70,7 @@ class IPageEndWritingTask;
 class ITiledPatternEndWritingTask;
 
 typedef std::set<IDocumentContextExtender *> IDocumentContextExtenderSet;
-typedef std::pair<PDFHummus::EStatusCode, ObjectIDType> EStatusCodeAndObjectIDType;
+typedef std::pair<charta::EStatusCode, ObjectIDType> EStatusCodeAndObjectIDType;
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 typedef std::set<ObjectIDType> ObjectIDTypeSet;
 typedef std::map<ObjectIDType, std::string> ObjectIDTypeToStringMap;
@@ -87,7 +87,7 @@ typedef std::map<PDFTiledPattern *, ITiledPatternEndWritingTaskList>
     PDFTiledPatternToITiledPatternEndWritingTaskListMap;
 typedef std::pair<std::string, unsigned long> StringAndULongPair;
 
-namespace PDFHummus
+namespace charta
 {
 struct HummusImageInformation
 {
@@ -116,9 +116,9 @@ class DocumentContext
     void SetObjectsContext(ObjectsContext *inObjectsContext);
     void SetOutputFileInformation(OutputFile *inOutputFile);
     void SetEmbedFonts(bool inEmbedFonts);
-    PDFHummus::EStatusCode WriteHeader(EPDFVersion inPDFVersion);
-    PDFHummus::EStatusCode FinalizeNewPDF();
-    PDFHummus::EStatusCode FinalizeModifiedPDF(PDFParser *inModifiedFileParser, EPDFVersion inModifiedPDFVersion);
+    charta::EStatusCode WriteHeader(EPDFVersion inPDFVersion);
+    charta::EStatusCode FinalizeNewPDF();
+    charta::EStatusCode FinalizeModifiedPDF(PDFParser *inModifiedFileParser, EPDFVersion inModifiedPDFVersion);
 
     TrailerInformation &GetTrailerInformation();
     CatalogInformation &GetCatalogInformation();
@@ -140,10 +140,10 @@ class DocumentContext
     // first the content before the image is written, then the content is paused, a new object that represents the image
     // is written, and then the content continues showing the image with a "do" operator. This is also the cause for
     // creating multiple content streams for a page (and what will happen in this implementation as well).
-    PDFHummus::EStatusCode PausePageContentContext(PageContentContext *inPageContext);
+    charta::EStatusCode PausePageContentContext(PageContentContext *inPageContext);
 
     // Finalize and release the page context. the current content stream is flushed to the PDF stream
-    PDFHummus::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
+    charta::EStatusCode EndPageContentContext(PageContentContext *inPageContext);
 
     // Determine whether this page already has a content context
     bool HasContentContext(PDFPage &inPage);
@@ -160,11 +160,11 @@ class DocumentContext
                                      const bool inUseTransparencyGroup = false);
     PDFFormXObject *StartFormXObject(const PDFRectangle &inBoundingBox, ObjectIDType inFormXObjectID,
                                      const double *inMatrix = NULL, const bool inUseTransparencyGroup = false);
-    PDFHummus::EStatusCode EndFormXObject(PDFFormXObject *inFormXObject);
-    PDFHummus::EStatusCode EndFormXObjectAndRelease(PDFFormXObject *inFormXObject);
+    charta::EStatusCode EndFormXObject(PDFFormXObject *inFormXObject);
+    charta::EStatusCode EndFormXObjectAndRelease(PDFFormXObject *inFormXObject);
 
     // no release version of ending a form XObject. owner should delete it (regular delete...nothin special)
-    PDFHummus::EStatusCode EndFormXObjectNoRelease(PDFFormXObject *inFormXObject);
+    charta::EStatusCode EndFormXObjectNoRelease(PDFFormXObject *inFormXObject);
 
     // Tiled Pattern  creation and finalization
     PDFTiledPattern *StartTiledPattern(int inPaintType, int inTilingType, const PDFRectangle &inBoundingBox,
@@ -172,8 +172,8 @@ class DocumentContext
     PDFTiledPattern *StartTiledPattern(int inPaintType, int inTilingType, const PDFRectangle &inBoundingBox,
                                        double inXStep, double inYStep, ObjectIDType inObjectID,
                                        const double *inMatrix = NULL);
-    PDFHummus::EStatusCode EndTiledPattern(PDFTiledPattern *inTiledPattern);
-    PDFHummus::EStatusCode EndTiledPatternAndRelease(PDFTiledPattern *inTiledPattern);
+    charta::EStatusCode EndTiledPattern(PDFTiledPattern *inTiledPattern);
+    charta::EStatusCode EndTiledPatternAndRelease(PDFTiledPattern *inTiledPattern);
 
     // Image XObject creating.
     // note that as oppose to other methods, create the image xobject also writes it, so there's no
@@ -255,15 +255,13 @@ class DocumentContext
 
     // MergePDFPagesToPage, merge PDF pages content to an input page. good for single-placement of a page content,
     // cheaper than creating and XObject and later placing, when the intention is to use this graphic just once.
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
-                                               const PDFParsingOptions &inParsingOptions,
-                                               const PDFPageRange &inPageRange,
-                                               const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
+    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
+                                            const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
+                                            const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
 
-    PDFHummus::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
-                                               const PDFParsingOptions &inParsingOptions,
-                                               const PDFPageRange &inPageRange,
-                                               const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
+    charta::EStatusCode MergePDFPagesToPage(PDFPage &inPage, IByteReaderWithPosition *inPDFStream,
+                                            const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
+                                            const ObjectIDTypeList &inCopyAdditionalObjects = ObjectIDTypeList());
 
     std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(const std::string &inPDFFilePath,
                                                                        const PDFParsingOptions &inOptions);
@@ -290,7 +288,7 @@ class DocumentContext
                                 long inFontIndex);
 
     // URL should be encoded to be a valid URL, ain't gonna be checking that!
-    PDFHummus::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
+    charta::EStatusCode AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea);
 
     // Extensibility
     void AddDocumentContextExtender(IDocumentContextExtender *inExtender);
@@ -321,13 +319,13 @@ class DocumentContext
     void RegisterTiledPatternEndWritingTask(PDFTiledPattern *inTiledPatternObject,
                                             ITiledPatternEndWritingTask *inWritingTask);
 
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
     void Cleanup();
 
     // modification scenario
-    PDFHummus::EStatusCode SetupModifiedFile(PDFParser *inModifiedFileParser);
+    charta::EStatusCode SetupModifiedFile(PDFParser *inModifiedFileParser);
 
     // internal methods for copying context listeners handling
     void RegisterCopyingContext(PDFDocumentCopyingContext *inCopyingContext);
@@ -380,11 +378,11 @@ class DocumentContext
 
     void WriteHeaderComment(EPDFVersion inPDFVersion);
     void Write4BinaryBytes();
-    PDFHummus::EStatusCode WriteCatalogObjectOfNewPDF();
-    PDFHummus::EStatusCode WriteCatalogObject(const ObjectReference &inPageTreeRootObjectReference,
-                                              IDocumentContextExtender *inModifiedFileCopyContext = NULL);
-    PDFHummus::EStatusCode WriteTrailerDictionary();
-    PDFHummus::EStatusCode WriteTrailerDictionaryValues(DictionaryContext *inDictionaryContext);
+    charta::EStatusCode WriteCatalogObjectOfNewPDF();
+    charta::EStatusCode WriteCatalogObject(const ObjectReference &inPageTreeRootObjectReference,
+                                           IDocumentContextExtender *inModifiedFileCopyContext = NULL);
+    charta::EStatusCode WriteTrailerDictionary();
+    charta::EStatusCode WriteTrailerDictionaryValues(DictionaryContext *inDictionaryContext);
     void WriteXrefReference(long long inXrefTablePosition);
     void WriteFinalEOF();
     void WriteInfoDictionary();
@@ -392,13 +390,13 @@ class DocumentContext
     void WritePagesTree();
     int WritePageTree(PageTree *inPageTreeToWrite);
     std::string GenerateMD5IDForFile();
-    PDFHummus::EStatusCode WriteResourcesDictionary(ResourcesDictionary &inResourcesDictionary);
-    PDFHummus::EStatusCode WriteResourceDictionary(ResourcesDictionary *inResourcesDictionary,
-                                                   DictionaryContext *inResourcesCategoryDictionary,
-                                                   const std::string &inResourceDictionaryLabel,
-                                                   MapIterator<ObjectIDTypeToStringMap> inMapping);
+    charta::EStatusCode WriteResourcesDictionary(ResourcesDictionary &inResourcesDictionary);
+    charta::EStatusCode WriteResourceDictionary(ResourcesDictionary *inResourcesDictionary,
+                                                DictionaryContext *inResourcesCategoryDictionary,
+                                                const std::string &inResourceDictionaryLabel,
+                                                MapIterator<ObjectIDTypeToStringMap> inMapping);
     bool IsIdentityMatrix(const double *inMatrix);
-    PDFHummus::EStatusCode WriteUsedFontsDefinitions();
+    charta::EStatusCode WriteUsedFontsDefinitions();
     EStatusCodeAndObjectIDType WriteAnnotationAndLinkForURL(const std::string &inURL,
                                                             const PDFRectangle &inLinkClickArea);
 
@@ -425,7 +423,7 @@ class DocumentContext
     bool DoExtendersRequireCatalogUpdate(PDFParser *inModifiedFileParser);
     void CopyEncryptionDictionary(PDFParser *inModifiedFileParser);
     bool RequiresXrefStream(PDFParser *inModifiedFileParser);
-    PDFHummus::EStatusCode WriteXrefStream(long long &outXrefPosition);
+    charta::EStatusCode WriteXrefStream(long long &outXrefPosition);
     HummusImageInformation &GetImageInformationStructFor(const std::string &inImageFile, unsigned long inImageIndex);
 };
-} // namespace PDFHummus
+} // namespace charta

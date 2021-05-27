@@ -24,7 +24,7 @@
 #include "Trace.h"
 #include "io/IByteWriterWithPosition.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 StateWriter::StateWriter()
 {
@@ -40,10 +40,10 @@ EStatusCode StateWriter::Start(const std::string &inStateFilePath)
 {
 
     // open the new file...
-    if (mOutputFile.OpenFile(inStateFilePath) != PDFHummus::eSuccess)
+    if (mOutputFile.OpenFile(inStateFilePath) != charta::eSuccess)
     {
         TRACE_LOG1("StateWriter::Start, can't open file for state writing in %s", inStateFilePath.c_str());
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // Get me a new copy of objects context, for this session
@@ -57,7 +57,7 @@ EStatusCode StateWriter::Start(const std::string &inStateFilePath)
     // Reset the root object
     mRootObject = 0;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 ObjectsContext *StateWriter::GetObjectsWriter()
@@ -82,7 +82,7 @@ EStatusCode StateWriter::Finish()
 
     } while (false);
 
-    if (PDFHummus::eSuccess == status)
+    if (charta::eSuccess == status)
         status = mOutputFile.CloseFile();
     else
         mOutputFile.CloseFile();

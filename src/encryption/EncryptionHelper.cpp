@@ -37,7 +37,7 @@ limitations under the License.
 
 #include <stdint.h>
 
-using namespace PDFHummus;
+using namespace charta;
 using namespace std;
 
 EncryptionHelper::EncryptionHelper()
@@ -371,7 +371,7 @@ EStatusCode EncryptionHelper::Setup(const DecryptionHelper &inDecryptionSource)
     return eSuccess;
 }
 
-PDFHummus::EStatusCode EncryptionHelper::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
+charta::EStatusCode EncryptionHelper::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
     inStateWriter->StartNewIndirectObject(inObjectID);
     DictionaryContext *encryptionObject = inStateWriter->StartDictionary();
@@ -424,7 +424,7 @@ PDFHummus::EStatusCode EncryptionHelper::WriteState(ObjectsContext *inStateWrite
     return eSuccess;
 }
 
-PDFHummus::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
+charta::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
     PDFObjectCastPtr<PDFDictionary> encryptionObjectState(inStateReader->ParseNewObject(inObjectID));
 

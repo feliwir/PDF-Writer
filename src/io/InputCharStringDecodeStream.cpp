@@ -20,7 +20,7 @@
 */
 #include "io/InputCharStringDecodeStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 InputCharStringDecodeStream::InputCharStringDecodeStream(IByteReader *inReadFrom, unsigned long inLenIV)
 {
@@ -55,10 +55,10 @@ EStatusCode InputCharStringDecodeStream::ReadDecodedByte(uint8_t &outByte)
     uint8_t buffer;
 
     if (mReadFrom->Read(&buffer, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     outByte = DecodeByte(buffer);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 uint8_t InputCharStringDecodeStream::DecodeByte(uint8_t inByteToDecode)
@@ -71,9 +71,9 @@ uint8_t InputCharStringDecodeStream::DecodeByte(uint8_t inByteToDecode)
 size_t InputCharStringDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
 {
     size_t bufferIndex = 0;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    while (NotEnded() && inBufferSize > bufferIndex && PDFHummus::eSuccess == status)
+    while (NotEnded() && inBufferSize > bufferIndex && charta::eSuccess == status)
     {
         status = ReadDecodedByte(inBuffer[bufferIndex]);
         ++bufferIndex;

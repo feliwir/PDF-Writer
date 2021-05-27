@@ -47,9 +47,9 @@ class ANSIFontWriter
     ANSIFontWriter(void);
     ~ANSIFontWriter(void);
 
-    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
-                                     ObjectsContext *inObjectsContext, IANSIFontWriterHelper *inANSIFontWriterHelper,
-                                     const std::string &inWrittenFontName);
+    charta::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                  ObjectsContext *inObjectsContext, IANSIFontWriterHelper *inANSIFontWriterHelper,
+                                  const std::string &inWrittenFontName);
 
   private:
     void CalculateCharacterEncodingArray();

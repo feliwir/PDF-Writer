@@ -40,7 +40,7 @@
 #include <list>
 #include <stdlib.h>
 
-using namespace PDFHummus;
+using namespace charta;
 using namespace std;
 
 typedef list<PDFImageXObject *> PDFImageXObjectList;
@@ -253,7 +253,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
         }
 
         EStatusCode status = inDocumentContext->EndFormXObjectNoRelease(formXObject);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("PNGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
                       "form XObject for image");

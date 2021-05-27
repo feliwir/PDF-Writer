@@ -34,17 +34,17 @@ class TrueTypePrimitiveWriter
 
     void SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile);
 
-    PDFHummus::EStatusCode GetInternalState();
+    charta::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode WriteBYTE(uint8_t inValue);
-    PDFHummus::EStatusCode WriteULONG(unsigned long inValue);
-    PDFHummus::EStatusCode WriteUSHORT(uint16_t inValue);
-    PDFHummus::EStatusCode WriteSHORT(short inValue);
+    charta::EStatusCode WriteBYTE(uint8_t inValue);
+    charta::EStatusCode WriteULONG(unsigned long inValue);
+    charta::EStatusCode WriteUSHORT(uint16_t inValue);
+    charta::EStatusCode WriteSHORT(short inValue);
 
-    PDFHummus::EStatusCode Pad(int inCount);
-    PDFHummus::EStatusCode PadTo4();
+    charta::EStatusCode Pad(int inCount);
+    charta::EStatusCode PadTo4();
 
   private:
     OutputStringBufferStream *mTrueTypeFile;
-    PDFHummus::EStatusCode mInternalState;
+    charta::EStatusCode mInternalState;
 };

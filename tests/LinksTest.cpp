@@ -27,7 +27,7 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, Links)
 {
@@ -37,10 +37,10 @@ TEST(PDF, Links)
     status =
         pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "LinksTest.pdf"), ePDFVersion13,
                            LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "LinksTest.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFFormXObject *soundCloudLogo = pdfWriter.CreateFormXObjectFromJPGFile(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/soundcloud_logo.jpg"));
@@ -57,7 +57,7 @@ TEST(PDF, Links)
     contentContext->Tf(font, 1);
     contentContext->Tm(11, 0, 0, 11, 90.024, 709.54);
     EStatusCode encodingStatus = contentContext->Tj("http://pdfhummus.com");
-    if (encodingStatus != PDFHummus::eSuccess)
+    if (encodingStatus != charta::eSuccess)
         std::cout << "Could not find some of the glyphs for this font (arial)";
     // continue even if failed...want to see how it looks like
     contentContext->ET();
@@ -69,7 +69,7 @@ TEST(PDF, Links)
     contentContext->Q();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     delete soundCloudLogo;
 
@@ -82,8 +82,8 @@ TEST(PDF, Links)
     pdfWriter.AttachURLLinktoCurrentPage("http://www.soundcloud.com", PDFRectangle(90.024, 200, 367.524, 375));
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

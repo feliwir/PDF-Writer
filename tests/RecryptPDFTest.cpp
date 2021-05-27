@@ -33,13 +33,13 @@ TEST(Xcryption, RecryptPDF)
     status = PDFWriter::RecryptPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/china.pdf"), "",
                                    RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "chinaWithoutEncryption.pdf"),
                                    LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // recrypt an encrypted document with no password
     status = PDFWriter::RecryptPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/PDFWithPassword.pdf"), "user",
                                    RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RecryptPDFWithPasswordToNothing.pdf"),
                                    LogConfiguration::DefaultLogConfiguration(), PDFCreationSettings(true, true));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // recrypt an encrypted document with new password
     status =
@@ -47,7 +47,7 @@ TEST(Xcryption, RecryptPDF)
                               RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RecryptPDFWithPasswordToNewPassword.pdf"),
                               LogConfiguration::DefaultLogConfiguration(),
                               PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // recrypt a plain to document to one with password
     status =
@@ -55,7 +55,7 @@ TEST(Xcryption, RecryptPDF)
                               RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RecryptPDFOriginalToPasswordProtected.pdf"),
                               LogConfiguration::DefaultLogConfiguration(),
                               PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // same, but forcing AES
     status = PDFWriter::RecryptPDF(
@@ -63,5 +63,5 @@ TEST(Xcryption, RecryptPDF)
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RecryptPDFOriginalToPasswordProtectedAES.pdf"),
         LogConfiguration::DefaultLogConfiguration(),
         PDFCreationSettings(true, true, EncryptionOptions("user1", 4, "owner1")), ePDFVersion16);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

@@ -29,7 +29,7 @@
 
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode PrepareSampleEmptyPDF(const std::string &inEmptyFileName)
 {
@@ -41,7 +41,7 @@ EStatusCode PrepareSampleEmptyPDF(const std::string &inEmptyFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     status = pdfWriter.WritePage(page);
     if (status != eSuccess)
@@ -53,7 +53,7 @@ EStatusCode PrepareSampleEmptyPDF(const std::string &inEmptyFileName)
     return status;
 }
 
-PDFHummus::EStatusCode CreateFormFromEmptyPage(const std::string &inEmptyFileName)
+charta::EStatusCode CreateFormFromEmptyPage(const std::string &inEmptyFileName)
 {
     EStatusCode status;
     PDFWriter pdfWriter;
@@ -66,11 +66,11 @@ PDFHummus::EStatusCode CreateFormFromEmptyPage(const std::string &inEmptyFileNam
     // Create XObjects from PDF to embed
     EStatusCodeAndObjectIDTypeList result = pdfWriter.CreateFormXObjectsFromPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, inEmptyFileName), PDFPageRange(), ePDFPageBoxMediaBox);
-    if (result.first != PDFHummus::eSuccess)
+    if (result.first != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
 
@@ -100,7 +100,7 @@ PDFHummus::EStatusCode CreateFormFromEmptyPage(const std::string &inEmptyFileNam
     return status;
 }
 
-PDFHummus::EStatusCode CreatePageFromEmptyPage(const std::string &inEmptyFileName)
+charta::EStatusCode CreatePageFromEmptyPage(const std::string &inEmptyFileName)
 {
     EStatusCode status;
 
@@ -132,7 +132,7 @@ PDFHummus::EStatusCode CreatePageFromEmptyPage(const std::string &inEmptyFileNam
     return status;
 }
 
-PDFHummus::EStatusCode MergeEmptyPageToPage(const std::string &inEmptyFileName)
+charta::EStatusCode MergeEmptyPageToPage(const std::string &inEmptyFileName)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
@@ -143,12 +143,12 @@ PDFHummus::EStatusCode MergeEmptyPageToPage(const std::string &inEmptyFileName)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PDFUsedFont *font = pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
     if (font == nullptr)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     PageContentContext *pageContent = pdfWriter.StartPageContentContext(page);
@@ -198,7 +198,7 @@ PDFHummus::EStatusCode MergeEmptyPageToPage(const std::string &inEmptyFileName)
     return status;
 }
 
-PDFHummus::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
+charta::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
@@ -212,7 +212,7 @@ PDFHummus::EStatusCode MergeEmptyPageToForm(const std::string &inEmptyFileName)
     // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     copyingContext = pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, inEmptyFileName));
     if (status != eSuccess)

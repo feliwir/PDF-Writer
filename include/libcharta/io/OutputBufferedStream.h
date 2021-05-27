@@ -47,7 +47,8 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     /*
         Constructor with assigning. see Assign for unassign instructions
     */
-    OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter, size_t inBufferSize = DEFAULT_OUTPUT_BUFFER_SIZE);
+    OutputBufferedStream(std::unique_ptr<IByteWriterWithPosition> inTargetWriter,
+                         size_t inBufferSize = DEFAULT_OUTPUT_BUFFER_SIZE);
 
     /*
         Assigns a writer for buffered writing. from the moment of assigning the
@@ -66,7 +67,7 @@ class OutputBufferedStream final : public IByteWriterWithPosition
     // force buffer flush to underlying stream
     void Flush();
 
-    IByteWriterWithPosition* GetTargetStream();
+    IByteWriterWithPosition *GetTargetStream();
 
   private:
     std::vector<uint8_t> mBuffer;

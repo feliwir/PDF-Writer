@@ -34,8 +34,8 @@ class CFFANSIFontWriter : public IANSIFontWriterHelper, IFontDescriptorHelper
     CFFANSIFontWriter(void);
     ~CFFANSIFontWriter(void);
 
-    PDFHummus::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
-                                     ObjectsContext *inObjectsContext, bool inEmbedFont);
+    charta::EStatusCode WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFontRepresentation *inFontOccurrence,
+                                  ObjectsContext *inObjectsContext, bool inEmbedFont);
 
     // IANSIFontWriterHelper implementation
     virtual void WriteSubTypeValue(DictionaryContext *inDictionary);

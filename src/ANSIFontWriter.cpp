@@ -37,7 +37,7 @@
 
 #include <algorithm>
 
-using namespace PDFHummus;
+using namespace charta;
 
 ANSIFontWriter::ANSIFontWriter() = default;
 
@@ -54,7 +54,7 @@ EStatusCode ANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFo
                                       ObjectsContext *inObjectsContext, IANSIFontWriterHelper *inANSIFontWriterHelper,
                                       const std::string &inSubsetFontName)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     FontDescriptorWriter fontDescriptorWriter;
 
     inObjectsContext->StartNewIndirectObject(inFontOccurrence->mWrittenObjectID);
@@ -102,7 +102,7 @@ EStatusCode ANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFo
     fontContext->WriteNewObjectReferenceValue(fontDescriptorObjectID);
 
     status = inObjectsContext->EndDictionary(fontContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG("ANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
         return status;

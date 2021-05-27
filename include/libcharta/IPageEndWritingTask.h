@@ -24,7 +24,7 @@
 
 class PDFPage;
 class ObjectsContext;
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,6 +36,6 @@ class IPageEndWritingTask
     {
     }
 
-    virtual PDFHummus::EStatusCode Write(PDFPage &inPageObject, ObjectsContext *inObjectsContext,
-                                         PDFHummus::DocumentContext *inDocumentContext) = 0;
+    virtual charta::EStatusCode Write(PDFPage &inPageObject, ObjectsContext *inObjectsContext,
+                                      charta::DocumentContext *inDocumentContext) = 0;
 };

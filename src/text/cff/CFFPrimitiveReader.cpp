@@ -21,7 +21,7 @@
 #include "text/cff/CFFPrimitiveReader.h"
 #include <math.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 CFFPrimitiveReader::CFFPrimitiveReader(IByteReaderWithPosition *inCFFFile)
 {
@@ -35,23 +35,23 @@ void CFFPrimitiveReader::SetStream(IByteReaderWithPosition *inCFFFile)
     {
         mCurrentOffsize = 1;
         mInitialPosition = inCFFFile->GetCurrentPosition();
-        mInternalState = PDFHummus::eSuccess;
+        mInternalState = charta::eSuccess;
     }
     else
     {
-        mInternalState = PDFHummus::eFailure;
+        mInternalState = charta::eFailure;
     }
 }
 
 void CFFPrimitiveReader::SetOffset(long long inNewOffset)
 {
-    if (mInternalState != PDFHummus::eFailure)
+    if (mInternalState != charta::eFailure)
         mCFFFile->SetPosition(mInitialPosition + inNewOffset);
 }
 
 void CFFPrimitiveReader::Skip(size_t inToSkip)
 {
-    if (mInternalState != PDFHummus::eFailure)
+    if (mInternalState != charta::eFailure)
         mCFFFile->Skip(inToSkip);
 }
 
@@ -62,35 +62,34 @@ EStatusCode CFFPrimitiveReader::GetInternalState()
 
 long long CFFPrimitiveReader::GetCurrentPosition()
 {
-    if (mInternalState != PDFHummus::eFailure)
+    if (mInternalState != charta::eFailure)
         return mCFFFile->GetCurrentPosition() - mInitialPosition;
     return 0;
 }
 
 EStatusCode CFFPrimitiveReader::ReadByte(uint8_t &outValue)
 {
-    if (PDFHummus::eFailure == mInternalState)
-        return PDFHummus::eFailure;
+    if (charta::eFailure == mInternalState)
+        return charta::eFailure;
 
     uint8_t buffer;
-    EStatusCode status = (mCFFFile->Read(&buffer, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    EStatusCode status = (mCFFFile->Read(&buffer, 1) == 1 ? charta::eSuccess : charta::eFailure);
 
-    if (PDFHummus::eFailure == status)
-        mInternalState = PDFHummus::eFailure;
+    if (charta::eFailure == status)
+        mInternalState = charta::eFailure;
     outValue = buffer;
     return status;
 }
 
 EStatusCode CFFPrimitiveReader::Read(uint8_t *ioBuffer, size_t inBufferSize)
 {
-    if (PDFHummus::eFailure == mInternalState)
-        return PDFHummus::eFailure;
+    if (charta::eFailure == mInternalState)
+        return charta::eFailure;
 
-    EStatusCode status =
-        (mCFFFile->Read(ioBuffer, inBufferSize) == inBufferSize ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    EStatusCode status = (mCFFFile->Read(ioBuffer, inBufferSize) == inBufferSize ? charta::eSuccess : charta::eFailure);
 
-    if (PDFHummus::eFailure == status)
-        mInternalState = PDFHummus::eFailure;
+    if (charta::eFailure == status)
+        mInternalState = charta::eFailure;
     return status;
 }
 
@@ -103,26 +102,26 @@ EStatusCode CFFPrimitiveReader::ReadCard16(uint16_t &outValue)
 {
     uint8_t byte1, byte2;
 
-    if (ReadByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
     outValue = ((uint16_t)byte1 << 8) + byte2;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode CFFPrimitiveReader::Read2ByteSigned(short &outValue)
 {
     uint16_t buffer;
     EStatusCode status = ReadCard16(buffer);
 
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     outValue = (short)buffer;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void CFFPrimitiveReader::SetOffSize(uint8_t inOffSize)
@@ -132,20 +131,20 @@ void CFFPrimitiveReader::SetOffSize(uint8_t inOffSize)
 
 EStatusCode CFFPrimitiveReader::ReadOffset(unsigned long &outValue)
 {
-    EStatusCode status = PDFHummus::eFailure;
+    EStatusCode status = charta::eFailure;
 
     switch (mCurrentOffsize)
     {
     case 1:
         uint8_t byteBuffer;
         status = ReadCard8(byteBuffer);
-        if (PDFHummus::eSuccess == status)
+        if (charta::eSuccess == status)
             outValue = byteBuffer;
         break;
     case 2:
         uint16_t shortBuffer;
         status = ReadCard16(shortBuffer);
-        if (PDFHummus::eSuccess == status)
+        if (charta::eSuccess == status)
             outValue = shortBuffer;
         break;
     case 3:
@@ -163,39 +162,39 @@ EStatusCode CFFPrimitiveReader::Read3ByteUnsigned(unsigned long &outValue)
 {
     uint8_t byte1, byte2, byte3;
 
-    if (ReadByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
     outValue = ((unsigned long)byte1 << 16) + ((unsigned long)byte2 << 8) + byte3;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveReader::Read4ByteUnsigned(unsigned long &outValue)
 {
     uint8_t byte1, byte2, byte3, byte4;
 
-    if (ReadByte(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (ReadByte(byte4) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (ReadByte(byte4) != charta::eSuccess)
+        return charta::eFailure;
 
     outValue = ((unsigned long)byte1 << 24) + ((unsigned long)byte2 << 16) + ((unsigned long)byte3 << 8) + byte4;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveReader::Read4ByteSigned(long &outValue)
@@ -203,12 +202,12 @@ EStatusCode CFFPrimitiveReader::Read4ByteSigned(long &outValue)
     unsigned long buffer;
     EStatusCode status = Read4ByteUnsigned(buffer);
 
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     outValue = (int)buffer; // very important to cast to 32, to get the sign right
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveReader::ReadOffSize(uint8_t &outValue)
@@ -224,7 +223,7 @@ EStatusCode CFFPrimitiveReader::ReadSID(uint16_t &outValue)
 EStatusCode CFFPrimitiveReader::ReadIntegerOperand(uint8_t inFirstByte, long &outValue)
 {
     uint8_t byte0, byte1;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     byte0 = inFirstByte;
 
@@ -234,15 +233,15 @@ EStatusCode CFFPrimitiveReader::ReadIntegerOperand(uint8_t inFirstByte, long &ou
     }
     else if (byte0 >= 247 && byte0 <= 250)
     {
-        if (ReadByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (ReadByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
 
         outValue = (byte0 - 247) * 256 + byte1 + 108;
     }
     else if (byte0 >= 251 && byte0 <= 254)
     {
-        if (ReadByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (ReadByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
 
         outValue = -(long)((long)byte0 - 251) * 256 - byte1 - 108;
     }
@@ -257,7 +256,7 @@ EStatusCode CFFPrimitiveReader::ReadIntegerOperand(uint8_t inFirstByte, long &ou
         status = Read4ByteSigned(outValue);
     }
     else
-        status = PDFHummus::eFailure;
+        status = charta::eFailure;
 
     return status;
 }
@@ -277,12 +276,12 @@ EStatusCode CFFPrimitiveReader::ReadRealOperand(double &outValue, long &outRealV
     outRealValueFractalEnd = 0;
     uint8_t buffer;
     uint8_t nibble[2];
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
         status = ReadByte(buffer);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         nibble[0] = (buffer >> 4) & 0xf;
@@ -327,7 +326,7 @@ EStatusCode CFFPrimitiveReader::ReadRealOperand(double &outValue, long &outRealV
         }
     } while (notDone);
 
-    if (PDFHummus::eSuccess == status)
+    if (charta::eSuccess == status)
     {
         result = integerPart + fractionPart / fractionDecimal;
         if (hasNegativePower || hasPositivePower)
@@ -349,16 +348,16 @@ EStatusCode CFFPrimitiveReader::ReadDictOperator(uint8_t inFirstByte, uint16_t &
     if (12 == inFirstByte)
     {
         uint8_t buffer;
-        if (ReadByte(buffer) == PDFHummus::eSuccess)
+        if (ReadByte(buffer) == charta::eSuccess)
         {
             outOperator = ((uint16_t)inFirstByte << 8) | buffer;
-            return PDFHummus::eSuccess;
+            return charta::eSuccess;
         }
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     outOperator = inFirstByte;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CFFPrimitiveReader::ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand)
@@ -374,5 +373,5 @@ EStatusCode CFFPrimitiveReader::ReadDictOperand(uint8_t inFirstByte, DictOperand
         outOperand.IsInteger = true;
         return ReadIntegerOperand(inFirstByte, outOperand.IntegerValue);
     }
-    return PDFHummus::eFailure; // not an operand
+    return charta::eFailure; // not an operand
 }

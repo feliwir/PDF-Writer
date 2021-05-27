@@ -32,12 +32,12 @@ class ObjectsContext;
 class PDFParser;
 class IPDFParserExtender;
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 }
 
-using namespace PDFHummus;
+using namespace charta;
 
 class PDFDocumentCopyingContext
 {
@@ -45,16 +45,16 @@ class PDFDocumentCopyingContext
     PDFDocumentCopyingContext();
     ~PDFDocumentCopyingContext();
 
-    PDFHummus::EStatusCode Start(const std::string &inPDFFilePath, DocumentContext *inDocumentContext,
-                                 ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
-                                 IPDFParserExtender *inParserExtender);
+    charta::EStatusCode Start(const std::string &inPDFFilePath, DocumentContext *inDocumentContext,
+                              ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
+                              IPDFParserExtender *inParserExtender);
 
-    PDFHummus::EStatusCode Start(IByteReaderWithPosition *inPDFStream, DocumentContext *inDocumentContext,
-                                 ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
-                                 IPDFParserExtender *inParserExtender);
+    charta::EStatusCode Start(IByteReaderWithPosition *inPDFStream, DocumentContext *inDocumentContext,
+                              ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
+                              IPDFParserExtender *inParserExtender);
 
-    PDFHummus::EStatusCode Start(PDFParser *inPDFParser, DocumentContext *inDocumentContext,
-                                 ObjectsContext *inObjectsContext);
+    charta::EStatusCode Start(PDFParser *inPDFParser, DocumentContext *inDocumentContext,
+                              ObjectsContext *inObjectsContext);
 
     EStatusCodeAndObjectIDType CreateFormXObjectFromPDFPage(unsigned long inPageIndex,
                                                             EPDFPageBox inPageBoxToUseAsFormBox,
@@ -64,15 +64,14 @@ class PDFDocumentCopyingContext
                                                             const double *inTransformationMatrix = NULL,
                                                             ObjectIDType inPredefinedFormId = 0);
     EStatusCodeAndObjectIDType AppendPDFPageFromPDF(unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
+    charta::EStatusCode MergePDFPageToPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
 
     // MergePDFPageToFormXObject merges a page content into a form xobject.
     // Such merging may require some resources copying, which can't be done while the form is still
     // open. don't worry, the copying context will automatically copy the required object when the form is done.
     // BUT MAKE SURE - not to close the copying context before the form is done. otherwise...it won't be able to do that
     // and hell breaks loose
-    PDFHummus::EStatusCode MergePDFPageToFormXObject(PDFFormXObject *inTargetFormXObject,
-                                                     unsigned long inSourcePageIndex);
+    charta::EStatusCode MergePDFPageToFormXObject(PDFFormXObject *inTargetFormXObject, unsigned long inSourcePageIndex);
 
     EStatusCodeAndObjectIDType CopyObject(ObjectIDType inSourceObjectID);
 
@@ -91,7 +90,7 @@ class PDFDocumentCopyingContext
        object. It is OK to merge a couple of results from multiple CopyDirectObject to a single list. MAKE SURE THERE
        ARE NO DUPLICATES in that case.
     */
-    PDFHummus::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
+    charta::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
 
     PDFParser *GetSourceDocumentParser();
     IByteReaderWithPosition *GetSourceDocumentStream();
@@ -121,12 +120,12 @@ class PDFDocumentCopyingContext
     // the referenced object and uses new references.
     // This method is fitting file modification scenarios. CopyDirectObjectDeepCopy fits
     // importing scenarios.
-    PDFHummus::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
+    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
 
     // internal, release document context reference, to avoid re-releasing in destruction
     void ReleaseDocumentContextReference();
 
   private:
-    PDFHummus::DocumentContext *mDocumentContext;
+    charta::DocumentContext *mDocumentContext;
     PDFDocumentHandler mDocumentHandler;
 };

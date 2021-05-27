@@ -19,7 +19,7 @@ limitations under the License.
 */
 #pragma once
 
-namespace PDFHummus
+namespace charta
 {
 
 enum EHummusImageType
@@ -30,4 +30,4 @@ enum EHummusImageType
     eTIFF,
     ePNG
 };
-} // namespace PDFHummus
+} // namespace charta

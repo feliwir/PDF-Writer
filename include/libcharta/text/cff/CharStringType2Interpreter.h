@@ -33,8 +33,8 @@ class CharStringType2Interpreter
     CharStringType2Interpreter(void);
     ~CharStringType2Interpreter(void);
 
-    PDFHummus::EStatusCode Intepret(const CharString &inCharStringToIntepret,
-                                    IType2InterpreterImplementation *inImplementationHelper);
+    charta::EStatusCode Intepret(const CharString &inCharStringToIntepret,
+                                 IType2InterpreterImplementation *inImplementationHelper);
 
   private:
     CharStringOperandList mOperandStack;
@@ -44,12 +44,12 @@ class CharStringType2Interpreter
     CharStringOperandVector mStorage;
     bool mCheckedWidth;
 
-    PDFHummus::EStatusCode ProcessCharString(uint8_t *inCharString, long long inCharStringLength);
+    charta::EStatusCode ProcessCharString(uint8_t *inCharString, long long inCharStringLength);
     bool IsOperator(uint8_t *inProgramCounter);
     uint8_t *InterpretNumber(uint8_t *inProgramCounter);
     uint8_t *InterpretOperator(uint8_t *inProgramCounter, bool &outGotEndExecutionCommand);
 
-    PDFHummus::EStatusCode ClearNFromStack(uint16_t inCount);
+    charta::EStatusCode ClearNFromStack(uint16_t inCount);
     void ClearStack();
     void CheckWidth();
 

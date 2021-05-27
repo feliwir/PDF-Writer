@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 void ShowIntVector(const std::vector<int> &inVector)
 {
@@ -119,7 +119,7 @@ EStatusCode ShowDependencies(const std::string &inCharStringName, Type1Input *in
 {
     CharString1Dependencies dependencies;
     EStatusCode status = inType1Input->CalculateDependenciesForCharIndex(inCharStringName, dependencies);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     if (!dependencies.mCharCodes.empty() || !dependencies.mOtherSubrs.empty() || !dependencies.mSubrs.empty())
@@ -148,7 +148,7 @@ EStatusCode SaveCharstringCode(const std::string &inCharStringName, Type1Input *
 
     EStatusCode status = glyphFile.OpenFile(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, std::string("glyphType1_") + inCharStringName + "_.txt"));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     CharStringType1Tracer tracer;
@@ -162,15 +162,15 @@ EStatusCode SaveCharstringCode(const std::string &inCharStringName, Type1Input *
 
 TEST(Type1, Type1)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     InputFile type1File;
     Type1Input type1Input;
 
     status = type1File.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFB"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = type1Input.ReadType1File(type1File.GetInputStream());
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // dump Font dictionary values
     ShowFontDictionary(type1Input.mFontDictionary);
@@ -178,16 +178,16 @@ TEST(Type1, Type1)
     ShowPrivateInfoDictionary(type1Input.mPrivateDictionary);
 
     // calculate dependencies for a,b,c,d and trace their code
-    ASSERT_EQ(ShowDependencies("a", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(ShowDependencies("b", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(ShowDependencies("c", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(ShowDependencies("d", &type1Input), PDFHummus::eSuccess);
+    ASSERT_EQ(ShowDependencies("a", &type1Input), charta::eSuccess);
+    ASSERT_EQ(ShowDependencies("b", &type1Input), charta::eSuccess);
+    ASSERT_EQ(ShowDependencies("c", &type1Input), charta::eSuccess);
+    ASSERT_EQ(ShowDependencies("d", &type1Input), charta::eSuccess);
     // show just abcd and notdef
-    ASSERT_EQ(SaveCharstringCode(".notdef", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(SaveCharstringCode("a", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(SaveCharstringCode("b", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(SaveCharstringCode("c", &type1Input), PDFHummus::eSuccess);
-    ASSERT_EQ(SaveCharstringCode("d", &type1Input), PDFHummus::eSuccess);
+    ASSERT_EQ(SaveCharstringCode(".notdef", &type1Input), charta::eSuccess);
+    ASSERT_EQ(SaveCharstringCode("a", &type1Input), charta::eSuccess);
+    ASSERT_EQ(SaveCharstringCode("b", &type1Input), charta::eSuccess);
+    ASSERT_EQ(SaveCharstringCode("c", &type1Input), charta::eSuccess);
+    ASSERT_EQ(SaveCharstringCode("d", &type1Input), charta::eSuccess);
 
     type1File.CloseFile();
 }

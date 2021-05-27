@@ -29,7 +29,7 @@
 
 #include FT_CID_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 DescendentFontWriter::DescendentFontWriter() = default;
 
@@ -46,7 +46,7 @@ EStatusCode DescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID, co
                                             ObjectsContext *inObjectsContext,
                                             IDescendentFontWriter *inDescendentFontWriterHelper)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     FontDescriptorWriter fontDescriptorWriter;
     inObjectsContext->StartNewIndirectObject(inDecendentObjectID);
 
@@ -84,7 +84,7 @@ EStatusCode DescendentFontWriter::WriteFont(ObjectIDType inDecendentObjectID, co
     inDescendentFontWriterHelper->WriteAdditionalKeys(fontContext);
 
     status = inObjectsContext->EndDictionary(fontContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG("CFFANSIFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
         return status;

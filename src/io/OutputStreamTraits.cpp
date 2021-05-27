@@ -22,7 +22,7 @@
 #include "io/IByteReaderWithPosition.h"
 #include "io/IByteWriter.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 OutputStreamTraits::OutputStreamTraits(IByteWriter *inOutputStream)
 {
@@ -34,13 +34,13 @@ EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream)
 {
     auto *buffer = new uint8_t[TENMEGS];
     size_t readBytes, writeBytes;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    while (inInputStream->NotEnded() && PDFHummus::eSuccess == status)
+    while (inInputStream->NotEnded() && charta::eSuccess == status)
     {
         readBytes = inInputStream->Read(buffer, TENMEGS);
         writeBytes = mOutputStream->Write(buffer, readBytes);
-        status = (readBytes == writeBytes) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+        status = (readBytes == writeBytes) ? charta::eSuccess : charta::eFailure;
         if (readBytes == 0)
         {
             break; // for whatever reason notEnded is not reached...dont want this to interfere
@@ -57,7 +57,7 @@ EStatusCode OutputStreamTraits::CopyToOutputStream(IByteReader *inInputStream, s
 
     readBytes = inInputStream->Read(buffer, inLength);
     writeBytes = mOutputStream->Write(buffer, readBytes);
-    EStatusCode status = (readBytes == writeBytes) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    EStatusCode status = (readBytes == writeBytes) ? charta::eSuccess : charta::eFailure;
     delete[] buffer;
     return status;
 }

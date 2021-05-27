@@ -29,10 +29,10 @@ class IByteReaderWithPosition;
 
 struct TwoLevelStatus
 {
-    PDFHummus::EStatusCode primary;
-    PDFHummus::EStatusCode secondary;
+    charta::EStatusCode primary;
+    charta::EStatusCode secondary;
 
-    TwoLevelStatus(PDFHummus::EStatusCode inPrimary, PDFHummus::EStatusCode inSecondary)
+    TwoLevelStatus(charta::EStatusCode inPrimary, charta::EStatusCode inSecondary)
     {
         primary = inPrimary;
         secondary = inSecondary;
@@ -40,7 +40,7 @@ struct TwoLevelStatus
 
     bool eitherBad()
     {
-        return primary != PDFHummus::eSuccess || secondary != PDFHummus::eSuccess;
+        return primary != charta::eSuccess || secondary != charta::eSuccess;
     }
 };
 
@@ -50,35 +50,35 @@ class JPEGImageParser
     JPEGImageParser(void);
     ~JPEGImageParser(void) = default;
 
-    PDFHummus::EStatusCode Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation);
+    charta::EStatusCode Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation);
 
   private:
     IByteReaderWithPosition *mImageStream;
     uint8_t mReadBuffer[500];
 
-    PDFHummus::EStatusCode ReadJPEGID();
-    PDFHummus::EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
+    charta::EStatusCode ReadJPEGID();
+    charta::EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
     TwoLevelStatus ReadStreamToBuffer(unsigned long inAmountToRead, unsigned long &refReadLimit);
-    PDFHummus::EStatusCode ReadJpegTag(uint32_t &outTagID);
-    PDFHummus::EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
+    charta::EStatusCode ReadJpegTag(uint32_t &outTagID);
+    charta::EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
     uint32_t GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian = false);
     void SkipStream(unsigned long inSkip);
-    PDFHummus::EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
-    PDFHummus::EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
-    PDFHummus::EStatusCode ReadPhotoshopData(JPEGImageInformation &outImageInformation, bool outPhotoshopDataOK);
-    PDFHummus::EStatusCode ReadExifData(JPEGImageInformation &outImageInformation);
-    PDFHummus::EStatusCode GetResolutionFromExif(JPEGImageInformation &outImageInformation,
-                                                 unsigned long inXResolutionOffset, unsigned long inYResolutionOffset,
-                                                 unsigned long &inoutOffset, bool inUseLittleEndian);
-    PDFHummus::EStatusCode ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian);
-    PDFHummus::EStatusCode ReadExifID();
-    PDFHummus::EStatusCode IsBigEndianExif(bool &outIsBigEndian);
-    PDFHummus::EStatusCode ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian = false);
-    PDFHummus::EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
-    PDFHummus::EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
+    charta::EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
+    charta::EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
+    charta::EStatusCode ReadPhotoshopData(JPEGImageInformation &outImageInformation, bool outPhotoshopDataOK);
+    charta::EStatusCode ReadExifData(JPEGImageInformation &outImageInformation);
+    charta::EStatusCode GetResolutionFromExif(JPEGImageInformation &outImageInformation,
+                                              unsigned long inXResolutionOffset, unsigned long inYResolutionOffset,
+                                              unsigned long &inoutOffset, bool inUseLittleEndian);
+    charta::EStatusCode ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian);
+    charta::EStatusCode ReadExifID();
+    charta::EStatusCode IsBigEndianExif(bool &outIsBigEndian);
+    charta::EStatusCode ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian = false);
+    charta::EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
+    charta::EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
     TwoLevelStatus ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,
                                  bool inUseLittleEndian = false);
     unsigned long GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian);
     double GetFractValue(const uint8_t *inBuffer);
-    PDFHummus::EStatusCode SkipTag();
+    charta::EStatusCode SkipTag();
 };

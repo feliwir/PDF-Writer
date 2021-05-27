@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(FontPackages, TTC)
 {
@@ -37,10 +37,10 @@ TEST(FontPackages, TTC)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TTCTestLucidaGrande.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TTCTestLucidaGrande.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(contentContext, nullptr);
@@ -59,7 +59,7 @@ TEST(FontPackages, TTC)
     contentContext->Tf(fontLucidaGrande0, 1);
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
     EStatusCode encodingStatus = contentContext->Tj("Hello World!");
-    ASSERT_EQ(encodingStatus, PDFHummus::eSuccess);
+    ASSERT_EQ(encodingStatus, charta::eSuccess);
     contentContext->ET();
 
     // Draw some text in Lucida Grande 0 (bold)
@@ -68,15 +68,15 @@ TEST(FontPackages, TTC)
     contentContext->Tf(fontLucidaGrande1, 1);
     contentContext->Tm(30, 0, 0, 30, 78.4252, 462.8997);
     encodingStatus = contentContext->Tj("Hello World!");
-    ASSERT_EQ(encodingStatus, PDFHummus::eSuccess);
+    ASSERT_EQ(encodingStatus, charta::eSuccess);
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

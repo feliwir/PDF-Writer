@@ -69,7 +69,7 @@
 
 #include <string.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 MD5Generator::MD5Generator()
 {
@@ -91,16 +91,16 @@ MD5Generator::~MD5Generator() = default;
 EStatusCode MD5Generator::Accumulate(const std::string &inString)
 {
     if (mIsFinalized)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     _Accumulate((const uint8_t *)inString.c_str(), (unsigned long)inString.length());
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode MD5Generator::Accumulate(const ByteList &inString)
 {
     if (mIsFinalized)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     auto *buffer = new uint8_t[inString.size()];
     uint8_t *itBuffer = buffer;
@@ -110,16 +110,16 @@ EStatusCode MD5Generator::Accumulate(const ByteList &inString)
 
     _Accumulate((const uint1 *)buffer, (unsigned long)inString.size());
     delete[] buffer;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode MD5Generator::Accumulate(const uint8_t *inArray, size_t inLength)
 {
     if (mIsFinalized)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     _Accumulate(inArray, (unsigned long)inLength);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void MD5Generator::_Accumulate(const uint1 *inBlock, unsigned long inBlockSize)

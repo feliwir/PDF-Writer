@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFEmbedding, MergeToPDFForm)
 {
@@ -40,16 +40,16 @@ TEST(PDFEmbedding, MergeToPDFForm)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "MergeToPDFForm.txt")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // in this test we will merge 2 pages into a PDF form, and place it twice, forming a 2X2 design. amazing.
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Linearized.pdf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // create form for two pages.
     PDFFormXObject *newFormXObject = pdfWriter.StartFormXObject(PDFRectangle(0, 0, 297.5, 842));
@@ -59,18 +59,18 @@ TEST(PDFEmbedding, MergeToPDFForm)
     xobjectContentContext->q();
     xobjectContentContext->cm(0.5, 0, 0, 0.5, 0, 0);
     status = copyingContext->MergePDFPageToFormXObject(newFormXObject, 1);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
     xobjectContentContext->Q();
 
     xobjectContentContext->q();
     xobjectContentContext->cm(0.5, 0, 0, 0.5, 0, 421);
     status = copyingContext->MergePDFPageToFormXObject(newFormXObject, 0);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
     xobjectContentContext->Q();
 
     ObjectIDType formID = newFormXObject->GetObjectID();
     status = pdfWriter.EndFormXObjectAndRelease(newFormXObject);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // now place it in the page
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
@@ -84,11 +84,11 @@ TEST(PDFEmbedding, MergeToPDFForm)
     pageContentContext->Q();
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

@@ -33,13 +33,13 @@ class Type2CharStringWriter
 
     void Assign(IByteWriter *inTargetStream);
 
-    PDFHummus::EStatusCode WriteHintMask(unsigned long inMask, unsigned long inMaskSize);
-    PDFHummus::EStatusCode WriteIntegerOperand(long inOperand);
-    PDFHummus::EStatusCode WriteOperator(uint16_t inOperatorCode);
+    charta::EStatusCode WriteHintMask(unsigned long inMask, unsigned long inMaskSize);
+    charta::EStatusCode WriteIntegerOperand(long inOperand);
+    charta::EStatusCode WriteOperator(uint16_t inOperatorCode);
 
   private:
     IByteWriter *mTargetStream;
 
-    PDFHummus::EStatusCode WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize);
-    PDFHummus::EStatusCode WriteByte(uint8_t inValue);
+    charta::EStatusCode WriteMaskBytes(unsigned long inMask, unsigned long inMaskByteSize);
+    charta::EStatusCode WriteByte(uint8_t inValue);
 };

@@ -36,7 +36,7 @@ class DictionaryContext
     DictionaryContext(ObjectsContext *inObjectsContext, size_t inIndentLevel);
     ~DictionaryContext(void);
 
-    PDFHummus::EStatusCode WriteKey(const std::string &inKey);
+    charta::EStatusCode WriteKey(const std::string &inKey);
 
     // returns true if key already written, false if not
     bool HasKey(const std::string &inKey);

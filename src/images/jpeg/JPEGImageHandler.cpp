@@ -35,7 +35,7 @@
 #include "io/InputFile.h"
 #include "io/OutputStreamTraits.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 JPEGImageHandler::JPEGImageHandler()
 {
@@ -101,7 +101,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     const std::string &inJPGFilePath, ObjectIDType inImageXObjectID, const JPEGImageInformation &inJPGImageInformation)
 {
     InputFile JPGFile;
-    if (JPGFile.OpenFile(inJPGFilePath) != PDFHummus::eSuccess)
+    if (JPGFile.OpenFile(inJPGFilePath) != charta::eSuccess)
     {
         TRACE_LOG1(
             "JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unable to open JPG file for reading, %s",
@@ -122,7 +122,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     const JPEGImageInformation &inJPGImageInformation)
 {
     PDFImageXObject *imageXObject = nullptr;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -185,10 +185,10 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
             TRACE_LOG1("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, Unexpected Error, unfamilar "
                        "color components count - %d",
                        inJPGImageInformation.ColorComponentsCount);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // Decoder - DCTDecode
@@ -196,26 +196,26 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
         imageContext->WriteNameValue(scDCTDecode);
 
         auto it = mExtenders.begin();
-        EStatusCode status = PDFHummus::eSuccess;
-        for (; it != mExtenders.end() && PDFHummus::eSuccess == status; ++it)
+        EStatusCode status = charta::eSuccess;
+        for (; it != mExtenders.end() && charta::eSuccess == status; ++it)
         {
             if ((*it)->OnJPEGImageXObjectWrite(inImageXObjectID, imageContext, mObjectsContext, mDocumentContext,
-                                               this) != PDFHummus::eSuccess)
+                                               this) != charta::eSuccess)
             {
                 TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, unexpected failure. "
                           "extender declared failure when writing image xobject.");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         std::shared_ptr<PDFStream> imageStream = mObjectsContext->StartUnfilteredPDFStream(imageContext);
 
         OutputStreamTraits outputTraits(imageStream->GetWriteStream());
         status = outputTraits.CopyToOutputStream(inJPGImageStream);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, failed to "
                       "copy jpg stream to output stream");
@@ -242,7 +242,7 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(IByteRead
         JPEGImageInformation imageInformation;
 
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("JPEGImageHandler::JPEGImageHandler. Failed to parse JPG stream");
             break;
@@ -266,7 +266,7 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std
         {
             InputFile JPGFile;
             EStatusCode status = JPGFile.OpenFile(inJPGFilePath);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Unable to open JPG file for reading, %s",
                            inJPGFilePath.c_str());
@@ -277,14 +277,14 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std
             JPEGImageInformation imageInformation;
 
             status = jpgImageParser.Parse(JPGFile.GetInputStream(), imageInformation);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Failed to parse JPG file, %s", inJPGFilePath.c_str());
                 break;
             }
 
             status = JPGFile.CloseFile();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Failed to close JPG file, %s", inJPGFilePath.c_str());
                 break;
@@ -390,7 +390,7 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
         xobjectContentContext->Q();
 
         EStatusCode status = mDocumentContext->EndFormXObjectNoRelease(formXObject);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
                       "form XObject for image");
@@ -537,7 +537,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(IByteReaderWi
         long long recordedPosition = inJPGStream->GetCurrentPosition();
 
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
             break;
@@ -587,7 +587,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(IByteReaderWith
         long long recordedPosition = inJPGStream->GetCurrentPosition();
 
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
             break;

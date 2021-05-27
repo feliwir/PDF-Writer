@@ -50,10 +50,10 @@ class UsedFontsRepository
     PDFUsedFont *GetFontForFile(const std::string &inFontFilePath, const std::string &inOptionalMetricsFile,
                                 long inFontIndex);
 
-    PDFHummus::EStatusCode WriteUsedFontsDefinitions();
+    charta::EStatusCode WriteUsedFontsDefinitions();
 
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
     void Reset();
 

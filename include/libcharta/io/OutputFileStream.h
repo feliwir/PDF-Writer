@@ -35,8 +35,8 @@ class OutputFileStream final : public IByteWriterWithPosition
     OutputFileStream(const std::string &inFilePath, bool inAppend = false);
 
     // input file path is in UTF8
-    PDFHummus::EStatusCode Open(const std::string &inFilePath, bool inAppend = false);
-    PDFHummus::EStatusCode Close();
+    charta::EStatusCode Open(const std::string &inFilePath, bool inAppend = false);
+    charta::EStatusCode Close();
 
     // IByteWriter implementation
     virtual size_t Write(const uint8_t *inBuffer, size_t inSize);

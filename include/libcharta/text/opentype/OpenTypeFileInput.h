@@ -193,8 +193,8 @@ class OpenTypeFileInput
     OpenTypeFileInput(void);
     ~OpenTypeFileInput(void);
 
-    PDFHummus::EStatusCode ReadOpenTypeFile(const std::string &inFontFilePath, uint16_t inFaceIndex);
-    PDFHummus::EStatusCode ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex);
+    charta::EStatusCode ReadOpenTypeFile(const std::string &inFontFilePath, uint16_t inFaceIndex);
+    charta::EStatusCode ReadOpenTypeFile(IByteReaderWithPosition *inTrueTypeFile, uint16_t inFaceIndex);
 
     EOpenTypeInputType GetOpenTypeFontType();
 
@@ -237,18 +237,18 @@ class OpenTypeFileInput
                                          // be empty, to avoid having to change the glyphs indices. some
                                          // technique some producers use
 
-    PDFHummus::EStatusCode ReadOpenTypeHeader();
-    PDFHummus::EStatusCode ReadOpenTypeSFNT();
-    PDFHummus::EStatusCode ReadOpenTypeSFNTFromDfont();
-    PDFHummus::EStatusCode ReadHead();
-    PDFHummus::EStatusCode ReadMaxP();
-    PDFHummus::EStatusCode ReadHHea();
-    PDFHummus::EStatusCode ReadHMtx();
-    PDFHummus::EStatusCode ReadOS2();
-    PDFHummus::EStatusCode ReadName();
-    PDFHummus::EStatusCode ReadLoca();
-    PDFHummus::EStatusCode ReadGlyfForDependencies();
+    charta::EStatusCode ReadOpenTypeHeader();
+    charta::EStatusCode ReadOpenTypeSFNT();
+    charta::EStatusCode ReadOpenTypeSFNTFromDfont();
+    charta::EStatusCode ReadHead();
+    charta::EStatusCode ReadMaxP();
+    charta::EStatusCode ReadHHea();
+    charta::EStatusCode ReadHMtx();
+    charta::EStatusCode ReadOS2();
+    charta::EStatusCode ReadName();
+    charta::EStatusCode ReadLoca();
+    charta::EStatusCode ReadGlyfForDependencies();
     unsigned long GetTag(const char *inTagName);
     void FreeTables();
-    PDFHummus::EStatusCode ReadCFF();
+    charta::EStatusCode ReadCFF();
 };

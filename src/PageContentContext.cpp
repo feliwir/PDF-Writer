@@ -26,9 +26,9 @@
 #include "PDFStream.h"
 #include "Trace.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
-PageContentContext::PageContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
+PageContentContext::PageContentContext(charta::DocumentContext *inDocumentContext, PDFPage &inPageOfContext,
                                        ObjectsContext *inObjectsContext)
     : AbstractContentContext(inDocumentContext), mPageOfContext(inPageOfContext)
 {
@@ -63,7 +63,7 @@ EStatusCode PageContentContext::FinalizeCurrentStream()
 {
     if (mCurrentStream != nullptr)
         return FinalizeStreamWriteAndRelease();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 PDFPage &PageContentContext::GetAssociatedPage()
@@ -75,7 +75,7 @@ EStatusCode PageContentContext::FinalizeStreamWriteAndRelease()
 {
     mObjectsContext->EndPDFStream(mCurrentStream);
     mCurrentStream = nullptr;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 std::shared_ptr<PDFStream> PageContentContext::GetCurrentPageContentStream()
@@ -103,8 +103,8 @@ class PageImageWritingTask : public IPageEndWritingTask
 
     ~PageImageWritingTask() override = default;
 
-    PDFHummus::EStatusCode Write(PDFPage & /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
-                                 PDFHummus::DocumentContext *inDocumentContext) override
+    charta::EStatusCode Write(PDFPage & /*inPageObject*/, ObjectsContext * /*inObjectsContext*/,
+                              charta::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

@@ -35,11 +35,11 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode ShowGlobalFontProperties(FreeTypeWrapper & /*inFreeType*/, FT_Face inFace)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     FreeTypeFaceWrapper face(inFace, "", 0, false);
 
@@ -74,7 +74,7 @@ EStatusCode ShowGlobalFontProperties(FreeTypeWrapper & /*inFreeType*/, FT_Face i
         if (FT_Get_CID_Registry_Ordering_Supplement(face, &registry, &ordering, &supplement) != 0)
         {
             std::cout << "Failed to read registry, ordering and supplement informaiton\n";
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
         }
         std::cout << "CID Registry = " << registry << "\n";
         std::cout << "CID Ordering = " << ordering << "\n";
@@ -132,7 +132,7 @@ EStatusCode ShowFaceProperties(FreeTypeWrapper &inFreeType, const std::string &i
                                const std::string &inSecondaryFontFilePath = "")
 {
     FT_Face face;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     if (inSecondaryFontFilePath.length() > 0)
         face = inFreeType.NewFace(inFontFilePath, inSecondaryFontFilePath, 0);
@@ -140,7 +140,7 @@ EStatusCode ShowFaceProperties(FreeTypeWrapper &inFreeType, const std::string &i
         face = inFreeType.NewFace(inFontFilePath, 0);
     if (face == nullptr)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     status = ShowGlobalFontProperties(inFreeType, face);
 
@@ -153,19 +153,19 @@ TEST(FreeType, FreeTypeInitialization)
     Singleton<Trace>::GetInstance()->SetLogSettings(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "FreeTypeTest.txt"),
                                                     true, true);
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     FreeTypeWrapper ftWrapper;
 
     status = ShowFaceProperties(ftWrapper, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = ShowFaceProperties(ftWrapper, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFB"),
                                 RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/HLB_____.PFM"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status =
         ShowFaceProperties(ftWrapper, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/BrushScriptStd.otf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     Singleton<Trace>::Reset();
 }

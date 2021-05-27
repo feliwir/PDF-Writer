@@ -28,10 +28,10 @@ class CFFDescendentFontWriter : public IDescendentFontWriter
     ~CFFDescendentFontWriter(void);
 
     // IDescendentFontWriter implementation [used also as helper for the DescendentFontWriter]
-    virtual PDFHummus::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
-                                             FreeTypeFaceWrapper &inFontInfo,
-                                             const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
-                                             ObjectsContext *inObjectsContext, bool inEmbedFont);
+    virtual charta::EStatusCode WriteFont(ObjectIDType inDecendentObjectID, const std::string &inFontName,
+                                          FreeTypeFaceWrapper &inFontInfo,
+                                          const UIntAndGlyphEncodingInfoVector &inEncodedGlyphs,
+                                          ObjectsContext *inObjectsContext, bool inEmbedFont);
     virtual void WriteSubTypeValue(DictionaryContext *inDescendentFontContext);
     virtual void WriteAdditionalKeys(DictionaryContext *inDescendentFontContext);
     virtual void WriteFontFileReference(DictionaryContext *inDescriptorContext, ObjectsContext *inObjectsContext);

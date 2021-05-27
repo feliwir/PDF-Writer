@@ -97,12 +97,12 @@ class ObjectsContext;
 class IDocumentContextExtender;
 class IByteReaderWithPosition;
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 }
 
-using namespace PDFHummus;
+using namespace charta;
 
 typedef std::list<ObjectIDType> ObjectIDTypeList;
 typedef std::list<PDFImageXObject *> PDFImageXObjectList;
@@ -136,8 +136,7 @@ class TIFFImageHandler
         IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 
-    void SetOperationsContexts(PDFHummus::DocumentContext *inContainerDocumentContext,
-                               ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(charta::DocumentContext *inContainerDocumentContext, ObjectsContext *inObjectsContext);
     void SetDocumentContextExtender(IDocumentContextExtender *inExtender);
 
     void Reset();
@@ -150,7 +149,7 @@ class TIFFImageHandler
     unsigned long ReadImagePageCount(IByteReaderWithPosition *inTIFFStream);
 
   private:
-    PDFHummus::DocumentContext *mContainerDocumentContext;
+    charta::DocumentContext *mContainerDocumentContext;
     ObjectsContext *mObjectsContext;
     T2P *mT2p; // state for tiff->pdf
     TIFFUsageParameters mUserParameters;
@@ -159,10 +158,10 @@ class TIFFImageHandler
     void InitializeConversionState();
     void DestroyConversionState();
     PDFFormXObject *ConvertTiff2PDF(ObjectIDType inFormXObjectID);
-    PDFHummus::EStatusCode ReadTopLevelTiffInformation();
-    PDFHummus::EStatusCode ReadTIFFPageInformation();
-    PDFHummus::EStatusCode ReadPhotometricPalette();
-    PDFHummus::EStatusCode ReadPhotometricPaletteCMYK();
+    charta::EStatusCode ReadTopLevelTiffInformation();
+    charta::EStatusCode ReadTIFFPageInformation();
+    charta::EStatusCode ReadPhotometricPalette();
+    charta::EStatusCode ReadPhotometricPaletteCMYK();
     void ComposePDFPage();
     void ComposePDFPageOrient(T2P_BOX *, uint16);
     void ComposePDFPageOrientFlip(T2P_BOX *, uint16);
@@ -178,7 +177,7 @@ class TIFFImageHandler
     void WriteImageXObjectDecode(DictionaryContext *inImageDictionary);
     void WriteImageXObjectFilter(DictionaryContext *inImageDictionary, int inTileIndex);
     void CalculateTiffTileSize(int inTileIndex);
-    PDFHummus::EStatusCode WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex);
+    charta::EStatusCode WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex);
     void SamplePlanarSeparateToContig(unsigned char *inBuffer, unsigned char *inSamplebuffer,
                                       tsize_t inSamplebuffersize);
     tsize_t SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount);
@@ -188,13 +187,13 @@ class TIFFImageHandler
                           uint32 inTileLength);
     PDFImageXObject *WriteUntiledImageXObject();
     void WriteCommonImageDictionaryProperties(DictionaryContext *inImageContext);
-    PDFHummus::EStatusCode WriteImageData(std::shared_ptr<PDFStream> inImageStream);
+    charta::EStatusCode WriteImageData(std::shared_ptr<PDFStream> inImageStream);
     void CalculateTiffSizeNoTiles();
     void SampleRealizePalette(unsigned char *inBuffer);
     tsize_t SampleABGRToRGB(tdata_t inData, uint32 inSampleCount);
-    PDFHummus::EStatusCode WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
-                                                    uint32 inImageLength, unsigned char *inBuffer,
-                                                    ImageSizeProc inBufferSizeFunction);
+    charta::EStatusCode WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
+                                                 uint32 inImageLength, unsigned char *inBuffer,
+                                                 ImageSizeProc inBufferSizeFunction);
     PDFFormXObject *WriteImagesFormXObject(const PDFImageXObjectList &inImages, ObjectIDType inFormXObjectID);
     void AddImagesProcsets(PDFImageXObject *inImageXObject);
     void WriteIndexedCSForBiLevelColorMap();

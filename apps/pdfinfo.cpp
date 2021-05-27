@@ -33,14 +33,14 @@ int main(int argc, char **argv)
     PDFParser parser;
     InputFile pdfFile;
     auto status = pdfFile.OpenFile(input);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         std::cerr << "Failed to open file: " << input << std::endl;
         return EXIT_FAILURE;
     }
 
     status = parser.StartPDFParsing(pdfFile.GetInputStream());
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         std::cerr << "Failed to parse PDF file: " << input << std::endl;
         return EXIT_FAILURE;

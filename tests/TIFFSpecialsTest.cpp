@@ -31,11 +31,11 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     TIFFUsageParameters TIFFParameters;
 
     std::string scWJim = RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___cg.tif");
@@ -43,7 +43,7 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     // GrayScale regular
     PDFFormXObject *imageGrayScale = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim);
     if (imageGrayScale == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // GrayScale Green
     TIFFParameters.GrayscaleTreatment.AsColorMap = true;
@@ -51,7 +51,7 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(255, 255, 255);
     PDFFormXObject *imageGrayScaleGreen = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
     if (imageGrayScaleGreen == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // grayscale cyan magenta
     TIFFParameters.GrayscaleTreatment.AsColorMap = true;
@@ -59,7 +59,7 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(0, 0, 0, 0);
     PDFFormXObject *imageGrayScaleCyanMagenta = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
     if (imageGrayScaleCyanMagenta == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // grayscale green vs red
     TIFFParameters.GrayscaleTreatment.AsColorMap = true;
@@ -67,7 +67,7 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(255, 0, 0);
     PDFFormXObject *imageGrayScaleGreenVSRed = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
     if (imageGrayScaleGreenVSRed == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // grayscale cyan vs magenta
     TIFFParameters.GrayscaleTreatment.AsColorMap = true;
@@ -75,15 +75,15 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     TIFFParameters.GrayscaleTreatment.ZeroColor = CMYKRGBColor(0, 255, 0, 0);
     PDFFormXObject *imageGrayScaleCyanVSMagenta = inpdfWriter.CreateFormXObjectFromTIFFFile(scWJim, TIFFParameters);
     if (imageGrayScaleCyanVSMagenta == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // start page
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     pageContentContext->q();
     pageContentContext->cm(1, 0, 0, 1, 0, 842 - 195.12);
@@ -120,7 +120,7 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
     delete imageGrayScaleCyanVSMagenta;
 
     status = inpdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return inpdfWriter.WritePage(page);
@@ -128,13 +128,13 @@ EStatusCode CreateBiLevelGrayScales(PDFWriter &inpdfWriter)
 
 EStatusCode CreatePageForImageAndRelease(PDFWriter &inpdfWriter, PDFFormXObject *inImageObject)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     std::string imageXObjectName = page.GetResourcesDictionary().AddFormXObjectMapping(inImageObject->GetObjectID());
 
@@ -146,7 +146,7 @@ EStatusCode CreatePageForImageAndRelease(PDFWriter &inpdfWriter, PDFFormXObject 
     delete inImageObject;
 
     status = inpdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return inpdfWriter.WritePage(page);
@@ -155,25 +155,25 @@ EStatusCode CreatePageForImageAndRelease(PDFWriter &inpdfWriter, PDFFormXObject 
 EStatusCode CreateBlackAndWhiteMaskImage(PDFWriter &inpdfWriter)
 {
     std::string scJimBW = RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___ah.tif");
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     TIFFUsageParameters TIFFParameters;
 
     PDFFormXObject *imageBW = inpdfWriter.CreateFormXObjectFromTIFFFile(scJimBW);
     if (imageBW == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     TIFFParameters.BWTreatment.AsImageMask = true;
     TIFFParameters.BWTreatment.OneColor = CMYKRGBColor(255, 128, 0);
     PDFFormXObject *imageBWMask = inpdfWriter.CreateFormXObjectFromTIFFFile(scJimBW, TIFFParameters);
     if (imageBWMask == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = inpdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     pageContentContext->q();
     pageContentContext->cm(1, 0, 0, 1, 0, 842 - 195.12);
@@ -192,7 +192,7 @@ EStatusCode CreateBlackAndWhiteMaskImage(PDFWriter &inpdfWriter)
     delete imageBWMask;
 
     status = inpdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return inpdfWriter.WritePage(page);
@@ -207,7 +207,7 @@ TEST(PDFImages, TIFFSpecials)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TiffSpecialsTest.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "TiffSpecialsTestLog.txt")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // multipage Tiff
     for (int i = 0; i < 4; ++i)
@@ -219,19 +219,19 @@ TEST(PDFImages, TIFFSpecials)
         ASSERT_NE(imageFormXObject, nullptr);
 
         status = CreatePageForImageAndRelease(pdfWriter, imageFormXObject);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     // Black and White mask
     status = CreateBlackAndWhiteMaskImage(pdfWriter);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Create BiLevel grayscales
     status = CreateBiLevelGrayScales(pdfWriter);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }
 
 #endif

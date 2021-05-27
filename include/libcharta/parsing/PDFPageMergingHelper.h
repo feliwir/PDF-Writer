@@ -36,12 +36,12 @@ class PDFPageMergingHelper
     PDFPageMergingHelper(PDFPage *inPage);
     virtual ~PDFPageMergingHelper(void);
 
-    PDFHummus::EStatusCode MergePageContent(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
-                                            unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,
-                                            unsigned long inPageIndex);
-    PDFHummus::EStatusCode MergePageContent(PDFWriter *inWriter, IByteReaderWithPosition *inPDFStream,
-                                            unsigned long inPageIndex);
+    charta::EStatusCode MergePageContent(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
+                                         unsigned long inPageIndex);
+    charta::EStatusCode MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,
+                                         unsigned long inPageIndex);
+    charta::EStatusCode MergePageContent(PDFWriter *inWriter, IByteReaderWithPosition *inPDFStream,
+                                         unsigned long inPageIndex);
 
   private:
     PDFPage *mPage;

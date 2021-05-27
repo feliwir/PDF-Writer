@@ -32,7 +32,7 @@
 
 #include <list>
 
-using namespace PDFHummus;
+using namespace charta;
 
 IndirectObjectsReferenceRegistry::IndirectObjectsReferenceRegistry()
 {
@@ -74,7 +74,7 @@ EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsWritten(ObjectIDType i
         TRACE_LOG1("IndirectObjectsReferenceRegistry::MarkObjectAsWritten, Out of range failure. An Object ID is "
                    "marked as written, which was not allocated before. ID = %ld",
                    inObjectID);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (mObjectsWritesRegistry[inObjectID].mObjectWritten)
@@ -82,8 +82,8 @@ EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsWritten(ObjectIDType i
         TRACE_LOG3("IndirectObjectsReferenceRegistry::MarkObjectAsWritten, Object rewrite failure. The object %ld was "
                    "already marked as written at %lld. New position is %lld",
                    inObjectID, mObjectsWritesRegistry[inObjectID].mWritePosition, inWritePosition);
-        return PDFHummus::eFailure; // trying to mark as written an object that was already marked as such in the past.
-                                    // probably a mistake [till we have revisions]
+        return charta::eFailure; // trying to mark as written an object that was already marked as such in the past.
+                                 // probably a mistake [till we have revisions]
     }
 
     if (inWritePosition >
@@ -93,13 +93,13 @@ EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsWritten(ObjectIDType i
             "IndirectObjectsReferenceRegistry::MarkObjectAsWritten, Write position out of bounds. Trying to write an "
             "object at position that cannot be represented in Xref = %lld. probably means file got too long",
             inWritePosition);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mObjectsWritesRegistry[inObjectID].mIsDirty = true;
     mObjectsWritesRegistry[inObjectID].mWritePosition = inWritePosition;
     mObjectsWritesRegistry[inObjectID].mObjectWritten = true;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 GetObjectWriteInformationResult IndirectObjectsReferenceRegistry::GetObjectWriteInformation(
@@ -129,14 +129,14 @@ ObjectIDType IndirectObjectsReferenceRegistry::GetObjectsCount() const
     return static_cast<ObjectIDType>(mObjectsWritesRegistry.size());
 }
 
-PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::DeleteObject(ObjectIDType inObjectID)
+charta::EStatusCode IndirectObjectsReferenceRegistry::DeleteObject(ObjectIDType inObjectID)
 {
     if (mObjectsWritesRegistry.size() <= inObjectID)
     {
         TRACE_LOG1("IndirectObjectsReferenceRegistry::DeleteObject, Out of range failure. An Object ID is marked for "
                    "delete,but there's no such object. ID = %ld",
                    inObjectID);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (mObjectsWritesRegistry[inObjectID].mGenerationNumber == 65535)
@@ -144,7 +144,7 @@ PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::DeleteObject(ObjectIDTy
         TRACE_LOG1("IndirectObjectsReferenceRegistry::DeleteObject, object ID generation number reached maximum value "
                    "and cannot be increased. ID = %ld",
                    inObjectID);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mObjectsWritesRegistry[inObjectID].mIsDirty = true;
@@ -152,18 +152,18 @@ PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::DeleteObject(ObjectIDTy
     mObjectsWritesRegistry[inObjectID].mWritePosition = 0;
     mObjectsWritesRegistry[inObjectID].mObjectReferenceType = ObjectWriteInformation::Free;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
-PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsUpdated(ObjectIDType inObjectID,
-                                                                             long long inNewWritePosition)
+charta::EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsUpdated(ObjectIDType inObjectID,
+                                                                          long long inNewWritePosition)
 {
     if (mObjectsWritesRegistry.size() <= inObjectID)
     {
         TRACE_LOG1("IndirectObjectsReferenceRegistry::MarkObjectAsUpdated, Out of range failure. An Object ID is "
                    "marked for update,but there's no such object. ID = %ld",
                    inObjectID);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (inNewWritePosition >
@@ -173,14 +173,14 @@ PDFHummus::EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsUpdated(Obj
             "IndirectObjectsReferenceRegistry::MarkObjectAsUpdated, Write position out of bounds. Trying to write an "
             "object at position that cannot be represented in Xref = %lld. probably means file got too long",
             inNewWritePosition);
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mObjectsWritesRegistry[inObjectID].mIsDirty = true;
     mObjectsWritesRegistry[inObjectID].mWritePosition = inNewWritePosition;
     mObjectsWritesRegistry[inObjectID].mObjectReferenceType = ObjectWriteInformation::Used;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 typedef std::list<ObjectIDType> ObjectIDTypeList;
@@ -247,7 +247,7 @@ EStatusCode IndirectObjectsReferenceRegistry::WriteState(ObjectsContext *inState
         inStateWriter->EndIndirectObject();
     }
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode IndirectObjectsReferenceRegistry::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
@@ -293,7 +293,7 @@ EStatusCode IndirectObjectsReferenceRegistry::ReadState(PDFParser *inStateReader
         mObjectsWritesRegistry.push_back(newObjectInformation);
     }
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void IndirectObjectsReferenceRegistry::Reset()

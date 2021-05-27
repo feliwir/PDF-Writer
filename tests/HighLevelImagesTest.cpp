@@ -29,7 +29,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFImages, HighLevelImages)
 {
@@ -39,12 +39,12 @@ TEST(PDFImages, HighLevelImages)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "HighLevelImages.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "HighLevelImages.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // First page
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
@@ -54,15 +54,15 @@ TEST(PDFImages, HighLevelImages)
         cxt->DrawImage(0, 0, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"));
 
         status = pdfWriter.EndPageContentContext(cxt);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
         AbstractContentContext::ImageOptions opt1;
@@ -92,14 +92,14 @@ TEST(PDFImages, HighLevelImages)
         cxt->DrawRectangle(10, 10, jpgDimensions.first / 4, jpgDimensions.second / 4, pathStrokeOptions);
 
         status = pdfWriter.EndPageContentContext(cxt);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }
 
 #endif

@@ -26,7 +26,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFEmbedding, PDFEmbedTest)
 {
@@ -34,15 +34,15 @@ TEST(PDFEmbedding, PDFEmbedTest)
     PDFWriter pdfWriter;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PDFEmbedTest.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Create XObjects from PDF to embed
     EStatusCodeAndObjectIDTypeList result = pdfWriter.CreateFormXObjectsFromPDF(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), PDFPageRange(), ePDFPageBoxMediaBox);
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
 
@@ -69,11 +69,11 @@ TEST(PDFEmbedding, PDFEmbedTest)
     contentContext->S();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

@@ -24,7 +24,7 @@
 #include "ResourcesDictionary.h"
 #include <memory>
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 };
@@ -36,7 +36,7 @@ class ObjectsContext;
 class PDFFormXObject
 {
   public:
-    PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
+    PDFFormXObject(charta::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
                    std::shared_ptr<PDFStream> inXObjectStream, ObjectIDType inFormXObjectResourcesDictionaryID);
     ~PDFFormXObject(void);
 

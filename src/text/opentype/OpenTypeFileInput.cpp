@@ -22,7 +22,7 @@
 #include "Trace.h"
 #include "io/InputFile.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 OpenTypeFileInput::OpenTypeFileInput()
 {
@@ -66,7 +66,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(const std::string &inFontFilePat
     InputFile fontFile;
 
     EStatusCode status = fontFile.OpenFile(inFontFilePath);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG1("OpenTypeFileInput::ReadOpenTypeFile, cannot open true type font file at %s",
                    inFontFilePath.c_str());
@@ -94,49 +94,49 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueT
         mTableOffset = (unsigned long)mPrimitivesReader.GetCurrentPosition();
 
         status = ReadOpenTypeHeader();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read true type header");
             break;
         }
 
         status = ReadHead();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read head table");
             break;
         }
 
         status = ReadMaxP();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read maxp table");
             break;
         }
 
         status = ReadHHea();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read hhea table");
             break;
         }
 
         status = ReadHMtx();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read hmtx table");
             break;
         }
 
         status = ReadOS2(); // Note that OS/2 is supposedly required, but some dfonts don't contain it...and it's fine
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read os2 table");
             break;
         }
 
         status = ReadName();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read name table");
             break;
@@ -146,14 +146,14 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueT
         {
             // true type specifics
             status = ReadLoca();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read loca table");
                 break;
             }
 
             status = ReadGlyfForDependencies();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read glyf table");
                 break;
@@ -169,7 +169,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeFile(IByteReaderWithPosition *inTrueT
         {
             // CFF specifics
             status = ReadCFF();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("OpenTypeFileInput::ReadOpenTypeFile, failed to read CFF table");
             }
@@ -196,7 +196,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeHeader()
     {
         status = ReadOpenTypeSFNT();
 
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("OpenTypeFileInput::ReaderTrueTypeHeader, SFNT header not open type");
             break;
@@ -232,9 +232,9 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
     mPrimitivesReader.SetOffset(mHeaderOffset);
     mPrimitivesReader.ReadULONG(sfntVersion);
 
-    if (mPrimitivesReader.GetInternalState() != PDFHummus::eSuccess)
+    if (mPrimitivesReader.GetInternalState() != charta::eSuccess)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if ((0x74746366 /* ttcf */ == sfntVersion))
@@ -253,7 +253,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
         {
             TRACE_LOG2("OpenTypeFileInput::ReadOpenTypeSFNT, face index %d out of range. Max font count is %ld",
                        mFaceIndex, numFonts);
-            return PDFHummus::eFailure;
+            return charta::eFailure;
         }
 
         for (int i = 0; i <= mFaceIndex; ++i)
@@ -268,18 +268,18 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNT()
     if ((0x10000 == sfntVersion) || (0x74727565 /* true */ == sfntVersion))
     {
         mFontType = EOpenTypeTrueType;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
     if (0x4F54544F /* OTTO */ == sfntVersion)
     {
         mFontType = EOpenTypeCFF;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
-    if ((ReadOpenTypeSFNTFromDfont() == PDFHummus::eSuccess))
+    if ((ReadOpenTypeSFNTFromDfont() == charta::eSuccess))
     {
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
@@ -310,7 +310,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
         /*
             if ( rdata_pos + rdata_len != map_pos || map_pos == 0 ) {
-                return PDFHummus::eFailure;
+                return charta::eFailure;
             }
         */
 
@@ -334,7 +334,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
                     if ( head[i] != 0 ) allzeros = 0;
                     if ( head2[i] != head[i] ) allmatch = 0;
                 }
-                if ( !allzeros && !allmatch ) return PDFHummus::eFailure;
+                if ( !allzeros && !allmatch ) return charta::eFailure;
             }
         */
     }
@@ -425,7 +425,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
             if (cur_face != face_index)
             {
                 TRACE_LOG("OpenTypeFileInput::ReadOpenTypeSFNTFromDfont, could not find face inside resource");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -439,7 +439,7 @@ EStatusCode OpenTypeFileInput::ReadOpenTypeSFNTFromDfont()
 
     if (status == eSuccess && foundSfnt)
         return ReadOpenTypeSFNT();
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 unsigned long OpenTypeFileInput::GetTag(const char *inTagName)
 
@@ -462,7 +462,7 @@ EStatusCode OpenTypeFileInput::ReadHead()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHead, could not find head table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPrimitivesReader.SetOffset(it->second.Offset);
@@ -493,7 +493,7 @@ EStatusCode OpenTypeFileInput::ReadMaxP()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadMaxP, could not find maxp table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     mPrimitivesReader.SetOffset(it->second.Offset);
 
@@ -528,7 +528,7 @@ EStatusCode OpenTypeFileInput::ReadHHea()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHHea, could not find hhea table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPrimitivesReader.SetOffset(it->second.Offset);
@@ -557,7 +557,7 @@ EStatusCode OpenTypeFileInput::ReadHMtx()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadHMtx, could not find hmtx table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPrimitivesReader.SetOffset(it->second.Offset);
@@ -650,7 +650,7 @@ EStatusCode OpenTypeFileInput::ReadName()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadName, could not find name table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPrimitivesReader.SetOffset(it->second.Offset);
@@ -688,7 +688,7 @@ EStatusCode OpenTypeFileInput::ReadLoca()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadLoca, could not find loca table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     mPrimitivesReader.SetOffset(it->second.Offset);
 
@@ -717,7 +717,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadGlyfForDependencies, could not find glyf table");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // it->second.Offset, is the offset to the beginning of the table
@@ -755,7 +755,7 @@ EStatusCode OpenTypeFileInput::ReadGlyfForDependencies()
                     if (glyphIndex >= mMaxp.NumGlyphs)
                     {
                         TRACE_LOG("OpenTypeFileInput::ReadGlyfForDependencies, dependent glyph out of range");
-                        return PDFHummus::eFailure;
+                        return charta::eFailure;
                     }
 
                     mGlyf[i]->mComponentGlyphs.push_back(glyphIndex);
@@ -802,7 +802,7 @@ EStatusCode OpenTypeFileInput::ReadCFF()
     if (it == mTables.end())
     {
         TRACE_LOG("OpenTypeFileInput::ReadCFF, could not find cff table entry");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPrimitivesReader.SetOffset(it->second.Offset);

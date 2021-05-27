@@ -22,7 +22,7 @@
 #include "Trace.h"
 #include <sstream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 UnicodeString::UnicodeString() = default;
 
@@ -65,10 +65,10 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
 {
     mUnicodeCharacters.clear();
     std::string::const_iterator it = inString.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     unsigned long unicodeCharacter;
 
-    for (; it != inString.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != inString.end() && charta::eSuccess == status; ++it)
     {
         if ((unsigned char)*it <= 0x7F)
         {
@@ -80,7 +80,7 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
             ++it;
             if (it == inString.end() || ((unsigned char)*it >> 6 != 0x2))
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -89,38 +89,38 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
         else if (((unsigned char)*it >> 4) == 0xE) // 3 bytes encoding
         {
             unicodeCharacter = (unsigned char)*it & 0xF;
-            for (int i = 0; i < 2 && PDFHummus::eSuccess == status; ++i)
+            for (int i = 0; i < 2 && charta::eSuccess == status; ++i)
             {
                 ++it;
                 if (it == inString.end() || ((unsigned char)*it >> 6 != 0x2))
                 {
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 unicodeCharacter = (unicodeCharacter << 6) | ((unsigned char)*it & 0x3F);
             }
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
         else if (((unsigned char)*it >> 3) == 0x1E) // 4 bytes encoding
         {
             unicodeCharacter = (unsigned char)*it & 0x7;
-            for (int i = 0; i < 3 && PDFHummus::eSuccess == status; ++i)
+            for (int i = 0; i < 3 && charta::eSuccess == status; ++i)
             {
                 ++it;
                 if (it == inString.end() || ((unsigned char)*it >> 6 != 0x2))
                 {
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 unicodeCharacter = (unicodeCharacter << 6) | ((unsigned char)*it & 0x3F);
             }
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
         else
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -133,10 +133,10 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
 EStatusCodeAndString UnicodeString::ToUTF8() const
 {
     auto it = mUnicodeCharacters.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     std::stringstream result;
 
-    for (; it != mUnicodeCharacters.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mUnicodeCharacters.end() && charta::eSuccess == status; ++it)
     {
         // Encode Unicode to UTF8
         if (*it <= 0x7F)
@@ -164,7 +164,7 @@ EStatusCodeAndString UnicodeString::ToUTF8() const
         else
         {
             TRACE_LOG("UnicodeString::ToUTF8, contains unicode characters that cannot be coded into UTF8");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
         }
     }
 
@@ -180,13 +180,13 @@ EStatusCode UnicodeString::FromUTF16(const unsigned char *inString, unsigned lon
 {
     // Read BOM
     if (inLength < 2)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     if (inString[0] == 0xFE && inString[1] == 0xFF)
         return FromUTF16BE(inString + 2, inLength - 2);
     if (inString[0] == 0xFF && inString[1] == 0xFE)
         return FromUTF16LE(inString + 2, inLength - 2);
-    return PDFHummus::eFailure; // no bom
+    return charta::eFailure; // no bom
 }
 
 EStatusCode UnicodeString::FromUTF16BE(const std::string &inString)
@@ -197,15 +197,15 @@ EStatusCode UnicodeString::FromUTF16BE(const std::string &inString)
 EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     if (inLength % 2 != 0)
     {
         TRACE_LOG("UnicodeString::FromUTF16BE, invalid UTF16 string, has odd numbers of characters");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
-    for (unsigned long i = 0; i < inLength - 1 && PDFHummus::eSuccess == status; i += 2)
+    for (unsigned long i = 0; i < inLength - 1 && charta::eSuccess == status; i += 2)
     {
         uint16_t buffer = (((uint16_t)inString[i]) << 8) + inString[i + 1];
 
@@ -218,7 +218,7 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16BE, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -227,7 +227,7 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16BE, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -250,15 +250,15 @@ EStatusCode UnicodeString::FromUTF16LE(const std::string &inString)
 EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     if (inLength % 2 != 0)
     {
         TRACE_LOG("UnicodeString::FromUTF16LE, invalid UTF16 string, has odd numbers of characters");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
-    for (unsigned long i = 0; i < inLength - 1 && PDFHummus::eSuccess == status; i += 2)
+    for (unsigned long i = 0; i < inLength - 1 && charta::eSuccess == status; i += 2)
     {
         uint16_t buffer = (((uint16_t)inString[i + 1]) << 8) + inString[i];
 
@@ -271,7 +271,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16LE, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -280,7 +280,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16LE, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -298,9 +298,9 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
 EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (unsigned long i = 0; i < inLength && PDFHummus::eSuccess == status; ++i)
+    for (unsigned long i = 0; i < inLength && charta::eSuccess == status; ++i)
     {
         if (0xD800 <= inShorts[i] && inShorts[i] <= 0xDBFF)
         {
@@ -310,7 +310,7 @@ EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned lo
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16UShort, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -318,7 +318,7 @@ EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned lo
             {
                 TRACE_LOG(
                     "UnicodeString::FromUTF16UShort, fault string - high surrogat encountered without a low surrogate");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -334,7 +334,7 @@ EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned lo
 EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
 {
     auto it = mUnicodeCharacters.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     std::stringstream result;
 
     if (inPrependWithBom)
@@ -343,7 +343,7 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
         result.put((unsigned char)0xFF);
     }
 
-    for (; it != mUnicodeCharacters.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mUnicodeCharacters.end() && charta::eSuccess == status; ++it)
     {
         if (*it < 0xD7FF || (0xE000 < *it && *it < 0xFFFF))
         {
@@ -362,7 +362,7 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
         }
         else
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     }
@@ -373,7 +373,7 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
 EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
 {
     auto it = mUnicodeCharacters.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     std::stringstream result;
 
     if (inPrependWithBom)
@@ -382,7 +382,7 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
         result.put((unsigned char)0xFE);
     }
 
-    for (; it != mUnicodeCharacters.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mUnicodeCharacters.end() && charta::eSuccess == status; ++it)
     {
         if (*it < 0xD7FF || (0xE000 < *it && *it < 0xFFFF))
         {
@@ -401,7 +401,7 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
         }
         else
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     }
@@ -412,10 +412,10 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
 EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
 {
     auto it = mUnicodeCharacters.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     UShortList result;
 
-    for (; it != mUnicodeCharacters.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mUnicodeCharacters.end() && charta::eSuccess == status; ++it)
     {
         if (*it < 0xD7FF || (0xE000 < *it && *it < 0xFFFF))
         {
@@ -431,7 +431,7 @@ EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
         }
         else
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     }

@@ -22,7 +22,7 @@
 #include "Trace.h"
 #include "io/InputByteArrayStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 CharStringType1Interpreter::CharStringType1Interpreter() = default;
 
@@ -44,7 +44,7 @@ EStatusCode CharStringType1Interpreter::Intepret(const Type1CharString &inCharSt
         {
             TRACE_LOG(
                 "CharStringType1Interpreter::Intepret, null implementation helper passed. pass a proper pointer!!");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -57,15 +57,14 @@ EStatusCode CharStringType1Interpreter::Intepret(const Type1CharString &inCharSt
 
 EStatusCode CharStringType1Interpreter::ProcessCharString(InputCharStringDecodeStream *inCharStringToIntepret)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     bool gotEndExecutionOperator = false;
     uint8_t buffer;
 
-    while (inCharStringToIntepret->NotEnded() && PDFHummus::eSuccess == status && !gotEndExecutionOperator &&
-           !mGotEndChar)
+    while (inCharStringToIntepret->NotEnded() && charta::eSuccess == status && !gotEndExecutionOperator && !mGotEndChar)
     {
-        status = (inCharStringToIntepret->Read(&buffer, 1) == 1) ? PDFHummus::eSuccess : PDFHummus::eFailure;
-        if (status != PDFHummus::eSuccess)
+        status = (inCharStringToIntepret->Read(&buffer, 1) == 1) ? charta::eSuccess : charta::eFailure;
+        if (status != charta::eSuccess)
             break;
 
         if (IsOperator(buffer))
@@ -85,7 +84,7 @@ EStatusCode CharStringType1Interpreter::InterpretOperator(uint8_t inBuffer,
                                                           InputCharStringDecodeStream *inCharStringToIntepret,
                                                           bool &outGotEndExecutionCommand)
 {
-    EStatusCode status = PDFHummus::eFailure;
+    EStatusCode status = charta::eFailure;
     uint16_t operatorValue;
     outGotEndExecutionCommand = false;
     uint8_t buffer;
@@ -93,7 +92,7 @@ EStatusCode CharStringType1Interpreter::InterpretOperator(uint8_t inBuffer,
     if (12 == inBuffer)
     {
         if (inCharStringToIntepret->Read(&buffer, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
 
         operatorValue = 0x0c00 + buffer;
     }
@@ -198,7 +197,7 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(uint8_t inBuffer,
     {
         uint8_t byte1;
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
 
         operand = (inBuffer - 247) * 256 + byte1 + 108;
     }
@@ -206,7 +205,7 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(uint8_t inBuffer,
     {
         uint8_t byte1;
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
 
         operand = -(short)(inBuffer - 251) * 256 - byte1 - 108;
     }
@@ -215,19 +214,19 @@ EStatusCode CharStringType1Interpreter::InterpretNumber(uint8_t inBuffer,
         uint8_t byte1, byte2, byte3, byte4;
 
         if (inCharStringToIntepret->Read(&byte1, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
         if (inCharStringToIntepret->Read(&byte2, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
         if (inCharStringToIntepret->Read(&byte3, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
         if (inCharStringToIntepret->Read(&byte4, 1) != 1)
-            return PDFHummus::eFailure;
+            return charta::eFailure;
 
         operand = (int)(((unsigned long)(byte1) << 24) + ((unsigned long)(byte2) << 16) +
                         ((unsigned long)(byte3) << 8) + (byte4));
     }
     else
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     mOperandStack.push_back(operand);
     return mImplementationHelper->Type1InterpretNumber(operand);
@@ -241,81 +240,81 @@ void CharStringType1Interpreter::ClearStack()
 EStatusCode CharStringType1Interpreter::InterpretHStem()
 {
     EStatusCode status = mImplementationHelper->Type1Hstem(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretVStem()
 {
     EStatusCode status = mImplementationHelper->Type1Vstem(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretVMoveto()
 {
     EStatusCode status = mImplementationHelper->Type1VMoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretRLineto()
 {
     EStatusCode status = mImplementationHelper->Type1RLineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretHLineto()
 {
     EStatusCode status = mImplementationHelper->Type1HLineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretVLineto()
 {
     EStatusCode status = mImplementationHelper->Type1VLineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretRRCurveto()
 {
     EStatusCode status = mImplementationHelper->Type1RRCurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretClosePath()
 {
     EStatusCode status = mImplementationHelper->Type1ClosePath(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretCallSubr()
@@ -329,139 +328,139 @@ EStatusCode CharStringType1Interpreter::InterpretCallSubr()
         InputCharStringDecodeStream charStringStream(&byteArrayStream, mImplementationHelper->GetLenIV());
 
         EStatusCode status = ProcessCharString(&charStringStream);
-        if (status != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
+        if (status != charta::eSuccess)
+            return charta::eFailure;
+        return charta::eSuccess;
     }
 
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretReturn()
 {
     EStatusCode status = mImplementationHelper->Type1Return(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretHsbw()
 {
     EStatusCode status = mImplementationHelper->Type1Hsbw(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretEndChar()
 {
     EStatusCode status = mImplementationHelper->Type1Endchar(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     mGotEndChar = true;
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretRMoveto()
 {
     EStatusCode status = mImplementationHelper->Type1RMoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretHMoveto()
 {
     EStatusCode status = mImplementationHelper->Type1HMoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretVHCurveto()
 {
     EStatusCode status = mImplementationHelper->Type1VHCurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretHVCurveto()
 {
     EStatusCode status = mImplementationHelper->Type1HVCurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretDotSection()
 {
     EStatusCode status = mImplementationHelper->Type1DotSection(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretVStem3()
 {
     EStatusCode status = mImplementationHelper->Type1VStem3(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretHStem3()
 {
     EStatusCode status = mImplementationHelper->Type1HStem3(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretSeac()
 {
     EStatusCode status = mImplementationHelper->Type1Seac(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretSbw()
 {
     EStatusCode status = mImplementationHelper->Type1Sbw(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretDiv()
 {
     EStatusCode status = mImplementationHelper->Type1Div(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     long valueA;
     long valueB;
@@ -471,7 +470,7 @@ EStatusCode CharStringType1Interpreter::InterpretDiv()
     valueA = mOperandStack.back();
     mOperandStack.pop_back();
     mOperandStack.push_back(valueA / valueB);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretCallOtherSubr()
@@ -483,8 +482,8 @@ EStatusCode CharStringType1Interpreter::InterpretCallOtherSubr()
         status = mImplementationHelper->CallOtherSubr(mOperandStack, mPostScriptOperandStack);
     else
         status = DefaultCallOtherSubr();
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     mOperandStack.pop_back();
     long argumentsCount = mOperandStack.back();
@@ -492,7 +491,7 @@ EStatusCode CharStringType1Interpreter::InterpretCallOtherSubr()
     for (long i = 0; i < argumentsCount; ++i)
         mOperandStack.pop_back();
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::DefaultCallOtherSubr()
@@ -518,28 +517,28 @@ EStatusCode CharStringType1Interpreter::DefaultCallOtherSubr()
         mPostScriptOperandStack.push_back(*it);
         ++it;
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretPop()
 {
     EStatusCode status = mImplementationHelper->Type1Pop(mOperandStack, mPostScriptOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     long parameter = mPostScriptOperandStack.back();
     mPostScriptOperandStack.pop_back();
     mOperandStack.push_back(parameter);
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Interpreter::InterpretSetCurrentPoint()
 {
     EStatusCode status = mImplementationHelper->Type1SetCurrentPoint(mOperandStack);
-    if (status != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (status != charta::eSuccess)
+        return charta::eFailure;
 
     ClearStack();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }

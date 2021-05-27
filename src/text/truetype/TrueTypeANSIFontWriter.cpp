@@ -30,7 +30,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 TrueTypeANSIFontWriter::TrueTypeANSIFontWriter() = default;
 
@@ -45,7 +45,7 @@ EStatusCode TrueTypeANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo,
     if (postscriptFontName.length() == 0)
     {
         TRACE_LOG("TrueTypeANSIFontWriter::WriteFont, unexpected failure. no postscript font name for font");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     std::string fontName;
 
@@ -60,7 +60,7 @@ EStatusCode TrueTypeANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo,
         fontName = inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName;
         EStatusCode status = embeddedFontWriter.WriteEmbeddedFont(
             inFontInfo, inFontOccurrence->GetGlyphIDsAsOrderedVector(), inObjectsContext, mEmbeddedFontFileObjectID);
-        if (PDFHummus::eFailure == status)
+        if (charta::eFailure == status)
             return status;
     }
     else

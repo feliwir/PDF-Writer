@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-using namespace PDFHummus;
+using namespace charta;
 
 Type1ToType2Converter::Type1ToType2Converter() = default;
 
@@ -56,12 +56,12 @@ EStatusCode Type1ToType2Converter::WriteConvertedFontProgram(const std::string &
         {
             TRACE_LOG1("Type1ToType2Converter::WriteConvertedFontProgram, Exception, cannot find glyph name %s",
                        inGlyphName.substr(0, MAX_TRACE_SIZE - 200).c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
         status = interpreter.Intepret(*charString, this);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("Type1ToType2Converter::WriteConvertedFontProgram, Exception, failed to interpret glyph");
             break;
@@ -78,7 +78,7 @@ EStatusCode Type1ToType2Converter::WriteConvertedFontProgram(const std::string &
         AddInitialWidthParameter();
 
         status = WriteProgramToStream(inByteWriter);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG(
                 "Type1ToType2Converter::WriteConvertedFontProgram, Exception, can't write program to target stream");
@@ -158,32 +158,32 @@ EStatusCode Type1ToType2Converter::Type1Pop(const LongList &inOperandList, const
 {
     (void)inOperandList;
     (void)inPostScriptOperandStack;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode Type1ToType2Converter::Type1SetCurrentPoint(const LongList &inOperandList)
 {
     (void)inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode Type1ToType2Converter::Type1InterpretNumber(long inOperand)
 {
     (void)inOperand;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode Type1ToType2Converter::Type1Div(const LongList &inOperandList)
 {
     (void)inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode Type1ToType2Converter::Type1DotSection(const LongList &inOperandList)
 {
     (void)inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 EStatusCode Type1ToType2Converter::Type1Return(const LongList &inOperandList)
 {
     (void)inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 void Type1ToType2Converter::RecordOperatorMarker(uint16_t inMarkerType)
@@ -196,7 +196,7 @@ void Type1ToType2Converter::RecordOperatorMarker(uint16_t inMarkerType)
 EStatusCode Type1ToType2Converter::Type1Hsbw(const LongList &inOperandList)
 {
     if (inOperandList.size() < 2)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     auto it = inOperandList.rbegin();
 
@@ -205,13 +205,13 @@ EStatusCode Type1ToType2Converter::Type1Hsbw(const LongList &inOperandList)
     ++it;
     mSideBearing[1] = 0;
     mSideBearing[0] = *it;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::Type1Sbw(const LongList &inOperandList)
 {
     if (inOperandList.size() < 4)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     auto it = inOperandList.rbegin();
 
@@ -222,7 +222,7 @@ EStatusCode Type1ToType2Converter::Type1Sbw(const LongList &inOperandList)
     mSideBearing[1] = *it;
     ++it;
     mSideBearing[0] = *it;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::Type1Hstem(const LongList &inOperandList)
@@ -245,7 +245,7 @@ EStatusCode Type1ToType2Converter::AddHStem(long inOrigin, long inExtent)
 
     if (it == mHStems.end())
         mHStems.insert(StemToSizeTMap::value_type(aStem, 0));
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::AddVStem(long inOrigin, long inExtent)
@@ -255,7 +255,7 @@ EStatusCode Type1ToType2Converter::AddVStem(long inOrigin, long inExtent)
 
     if (it == mVStems.end())
         mVStems.insert(StemToSizeTMap::value_type(aStem, 0));
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::RecordOperatorWithParameters(uint16_t inMarkerType, const LongList &inOperandList)
@@ -264,7 +264,7 @@ EStatusCode Type1ToType2Converter::RecordOperatorWithParameters(uint16_t inMarke
     mConversionProgram.push_back(node);
     mConversionProgram.back().mMarkerType = inMarkerType;
     mConversionProgram.back().mOperands = inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::Type1Vstem(const LongList &inOperandList)
@@ -357,7 +357,7 @@ EStatusCode Type1ToType2Converter::Type1RMoveto(const LongList &inOperandList)
             ++it;
             mFlexParameters.push_back(*it);
         }
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     return RecordOperatorWithParameters(21, inOperandList);
@@ -409,14 +409,14 @@ EStatusCode Type1ToType2Converter::Type1ClosePath(const LongList &inOperandList)
 {
     // IMPORTANT - apparently closepath was removed for type 2. didn't notice it till now
     (void)inOperandList;
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::Type1Endchar(const LongList &inOperandList)
 {
     (void)inOperandList;
     RecordOperatorMarker(14);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode Type1ToType2Converter::Type1Seac(const LongList &inOperandList)
@@ -953,11 +953,11 @@ void Type1ToType2Converter::AddInitialWidthParameter()
 EStatusCode Type1ToType2Converter::WriteProgramToStream(IByteWriter *inByteWriter)
 {
     Type2CharStringWriter commandWriter(inByteWriter);
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     auto it = mConversionProgram.begin();
 
-    for (; it != mConversionProgram.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mConversionProgram.end() && charta::eSuccess == status; ++it)
     {
         auto itOperands = it->mOperands.begin();
 
@@ -968,10 +968,10 @@ EStatusCode Type1ToType2Converter::WriteProgramToStream(IByteWriter *inByteWrite
         }
         else
         {
-            for (; itOperands != it->mOperands.end() && PDFHummus::eSuccess == status; ++itOperands)
+            for (; itOperands != it->mOperands.end() && charta::eSuccess == status; ++itOperands)
                 status = commandWriter.WriteIntegerOperand(*itOperands);
 
-            if (PDFHummus::eSuccess == status)
+            if (charta::eSuccess == status)
             {
                 // if marker type is vstemhm, and next one is hintmask, no need to write vstemhm
                 if (23 == it->mMarkerType)

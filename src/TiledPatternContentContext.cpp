@@ -23,9 +23,9 @@
 #include "ITiledPatternEndWritingTask.h"
 #include "PDFTiledPattern.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
-TiledPatternContentContext::TiledPatternContentContext(PDFHummus::DocumentContext *inDocumentContext,
+TiledPatternContentContext::TiledPatternContentContext(charta::DocumentContext *inDocumentContext,
                                                        PDFTiledPattern *inObject)
     : AbstractContentContext(inDocumentContext)
 {
@@ -54,8 +54,8 @@ class TiledPatternImageWritingTask : public ITiledPatternEndWritingTask
 
     ~TiledPatternImageWritingTask() override = default;
 
-    PDFHummus::EStatusCode Write(PDFTiledPattern * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
-                                 PDFHummus::DocumentContext *inDocumentContext) override
+    charta::EStatusCode Write(PDFTiledPattern * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
+                              charta::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

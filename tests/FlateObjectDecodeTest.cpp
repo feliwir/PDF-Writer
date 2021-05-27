@@ -30,7 +30,7 @@ limitations under the License.
 #include <iostream>
 #include <string>
 
-using namespace PDFHummus;
+using namespace charta;
 
 #define BUF_SIZE 1024
 

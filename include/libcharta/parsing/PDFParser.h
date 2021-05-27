@@ -41,7 +41,7 @@ class PDFDictionary;
 class PDFName;
 class IPDFParserExtender;
 
-typedef std::pair<PDFHummus::EStatusCode, IByteReader *> EStatusCodeAndIByteReader;
+typedef std::pair<charta::EStatusCode, IByteReader *> EStatusCodeAndIByteReader;
 
 #define LINE_BUFFER_SIZE 1024
 
@@ -85,7 +85,7 @@ class PDFParser
 
     // sets the stream to parse, then parses for enough information to be able
     // to parse objects later
-    PDFHummus::EStatusCode StartPDFParsing(
+    charta::EStatusCode StartPDFParsing(
         IByteReaderWithPosition *inSourceStream,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
@@ -160,7 +160,7 @@ class PDFParser
 
     // using PDFParser also for state information reading. this is a specialized version of the StartParsing for reading
     // state
-    PDFHummus::EStatusCode StartStateFileParsing(IByteReaderWithPosition *inSourceStream);
+    charta::EStatusCode StartStateFileParsing(IByteReaderWithPosition *inSourceStream);
 
     // check if this file is encrypted. considering that the library can't really handle these files, this shoud be
     // handy.
@@ -202,50 +202,47 @@ class PDFParser
     IPDFParserExtender *mParserExtender;
     bool mAllowExtendingSegments;
 
-    PDFHummus::EStatusCode ParseHeaderLine();
-    PDFHummus::EStatusCode ParseEOFLine();
-    PDFHummus::EStatusCode ParseLastXrefPosition();
-    PDFHummus::EStatusCode ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer);
-    PDFHummus::EStatusCode BuildXrefTableFromTable();
-    PDFHummus::EStatusCode DetermineXrefSize();
-    PDFHummus::EStatusCode InitializeXref();
-    PDFHummus::EStatusCode ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                  long long inXrefPosition, bool inIsFirstXref,
-                                                  XrefEntryInput **outExtendedTable,
-                                                  ObjectIDType *outExtendedTableSize);
+    charta::EStatusCode ParseHeaderLine();
+    charta::EStatusCode ParseEOFLine();
+    charta::EStatusCode ParseLastXrefPosition();
+    charta::EStatusCode ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer);
+    charta::EStatusCode BuildXrefTableFromTable();
+    charta::EStatusCode DetermineXrefSize();
+    charta::EStatusCode InitializeXref();
+    charta::EStatusCode ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
+                                               long long inXrefPosition, bool inIsFirstXref,
+                                               XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize);
     XrefEntryInput *ExtendXrefTableToSize(XrefEntryInput *inXrefTable, ObjectIDType inOldSize, ObjectIDType inNewSize);
-    PDFHummus::EStatusCode ReadNextXrefEntry(uint8_t inBuffer[20]);
+    charta::EStatusCode ReadNextXrefEntry(uint8_t inBuffer[20]);
     std::shared_ptr<PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
-    PDFHummus::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
-    PDFHummus::EStatusCode ParsePagesObjectIDs();
-    PDFHummus::EStatusCode ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
-    PDFHummus::EStatusCode ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPageNode, ObjectIDType inNodeObjectID,
-                                         unsigned long &ioCurrentPageIndex);
-    PDFHummus::EStatusCode ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &inTrailer);
+    charta::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
+    charta::EStatusCode ParsePagesObjectIDs();
+    charta::EStatusCode ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
+    charta::EStatusCode ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPageNode, ObjectIDType inNodeObjectID,
+                                      unsigned long &ioCurrentPageIndex);
+    charta::EStatusCode ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &inTrailer);
     void MergeXrefWithMainXref(XrefEntryInput *inTableToMerge, ObjectIDType inMergedTableSize);
-    PDFHummus::EStatusCode ParseFileDirectory();
-    PDFHummus::EStatusCode BuildXrefTableAndTrailerFromXrefStream(long long inXrefStreamObjectID);
+    charta::EStatusCode ParseFileDirectory();
+    charta::EStatusCode BuildXrefTableAndTrailerFromXrefStream(long long inXrefStreamObjectID);
     // an overload for cases where the xref stream object is already parsed
-    PDFHummus::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                   const std::shared_ptr<PDFStreamInput> &inXrefStream,
+    charta::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
+                                                const std::shared_ptr<PDFStreamInput> &inXrefStream,
+                                                XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize);
+    // an overload for cases where the position should hold a stream object, and it should be parsed
+    charta::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
+                                                long long inXrefPosition, XrefEntryInput **outExtendedTable,
+                                                ObjectIDType *outExtendedTableSize);
+    charta::EStatusCode ReadXrefStreamSegment(XrefEntryInput *inXrefTable, ObjectIDType inSegmentStartObject,
+                                              ObjectIDType inSegmentCount, IByteReader *inReadFrom, int *inEntryWidths,
+                                              unsigned long inEntryWidthsSize);
+    charta::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue);
+    charta::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue);
+    charta::EStatusCode ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
+                                                   ObjectIDType inXrefSize, std::shared_ptr<PDFDictionary> *outTrailer,
                                                    XrefEntryInput **outExtendedTable,
                                                    ObjectIDType *outExtendedTableSize);
-    // an overload for cases where the position should hold a stream object, and it should be parsed
-    PDFHummus::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                   long long inXrefPosition, XrefEntryInput **outExtendedTable,
-                                                   ObjectIDType *outExtendedTableSize);
-    PDFHummus::EStatusCode ReadXrefStreamSegment(XrefEntryInput *inXrefTable, ObjectIDType inSegmentStartObject,
-                                                 ObjectIDType inSegmentCount, IByteReader *inReadFrom,
-                                                 int *inEntryWidths, unsigned long inEntryWidthsSize);
-    PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, long long &outValue);
-    PDFHummus::EStatusCode ReadXrefSegmentValue(IByteReader *inSource, int inEntrySize, ObjectIDType &outValue);
-    PDFHummus::EStatusCode ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
-                                                      ObjectIDType inXrefSize,
-                                                      std::shared_ptr<PDFDictionary> *outTrailer,
-                                                      XrefEntryInput **outExtendedTable,
-                                                      ObjectIDType *outExtendedTableSize);
     std::shared_ptr<PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
-    PDFHummus::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
+    charta::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
     void MovePositionInStream(long long inPosition);
     EStatusCodeAndIByteReader CreateFilterForStream(IByteReader *inStream, const std::shared_ptr<PDFName> &inFilterName,
                                                     const std::shared_ptr<PDFDictionary> &inDecodeParams,

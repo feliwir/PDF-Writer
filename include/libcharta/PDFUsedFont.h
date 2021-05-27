@@ -95,23 +95,22 @@ class PDFUsedFont
         of characters. the encoded array is a list of short values (double byte for CID, one byte for regular), and an
        extra boolean value indicates whether they are CID or regular.
     */
-    PDFHummus::EStatusCode EncodeStringForShowing(const GlyphUnicodeMappingList &inText,
-                                                  ObjectIDType &outFontObjectToUse, UShortList &outCharactersToUse,
-                                                  bool &outTreatCharactersAsCID);
+    charta::EStatusCode EncodeStringForShowing(const GlyphUnicodeMappingList &inText, ObjectIDType &outFontObjectToUse,
+                                               UShortList &outCharactersToUse, bool &outTreatCharactersAsCID);
 
     // encode all strings. make sure that they will use the same font.
-    PDFHummus::EStatusCode EncodeStringsForShowing(const GlyphUnicodeMappingListList &inText,
-                                                   ObjectIDType &outFontObjectToUse, UShortListList &outCharactersToUse,
-                                                   bool &outTreatCharactersAsCID);
+    charta::EStatusCode EncodeStringsForShowing(const GlyphUnicodeMappingListList &inText,
+                                                ObjectIDType &outFontObjectToUse, UShortListList &outCharactersToUse,
+                                                bool &outTreatCharactersAsCID);
 
-    PDFHummus::EStatusCode WriteFontDefinition();
+    charta::EStatusCode WriteFontDefinition();
 
     // use this method to translate text to glyphs and unicode mapping, to be later used for EncodeStringForShowing
-    PDFHummus::EStatusCode TranslateStringToGlyphs(const std::string &inText,
-                                                   GlyphUnicodeMappingList &outGlyphsUnicodeMapping);
+    charta::EStatusCode TranslateStringToGlyphs(const std::string &inText,
+                                                GlyphUnicodeMappingList &outGlyphsUnicodeMapping);
 
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
     FreeTypeFaceWrapper *GetFreeTypeFont();
 

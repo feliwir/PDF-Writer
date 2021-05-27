@@ -23,10 +23,9 @@
 #include "IFormEndWritingTask.h"
 #include "PDFFormXObject.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
-XObjectContentContext::XObjectContentContext(PDFHummus::DocumentContext *inDocumentContext,
-                                             PDFFormXObject *inFormXObject)
+XObjectContentContext::XObjectContentContext(charta::DocumentContext *inDocumentContext, PDFFormXObject *inFormXObject)
     : AbstractContentContext(inDocumentContext)
 {
     mPDFFormXObjectOfContext = inFormXObject;
@@ -54,8 +53,8 @@ class FormImageWritingTask : public IFormEndWritingTask
 
     ~FormImageWritingTask() override = default;
 
-    PDFHummus::EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
-                                 PDFHummus::DocumentContext *inDocumentContext) override
+    charta::EStatusCode Write(PDFFormXObject * /*inFormXObject*/, ObjectsContext * /*inObjectsContext*/,
+                              charta::DocumentContext *inDocumentContext) override
     {
         return inDocumentContext->WriteFormForImage(mImagePath, mImageIndex, mObjectID, mPDFParsingOptions);
     }

@@ -37,12 +37,12 @@ class PDFDocumentHandler;
 class PDFDictionary;
 class PDFParser;
 
-namespace PDFHummus
+namespace charta
 {
 class DocumentContext;
 }
 
-using namespace PDFHummus;
+using namespace charta;
 
 class IDocumentContextExtender
 {
@@ -52,100 +52,101 @@ class IDocumentContextExtender
     }
 
     // add items to the page dictionary while it's written
-    virtual PDFHummus::EStatusCode OnPageWrite(PDFPage &inPage, DictionaryContext *inPageDictionaryContext,
-                                               ObjectsContext *inPDFWriterObjectContext,
-                                               PDFHummus::DocumentContext *inPDFWriterDocumentContext) = 0;
+    virtual charta::EStatusCode OnPageWrite(PDFPage &inPage, DictionaryContext *inPageDictionaryContext,
+                                            ObjectsContext *inPDFWriterObjectContext,
+                                            charta::DocumentContext *inPDFWriterDocumentContext) = 0;
 
     // add items to the resources dictionary while it's written (can be either page or xobject resources dictionary)
-    virtual PDFHummus::EStatusCode OnResourcesWrite(ResourcesDictionary *inResources,
-                                                    DictionaryContext *inPageResourcesDictionaryContext,
-                                                    ObjectsContext *inPDFWriterObjectContext,
-                                                    PDFHummus::DocumentContext *inPDFWriterDocumentContext) = 0;
+    virtual charta::EStatusCode OnResourcesWrite(ResourcesDictionary *inResources,
+                                                 DictionaryContext *inPageResourcesDictionaryContext,
+                                                 ObjectsContext *inPDFWriterObjectContext,
+                                                 charta::DocumentContext *inPDFWriterDocumentContext) = 0;
 
     // add items to a particular resource dictionary (will be called from all but procset array and xobjects dict)
-    virtual PDFHummus::EStatusCode OnResourceDictionaryWrite(
-        DictionaryContext *inResourceDictionary, const std::string &inResourceDictionaryName,
-        ObjectsContext *inPDFWriterObjectContext, PDFHummus::DocumentContext *inPDFWriterDocumentContext) = 0;
+    virtual charta::EStatusCode OnResourceDictionaryWrite(DictionaryContext *inResourceDictionary,
+                                                          const std::string &inResourceDictionaryName,
+                                                          ObjectsContext *inPDFWriterObjectContext,
+                                                          charta::DocumentContext *inPDFWriterDocumentContext) = 0;
 
     // add items to the form dictionary while it's written
-    virtual PDFHummus::EStatusCode OnFormXObjectWrite(ObjectIDType inFormXObjectID,
-                                                      ObjectIDType inFormXObjectResourcesDictionaryID,
-                                                      DictionaryContext *inFormDictionaryContext,
-                                                      ObjectsContext *inPDFWriterObjectContext,
-                                                      PDFHummus::DocumentContext *inPDFWriterDocumentContext) = 0;
+    virtual charta::EStatusCode OnFormXObjectWrite(ObjectIDType inFormXObjectID,
+                                                   ObjectIDType inFormXObjectResourcesDictionaryID,
+                                                   DictionaryContext *inFormDictionaryContext,
+                                                   ObjectsContext *inPDFWriterObjectContext,
+                                                   charta::DocumentContext *inPDFWriterDocumentContext) = 0;
 
     // add items to the image dictionary while it's written for a JPG Image
-    virtual PDFHummus::EStatusCode OnJPEGImageXObjectWrite(ObjectIDType inImageXObjectID,
-                                                           DictionaryContext *inImageDictionaryContext,
-                                                           ObjectsContext *inPDFWriterObjectContext,
-                                                           PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                           JPEGImageHandler *inJPGImageHandler) = 0;
+    virtual charta::EStatusCode OnJPEGImageXObjectWrite(ObjectIDType inImageXObjectID,
+                                                        DictionaryContext *inImageDictionaryContext,
+                                                        ObjectsContext *inPDFWriterObjectContext,
+                                                        charta::DocumentContext *inPDFWriterDocumentContext,
+                                                        JPEGImageHandler *inJPGImageHandler) = 0;
 
     // add items to the image dictionary while it's writtern for a TIFF image (for tile images there are multiple such
     // images)
-    virtual PDFHummus::EStatusCode OnTIFFImageXObjectWrite(ObjectIDType inImageXObjectID,
-                                                           DictionaryContext *inImageDictionaryContext,
-                                                           ObjectsContext *inPDFWriterObjectContext,
-                                                           PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                           TIFFImageHandler *inTIFFImageHandler) = 0;
+    virtual charta::EStatusCode OnTIFFImageXObjectWrite(ObjectIDType inImageXObjectID,
+                                                        DictionaryContext *inImageDictionaryContext,
+                                                        ObjectsContext *inPDFWriterObjectContext,
+                                                        charta::DocumentContext *inPDFWriterDocumentContext,
+                                                        TIFFImageHandler *inTIFFImageHandler) = 0;
 
     // add items to catalog dictionary while it's written
-    virtual PDFHummus::EStatusCode OnCatalogWrite(CatalogInformation *inCatalogInformation,
-                                                  DictionaryContext *inCatalogDictionaryContext,
-                                                  ObjectsContext *inPDFWriterObjectContext,
-                                                  PDFHummus::DocumentContext *inPDFWriterDocumentContext) = 0;
+    virtual charta::EStatusCode OnCatalogWrite(CatalogInformation *inCatalogInformation,
+                                               DictionaryContext *inCatalogDictionaryContext,
+                                               ObjectsContext *inPDFWriterObjectContext,
+                                               charta::DocumentContext *inPDFWriterDocumentContext) = 0;
 
     // PDF document embedding events
 
     // When using any embedding method - Parsing of PDF to merge is not complete, before starting any merging
-    virtual PDFHummus::EStatusCode OnPDFParsingComplete(ObjectsContext *inPDFWriterObjectContext,
-                                                        PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                        PDFDocumentHandler *inPDFDocumentHandler) = 0;
+    virtual charta::EStatusCode OnPDFParsingComplete(ObjectsContext *inPDFWriterObjectContext,
+                                                     charta::DocumentContext *inPDFWriterDocumentContext,
+                                                     PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
     // When creating XObjects from pages - before creating a particular page xobject
-    virtual PDFHummus::EStatusCode OnBeforeCreateXObjectFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                                 ObjectsContext *inPDFWriterObjectContext,
-                                                                 PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                                 PDFDocumentHandler *inPDFDocumentHandler) = 0;
-
-    // When creating XObjects from pages - after creating a particular page xobject
-    virtual PDFHummus::EStatusCode OnAfterCreateXObjectFromPage(PDFFormXObject *iPageObjectResultXObject,
-                                                                std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                                ObjectsContext *inPDFWriterObjectContext,
-                                                                PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                                PDFDocumentHandler *inPDFDocumentHandler) = 0;
-
-    // When appending pages from PDF - before appending a particular page
-    virtual PDFHummus::EStatusCode OnBeforeCreatePageFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+    virtual charta::EStatusCode OnBeforeCreateXObjectFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                               ObjectsContext *inPDFWriterObjectContext,
-                                                              PDFHummus::DocumentContext *inPDFWriterDocumentContext,
+                                                              charta::DocumentContext *inPDFWriterDocumentContext,
                                                               PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
-    // When appending pages from PDF - after appending a particular page
-    virtual PDFHummus::EStatusCode OnAfterCreatePageFromPage(PDFPage &iPageObjectResultPage,
+    // When creating XObjects from pages - after creating a particular page xobject
+    virtual charta::EStatusCode OnAfterCreateXObjectFromPage(PDFFormXObject *iPageObjectResultXObject,
                                                              std::shared_ptr<PDFDictionary> inPageObjectDictionary,
                                                              ObjectsContext *inPDFWriterObjectContext,
-                                                             PDFHummus::DocumentContext *inPDFWriterDocumentContext,
+                                                             charta::DocumentContext *inPDFWriterDocumentContext,
                                                              PDFDocumentHandler *inPDFDocumentHandler) = 0;
+
+    // When appending pages from PDF - before appending a particular page
+    virtual charta::EStatusCode OnBeforeCreatePageFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                           ObjectsContext *inPDFWriterObjectContext,
+                                                           charta::DocumentContext *inPDFWriterDocumentContext,
+                                                           PDFDocumentHandler *inPDFDocumentHandler) = 0;
+
+    // When appending pages from PDF - after appending a particular page
+    virtual charta::EStatusCode OnAfterCreatePageFromPage(PDFPage &iPageObjectResultPage,
+                                                          std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                          ObjectsContext *inPDFWriterObjectContext,
+                                                          charta::DocumentContext *inPDFWriterDocumentContext,
+                                                          PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
     // When merging pages from PDF - before merging a particular page
-    virtual PDFHummus::EStatusCode OnBeforeMergePageFromPage(PDFPage &inTargetPage,
-                                                             std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                             ObjectsContext *inPDFWriterObjectContext,
-                                                             PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                             PDFDocumentHandler *inPDFDocumentHandler) = 0;
+    virtual charta::EStatusCode OnBeforeMergePageFromPage(PDFPage &inTargetPage,
+                                                          std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                          ObjectsContext *inPDFWriterObjectContext,
+                                                          charta::DocumentContext *inPDFWriterDocumentContext,
+                                                          PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
     // When merging pages from PDF - after merging a particular page
-    virtual PDFHummus::EStatusCode OnAfterMergePageFromPage(PDFPage &inTargetPage,
-                                                            std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                            ObjectsContext *inPDFWriterObjectContext,
-                                                            PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                            PDFDocumentHandler *inPDFDocumentHandler) = 0;
+    virtual charta::EStatusCode OnAfterMergePageFromPage(PDFPage &inTargetPage,
+                                                         std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                         ObjectsContext *inPDFWriterObjectContext,
+                                                         charta::DocumentContext *inPDFWriterDocumentContext,
+                                                         PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
     // When using any embedding method - right after embedding of the PDF is complete
-    virtual PDFHummus::EStatusCode OnPDFCopyingComplete(ObjectsContext *inPDFWriterObjectContext,
-                                                        PDFHummus::DocumentContext *inPDFWriterDocumentContext,
-                                                        PDFDocumentHandler *inPDFDocumentHandler) = 0;
+    virtual charta::EStatusCode OnPDFCopyingComplete(ObjectsContext *inPDFWriterObjectContext,
+                                                     charta::DocumentContext *inPDFWriterDocumentContext,
+                                                     PDFDocumentHandler *inPDFDocumentHandler) = 0;
 
     // When modifying a PDF, asking extender whether catalog update is desirable
     virtual bool IsCatalogUpdateRequiredForModifiedFile(PDFParser *inModifiderFileParser) = 0;

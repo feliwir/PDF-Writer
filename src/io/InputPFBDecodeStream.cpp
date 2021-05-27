@@ -22,13 +22,13 @@
 #include "Trace.h"
 #include "io/OutputStringBufferStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 InputPFBDecodeStream::InputPFBDecodeStream()
 {
     mStreamToDecode = nullptr;
     mDecodeMethod = nullptr;
-    mInternalState = PDFHummus::eFailure;
+    mInternalState = charta::eFailure;
 }
 
 InputPFBDecodeStream::~InputPFBDecodeStream()
@@ -47,8 +47,8 @@ EStatusCode InputPFBDecodeStream::Assign(IByteReader *inStreamToDecode)
         return mInternalState;
     }
 
-    mInternalState = PDFHummus::eFailure;
-    return PDFHummus::eSuccess;
+    mInternalState = charta::eFailure;
+    return charta::eSuccess;
 }
 
 void InputPFBDecodeStream::ResetReadStatus()
@@ -58,7 +58,7 @@ void InputPFBDecodeStream::ResetReadStatus()
     mCurrentType = 0;
     mHasTokenBuffer = false;
     mFoundEOF = false;
-    mInternalState = (mStreamToDecode != nullptr) ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    mInternalState = (mStreamToDecode != nullptr) ? charta::eSuccess : charta::eFailure;
 }
 
 EStatusCode STATIC_NoDecodeRead(InputPFBDecodeStream *inThis, uint8_t &outByte)
@@ -70,16 +70,16 @@ EStatusCode InputPFBDecodeStream::ReadRegularByte(uint8_t &outByte)
 {
     if (mInSegmentReadIndex >= mSegmentSize)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     ++mInSegmentReadIndex;
-    return (mStreamToDecode->Read(&outByte, 1) != 1) ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return (mStreamToDecode->Read(&outByte, 1) != 1) ? charta::eFailure : charta::eSuccess;
 }
 
 EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint8_t buffer;
     bool requireSegmentReread = false;
 
@@ -91,7 +91,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         // verify segment header
         if (mStreamToDecode->Read(&buffer, 1) != 1)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG("InputPFBDecodeStream::InitializeStreamSegment, unable to read segment header");
             break;
         }
@@ -105,7 +105,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         // retrieve segment type
         if (mStreamToDecode->Read(&buffer, 1) != 1)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG("InputPFBDecodeStream::InitializeStreamSegment, unable to read segment type");
             break;
         }
@@ -115,14 +115,14 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         {
         case 1: {
             status = StoreSegmentLength();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
             mDecodeMethod = STATIC_NoDecodeRead;
             // if previous type was binary, flush also the trailing 0's and cleartomark
             if (2 == mCurrentType)
             {
                 status = FlushBinarySectionTrailingCode();
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                     break;
 
                 // flushing might lead us to section end...to save another call
@@ -135,7 +135,7 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
 
         case 2: {
             status = StoreSegmentLength();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
             status = InitializeBinaryDecode();
             break;
@@ -147,14 +147,14 @@ EStatusCode InputPFBDecodeStream::InitializeStreamSegment()
         }
         default: {
             TRACE_LOG1("InputPFBDecodeStream::InitializeStreamSegment, unrecognized segment type - %d", buffer);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         }
         mCurrentType = buffer;
     } while (false);
 
-    if (PDFHummus::eSuccess == status && requireSegmentReread)
+    if (charta::eSuccess == status && requireSegmentReread)
         return InitializeStreamSegment();
     return status;
 }
@@ -164,26 +164,26 @@ EStatusCode InputPFBDecodeStream::StoreSegmentLength()
     uint8_t byte1, byte2, byte3, byte4;
 
     if (mStreamToDecode->Read(&byte1, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     if (mStreamToDecode->Read(&byte2, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     if (mStreamToDecode->Read(&byte3, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     if (mStreamToDecode->Read(&byte4, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     mSegmentSize = byte1 | (byte2 << 8) | (byte3 << 16) | (byte4 << 24);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
 {
     int zeroesCount = 512;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint8_t buffer = 0;
 
     // skip 0's
-    while (zeroesCount > 0 && PDFHummus::eSuccess == status)
+    while (zeroesCount > 0 && charta::eSuccess == status)
     {
         status = ReadRegularByte(buffer);
         if ('0' == buffer)
@@ -193,10 +193,10 @@ EStatusCode InputPFBDecodeStream::FlushBinarySectionTrailingCode()
     // now skip the final cleartomark token
     BoolAndString nextToken = GetNextToken();
     if (!nextToken.first)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     if (strcmp(nextToken.second.c_str(), "cleartomark") != 0)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     // skip till next token or end of stream
     SkipTillToken();
@@ -229,7 +229,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
     uint8_t buffer;
     OutputStringBufferStream tokenBuffer;
 
-    if (mInternalState != PDFHummus::eSuccess)
+    if (mInternalState != charta::eSuccess)
     {
         result.first = false;
         return result;
@@ -247,7 +247,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
     {
         mInternalState = InitializeStreamSegment();
         // new segment brought to end...mark as no token
-        if (mInternalState != PDFHummus::eSuccess || !NotEnded())
+        if (mInternalState != charta::eSuccess || !NotEnded())
         {
             result.first = false;
             return result;
@@ -271,7 +271,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
         // now read token until it's done. there are some special cases detemining when a token is done
         // based on the first charachter of the token [literal string, hex string , comment]
 
-        if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+        if (GetNextByteForToken(buffer) != charta::eSuccess)
         {
             result.first = false;
             break;
@@ -284,7 +284,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
             // for a comment, the token goes on till the end of line marker [not including]
             while (IsSegmentNotEnded())
             {
-                if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                if (GetNextByteForToken(buffer) != charta::eSuccess)
                 {
                     result.first = false;
                     break;
@@ -303,7 +303,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
             bool backSlashEncountered = false;
             while (balanceLevel > 0 && IsSegmentNotEnded())
             {
-                if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                if (GetNextByteForToken(buffer) != charta::eSuccess)
                 {
                     result.first = false;
                     break;
@@ -318,7 +318,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                         // for cr-ln
                         if (0xD == buffer && IsSegmentNotEnded())
                         {
-                            if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                            if (GetNextByteForToken(buffer) != charta::eSuccess)
                             {
                                 result.first = false;
                                 break;
@@ -363,7 +363,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
             // for the purpose of the tokanizer it needs to know if this is a
             // hex string, so as to ignore spaces (not gonna do making sure it's hex
             // leave that to the primitive reader, if one exists)
-            if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+            if (GetNextByteForToken(buffer) != charta::eSuccess)
             {
                 result.first = false;
                 break;
@@ -375,7 +375,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                 // ASCII 85 string, read all till '~>'
                 while (IsSegmentNotEnded())
                 {
-                    if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                    if (GetNextByteForToken(buffer) != charta::eSuccess)
                     {
                         result.first = false;
                         break;
@@ -386,7 +386,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                     {
                         if (!IsSegmentNotEnded())
                             break;
-                        if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                        if (GetNextByteForToken(buffer) != charta::eSuccess)
                         {
                             result.first = false;
                             break;
@@ -403,7 +403,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
                 // regular ascii, read anything till '>' skipping white spaces
                 while (IsSegmentNotEnded())
                 {
-                    if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                    if (GetNextByteForToken(buffer) != charta::eSuccess)
                     {
                         result.first = false;
                         break;
@@ -429,7 +429,7 @@ BoolAndString InputPFBDecodeStream::GetNextToken()
         {
             while (IsSegmentNotEnded())
             {
-                if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+                if (GetNextByteForToken(buffer) != charta::eSuccess)
                 {
                     result.first = false;
                     break;
@@ -460,7 +460,7 @@ EStatusCode InputPFBDecodeStream::GetNextByteForToken(uint8_t &outByte)
     {
         outByte = mTokenBuffer;
         mHasTokenBuffer = false;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
     return mDecodeMethod(this, outByte);
 }
@@ -480,13 +480,13 @@ void InputPFBDecodeStream::SkipTillToken()
 {
     uint8_t buffer = 0;
 
-    if (mInternalState != PDFHummus::eSuccess || !NotEnded())
+    if (mInternalState != charta::eSuccess || !NotEnded())
         return;
 
     // skip till hitting first non space, or segment end
     while (IsSegmentNotEnded())
     {
-        if (GetNextByteForToken(buffer) != PDFHummus::eSuccess)
+        if (GetNextByteForToken(buffer) != charta::eSuccess)
             break;
 
         if (!IsPostScriptWhiteSpace(buffer))
@@ -510,13 +510,13 @@ static const int RANDOMIZER_MODULU_VAL = 65536;
 EStatusCode InputPFBDecodeStream::InitializeBinaryDecode()
 {
     uint8_t dummyByte;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     mDecodeMethod = STATIC_DecodeRead;
     mRandomizer = RANDOMIZER_INIT;
 
     // decode first 4 bytes, which are just a prefix
-    for (int i = 0; i < 4 && (PDFHummus::eSuccess == status); ++i)
+    for (int i = 0; i < 4 && (charta::eSuccess == status); ++i)
         status = ReadDecodedByte(dummyByte);
     return status;
 }
@@ -527,15 +527,15 @@ EStatusCode InputPFBDecodeStream::ReadDecodedByte(uint8_t &outByte)
 
     if (mInSegmentReadIndex >= mSegmentSize)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     ++mInSegmentReadIndex;
     if (mStreamToDecode->Read(&buffer, 1) != 1)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     outByte = DecodeByte(buffer);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 uint8_t InputPFBDecodeStream::DecodeByte(uint8_t inByteToDecode)
@@ -556,17 +556,16 @@ size_t InputPFBDecodeStream::Read(uint8_t *inBuffer, size_t inBufferSize)
         ++bufferIndex;
     }
 
-    while (NotEnded() && inBufferSize > bufferIndex && PDFHummus::eSuccess == mInternalState)
+    while (NotEnded() && inBufferSize > bufferIndex && charta::eSuccess == mInternalState)
     {
-        while (mSegmentSize > mInSegmentReadIndex && inBufferSize > bufferIndex &&
-               PDFHummus::eSuccess == mInternalState)
+        while (mSegmentSize > mInSegmentReadIndex && inBufferSize > bufferIndex && charta::eSuccess == mInternalState)
         {
             mInternalState = mDecodeMethod(this, inBuffer[bufferIndex]);
             ++bufferIndex;
         }
 
         // segment ended, initialize next segment
-        if (inBufferSize > bufferIndex && NotEnded() && PDFHummus::eSuccess == mInternalState)
+        if (inBufferSize > bufferIndex && NotEnded() && charta::eSuccess == mInternalState)
             mInternalState = InitializeStreamSegment();
     }
     return bufferIndex;

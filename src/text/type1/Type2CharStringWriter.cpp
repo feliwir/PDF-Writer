@@ -21,7 +21,7 @@
 #include "text/type1/Type2CharStringWriter.h"
 #include "io/IByteWriter.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 Type2CharStringWriter::Type2CharStringWriter(IByteWriter *inTargetStream)
 {
@@ -38,7 +38,7 @@ EStatusCode Type2CharStringWriter::WriteHintMask(unsigned long inMask, unsigned 
     unsigned long maskByteSize = inMaskSize / 8 + (inMaskSize % 8 != 0 ? 1 : 0);
 
     EStatusCode status = WriteOperator(19);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return WriteMaskBytes(inMask, maskByteSize);
@@ -51,7 +51,7 @@ EStatusCode Type2CharStringWriter::WriteMaskBytes(unsigned long inMask, unsigned
     if (inMaskByteSize > 1)
     {
         status = WriteMaskBytes(inMask >> 1, inMaskByteSize - 1);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
     return WriteByte((uint8_t)(inMask & 0xff));
@@ -59,7 +59,7 @@ EStatusCode Type2CharStringWriter::WriteMaskBytes(unsigned long inMask, unsigned
 
 EStatusCode Type2CharStringWriter::WriteByte(uint8_t inValue)
 {
-    return (mTargetStream->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    return (mTargetStream->Write(&inValue, 1) == 1 ? charta::eSuccess : charta::eFailure);
 }
 
 EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
@@ -78,12 +78,12 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
         byte0 = ((value >> 8) & 0xff) + 247;
         byte1 = value & 0xff;
 
-        if (WriteByte(byte0) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte0) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
+        return charta::eSuccess;
     }
     if (-1131 <= value && value <= -108)
     {
@@ -94,12 +94,12 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
         byte0 = ((value >> 8) & 0xff) + 251;
         byte1 = value & 0xff;
 
-        if (WriteByte(byte0) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte0) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
+        return charta::eSuccess;
     }
     if (-32768 <= value && value <= 32767)
     {
@@ -108,25 +108,25 @@ EStatusCode Type2CharStringWriter::WriteIntegerOperand(long inOperand)
         byte1 = (value >> 8) & 0xff;
         byte2 = value & 0xff;
 
-        if (WriteByte(28) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(28) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte1) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(byte1) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(byte2) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        return PDFHummus::eSuccess;
+        if (WriteByte(byte2) != charta::eSuccess)
+            return charta::eFailure;
+        return charta::eSuccess;
     }
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 EStatusCode Type2CharStringWriter::WriteOperator(uint16_t inOperatorCode)
 {
     if ((inOperatorCode & 0xff00) == 0x0c00)
     {
-        if (WriteByte(0x0c) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(0x0c) != charta::eSuccess)
+            return charta::eFailure;
     }
     return WriteByte(uint8_t(inOperatorCode & 0x00ff));
 }

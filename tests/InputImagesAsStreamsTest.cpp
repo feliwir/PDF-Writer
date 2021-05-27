@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(CustomStreams, InputImagesAsStreams)
 {
@@ -20,18 +20,18 @@ TEST(CustomStreams, InputImagesAsStreams)
     EStatusCode status;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ImagesInStreams.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         // JPG image
 
         InputFile jpgImage;
 
         status = jpgImage.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/otherStage.JPG"));
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGStream(jpgImage.GetInputStream());
         ASSERT_NE(formXObject, nullptr);
@@ -49,21 +49,21 @@ TEST(CustomStreams, InputImagesAsStreams)
         delete formXObject;
 
         status = pdfWriter.EndPageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     // TIFF image
 #ifndef PDFHUMMUS_NO_TIFF
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         InputFile tiffFile;
         status = tiffFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/FLAG_T24.TIF"));
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromTIFFStream(tiffFile.GetInputStream());
         ASSERT_NE(formXObject, nullptr);
@@ -81,10 +81,10 @@ TEST(CustomStreams, InputImagesAsStreams)
         delete formXObject;
 
         status = pdfWriter.EndPageContentContext(pageContentContext);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 #endif
 
@@ -92,13 +92,13 @@ TEST(CustomStreams, InputImagesAsStreams)
     InputFile pdfFile;
 
     status = pdfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Original.pdf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.AppendPDFPagesFromPDF(pdfFile.GetInputStream(), PDFPageRange()).first;
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     pdfFile.CloseFile();
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

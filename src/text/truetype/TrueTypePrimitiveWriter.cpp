@@ -21,7 +21,7 @@
 #include "text/truetype/TrueTypePrimitiveWriter.h"
 #include "io/OutputStringBufferStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 TrueTypePrimitiveWriter::TrueTypePrimitiveWriter(OutputStringBufferStream *inTrueTypeFile)
 {
@@ -31,7 +31,7 @@ TrueTypePrimitiveWriter::TrueTypePrimitiveWriter(OutputStringBufferStream *inTru
 void TrueTypePrimitiveWriter::SetOpenTypeStream(OutputStringBufferStream *inTrueTypeFile)
 {
     mTrueTypeFile = inTrueTypeFile;
-    mInternalState = (inTrueTypeFile != nullptr ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    mInternalState = (inTrueTypeFile != nullptr ? charta::eSuccess : charta::eFailure);
 }
 
 EStatusCode TrueTypePrimitiveWriter::GetInternalState()
@@ -41,13 +41,13 @@ EStatusCode TrueTypePrimitiveWriter::GetInternalState()
 
 EStatusCode TrueTypePrimitiveWriter::WriteBYTE(uint8_t inValue)
 {
-    if (PDFHummus::eFailure == mInternalState)
-        return PDFHummus::eFailure;
+    if (charta::eFailure == mInternalState)
+        return charta::eFailure;
 
-    EStatusCode status = (mTrueTypeFile->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    EStatusCode status = (mTrueTypeFile->Write(&inValue, 1) == 1 ? charta::eSuccess : charta::eFailure);
 
-    if (PDFHummus::eFailure == status)
-        mInternalState = PDFHummus::eFailure;
+    if (charta::eFailure == status)
+        mInternalState = charta::eFailure;
     return status;
 }
 
@@ -58,19 +58,19 @@ EStatusCode TrueTypePrimitiveWriter::WriteULONG(unsigned long inValue)
     uint8_t byte3 = (inValue >> 8) & 0xff;
     uint8_t byte4 = inValue & 0xff;
 
-    if (WriteBYTE(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteBYTE(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteBYTE(byte3) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte3) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteBYTE(byte4) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte4) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(uint16_t inValue)
@@ -78,13 +78,13 @@ EStatusCode TrueTypePrimitiveWriter::WriteUSHORT(uint16_t inValue)
     uint8_t byte1 = (inValue >> 8) & 0xff;
     uint8_t byte2 = inValue & 0xff;
 
-    if (WriteBYTE(byte1) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte1) != charta::eSuccess)
+        return charta::eFailure;
 
-    if (WriteBYTE(byte2) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteBYTE(byte2) != charta::eSuccess)
+        return charta::eFailure;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode TrueTypePrimitiveWriter::WriteSHORT(short inValue)
@@ -95,7 +95,7 @@ EStatusCode TrueTypePrimitiveWriter::WriteSHORT(short inValue)
 EStatusCode TrueTypePrimitiveWriter::Pad(int inCount)
 {
 
-    for (int i = 0; i < inCount && (mInternalState == PDFHummus::eSuccess); ++i)
+    for (int i = 0; i < inCount && (mInternalState == charta::eSuccess); ++i)
         WriteBYTE(0);
 
     return mInternalState;

@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode RunImageTest(const std::string &inImageName)
 {
@@ -40,11 +40,11 @@ EStatusCode RunImageTest(const std::string &inImageName)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PNGTest_" + inImageName + ".pdf"), ePDFVersion14,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "PNGTest_" + inImageName + ".log")));
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     if (pageContentContext == nullptr)
@@ -63,11 +63,11 @@ EStatusCode RunImageTest(const std::string &inImageName)
         10, 200, RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/png/" + inImageName + ".png"), imageOptions);
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();

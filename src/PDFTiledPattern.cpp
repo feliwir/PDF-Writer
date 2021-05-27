@@ -23,7 +23,7 @@
 #include "PDFStream.h"
 #include "TiledPatternContentContext.h"
 
-PDFTiledPattern::PDFTiledPattern(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
+PDFTiledPattern::PDFTiledPattern(charta::DocumentContext *inDocumentContext, ObjectIDType inObjectID,
                                  std::shared_ptr<PDFStream> inStream, ObjectIDType inResourcesDictionaryID)
 {
     mObjectID = inObjectID;

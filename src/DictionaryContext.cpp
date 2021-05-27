@@ -23,7 +23,7 @@
 #include "Trace.h"
 #include "io/IByteWriterWithPosition.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 static const std::string scStartDictionary = "<<";
 static const std::string scEndDictionary = ">>";
@@ -53,13 +53,13 @@ EStatusCode DictionaryContext::WriteKey(const std::string &inKey)
         WriteIndents();
         mObjectsContext->WriteName(inKey);
         mKeys.insert(inKey);
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     TRACE_LOG1("DictionaryContext::WriteKey, Duplicate key error. Cannot write multiple keys in the same "
                "dictionary. key reused - %s",
                inKey.substr(0, MAX_TRACE_SIZE - 200).c_str());
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 bool DictionaryContext::HasKey(const std::string &inKey)

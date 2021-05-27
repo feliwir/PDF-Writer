@@ -33,7 +33,7 @@
 
 class InputPFBDecodeStream;
 
-typedef PDFHummus::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, uint8_t &outByte);
+typedef charta::EStatusCode (*DecodeMethod)(InputPFBDecodeStream *inThis, uint8_t &outByte);
 
 typedef std::pair<bool, std::string> BoolAndString;
 
@@ -45,7 +45,7 @@ class InputPFBDecodeStream final : public IByteReader
 
     // Assign will set the stream to decode. it also takes ownership of the stream. if you
     // don't want the ownership make sure to Assign(NULL) when done using the decoder.
-    PDFHummus::EStatusCode Assign(IByteReader *inStreamToDecode);
+    charta::EStatusCode Assign(IByteReader *inStreamToDecode);
 
     // IByteReader implementation
     virtual size_t Read(uint8_t *inBuffer, size_t inBufferSize);
@@ -62,11 +62,11 @@ class InputPFBDecodeStream final : public IByteReader
     // will stop tokenizer as well
     void SkipTillToken();
 
-    PDFHummus::EStatusCode GetInternalState();
+    charta::EStatusCode GetInternalState();
 
     // internal usage.
-    PDFHummus::EStatusCode ReadDecodedByte(uint8_t &outByte);
-    PDFHummus::EStatusCode ReadRegularByte(uint8_t &outByte);
+    charta::EStatusCode ReadDecodedByte(uint8_t &outByte);
+    charta::EStatusCode ReadRegularByte(uint8_t &outByte);
 
   private:
     IByteReader *mStreamToDecode;
@@ -80,19 +80,19 @@ class InputPFBDecodeStream final : public IByteReader
     bool mFoundEOF;
 
     // error flag. if set, will not allow further reading
-    PDFHummus::EStatusCode mInternalState;
+    charta::EStatusCode mInternalState;
 
     // Starts reading a stream segment, to receive the type and length of the segment
-    PDFHummus::EStatusCode InitializeStreamSegment();
+    charta::EStatusCode InitializeStreamSegment();
     void ResetReadStatus();
-    PDFHummus::EStatusCode StoreSegmentLength();
-    PDFHummus::EStatusCode FlushBinarySectionTrailingCode();
+    charta::EStatusCode StoreSegmentLength();
+    charta::EStatusCode FlushBinarySectionTrailingCode();
     bool IsPostScriptWhiteSpace(uint8_t inCharacter);
     bool IsSegmentNotEnded();
     void SaveTokenBuffer(uint8_t inToSave);
     bool IsPostScriptEntityBreaker(uint8_t inCharacter);
-    PDFHummus::EStatusCode InitializeBinaryDecode();
+    charta::EStatusCode InitializeBinaryDecode();
     uint8_t DecodeByte(uint8_t inByteToDecode);
 
-    PDFHummus::EStatusCode GetNextByteForToken(uint8_t &outByte);
+    charta::EStatusCode GetNextByteForToken(uint8_t &outByte);
 };

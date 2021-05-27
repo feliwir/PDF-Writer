@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 #include <string>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(CustomStreams, CustomLog)
 {
@@ -29,14 +29,14 @@ TEST(CustomStreams, CustomLog)
 
     // setup log file with compression
     status = compressedLogFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "CustomLogEncrypted.txt"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     flateEncodeStream.Assign(compressedLogFile.GetOutputStream());
 
     // generate PDF
     TRACE_LOG("Starting PDF File Writing");
     status = pdfWriter.StartPDFForStream(&pdfStream, ePDFVersion13, LogConfiguration(true, &flateEncodeStream));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     TRACE_LOG("Now will add an empty page");
     PDFPage page;
@@ -44,12 +44,12 @@ TEST(CustomStreams, CustomLog)
     page.SetMediaBox(PDFRectangle(0, 0, 400, 400));
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     TRACE_LOG("Added page, now will close");
 
     status = pdfWriter.EndPDFForStream();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // since log was started by starting PDF...the ending resets it. so let's now begin again
     Singleton<Trace>::GetInstance()->SetLogSettings(&flateEncodeStream, true);
@@ -58,7 +58,7 @@ TEST(CustomStreams, CustomLog)
     // dump PDF to a file, so we can review it
     OutputFile pdfFile;
     status = pdfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "DumpPDFFile.pdf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     auto pdfString = pdfStream.ToString();
     pdfFile.GetOutputStream()->Write((const uint8_t *)pdfString.c_str(), pdfString.size());
@@ -77,7 +77,7 @@ TEST(CustomStreams, CustomLog)
     OutputFile decryptedLogFile;
 
     status = decryptedLogFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "CustomLogDecrypted.txt"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // place an initial bom (cause the compressed content is unicode)
     uint16_t bom = (0xFE << 8) + 0xFF;
@@ -88,14 +88,14 @@ TEST(CustomStreams, CustomLog)
 
     InputFile compressedLogFileInput;
     status = compressedLogFileInput.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "CustomLogEncrypted.txt"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = traits.CopyToOutputStream(compressedLogFileInput.GetInputStream());
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     compressedLogFileInput.CloseFile();
     flateDecodeStream.Assign(nullptr);
     decryptedLogFile.CloseFile();
 
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

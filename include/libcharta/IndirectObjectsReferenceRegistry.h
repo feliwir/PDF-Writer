@@ -70,7 +70,7 @@ class IndirectObjectsReferenceRegistry
 
     ObjectIDType AllocateNewObjectID();
 
-    PDFHummus::EStatusCode MarkObjectAsWritten(ObjectIDType inObjectID, long long inWritePosition);
+    charta::EStatusCode MarkObjectAsWritten(ObjectIDType inObjectID, long long inWritePosition);
     GetObjectWriteInformationResult GetObjectWriteInformation(ObjectIDType inObjectID) const;
 
     ObjectIDType GetObjectsCount() const;
@@ -78,11 +78,11 @@ class IndirectObjectsReferenceRegistry
     const ObjectWriteInformation &GetNthObjectReference(ObjectIDType inObjectID) const;
 
     // modified PDF methods
-    PDFHummus::EStatusCode DeleteObject(ObjectIDType inObjectID);
-    PDFHummus::EStatusCode MarkObjectAsUpdated(ObjectIDType inObjectID, long long inNewWritePosition);
+    charta::EStatusCode DeleteObject(ObjectIDType inObjectID);
+    charta::EStatusCode MarkObjectAsUpdated(ObjectIDType inObjectID, long long inNewWritePosition);
 
-    PDFHummus::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    PDFHummus::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
+    charta::EStatusCode WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
+    charta::EStatusCode ReadState(PDFParser *inStateReader, ObjectIDType inObjectID);
 
     void Reset();
 

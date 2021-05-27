@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, UnicodeTextUsage)
 {
@@ -37,10 +37,10 @@ TEST(PDF, UnicodeTextUsage)
     status = pdfWriter.StartPDF(
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "UnicodeTextUsage.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "UnicodeTextUsage.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *contentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(contentContext, nullptr);
@@ -57,17 +57,17 @@ TEST(PDF, UnicodeTextUsage)
     contentContext->Tm(30, 0, 0, 30, 78.4252, 662.8997);
 
     EStatusCode encodingStatus = contentContext->Tj("hello \xD7\x92");
-    ASSERT_EQ(encodingStatus, PDFHummus::eSuccess);
+    ASSERT_EQ(encodingStatus, charta::eSuccess);
 
     // continue even if failed...want to see how it looks like
     contentContext->ET();
 
     status = pdfWriter.EndPageContentContext(contentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

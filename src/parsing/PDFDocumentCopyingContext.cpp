@@ -23,7 +23,7 @@
 #include "DocumentContext.h"
 #include <utility>
 
-using namespace PDFHummus;
+using namespace charta;
 
 PDFDocumentCopyingContext::PDFDocumentCopyingContext()
 {
@@ -61,8 +61,8 @@ EStatusCode PDFDocumentCopyingContext::Start(IByteReaderWithPosition *inPDFStrea
     return status;
 }
 
-PDFHummus::EStatusCode PDFDocumentCopyingContext::Start(PDFParser *inPDFParser, DocumentContext *inDocumentContext,
-                                                        ObjectsContext *inObjectsContext)
+charta::EStatusCode PDFDocumentCopyingContext::Start(PDFParser *inPDFParser, DocumentContext *inDocumentContext,
+                                                     ObjectsContext *inObjectsContext)
 {
     mDocumentContext = inDocumentContext;
     inDocumentContext->RegisterCopyingContext(this);

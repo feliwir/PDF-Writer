@@ -113,7 +113,7 @@ class PFMFileReader
     PFMFileReader(void);
     ~PFMFileReader(void) = default;
 
-    PDFHummus::EStatusCode Read(const std::string &inPFMFilePath);
+    charta::EStatusCode Read(const std::string &inPFMFilePath);
 
     PFMHeader Header;
     PFMExtension Extension;
@@ -123,13 +123,13 @@ class PFMFileReader
 
   private:
     IByteReaderWithPosition *mReaderStream;
-    PDFHummus::EStatusCode mInternalReadStatus;
+    charta::EStatusCode mInternalReadStatus;
 
-    PDFHummus::EStatusCode ReadByte(BYTE &outByte);
-    PDFHummus::EStatusCode ReadWord(WORD &outWORD);
-    PDFHummus::EStatusCode ReadDWord(DWORD &outDWORD);
+    charta::EStatusCode ReadByte(BYTE &outByte);
+    charta::EStatusCode ReadWord(WORD &outWORD);
+    charta::EStatusCode ReadDWord(DWORD &outDWORD);
 
-    PDFHummus::EStatusCode ReadHeader();
-    PDFHummus::EStatusCode ReadExtension();
-    PDFHummus::EStatusCode ReadExtendedFontMetrics();
+    charta::EStatusCode ReadHeader();
+    charta::EStatusCode ReadExtension();
+    charta::EStatusCode ReadExtendedFontMetrics();
 };

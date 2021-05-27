@@ -23,10 +23,10 @@
 #include "io/InputBufferedStream.h"
 #include "io/InputFileStream.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 InputFile::InputFile() = default;
- 
+
 InputFile::~InputFile()
 {
     CloseFile();
@@ -36,7 +36,7 @@ EStatusCode InputFile::OpenFile(const std::string &inFilePath)
 {
 
     EStatusCode status = CloseFile();
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Couldn't close previously open file - %s",
                    mFilePath.c_str());
@@ -45,7 +45,7 @@ EStatusCode InputFile::OpenFile(const std::string &inFilePath)
 
     auto inputFileStream = std::make_unique<InputFileStream>();
     status = inputFileStream->Open(inFilePath); // explicitly open, so status may be retrieved
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         TRACE_LOG1("InputFile::OpenFile, Unexpected Failure. Cannot open file for reading - %s", inFilePath.c_str());
         return status;
@@ -61,7 +61,7 @@ EStatusCode InputFile::CloseFile()
 {
     if (nullptr == mInputStream)
     {
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     auto *inputFileStream = (InputFileStream *)mInputStream->GetSourceStream();

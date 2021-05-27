@@ -33,7 +33,7 @@ class StateReader
     StateReader(void);
     ~StateReader(void);
 
-    PDFHummus::EStatusCode Start(const std::string &inStateFilePath);
+    charta::EStatusCode Start(const std::string &inStateFilePath);
     PDFParser *GetObjectsReader();
     ObjectIDType GetRootObjectID() const;
     void Finish();

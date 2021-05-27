@@ -23,7 +23,7 @@
 #include "PDFStream.h"
 #include "XObjectContentContext.h"
 
-PDFFormXObject::PDFFormXObject(PDFHummus::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
+PDFFormXObject::PDFFormXObject(charta::DocumentContext *inDocumentContext, ObjectIDType inFormXObjectID,
                                std::shared_ptr<PDFStream> inXObjectStream,
                                ObjectIDType inFormXObjectResourcesDictionaryID)
 {

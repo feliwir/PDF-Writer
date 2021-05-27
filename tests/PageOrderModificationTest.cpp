@@ -30,7 +30,7 @@ limitations under the License.
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 void addPageToNewTree(unsigned long inPageIndex, PDFWriter &inWriter,
                       std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
@@ -82,7 +82,7 @@ TEST(Modification, PageOrderModification)
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"), ePDFVersion13,
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentOrderModified.pdf"),
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "XObjectContentOrderModified.log")));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFParser &modifiedFileParser = pdfWriter.GetModifiedFileParser();
 
@@ -106,5 +106,5 @@ TEST(Modification, PageOrderModification)
     objectsRegistry.DeleteObject(pagesReference->mObjectID);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

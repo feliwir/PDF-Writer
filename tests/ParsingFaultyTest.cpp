@@ -30,7 +30,7 @@ limitations under the License.
 #include <iostream>
 #include <string>
 
-using namespace PDFHummus;
+using namespace charta;
 
 static EStatusCode openPDF(const std::string &path)
 {

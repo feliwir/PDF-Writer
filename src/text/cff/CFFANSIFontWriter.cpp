@@ -34,7 +34,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 CFFANSIFontWriter::CFFANSIFontWriter() = default;
 
@@ -51,7 +51,7 @@ EStatusCode CFFANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, Writte
     if (postscriptFontName.length() == 0)
     {
         TRACE_LOG("CFFANSIFontWriter::WriteFont, unexpected failure. no postscript font name for font");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     std::string fontName;
 
@@ -85,9 +85,9 @@ EStatusCode CFFANSIFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, Writte
         {
 
             TRACE_LOG("CFFANSIFontWriter::WriteFont, Exception, unfamilar font type for embedding representation");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
     else

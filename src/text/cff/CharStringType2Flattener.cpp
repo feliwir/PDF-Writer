@@ -26,7 +26,7 @@
 
 #include <math.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 CharStringType2Flattener::CharStringType2Flattener() = default;
 
@@ -45,7 +45,7 @@ EStatusCode CharStringType2Flattener::WriteFlattenedGlyphProgram(uint16_t inFont
 
     do
     {
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("CharStringType2Flattener::Trace, Exception, cannot prepare for glyph interpretation");
             break;
@@ -85,7 +85,7 @@ EStatusCode CharStringType2Flattener::ReadCharString(long long inCharStringStart
 EStatusCode CharStringType2Flattener::Type2InterpretNumber(const CharStringOperand &inOperand)
 {
     mOperandsToWrite.push_back(inOperand);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType2Flattener::Type2Hstem(const CharStringOperandList &inOperandList)
@@ -98,11 +98,11 @@ EStatusCode CharStringType2Flattener::Type2Hstem(const CharStringOperandList &in
 EStatusCode CharStringType2Flattener::WriteRegularOperator(uint16_t inOperatorCode)
 {
     auto it = mOperandsToWrite.begin();
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (; it != mOperandsToWrite.end() && PDFHummus::eSuccess == status; ++it)
+    for (; it != mOperandsToWrite.end() && charta::eSuccess == status; ++it)
         status = WriteCharStringOperand(*it);
-    if (status != PDFHummus::eFailure)
+    if (status != charta::eFailure)
         status = WriteCharStringOperator(inOperatorCode);
 
     mOperandsToWrite.clear();
@@ -128,11 +128,11 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
             byte0 = ((value >> 8) & 0xff) + 247;
             byte1 = value & 0xff;
 
-            if (WriteByte(byte0) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte0) != charta::eSuccess)
+                return charta::eFailure;
 
-            if (WriteByte(byte1) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte1) != charta::eSuccess)
+                return charta::eFailure;
         }
         else if (-1131 <= value && value <= -108)
         {
@@ -143,11 +143,11 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
             byte0 = ((value >> 8) & 0xff) + 251;
             byte1 = value & 0xff;
 
-            if (WriteByte(byte0) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte0) != charta::eSuccess)
+                return charta::eFailure;
 
-            if (WriteByte(byte1) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte1) != charta::eSuccess)
+                return charta::eFailure;
         }
         else if (-32768 <= value && value <= 32767)
         {
@@ -156,17 +156,17 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
             byte1 = (value >> 8) & 0xff;
             byte2 = value & 0xff;
 
-            if (WriteByte(28) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(28) != charta::eSuccess)
+                return charta::eFailure;
 
-            if (WriteByte(byte1) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte1) != charta::eSuccess)
+                return charta::eFailure;
 
-            if (WriteByte(byte2) != PDFHummus::eSuccess)
-                return PDFHummus::eFailure;
+            if (WriteByte(byte2) != charta::eSuccess)
+                return charta::eFailure;
         }
         else
-            return PDFHummus::eFailure;
+            return charta::eFailure;
     }
     else
     {
@@ -179,34 +179,34 @@ EStatusCode CharStringType2Flattener::WriteCharStringOperand(const CharStringOpe
         if (sign)
             integerPart = -integerPart;
 
-        if (WriteByte(uint8_t(0xff)) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        if (WriteByte(uint8_t((integerPart >> 8) & 0xff)) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        if (WriteByte(uint8_t(integerPart & 0xff)) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(uint8_t(0xff)) != charta::eSuccess)
+            return charta::eFailure;
+        if (WriteByte(uint8_t((integerPart >> 8) & 0xff)) != charta::eSuccess)
+            return charta::eFailure;
+        if (WriteByte(uint8_t(integerPart & 0xff)) != charta::eSuccess)
+            return charta::eFailure;
 
-        if (WriteByte(uint8_t((realPart >> 8) & 0xff)) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
-        if (WriteByte(uint8_t(realPart & 0xff)) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(uint8_t((realPart >> 8) & 0xff)) != charta::eSuccess)
+            return charta::eFailure;
+        if (WriteByte(uint8_t(realPart & 0xff)) != charta::eSuccess)
+            return charta::eFailure;
     }
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType2Flattener::WriteCharStringOperator(uint16_t inOperatorCode)
 {
     if ((inOperatorCode & 0xff00) == 0x0c00)
     {
-        if (WriteByte(0x0c) != PDFHummus::eSuccess)
-            return PDFHummus::eFailure;
+        if (WriteByte(0x0c) != charta::eSuccess)
+            return charta::eFailure;
     }
     return WriteByte(uint8_t(inOperatorCode & 0xff));
 }
 
 EStatusCode CharStringType2Flattener::WriteByte(uint8_t inValue)
 {
-    return (mWriter->Write(&inValue, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
+    return (mWriter->Write(&inValue, 1) == 1 ? charta::eSuccess : charta::eFailure);
 }
 
 EStatusCode CharStringType2Flattener::Type2Vstem(const CharStringOperandList &inOperandList)
@@ -244,7 +244,7 @@ EStatusCode CharStringType2Flattener::Type2RRCurveto(const CharStringOperandList
 EStatusCode CharStringType2Flattener::Type2Return(const CharStringOperandList & /*inOperandList*/)
 {
     // ignore returns
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType2Flattener::Type2Endchar(const CharStringOperandList & /*inOperandList*/)
@@ -264,8 +264,8 @@ EStatusCode CharStringType2Flattener::Type2Hintmask(const CharStringOperandList 
 {
     mStemsCount += (uint16_t)(inOperandList.size() / 2);
 
-    if (WriteRegularOperator(19) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteRegularOperator(19) != charta::eSuccess)
+        return charta::eFailure;
 
     return WriteStemMask(inProgramCounter);
 }
@@ -274,14 +274,14 @@ EStatusCode CharStringType2Flattener::WriteStemMask(uint8_t *inProgramCounter)
 {
     uint16_t maskSize = mStemsCount / 8 + (mStemsCount % 8 != 0 ? 1 : 0);
 
-    return mWriter->Write(inProgramCounter, maskSize) != maskSize ? PDFHummus::eFailure : PDFHummus::eSuccess;
+    return mWriter->Write(inProgramCounter, maskSize) != maskSize ? charta::eFailure : charta::eSuccess;
 }
 
 EStatusCode CharStringType2Flattener::Type2Cntrmask(const CharStringOperandList & /*inOperandList*/,
                                                     uint8_t *inProgramCounter)
 {
-    if (WriteRegularOperator(20) != PDFHummus::eSuccess)
-        return PDFHummus::eFailure;
+    if (WriteRegularOperator(20) != charta::eSuccess)
+        return charta::eFailure;
 
     return WriteStemMask(inProgramCounter);
 }
@@ -455,7 +455,7 @@ EStatusCode CharStringType2Flattener::Type2Roll(const CharStringOperandList & /*
 
 CharString *CharStringType2Flattener::GetLocalSubr(long inSubrIndex)
 {
-    if (WriteSubrOperator(10) != PDFHummus::eSuccess)
+    if (WriteSubrOperator(10) != charta::eSuccess)
         return nullptr;
 
     return mHelper->GetLocalSubr(inSubrIndex);
@@ -465,13 +465,13 @@ EStatusCode CharStringType2Flattener::WriteSubrOperator(uint16_t /*inOperatorCod
 {
     if (!mOperandsToWrite.empty())
     {
-        EStatusCode status = PDFHummus::eSuccess;
+        EStatusCode status = charta::eSuccess;
         mOperandsToWrite.pop_back(); // pop back parameter, which is the subr index
 
         // now continue writing all operands
         auto it = mOperandsToWrite.begin();
 
-        for (; it != mOperandsToWrite.end() && PDFHummus::eSuccess == status; ++it)
+        for (; it != mOperandsToWrite.end() && charta::eSuccess == status; ++it)
             status = WriteCharStringOperand(*it);
 
         mOperandsToWrite.clear();
@@ -483,7 +483,7 @@ EStatusCode CharStringType2Flattener::WriteSubrOperator(uint16_t /*inOperatorCod
 
 CharString *CharStringType2Flattener::GetGlobalSubr(long inSubrIndex)
 {
-    if (WriteSubrOperator(29) != PDFHummus::eSuccess)
+    if (WriteSubrOperator(29) != charta::eSuccess)
         return nullptr;
 
     return mHelper->GetGlobalSubr(inSubrIndex);

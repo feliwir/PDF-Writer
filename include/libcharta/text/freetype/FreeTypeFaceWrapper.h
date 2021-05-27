@@ -66,8 +66,8 @@ class FreeTypeFaceWrapper
 
     bool IsValid();
 
-    PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongList &inUnicodeCharacters, UIntList &outGlyphs);
-    PDFHummus::EStatusCode GetGlyphsForUnicodeText(const ULongListList &inUnicodeCharacters, UIntListList &outGlyphs);
+    charta::EStatusCode GetGlyphsForUnicodeText(const ULongList &inUnicodeCharacters, UIntList &outGlyphs);
+    charta::EStatusCode GetGlyphsForUnicodeText(const ULongListList &inUnicodeCharacters, UIntListList &outGlyphs);
 
     std::string GetPostscriptName();
     double GetItalicAngle();

@@ -23,7 +23,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 CharStringType2Interpreter::CharStringType2Interpreter()
 {
@@ -48,13 +48,13 @@ EStatusCode CharStringType2Interpreter::Intepret(const CharString &inCharStringT
         {
             TRACE_LOG(
                 "CharStringType2Interpreter::Intepret, null implementation helper passed. pass a proper pointer!!");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
         status = mImplementationHelper->ReadCharString(inCharStringToIntepret.mStartPosition,
                                                        inCharStringToIntepret.mEndPosition, &charString);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG2(
                 "CharStringType2Interpreter::Intepret, failed to read charstring starting in %lld and ending in %lld",
@@ -74,24 +74,24 @@ EStatusCode CharStringType2Interpreter::Intepret(const CharString &inCharStringT
 
 EStatusCode CharStringType2Interpreter::ProcessCharString(uint8_t *inCharString, long long inCharStringLength)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     uint8_t *pointer = inCharString;
     bool gotEndExecutionOperator = false;
 
-    while (pointer - inCharString < inCharStringLength && PDFHummus::eSuccess == status && !gotEndExecutionOperator &&
+    while (pointer - inCharString < inCharStringLength && charta::eSuccess == status && !gotEndExecutionOperator &&
            !mGotEndChar)
     {
         if (IsOperator(pointer))
         {
             pointer = InterpretOperator(pointer, gotEndExecutionOperator);
             if (pointer == nullptr)
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
         }
         else
         {
             pointer = InterpretNumber(pointer);
             if (pointer == nullptr)
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
         }
     }
     return status;
@@ -148,7 +148,7 @@ uint8_t *CharStringType2Interpreter::InterpretNumber(uint8_t *inProgramCounter)
     {
         mOperandStack.push_back(operand);
         EStatusCode status = mImplementationHelper->Type2InterpretNumber(operand);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return nullptr;
     }
 
@@ -349,7 +349,7 @@ uint8_t *CharStringType2Interpreter::InterpretHStem(uint8_t *inProgramCounter)
     mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hstem(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -362,9 +362,9 @@ EStatusCode CharStringType2Interpreter::ClearNFromStack(uint16_t inCount)
     {
         for (uint16_t i = 0; i < inCount; ++i)
             mOperandStack.pop_back();
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 void CharStringType2Interpreter::ClearStack()
@@ -377,7 +377,7 @@ uint8_t *CharStringType2Interpreter::InterpretVStem(uint8_t *inProgramCounter)
     mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Vstem(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -387,7 +387,7 @@ uint8_t *CharStringType2Interpreter::InterpretVStem(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretVMoveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Vmoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -397,7 +397,7 @@ uint8_t *CharStringType2Interpreter::InterpretVMoveto(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretRLineto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Rlineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -407,7 +407,7 @@ uint8_t *CharStringType2Interpreter::InterpretRLineto(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretHLineto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hlineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -417,7 +417,7 @@ uint8_t *CharStringType2Interpreter::InterpretHLineto(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretVLineto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Vlineto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -427,7 +427,7 @@ uint8_t *CharStringType2Interpreter::InterpretVLineto(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretRRCurveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2RRCurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -448,7 +448,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallSubr(uint8_t *inProgramCounter
 
         do
         {
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG2("CharStringType2Interpreter::InterpretCallSubr, failed to read charstring starting in %lld "
                            "and ending in %lld",
@@ -460,7 +460,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallSubr(uint8_t *inProgramCounter
         } while (false);
 
         delete[] charString;
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return nullptr;
         return inProgramCounter;
     }
@@ -471,7 +471,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallSubr(uint8_t *inProgramCounter
 uint8_t *CharStringType2Interpreter::InterpretReturn(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Return(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     return inProgramCounter;
@@ -480,7 +480,7 @@ uint8_t *CharStringType2Interpreter::InterpretReturn(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretEndChar(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Endchar(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     mGotEndChar = true;
@@ -493,7 +493,7 @@ uint8_t *CharStringType2Interpreter::InterpretHStemHM(uint8_t *inProgramCounter)
     mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hstemhm(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -505,7 +505,7 @@ uint8_t *CharStringType2Interpreter::InterpretHintMask(uint8_t *inProgramCounter
     mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Hintmask(mOperandStack, inProgramCounter);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -515,7 +515,7 @@ uint8_t *CharStringType2Interpreter::InterpretHintMask(uint8_t *inProgramCounter
 uint8_t *CharStringType2Interpreter::InterpretCntrMask(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Cntrmask(mOperandStack, inProgramCounter);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -525,7 +525,7 @@ uint8_t *CharStringType2Interpreter::InterpretCntrMask(uint8_t *inProgramCounter
 uint8_t *CharStringType2Interpreter::InterpretRMoveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Rmoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -535,7 +535,7 @@ uint8_t *CharStringType2Interpreter::InterpretRMoveto(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretHMoveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hmoveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -547,7 +547,7 @@ uint8_t *CharStringType2Interpreter::InterpretVStemHM(uint8_t *inProgramCounter)
     mStemsCount += (uint16_t)(mOperandStack.size() / 2);
 
     EStatusCode status = mImplementationHelper->Type2Vstemhm(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -557,7 +557,7 @@ uint8_t *CharStringType2Interpreter::InterpretVStemHM(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretRCurveLine(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Rcurveline(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -567,7 +567,7 @@ uint8_t *CharStringType2Interpreter::InterpretRCurveLine(uint8_t *inProgramCount
 uint8_t *CharStringType2Interpreter::InterpretRLineCurve(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Rlinecurve(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -577,7 +577,7 @@ uint8_t *CharStringType2Interpreter::InterpretRLineCurve(uint8_t *inProgramCount
 uint8_t *CharStringType2Interpreter::InterpretVVCurveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Vvcurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -587,7 +587,7 @@ uint8_t *CharStringType2Interpreter::InterpretVVCurveto(uint8_t *inProgramCounte
 uint8_t *CharStringType2Interpreter::InterpretHHCurveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hhcurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -608,7 +608,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallGSubr(uint8_t *inProgramCounte
 
         do
         {
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG2("CharStringType2Interpreter::InterpretCallSubr, failed to read charstring starting in %lld "
                            "and ending in %lld",
@@ -620,7 +620,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallGSubr(uint8_t *inProgramCounte
         } while (false);
 
         delete[] charString;
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return nullptr;
         return inProgramCounter;
     }
@@ -631,7 +631,7 @@ uint8_t *CharStringType2Interpreter::InterpretCallGSubr(uint8_t *inProgramCounte
 uint8_t *CharStringType2Interpreter::InterpretVHCurveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Vhcurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -641,7 +641,7 @@ uint8_t *CharStringType2Interpreter::InterpretVHCurveto(uint8_t *inProgramCounte
 uint8_t *CharStringType2Interpreter::InterpretHVCurveto(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hvcurveto(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -651,7 +651,7 @@ uint8_t *CharStringType2Interpreter::InterpretHVCurveto(uint8_t *inProgramCounte
 uint8_t *CharStringType2Interpreter::InterpretAnd(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2And(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -675,7 +675,7 @@ uint8_t *CharStringType2Interpreter::InterpretAnd(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretOr(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Or(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -699,7 +699,7 @@ uint8_t *CharStringType2Interpreter::InterpretOr(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretNot(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Not(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -717,7 +717,7 @@ uint8_t *CharStringType2Interpreter::InterpretNot(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretAbs(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Abs(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -738,7 +738,7 @@ uint8_t *CharStringType2Interpreter::InterpretAbs(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretAdd(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Add(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -768,7 +768,7 @@ uint8_t *CharStringType2Interpreter::InterpretAdd(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretSub(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Sub(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -798,7 +798,7 @@ uint8_t *CharStringType2Interpreter::InterpretSub(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretDiv(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Div(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -828,7 +828,7 @@ uint8_t *CharStringType2Interpreter::InterpretDiv(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretNeg(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Neg(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -849,7 +849,7 @@ uint8_t *CharStringType2Interpreter::InterpretNeg(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretEq(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Eq(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -873,7 +873,7 @@ uint8_t *CharStringType2Interpreter::InterpretEq(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretDrop(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Drop(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     mOperandStack.pop_back();
@@ -883,7 +883,7 @@ uint8_t *CharStringType2Interpreter::InterpretDrop(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretPut(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Put(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -902,7 +902,7 @@ uint8_t *CharStringType2Interpreter::InterpretPut(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretGet(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Get(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -922,7 +922,7 @@ uint8_t *CharStringType2Interpreter::InterpretGet(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretIfelse(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Ifelse(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -961,7 +961,7 @@ uint8_t *CharStringType2Interpreter::InterpretIfelse(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretRandom(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Random(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand newOperand;
@@ -976,7 +976,7 @@ uint8_t *CharStringType2Interpreter::InterpretRandom(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretMul(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Mul(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -1006,7 +1006,7 @@ uint8_t *CharStringType2Interpreter::InterpretMul(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretSqrt(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Sqrt(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -1024,7 +1024,7 @@ uint8_t *CharStringType2Interpreter::InterpretSqrt(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretDup(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Dup(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     mOperandStack.push_back(mOperandStack.back());
@@ -1034,7 +1034,7 @@ uint8_t *CharStringType2Interpreter::InterpretDup(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretExch(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Exch(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -1054,7 +1054,7 @@ uint8_t *CharStringType2Interpreter::InterpretExch(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretIndex(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Index(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand value;
@@ -1074,7 +1074,7 @@ uint8_t *CharStringType2Interpreter::InterpretIndex(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretRoll(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Roll(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     CharStringOperand valueA;
@@ -1125,7 +1125,7 @@ uint8_t *CharStringType2Interpreter::InterpretRoll(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretHFlex(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hflex(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -1135,7 +1135,7 @@ uint8_t *CharStringType2Interpreter::InterpretHFlex(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretFlex(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Flex(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -1145,7 +1145,7 @@ uint8_t *CharStringType2Interpreter::InterpretFlex(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretHFlex1(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Hflex1(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();
@@ -1155,7 +1155,7 @@ uint8_t *CharStringType2Interpreter::InterpretHFlex1(uint8_t *inProgramCounter)
 uint8_t *CharStringType2Interpreter::InterpretFlex1(uint8_t *inProgramCounter)
 {
     EStatusCode status = mImplementationHelper->Type2Flex1(mOperandStack);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return nullptr;
 
     ClearStack();

@@ -25,11 +25,11 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(ObjectContext, UppercaseSequence)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     UppercaseSequence sequance;
 
     auto value = sequance.GetNextValue();

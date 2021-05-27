@@ -26,7 +26,7 @@ class PDFFormXObject;
 class XObjectContentContext : public AbstractContentContext
 {
   public:
-    XObjectContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFFormXObject *inFormXObject);
+    XObjectContentContext(charta::DocumentContext *inDocumentContext, PDFFormXObject *inFormXObject);
     virtual ~XObjectContentContext(void);
 
   private:

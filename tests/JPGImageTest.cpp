@@ -31,7 +31,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFImage, JPGImage)
 {
@@ -39,10 +39,10 @@ TEST(PDFImage, JPGImage)
     EStatusCode status;
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "BasicJPGImagesTest.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(pageContentContext, nullptr);
@@ -56,7 +56,7 @@ TEST(PDFImage, JPGImage)
 
     // pause stream to start writing the image
     status = pdfWriter.PausePageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Create image xobject from
     PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
@@ -74,7 +74,7 @@ TEST(PDFImage, JPGImage)
     // now do the same with a form xobject
     // pause stream to start writing the image
     status = pdfWriter.PausePageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFFormXObject *formXObject = pdfWriter.CreateFormXObjectFromJPGFile(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/otherStage.JPG"));
@@ -89,13 +89,13 @@ TEST(PDFImage, JPGImage)
     delete formXObject;
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }
 
 #endif

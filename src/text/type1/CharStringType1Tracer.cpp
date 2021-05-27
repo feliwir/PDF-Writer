@@ -23,7 +23,7 @@
 #include "text/type1/CharStringType1Interpreter.h"
 #include "text/type1/Type1Input.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 CharStringType1Tracer::CharStringType1Tracer() = default;
 
@@ -41,7 +41,7 @@ inWriter)
     if(!charString)
     {
         TRACE_LOG("CharStringType1Tracer::TraceGlyphProgram, Exception, cannot find glyph index");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     return interpreter.Intepret(*charString,this);
@@ -60,7 +60,7 @@ EStatusCode CharStringType1Tracer::TraceGlyphProgram(const std::string &inGlyphN
     if (charString == nullptr)
     {
         TRACE_LOG("CharStringType1Tracer::TraceGlyphProgram, Exception, cannot find glyph name");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     return interpreter.Intepret(*charString, this);
@@ -69,49 +69,49 @@ EStatusCode CharStringType1Tracer::TraceGlyphProgram(const std::string &inGlyphN
 EStatusCode CharStringType1Tracer::Type1Hstem(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hstem");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Vstem(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("vstem");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1VMoveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("vmoveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1RLineto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("rlineto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1HLineto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hlineto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1VLineto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("vlineto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1RRCurveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("rrcurveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1ClosePath(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("closepath");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 Type1CharString *CharStringType1Tracer::GetSubr(long inSubrIndex)
@@ -123,79 +123,79 @@ Type1CharString *CharStringType1Tracer::GetSubr(long inSubrIndex)
 EStatusCode CharStringType1Tracer::Type1Return(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("return");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Hsbw(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hsbw");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Endchar(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("endchar");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1RMoveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("rmoveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1HMoveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hmoveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1VHCurveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("vhcurveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1HVCurveto(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hvcurveto");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1DotSection(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("dotsection");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1VStem3(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("vstem3");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1HStem3(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("hstem3");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Seac(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("seac");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Sbw(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("sbw");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Div(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("div");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 bool CharStringType1Tracer::IsOtherSubrSupported(long /*inOtherSubrsIndex*/)
@@ -208,26 +208,26 @@ EStatusCode CharStringType1Tracer::CallOtherSubr(const LongList & /*inOperandLis
                                                  LongList & /*outPostScriptOperandStack*/)
 {
     // not looking to get here, due to IsOtherSubrSupported returning false
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1Pop(const LongList & /*inOperandList*/,
                                             const LongList & /*inPostScriptOperandStack*/)
 {
     mPrimitiveWriter.WriteKeyword("pop");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1SetCurrentPoint(const LongList & /*inOperandList*/)
 {
     mPrimitiveWriter.WriteKeyword("setcurrentpoint");
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode CharStringType1Tracer::Type1InterpretNumber(long inOperand)
 {
     mPrimitiveWriter.WriteInteger(inOperand);
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 unsigned long CharStringType1Tracer::GetLenIV()

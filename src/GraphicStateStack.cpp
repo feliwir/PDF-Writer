@@ -21,7 +21,7 @@
 #include "GraphicStateStack.h"
 #include "Trace.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 GraphicStateStack::GraphicStateStack()
 {
@@ -43,11 +43,11 @@ EStatusCode GraphicStateStack::Pop()
     if (mGraphicStateStack.size() == 1)
     {
         TRACE_LOG("GraphicStateStack::Pop, exception. stack underflow, reached to the initial state");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mGraphicStateStack.pop_back();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 GraphicState &GraphicStateStack::GetCurrentState()

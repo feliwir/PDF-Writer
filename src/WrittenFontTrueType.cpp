@@ -30,7 +30,7 @@
 #include "text/truetype/TrueTypeANSIFontWriter.h"
 #include "text/truetype/TrueTypeDescendentFontWriter.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 WrittenFontTrueType::WrittenFontTrueType(ObjectsContext *inObjectsContext) : AbstractWrittenFont(inObjectsContext)
 {
@@ -108,7 +108,7 @@ bool WrittenFontTrueType::AddToANSIRepresentation(const GlyphUnicodeMappingList 
 
 EStatusCode WrittenFontTrueType::WriteFontDefinition(FreeTypeFaceWrapper &inFontInfo, bool inEmbedFont)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     do
     {
         if ((mANSIRepresentation != nullptr) && !mANSIRepresentation->isEmpty() &&
@@ -117,7 +117,7 @@ EStatusCode WrittenFontTrueType::WriteFontDefinition(FreeTypeFaceWrapper &inFont
             TrueTypeANSIFontWriter fontWriter;
 
             status = fontWriter.WriteFont(inFontInfo, mANSIRepresentation, mObjectsContext, inEmbedFont);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("WrittenFontTrueType::WriteFontDefinition, Failed to write Ansi font definition");
                 break;
@@ -132,7 +132,7 @@ EStatusCode WrittenFontTrueType::WriteFontDefinition(FreeTypeFaceWrapper &inFont
 
             status = fontWriter.WriteFont(inFontInfo, mCIDRepresentation, mObjectsContext, &descendentFontWriter,
                                           inEmbedFont);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG("WrittenFontTrueType::WriteFontDefinition, Failed to write CID font definition");
                 break;
@@ -231,7 +231,7 @@ EStatusCode WrittenFontTrueType::WriteState(ObjectsContext *inStateWriter, Objec
     writtenFontDictionary->WriteNameValue("WrittenFontTrueType");
 
     EStatusCode status = AbstractWrittenFont::WriteStateInDictionary(inStateWriter, writtenFontDictionary);
-    if (PDFHummus::eSuccess == status)
+    if (charta::eSuccess == status)
     {
         inStateWriter->EndDictionary(writtenFontDictionary);
         inStateWriter->EndIndirectObject();

@@ -26,7 +26,7 @@ class PDFTiledPattern;
 class TiledPatternContentContext : public AbstractContentContext
 {
   public:
-    TiledPatternContentContext(PDFHummus::DocumentContext *inDocumentContext, PDFTiledPattern *inObject);
+    TiledPatternContentContext(charta::DocumentContext *inDocumentContext, PDFTiledPattern *inObject);
     virtual ~TiledPatternContentContext(void);
 
   private:

@@ -33,36 +33,36 @@ class CFFPrimitiveReader
     void SetOffset(long long inNewOffset);
     void Skip(size_t inToSkip);
     long long GetCurrentPosition();
-    PDFHummus::EStatusCode GetInternalState();
+    charta::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode ReadByte(uint8_t &outValue);
-    PDFHummus::EStatusCode Read(uint8_t *ioBuffer, size_t inBufferSize);
+    charta::EStatusCode ReadByte(uint8_t &outValue);
+    charta::EStatusCode Read(uint8_t *ioBuffer, size_t inBufferSize);
 
     // basic CFF values
-    PDFHummus::EStatusCode ReadCard8(uint8_t &outValue);
-    PDFHummus::EStatusCode ReadCard16(uint16_t &outValue);
+    charta::EStatusCode ReadCard8(uint8_t &outValue);
+    charta::EStatusCode ReadCard16(uint16_t &outValue);
     // set offsize to read offsets
     void SetOffSize(uint8_t inOffSize);
-    PDFHummus::EStatusCode ReadOffset(unsigned long &outValue);
-    PDFHummus::EStatusCode ReadOffSize(uint8_t &outValue);
-    PDFHummus::EStatusCode ReadSID(uint16_t &outValue);
+    charta::EStatusCode ReadOffset(unsigned long &outValue);
+    charta::EStatusCode ReadOffSize(uint8_t &outValue);
+    charta::EStatusCode ReadSID(uint16_t &outValue);
 
     // dict data
     bool IsDictOperator(uint8_t inCandidate);
-    PDFHummus::EStatusCode ReadDictOperator(uint8_t inFirstByte, uint16_t &outOperator);
-    PDFHummus::EStatusCode ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand);
+    charta::EStatusCode ReadDictOperator(uint8_t inFirstByte, uint16_t &outOperator);
+    charta::EStatusCode ReadDictOperand(uint8_t inFirstByte, DictOperand &outOperand);
 
   private:
     IByteReaderWithPosition *mCFFFile;
     long long mInitialPosition;
-    PDFHummus::EStatusCode mInternalState;
+    charta::EStatusCode mInternalState;
     uint8_t mCurrentOffsize;
 
-    PDFHummus::EStatusCode Read3ByteUnsigned(unsigned long &outValue);
-    PDFHummus::EStatusCode Read4ByteUnsigned(unsigned long &outValue);
-    PDFHummus::EStatusCode Read4ByteSigned(long &outValue);
-    PDFHummus::EStatusCode Read2ByteSigned(short &outValue);
-    PDFHummus::EStatusCode ReadIntegerOperand(uint8_t inFirstByte, long &outValue);
+    charta::EStatusCode Read3ByteUnsigned(unsigned long &outValue);
+    charta::EStatusCode Read4ByteUnsigned(unsigned long &outValue);
+    charta::EStatusCode Read4ByteSigned(long &outValue);
+    charta::EStatusCode Read2ByteSigned(short &outValue);
+    charta::EStatusCode ReadIntegerOperand(uint8_t inFirstByte, long &outValue);
     // make sure you get here after discarding the initial byte, 30.
-    PDFHummus::EStatusCode ReadRealOperand(double &outValue, long &outRealValueFractalEnd);
+    charta::EStatusCode ReadRealOperand(double &outValue, long &outRealValueFractalEnd);
 };

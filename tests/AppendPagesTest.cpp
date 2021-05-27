@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFEmbedding, AppendPages)
 {
@@ -35,22 +35,22 @@ TEST(PDFEmbedding, AppendPages)
         RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "AppendPagesTest.pdf"), ePDFVersion13,
         LogConfiguration(true, true, RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "AppendPagesTestLog.txt")));
 
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     EStatusCodeAndObjectIDTypeList result;
 
     result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/Original.pdf"),
                                              PDFPageRange());
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/XObjectContent.pdf"),
                                              PDFPageRange());
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     result = pdfWriter.AppendPDFPagesFromPDF(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"), PDFPageRange());
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

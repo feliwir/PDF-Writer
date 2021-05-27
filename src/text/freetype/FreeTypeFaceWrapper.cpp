@@ -33,7 +33,7 @@
 #include FT_CID_H
 #include FT_OUTLINE_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 FreeTypeFaceWrapper::FreeTypeFaceWrapper(FT_Face inFace, const std::string &inFontFilePath, long inFontIndex,
                                          bool inDoOwn)
@@ -580,7 +580,7 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnic
     if (mFace != nullptr)
     {
         FT_UInt glyphIndex;
-        EStatusCode status = PDFHummus::eSuccess;
+        EStatusCode status = charta::eSuccess;
 
         outGlyphs.clear();
 
@@ -605,7 +605,7 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnic
                     TRACE_LOG1(
                         "FreeTypeFaceWrapper::GetGlyphsForUnicodeText, failed to find glyph for charachter 0x%04x",
                         *it);
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                 }
             }
             outGlyphs.push_back(glyphIndex);
@@ -613,20 +613,20 @@ EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongList &inUnic
 
         return status;
     }
-    return PDFHummus::eFailure;
+    return charta::eFailure;
 }
 
 EStatusCode FreeTypeFaceWrapper::GetGlyphsForUnicodeText(const ULongListList &inUnicodeCharacters,
                                                          UIntListList &outGlyphs)
 {
     UIntList glyphs;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     auto it = inUnicodeCharacters.begin();
 
     for (; it != inUnicodeCharacters.end(); ++it)
     {
-        if (PDFHummus::eFailure == GetGlyphsForUnicodeText(*it, glyphs))
-            status = PDFHummus::eFailure;
+        if (charta::eFailure == GetGlyphsForUnicodeText(*it, glyphs))
+            status = charta::eFailure;
         outGlyphs.push_back(glyphs);
     }
 

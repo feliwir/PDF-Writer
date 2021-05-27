@@ -28,7 +28,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDF, RotatedPagesPDF)
 {
@@ -39,7 +39,7 @@ TEST(PDF, RotatedPagesPDF)
     PDFWriter pdfWriter;
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RotatedPages.pdf"), ePDFVersion13,
                                 logConfiguration);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     AbstractContentContext::TextOptions textOptions(
         pdfWriter.GetFontForFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf")), 14,
@@ -48,7 +48,7 @@ TEST(PDF, RotatedPagesPDF)
     for (int i = 0; i < 6; ++i)
     {
         PDFPage page;
-        page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+        page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
         // This is invalid rotation and should not be applied
         page.SetRotate(33);
@@ -62,28 +62,28 @@ TEST(PDF, RotatedPagesPDF)
         PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
         cxt->WriteText(75, 805, s.str(), textOptions);
         status = pdfWriter.EndPageContentContext(cxt);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
 
         status = pdfWriter.WritePage(page);
-        ASSERT_EQ(status, PDFHummus::eSuccess);
+        ASSERT_EQ(status, charta::eSuccess);
     }
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // PDF page rotation copy
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RotatedPagesCopy.pdf"), ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     EStatusCodeAndObjectIDTypeList result;
 
     // append pages
     result = pdfWriter.AppendPDFPagesFromPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RotatedPages.pdf"),
                                              PDFPageRange());
-    ASSERT_EQ(result.first, PDFHummus::eSuccess);
+    ASSERT_EQ(result.first, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // PDF Page rotation parsing
 
@@ -91,10 +91,10 @@ TEST(PDF, RotatedPagesPDF)
     PDFParser pdfParser;
 
     status = pdfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "RotatedPagesCopy.pdf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfParser.StartPDFParsing(pdfFile.GetInputStream());
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     ASSERT_EQ(pdfParser.GetPagesCount(), 6);
 

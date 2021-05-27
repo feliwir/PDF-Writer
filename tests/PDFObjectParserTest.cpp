@@ -34,7 +34,7 @@ limitations under the License.
 #include <iostream>
 #include <sstream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 class InputInterfaceToStream : public IByteReader, public IReadPositionProvider
 {

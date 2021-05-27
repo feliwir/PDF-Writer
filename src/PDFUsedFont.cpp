@@ -30,7 +30,7 @@
 
 #include FT_GLYPH_H
 
-using namespace PDFHummus;
+using namespace charta;
 
 PDFUsedFont::PDFUsedFont(FT_Face inInputFace, const std::string &inFontFilePath,
                          const std::string &inAdditionalMetricsFontFilePath, long inFontIndex,
@@ -59,7 +59,7 @@ EStatusCode PDFUsedFont::EncodeStringForShowing(const GlyphUnicodeMappingList &i
     {
         outFontObjectToUse = 0;
         outTreatCharactersAsCID = false;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     if (mWrittenFont == nullptr)
@@ -67,7 +67,7 @@ EStatusCode PDFUsedFont::EncodeStringForShowing(const GlyphUnicodeMappingList &i
 
     mWrittenFont->AppendGlyphs(inText, outCharactersToUse, outTreatCharactersAsCID, outFontObjectToUse);
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode PDFUsedFont::TranslateStringToGlyphs(const std::string &inText,
@@ -77,7 +77,7 @@ EStatusCode PDFUsedFont::TranslateStringToGlyphs(const std::string &inText,
     UnicodeString unicode;
 
     EStatusCode status = unicode.FromUTF8(inText);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = mFaceWrapper.GetGlyphsForUnicodeText(unicode.GetUnicodeList(), glyphs);
@@ -99,7 +99,7 @@ EStatusCode PDFUsedFont::EncodeStringsForShowing(const GlyphUnicodeMappingListLi
     {
         outFontObjectToUse = 0;
         outTreatCharactersAsCID = false;
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
     }
 
     if (mWrittenFont == nullptr)
@@ -107,7 +107,7 @@ EStatusCode PDFUsedFont::EncodeStringsForShowing(const GlyphUnicodeMappingListLi
 
     mWrittenFont->AppendGlyphs(inText, outCharactersToUse, outTreatCharactersAsCID, outFontObjectToUse);
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode PDFUsedFont::WriteFontDefinition()
@@ -143,7 +143,7 @@ EStatusCode PDFUsedFont::WriteState(ObjectsContext *inStateWriter, ObjectIDType 
     if (mWrittenFont != nullptr)
         mWrittenFont->WriteState(inStateWriter, writtenFontObject);
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode PDFUsedFont::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
@@ -154,14 +154,14 @@ EStatusCode PDFUsedFont::ReadState(PDFParser *inStateReader, ObjectIDType inObje
         pdfUsedFontState->QueryDirectObject("mWrittenFont"));
 
     if (!writtenFontReference)
-        return PDFHummus::eSuccess;
+        return charta::eSuccess;
 
     if (mWrittenFont != nullptr)
         delete mWrittenFont;
 
     mWrittenFont = mFaceWrapper.CreateWrittenFontObject(mObjectsContext, mEmbedFont);
     if (mWrittenFont == nullptr)
-        return PDFHummus::eFailure;
+        return charta::eFailure;
 
     return mWrittenFont->ReadState(inStateReader, writtenFontReference->mObjectID);
 }

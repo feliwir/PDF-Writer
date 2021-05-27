@@ -25,7 +25,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(TrueType, TrueType)
 {
@@ -33,10 +33,10 @@ TEST(TrueType, TrueType)
     InputFile ttfFile;
 
     status = ttfFile.OpenFile(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/fonts/arial.ttf"));
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     OpenTypeFileInput trueTypeReader;
 
     status = trueTypeReader.ReadOpenTypeFile(ttfFile.GetInputStream(), 0);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

@@ -32,7 +32,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
 {
@@ -41,10 +41,10 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
 
     status = pdfWriter.StartPDF(RelativeURLToLocalPath(PDFWRITE_BINARY_PATH, "ImagesAndFormsForwardReferenceTest.pdf"),
                                 ePDFVersion13);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *pageContentContext = pdfWriter.StartPageContentContext(page);
     ASSERT_NE(pageContentContext, nullptr);
@@ -84,10 +84,10 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
     pageContentContext->Q();
 
     status = pdfWriter.EndPageContentContext(pageContentContext);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.WritePage(page);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     // Create image xobject
     PDFImageXObject *imageXObject = pdfWriter.CreateImageXObjectFromJPGFile(
@@ -120,8 +120,8 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
     xobjectContentContext->Q();
 
     status = pdfWriter.EndFormXObjectAndRelease(xobjectForm);
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 
     status = pdfWriter.EndPDF();
-    ASSERT_EQ(status, PDFHummus::eSuccess);
+    ASSERT_EQ(status, charta::eSuccess);
 }

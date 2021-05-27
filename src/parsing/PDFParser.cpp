@@ -47,7 +47,7 @@
 
 #include <algorithm>
 #include <utility>
-using namespace PDFHummus;
+using namespace charta;
 
 PDFParser::PDFParser()
 {
@@ -99,7 +99,7 @@ EStatusCode PDFParser::StartPDFParsing(IByteReaderWithPosition *inSourceStream, 
     do
     {
         status = ParseHeaderLine();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // initialize reading from end
@@ -108,19 +108,19 @@ EStatusCode PDFParser::StartPDFParsing(IByteReaderWithPosition *inSourceStream, 
         mLastAvailableIndex = mCurrentBufferIndex = mLinesBuffer;
 
         status = ParseEOFLine();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ParseLastXrefPosition();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ParseFileDirectory(); // that would be the xref and trailer
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = SetupDecryptionHelper(inOptions.Password);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (IsEncrypted() && !IsEncryptionSupported())
@@ -135,7 +135,7 @@ EStatusCode PDFParser::StartPDFParsing(IByteReaderWithPosition *inSourceStream, 
         else
         {
             status = ParsePagesObjectIDs();
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
 
@@ -165,7 +165,7 @@ EStatusCode PDFParser::ParseHeaderLine()
     if (!tokenizerResult.first)
     {
         TRACE_LOG("PDFParser::ParseHeaderLine, no tokens in PDF input. in other words - it's empty.");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (tokenizerResult.second.compare(0, scPDFMagic.size(), scPDFMagic) != 0)
@@ -173,11 +173,11 @@ EStatusCode PDFParser::ParseHeaderLine()
         TRACE_LOG1("PDFParser::ParseHeaderLine, file does not begin as a PDF file. a PDF file should start with "
                    "\"%%PDF-\". file header = %s",
                    tokenizerResult.second.substr(0, MAX_TRACE_SIZE - 200).c_str());
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mPDFLevel = Double(tokenizerResult.second.substr(scPDFMagic.size()));
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 static const std::string scEOF = "%%EOF";
@@ -213,7 +213,7 @@ EStatusCode PDFParser::ParseEOFLine()
         }
     }
 
-    return foundEOF ? PDFHummus::eSuccess : PDFHummus::eFailure;
+    return foundEOF ? charta::eSuccess : charta::eFailure;
 }
 
 size_t PDFParser::GetCurrentPositionFromEnd()
@@ -328,7 +328,7 @@ bool PDFParser::IsBeginOfFile()
 static const std::string scStartxref = "startxref";
 EStatusCode PDFParser::ParseLastXrefPosition()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     // next two lines should be the xref position and then "startxref"
 
@@ -338,7 +338,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
         // find and read xref position
         if (!GoBackTillToken())
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG("PDFParser::ParseXrefPosition, couldn't find xref position token");
             break;
         }
@@ -358,7 +358,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
             // find and read startxref keyword
             if (!GoBackTillToken())
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 TRACE_LOG("PDFParser::ParseXrefPosition, couldn't find startxref keyword");
                 break;
             }
@@ -371,7 +371,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 
             if (!startxRef || startxRef->GetValue() != scStartxref)
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 TRACE_LOG("PDFParser::ParseXrefPosition, syntax error in reading xref position");
                 break;
             }
@@ -390,7 +390,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 
             if (!foundStartXref)
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 TRACE_LOG("PDFParser::ParseXrefPosition, could not find startxref keyword");
                 break;
             }
@@ -398,7 +398,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
             PDFObjectCastPtr<PDFInteger> xrefPosition(mObjectParser.ParseNewObject());
             if (!xrefPosition)
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 TRACE_LOG("PDFParser::ParseXrefPosition, syntax error in reading xref position");
                 break;
             }
@@ -415,7 +415,7 @@ static const std::string scTrailer = "trailer";
 EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer)
 {
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     bool foundTrailer = false;
 
     do
@@ -433,7 +433,7 @@ EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *ou
 
         if (!foundTrailer)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG("PDFParser::ParseTrailerDictionary, trailer not found...");
             break;
         }
@@ -443,7 +443,7 @@ EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *ou
         PDFObjectCastPtr<PDFDictionary> trailerDictionary(mObjectParser.ParseNewObject());
         if (!trailerDictionary)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             TRACE_LOG("PDFParser::ParseTrailerDictionary, failure to parse trailer dictionary");
             break;
         }
@@ -461,18 +461,18 @@ EStatusCode PDFParser::BuildXrefTableFromTable()
     do
     {
         status = DetermineXrefSize();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = InitializeXref();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         bool hasPrev = mTrailer->Exists("Prev");
         if (hasPrev)
         {
             status = ParsePreviousXrefs(mTrailer);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
 
@@ -480,7 +480,7 @@ EStatusCode PDFParser::BuildXrefTableFromTable()
         ObjectIDType extendedTableSize;
         status = ParseXrefFromXrefTable(mXrefTable, mXrefSize, mLastXrefPosition, !hasPrev, &extendedTable,
                                         &extendedTableSize);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // Table may have been extended, in which case replace the pointer and current size
@@ -498,7 +498,7 @@ EStatusCode PDFParser::BuildXrefTableFromTable()
         // if exists, merge update xref
         status = ParseXrefFromXrefStream(mXrefTable, mXrefSize, xrefStmReference->GetValue(), &extendedTable,
                                          &extendedTableSize);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("PDFParser::ParseDirectory, failure to parse xref in hybrid mode");
             break;
@@ -520,17 +520,17 @@ EStatusCode PDFParser::DetermineXrefSize()
 
     if (!aSize)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     mXrefSize = (ObjectIDType)aSize->GetValue();
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 EStatusCode PDFParser::InitializeXref()
 {
     mXrefTable = new XrefEntryInput[mXrefSize];
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 typedef BoxingBaseWithRW<ObjectIDType> ObjectIDTypeBox;
@@ -547,7 +547,7 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
     // i'm gonna tokanize them, for easier reading
     PDFParserTokenizer tokenizer;
     BoolAndString token;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     ObjectIDType firstNonSectionObject;
     uint8_t entry[20];
 
@@ -569,19 +569,19 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
         {
             TRACE_LOG1("PDFParser::ParseXref, error in parsing xref, expected to find \"xref\" keyword, found = %s",
                        token.second.substr(0, MAX_TRACE_SIZE - 200).c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
         ObjectIDType currentObject = 0;
 
-        while (PDFHummus::eSuccess == status)
+        while (charta::eSuccess == status)
         {
             token = tokenizer.GetNextToken();
             if (!token.first)
             {
                 TRACE_LOG("PDFParser::ParseXref, failed to read tokens, while reading xref");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -601,7 +601,7 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
             if (!token.first)
             {
                 TRACE_LOG("PDFParser::ParseXref, unable to read section size, while reading xref");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             // parse segment size
@@ -636,7 +636,7 @@ EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, Objec
                 ++currentObject;
             }
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
     } while (false);
@@ -654,7 +654,7 @@ EStatusCode PDFParser::ReadNextXrefEntry(uint8_t inBuffer[20])
         if (mStream->Read(inBuffer, 1) != 1)
         {
             TRACE_LOG("PDFParser::ReadNextXrefEntry, failed to read xref entry");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     } while (IsPDFWhiteSpace(inBuffer[0]));
@@ -665,7 +665,7 @@ EStatusCode PDFParser::ReadNextXrefEntry(uint8_t inBuffer[20])
     if (mStream->Read(inBuffer + 1, 19) != 19)
     {
         TRACE_LOG("PDFParser::ReadNextXrefEntry, failed to read xref entry");
-        status = PDFHummus::eFailure;
+        status = charta::eFailure;
     }
     // set position if the EOL is 1 char instead of 2 (some documents may not follow the standard!)
     if ((inBuffer[19] != scLN && inBuffer[19] != scCR) && (inBuffer[18] == scLN || inBuffer[18] == scCR))
@@ -790,7 +790,7 @@ EStatusCode PDFParser::SetupDecryptionHelper(const std::string &inPassword)
 
 EStatusCode PDFParser::ParsePagesObjectIDs()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     // m.k plan is to look for the catalog, then find the pages, then initialize the array to the count at the root, and
     // then just recursively loop the pages by order of pages and fill up the IDs. easy.
@@ -802,7 +802,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         if (!catalogReference)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read catalog reference in trailer");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -810,7 +810,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         if (!catalog)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read catalog");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -819,7 +819,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         if (!pagesReference)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages reference in catalog");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -827,7 +827,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         if (!pages)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -835,7 +835,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         if (!totalPagesCount)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages count");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -867,7 +867,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
     // if this is a page, write it's node object ID in the current page index and +1
     // if this is a pagetree, loop it's kids, for each parsing the kid, running the recursion on it, and deleting
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -875,7 +875,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
         if (!objectType)
         {
             TRACE_LOG("PDFParser::ParsePagesIDs, can't read object type");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -885,7 +885,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
             if (ioCurrentPageIndex >= mPagesCount)
             {
                 TRACE_LOG("PDFParser::ParsePagesIDs, there are more pages than the page count specifies. fail.");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -902,13 +902,13 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
             if (!kidsObject)
             {
                 TRACE_LOG("PDFParser::ParsePagesIDs, unable to find page kids array");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
             SingleValueContainerIterator<PDFObjectVector> it = kidsObject->GetIterator();
 
-            while (it.MoveNext() && PDFHummus::eSuccess == status)
+            while (it.MoveNext() && charta::eSuccess == status)
             {
                 if (it.GetItem()->GetType() == PDFObject::ePDFObjectNull)
                 {
@@ -922,7 +922,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
                 {
                     TRACE_LOG1("PDFParser::ParsePagesIDs, unexpected type for a Kids array object, type = %s",
                                PDFObject::scPDFObjectTypeLabel(it.GetItem()->GetType()));
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
 
@@ -931,7 +931,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
                 if (!pageNodeObject)
                 {
                     TRACE_LOG("PDFParser::ParsePagesIDs, unable to parse page node object from kids reference");
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
 
@@ -944,7 +944,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
         {
             TRACE_LOG1("PDFParser::ParsePagesIDs, unexpected object type. should be either Page or Pages, found %s",
                        objectType->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     } while (false);
@@ -1036,7 +1036,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &
     if (!previousPosition)
     {
         TRACE_LOG("PDFParser::ParsePreviousXrefs, unexpected, prev is not integer");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     EStatusCode status;
@@ -1050,14 +1050,14 @@ EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &
         ObjectIDType extendedTableSize;
         status = ParsePreviousFileDirectory(previousPosition->GetValue(), aTable, mXrefSize, &trailerP, &extendedTable,
                                             &extendedTableSize);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
         std::shared_ptr<PDFDictionary> trailer(trailerP);
 
         if (trailer->Exists("Prev"))
         {
             status = ParsePreviousXrefs(trailer);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
 
@@ -1082,7 +1082,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                                                   ObjectIDType inXrefSize, std::shared_ptr<PDFDictionary> *outTrailer,
                                                   XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     MovePositionInStream(inXrefPosition);
 
@@ -1092,7 +1092,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
         std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
         if (!anObject)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1106,14 +1106,14 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             // to-be-parsed xref is the first one, or not.
             std::shared_ptr<PDFDictionary> trailerDictionary = nullptr;
             status = ParseTrailerDictionary(&trailerDictionary);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
 
             bool hasPrev = trailerDictionary->Exists("Prev");
 
             status = ParseXrefFromXrefTable(inXrefTable, inXrefSize, inXrefPosition, !hasPrev, outExtendedTable,
                                             outExtendedTableSize);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 TRACE_LOG1("PDFParser::ParseDirectory, failed to parse xref table in %ld", inXrefPosition);
                 break;
@@ -1132,7 +1132,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                 // if exists, merge update xref
                 status = ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStmReference->GetValue(),
                                                  outExtendedTable, outExtendedTableSize);
-                if (status != PDFHummus::eSuccess)
+                if (status != charta::eSuccess)
                 {
                     TRACE_LOG("PDFParser::ParseDirectory, failure to parse xref in hybrid mode");
                     break;
@@ -1151,7 +1151,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             if (!versionObject)
             {
                 TRACE_LOG("PDFParser::ParseDirectory, failed to read xref object declaration, Version");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -1160,7 +1160,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             if (!objKeyword)
             {
                 TRACE_LOG("PDFParser::ParseDirectory, failed to read xref object declaration, obj keyword");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -1169,7 +1169,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                 TRACE_LOG1(
                     "PDFParser::ParseDirectory, failed to read xref object declaration, expected obj keyword found %s",
                     objKeyword->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -1180,7 +1180,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             if (!xrefStream)
             {
                 TRACE_LOG("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failure to parse xref stream");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -1190,13 +1190,13 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
 
             status =
                 ParseXrefFromXrefStream(inXrefTable, inXrefSize, xrefStream, outExtendedTable, outExtendedTableSize);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
         else
         {
             TRACE_LOG("PDFParser::ParseDirectory,Unexpected object at xref start");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
         }
     } while (false);
     return status;
@@ -1221,7 +1221,7 @@ void PDFParser::MergeXrefWithMainXref(XrefEntryInput *inTableToMerge, ObjectIDTy
 
 EStatusCode PDFParser::ParseFileDirectory()
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     MovePositionInStream(mLastXrefPosition);
 
@@ -1229,7 +1229,7 @@ EStatusCode PDFParser::ParseFileDirectory()
     std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
     if (!anObject)
     {
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     if (anObject->GetType() == PDFObject::ePDFObjectSymbol &&
@@ -1239,14 +1239,14 @@ EStatusCode PDFParser::ParseFileDirectory()
         // jump lines till you get to a line where the token is "trailer". then parse.
         std::shared_ptr<PDFDictionary> trailerP = nullptr;
         status = ParseTrailerDictionary(&trailerP);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
         std::shared_ptr<PDFDictionary> trailer(
             trailerP); // this should take care of the internally added ref...minor technicality
         mTrailer = trailer;
 
         status = BuildXrefTableFromTable();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
     else if (anObject->GetType() == PDFObject::ePDFObjectInteger &&
@@ -1254,7 +1254,7 @@ EStatusCode PDFParser::ParseFileDirectory()
     {
         // Xref stream case
         status = BuildXrefTableAndTrailerFromXrefStream(std::static_pointer_cast<PDFInteger>(anObject)->GetValue());
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             return status;
     }
     else
@@ -1271,7 +1271,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
     // xref stream is trailer and stream togather. need to parse them both.
     // the object parser is now after the object ID. so verify that next we goot a version and the obj keyword
     // then parse the xref stream
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     PDFObjectCastPtr<PDFInteger> versionObject(mObjectParser.ParseNewObject());
 
@@ -1281,7 +1281,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
         {
             TRACE_LOG(
                 "PDFParser::BuildXrefTableAndTrailerFromXrefStream, failed to read xref object declaration, Version");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1291,7 +1291,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
         {
             TRACE_LOG("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failed to read xref object declaration, obj "
                       "keyword");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1300,7 +1300,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
             TRACE_LOG1("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failed to read xref object declaration, "
                        "expected obj keyword found %s",
                        objKeyword->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1312,7 +1312,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
         if (!xrefStream)
         {
             TRACE_LOG("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failure to parse xref stream");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1322,24 +1322,24 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
         mTrailer = xrefDictionary;
 
         status = DetermineXrefSize();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = InitializeXref();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (mTrailer->Exists("Prev"))
         {
             status = ParsePreviousXrefs(mTrailer);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
                 break;
         }
 
         XrefEntryInput *extendedTable = nullptr;
         ObjectIDType extendedTableSize;
         status = ParseXrefFromXrefStream(mXrefTable, mXrefSize, xrefStream, &extendedTable, &extendedTableSize);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // Table may have been extended, in which case replace the pointer and current size
@@ -1359,7 +1359,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
                                                long long inXrefPosition, XrefEntryInput **outExtendedTable,
                                                ObjectIDType *outExtendedTableSize)
 {
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     MovePositionInStream(inXrefPosition);
 
@@ -1371,7 +1371,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         {
             TRACE_LOG1("PDFParser::ParseXrefFromXrefStream, expecting object number for xref stream at %ld",
                        inXrefPosition);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1380,7 +1380,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         if (!versionObject)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, failed to read xref object declaration, Version");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1391,7 +1391,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         if (!objKeyword)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, failed to read xref object declaration, obj keyword");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1400,7 +1400,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             TRACE_LOG1("PDFParser::ParseXrefFromXrefStream, failed to read xref object declaration, expected obj "
                        "keyword found %s",
                        objKeyword->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1408,7 +1408,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         if (!xrefStream)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, failure to parse xref stream");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1430,7 +1430,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
     // right position in the table
     //    The entries are read using the "W" value. make sure to read even values that you don't need.
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     outExtendedTable = nullptr;
 
@@ -1441,7 +1441,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
     {
         if (xrefStreamSource == nullptr)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1452,7 +1452,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         if (!wArray)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, W array not available. failing");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1464,12 +1464,12 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             {
                 TRACE_LOG(
                     "PDFParser::ParseXrefFromXrefStream, wrong items in width array (supposed to have only integers)");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             widthsArray[i] = (int)widthObject->GetValue();
         }
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         // read the segments from the stream
@@ -1482,7 +1482,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             if (!xrefSize)
             {
                 TRACE_LOG("PDFParser::ParseXrefFromXrefStream, xref size does not exist for this stream");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
 
@@ -1509,14 +1509,14 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         {
             SingleValueContainerIterator<PDFObjectVector> segmentsIterator = subsectionsIndex->GetIterator();
             PDFObjectCastPtr<PDFInteger> segmentValue;
-            while (segmentsIterator.MoveNext() && PDFHummus::eSuccess == status)
+            while (segmentsIterator.MoveNext() && charta::eSuccess == status)
             {
                 segmentValue = segmentsIterator.GetItem();
                 if (!segmentValue)
                 {
                     TRACE_LOG(
                         "PDFParser::ParseXrefFromXrefStream, found non integer value in Index array of xref stream");
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 auto startObject = (ObjectIDType)segmentValue->GetValue();
@@ -1524,7 +1524,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
                 {
                     TRACE_LOG("PDFParser::ParseXrefFromXrefStream,Index array of xref stream should have an even "
                               "number of values");
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
 
@@ -1533,7 +1533,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
                 {
                     TRACE_LOG(
                         "PDFParser::ParseXrefFromXrefStream, found non integer value in Index array of xref stream");
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 auto objectsCount = (ObjectIDType)segmentValue->GetValue();
@@ -1575,28 +1575,28 @@ EStatusCode PDFParser::ReadXrefStreamSegment(XrefEntryInput *inXrefTable, Object
                                              unsigned long inEntryWidthsSize)
 {
     ObjectIDType objectToRead = inSegmentStartObject;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     if (inEntryWidthsSize != 3)
     {
         TRACE_LOG("PDFParser::ReadXrefStreamSegment, can handle only 3 length entries");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // Note - i'm also checking that the stream is not ended. in non-finite segments, it could be that the particular
     // stream does no define all objects...just the "updated" ones
-    for (; (objectToRead < inSegmentStartObject + inSegmentCount) && PDFHummus::eSuccess == status &&
-           inReadFrom->NotEnded();
+    for (;
+         (objectToRead < inSegmentStartObject + inSegmentCount) && charta::eSuccess == status && inReadFrom->NotEnded();
          ++objectToRead)
     {
         long long entryType;
         status = ReadXrefSegmentValue(inReadFrom, inEntryWidths[0], entryType);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
         status = ReadXrefSegmentValue(inReadFrom, inEntryWidths[1], inXrefTable[objectToRead].mObjectPosition);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
         status = ReadXrefSegmentValue(inReadFrom, inEntryWidths[2], inXrefTable[objectToRead].mRivision);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         if (0 == entryType)
@@ -1614,7 +1614,7 @@ EStatusCode PDFParser::ReadXrefStreamSegment(XrefEntryInput *inXrefTable, Object
         else
         {
             TRACE_LOG("PDFParser::ReadXrefStreamSegment, unfamiliar entry type. must be either 0,1 or 2");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
         }
     }
     return status;
@@ -1624,12 +1624,12 @@ EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySi
 {
     outValue = 0;
     uint8_t buffer;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (int i = 0; i < inEntrySize && PDFHummus::eSuccess == status; ++i)
+    for (int i = 0; i < inEntrySize && charta::eSuccess == status; ++i)
     {
-        status = (inSource->Read(&buffer, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
-        if (status != PDFHummus::eFailure)
+        status = (inSource->Read(&buffer, 1) == 1 ? charta::eSuccess : charta::eFailure);
+        if (status != charta::eFailure)
             outValue = (outValue << 8) + buffer;
     }
     return status;
@@ -1639,12 +1639,12 @@ EStatusCode PDFParser::ReadXrefSegmentValue(IByteReader *inSource, int inEntrySi
 {
     outValue = 0;
     uint8_t buffer;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    for (int i = 0; i < inEntrySize && PDFHummus::eSuccess == status; ++i)
+    for (int i = 0; i < inEntrySize && charta::eSuccess == status; ++i)
     {
-        status = (inSource->Read(&buffer, 1) == 1 ? PDFHummus::eSuccess : PDFHummus::eFailure);
-        if (status != PDFHummus::eFailure)
+        status = (inSource->Read(&buffer, 1) == 1 ? charta::eSuccess : charta::eFailure);
+        if (status != charta::eFailure)
             outValue = (outValue << 8) + buffer;
     }
     return status;
@@ -1660,7 +1660,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
     // 5. Jump to the right object position (or decode till its position)
     // 6. Read the object
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     ObjectStreamHeaderEntry *objectStreamHeader;
     IByteReader *objectSource = nullptr;
 
@@ -1677,7 +1677,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
             TRACE_LOG2("PDFParser::ParseExistingInDirectStreamObject, failed to parse object %ld. failed to find "
                        "object stream for it, which should be %ld",
                        inObjectId, mXrefTable[inObjectId].mObjectPosition);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1688,7 +1688,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
         {
             TRACE_LOG1("PDFParser::ParseExistingInDirectStreamObject, no N key in stream dictionary %ld",
                        objectStreamID);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         auto objectsCount = (ObjectIDType)streamObjectsCount->GetValue();
@@ -1698,7 +1698,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
         {
             TRACE_LOG1("PDFParser::ParseExistingInDirectStreamObject, no First key in stream dictionary %ld",
                        objectStreamID);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1714,7 +1714,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
         {
             objectStreamHeader = new ObjectStreamHeaderEntry[objectsCount];
             status = ParseObjectStreamHeader(objectStreamHeader, objectsCount);
-            if (status != PDFHummus::eSuccess)
+            if (status != charta::eSuccess)
             {
                 delete[] objectStreamHeader;
                 break;
@@ -1735,7 +1735,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
                 objectsCount <= mXrefTable[inObjectId].mRivision
                     ? -1
                     : objectStreamHeader[mXrefTable[inObjectId].mRivision].mObjectNumber);
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1782,16 +1782,16 @@ void PDFParser::NotifyIndirectObjectEnd(const std::shared_ptr<PDFObject> &inObje
 EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount)
 {
     ObjectIDType currentObject = 0;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
-    while (currentObject < inObjectsCount && (PDFHummus::eSuccess == status))
+    while (currentObject < inObjectsCount && (charta::eSuccess == status))
     {
         PDFObjectCastPtr<PDFInteger> objectNumber(mObjectParser.ParseNewObject());
         if (!objectNumber)
         {
             TRACE_LOG("PDFParser::ParseObjectStreamHeader, parsing failed when reading object number. either not "
                       "enough objects, or of the wrong type");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1800,7 +1800,7 @@ EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeader
         {
             TRACE_LOG("PDFParser::ParseObjectStreamHeader, parsing failed when reading object position. either not "
                       "enough objects, or of the wrong type");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
         inHeaderInfo[currentObject].mObjectNumber = (ObjectIDType)(objectNumber->GetValue());
@@ -1836,7 +1836,7 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -1846,7 +1846,7 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
         if (!lengthObject)
         {
             TRACE_LOG("PDFParser::CreateInputStreamReader, stream does not have length, failing");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -1872,7 +1872,7 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
                 {
                     TRACE_LOG(
                         "PDFParser::CreateInputStreamReader, filter item in an array is not a name. should be a name");
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
 
@@ -1892,7 +1892,7 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
 
                 if (createStatus.first != eSuccess)
                 {
-                    status = PDFHummus::eFailure;
+                    status = charta::eFailure;
                     break;
                 }
                 result = createStatus.second;
@@ -1907,7 +1907,7 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
                                                       !decodeParams ? nullptr : decodeParams, inStream);
             if (createStatus.first != eSuccess)
             {
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             result = createStatus.second;
@@ -1916,13 +1916,13 @@ IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamI
         {
             TRACE_LOG("PDFParser::CreateInputStreamReader, filter parameter is of unkown type. only array and name are "
                       "supported.");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
     } while (false);
 
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         delete result;
         result = nullptr;
@@ -2005,7 +2005,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
             default: {
                 TRACE_LOG("PDFParser::CreateFilterForStream, supporting only predictor of types 1,2,10,11,12,13,14,15, "
                           "failing");
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
             }
@@ -2038,7 +2038,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
             {
                 TRACE_LOG1("PDFParser::CreateFilterForStream, filter is not supported by extender - %s",
                            inFilterName->GetValue().substr(0, MAX_TRACE_SIZE - 200).c_str());
-                status = PDFHummus::eFailure;
+                status = charta::eFailure;
                 break;
             }
         }
@@ -2046,12 +2046,12 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(IByteReader *inStream
         {
             TRACE_LOG("PDFParser::CreateFilterForStream, supporting only flate decode, lzw, dct, crypt and ascii "
                       "85+hex decode, failing");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
     } while (false);
 
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         delete result;
         result = nullptr;
@@ -2099,7 +2099,7 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared
 {
     std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     IByteReader *result = nullptr;
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -2108,7 +2108,7 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared
         if (!lengthObject)
         {
             TRACE_LOG("PDFParser::CreateInputStreamReaderForPlainCopying, stream does not have length, failing");
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -2118,7 +2118,7 @@ IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared
 
     } while (false);
 
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
     {
         delete result;
         result = nullptr;
@@ -2152,15 +2152,15 @@ EStatusCode PDFParser::StartStateFileParsing(IByteReaderWithPosition *inSourceSt
         mLastAvailableIndex = mCurrentBufferIndex = mLinesBuffer;
 
         status = ParseEOFLine();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ParseLastXrefPosition();
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
         status = ParseFileDirectory(); // that would be the xref and trailer
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
             break;
 
     } while (false);

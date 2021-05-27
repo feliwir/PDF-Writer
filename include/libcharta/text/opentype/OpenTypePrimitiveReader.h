@@ -33,22 +33,22 @@ class OpenTypePrimitiveReader
     void SetOffset(long long inNewOffset);
     void Skip(size_t inToSkip);
     long long GetCurrentPosition();
-    PDFHummus::EStatusCode GetInternalState();
+    charta::EStatusCode GetInternalState();
 
-    PDFHummus::EStatusCode ReadBYTE(unsigned char &outValue);
-    PDFHummus::EStatusCode ReadCHAR(char &outValue);
-    PDFHummus::EStatusCode ReadUSHORT(uint16_t &outValue);
-    PDFHummus::EStatusCode ReadSHORT(short &outValue);
-    PDFHummus::EStatusCode ReadULONG(unsigned long &outValue);
-    PDFHummus::EStatusCode ReadLONG(long &outValue);
-    PDFHummus::EStatusCode ReadLongDateTime(long long &outValue);
-    PDFHummus::EStatusCode ReadFixed(double &outValue);
-    PDFHummus::EStatusCode Read(uint8_t *inBuffer, size_t inBufferSize);
+    charta::EStatusCode ReadBYTE(unsigned char &outValue);
+    charta::EStatusCode ReadCHAR(char &outValue);
+    charta::EStatusCode ReadUSHORT(uint16_t &outValue);
+    charta::EStatusCode ReadSHORT(short &outValue);
+    charta::EStatusCode ReadULONG(unsigned long &outValue);
+    charta::EStatusCode ReadLONG(long &outValue);
+    charta::EStatusCode ReadLongDateTime(long long &outValue);
+    charta::EStatusCode ReadFixed(double &outValue);
+    charta::EStatusCode Read(uint8_t *inBuffer, size_t inBufferSize);
 
     IByteReaderWithPosition *GetReadStream();
 
   private:
     IByteReaderWithPosition *mOpenTypeFile;
     long long mInitialPosition;
-    PDFHummus::EStatusCode mInternalState;
+    charta::EStatusCode mInternalState;
 };

@@ -27,7 +27,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-using namespace PDFHummus;
+using namespace charta;
 
 EStatusCode RunTest(bool inUseAES)
 {
@@ -43,12 +43,12 @@ EStatusCode RunTest(bool inUseAES)
         inUseAES ? ePDFVersion16 : ePDFVersion14, logConfiguration,
         PDFCreationSettings(true, true,
                             EncryptionOptions("user", 4, "owner"))); // 4 should translate to -3900 in actual PDF
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     // create simple page
     PDFPage page;
-    page.SetMediaBox(PDFHummus::PagePresets::A4_Portrait);
+    page.SetMediaBox(charta::PagePresets::A4_Portrait);
 
     PageContentContext *cxt = pdfWriter.StartPageContentContext(page);
 
@@ -62,12 +62,12 @@ EStatusCode RunTest(bool inUseAES)
     cxt->WriteText(10, 50, "Hello", textOptions);
 
     status = pdfWriter.EndPageContentContext(cxt);
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     status = pdfWriter.WritePage(page);
 
-    if (status != PDFHummus::eSuccess)
+    if (status != charta::eSuccess)
         return status;
 
     return pdfWriter.EndPDF();

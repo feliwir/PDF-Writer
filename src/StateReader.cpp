@@ -23,7 +23,7 @@
 #include "objects/PDFIndirectObjectReference.h"
 #include "objects/PDFObjectCast.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 StateReader::StateReader() = default;
 
@@ -32,23 +32,23 @@ StateReader::~StateReader() = default;
 EStatusCode StateReader::Start(const std::string &inStateFilePath)
 {
     // open the new file...
-    if (mInputFile.OpenFile(inStateFilePath) != PDFHummus::eSuccess)
+    if (mInputFile.OpenFile(inStateFilePath) != charta::eSuccess)
     {
         TRACE_LOG1("StateReader::Start, can't open file for state reading in %s", inStateFilePath.c_str());
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
-    if (mParser.StartStateFileParsing(mInputFile.GetInputStream()) != PDFHummus::eSuccess)
+    if (mParser.StartStateFileParsing(mInputFile.GetInputStream()) != charta::eSuccess)
     {
         TRACE_LOG("StateReader::Start, unable to start parsing for the state reader file");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
 
     // set the root object
     PDFObjectCastPtr<PDFIndirectObjectReference> rootObject(mParser.GetTrailer()->QueryDirectObject("Root"));
     mRootObject = rootObject->mObjectID;
 
-    return PDFHummus::eSuccess;
+    return charta::eSuccess;
 }
 
 PDFParser *StateReader::GetObjectsReader()

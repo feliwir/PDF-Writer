@@ -36,7 +36,7 @@
 #include "objects/PDFPageInput.h"
 #include "parsing/PDFDocumentCopyingContext.h"
 
-using namespace PDFHummus;
+using namespace charta;
 
 const LogConfiguration &LogConfiguration::DefaultLogConfiguration()
 {
@@ -776,7 +776,7 @@ std::pair<double, double> PDFWriter::GetImageDimensions(IByteReaderWithPosition 
     return mDocumentContext.GetImageDimensions(inImageStream, inImageIndex, inParsingOptions);
 }
 
-PDFHummus::EHummusImageType PDFWriter::GetImageType(const std::string &inImageFile, unsigned long inImageIndex)
+charta::EHummusImageType PDFWriter::GetImageType(const std::string &inImageFile, unsigned long inImageIndex)
 {
     return mDocumentContext.GetImageType(inImageFile, inImageIndex);
 }
@@ -786,11 +786,11 @@ unsigned long PDFWriter::GetImagePagesCount(const std::string &inImageFile, cons
     return mDocumentContext.GetImagePagesCount(inImageFile, inOptions);
 }
 
-PDFHummus::EStatusCode PDFWriter::RecryptPDF(const std::string &inOriginalPDFPath,
-                                             const std::string &inOriginalPDFPassword, const std::string &inNewPDFPath,
-                                             const LogConfiguration &inLogConfiguration,
-                                             const PDFCreationSettings &inPDFCreationSettings,
-                                             EPDFVersion inOveridePDFVersion)
+charta::EStatusCode PDFWriter::RecryptPDF(const std::string &inOriginalPDFPath,
+                                          const std::string &inOriginalPDFPassword, const std::string &inNewPDFPath,
+                                          const LogConfiguration &inLogConfiguration,
+                                          const PDFCreationSettings &inPDFCreationSettings,
+                                          EPDFVersion inOveridePDFVersion)
 {
 
     InputFile originalPDF;
@@ -808,12 +808,12 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(const std::string &inOriginalPDFPat
                                  inLogConfiguration, inPDFCreationSettings, inOveridePDFVersion);
 }
 
-PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
-                                             const std::string &inOriginalPDFPassword,
-                                             IByteWriterWithPosition *inNewPDFStream,
-                                             const LogConfiguration &inLogConfiguration,
-                                             const PDFCreationSettings &inPDFCreationSettings,
-                                             EPDFVersion inOveridePDFVersion)
+charta::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginalPDFStream,
+                                          const std::string &inOriginalPDFPassword,
+                                          IByteWriterWithPosition *inNewPDFStream,
+                                          const LogConfiguration &inLogConfiguration,
+                                          const PDFCreationSettings &inPDFCreationSettings,
+                                          EPDFVersion inOveridePDFVersion)
 {
     PDFWriter pdfWriter;
     EStatusCode status;
@@ -832,7 +832,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
             pdfWriter.CreatePDFCopyingContext(inOriginalPDFStream, PDFParsingOptions(inOriginalPDFPassword));
         if (copyingContext == nullptr)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -843,7 +843,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
                 ? EPDFVersion((int)(copyingContext->GetSourceDocumentParser()->GetPDFLevel() * 10))
                 : inOveridePDFVersion,
             inLogConfiguration, inPDFCreationSettings);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             break;
         }
@@ -853,7 +853,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
             copyingContext->GetSourceDocumentParser()->GetTrailer()->QueryDirectObject("Root"));
         if (!catalogRef)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -861,7 +861,7 @@ PDFHummus::EStatusCode PDFWriter::RecryptPDF(IByteReaderWithPosition *inOriginal
         EStatusCodeAndObjectIDType copyCatalogResult = copyingContext->CopyObject(catalogRef->mObjectID);
         if (copyCatalogResult.first != eSuccess)
         {
-            status = PDFHummus::eFailure;
+            status = charta::eFailure;
             break;
         }
 

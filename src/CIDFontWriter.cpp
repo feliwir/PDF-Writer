@@ -35,7 +35,7 @@
 
 #include <algorithm>
 
-using namespace PDFHummus;
+using namespace charta;
 
 CIDFontWriter::CIDFontWriter() = default;
 
@@ -55,7 +55,7 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFon
                                      bool inEmbedFont)
 {
 
-    EStatusCode status = PDFHummus::eSuccess;
+    EStatusCode status = charta::eSuccess;
     inObjectsContext->StartNewIndirectObject(inFontOccurrence->mWrittenObjectID);
 
     mFontInfo = &inFontInfo;
@@ -78,7 +78,7 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFon
     if (postscriptFontName.length() == 0)
     {
         TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. no postscript font name for font");
-        return PDFHummus::eFailure;
+        return charta::eFailure;
     }
     std::string fontName =
         inEmbedFont ? (inObjectsContext->GenerateSubsetFontPrefix() + scPlus + postscriptFontName) : postscriptFontName;
@@ -105,7 +105,7 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFon
         fontContext->WriteNewObjectReferenceValue(toUnicodeMapObjectID);
 
         status = inObjectsContext->EndDictionary(fontContext);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
             return status;
@@ -117,7 +117,7 @@ EStatusCode CIDFontWriter::WriteFont(FreeTypeFaceWrapper &inFontInfo, WrittenFon
     {
         // else just finish font writing (a bit of an edge case here...but should take care of, for cleanliness)
         status = inObjectsContext->EndDictionary(fontContext);
-        if (status != PDFHummus::eSuccess)
+        if (status != charta::eSuccess)
         {
             TRACE_LOG("CIDFontWriter::WriteFont, unexpected failure. Failed to end dictionary in font write.");
             return status;

@@ -23,7 +23,7 @@
 #include "Trace.h"
 #include <gtest/gtest.h>
 
-using namespace PDFHummus;
+using namespace charta;
 
 TEST(IO, Log)
 {
