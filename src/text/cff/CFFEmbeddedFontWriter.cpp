@@ -562,8 +562,8 @@ EStatusCode CFFEmbeddedFontWriter::WriteGlobalSubrsIndex()
     return mPrimitivesWriter.WriteCard16(0);
 }
 
-typedef std::pair<uint8_t, uint16_t> ByteAndUShort;
-typedef std::list<ByteAndUShort> ByteAndUShortList;
+using ByteAndUShort = std::pair<uint8_t, uint16_t>;
+using ByteAndUShortList = std::list<ByteAndUShort>;
 
 EStatusCode CFFEmbeddedFontWriter::WriteEncodings(const UIntVector &inSubsetGlyphIDs)
 {
@@ -748,9 +748,9 @@ EStatusCode CFFEmbeddedFontWriter::WritePrivateDictionaryBody(const PrivateDictI
     return charta::eSuccess;
 }
 
-typedef std::set<FontDictInfo *> FontDictInfoSet;
-typedef std::pair<long long, long long> LongFilePositionTypePair;
-typedef std::map<FontDictInfo *, LongFilePositionTypePair> FontDictInfoToLongFilePositionTypePairMap;
+using FontDictInfoSet = std::set<FontDictInfo *>;
+using LongFilePositionTypePair = std::pair<long long, long long>;
+using FontDictInfoToLongFilePositionTypePairMap = std::map<FontDictInfo *, LongFilePositionTypePair>;
 
 void CFFEmbeddedFontWriter::DetermineFDArrayIndexes(const UIntVector &inSubsetGlyphIDs,
                                                     FontDictInfoToByteMap &outNewFontDictsIndexes) const

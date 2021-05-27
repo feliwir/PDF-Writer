@@ -114,11 +114,9 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
         auto aDictionary(std::static_pointer_cast<PDFStreamInput>(inObject)->QueryStreamDictionary());
         return IterateObjectTypes(aDictionary, inParser, inOutput);
     }
-    else
-    {
-        primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
-        return charta::eSuccess;
-    }
+
+    primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
+    return charta::eSuccess;
 }
 
 TEST(PDFEmbedding, PDFParser)

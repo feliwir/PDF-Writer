@@ -132,7 +132,7 @@ PDFUsedFont *UsedFontsRepository::GetFontForFile(const std::string &inFontFilePa
     return GetFontForFile(inFontFilePath, "", inFontIndex);
 }
 
-typedef std::list<ObjectIDType> ObjectIDTypeList;
+using ObjectIDTypeList = std::list<ObjectIDType>;
 EStatusCode UsedFontsRepository::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
     EStatusCode status = charta::eSuccess;

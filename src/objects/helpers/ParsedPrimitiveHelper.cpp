@@ -73,7 +73,7 @@ bool ParsedPrimitiveHelper::IsNumber()
            mWrappedObject->GetType() == PDFObject::ePDFObjectReal;
 }
 
-typedef BoxingBaseWithRW<long long> LongLong;
+using LongLong = BoxingBaseWithRW<long long>;
 
 // strings (relevant for: names, literal string, hex string, real, integer, symbol, boolean)
 std::string ParsedPrimitiveHelper::ToString()

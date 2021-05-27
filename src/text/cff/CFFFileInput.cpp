@@ -1019,7 +1019,7 @@ EStatusCode CFFFileInput::ReadLocalSubrsForPrivateDict(PrivateDictInfo *inPrivat
     return status;
 }
 
-typedef std::map<long long, CharSetInfo *> LongFilePositionTypeToCharSetInfoMap;
+using LongFilePositionTypeToCharSetInfoMap = std::map<long long, CharSetInfo *>;
 
 static const uint16_t scROS = 0xC1E;
 EStatusCode CFFFileInput::ReadCharsets()
@@ -1072,7 +1072,7 @@ EStatusCode CFFFileInput::ReadCharsets()
     return mPrimitivesReader.GetInternalState();
 }
 
-typedef std::map<long long, EncodingsInfo *> LongFilePositionTypeToEncodingsInfoMap;
+using LongFilePositionTypeToEncodingsInfoMap = std::map<long long, EncodingsInfo *>;
 
 EStatusCode CFFFileInput::ReadEncodings()
 {

@@ -22,7 +22,7 @@
 #include "BoxingBase.h"
 #include "PDFImageXObject.h"
 
-typedef BoxingBaseWithRW<unsigned long> ULong;
+using ULong = BoxingBaseWithRW<unsigned long>;
 
 ResourcesDictionary::ResourcesDictionary()
 {

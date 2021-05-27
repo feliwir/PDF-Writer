@@ -337,7 +337,7 @@ EStatusCode AbstractWrittenFont::WriteStateAfterDictionary(ObjectsContext *inSta
     return status;
 }
 
-typedef std::list<ObjectIDType> ObjectIDTypeList;
+using ObjectIDTypeList = std::list<ObjectIDType>;
 
 EStatusCode AbstractWrittenFont::WriteWrittenFontState(WrittenFontRepresentation *inRepresentation,
                                                        ObjectsContext *inStateWriter, ObjectIDType inObjectID)

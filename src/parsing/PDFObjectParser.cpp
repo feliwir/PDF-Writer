@@ -102,10 +102,10 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
     if (IsBoolean(token))
         return ParseBoolean(token);
     // Literal String
-    else if (IsLiteralString(token))
+    if (IsLiteralString(token))
         return ParseLiteralString(token);
     // Hexadecimal String
-    else if (IsHexadecimalString(token))
+    if (IsHexadecimalString(token))
         return ParseHexadecimalString(token);
     // NULL
     else if (IsNull(token))
@@ -516,7 +516,7 @@ bool PDFObjectParser::IsNumber(const std::string &inToken)
     return isNumber;
 }
 
-typedef BoxingBaseWithRW<long long> LongLong;
+using LongLong = BoxingBaseWithRW<long long>;
 
 std::shared_ptr<PDFObject> PDFObjectParser::ParseNumber(const std::string &inToken)
 {

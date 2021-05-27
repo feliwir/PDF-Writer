@@ -43,7 +43,7 @@
 using namespace charta;
 using namespace std;
 
-typedef list<PDFImageXObject *> PDFImageXObjectList;
+using PDFImageXObjectList = list<PDFImageXObject *>;
 
 PNGImageHandler::PNGImageHandler()
 {

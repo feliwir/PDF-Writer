@@ -534,9 +534,9 @@ EStatusCode PDFParser::InitializeXref()
     return charta::eSuccess;
 }
 
-typedef BoxingBaseWithRW<ObjectIDType> ObjectIDTypeBox;
-typedef BoxingBaseWithRW<unsigned long> ULong;
-typedef BoxingBaseWithRW<long long> LongFilePositionTypeBox;
+using ObjectIDTypeBox = BoxingBaseWithRW<ObjectIDType>;
+using ULong = BoxingBaseWithRW<unsigned long>;
+using LongFilePositionTypeBox = BoxingBaseWithRW<long long>;
 
 static const std::string scXref = "xref";
 EStatusCode PDFParser::ParseXrefFromXrefTable(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,

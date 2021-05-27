@@ -183,7 +183,7 @@ charta::EStatusCode IndirectObjectsReferenceRegistry::MarkObjectAsUpdated(Object
     return charta::eSuccess;
 }
 
-typedef std::list<ObjectIDType> ObjectIDTypeList;
+using ObjectIDTypeList = std::list<ObjectIDType>;
 
 EStatusCode IndirectObjectsReferenceRegistry::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
