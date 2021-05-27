@@ -24,18 +24,17 @@
 #include <stdint.h>
 #include <stdio.h>
 
-struct JPEGImageInformation;
 namespace charta
 {
 class IByteReaderWithPosition;
-};
+struct JPEGImageInformation;
 
 struct TwoLevelStatus
 {
-    charta::EStatusCode primary;
-    charta::EStatusCode secondary;
+    EStatusCode primary;
+    EStatusCode secondary;
 
-    TwoLevelStatus(charta::EStatusCode inPrimary, charta::EStatusCode inSecondary)
+    TwoLevelStatus(EStatusCode inPrimary, EStatusCode inSecondary)
     {
         primary = inPrimary;
         secondary = inSecondary;
@@ -43,7 +42,7 @@ struct TwoLevelStatus
 
     bool eitherBad()
     {
-        return primary != charta::eSuccess || secondary != charta::eSuccess;
+        return primary != eSuccess || secondary != eSuccess;
     }
 };
 
@@ -53,36 +52,36 @@ class JPEGImageParser
     JPEGImageParser(void);
     ~JPEGImageParser(void) = default;
 
-    charta::EStatusCode Parse(charta::IByteReaderWithPosition *inImageStream,
-                              JPEGImageInformation &outImageInformation);
+    EStatusCode Parse(IByteReaderWithPosition *inImageStream, JPEGImageInformation &outImageInformation);
 
   private:
-    charta::IByteReaderWithPosition *mImageStream;
+    IByteReaderWithPosition *mImageStream;
     uint8_t mReadBuffer[500];
 
-    charta::EStatusCode ReadJPEGID();
-    charta::EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
+    EStatusCode ReadJPEGID();
+    EStatusCode ReadStreamToBuffer(unsigned long inAmountToRead);
     TwoLevelStatus ReadStreamToBuffer(unsigned long inAmountToRead, unsigned long &refReadLimit);
-    charta::EStatusCode ReadJpegTag(uint32_t &outTagID);
-    charta::EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
+    EStatusCode ReadJpegTag(uint32_t &outTagID);
+    EStatusCode ReadSOF0Data(JPEGImageInformation &outImageInformation);
     uint32_t GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian = false);
     void SkipStream(unsigned long inSkip);
-    charta::EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
-    charta::EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
-    charta::EStatusCode ReadPhotoshopData(JPEGImageInformation &outImageInformation, bool outPhotoshopDataOK);
-    charta::EStatusCode ReadExifData(JPEGImageInformation &outImageInformation);
-    charta::EStatusCode GetResolutionFromExif(JPEGImageInformation &outImageInformation,
-                                              unsigned long inXResolutionOffset, unsigned long inYResolutionOffset,
-                                              unsigned long &inoutOffset, bool inUseLittleEndian);
-    charta::EStatusCode ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian);
-    charta::EStatusCode ReadExifID();
-    charta::EStatusCode IsBigEndianExif(bool &outIsBigEndian);
-    charta::EStatusCode ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian = false);
-    charta::EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
-    charta::EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
+    EStatusCode SkipStream(unsigned long inSkip, unsigned long &refReadLimit);
+    EStatusCode ReadJFIFData(JPEGImageInformation &outImageInformation);
+    EStatusCode ReadPhotoshopData(JPEGImageInformation &outImageInformation, bool outPhotoshopDataOK);
+    EStatusCode ReadExifData(JPEGImageInformation &outImageInformation);
+    EStatusCode GetResolutionFromExif(JPEGImageInformation &outImageInformation, unsigned long inXResolutionOffset,
+                                      unsigned long inYResolutionOffset, unsigned long &inoutOffset,
+                                      bool inUseLittleEndian);
+    EStatusCode ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian);
+    EStatusCode ReadExifID();
+    EStatusCode IsBigEndianExif(bool &outIsBigEndian);
+    EStatusCode ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian = false);
+    EStatusCode SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit);
+    EStatusCode ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian);
     TwoLevelStatus ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,
                                  bool inUseLittleEndian = false);
     unsigned long GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian);
     double GetFractValue(const uint8_t *inBuffer);
-    charta::EStatusCode SkipTag();
+    EStatusCode SkipTag();
 };
+}; // namespace charta

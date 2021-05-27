@@ -32,19 +32,15 @@ class ObjectsContext;
 class PDFImageXObject;
 class IDocumentContextExtender;
 class PDFFormXObject;
+
 namespace charta
 {
 class IByteReaderWithPosition;
-};
-
-namespace charta
-{
 class DocumentContext;
-}
 
-typedef std::map<std::string, JPEGImageInformation> StringToJPEGImageInformationMap;
-typedef std::pair<bool, JPEGImageInformation> BoolAndJPEGImageInformation;
-typedef std::set<IDocumentContextExtender *> IDocumentContextExtenderSet;
+using StringToJPEGImageInformationMap = std::map<std::string, JPEGImageInformation>;
+using BoolAndJPEGImageInformation = std::pair<bool, JPEGImageInformation>;
+using IDocumentContextExtenderSet = std::set<IDocumentContextExtender *>;
 
 class JPEGImageHandler
 {
@@ -54,23 +50,22 @@ class JPEGImageHandler
 
     // use this for retrieving image information for JPEG (useful for deciphering JPG dimensions tags)
     BoolAndJPEGImageInformation RetrieveImageInformation(const std::string &inJPGFilePath);
-    BoolAndJPEGImageInformation RetrieveImageInformation(charta::IByteReaderWithPosition *inJPGStream);
+    BoolAndJPEGImageInformation RetrieveImageInformation(IByteReaderWithPosition *inJPGStream);
 
     // DocumentContext::CreateImageXObjectFromJPGFile are equivelent
     PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath);
-    PDFImageXObject *CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream);
+    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
     PDFImageXObject *CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inImageXObjectID);
-    PDFImageXObject *CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+    PDFImageXObject *CreateImageXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream,
                                                      ObjectIDType inImageXObjectID);
 
     // will return form XObject, which will include the xobject at it's size
     PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath);
-    PDFFormXObject *CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream);
     PDFFormXObject *CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath, ObjectIDType inFormXObjectID);
-    PDFFormXObject *CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
-                                                   ObjectIDType inFormXObjectID);
+    PDFFormXObject *CreateFormXObjectFromJPGStream(IByteReaderWithPosition *inJPGStream, ObjectIDType inFormXObjectID);
 
-    void SetOperationsContexts(charta::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
     void AddDocumentContextExtender(IDocumentContextExtender *inExtender);
     void RemoveDocumentContextExtender(IDocumentContextExtender *inExtender);
 
@@ -85,7 +80,7 @@ class JPEGImageHandler
     JPEGImageInformation mNullInformation;
     StringToJPEGImageInformationMap mImagesInformationMap;
     ObjectsContext *mObjectsContext;
-    charta::DocumentContext *mDocumentContext;
+    DocumentContext *mDocumentContext;
     IDocumentContextExtenderSet mExtenders;
 
     PDFImageXObject *CreateAndWriteImageXObjectFromJPGInformation(const std::string &inJPGFilePath,
@@ -98,3 +93,4 @@ class JPEGImageHandler
                                                            ObjectIDType inFormXObjectID,
                                                            const JPEGImageInformation &inJPGImageInformation);
 };
+} // namespace charta

@@ -35,30 +35,29 @@
 #include "io/InputFile.h"
 #include "io/OutputStreamTraits.h"
 
-using namespace charta;
-
-JPEGImageHandler::JPEGImageHandler()
+charta::JPEGImageHandler::JPEGImageHandler()
 {
     mObjectsContext = nullptr;
     mDocumentContext = nullptr;
 }
 
-JPEGImageHandler::~JPEGImageHandler() = default;
+charta::JPEGImageHandler::~JPEGImageHandler() = default;
 
-void JPEGImageHandler::Reset()
+void charta::JPEGImageHandler::Reset()
 {
     mImagesInformationMap.clear();
     mExtenders.clear();
 }
 
-void JPEGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext)
+void charta::JPEGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext,
+                                                     ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;
     mDocumentContext = inDocumentContext;
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath,
-                                                                 ObjectIDType inImageXObjectID)
+PDFImageXObject *charta::JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath,
+                                                                         ObjectIDType inImageXObjectID)
 {
     PDFImageXObject *imageXObject = nullptr;
 
@@ -68,8 +67,9 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::stri
         BoolAndJPEGImageInformation imageInformationResult = RetrieveImageInformation(inJPGFilePath);
         if (!imageInformationResult.first)
         {
-            TRACE_LOG1("JPEGImageHandler::CreateImageXObjectJPGFile, unable to retrieve image information for %s",
-                       inJPGFilePath.c_str());
+            TRACE_LOG1(
+                "charta::JPEGImageHandler::CreateImageXObjectJPGFile, unable to retrieve image information for %s",
+                inJPGFilePath.c_str());
             break;
         }
 
@@ -97,15 +97,15 @@ static const std::string scDecode = "Decode";
 static const std::string scBitsPerComponent = "BitsPerComponent";
 static const std::string scFilter = "Filter";
 static const std::string scDCTDecode = "DCTDecode";
-PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
+PDFImageXObject *charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     const std::string &inJPGFilePath, ObjectIDType inImageXObjectID, const JPEGImageInformation &inJPGImageInformation)
 {
     InputFile JPGFile;
     if (JPGFile.OpenFile(inJPGFilePath) != charta::eSuccess)
     {
-        TRACE_LOG1(
-            "JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unable to open JPG file for reading, %s",
-            inJPGFilePath.c_str());
+        TRACE_LOG1("charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unable to open JPG file "
+                   "for reading, %s",
+                   inJPGFilePath.c_str());
         return nullptr;
     }
 
@@ -117,7 +117,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     return imageXObject;
 }
 
-PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
+PDFImageXObject *charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     charta::IByteReaderWithPosition *inJPGImageStream, ObjectIDType inImageXObjectID,
     const JPEGImageInformation &inJPGImageInformation)
 {
@@ -128,7 +128,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     {
         if (mObjectsContext == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, "
+            TRACE_LOG("charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, "
                       "mObjectsContext not initialized with an objects context");
             break;
         }
@@ -182,9 +182,10 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
             break;
 
         default:
-            TRACE_LOG1("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, Unexpected Error, unfamilar "
-                       "color components count - %d",
-                       inJPGImageInformation.ColorComponentsCount);
+            TRACE_LOG1(
+                "charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, Unexpected Error, unfamilar "
+                "color components count - %d",
+                inJPGImageInformation.ColorComponentsCount);
             status = charta::eFailure;
             break;
         }
@@ -202,7 +203,7 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
             if ((*it)->OnJPEGImageXObjectWrite(inImageXObjectID, imageContext, mObjectsContext, mDocumentContext,
                                                this) != charta::eSuccess)
             {
-                TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, unexpected failure. "
+                TRACE_LOG("charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation, unexpected failure. "
                           "extender declared failure when writing image xobject.");
                 status = charta::eFailure;
                 break;
@@ -217,8 +218,9 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
         status = outputTraits.CopyToOutputStream(inJPGImageStream);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG("JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, failed to "
-                      "copy jpg stream to output stream");
+            TRACE_LOG(
+                "charta::JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation. Unexpected Error, failed to "
+                "copy jpg stream to output stream");
 
             break;
         }
@@ -232,7 +234,8 @@ PDFImageXObject *JPEGImageHandler::CreateAndWriteImageXObjectFromJPGInformation(
     return imageXObject;
 }
 
-BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(charta::IByteReaderWithPosition *inJPGStream)
+charta::BoolAndJPEGImageInformation charta::JPEGImageHandler::RetrieveImageInformation(
+    charta::IByteReaderWithPosition *inJPGStream)
 {
     BoolAndJPEGImageInformation imageInformationResult(false, mNullInformation);
 
@@ -244,7 +247,7 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(charta::I
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG("JPEGImageHandler::JPEGImageHandler. Failed to parse JPG stream");
+            TRACE_LOG("charta::JPEGImageHandler::JPEGImageHandler. Failed to parse JPG stream");
             break;
         }
 
@@ -255,7 +258,7 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(charta::I
     return imageInformationResult;
 }
 
-BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std::string &inJPGFilePath)
+charta::BoolAndJPEGImageInformation charta::JPEGImageHandler::RetrieveImageInformation(const std::string &inJPGFilePath)
 {
     BoolAndJPEGImageInformation imageInformationResult(false, mNullInformation);
 
@@ -268,7 +271,7 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std
             EStatusCode status = JPGFile.OpenFile(inJPGFilePath);
             if (status != charta::eSuccess)
             {
-                TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Unable to open JPG file for reading, %s",
+                TRACE_LOG1("charta::JPEGImageHandler::JPEGImageHandler. Unable to open JPG file for reading, %s",
                            inJPGFilePath.c_str());
                 break;
             }
@@ -279,14 +282,16 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std
             status = jpgImageParser.Parse(JPGFile.GetInputStream(), imageInformation);
             if (status != charta::eSuccess)
             {
-                TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Failed to parse JPG file, %s", inJPGFilePath.c_str());
+                TRACE_LOG1("charta::JPEGImageHandler::JPEGImageHandler. Failed to parse JPG file, %s",
+                           inJPGFilePath.c_str());
                 break;
             }
 
             status = JPGFile.CloseFile();
             if (status != charta::eSuccess)
             {
-                TRACE_LOG1("JPEGImageHandler::JPEGImageHandler. Failed to close JPG file, %s", inJPGFilePath.c_str());
+                TRACE_LOG1("charta::JPEGImageHandler::JPEGImageHandler. Failed to close JPG file, %s",
+                           inJPGFilePath.c_str());
                 break;
             }
 
@@ -304,18 +309,18 @@ BoolAndJPEGImageInformation JPEGImageHandler::RetrieveImageInformation(const std
     return imageInformationResult;
 }
 
-void JPEGImageHandler::AddDocumentContextExtender(IDocumentContextExtender *inExtender)
+void charta::JPEGImageHandler::AddDocumentContextExtender(IDocumentContextExtender *inExtender)
 {
     mExtenders.insert(inExtender);
 }
 
-void JPEGImageHandler::RemoveDocumentContextExtender(IDocumentContextExtender *inExtender)
+void charta::JPEGImageHandler::RemoveDocumentContextExtender(IDocumentContextExtender *inExtender)
 {
     mExtenders.erase(inExtender);
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath,
-                                                               ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath,
+                                                                       ObjectIDType inFormXObjectID)
 {
     PDFImageXObject *imageXObject = nullptr;
     PDFFormXObject *imageFormXObject = nullptr;
@@ -324,7 +329,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
     {
         if (mObjectsContext == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGFile. Unexpected Error, mDocumentContex not "
+            TRACE_LOG("charta::JPEGImageHandler::CreateFormXObjectFromJPGFile. Unexpected Error, mDocumentContex not "
                       "initialized with a document context");
             break;
         }
@@ -333,8 +338,9 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
         BoolAndJPEGImageInformation imageInformationResult = RetrieveImageInformation(inJPGFilePath);
         if (!imageInformationResult.first)
         {
-            TRACE_LOG1("JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to retrieve image information for %s",
-                       inJPGFilePath.c_str());
+            TRACE_LOG1(
+                "charta::JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to retrieve image information for %s",
+                inJPGFilePath.c_str());
             break;
         }
 
@@ -344,7 +350,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
             imageInformationResult.second);
         if (imageXObject == nullptr)
         {
-            TRACE_LOG1("JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to create image xobject for %s",
+            TRACE_LOG1("charta::JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to create image xobject for %s",
                        inJPGFilePath.c_str());
             break;
         }
@@ -354,7 +360,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
             CreateImageFormXObjectFromImageXObject(imageXObject, inFormXObjectID, imageInformationResult.second);
         if (imageFormXObject == nullptr)
         {
-            TRACE_LOG1("JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to create form xobject for %s",
+            TRACE_LOG1("charta::JPEGImageHandler::CreateFormXObjectFromJPGFile, unable to create form xobject for %s",
                        inJPGFilePath.c_str());
             break;
         }
@@ -365,7 +371,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
     return imageFormXObject;
 }
 
-PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
+PDFFormXObject *charta::JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
     PDFImageXObject *inImageXObject, ObjectIDType inFormXObjectID, const JPEGImageInformation &inJPGImageInformation)
 {
     PDFFormXObject *formXObject = nullptr;
@@ -373,7 +379,8 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
     {
         if (mObjectsContext == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, mDocumentContex not "
+            TRACE_LOG("charta::JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, "
+                      "mDocumentContex not "
                       "initialized with a document context");
             break;
         }
@@ -392,8 +399,9 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
         EStatusCode status = mDocumentContext->EndFormXObjectNoRelease(formXObject);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
-                      "form XObject for image");
+            TRACE_LOG(
+                "charta::JPEGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
+                "form XObject for image");
             delete formXObject;
             formXObject = nullptr;
             break;
@@ -403,7 +411,8 @@ PDFFormXObject *JPEGImageHandler::CreateImageFormXObjectFromImageXObject(
     return formXObject;
 }
 
-std::pair<double, double> JPEGImageHandler::GetImageDimensions(const JPEGImageInformation &inJPGImageInformation)
+std::pair<double, double> charta::JPEGImageHandler::GetImageDimensions(
+    const JPEGImageInformation &inJPGImageInformation)
 {
     std::pair<double, double> returnResult(1, 1);
 
@@ -478,11 +487,12 @@ std::pair<double, double> JPEGImageHandler::GetImageDimensions(const JPEGImageIn
     return returnResult;
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath)
+PDFImageXObject *charta::JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGFile. Unexpected Error, mObjectsContext not initialized "
+        TRACE_LOG("charta::JPEGImageHandler::CreateImageXObjectFromJPGFile. Unexpected Error, mObjectsContext not "
+                  "initialized "
                   "with an objects context");
         return nullptr;
     }
@@ -491,12 +501,13 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGFile(const std::stri
                                          mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath)
+PDFFormXObject *charta::JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGFile. Unexpected Error, mObjectsContext not initialized "
-                  "with an objects context");
+        TRACE_LOG(
+            "charta::JPEGImageHandler::CreateFormXObjectFromJPGFile. Unexpected Error, mObjectsContext not initialized "
+            "with an objects context");
         return nullptr;
     }
 
@@ -504,11 +515,11 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGFile(const std::string
                                         mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
+PDFImageXObject *charta::JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mObjectsContext not "
+        TRACE_LOG("charta::JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mObjectsContext not "
                   "initialized with an objects context");
         return nullptr;
     }
@@ -517,8 +528,8 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByte
                                            mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
-                                                                   ObjectIDType inImageXObjectID)
+PDFImageXObject *charta::JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+                                                                           ObjectIDType inImageXObjectID)
 {
     PDFImageXObject *imageXObject = nullptr;
 
@@ -526,8 +537,9 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByte
     {
         if (mObjectsContext == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mDocumentContex not "
-                      "initialized with a document context");
+            TRACE_LOG(
+                "charta::JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mDocumentContex not "
+                "initialized with a document context");
             break;
         }
 
@@ -539,7 +551,7 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByte
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
+            TRACE_LOG("charta::JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
             break;
         }
 
@@ -553,11 +565,12 @@ PDFImageXObject *JPEGImageHandler::CreateImageXObjectFromJPGStream(charta::IByte
     return imageXObject;
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
+PDFFormXObject *charta::JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGStream. Unexpected Error, mObjectsContext not initialized "
+        TRACE_LOG("charta::JPEGImageHandler::CreateFormXObjectFromJPGStream. Unexpected Error, mObjectsContext not "
+                  "initialized "
                   "with an objects context");
         return nullptr;
     }
@@ -566,8 +579,8 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
                                           mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID());
 }
 
-PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
-                                                                 ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+                                                                         ObjectIDType inFormXObjectID)
 {
     PDFFormXObject *imageFormXObject = nullptr;
     PDFImageXObject *imageXObject = nullptr;
@@ -576,8 +589,9 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
     {
         if (mObjectsContext == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mDocumentContex not "
-                      "initialized with a document context");
+            TRACE_LOG(
+                "charta::JPEGImageHandler::CreateImageXObjectFromJPGStream. Unexpected Error, mDocumentContex not "
+                "initialized with a document context");
             break;
         }
 
@@ -589,7 +603,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
         EStatusCode status = jpgImageParser.Parse(inJPGStream, imageInformation);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
+            TRACE_LOG("charta::JPEGImageHandler::CreateImageXObjectFromJPGStream. Failed to parse JPG stream");
             break;
         }
 
@@ -600,7 +614,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
             inJPGStream, mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID(), imageInformation);
         if (imageXObject == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateFormXObjectFromJPGStream, unable to create image xobject");
+            TRACE_LOG("charta::JPEGImageHandler::CreateFormXObjectFromJPGStream, unable to create image xobject");
             break;
         }
 
@@ -608,7 +622,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
         imageFormXObject = CreateImageFormXObjectFromImageXObject(imageXObject, inFormXObjectID, imageInformation);
         if (imageFormXObject == nullptr)
         {
-            TRACE_LOG("JPEGImageHandler::CreateImageXObjectFromJPGStream, unable to create form xobject");
+            TRACE_LOG("charta::JPEGImageHandler::CreateImageXObjectFromJPGStream, unable to create form xobject");
             break;
         }
 
@@ -618,7 +632,7 @@ PDFFormXObject *JPEGImageHandler::CreateFormXObjectFromJPGStream(charta::IByteRe
     return imageFormXObject;
 }
 
-int JPEGImageHandler::GetColorComponents(const JPEGImageInformation &inJPGImageInformation)
+int charta::JPEGImageHandler::GetColorComponents(const JPEGImageInformation &inJPGImageInformation)
 {
     return inJPGImageInformation.ColorComponentsCount;
 }

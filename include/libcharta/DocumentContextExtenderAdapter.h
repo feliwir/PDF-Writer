@@ -86,7 +86,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
                                                         DictionaryContext *inImageDictionaryContext,
                                                         ObjectsContext *inPDFWriterObjectContext,
                                                         charta::DocumentContext *inDocumentContext,
-                                                        JPEGImageHandler *inJPGImageHandler)
+                                                        charta::JPEGImageHandler *inJPGImageHandler)
     {
         (void)inImageXObjectID;
         (void)inImageDictionaryContext;

@@ -21,30 +21,31 @@
 #pragma once
 #include <stdint.h>
 
+namespace charta
+{
 struct JPEGImageInformation
 {
-    JPEGImageInformation(void);
-
     // basic image information
-    long long SamplesWidth;
-    long long SamplesHeight;
-    int ColorComponentsCount;
+    long long SamplesWidth = 0;
+    long long SamplesHeight = 0;
+    int ColorComponentsCount = 0;
 
     // JFIF Information
-    bool JFIFInformationExists;
-    uint32_t JFIFUnit;
-    double JFIFXDensity;
-    double JFIFYDensity;
+    bool JFIFInformationExists = false;
+    uint32_t JFIFUnit = 0;
+    double JFIFXDensity = 0;
+    double JFIFYDensity = 0;
 
     // Exif Information
-    bool ExifInformationExists;
-    uint32_t ExifUnit;
-    double ExifXDensity;
-    double ExifYDensity;
+    bool ExifInformationExists = false;
+    uint32_t ExifUnit = 0;
+    double ExifXDensity = 0;
+    double ExifYDensity = 0;
 
     // Photoshop Information
-    bool PhotoshopInformationExists;
+    bool PhotoshopInformationExists = 0;
     // photoshop density is always pixel per inch
-    double PhotoshopXDensity;
-    double PhotoshopYDensity;
+    double PhotoshopXDensity = 0;
+    double PhotoshopYDensity = 0;
 };
+} // namespace charta

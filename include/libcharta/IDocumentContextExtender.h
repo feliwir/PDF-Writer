@@ -31,7 +31,6 @@ class ObjectsContext;
 class CatalogInformation;
 class ResourcesDictionary;
 class PDFFormXObject;
-class JPEGImageHandler;
 class TIFFImageHandler;
 class PDFDocumentHandler;
 class PDFDictionary;
@@ -40,7 +39,8 @@ class PDFParser;
 namespace charta
 {
 class DocumentContext;
-}
+class JPEGImageHandler;
+} // namespace charta
 
 class IDocumentContextExtender
 {
@@ -78,7 +78,7 @@ class IDocumentContextExtender
                                                         DictionaryContext *inImageDictionaryContext,
                                                         ObjectsContext *inPDFWriterObjectContext,
                                                         charta::DocumentContext *inPDFWriterDocumentContext,
-                                                        JPEGImageHandler *inJPGImageHandler) = 0;
+                                                        charta::JPEGImageHandler *inJPGImageHandler) = 0;
 
     // add items to the image dictionary while it's writtern for a TIFF image (for tile images there are multiple such
     // images)

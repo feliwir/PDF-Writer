@@ -24,9 +24,7 @@
 
 #include <memory.h>
 
-using namespace charta;
-
-JPEGImageParser::JPEGImageParser() = default;
+charta::JPEGImageParser::JPEGImageParser() = default;
 
 const uint32_t scSOF0TagID = 0xc0; // baseline format
 const uint32_t scSOF1TagID = 0xc1;
@@ -57,8 +55,8 @@ const uint32_t scAPP1xResolutionTagID = 0x011a;
 const uint32_t scAPP1yResolutionTagID = 0x011b;
 const uint32_t scAPP1ResolutionUnitTagID = 0x0128;
 
-EStatusCode JPEGImageParser::Parse(charta::IByteReaderWithPosition *inImageStream,
-                                   JPEGImageInformation &outImageInformation)
+charta::EStatusCode charta::JPEGImageParser::Parse(charta::IByteReaderWithPosition *inImageStream,
+                                                   JPEGImageInformation &outImageInformation)
 {
     EStatusCode status = charta::eFailure;
     uint32_t tagID;
@@ -152,7 +150,7 @@ EStatusCode JPEGImageParser::Parse(charta::IByteReaderWithPosition *inImageStrea
     return status;
 }
 
-EStatusCode JPEGImageParser::ReadJPEGID()
+charta::EStatusCode charta::JPEGImageParser::ReadJPEGID()
 {
     EStatusCode status = ReadStreamToBuffer(2);
 
@@ -165,14 +163,14 @@ EStatusCode JPEGImageParser::ReadJPEGID()
     return charta::eSuccess;
 }
 
-EStatusCode JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead)
+charta::EStatusCode charta::JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead)
 {
     if (inAmountToRead == mImageStream->Read(mReadBuffer, inAmountToRead))
         return charta::eSuccess;
     return charta::eFailure;
 }
 
-EStatusCode JPEGImageParser::ReadJpegTag(uint32_t &outTagID)
+charta::EStatusCode charta::JPEGImageParser::ReadJpegTag(uint32_t &outTagID)
 {
     EStatusCode status = ReadStreamToBuffer(2);
 
@@ -186,7 +184,7 @@ EStatusCode JPEGImageParser::ReadJpegTag(uint32_t &outTagID)
     return status;
 }
 
-EStatusCode JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformation)
+charta::EStatusCode charta::JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformation)
 {
     uint32_t toSkip;
     EStatusCode status;
@@ -203,7 +201,7 @@ EStatusCode JPEGImageParser::ReadSOF0Data(JPEGImageInformation &outImageInformat
     return status;
 }
 
-uint32_t JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian)
+uint32_t charta::JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleEndian)
 {
     uint32_t value;
 
@@ -221,12 +219,12 @@ uint32_t JPEGImageParser::GetIntValue(const uint8_t *inBuffer, bool inUseLittleE
     return value;
 }
 
-void JPEGImageParser::SkipStream(unsigned long inSkip)
+void charta::JPEGImageParser::SkipStream(unsigned long inSkip)
 {
     mImageStream->Skip(inSkip);
 }
 
-EStatusCode JPEGImageParser::ReadJFIFData(JPEGImageInformation &outImageInformation)
+charta::EStatusCode charta::JPEGImageParser::ReadJFIFData(JPEGImageInformation &outImageInformation)
 {
     uint32_t toSkip;
     EStatusCode status;
@@ -244,7 +242,8 @@ EStatusCode JPEGImageParser::ReadJFIFData(JPEGImageInformation &outImageInformat
     return status;
 }
 
-TwoLevelStatus JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead, unsigned long &refReadLimit)
+charta::TwoLevelStatus charta::JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead,
+                                                                   unsigned long &refReadLimit)
 {
     if (refReadLimit < inAmountToRead)
         return TwoLevelStatus(charta::eSuccess, charta::eFailure);
@@ -253,8 +252,9 @@ TwoLevelStatus JPEGImageParser::ReadStreamToBuffer(unsigned long inAmountToRead,
         refReadLimit -= inAmountToRead;
     return TwoLevelStatus(status, charta::eSuccess);
 }
-TwoLevelStatus JPEGImageParser::ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,
-                                              bool inUseLittleEndian)
+
+charta::TwoLevelStatus charta::JPEGImageParser::ReadLongValue(unsigned long &refReadLimit, unsigned long &outLongValue,
+                                                              bool inUseLittleEndian)
 {
     if (refReadLimit < 4)
         return TwoLevelStatus(charta::eSuccess, charta::eFailure);
@@ -265,7 +265,7 @@ TwoLevelStatus JPEGImageParser::ReadLongValue(unsigned long &refReadLimit, unsig
     return TwoLevelStatus(status, charta::eSuccess);
 }
 
-EStatusCode JPEGImageParser::SkipStream(unsigned long inSkip, unsigned long &refReadLimit)
+charta::EStatusCode charta::JPEGImageParser::SkipStream(unsigned long inSkip, unsigned long &refReadLimit)
 {
     if (refReadLimit < inSkip)
         return charta::eFailure;
@@ -274,7 +274,8 @@ EStatusCode JPEGImageParser::SkipStream(unsigned long inSkip, unsigned long &ref
     return charta::eSuccess;
 }
 
-EStatusCode JPEGImageParser::ReadPhotoshopData(JPEGImageInformation &outImageInformation, bool outPhotoshopDataOK)
+charta::EStatusCode charta::JPEGImageParser::ReadPhotoshopData(JPEGImageInformation &outImageInformation,
+                                                               bool outPhotoshopDataOK)
 {
     // code below uses a two level status where the primary is in charge of read error
     // and the seconary is in charge of realizing whether the data is correct.
@@ -346,7 +347,7 @@ EStatusCode JPEGImageParser::ReadPhotoshopData(JPEGImageInformation &outImageInf
     return twoLevelStatus.primary;
 }
 
-EStatusCode JPEGImageParser::ReadExifData(JPEGImageInformation &outImageInformation)
+charta::EStatusCode charta::JPEGImageParser::ReadExifData(JPEGImageInformation &outImageInformation)
 {
     EStatusCode status;
     unsigned long ifdOffset;
@@ -476,9 +477,10 @@ EStatusCode JPEGImageParser::ReadExifData(JPEGImageInformation &outImageInformat
     return status;
 }
 
-EStatusCode JPEGImageParser::GetResolutionFromExif(JPEGImageInformation &outImageInformation,
-                                                   unsigned long inXResolutionOffset, unsigned long inYResolutionOffset,
-                                                   unsigned long &inoutOffset, bool inUseLittleEndian)
+charta::EStatusCode charta::JPEGImageParser::GetResolutionFromExif(JPEGImageInformation &outImageInformation,
+                                                                   unsigned long inXResolutionOffset,
+                                                                   unsigned long inYResolutionOffset,
+                                                                   unsigned long &inoutOffset, bool inUseLittleEndian)
 {
     unsigned long firstOffset = 0, secondOffset = 0;
     bool xResolutionIsFirst = true;
@@ -537,7 +539,7 @@ EStatusCode JPEGImageParser::GetResolutionFromExif(JPEGImageInformation &outImag
     return status;
 }
 
-EStatusCode JPEGImageParser::ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian)
+charta::EStatusCode charta::JPEGImageParser::ReadRationalValue(double &outDoubleValue, bool inUseLittleEndian)
 {
     unsigned long numerator, denominator;
     EStatusCode status = ReadLongValue(numerator, inUseLittleEndian);
@@ -554,7 +556,7 @@ EStatusCode JPEGImageParser::ReadRationalValue(double &outDoubleValue, bool inUs
     return status;
 }
 
-EStatusCode JPEGImageParser::ReadExifID()
+charta::EStatusCode charta::JPEGImageParser::ReadExifID()
 {
     EStatusCode status = ReadStreamToBuffer(6);
     if (status != charta::eSuccess)
@@ -566,7 +568,7 @@ EStatusCode JPEGImageParser::ReadExifID()
     return charta::eSuccess;
 }
 
-EStatusCode JPEGImageParser::IsBigEndianExif(bool &outIsBigEndian)
+charta::EStatusCode charta::JPEGImageParser::IsBigEndianExif(bool &outIsBigEndian)
 {
     uint32_t encodingType;
     EStatusCode status = ReadIntValue(encodingType);
@@ -584,7 +586,7 @@ EStatusCode JPEGImageParser::IsBigEndianExif(bool &outIsBigEndian)
     return charta::eSuccess;
 }
 
-EStatusCode JPEGImageParser::ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian)
+charta::EStatusCode charta::JPEGImageParser::ReadIntValue(uint32_t &outIntValue, bool inUseLittleEndian)
 {
     EStatusCode status = ReadStreamToBuffer(2);
 
@@ -593,7 +595,7 @@ EStatusCode JPEGImageParser::ReadIntValue(uint32_t &outIntValue, bool inUseLittl
     return status;
 }
 
-EStatusCode JPEGImageParser::SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit)
+charta::EStatusCode charta::JPEGImageParser::SkipTillChar(uint8_t inSkipUntilValue, unsigned long &refSkipLimit)
 {
     EStatusCode status = charta::eSuccess;
     bool charNotFound = true;
@@ -611,7 +613,7 @@ EStatusCode JPEGImageParser::SkipTillChar(uint8_t inSkipUntilValue, unsigned lon
     return status;
 }
 
-EStatusCode JPEGImageParser::ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian)
+charta::EStatusCode charta::JPEGImageParser::ReadLongValue(unsigned long &outLongValue, bool inUseLittleEndian)
 {
     EStatusCode status = ReadStreamToBuffer(4);
 
@@ -620,7 +622,7 @@ EStatusCode JPEGImageParser::ReadLongValue(unsigned long &outLongValue, bool inU
     return status;
 }
 
-unsigned long JPEGImageParser::GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian)
+unsigned long charta::JPEGImageParser::GetLongValue(const uint8_t *inBuffer, bool inUseLittleEndian)
 {
     unsigned long value;
 
@@ -641,7 +643,7 @@ unsigned long JPEGImageParser::GetLongValue(const uint8_t *inBuffer, bool inUseL
     return value;
 }
 
-double JPEGImageParser::GetFractValue(const uint8_t *inBuffer)
+double charta::JPEGImageParser::GetFractValue(const uint8_t *inBuffer)
 {
     double value;
 
@@ -649,7 +651,7 @@ double JPEGImageParser::GetFractValue(const uint8_t *inBuffer)
     return value;
 }
 
-EStatusCode JPEGImageParser::SkipTag()
+charta::EStatusCode charta::JPEGImageParser::SkipTag()
 {
     EStatusCode status;
     uint32_t toSkip;
