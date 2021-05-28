@@ -25,18 +25,19 @@
 #include <list>
 #include <string>
 
-typedef std::pair<charta::EStatusCode, std::string> EStatusCodeAndString;
-typedef std::list<unsigned long> ULongList;
-typedef std::list<uint16_t> UShortList;
-typedef std::pair<charta::EStatusCode, UShortList> EStatusCodeAndUShortList;
+namespace charta
+{
+using EStatusCodeAndString = std::pair<charta::EStatusCode, std::string>;
+using ULongList = std::list<unsigned long>;
+using UShortList = std::list<uint16_t>;
+using EStatusCodeAndUShortList = std::pair<charta::EStatusCode, UShortList>;
 
 class UnicodeString
 {
   public:
-    UnicodeString(void);
+    UnicodeString() = default;
     UnicodeString(const UnicodeString &inOtherString);
     UnicodeString(const ULongList &inOtherList);
-    ~UnicodeString(void);
 
     UnicodeString &operator=(const UnicodeString &inOtherString);
     UnicodeString &operator=(const ULongList &inOtherList);
@@ -76,3 +77,4 @@ class UnicodeString
   private:
     ULongList mUnicodeCharacters;
 };
+} // namespace charta

@@ -278,9 +278,7 @@ static const char *scGlyphNames[256] = {".notdef",
                                         "thorn",
                                         "ydieresis"};
 
-PDFDocEncoding::PDFDocEncoding() = default;
-
-BoolAndByte PDFDocEncoding::Encode(unsigned long inUnicodeCharacter)
+charta::BoolAndByte charta::PDFDocEncoding::Encode(unsigned long inUnicodeCharacter)
 {
     BoolAndByte result(true, 0);
 
@@ -421,12 +419,12 @@ BoolAndByte PDFDocEncoding::Encode(unsigned long inUnicodeCharacter)
     return result;
 }
 
-const char *PDFDocEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
+const char *charta::PDFDocEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }
 
-unsigned long PDFDocEncoding::Decode(uint8_t inEncodedCharacter)
+unsigned long charta::PDFDocEncoding::Decode(uint8_t inEncodedCharacter)
 {
     unsigned long result;
 

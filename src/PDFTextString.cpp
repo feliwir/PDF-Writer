@@ -70,9 +70,9 @@ void PDFTextString::ConvertFromUTF8(const std::string &inStringToConvert)
     {
         // if no DOC encoding then convert to utf16BE (with BOM)
 
-        UnicodeString unicodeString;
+        charta::UnicodeString unicodeString;
         unicodeString.FromUTF8(inStringToConvert);
-        EStatusCodeAndString result = unicodeString.ToUTF16BE(true);
+        auto result = unicodeString.ToUTF16BE(true);
 
         mTextString = result.second;
     }
@@ -85,11 +85,11 @@ void PDFTextString::ConvertFromUTF8(const std::string &inStringToConvert)
 bool PDFTextString::ConvertUTF8ToPDFDocEncoding(const std::string &inStringToConvert,
                                                 charta::OutputStringBufferStream &refResult)
 {
-    BoolAndByte encodingResult;
-    PDFDocEncoding pdfDocEncoding;
+    charta::BoolAndByte encodingResult;
+    charta::PDFDocEncoding pdfDocEncoding;
     bool PDFEncodingOK = true;
 
-    UnicodeString unicodeString;
+    charta::UnicodeString unicodeString;
 
     unicodeString.FromUTF8(inStringToConvert);
 
@@ -121,19 +121,19 @@ std::string PDFTextString::ToUTF8String() const
 
 std::string PDFTextString::ToUTF8FromUTF16BE() const
 {
-    UnicodeString unicodeString;
+    charta::UnicodeString unicodeString;
 
     unicodeString.FromUTF16(mTextString);
 
-    EStatusCodeAndString result = unicodeString.ToUTF8();
+    auto result = unicodeString.ToUTF8();
     return result.second;
 }
 
 std::string PDFTextString::ToUTF8FromPDFDocEncoding() const
 {
-    ULongList unicodes;
-    UnicodeString decoder;
-    PDFDocEncoding pdfDocEncoding;
+    charta::ULongList unicodes;
+    charta::UnicodeString decoder;
+    charta::PDFDocEncoding pdfDocEncoding;
 
     std::string::const_iterator it = mTextString.begin();
 

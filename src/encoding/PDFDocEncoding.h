@@ -24,15 +24,15 @@
 #include <stdio.h>
 #include <utility>
 
-typedef std::pair<bool, uint8_t> BoolAndByte;
+namespace charta
+{
+using BoolAndByte = std::pair<bool, uint8_t>;
 
 class PDFDocEncoding
 {
   public:
-    PDFDocEncoding(void);
-    ~PDFDocEncoding(void) = default;
-
     BoolAndByte Encode(unsigned long inUnicodeCharacter);
     unsigned long Decode(uint8_t inEncodedCharacter);
     const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };
+} // namespace charta

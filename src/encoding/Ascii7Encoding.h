@@ -23,10 +23,13 @@
 #include <string>
 #include <utility>
 
-typedef std::pair<bool, std::string> BoolAndString;
+namespace charta
+{
+using BoolAndString = std::pair<bool, std::string>;
 
 class Ascii7Encoding
 {
   public:
     BoolAndString Encode(const std::string &inString);
 };
+} // namespace charta

@@ -278,9 +278,7 @@ static const char *scGlyphNames[256] = {".notdef",
                                         "thorn",
                                         "ydieresis"};
 
-WinAnsiEncoding::WinAnsiEncoding() = default;
-
-BoolAndByte WinAnsiEncoding::Encode(unsigned long inUnicodeCharacter)
+charta::BoolAndByte charta::WinAnsiEncoding::Encode(unsigned long inUnicodeCharacter)
 {
     BoolAndByte result(true, 0);
 
@@ -383,7 +381,7 @@ BoolAndByte WinAnsiEncoding::Encode(unsigned long inUnicodeCharacter)
     return result;
 }
 
-const char *WinAnsiEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
+const char *charta::WinAnsiEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }

@@ -278,9 +278,7 @@ static const char *scGlyphNames[256] = {".notdef",
                                         ".notdef",
                                         ".notdef"};
 
-StandardEncoding::StandardEncoding() = default;
-
-const char *StandardEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
+const char *charta::StandardEncoding::GetEncodedGlyphName(uint8_t inEncodedCharacter)
 {
     return scGlyphNames[inEncodedCharacter];
 }

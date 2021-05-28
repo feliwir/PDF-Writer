@@ -21,9 +21,9 @@
 #include "encoding/Ascii7Encoding.h"
 #include "io/OutputStringBufferStream.h"
 
-BoolAndString Ascii7Encoding::Encode(const std::string &inString)
+charta::BoolAndString charta::Ascii7Encoding::Encode(const std::string &inString)
 {
-    charta::OutputStringBufferStream asciiString;
+    OutputStringBufferStream asciiString;
     bool encodingGood = true;
     uint8_t buffer;
     std::string::const_iterator it = inString.begin();

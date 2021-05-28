@@ -96,8 +96,7 @@ using namespace charta;
 #define PS_UNIT_SIZE 72.0F
 
 /* This type is of PDF color spaces. */
-using t2p_cs_t = enum
-{
+using t2p_cs_t = enum {
     T2P_CS_BILEVEL = 0x01,   /* Bilevel, black and white */
     T2P_CS_GRAY = 0x02,      /* Single channel */
     T2P_CS_RGB = 0x04,       /* Three channel tristimulus RGB */
@@ -110,23 +109,16 @@ using t2p_cs_t = enum
 };
 
 /* This type is of PDF compression types.  */
-using t2p_compress_t = enum
-{
-    T2P_COMPRESS_NONE = 0x00,
-    T2P_COMPRESS_G4 = 0x01,
-    T2P_COMPRESS_ZIP = 0x04
-};
+using t2p_compress_t = enum { T2P_COMPRESS_NONE = 0x00, T2P_COMPRESS_G4 = 0x01, T2P_COMPRESS_ZIP = 0x04 };
 
 /* This type is whether TIFF image data can be used in PDF without transcoding. */
-using t2p_transcode_t = enum
-{
+using t2p_transcode_t = enum {
     T2P_TRANSCODE_RAW = 0x01,   /* The raw data from the input can be used without recompressing */
     T2P_TRANSCODE_ENCODE = 0x02 /* The data from the input is perhaps unencoded and reencoded */
 };
 
 /* This type is of information about the data samples of the input image. */
-using t2p_sample_t = enum
-{
+using t2p_sample_t = enum {
     T2P_SAMPLE_NOTHING = 0x0000,      /* The unencoded samples are normal for the output colorspace */
     T2P_SAMPLE_ABGR_TO_RGB = 0x0001,  /* The unencoded samples are the result of ReadRGBAImage */
     T2P_SAMPLE_RGBA_TO_RGB = 0x0002,  /* The unencoded samples are contiguous RGBA */
@@ -140,8 +132,7 @@ using t2p_sample_t = enum
 };
 
 /* This type is of error status of the T2P struct. */
-using t2p_err_t = enum
-{
+using t2p_err_t = enum {
     T2P_ERR_OK = 0,   /* This is the value of mT2p->t2p_error when there is no error */
     T2P_ERR_ERROR = 1 /* This is the value of mT2p->t2p_error when there was an error */
 };

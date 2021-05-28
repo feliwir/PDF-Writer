@@ -22,46 +22,40 @@
 #include "Trace.h"
 #include <sstream>
 
-using namespace charta;
-
-UnicodeString::UnicodeString() = default;
-
-UnicodeString::~UnicodeString() = default;
-
-UnicodeString::UnicodeString(const UnicodeString &inOtherString)
+charta::UnicodeString::UnicodeString(const UnicodeString &inOtherString)
 {
     mUnicodeCharacters = inOtherString.mUnicodeCharacters;
 }
 
-UnicodeString::UnicodeString(const ULongList &inOtherList)
+charta::UnicodeString::UnicodeString(const ULongList &inOtherList)
 {
     mUnicodeCharacters = inOtherList;
 }
 
-UnicodeString &UnicodeString::operator=(const UnicodeString &inOtherString) = default;
+charta::UnicodeString &charta::UnicodeString::operator=(const UnicodeString &inOtherString) = default;
 
-UnicodeString &UnicodeString::operator=(const ULongList &inOtherList)
+charta::UnicodeString &charta::UnicodeString::operator=(const ULongList &inOtherList)
 {
     mUnicodeCharacters = inOtherList;
     return *this;
 }
 
-bool UnicodeString::operator==(const UnicodeString &inOtherString) const
+bool charta::UnicodeString::operator==(const UnicodeString &inOtherString) const
 {
     return mUnicodeCharacters == inOtherString.mUnicodeCharacters;
 }
 
-const ULongList &UnicodeString::GetUnicodeList() const
+const charta::ULongList &charta::UnicodeString::GetUnicodeList() const
 {
     return mUnicodeCharacters;
 }
 
-ULongList &UnicodeString::GetUnicodeList()
+charta::ULongList &charta::UnicodeString::GetUnicodeList()
 {
     return mUnicodeCharacters;
 }
 
-EStatusCode UnicodeString::FromUTF8(const std::string &inString)
+charta::EStatusCode charta::UnicodeString::FromUTF8(const std::string &inString)
 {
     mUnicodeCharacters.clear();
     std::string::const_iterator it = inString.begin();
@@ -130,7 +124,7 @@ EStatusCode UnicodeString::FromUTF8(const std::string &inString)
     return status;
 }
 
-EStatusCodeAndString UnicodeString::ToUTF8() const
+charta::EStatusCodeAndString charta::UnicodeString::ToUTF8() const
 {
     auto it = mUnicodeCharacters.begin();
     EStatusCode status = charta::eSuccess;
@@ -171,12 +165,12 @@ EStatusCodeAndString UnicodeString::ToUTF8() const
     return EStatusCodeAndString(status, result.str());
 }
 
-EStatusCode UnicodeString::FromUTF16(const std::string &inString)
+charta::EStatusCode charta::UnicodeString::FromUTF16(const std::string &inString)
 {
     return FromUTF16((const unsigned char *)inString.c_str(), (unsigned long)inString.length());
 }
 
-EStatusCode UnicodeString::FromUTF16(const unsigned char *inString, unsigned long inLength)
+charta::EStatusCode charta::UnicodeString::FromUTF16(const unsigned char *inString, unsigned long inLength)
 {
     // Read BOM
     if (inLength < 2)
@@ -189,12 +183,12 @@ EStatusCode UnicodeString::FromUTF16(const unsigned char *inString, unsigned lon
     return charta::eFailure; // no bom
 }
 
-EStatusCode UnicodeString::FromUTF16BE(const std::string &inString)
+charta::EStatusCode charta::UnicodeString::FromUTF16BE(const std::string &inString)
 {
     return FromUTF16BE((const unsigned char *)inString.c_str(), (unsigned long)inString.length());
 }
 
-EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned long inLength)
+charta::EStatusCode charta::UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
     EStatusCode status = charta::eSuccess;
@@ -242,12 +236,12 @@ EStatusCode UnicodeString::FromUTF16BE(const unsigned char *inString, unsigned l
     return status;
 }
 
-EStatusCode UnicodeString::FromUTF16LE(const std::string &inString)
+charta::EStatusCode charta::UnicodeString::FromUTF16LE(const std::string &inString)
 {
     return FromUTF16LE((const unsigned char *)inString.c_str(), (unsigned long)inString.length());
 }
 
-EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned long inLength)
+charta::EStatusCode charta::UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
     EStatusCode status = charta::eSuccess;
@@ -295,7 +289,7 @@ EStatusCode UnicodeString::FromUTF16LE(const unsigned char *inString, unsigned l
     return status;
 }
 
-EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength)
+charta::EStatusCode charta::UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned long inLength)
 {
     mUnicodeCharacters.clear();
     EStatusCode status = charta::eSuccess;
@@ -331,7 +325,7 @@ EStatusCode UnicodeString::FromUTF16UShort(const uint16_t *inShorts, unsigned lo
     return status;
 }
 
-EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
+charta::EStatusCodeAndString charta::UnicodeString::ToUTF16BE(bool inPrependWithBom) const
 {
     auto it = mUnicodeCharacters.begin();
     EStatusCode status = charta::eSuccess;
@@ -370,7 +364,7 @@ EStatusCodeAndString UnicodeString::ToUTF16BE(bool inPrependWithBom) const
     return EStatusCodeAndString(status, result.str());
 }
 
-EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
+charta::EStatusCodeAndString charta::UnicodeString::ToUTF16LE(bool inPrependWithBom) const
 {
     auto it = mUnicodeCharacters.begin();
     EStatusCode status = charta::eSuccess;
@@ -409,7 +403,7 @@ EStatusCodeAndString UnicodeString::ToUTF16LE(bool inPrependWithBom) const
     return EStatusCodeAndString(status, result.str());
 }
 
-EStatusCodeAndUShortList UnicodeString::ToUTF16UShort() const
+charta::EStatusCodeAndUShortList charta::UnicodeString::ToUTF16UShort() const
 {
     auto it = mUnicodeCharacters.begin();
     EStatusCode status = charta::eSuccess;

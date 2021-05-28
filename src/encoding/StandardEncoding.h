@@ -22,11 +22,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
+namespace charta
+{
 class StandardEncoding
 {
   public:
-    StandardEncoding(void);
-    ~StandardEncoding(void) = default;
-
     const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };
+} // namespace charta

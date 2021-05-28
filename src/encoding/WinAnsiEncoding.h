@@ -24,14 +24,14 @@
 #include <stdio.h>
 #include <utility>
 
-typedef std::pair<bool, uint8_t> BoolAndByte;
+namespace charta
+{
+using BoolAndByte = std::pair<bool, uint8_t>;
 
 class WinAnsiEncoding
 {
   public:
-    WinAnsiEncoding(void);
-    ~WinAnsiEncoding(void) = default;
-
     BoolAndByte Encode(unsigned long inUnicodeCharacter);
     const char *GetEncodedGlyphName(uint8_t inEncodedCharacter);
 };
+} // namespace charta
