@@ -24,13 +24,16 @@
 #include "IByteReader.h"
 
 #include <memory>
+namespace charta
+{
 class PDFArray;
+}
 class PDFParser;
 
 class ArrayOfInputStreamsStream : public charta::IByteReader
 {
   public:
-    ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser);
+    ArrayOfInputStreamsStream(std::shared_ptr<charta::PDFArray> inArrayOfStreams, PDFParser *inParser);
     virtual ~ArrayOfInputStreamsStream(void);
 
     // IByteReader implementation
@@ -42,6 +45,6 @@ class ArrayOfInputStreamsStream : public charta::IByteReader
 
     charta::IByteReader *mCurrentStream;
     PDFParser *mParser;
-    std::shared_ptr<PDFArray> mArray;
+    std::shared_ptr<charta::PDFArray> mArray;
     unsigned long mCurrentIndex;
 };

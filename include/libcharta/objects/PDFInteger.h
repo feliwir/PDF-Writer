@@ -21,6 +21,9 @@
 #pragma once
 #include "PDFObject.h"
 
+namespace charta
+{
+
 class PDFInteger : public PDFObject
 {
   public:
@@ -30,11 +33,12 @@ class PDFInteger : public PDFObject
     };
 
     PDFInteger(long long inValue);
-    virtual ~PDFInteger(void);
+    virtual ~PDFInteger() = default;
 
     long long GetValue() const;
     operator long long() const;
 
   private:
-    long long mValue;
+    const long long mValue;
 };
+} // namespace charta

@@ -45,11 +45,11 @@ class PDFDictionaryIterator
     {
     }
 
-    PDFDictionaryIterator(PDFParser &parser, PDFObjectCastPtr<PDFDictionary> &inDict)
+    PDFDictionaryIterator(PDFParser &parser, PDFObjectCastPtr<charta::PDFDictionary> &inDict)
         : mDictonary(inDict.GetPtr()), mDictonaryRefPtr(inDict), mParser(parser)
     {
     }
-    PDFDictionaryIterator(PDFParser &parser, std::shared_ptr<PDFDictionary> inDict)
+    PDFDictionaryIterator(PDFParser &parser, std::shared_ptr<charta::PDFDictionary> inDict)
         : mDictonary(inDict), mParser(parser)
     {
     }
@@ -62,12 +62,12 @@ class PDFDictionaryIterator
     bool WriteStreamToFile(charta::InputFile &pdfFile, const std::string &s, const std::string &filePath);
 
   private:
-    void SetDictRefPtr(std::shared_ptr<PDFDictionary> dictonary)
+    void SetDictRefPtr(std::shared_ptr<charta::PDFDictionary> dictonary)
     {
         mDictonary = dictonary;
         mDictonaryRefPtr = dictonary;
     }
-    std::shared_ptr<PDFDictionary> mDictonary;
-    PDFObjectCastPtr<PDFDictionary> mDictonaryRefPtr;
+    std::shared_ptr<charta::PDFDictionary> mDictonary;
+    PDFObjectCastPtr<charta::PDFDictionary> mDictonaryRefPtr;
     PDFParser &mParser;
 };

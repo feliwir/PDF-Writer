@@ -20,19 +20,17 @@
 */
 #include "objects/PDFHexString.h"
 
-PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
+charta::PDFHexString::PDFHexString(const std::string &inValue) : PDFObject(eType)
 {
     mValue = inValue;
 }
 
-PDFHexString::~PDFHexString() = default;
-
-const std::string &PDFHexString::GetValue() const
+const std::string &charta::PDFHexString::GetValue() const
 {
     return mValue;
 }
 
-PDFHexString::operator std::string() const
+charta::PDFHexString::operator std::string() const
 {
     return mValue;
 }

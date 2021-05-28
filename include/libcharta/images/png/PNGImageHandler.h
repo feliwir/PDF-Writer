@@ -30,12 +30,7 @@ class PDFFormXObject;
 namespace charta
 {
 class IByteReaderWithPosition;
-};
-
-namespace charta
-{
 class DocumentContext;
-}
 
 class PNGImageHandler
 {
@@ -50,16 +45,16 @@ class PNGImageHandler
     PNGImageHandler();
     ~PNGImageHandler(void) = default;
 
-    PDFFormXObject *CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
-                                                   ObjectIDType inFormXObjectID);
+    PDFFormXObject *CreateFormXObjectFromPNGStream(IByteReaderWithPosition *inPNGStream, ObjectIDType inFormXObjectID);
 
-    void SetOperationsContexts(charta::DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext);
 
-    std::pair<double, double> ReadImageDimensions(charta::IByteReaderWithPosition *inPNGStream);
-    PNGImageInfo ReadImageInfo(charta::IByteReaderWithPosition *inPNGStream);
+    std::pair<double, double> ReadImageDimensions(IByteReaderWithPosition *inPNGStream);
+    PNGImageInfo ReadImageInfo(IByteReaderWithPosition *inPNGStream);
 
   private:
     ObjectsContext *mObjectsContext;
-    charta::DocumentContext *mDocumentContext;
+    DocumentContext *mDocumentContext;
 };
+} // namespace charta
 #endif

@@ -23,9 +23,11 @@
 #include <map>
 #include <string>
 
+namespace charta
+{
 class IDeletable;
-
-typedef std::map<std::string, IDeletable *> StringToIDeletable;
+}
+typedef std::map<std::string, charta::IDeletable *> StringToIDeletable;
 
 class PDFObject
 {
@@ -58,10 +60,10 @@ class PDFObject
         metadata will automatically be deleted when object is released
     */
     void SetMetadata(const std::string &inKey,
-                     IDeletable *inValue); // will automatically delete old data in the same key
-    IDeletable *GetMetadata(const std::string &inKey);
+                     charta::IDeletable *inValue); // will automatically delete old data in the same key
+    charta::IDeletable *GetMetadata(const std::string &inKey);
     // Detach will only remove the pointer from metadata map, Delete will also delete the inValue pointer
-    IDeletable *DetachMetadata(const std::string &inKey);
+    charta::IDeletable *DetachMetadata(const std::string &inKey);
     void DeleteMetadata(const std::string &inKey);
 
   private:

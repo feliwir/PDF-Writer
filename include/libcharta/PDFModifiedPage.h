@@ -28,12 +28,16 @@
 class AbstractContentContext;
 class PDFWriter;
 class PDFFormXObject;
-class PDFDictionary;
 class PDFDocumentCopyingContext;
 class ObjectsContext;
 class ResourcesDictionary;
 class PDFParser;
 class PDFObject;
+
+namespace charta
+{
+class PDFDictionary;
+}
 
 typedef std::vector<PDFFormXObject *> PDFFormXObjectVector;
 
@@ -65,12 +69,11 @@ class PDFModifiedPage
     PDFFormXObjectVector mContenxts;
     bool mIsDirty;
 
-    std::vector<std::string> WriteModifiedResourcesDict(PDFParser *inParser,
-                                                        const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
-                                                        ObjectsContext &inObjectContext,
-                                                        std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext);
+    std::vector<std::string> WriteModifiedResourcesDict(
+        PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inResourcesDictionary,
+        ObjectsContext &inObjectContext, std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext);
     unsigned char GetDifferentChar(unsigned char);
     std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
     std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser,
-                                                      const std::shared_ptr<PDFDictionary> &inDictionary);
+                                                      const std::shared_ptr<charta::PDFDictionary> &inDictionary);
 };

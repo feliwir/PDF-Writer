@@ -5,9 +5,9 @@
 namespace charta
 {
 class IByteReader;
-};
-class PDFName;
 class PDFDictionary;
+}; // namespace charta
+class PDFName;
 class PDFStreamInput;
 
 class IPDFParserExtender
@@ -20,7 +20,7 @@ class IPDFParserExtender
     // for extending fliter support in stream read
     virtual charta::IByteReader *CreateFilterForStream(charta::IByteReader *inStream,
                                                        std::shared_ptr<PDFName> inFilterName,
-                                                       std::shared_ptr<PDFDictionary> inDecodeParams,
+                                                       std::shared_ptr<charta::PDFDictionary> inDecodeParams,
                                                        std::shared_ptr<PDFStreamInput> inPDFStream) = 0;
 
     // for decryption extension

@@ -14,7 +14,7 @@ PDFArrayIterator PDFDictionaryIterator::Array(const std::string &s)
     if (mDictonary == nullptr)
         return PDFArrayIterator(mParser);
 
-    PDFObjectCastPtr<PDFArray> foundArray(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<charta::PDFArray> foundArray(mDictonary->QueryDirectObject(s));
     if (foundArray.GetPtr() != nullptr)
         return PDFArrayIterator(mParser, foundArray);
     return PDFArrayIterator(mParser);
@@ -24,11 +24,11 @@ PDFDictionaryIterator PDFDictionaryIterator::Enter(const std::string &s)
 {
     if (mDictonary == nullptr)
         return PDFDictionaryIterator(mParser);
-    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
     if (!foundReference)
         return PDFDictionaryIterator(mParser);
 
-    PDFObjectCastPtr<PDFDictionary> catalog(mParser.ParseNewObject(foundReference->mObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> catalog(mParser.ParseNewObject(foundReference->mObjectID));
     if (!catalog)
         return PDFDictionaryIterator(mParser);
 
@@ -50,7 +50,7 @@ bool PDFDictionaryIterator::WriteStreamToFile(charta::InputFile &pdfFile, const 
 {
     if (mDictonary == nullptr)
         return false;
-    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> foundReference(mDictonary->QueryDirectObject(s));
     if (!foundReference)
         return false;
 

@@ -20,19 +20,16 @@
 */
 #include "objects/PDFBoolean.h"
 
-PDFBoolean::PDFBoolean(bool inValue) : PDFObject(eType)
+charta::PDFBoolean::PDFBoolean(bool inValue) : PDFObject(eType), mValue(inValue)
 {
-    mValue = inValue;
 }
 
-PDFBoolean::~PDFBoolean() = default;
-
-bool PDFBoolean::GetValue() const
+bool charta::PDFBoolean::GetValue() const
 {
     return mValue;
 }
 
-PDFBoolean::operator bool() const
+charta::PDFBoolean::operator bool() const
 {
     return mValue;
 }

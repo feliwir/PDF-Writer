@@ -266,7 +266,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                                                                 const double *inTransformationMatrix,
                                                                 ObjectIDType inPredefinedFormId)
 {
-    std::shared_ptr<PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
+    std::shared_ptr<charta::PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
 
     if (!pageObject)
     {
@@ -279,10 +279,9 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                                        inTransformationMatrix, inPredefinedFormId);
 }
 
-PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(const std::shared_ptr<PDFDictionary> &inPageObject,
-                                                                const PDFRectangle &inFormBox,
-                                                                const double *inTransformationMatrix,
-                                                                ObjectIDType inPredefinedFormId)
+PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(
+    const std::shared_ptr<charta::PDFDictionary> &inPageObject, const PDFRectangle &inFormBox,
+    const double *inTransformationMatrix, ObjectIDType inPredefinedFormId)
 {
     PDFFormXObject *result = nullptr;
     EStatusCode status = charta::eSuccess;
@@ -355,7 +354,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(const std::share
     return result;
 }
 
-PDFRectangle PDFDocumentHandler::DeterminePageBox(const std::shared_ptr<PDFDictionary> &inDictionary,
+PDFRectangle PDFDocumentHandler::DeterminePageBox(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                   EPDFPageBox inPageBoxType)
 {
     PDFRectangle result;
@@ -391,7 +390,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
                                                                 const double *inTransformationMatrix,
                                                                 ObjectIDType inPredefinedFormId)
 {
-    std::shared_ptr<PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
+    std::shared_ptr<charta::PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
 
     if (!pageObject)
     {
@@ -404,7 +403,7 @@ PDFFormXObject *PDFDocumentHandler::CreatePDFFormXObjectForPage(unsigned long in
 }
 
 EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWriter *inTargetStream,
-                                                               std::shared_ptr<PDFDictionary> inPageObject)
+                                                               std::shared_ptr<charta::PDFDictionary> inPageObject)
 {
     EStatusCode status = charta::eSuccess;
 
@@ -420,9 +419,8 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWrit
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
-        SingleValueContainerIterator<PDFObjectVector> it =
-            std::static_pointer_cast<PDFArray>(pageContent)->GetIterator();
-        PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+        auto it = std::static_pointer_cast<charta::PDFArray>(pageContent)->GetIterator();
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> refItem;
         while (it.MoveNext() && status == charta::eSuccess)
         {
             refItem = it.GetItem();
@@ -477,7 +475,7 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter 
     return status;
 }
 
-EStatusCode PDFDocumentHandler::CopyResourcesIndirectObjects(std::shared_ptr<PDFDictionary> inPage)
+EStatusCode PDFDocumentHandler::CopyResourcesIndirectObjects(std::shared_ptr<charta::PDFDictionary> inPage)
 {
     // makes sure that all indirect references are copied. those will come from the resources dictionary.
     // this is how we go about this:
@@ -485,7 +483,7 @@ EStatusCode PDFDocumentHandler::CopyResourcesIndirectObjects(std::shared_ptr<PDF
     // if indirect, run CopyInDirectObject on it (passing its ID and a new ID at the target PDF (just allocate as you
     // go)) if direct, let go.
 
-    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
+    PDFObjectCastPtr<charta::PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
 
     // k. no resources...as wierd as that might be...or just wrong...i'll let it be
     if (!resources)
@@ -531,24 +529,25 @@ EStatusCode PDFDocumentHandler::WriteNewObjects(const ObjectIDTypeList &inSource
     return status;
 }
 
-void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<PDFDictionary> &inDictionary,
+void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                  ObjectIDTypeList &outNewObjects)
 {
-    MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
+    auto it(inDictionary->GetIterator());
 
     // i'm assuming keys are directs. i can move into indirects if that's important
     while (it.MoveNext())
     {
         if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            auto itObjects =
-                mSourceToTarget.find(std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID);
+            auto itObjects = mSourceToTarget.find(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID);
             if (itObjects == mSourceToTarget.end())
-                outNewObjects.push_back(std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID);
+                outNewObjects.push_back(
+                    std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID);
         }
         else if (it.GetValue()->GetType() == PDFObject::ePDFObjectArray)
         {
-            RegisterInDirectObjects(std::static_pointer_cast<PDFArray>(it.GetValue()), outNewObjects);
+            RegisterInDirectObjects(std::static_pointer_cast<charta::PDFArray>(it.GetValue()), outNewObjects);
         }
         else if (it.GetValue()->GetType() == PDFObject::ePDFObjectDictionary)
         {
@@ -557,23 +556,24 @@ void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<PDFDictio
     }
 }
 
-void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<PDFArray> &inArray,
+void PDFDocumentHandler::RegisterInDirectObjects(const std::shared_ptr<charta::PDFArray> &inArray,
                                                  ObjectIDTypeList &outNewObjects)
 {
-    SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
+    auto it(inArray->GetIterator());
 
     while (it.MoveNext())
     {
         if (it.GetItem()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            auto itObjects =
-                mSourceToTarget.find(std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID);
+            auto itObjects = mSourceToTarget.find(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID);
             if (itObjects == mSourceToTarget.end())
-                outNewObjects.push_back(std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID);
+                outNewObjects.push_back(
+                    std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID);
         }
         else if (it.GetItem()->GetType() == PDFObject::ePDFObjectArray)
         {
-            RegisterInDirectObjects(std::static_pointer_cast<PDFArray>(it.GetItem()), outNewObjects);
+            RegisterInDirectObjects(std::static_pointer_cast<charta::PDFArray>(it.GetItem()), outNewObjects);
         }
         else if (it.GetItem()->GetType() == PDFObject::ePDFObjectDictionary)
         {
@@ -637,14 +637,14 @@ EStatusCode PDFDocumentHandler::OnResourcesWrite(ResourcesDictionary * /*inResou
     // Writing resources dictionary. simply loop internal elements and copy. nicely enough, i can use read methods,
     // trusting that no new objects need be written
 
-    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, mWrittenPage));
+    PDFObjectCastPtr<charta::PDFDictionary> resources(FindPageResources(mParser, mWrittenPage));
     ObjectIDTypeList dummyObjectList; // this one should remain empty...
 
     // k. no resources...as wierd as that might be...or just wrong...i'll let it be
     if (!resources)
         return charta::eSuccess;
 
-    MapIterator<PDFNameToPDFObjectMap> it(resources->GetIterator());
+    auto it(resources->GetIterator());
     EStatusCode status = charta::eSuccess;
     OutWritingPolicy writingPolicy(this, dummyObjectList);
 
@@ -763,7 +763,7 @@ EStatusCodeAndObjectIDTypeList PDFDocumentHandler::AppendPDFPagesFromPDFInContex
 
 EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned long inPageIndex)
 {
-    std::shared_ptr<PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
+    std::shared_ptr<charta::PDFDictionary> pageObject = mParser->ParsePage(inPageIndex);
     EStatusCodeAndObjectIDType result;
     result.first = charta::eFailure;
     result.second = 0;
@@ -846,7 +846,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CreatePDFPageForPage(unsigned lon
 }
 
 EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
-    PDFPage &inPage, const std::shared_ptr<PDFDictionary> &inPageObject)
+    PDFPage &inPage, const std::shared_ptr<charta::PDFDictionary> &inPageObject)
 {
     EStatusCode status = charta::eSuccess;
 
@@ -858,7 +858,8 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
 
     if (pageContent->GetType() == PDFObject::ePDFObjectStream)
     {
-        PDFObjectCastPtr<PDFIndirectObjectReference> streamReference = inPageObject->QueryDirectObject("Contents");
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> streamReference =
+            inPageObject->QueryDirectObject("Contents");
         EStatusCodeAndObjectIDType copyObjectStatus = CopyObject(streamReference->mObjectID);
         status = copyObjectStatus.first;
         if (charta::eSuccess == status)
@@ -868,9 +869,8 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
-        SingleValueContainerIterator<PDFObjectVector> it =
-            std::static_pointer_cast<PDFArray>(pageContent)->GetIterator();
-        PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+        auto it = std::static_pointer_cast<charta::PDFArray>(pageContent)->GetIterator();
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> refItem;
         while (it.MoveNext() && status == charta::eSuccess)
         {
             refItem = it.GetItem();
@@ -901,7 +901,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
 }
 
 EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPage,
-                                                                   std::shared_ptr<PDFDictionary> inPageObject)
+                                                                   std::shared_ptr<charta::PDFDictionary> inPageObject)
 {
     EStatusCode status = charta::eSuccess;
 
@@ -919,9 +919,8 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
-        SingleValueContainerIterator<PDFObjectVector> it =
-            std::static_pointer_cast<PDFArray>(pageContent)->GetIterator();
-        PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+        auto it = std::static_pointer_cast<charta::PDFArray>(pageContent)->GetIterator();
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> refItem;
         while (it.MoveNext() && status == charta::eSuccess)
         {
             refItem = it.GetItem();
@@ -1309,7 +1308,7 @@ EStatusCode PDFDocumentHandler::MergePDFPagesToPageInContext(PDFPage &inPage, co
 
 EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex)
 {
-    std::shared_ptr<PDFDictionary> pageObject = mParser->ParsePage(inSourcePageIndex);
+    std::shared_ptr<charta::PDFDictionary> pageObject = mParser->ParsePage(inSourcePageIndex);
     EStatusCode status = charta::eSuccess;
 
     if (!pageObject)
@@ -1367,13 +1366,14 @@ EStatusCode PDFDocumentHandler::MergePDFPageForPage(PDFPage &inTargetPage, unsig
     return status;
 }
 
-EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std::shared_ptr<PDFDictionary> inPage,
+EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage,
+                                                     std::shared_ptr<charta::PDFDictionary> inPage,
                                                      StringToStringMap &outMappedResourcesNames)
 {
     // parse each individual resources dictionary separately and copy the resources. the output parameter should be used
     // for old vs. new names
 
-    PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
+    PDFObjectCastPtr<charta::PDFDictionary> resources(FindPageResources(mParser, std::move(inPage)));
 
     // k. no resources...as wierd as that might be...or just wrong...i'll let it be
     if (!resources)
@@ -1382,10 +1382,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
     EStatusCode status = charta::eSuccess;
 
     // ProcSet
-    PDFObjectCastPtr<PDFArray> procsets(mParser->QueryDictionaryObject(resources, "ProcSet"));
+    PDFObjectCastPtr<charta::PDFArray> procsets(mParser->QueryDictionaryObject(resources, "ProcSet"));
     if (procsets != nullptr)
     {
-        SingleValueContainerIterator<PDFObjectVector> it(procsets->GetIterator());
+        auto it(procsets->GetIterator());
         while (it.MoveNext())
             inTargetPage.GetResourcesDictionary().AddProcsetResource(
                 std::static_pointer_cast<PDFName>(it.GetItem())->GetValue());
@@ -1395,10 +1395,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
     {
 
         // ExtGState
-        PDFObjectCastPtr<PDFDictionary> extgstate(mParser->QueryDictionaryObject(resources, "ExtGState"));
+        PDFObjectCastPtr<charta::PDFDictionary> extgstate(mParser->QueryDictionaryObject(resources, "ExtGState"));
         if (extgstate != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(extgstate->GetIterator());
+            auto it(extgstate->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 // always copying to indirect object. with this method i'm forcing to write them now, not having to hold
@@ -1415,10 +1415,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // ColorSpace
-        PDFObjectCastPtr<PDFDictionary> colorspace(mParser->QueryDictionaryObject(resources, "ColorSpace"));
+        PDFObjectCastPtr<charta::PDFDictionary> colorspace(mParser->QueryDictionaryObject(resources, "ColorSpace"));
         if (colorspace != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(colorspace->GetIterator());
+            auto it(colorspace->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1433,10 +1433,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // Pattern
-        PDFObjectCastPtr<PDFDictionary> pattern(mParser->QueryDictionaryObject(resources, "Pattern"));
+        PDFObjectCastPtr<charta::PDFDictionary> pattern(mParser->QueryDictionaryObject(resources, "Pattern"));
         if (pattern != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(pattern->GetIterator());
+            auto it(pattern->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1451,10 +1451,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // Shading
-        PDFObjectCastPtr<PDFDictionary> shading(mParser->QueryDictionaryObject(resources, "Shading"));
+        PDFObjectCastPtr<charta::PDFDictionary> shading(mParser->QueryDictionaryObject(resources, "Shading"));
         if (shading != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(shading->GetIterator());
+            auto it(shading->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1469,10 +1469,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // XObject
-        PDFObjectCastPtr<PDFDictionary> xobject(mParser->QueryDictionaryObject(resources, "XObject"));
+        PDFObjectCastPtr<charta::PDFDictionary> xobject(mParser->QueryDictionaryObject(resources, "XObject"));
         if (xobject != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(xobject->GetIterator());
+            auto it(xobject->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1487,10 +1487,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // Font
-        PDFObjectCastPtr<PDFDictionary> font(mParser->QueryDictionaryObject(resources, "Font"));
+        PDFObjectCastPtr<charta::PDFDictionary> font(mParser->QueryDictionaryObject(resources, "Font"));
         if (font != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(font->GetIterator());
+            auto it(font->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1505,10 +1505,10 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage, std:
         }
 
         // Properties
-        PDFObjectCastPtr<PDFDictionary> properties(mParser->QueryDictionaryObject(resources, "Properties"));
+        PDFObjectCastPtr<charta::PDFDictionary> properties(mParser->QueryDictionaryObject(resources, "Properties"));
         if (properties != nullptr)
         {
-            MapIterator<PDFNameToPDFObjectMap> it(properties->GetIterator());
+            auto it(properties->GetIterator());
             while (it.MoveNext() && charta::eSuccess == status)
             {
                 EStatusCodeAndObjectIDType result = CopyObjectToIndirectObject(it.GetValue());
@@ -1551,14 +1551,14 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(const 
     else
     {
         auto itObjects =
-            mSourceToTarget.find(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID);
+            mSourceToTarget.find(std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID);
         if (itObjects == mSourceToTarget.end())
         {
             result.second = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
             mSourceToTarget.insert(
-                {std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID, result.second});
-            result.first = CopyInDirectObject(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID,
-                                              result.second);
+                {std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID, result.second});
+            result.first = CopyInDirectObject(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID, result.second);
         }
         else
         {
@@ -1589,7 +1589,7 @@ EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(const std::shar
 }
 
 EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPage,
-                                                             std::shared_ptr<PDFDictionary> inSourcePage,
+                                                             std::shared_ptr<charta::PDFDictionary> inSourcePage,
                                                              const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = charta::eSuccess;
@@ -1610,9 +1610,8 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
-        SingleValueContainerIterator<PDFObjectVector> it =
-            std::static_pointer_cast<PDFArray>(pageContent)->GetIterator();
-        PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+        auto it = std::static_pointer_cast<charta::PDFArray>(pageContent)->GetIterator();
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> refItem;
         while (it.MoveNext() && status == charta::eSuccess)
         {
             refItem = it.GetItem();
@@ -1909,14 +1908,14 @@ EStatusCode PDFDocumentHandler::CopyDirectObjectAsIs(std::shared_ptr<PDFObject> 
     return WriteObjectByType(std::move(inObject), eTokenSeparatorEndLine, &writingPolicy);
 }
 
-void InWritingPolicy::WriteReference(std::shared_ptr<PDFIndirectObjectReference> inReference,
+void InWritingPolicy::WriteReference(std::shared_ptr<charta::PDFIndirectObjectReference> inReference,
                                      ETokenSeparator inSeparator)
 {
     mDocumentHandler->mObjectsContext->WriteIndirectObjectReference(inReference->mObjectID, inReference->mVersion,
                                                                     inSeparator);
 }
 
-void OutWritingPolicy::WriteReference(std::shared_ptr<PDFIndirectObjectReference> inReference,
+void OutWritingPolicy::WriteReference(std::shared_ptr<charta::PDFIndirectObjectReference> inReference,
                                       ETokenSeparator inSeparator)
 {
     ObjectIDType sourceObjectID = inReference->mObjectID;
@@ -1941,7 +1940,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
     switch (inObject->GetType())
     {
     case PDFObject::ePDFObjectBoolean: {
-        mObjectsContext->WriteBoolean(std::static_pointer_cast<PDFBoolean>(inObject)->GetValue(), inSeparator);
+        mObjectsContext->WriteBoolean(std::static_pointer_cast<charta::PDFBoolean>(inObject)->GetValue(), inSeparator);
         break;
     }
     case PDFObject::ePDFObjectLiteralString: {
@@ -1950,7 +1949,8 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectHexString: {
-        mObjectsContext->WriteHexString(std::static_pointer_cast<PDFHexString>(inObject)->GetValue(), inSeparator);
+        mObjectsContext->WriteHexString(std::static_pointer_cast<charta::PDFHexString>(inObject)->GetValue(),
+                                        inSeparator);
         break;
     }
     case PDFObject::ePDFObjectNull: {
@@ -1962,7 +1962,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectInteger: {
-        mObjectsContext->WriteInteger(std::static_pointer_cast<PDFInteger>(inObject)->GetValue(), inSeparator);
+        mObjectsContext->WriteInteger(std::static_pointer_cast<charta::PDFInteger>(inObject)->GetValue(), inSeparator);
         break;
     }
     case PDFObject::ePDFObjectReal: {
@@ -1974,11 +1974,12 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectIndirectObjectReference: {
-        inWritePolicy->WriteReference(std::static_pointer_cast<PDFIndirectObjectReference>(inObject), inSeparator);
+        inWritePolicy->WriteReference(std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject),
+                                      inSeparator);
         break;
     }
     case PDFObject::ePDFObjectArray: {
-        status = WriteArrayObject(std::static_pointer_cast<PDFArray>(inObject), inSeparator, inWritePolicy);
+        status = WriteArrayObject(std::static_pointer_cast<charta::PDFArray>(inObject), inSeparator, inWritePolicy);
         break;
     }
     case PDFObject::ePDFObjectDictionary: {
@@ -1993,10 +1994,10 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteArrayObject(const std::shared_ptr<PDFArray> &inArray, ETokenSeparator inSeparator,
-                                                 IObjectWritePolicy *inWritePolicy)
+EStatusCode PDFDocumentHandler::WriteArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
+                                                 ETokenSeparator inSeparator, IObjectWritePolicy *inWritePolicy)
 {
-    SingleValueContainerIterator<PDFObjectVector> it(inArray->GetIterator());
+    auto it(inArray->GetIterator());
 
     EStatusCode status = charta::eSuccess;
 
@@ -2011,10 +2012,10 @@ EStatusCode PDFDocumentHandler::WriteArrayObject(const std::shared_ptr<PDFArray>
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WriteDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
+EStatusCode PDFDocumentHandler::WriteDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                       IObjectWritePolicy *inWritePolicy)
 {
-    MapIterator<PDFNameToPDFObjectMap> it(inDictionary->GetIterator());
+    auto it(inDictionary->GetIterator());
     EStatusCode status = charta::eSuccess;
     DictionaryContext *dictionary = mObjectsContext->StartDictionary();
 
@@ -2040,10 +2041,10 @@ EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<PDFStrea
     internals may not)
     2. Create PDFStream with this dictionary and use its output stream to write the result
     */
-    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     DictionaryContext *newStreamDictionary = mObjectsContext->StartDictionary();
 
-    MapIterator<PDFNameToPDFObjectMap> it(streamDictionary->GetIterator());
+    auto it(streamDictionary->GetIterator());
     EStatusCode status = charta::eSuccess;
     bool readingDecrypted = false;
     charta::IByteReader *streamReader = nullptr;
@@ -2120,7 +2121,7 @@ EStatusCode PDFDocumentHandler::MergePDFPageToFormXObject(PDFFormXObject *inTarg
 EStatusCode PDFDocumentHandler::MergePDFPageForXObject(PDFFormXObject *inTargetFormXObject,
                                                        unsigned long inSourcePageIndex)
 {
-    std::shared_ptr<PDFDictionary> pageObject = mParser->ParsePage(inSourcePageIndex);
+    std::shared_ptr<charta::PDFDictionary> pageObject = mParser->ParsePage(inSourcePageIndex);
     EStatusCode result = eSuccess;
 
     do
@@ -2306,7 +2307,7 @@ class PropertyCategoryServices : public ICategoryServicesCommand
 };
 
 EStatusCode PDFDocumentHandler::RegisterResourcesForForm(PDFFormXObject *inTargetFormXObject,
-                                                         const std::shared_ptr<PDFDictionary> &inPageObject,
+                                                         const std::shared_ptr<charta::PDFDictionary> &inPageObject,
                                                          StringToStringMap &outMappedResourcesNames)
 {
     EStatusCode result = charta::eSuccess;
@@ -2314,17 +2315,17 @@ EStatusCode PDFDocumentHandler::RegisterResourcesForForm(PDFFormXObject *inTarge
 
     do
     {
-        PDFObjectCastPtr<PDFDictionary> resources(FindPageResources(mParser, inPageObject));
+        PDFObjectCastPtr<charta::PDFDictionary> resources(FindPageResources(mParser, inPageObject));
 
         // k. no resources...as wierd as that might be...or just wrong...i'll let it be
         if (!resources)
             break;
 
         // ProcSet
-        PDFObjectCastPtr<PDFArray> procsets(mParser->QueryDictionaryObject(resources, "ProcSet"));
+        PDFObjectCastPtr<charta::PDFArray> procsets(mParser->QueryDictionaryObject(resources, "ProcSet"));
         if (procsets != nullptr)
         {
-            SingleValueContainerIterator<PDFObjectVector> it(procsets->GetIterator());
+            auto it(procsets->GetIterator());
             while (it.MoveNext())
                 inTargetFormXObject->GetResourcesDictionary().AddProcsetResource(
                     std::static_pointer_cast<PDFName>(it.GetItem())->GetValue());
@@ -2412,22 +2413,21 @@ class ResourceCopierTask : public IResourceWritingTask
     PDFFormXObject *mFormXObject;
 };
 
-void PDFDocumentHandler::RegisterResourcesForResourcesCategory(PDFFormXObject *inTargetFormXObject,
-                                                               ICategoryServicesCommand *inCommand,
-                                                               std::shared_ptr<PDFDictionary> inResourcesDictionary,
-                                                               ObjectIDTypeList &ioObjectsToLaterCopy,
-                                                               StringToStringMap &ioMappedResourcesNames)
+void PDFDocumentHandler::RegisterResourcesForResourcesCategory(
+    PDFFormXObject *inTargetFormXObject, ICategoryServicesCommand *inCommand,
+    std::shared_ptr<charta::PDFDictionary> inResourcesDictionary, ObjectIDTypeList &ioObjectsToLaterCopy,
+    StringToStringMap &ioMappedResourcesNames)
 {
-    PDFObjectCastPtr<PDFDictionary> resourcesCategoryDictionary(
+    PDFObjectCastPtr<charta::PDFDictionary> resourcesCategoryDictionary(
         mParser->QueryDictionaryObject(std::move(inResourcesDictionary), inCommand->GetResourcesCategoryName()));
     if (resourcesCategoryDictionary != nullptr)
     {
-        MapIterator<PDFNameToPDFObjectMap> it(resourcesCategoryDictionary->GetIterator());
+        auto it(resourcesCategoryDictionary->GetIterator());
         while (it.MoveNext())
         {
             if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
             {
-                auto indirectReference = std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue());
+                auto indirectReference = std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue());
                 auto itObjects = mSourceToTarget.find(indirectReference->mObjectID);
                 ObjectIDType targetObjectID;
                 if (itObjects == mSourceToTarget.end())
@@ -2462,7 +2462,7 @@ void PDFDocumentHandler::RegisterResourcesForResourcesCategory(PDFFormXObject *i
 }
 
 EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *inTargetFormXObject,
-                                                                std::shared_ptr<PDFDictionary> inSourcePage,
+                                                                std::shared_ptr<charta::PDFDictionary> inSourcePage,
                                                                 const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = charta::eSuccess;
@@ -2484,9 +2484,8 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
-        SingleValueContainerIterator<PDFObjectVector> it =
-            std::static_pointer_cast<PDFArray>(pageContent)->GetIterator();
-        PDFObjectCastPtr<PDFIndirectObjectReference> refItem;
+        auto it = std::static_pointer_cast<charta::PDFArray>(pageContent)->GetIterator();
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> refItem;
         while (it.MoveNext() && status == charta::eSuccess)
         {
             refItem = it.GetItem();
@@ -2549,15 +2548,15 @@ void PDFDocumentHandler::RegisterFormRelatedObjects(PDFFormXObject *inFormXObjec
     mDocumentContext->RegisterFormEndWritingTask(inFormXObject, new ObjectsCopyingTask(this, inObjectsToWrite));
 }
 
-std::shared_ptr<PDFObject> PDFDocumentHandler::FindPageResources(PDFParser *inParser,
-                                                                 const std::shared_ptr<PDFDictionary> &inDictionary)
+std::shared_ptr<PDFObject> PDFDocumentHandler::FindPageResources(
+    PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))
     {
         return inParser->QueryDictionaryObject(inDictionary, "Resources");
     }
 
-    PDFObjectCastPtr<PDFDictionary> parentDict(
+    PDFObjectCastPtr<charta::PDFDictionary> parentDict(
         inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
     if (!parentDict)
     {

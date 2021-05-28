@@ -252,21 +252,21 @@ EStatusCode IndirectObjectsReferenceRegistry::WriteState(ObjectsContext *inState
 
 EStatusCode IndirectObjectsReferenceRegistry::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> indirectObjectsDictionary(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> indirectObjectsDictionary(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFArray> objectsWritesRegistry(
+    PDFObjectCastPtr<charta::PDFArray> objectsWritesRegistry(
         indirectObjectsDictionary->QueryDirectObject("mObjectsWritesRegistry"));
 
-    SingleValueContainerIterator<PDFObjectVector> it = objectsWritesRegistry->GetIterator();
+    auto it = objectsWritesRegistry->GetIterator();
 
     mObjectsWritesRegistry.clear();
     while (it.MoveNext())
     {
         ObjectWriteInformation newObjectInformation;
-        PDFObjectCastPtr<PDFDictionary> objectWriteInformationDictionary(inStateReader->ParseNewObject(
-            std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID));
+        PDFObjectCastPtr<charta::PDFDictionary> objectWriteInformationDictionary(inStateReader->ParseNewObject(
+            std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID));
 
-        PDFObjectCastPtr<PDFBoolean> objectWritten(
+        PDFObjectCastPtr<charta::PDFBoolean> objectWritten(
             objectWriteInformationDictionary->QueryDirectObject("mObjectWritten"));
 
         newObjectInformation.mObjectWritten = objectWritten->GetValue();
@@ -283,7 +283,8 @@ EStatusCode IndirectObjectsReferenceRegistry::ReadState(PDFParser *inStateReader
         newObjectInformation.mObjectReferenceType =
             (ObjectWriteInformation::EObjectReferenceType)objectReferenceType->GetValue();
 
-        PDFObjectCastPtr<PDFBoolean> objectDirty(objectWriteInformationDictionary->QueryDirectObject("mIsDirty"));
+        PDFObjectCastPtr<charta::PDFBoolean> objectDirty(
+            objectWriteInformationDictionary->QueryDirectObject("mIsDirty"));
         newObjectInformation.mIsDirty = objectDirty->GetValue();
 
         PDFObjectCastPtr<PDFInteger> generationNumber(

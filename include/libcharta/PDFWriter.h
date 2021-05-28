@@ -30,7 +30,7 @@
 #include "ObjectsContext.h"
 #include "PDFRectangle.h"
 #include "encryption/EncryptionOptions.h"
-#include "images/tiff/TiffUsageParameters.h"
+#include "images/tiff/TIFFUsageParameters.h"
 #include "io/OutputFile.h"
 #include "parsing/PDFEmbedParameterTypes.h"
 #include "parsing/PDFParsingOptions.h"
@@ -180,18 +180,19 @@ class PDFWriter
 
     // tiff
 #ifndef PDFHUMMUS_NO_TIFF
-    PDFFormXObject *CreateFormXObjectFromTIFFFile(
-        const std::string &inTIFFFilePath,
-        const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
-    PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        charta::IByteReaderWithPosition *inTIFFStream,
-        const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
-    PDFFormXObject *CreateFormXObjectFromTIFFFile(
-        const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID,
-        const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
-    PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
-        const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
+    PDFFormXObject *CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
+                                                  const charta::TIFFUsageParameters &inTIFFUsageParameters =
+                                                      charta::TIFFUsageParameters::DefaultTIFFUsageParameters());
+    PDFFormXObject *CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
+                                                    const charta::TIFFUsageParameters &inTIFFUsageParameters =
+                                                        charta::TIFFUsageParameters::DefaultTIFFUsageParameters());
+    PDFFormXObject *CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID,
+                                                  const charta::TIFFUsageParameters &inTIFFUsageParameters =
+                                                      charta::TIFFUsageParameters::DefaultTIFFUsageParameters());
+    PDFFormXObject *CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
+                                                    ObjectIDType inFormXObjectID,
+                                                    const charta::TIFFUsageParameters &inTIFFUsageParameters =
+                                                        charta::TIFFUsageParameters::DefaultTIFFUsageParameters());
 #endif
 
     // png

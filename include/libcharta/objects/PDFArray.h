@@ -24,8 +24,8 @@
 
 #include <memory>
 #include <vector>
-
-typedef std::vector<std::shared_ptr<PDFObject>> PDFObjectVector;
+namespace charta
+{
 
 class PDFArray : public PDFObject
 {
@@ -41,12 +41,13 @@ class PDFArray : public PDFObject
     void AppendObject(const std::shared_ptr<PDFObject> &inObject);
 
     // Returns an object for iterating the array
-    SingleValueContainerIterator<PDFObjectVector> GetIterator();
+    SingleValueContainerIterator<std::vector<std::shared_ptr<PDFObject>>> GetIterator();
 
     // Returns object at a given index, calls AddRef
     std::shared_ptr<PDFObject> QueryObject(unsigned long i);
     unsigned long GetLength();
 
   private:
-    PDFObjectVector mValues;
+    std::vector<std::shared_ptr<PDFObject>> mValues;
 };
+} // namespace charta

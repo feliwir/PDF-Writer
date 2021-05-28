@@ -76,8 +76,9 @@
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"
-#include "images/tiff/TiffUsageParameters.h"
+#include "images/tiff/TIFFUsageParameters.h"
 
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -100,12 +101,11 @@ namespace charta
 {
 class DocumentContext;
 class IByteReaderWithPosition;
-} // namespace charta
 
-typedef std::list<ObjectIDType> ObjectIDTypeList;
-typedef std::list<PDFImageXObject *> PDFImageXObjectList;
+using ObjectIDTypeList = std::list<ObjectIDType>;
+using PDFImageXObjectList = std::list<PDFImageXObject *>;
 
-typedef tsize_t (*ImageSizeProc)(T2P *inT2p);
+using ImageSizeProc = std::function<tsize_t(T2P *inT2p)>;
 
 class TIFFImageHandler
 {
@@ -125,30 +125,29 @@ class TIFFImageHandler
         const std::string &inTIFFFilePath,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        charta::IByteReaderWithPosition *inTIFFStream,
+        IByteReaderWithPosition *inTIFFStream,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFFile(
         const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
     PDFFormXObject *CreateFormXObjectFromTIFFStream(
-        charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
+        IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
         const TIFFUsageParameters &inTIFFUsageParameters = TIFFUsageParameters::DefaultTIFFUsageParameters());
 
-    void SetOperationsContexts(charta::DocumentContext *inContainerDocumentContext, ObjectsContext *inObjectsContext);
+    void SetOperationsContexts(DocumentContext *inContainerDocumentContext, ObjectsContext *inObjectsContext);
     void SetDocumentContextExtender(IDocumentContextExtender *inExtender);
 
     void Reset();
 
     // utility for tiffs, to get what tiff dimensions hummus will use
-    std::pair<double, double> ReadImageDimensions(charta::IByteReaderWithPosition *inTIFFStream,
-                                                  unsigned long inImageIndex);
+    std::pair<double, double> ReadImageDimensions(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
     // retrieves some image data, see struct for info
-    TiffImageInfo ReadImageInfo(charta::IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
+    TiffImageInfo ReadImageInfo(IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex);
     // get number of images in the tiff collection
-    unsigned long ReadImagePageCount(charta::IByteReaderWithPosition *inTIFFStream);
+    unsigned long ReadImagePageCount(IByteReaderWithPosition *inTIFFStream);
 
   private:
-    charta::DocumentContext *mContainerDocumentContext;
+    DocumentContext *mContainerDocumentContext;
     ObjectsContext *mObjectsContext;
     T2P *mT2p; // state for tiff->pdf
     TIFFUsageParameters mUserParameters;
@@ -157,10 +156,10 @@ class TIFFImageHandler
     void InitializeConversionState();
     void DestroyConversionState();
     PDFFormXObject *ConvertTiff2PDF(ObjectIDType inFormXObjectID);
-    charta::EStatusCode ReadTopLevelTiffInformation();
-    charta::EStatusCode ReadTIFFPageInformation();
-    charta::EStatusCode ReadPhotometricPalette();
-    charta::EStatusCode ReadPhotometricPaletteCMYK();
+    EStatusCode ReadTopLevelTiffInformation();
+    EStatusCode ReadTIFFPageInformation();
+    EStatusCode ReadPhotometricPalette();
+    EStatusCode ReadPhotometricPaletteCMYK();
     void ComposePDFPage();
     void ComposePDFPageOrient(T2P_BOX *, uint16);
     void ComposePDFPageOrientFlip(T2P_BOX *, uint16);
@@ -176,7 +175,7 @@ class TIFFImageHandler
     void WriteImageXObjectDecode(DictionaryContext *inImageDictionary);
     void WriteImageXObjectFilter(DictionaryContext *inImageDictionary, int inTileIndex);
     void CalculateTiffTileSize(int inTileIndex);
-    charta::EStatusCode WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex);
+    EStatusCode WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex);
     void SamplePlanarSeparateToContig(unsigned char *inBuffer, unsigned char *inSamplebuffer,
                                       tsize_t inSamplebuffersize);
     tsize_t SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount);
@@ -186,16 +185,17 @@ class TIFFImageHandler
                           uint32 inTileLength);
     PDFImageXObject *WriteUntiledImageXObject();
     void WriteCommonImageDictionaryProperties(DictionaryContext *inImageContext);
-    charta::EStatusCode WriteImageData(std::shared_ptr<PDFStream> inImageStream);
+    EStatusCode WriteImageData(std::shared_ptr<PDFStream> inImageStream);
     void CalculateTiffSizeNoTiles();
     void SampleRealizePalette(unsigned char *inBuffer);
     tsize_t SampleABGRToRGB(tdata_t inData, uint32 inSampleCount);
-    charta::EStatusCode WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
-                                                 uint32 inImageLength, unsigned char *inBuffer,
-                                                 ImageSizeProc inBufferSizeFunction);
+    EStatusCode WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
+                                         uint32 inImageLength, unsigned char *inBuffer,
+                                         ImageSizeProc inBufferSizeFunction);
     PDFFormXObject *WriteImagesFormXObject(const PDFImageXObjectList &inImages, ObjectIDType inFormXObjectID);
     void AddImagesProcsets(PDFImageXObject *inImageXObject);
     void WriteIndexedCSForBiLevelColorMap();
 };
+} // namespace charta
 
 #endif

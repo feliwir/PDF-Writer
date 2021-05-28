@@ -206,15 +206,15 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
         delete (itUsedFonts->second);
     mUsedFonts.clear();
 
-    PDFObjectCastPtr<PDFDictionary> usedFontsRepositoryState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> usedFontsRepositoryState(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFBoolean> embedFontsObject(usedFontsRepositoryState->QueryDirectObject("mEmbedFonts"));
+    PDFObjectCastPtr<charta::PDFBoolean> embedFontsObject(usedFontsRepositoryState->QueryDirectObject("mEmbedFonts"));
     mEmbedFonts = embedFontsObject->GetValue();
 
     mOptionaMetricsFiles.clear();
-    PDFObjectCastPtr<PDFArray> optionalMetricsState(
+    PDFObjectCastPtr<charta::PDFArray> optionalMetricsState(
         usedFontsRepositoryState->QueryDirectObject("mOptionaMetricsFiles"));
-    SingleValueContainerIterator<PDFObjectVector> it = optionalMetricsState->GetIterator();
+    auto it = optionalMetricsState->GetIterator();
     PDFObjectCastPtr<PDFLiteralString> aStringValue;
 
     while (it.MoveNext())
@@ -233,12 +233,12 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
         mOptionaMetricsFiles.insert(StringToStringMap::value_type(aKey.ToUTF8String(), aValue.ToUTF8String()));
     }
 
-    PDFObjectCastPtr<PDFArray> usedFontsState(usedFontsRepositoryState->QueryDirectObject("mUsedFonts"));
+    PDFObjectCastPtr<charta::PDFArray> usedFontsState(usedFontsRepositoryState->QueryDirectObject("mUsedFonts"));
 
     it = usedFontsState->GetIterator();
     PDFObjectCastPtr<PDFLiteralString> keyStringItem;
     PDFObjectCastPtr<PDFInteger> keyIndexItem;
-    PDFObjectCastPtr<PDFIndirectObjectReference> valueItem;
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> valueItem;
 
     if (mInputFontsInformation == nullptr)
         mInputFontsInformation = new FreeTypeWrapper();

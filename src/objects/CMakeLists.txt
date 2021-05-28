@@ -1,8 +1,6 @@
 target_sources(libcharta PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFArray.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFBoolean.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/PDFCosArray.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/PDFCosDict.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFDictionary.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFHexString.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PDFIndirectObjectReference.cpp

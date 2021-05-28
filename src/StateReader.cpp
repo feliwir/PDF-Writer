@@ -45,7 +45,7 @@ EStatusCode StateReader::Start(const std::string &inStateFilePath)
     }
 
     // set the root object
-    PDFObjectCastPtr<PDFIndirectObjectReference> rootObject(mParser.GetTrailer()->QueryDirectObject("Root"));
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> rootObject(mParser.GetTrailer()->QueryDirectObject("Root"));
     mRootObject = rootObject->mObjectID;
 
     return charta::eSuccess;

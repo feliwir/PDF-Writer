@@ -35,9 +35,12 @@
 #include <memory>
 #include <utility>
 
+namespace charta
+{
 class PDFArray;
-class PDFStreamInput;
 class PDFDictionary;
+} // namespace charta
+class PDFStreamInput;
 class PDFName;
 class IPDFParserExtender;
 
@@ -99,7 +102,7 @@ class PDFParser
     double GetPDFLevel() const;
 
     // GetTrailer, not calling AddRef
-    std::shared_ptr<PDFDictionary> GetTrailer();
+    std::shared_ptr<charta::PDFDictionary> GetTrailer();
 
     // IMPORTANT! All non "Get" prefix methods below return an object after calling AddRef (or at least make sure
     // reference is added) to handle refcount use the RefCountPtr object, or just make sure to call Release when you are
@@ -111,18 +114,19 @@ class PDFParser
 
     // Query a dictinary object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct dictionary value, use PDFDictionary::QueryDirectObject [will AddRef automatically]
-    std::shared_ptr<PDFObject> QueryDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
+    std::shared_ptr<PDFObject> QueryDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                      const std::string &inName);
 
     // Query an array object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct array value, use the PDFArray direct access to the vector [and use AddRef, cause it
     // won't]
-    std::shared_ptr<PDFObject> QueryArrayObject(const std::shared_ptr<PDFArray> &inArray, unsigned long inIndex);
+    std::shared_ptr<PDFObject> QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
+                                                unsigned long inIndex);
 
     unsigned long GetPagesCount() const;
     // don't be confused - pass number of pages here. returns the dictionary, and verifies that it's actually a page
     // (via type)
-    std::shared_ptr<PDFDictionary> ParsePage(unsigned long inPageIndex);
+    std::shared_ptr<charta::PDFDictionary> ParsePage(unsigned long inPageIndex);
     // get page object ID for an input index
     ObjectIDType GetPageObjectID(unsigned long inPageIndex);
 
@@ -148,7 +152,7 @@ class PDFParser
     // interpreting them
     PDFObjectParser *StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream);
     // same, but for an array of streams, in case of page contents that are arrays. need to count as one
-    PDFObjectParser *StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams);
+    PDFObjectParser *StartReadingObjectsFromStreams(std::shared_ptr<charta::PDFArray> inArrayOfStreams);
 
     /*
         Same as above, but reading only decrypts, but does not defiler. ideal for copying
@@ -194,7 +198,7 @@ class PDFParser
 
     double mPDFLevel;
     long long mLastXrefPosition;
-    std::shared_ptr<PDFDictionary> mTrailer;
+    std::shared_ptr<charta::PDFDictionary> mTrailer;
     ObjectIDType mXrefSize;
     XrefEntryInput *mXrefTable;
     unsigned long mPagesCount;
@@ -205,7 +209,7 @@ class PDFParser
     charta::EStatusCode ParseHeaderLine();
     charta::EStatusCode ParseEOFLine();
     charta::EStatusCode ParseLastXrefPosition();
-    charta::EStatusCode ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer);
+    charta::EStatusCode ParseTrailerDictionary(std::shared_ptr<charta::PDFDictionary> *outTrailer);
     charta::EStatusCode BuildXrefTableFromTable();
     charta::EStatusCode DetermineXrefSize();
     charta::EStatusCode InitializeXref();
@@ -217,10 +221,10 @@ class PDFParser
     std::shared_ptr<PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
     charta::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
     charta::EStatusCode ParsePagesObjectIDs();
-    charta::EStatusCode ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
-    charta::EStatusCode ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPageNode, ObjectIDType inNodeObjectID,
-                                      unsigned long &ioCurrentPageIndex);
-    charta::EStatusCode ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &inTrailer);
+    charta::EStatusCode ParsePagesIDs(std::shared_ptr<charta::PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
+    charta::EStatusCode ParsePagesIDs(const std::shared_ptr<charta::PDFDictionary> &inPageNode,
+                                      ObjectIDType inNodeObjectID, unsigned long &ioCurrentPageIndex);
+    charta::EStatusCode ParsePreviousXrefs(const std::shared_ptr<charta::PDFDictionary> &inTrailer);
     void MergeXrefWithMainXref(XrefEntryInput *inTableToMerge, ObjectIDType inMergedTableSize);
     charta::EStatusCode ParseFileDirectory();
     charta::EStatusCode BuildXrefTableAndTrailerFromXrefStream(long long inXrefStreamObjectID);
@@ -238,7 +242,8 @@ class PDFParser
     charta::EStatusCode ReadXrefSegmentValue(charta::IByteReader *inSource, int inEntrySize, long long &outValue);
     charta::EStatusCode ReadXrefSegmentValue(charta::IByteReader *inSource, int inEntrySize, ObjectIDType &outValue);
     charta::EStatusCode ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
-                                                   ObjectIDType inXrefSize, std::shared_ptr<PDFDictionary> *outTrailer,
+                                                   ObjectIDType inXrefSize,
+                                                   std::shared_ptr<charta::PDFDictionary> *outTrailer,
                                                    XrefEntryInput **outExtendedTable,
                                                    ObjectIDType *outExtendedTableSize);
     std::shared_ptr<PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
@@ -246,7 +251,7 @@ class PDFParser
     void MovePositionInStream(long long inPosition);
     EStatusCodeAndIByteReader CreateFilterForStream(charta::IByteReader *inStream,
                                                     const std::shared_ptr<PDFName> &inFilterName,
-                                                    const std::shared_ptr<PDFDictionary> &inDecodeParams,
+                                                    const std::shared_ptr<charta::PDFDictionary> &inDecodeParams,
                                                     const std::shared_ptr<PDFStreamInput> &inPDFStream);
 
     void NotifyIndirectObjectStart(long long inObjectID, long long inGenerationNumber);

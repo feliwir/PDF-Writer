@@ -1651,9 +1651,10 @@ void DocumentContext::WritePageTreeState(ObjectsContext *inStateWriter, ObjectID
 
 EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> documentState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> documentState(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFBoolean> modifiedDocumentExists(documentState->QueryDirectObject("mModifiedDocumentIDExists"));
+    PDFObjectCastPtr<charta::PDFBoolean> modifiedDocumentExists(
+        documentState->QueryDirectObject("mModifiedDocumentIDExists"));
     mModifiedDocumentIDExists = modifiedDocumentExists->GetValue();
 
     if (mModifiedDocumentIDExists)
@@ -1667,46 +1668,48 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
     if (!!newPDFID)
         mNewPDFID = newPDFID->GetValue();
 
-    PDFObjectCastPtr<PDFDictionary> trailerInformationState(
+    PDFObjectCastPtr<charta::PDFDictionary> trailerInformationState(
         inStateReader->QueryDictionaryObject(documentState, "mTrailerInformation"));
     ReadTrailerState(inStateReader, trailerInformationState);
 
-    PDFObjectCastPtr<PDFDictionary> catalogInformationState(
+    PDFObjectCastPtr<charta::PDFDictionary> catalogInformationState(
         inStateReader->QueryDictionaryObject(documentState, "mCatalogInformation"));
     ReadCatalogInformationState(inStateReader, catalogInformationState);
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> usedFontsInformationStateID(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> usedFontsInformationStateID(
         documentState->QueryDirectObject("mUsedFontsRepository"));
     EStatusCode status = mUsedFontsRepository.ReadState(inStateReader, usedFontsInformationStateID->mObjectID);
     if (status != eSuccess)
         return status;
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> encrytpionStateID(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> encrytpionStateID(
         documentState->QueryDirectObject("mEncryptionHelper"));
     return mEncryptionHelper.ReadState(inStateReader, encrytpionStateID->mObjectID);
 }
 
-void DocumentContext::ReadTrailerState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerState)
+void DocumentContext::ReadTrailerState(PDFParser *inStateReader,
+                                       const std::shared_ptr<charta::PDFDictionary> &inTrailerState)
 {
     PDFObjectCastPtr<PDFInteger> prevState(inTrailerState->QueryDirectObject("mPrev"));
     mTrailerInformation.SetPrev(prevState->GetValue());
 
-    PDFObjectCastPtr<PDFDictionary> rootReferenceState(inTrailerState->QueryDirectObject("mRootReference"));
+    PDFObjectCastPtr<charta::PDFDictionary> rootReferenceState(inTrailerState->QueryDirectObject("mRootReference"));
     mTrailerInformation.SetRoot(GetReferenceFromState(rootReferenceState));
 
-    PDFObjectCastPtr<PDFDictionary> encryptReferenceState(inTrailerState->QueryDirectObject("mEncryptReference"));
+    PDFObjectCastPtr<charta::PDFDictionary> encryptReferenceState(
+        inTrailerState->QueryDirectObject("mEncryptReference"));
     mTrailerInformation.SetEncrypt(GetReferenceFromState(encryptReferenceState));
 
-    PDFObjectCastPtr<PDFDictionary> infoDictionaryState(
+    PDFObjectCastPtr<charta::PDFDictionary> infoDictionaryState(
         inStateReader->QueryDictionaryObject(inTrailerState, "mInfoDictionary"));
     ReadTrailerInfoState(inStateReader, infoDictionaryState);
 
-    PDFObjectCastPtr<PDFDictionary> infoDictionaryReferenceState(
+    PDFObjectCastPtr<charta::PDFDictionary> infoDictionaryReferenceState(
         inTrailerState->QueryDirectObject("mInfoDictionaryReference"));
     mTrailerInformation.SetInfoDictionaryReference(GetReferenceFromState(infoDictionaryReferenceState));
 }
 
-ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<PDFDictionary> &inDictionary)
+ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     PDFObjectCastPtr<PDFInteger> objectID(inDictionary->QueryDirectObject("ObjectID"));
     PDFObjectCastPtr<PDFInteger> generationNumber(inDictionary->QueryDirectObject("GenerationNumber"));
@@ -1715,7 +1718,7 @@ ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<PDF
 }
 
 void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
-                                           const std::shared_ptr<PDFDictionary> &inTrailerInfoState)
+                                           const std::shared_ptr<charta::PDFDictionary> &inTrailerInfoState)
 {
     PDFObjectCastPtr<PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
@@ -1735,19 +1738,19 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
     PDFObjectCastPtr<PDFLiteralString> producerState(inTrailerInfoState->QueryDirectObject("Producer"));
     mTrailerInformation.GetInfo().Producer = producerState->GetValue();
 
-    PDFObjectCastPtr<PDFDictionary> creationDateState(inTrailerInfoState->QueryDirectObject("CreationDate"));
+    PDFObjectCastPtr<charta::PDFDictionary> creationDateState(inTrailerInfoState->QueryDirectObject("CreationDate"));
     ReadDateState(creationDateState, mTrailerInformation.GetInfo().CreationDate);
 
-    PDFObjectCastPtr<PDFDictionary> modDateState(inTrailerInfoState->QueryDirectObject("ModDate"));
+    PDFObjectCastPtr<charta::PDFDictionary> modDateState(inTrailerInfoState->QueryDirectObject("ModDate"));
     ReadDateState(creationDateState, mTrailerInformation.GetInfo().ModDate);
 
     PDFObjectCastPtr<PDFInteger> trappedState(inTrailerInfoState->QueryDirectObject("Trapped"));
     mTrailerInformation.GetInfo().Trapped = (EInfoTrapped)trappedState->GetValue();
 
-    PDFObjectCastPtr<PDFDictionary> additionalInfoState(
+    PDFObjectCastPtr<charta::PDFDictionary> additionalInfoState(
         inTrailerInfoState->QueryDirectObject("mAdditionalInfoEntries"));
 
-    MapIterator<PDFNameToPDFObjectMap> it = additionalInfoState->GetIterator();
+    auto it = additionalInfoState->GetIterator();
     PDFObjectCastPtr<PDFName> keyState;
     PDFObjectCastPtr<PDFLiteralString> valueState;
 
@@ -1762,7 +1765,7 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
     }
 }
 
-void DocumentContext::ReadDateState(const std::shared_ptr<PDFDictionary> &inDateState, PDFDate &inDate)
+void DocumentContext::ReadDateState(const std::shared_ptr<charta::PDFDictionary> &inDateState, PDFDate &inDate)
 {
     PDFObjectCastPtr<PDFInteger> yearState(inDateState->QueryDirectObject("Year"));
     inDate.Year = (int)yearState->GetValue();
@@ -1792,10 +1795,10 @@ void DocumentContext::ReadDateState(const std::shared_ptr<PDFDictionary> &inDate
     inDate.MinuteFromUTC = (int)minuteFromUTCState->GetValue();
 }
 
-void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
-                                                  const std::shared_ptr<PDFDictionary> &inCatalogInformationState)
+void DocumentContext::ReadCatalogInformationState(
+    PDFParser *inStateReader, const std::shared_ptr<charta::PDFDictionary> &inCatalogInformationState)
 {
-    PDFObjectCastPtr<PDFIndirectObjectReference> pageTreeRootState(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> pageTreeRootState(
         inCatalogInformationState->QueryDirectObject("PageTreeRoot"));
 
     // clear current state
@@ -1808,11 +1811,11 @@ void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
     if (!pageTreeRootState) // no page nodes yet...
         return;
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> currentPageTreeState(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> currentPageTreeState(
         inCatalogInformationState->QueryDirectObject("mCurrentPageTreeNode"));
     mCurrentPageTreeIDInState = currentPageTreeState->mObjectID;
 
-    PDFObjectCastPtr<PDFDictionary> pageTreeState(inStateReader->ParseNewObject(pageTreeRootState->mObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> pageTreeState(inStateReader->ParseNewObject(pageTreeRootState->mObjectID));
 
     PDFObjectCastPtr<PDFInteger> pageTreeIDState(pageTreeState->QueryDirectObject("mPageTreeID"));
     auto *rootNode = new PageTree((ObjectIDType)pageTreeIDState->GetValue());
@@ -1822,18 +1825,19 @@ void DocumentContext::ReadCatalogInformationState(PDFParser *inStateReader,
     ReadPageTreeState(inStateReader, pageTreeState, rootNode);
 }
 
-void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inPageTreeState,
+void DocumentContext::ReadPageTreeState(PDFParser *inStateReader,
+                                        const std::shared_ptr<charta::PDFDictionary> &inPageTreeState,
                                         PageTree *inPageTree)
 {
-    PDFObjectCastPtr<PDFBoolean> isLeafParentState(inPageTreeState->QueryDirectObject("mIsLeafParent"));
+    PDFObjectCastPtr<charta::PDFBoolean> isLeafParentState(inPageTreeState->QueryDirectObject("mIsLeafParent"));
     bool isLeafParent = isLeafParentState->GetValue();
 
     if (isLeafParent)
     {
-        PDFObjectCastPtr<PDFArray> kidsIDsState(inPageTreeState->QueryDirectObject("mKidsIDs"));
+        PDFObjectCastPtr<charta::PDFArray> kidsIDsState(inPageTreeState->QueryDirectObject("mKidsIDs"));
         PDFObjectCastPtr<PDFInteger> kidID;
 
-        SingleValueContainerIterator<PDFObjectVector> it = kidsIDsState->GetIterator();
+        auto it = kidsIDsState->GetIterator();
         while (it.MoveNext())
         {
             kidID = it.GetItem();
@@ -1842,18 +1846,18 @@ void DocumentContext::ReadPageTreeState(PDFParser *inStateReader, const std::sha
     }
     else
     {
-        PDFObjectCastPtr<PDFArray> kidsNodesState(inPageTreeState->QueryDirectObject("mKidsNodes"));
+        PDFObjectCastPtr<charta::PDFArray> kidsNodesState(inPageTreeState->QueryDirectObject("mKidsNodes"));
 
-        SingleValueContainerIterator<PDFObjectVector> it = kidsNodesState->GetIterator();
+        auto it = kidsNodesState->GetIterator();
         while (it.MoveNext())
         {
-            PDFObjectCastPtr<PDFDictionary> kidNodeState(inStateReader->ParseNewObject(
-                std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID));
+            PDFObjectCastPtr<charta::PDFDictionary> kidNodeState(inStateReader->ParseNewObject(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID));
 
             PDFObjectCastPtr<PDFInteger> pageTreeIDState(kidNodeState->QueryDirectObject("mPageTreeID"));
             auto *kidNode = new PageTree((ObjectIDType)pageTreeIDState->GetValue());
 
-            if (std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID ==
+            if (std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID ==
                 mCurrentPageTreeIDInState)
                 mCatalogInformation.SetCurrentPageTreeNode(kidNode);
             ReadPageTreeState(inStateReader, kidNodeState, kidNode);
@@ -2138,7 +2142,7 @@ EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
     if (inModifiedFileParser->GetTrailer() == nullptr)
         return eFailure;
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> rootReference =
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> rootReference =
         inModifiedFileParser->GetTrailer()->QueryDirectObject("Root");
     if (!rootReference)
         return eFailure;
@@ -2153,7 +2157,7 @@ EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
     // try to get document ID. in any case use whatever was the original
     mModifiedDocumentIDExists = true;
     mModifiedDocumentID = "";
-    PDFObjectCastPtr<PDFArray> idArray = inModifiedFileParser->GetTrailer()->QueryDirectObject("ID");
+    PDFObjectCastPtr<charta::PDFArray> idArray = inModifiedFileParser->GetTrailer()->QueryDirectObject("ID");
     if ((idArray != nullptr) && idArray->GetLength() == 2)
     {
         PDFObjectCastPtr<PDFHexString> firstID = idArray->QueryObject(0);
@@ -2194,9 +2198,9 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
 
         // now write all info that's not overriden by this implementation
         PDFParser *modifiedDocumentParser = mModifiedDocumentCopyingContext->GetSourceDocumentParser();
-        PDFObjectCastPtr<PDFDictionary> catalogDict(
+        PDFObjectCastPtr<charta::PDFDictionary> catalogDict(
             modifiedDocumentParser->QueryDictionaryObject(modifiedDocumentParser->GetTrailer(), "Root"));
-        MapIterator<PDFNameToPDFObjectMap> catalogDictIt = catalogDict->GetIterator();
+        auto catalogDictIt = catalogDict->GetIterator();
 
         if (!catalogDict)
         {
@@ -2323,7 +2327,7 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
     do
     {
         // get catalogue, verify indirect reference
-        PDFObjectCastPtr<PDFIndirectObjectReference> catalogReference(
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> catalogReference(
             inModifiedFileParser->GetTrailer()->QueryDirectObject("Root"));
         if (!catalogReference)
         {
@@ -2331,7 +2335,8 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
             break;
         }
 
-        PDFObjectCastPtr<PDFDictionary> catalog(inModifiedFileParser->ParseNewObject(catalogReference->mObjectID));
+        PDFObjectCastPtr<charta::PDFDictionary> catalog(
+            inModifiedFileParser->ParseNewObject(catalogReference->mObjectID));
         if (!catalog)
         {
             TRACE_LOG("DocumentContext::GetOriginalDocumentPageTreeRoot, failed to read catalog");
@@ -2339,7 +2344,7 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
         }
 
         // get pages, verify indirect reference
-        PDFObjectCastPtr<PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
         if (!pagesReference)
         {
             TRACE_LOG("PDFParser::GetOriginalDocumentPageTreeRoot, failed to read pages reference in catalog");
@@ -2409,7 +2414,7 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     // write modified old pages root
     ObjectReference originalTreeRoot = GetOriginalDocumentPageTreeRoot(inModifiedFileParser);
 
-    PDFObjectCastPtr<PDFDictionary> originalTreeRootObject =
+    PDFObjectCastPtr<charta::PDFDictionary> originalTreeRootObject =
         inModifiedFileParser->ParseNewObject(originalTreeRoot.ObjectID);
 
     mObjectsContext->StartModifiedIndirectObject(originalTreeRoot.ObjectID);
@@ -2420,7 +2425,7 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     long long originalPageTreeKidsCount = kidsCount != nullptr ? kidsCount->GetValue() : 0;
 
     // copy all but parent key. then add parent as the new root object
-    MapIterator<PDFNameToPDFObjectMap> pageTreeIt = originalTreeRootObject->GetIterator();
+    auto pageTreeIt = originalTreeRootObject->GetIterator();
     PDFDocumentCopyingContext aCopyingContext;
 
     EStatusCode status = aCopyingContext.Start(inModifiedFileParser, this, mObjectsContext);
@@ -2506,7 +2511,8 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
     if (encrypt->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         // just set the reference to the object
-        mTrailerInformation.SetEncrypt(std::static_pointer_cast<PDFIndirectObjectReference>(encrypt)->mObjectID);
+        mTrailerInformation.SetEncrypt(
+            std::static_pointer_cast<charta::PDFIndirectObjectReference>(encrypt)->mObjectID);
     }
     else
     {

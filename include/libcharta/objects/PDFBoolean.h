@@ -22,6 +22,8 @@
 
 #include "PDFObject.h"
 
+namespace charta
+{
 class PDFBoolean : public PDFObject
 {
   public:
@@ -31,11 +33,11 @@ class PDFBoolean : public PDFObject
     };
 
     PDFBoolean(bool inValue);
-    virtual ~PDFBoolean(void);
 
     bool GetValue() const;
     operator bool() const;
 
   private:
-    bool mValue;
+    const bool mValue;
 };
+} // namespace charta

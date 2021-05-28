@@ -427,15 +427,17 @@ charta::EStatusCode EncryptionHelper::WriteState(ObjectsContext *inStateWriter, 
 
 charta::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> encryptionObjectState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> encryptionObjectState(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFBoolean> isDocumentEncrypted = encryptionObjectState->QueryDirectObject("mIsDocumentEncrypted");
+    PDFObjectCastPtr<charta::PDFBoolean> isDocumentEncrypted =
+        encryptionObjectState->QueryDirectObject("mIsDocumentEncrypted");
     mIsDocumentEncrypted = isDocumentEncrypted->GetValue();
 
-    PDFObjectCastPtr<PDFBoolean> supportsEncryption = encryptionObjectState->QueryDirectObject("mSupportsEncryption");
+    PDFObjectCastPtr<charta::PDFBoolean> supportsEncryption =
+        encryptionObjectState->QueryDirectObject("mSupportsEncryption");
     mSupportsEncryption = supportsEncryption->GetValue();
 
-    PDFObjectCastPtr<PDFBoolean> usingAESObject = encryptionObjectState->QueryDirectObject("mUsingAES");
+    PDFObjectCastPtr<charta::PDFBoolean> usingAESObject = encryptionObjectState->QueryDirectObject("mUsingAES");
     bool usingAES = usingAESObject->GetValue();
 
     PDFObjectCastPtr<PDFInteger> length = encryptionObjectState->QueryDirectObject("mLength");
@@ -450,7 +452,7 @@ charta::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, Object
     PDFObjectCastPtr<PDFInteger> p = encryptionObjectState->QueryDirectObject("mP");
     mP = p->GetValue();
 
-    PDFObjectCastPtr<PDFBoolean> encryptMetaData = encryptionObjectState->QueryDirectObject("mEncryptMetaData");
+    PDFObjectCastPtr<charta::PDFBoolean> encryptMetaData = encryptionObjectState->QueryDirectObject("mEncryptMetaData");
     mEncryptMetaData = encryptMetaData->GetValue();
 
     PDFObjectCastPtr<PDFLiteralString> fileIDPart1 = encryptionObjectState->QueryDirectObject("mFileIDPart1");

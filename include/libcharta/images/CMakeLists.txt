@@ -4,6 +4,6 @@ set(LIBCHARTA_PUBLIC_HEADERS ${LIBCHARTA_PUBLIC_HEADERS}
     ${CMAKE_CURRENT_SOURCE_DIR}/jpeg/JPEGImageParser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/png/PNGImageHandler.h
     ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TIFFImageHandler.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TiffUsageParameters.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TIFFUsageParameters.h
     PARENT_SCOPE
 )

@@ -49,7 +49,7 @@ void PDFPageInput::AssertPageObjectValid()
     }
 }
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<PDFDictionary> &inPageObject)
+PDFPageInput::PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<charta::PDFDictionary> &inPageObject)
 {
     mParser = inParser;
     mPageObject = inPageObject;
@@ -99,7 +99,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
 {
     PDFRectangle result;
 
-    PDFObjectCastPtr<PDFArray> mediaBox(QueryInheritedValue(mPageObject, "MediaBox"));
+    PDFObjectCastPtr<charta::PDFArray> mediaBox(QueryInheritedValue(mPageObject, "MediaBox"));
     if (!mediaBox || mediaBox->GetLength() != 4)
     {
         TRACE_LOG("PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
@@ -116,7 +116,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
 PDFRectangle PDFPageInput::GetCropBox()
 {
     PDFRectangle result;
-    PDFObjectCastPtr<PDFArray> cropBox(QueryInheritedValue(mPageObject, "CropBox"));
+    PDFObjectCastPtr<charta::PDFArray> cropBox(QueryInheritedValue(mPageObject, "CropBox"));
 
     if (!cropBox || cropBox->GetLength() != 4)
         result = GetMediaBox();
@@ -133,7 +133,7 @@ PDFRectangle PDFPageInput::GetTrimBox()
 PDFRectangle PDFPageInput::GetBoxAndDefaultWithCrop(const std::string &inBoxName)
 {
     PDFRectangle result;
-    PDFObjectCastPtr<PDFArray> aBox(QueryInheritedValue(mPageObject, inBoxName));
+    PDFObjectCastPtr<charta::PDFArray> aBox(QueryInheritedValue(mPageObject, inBoxName));
 
     if (!aBox || aBox->GetLength() != 4)
         result = GetCropBox();
@@ -153,7 +153,7 @@ PDFRectangle PDFPageInput::GetArtBox()
 }
 
 static const std::string scParent = "Parent";
-std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_ptr<PDFDictionary> &inDictionary,
+std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                              const std::string &inName)
 {
     if (inDictionary->Exists(inName))
@@ -162,7 +162,7 @@ std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_p
     }
     if (inDictionary->Exists(scParent))
     {
-        PDFObjectCastPtr<PDFDictionary> parent(mParser->QueryDictionaryObject(inDictionary, scParent));
+        PDFObjectCastPtr<charta::PDFDictionary> parent(mParser->QueryDictionaryObject(inDictionary, scParent));
         if (!parent)
             return nullptr;
         return QueryInheritedValue(parent, inName);
@@ -170,7 +170,7 @@ std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_p
     return nullptr;
 }
 
-void PDFPageInput::SetPDFRectangleFromPDFArray(const std::shared_ptr<PDFArray> &inPDFArray,
+void PDFPageInput::SetPDFRectangleFromPDFArray(const std::shared_ptr<charta::PDFArray> &inPDFArray,
                                                PDFRectangle &outPDFRectangle)
 {
     std::shared_ptr<PDFObject> lowerLeftX(inPDFArray->QueryObject(0));

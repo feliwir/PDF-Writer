@@ -1,5 +1,7 @@
 #include "IDeletable.h"
 
+namespace charta
+{
 template <typename T> class Deletable : public IDeletable
 {
   public:
@@ -40,3 +42,4 @@ template <typename T> T *Deletable<T>::GetPtr()
 {
     return mValue;
 }
+} // namespace charta

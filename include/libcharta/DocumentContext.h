@@ -32,7 +32,7 @@
 #include "images/jpeg/JPEGImageHandler.h"
 #include "images/png/PNGImageHandler.h"
 #include "images/tiff/TIFFImageHandler.h"
-#include "images/tiff/TiffUsageParameters.h"
+#include "images/tiff/TIFFUsageParameters.h"
 #include "parsing/PDFDocumentHandler.h"
 #include "parsing/PDFEmbedParameterTypes.h"
 #include "parsing/PDFParsingOptions.h"
@@ -61,7 +61,6 @@ class PDFImageXObject;
 class PDFUsedFont;
 class PageContentContext;
 class PDFParser;
-class PDFDictionary;
 class IResourceWritingTask;
 class IFormEndWritingTask;
 class PDFDocumentCopyingContext;
@@ -89,6 +88,7 @@ typedef std::pair<std::string, unsigned long> StringAndULongPair;
 namespace charta
 {
 class OutputFile;
+class PDFDictionary;
 
 struct HummusImageInformation
 {
@@ -406,15 +406,16 @@ class DocumentContext
     void WriteTrailerInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteDateState(ObjectsContext *inStateWriter, const PDFDate &inDate);
     void WriteCatalogInformationState(ObjectsContext *inStateWriter, ObjectIDType inObjectID);
-    void ReadTrailerState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerState);
-    ObjectReference GetReferenceFromState(const std::shared_ptr<PDFDictionary> &inDictionary);
-    void ReadTrailerInfoState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inTrailerInfoState);
-    void ReadDateState(const std::shared_ptr<PDFDictionary> &inDateState, PDFDate &inDate);
+    void ReadTrailerState(PDFParser *inStateReader, const std::shared_ptr<charta::PDFDictionary> &inTrailerState);
+    ObjectReference GetReferenceFromState(const std::shared_ptr<charta::PDFDictionary> &inDictionary);
+    void ReadTrailerInfoState(PDFParser *inStateReader,
+                              const std::shared_ptr<charta::PDFDictionary> &inTrailerInfoState);
+    void ReadDateState(const std::shared_ptr<charta::PDFDictionary> &inDateState, PDFDate &inDate);
     void ReadCatalogInformationState(PDFParser *inStateReader,
-                                     const std::shared_ptr<PDFDictionary> &inCatalogInformationState);
+                                     const std::shared_ptr<charta::PDFDictionary> &inCatalogInformationState);
 
     void WritePageTreeState(ObjectsContext *inStateWriter, ObjectIDType inObjectID, PageTree *inPageTree);
-    void ReadPageTreeState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inPageTreeState,
+    void ReadPageTreeState(PDFParser *inStateReader, const std::shared_ptr<charta::PDFDictionary> &inPageTreeState,
                            PageTree *inPageTree);
 
     ObjectReference GetOriginalDocumentPageTreeRoot(PDFParser *inModifiedFileParser);

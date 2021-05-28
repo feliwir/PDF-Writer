@@ -17,7 +17,7 @@ class PDFArrayIterator
     PDFArrayIterator(PDFParser &parser) : mParser(parser)
     {
     }
-    PDFArrayIterator(PDFParser &parser, PDFObjectCastPtr<PDFArray> &inArray) : mArray(inArray), mParser(parser)
+    PDFArrayIterator(PDFParser &parser, PDFObjectCastPtr<charta::PDFArray> &inArray) : mArray(inArray), mParser(parser)
     {
     }
 
@@ -25,6 +25,6 @@ class PDFArrayIterator
     unsigned long GetLength();
 
   private:
-    PDFObjectCastPtr<PDFArray> mArray;
+    PDFObjectCastPtr<charta::PDFArray> mArray;
     PDFParser &mParser;
 };

@@ -148,9 +148,9 @@ EStatusCode PDFUsedFont::WriteState(ObjectsContext *inStateWriter, ObjectIDType 
 
 EStatusCode PDFUsedFont::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> pdfUsedFontState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> pdfUsedFontState(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> writtenFontReference(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> writtenFontReference(
         pdfUsedFontState->QueryDirectObject("mWrittenFont"));
 
     if (!writtenFontReference)

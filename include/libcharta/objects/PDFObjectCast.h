@@ -29,6 +29,7 @@
 
 template <class T> std::shared_ptr<T> PDFObjectCast(std::shared_ptr<PDFObject> inOriginal)
 {
+    using namespace charta;
     if (!inOriginal)
         return nullptr;
 

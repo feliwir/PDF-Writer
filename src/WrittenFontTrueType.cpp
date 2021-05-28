@@ -243,7 +243,7 @@ EStatusCode WrittenFontTrueType::WriteState(ObjectsContext *inStateWriter, Objec
 
 EStatusCode WrittenFontTrueType::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> writtenFontState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> writtenFontState(inStateReader->ParseNewObject(inObjectID));
 
     return AbstractWrittenFont::ReadStateFromObject(inStateReader, writtenFontState);
 }

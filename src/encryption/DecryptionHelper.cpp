@@ -100,7 +100,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
     mParser = inParser;
 
     // setup encrypted flag through the existance of encryption dict
-    std::shared_ptr<PDFDictionary> encryptionDictionary =
+    std::shared_ptr<charta::PDFDictionary> encryptionDictionary =
         std::static_pointer_cast<PDFDictionary>(inParser->QueryDictionaryObject(inParser->GetTrailer(), "Encrypt"));
     mIsEncrypted = encryptionDictionary != nullptr;
 
@@ -192,7 +192,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
             mP = pHelper.GetAsInteger();
         }
 
-        PDFObjectCastPtr<PDFBoolean> encryptMetadata(
+        PDFObjectCastPtr<charta::PDFBoolean> encryptMetadata(
             inParser->QueryDictionaryObject(encryptionDictionary, "EncryptMetadata"));
         if (!encryptMetadata)
         {
@@ -205,7 +205,7 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
 
         // grab file ID from trailer
         mFileIDPart1 = ByteList();
-        PDFObjectCastPtr<PDFArray> idArray(inParser->QueryDictionaryObject(inParser->GetTrailer(), "ID"));
+        PDFObjectCastPtr<charta::PDFArray> idArray(inParser->QueryDictionaryObject(inParser->GetTrailer(), "ID"));
         if (!!idArray && idArray->GetLength() > 0)
         {
             std::shared_ptr<PDFObject> idPart1Object(inParser->QueryArrayObject(idArray, 0));
@@ -230,15 +230,16 @@ EStatusCode DecryptionHelper::Setup(PDFParser *inParser, const string &inPasswor
         if (mV == 4)
         {
             // multiple xcryptions. read crypt filters, determine which does what
-            PDFObjectCastPtr<PDFDictionary> cryptFilters(inParser->QueryDictionaryObject(encryptionDictionary, "CF"));
+            PDFObjectCastPtr<charta::PDFDictionary> cryptFilters(
+                inParser->QueryDictionaryObject(encryptionDictionary, "CF"));
             if (!!cryptFilters)
             {
-                MapIterator<PDFNameToPDFObjectMap> cryptFiltersIt = cryptFilters->GetIterator();
+                auto cryptFiltersIt = cryptFilters->GetIterator();
 
                 // read crypt filters
                 while (cryptFiltersIt.MoveNext())
                 {
-                    PDFObjectCastPtr<PDFDictionary> cryptFilter;
+                    PDFObjectCastPtr<charta::PDFDictionary> cryptFilter;
                     // A little caveat of those smart ptrs need to be handled here
                     // make sure to pass the pointer after init...otherwise cast wont do addref
                     // and object will be released
@@ -323,7 +324,7 @@ static const string scEcnryptionKeyMetadataKey = "DecryptionHelper.EncryptionKey
 
 bool HasCryptFilterDefinition(PDFParser *inParser, const std::shared_ptr<PDFStreamInput> &inStream)
 {
-    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
 
     // check if stream has a crypt filter
     std::shared_ptr<PDFObject> filterObject(inParser->QueryDictionaryObject(streamDictionary, "Filter"));
@@ -335,7 +336,7 @@ bool HasCryptFilterDefinition(PDFParser *inParser, const std::shared_ptr<PDFStre
 
     if (filterObject->GetType() == PDFObject::ePDFObjectArray)
     {
-        auto filterObjectArray = std::static_pointer_cast<PDFArray>(filterObject);
+        auto filterObjectArray = std::static_pointer_cast<charta::PDFArray>(filterObject);
         bool foundCrypt = false;
         for (unsigned long i = 0; i < filterObjectArray->GetLength() && !foundCrypt; ++i)
         {
@@ -365,7 +366,7 @@ charta::IByteReader *DecryptionHelper::CreateDefaultDecryptionFilterForStream(
         (mXcryptStreams == nullptr))
         return nullptr;
 
-    IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
+    charta::IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
     if (savedEcnryptionKey != nullptr)
     {
         return CreateDecryptionReader(inToWrapStream, *(((Deletable<ByteList> *)savedEcnryptionKey)->GetPtr()),
@@ -382,7 +383,7 @@ charta::IByteReader *DecryptionHelper::CreateDecryptionFilterForStream(const std
     if (!IsEncrypted() || !CanDecryptDocument())
         return inToWrapStream;
 
-    IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
+    charta::IDeletable *savedEcnryptionKey = inStream->GetMetadata(scEcnryptionKeyMetadataKey);
     if (savedEcnryptionKey == nullptr)
     {
         // sign for no encryption here
@@ -441,12 +442,12 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(const std::shared_ptr<PDFSt
     if (HasCryptFilterDefinition(mParser, inStream))
     {
         // find position of crypt filter, and get the name of the crypt filter from the decodeParams
-        std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+        std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
 
         std::shared_ptr<PDFObject> filterObject(mParser->QueryDictionaryObject(streamDictionary, "Filter"));
         if (filterObject->GetType() == PDFObject::ePDFObjectArray)
         {
-            auto filterObjectArray = std::static_pointer_cast<PDFArray>(filterObject);
+            auto filterObjectArray = std::static_pointer_cast<charta::PDFArray>(filterObject);
             unsigned long i = 0;
             for (; i < filterObjectArray->GetLength(); ++i)
             {
@@ -456,12 +457,12 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(const std::shared_ptr<PDFSt
             }
             if (i < filterObjectArray->GetLength())
             {
-                PDFObjectCastPtr<PDFArray> decodeParams(
+                PDFObjectCastPtr<charta::PDFArray> decodeParams(
                     mParser->QueryDictionaryObject(streamDictionary, "DecodeParms"));
                 if (!decodeParams)
                     return mXcryptStreams;
                 // got index, look for the name in the decode params array
-                PDFObjectCastPtr<PDFDictionary> decodeParamsItem((mParser->QueryArrayObject(decodeParams, i)));
+                PDFObjectCastPtr<charta::PDFDictionary> decodeParamsItem((mParser->QueryArrayObject(decodeParams, i)));
                 if (!decodeParamsItem)
                     return mXcryptStreams;
 
@@ -473,7 +474,7 @@ XCryptionCommon *DecryptionHelper::GetCryptForStream(const std::shared_ptr<PDFSt
         if (filterObject->GetType() == PDFObject::ePDFObjectName)
         {
             // has to be crypt filter, look for the name in decode params
-            PDFObjectCastPtr<PDFDictionary> decodeParamsItem(
+            PDFObjectCastPtr<charta::PDFDictionary> decodeParamsItem(
                 (mParser->QueryDictionaryObject(streamDictionary, "DecodeParms")));
             if (!decodeParamsItem)
                 return mXcryptStreams;

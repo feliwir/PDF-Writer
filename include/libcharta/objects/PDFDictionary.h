@@ -26,6 +26,8 @@
 #include <map>
 #include <memory>
 
+namespace charta
+{
 struct PDFNameLess
 {
     bool operator()(const std::shared_ptr<PDFName> left, const std::shared_ptr<PDFName> right) const
@@ -33,8 +35,6 @@ struct PDFNameLess
         return left->GetValue() < right->GetValue();
     }
 };
-
-using PDFNameToPDFObjectMap = std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess>;
 
 class PDFDictionary : public PDFObject
 {
@@ -52,8 +52,9 @@ class PDFDictionary : public PDFObject
     bool Exists(const std::string &inName);
     std::shared_ptr<PDFObject> QueryDirectObject(const std::string &inName);
 
-    MapIterator<PDFNameToPDFObjectMap> GetIterator();
+    MapIterator<std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess>> GetIterator();
 
   private:
-    PDFNameToPDFObjectMap mValues;
+    std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess> mValues;
 };
+} // namespace charta

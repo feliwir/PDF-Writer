@@ -581,17 +581,17 @@ EStatusCode ObjectsContext::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
 
 EStatusCode ObjectsContext::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> objectsContext(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> objectsContext(inStateReader->ParseNewObject(inObjectID));
 
-    PDFObjectCastPtr<PDFBoolean> compressStreams(objectsContext->QueryDirectObject("mCompressStreams"));
+    PDFObjectCastPtr<charta::PDFBoolean> compressStreams(objectsContext->QueryDirectObject("mCompressStreams"));
     mCompressStreams = compressStreams->GetValue();
 
-    PDFObjectCastPtr<PDFDictionary> subsetFontsNamesSequance(
+    PDFObjectCastPtr<charta::PDFDictionary> subsetFontsNamesSequance(
         inStateReader->QueryDictionaryObject(objectsContext, "mSubsetFontsNamesSequance"));
     PDFObjectCastPtr<PDFLiteralString> sequanceString(subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
     mSubsetFontsNamesSequance.SetSequanceString(sequanceString->GetValue());
 
-    PDFObjectCastPtr<PDFIndirectObjectReference> referencesObject(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> referencesObject(
         objectsContext->QueryDirectObject("mReferencesRegistry"));
 
     return mReferencesRegistry.ReadState(inStateReader, referencesObject->mObjectID);

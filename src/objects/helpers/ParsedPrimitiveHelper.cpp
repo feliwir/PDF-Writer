@@ -41,7 +41,7 @@ double ParsedPrimitiveHelper::GetAsDouble()
 {
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
     {
-        auto anInteger = std::static_pointer_cast<PDFInteger>(mWrappedObject);
+        auto anInteger = std::static_pointer_cast<charta::PDFInteger>(mWrappedObject);
         return (double)anInteger->GetValue();
     }
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
@@ -56,7 +56,7 @@ long long ParsedPrimitiveHelper::GetAsInteger()
 {
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
     {
-        auto anInteger = std::static_pointer_cast<PDFInteger>(mWrappedObject);
+        auto anInteger = std::static_pointer_cast<charta::PDFInteger>(mWrappedObject);
         return anInteger->GetValue();
     }
     if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
@@ -89,19 +89,19 @@ std::string ParsedPrimitiveHelper::ToString()
         result = std::static_pointer_cast<PDFLiteralString>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectHexString:
-        result = std::static_pointer_cast<PDFHexString>(mWrappedObject)->GetValue();
+        result = std::static_pointer_cast<charta::PDFHexString>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectReal:
         result = Double(std::static_pointer_cast<PDFReal>(mWrappedObject)->GetValue()).ToString();
         break;
     case PDFObject::ePDFObjectInteger:
-        result = LongLong(std::static_pointer_cast<PDFInteger>(mWrappedObject)->GetValue()).ToString();
+        result = LongLong(std::static_pointer_cast<charta::PDFInteger>(mWrappedObject)->GetValue()).ToString();
         break;
     case PDFObject::ePDFObjectSymbol:
         result = std::static_pointer_cast<PDFSymbol>(mWrappedObject)->GetValue();
         break;
     case PDFObject::ePDFObjectBoolean:
-        result = std::static_pointer_cast<PDFBoolean>(mWrappedObject)->GetValue() ? "true" : "false";
+        result = std::static_pointer_cast<charta::PDFBoolean>(mWrappedObject)->GetValue() ? "true" : "false";
         break;
     default:
         result = PDFObject::scPDFObjectTypeLabel(mWrappedObject->GetType());

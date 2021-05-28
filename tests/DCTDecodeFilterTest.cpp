@@ -107,24 +107,25 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
     if (!firstPage)
         return imageObject;
 
-    PDFObjectCastPtr<PDFDictionary> resourceDictionary(inParser->QueryDictionaryObject(firstPage, "Resources"));
+    PDFObjectCastPtr<charta::PDFDictionary> resourceDictionary(inParser->QueryDictionaryObject(firstPage, "Resources"));
 
     if (!resourceDictionary)
         return imageObject;
 
-    PDFObjectCastPtr<PDFDictionary> xobjectDictionary(inParser->QueryDictionaryObject(resourceDictionary, "XObject"));
+    PDFObjectCastPtr<charta::PDFDictionary> xobjectDictionary(
+        inParser->QueryDictionaryObject(resourceDictionary, "XObject"));
 
     if (!xobjectDictionary)
         return imageObject;
 
-    MapIterator<PDFNameToPDFObjectMap> it = xobjectDictionary->GetIterator();
+    auto it = xobjectDictionary->GetIterator();
 
     while (it.MoveNext())
     {
         if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
             auto image = std::static_pointer_cast<PDFStreamInput>(inParser->ParseNewObject(
-                std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID));
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID));
             auto imageDictionary = image->QueryStreamDictionary();
 
             PDFObjectCastPtr<PDFName> objectType = imageDictionary->QueryDirectObject("Subtype");
@@ -138,11 +139,11 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
             if (filters->GetType() == PDFObject::ePDFObjectName &&
                 std::static_pointer_cast<PDFName>(filters)->GetValue() == "DCTDecode")
             {
-                imageObject = std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID;
+                imageObject = std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID;
                 break;
             }
 
-            auto filtersArray = std::static_pointer_cast<PDFArray>(filters);
+            auto filtersArray = std::static_pointer_cast<charta::PDFArray>(filters);
 
             if (filtersArray->GetLength() == 1)
             {
@@ -150,7 +151,8 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
 
                 if (firstDecoder->GetValue() == "DCTDecode")
                 {
-                    imageObject = std::static_pointer_cast<PDFIndirectObjectReference>(it.GetValue())->mObjectID;
+                    imageObject =
+                        std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID;
                     break;
                 }
             }
@@ -175,7 +177,7 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 
     DictionaryContext *newImageDictionary = inWriter->GetObjectsContext().StartDictionary();
 
-    MapIterator<PDFNameToPDFObjectMap> it = imageDictionary->GetIterator();
+    auto it = imageDictionary->GetIterator();
 
     // copy all but "Filter" and "Length"
     ObjectIDTypeList indirectObjects;

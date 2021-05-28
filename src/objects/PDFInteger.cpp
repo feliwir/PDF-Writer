@@ -20,19 +20,16 @@
 */
 #include "objects/PDFInteger.h"
 
-PDFInteger::PDFInteger(long long inValue) : PDFObject(eType)
+charta::PDFInteger::PDFInteger(long long inValue) : PDFObject(eType), mValue(inValue)
 {
-    mValue = inValue;
 }
 
-PDFInteger::~PDFInteger() = default;
-
-long long PDFInteger::GetValue() const
+long long charta::PDFInteger::GetValue() const
 {
     return mValue;
 }
 
-PDFInteger::operator long long() const
+charta::PDFInteger::operator long long() const
 {
     return mValue;
 }

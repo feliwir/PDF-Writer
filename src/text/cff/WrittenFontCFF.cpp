@@ -290,7 +290,7 @@ EStatusCode WrittenFontCFF::WriteState(ObjectsContext *inStateWriter, ObjectIDTy
 
 EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
-    PDFObjectCastPtr<PDFDictionary> writtenFontState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> writtenFontState(inStateReader->ParseNewObject(inObjectID));
 
     PDFObjectCastPtr<PDFInteger> availablePositionsCount(
         writtenFontState->QueryDirectObject("mAvailablePositionsCount"));
@@ -298,9 +298,9 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
     mAvailablePositionsCount = (unsigned char)availablePositionsCount->GetValue();
 
     mFreeList.clear();
-    PDFObjectCastPtr<PDFArray> freeListState(writtenFontState->QueryDirectObject("mFreeList"));
+    PDFObjectCastPtr<charta::PDFArray> freeListState(writtenFontState->QueryDirectObject("mFreeList"));
 
-    SingleValueContainerIterator<PDFObjectVector> it = freeListState->GetIterator();
+    auto it = freeListState->GetIterator();
     PDFObjectCastPtr<PDFInteger> item;
     UCharAndUChar aPair;
     while (it.MoveNext())
@@ -313,7 +313,8 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
         mFreeList.push_back(aPair);
     }
 
-    PDFObjectCastPtr<PDFArray> assignedPositionsState(writtenFontState->QueryDirectObject("mAssignedPositions"));
+    PDFObjectCastPtr<charta::PDFArray> assignedPositionsState(
+        writtenFontState->QueryDirectObject("mAssignedPositions"));
     it = assignedPositionsState->GetIterator();
     int i = 0;
 
@@ -325,12 +326,12 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
         ++i;
     }
 
-    PDFObjectCastPtr<PDFArray> assignedPositionsAvailableState(
+    PDFObjectCastPtr<charta::PDFArray> assignedPositionsAvailableState(
         writtenFontState->QueryDirectObject("mAssignedPositionsAvailable"));
     it = assignedPositionsAvailableState->GetIterator();
     i = 0;
 
-    PDFObjectCastPtr<PDFBoolean> assignedPositionAvailableItem;
+    PDFObjectCastPtr<charta::PDFBoolean> assignedPositionAvailableItem;
     while (it.MoveNext())
     {
         assignedPositionAvailableItem = it.GetItem();
@@ -338,7 +339,7 @@ EStatusCode WrittenFontCFF::ReadState(PDFParser *inStateReader, ObjectIDType inO
         ++i;
     }
 
-    PDFObjectCastPtr<PDFBoolean> isCIDState(writtenFontState->QueryDirectObject("mIsCID"));
+    PDFObjectCastPtr<charta::PDFBoolean> isCIDState(writtenFontState->QueryDirectObject("mIsCID"));
 
     mIsCID = isCIDState->GetValue();
 

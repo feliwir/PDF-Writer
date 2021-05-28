@@ -453,10 +453,10 @@ EStatusCode PDFWriter::SetupState(const std::string &inStateFilePath)
             break;
         }
 
-        PDFObjectCastPtr<PDFDictionary> pdfWriterDictionary(
+        PDFObjectCastPtr<charta::PDFDictionary> pdfWriterDictionary(
             reader.GetObjectsReader()->ParseNewObject(reader.GetRootObjectID()));
 
-        PDFObjectCastPtr<PDFBoolean> isModifiedObject(pdfWriterDictionary->QueryDirectObject("mIsModified"));
+        PDFObjectCastPtr<charta::PDFBoolean> isModifiedObject(pdfWriterDictionary->QueryDirectObject("mIsModified"));
         mIsModified = isModifiedObject->GetValue();
 
         if (mIsModified)
@@ -466,13 +466,13 @@ EStatusCode PDFWriter::SetupState(const std::string &inStateFilePath)
             mModifiedFileVersion = (EPDFVersion)(isModifiedFileVersionObject->GetValue());
         }
 
-        PDFObjectCastPtr<PDFIndirectObjectReference> objectsContextObject(
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> objectsContextObject(
             pdfWriterDictionary->QueryDirectObject("mObjectsContext"));
         status = mObjectsContext.ReadState(reader.GetObjectsReader(), objectsContextObject->mObjectID);
         if (status != eSuccess)
             break;
 
-        PDFObjectCastPtr<PDFIndirectObjectReference> documentContextObject(
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> documentContextObject(
             pdfWriterDictionary->QueryDirectObject("mDocumentContext"));
         status = mDocumentContext.ReadState(reader.GetObjectsReader(), documentContextObject->mObjectID);
         if (status != eSuccess)
@@ -851,7 +851,7 @@ charta::EStatusCode PDFWriter::RecryptPDF(charta::IByteReaderWithPosition *inOri
         }
 
         // get its root object ID
-        PDFObjectCastPtr<PDFIndirectObjectReference> catalogRef(
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> catalogRef(
             copyingContext->GetSourceDocumentParser()->GetTrailer()->QueryDirectObject("Root"));
         if (!catalogRef)
         {

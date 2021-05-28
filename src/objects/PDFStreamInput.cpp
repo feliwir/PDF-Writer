@@ -24,14 +24,15 @@
 #include "objects/PDFName.h"
 #include <utility>
 
-PDFStreamInput::PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart)
+PDFStreamInput::PDFStreamInput(std::shared_ptr<charta::PDFDictionary> inStreamDictionary,
+                               long long inStreamContentStart)
     : PDFObject(eType)
 {
     mDictionary = std::move(inStreamDictionary);
     mStreamContentStart = inStreamContentStart;
 }
 
-std::shared_ptr<PDFDictionary> PDFStreamInput::QueryStreamDictionary()
+std::shared_ptr<charta::PDFDictionary> PDFStreamInput::QueryStreamDictionary()
 {
     return mDictionary;
 }

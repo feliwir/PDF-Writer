@@ -125,15 +125,15 @@ vector<string> PDFModifiedPage::WriteNewResourcesDictionary(ObjectsContext &inOb
     return formResourcesNames;
 }
 
-std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(PDFParser *inParser,
-                                                                   const std::shared_ptr<PDFDictionary> &inDictionary)
+std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(
+    PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))
     {
         return inParser->QueryDictionaryObject(inDictionary, "Resources");
     }
 
-    PDFObjectCastPtr<PDFDictionary> parentDict(
+    PDFObjectCastPtr<charta::PDFDictionary> parentDict(
         inDictionary->Exists("Parent") ? inParser->QueryDictionaryObject(inDictionary, "Parent") : nullptr);
     if (!parentDict)
     {
@@ -166,9 +166,9 @@ charta::EStatusCode PDFModifiedPage::WritePage()
 
         // get the page object
         ObjectIDType pageObjectID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(mPageIndex);
-        PDFObjectCastPtr<PDFDictionary> pageDictionaryObject(
+        PDFObjectCastPtr<charta::PDFDictionary> pageDictionaryObject(
             copyingContext->GetSourceDocumentParser()->ParsePage(mPageIndex));
-        MapIterator<PDFNameToPDFObjectMap> pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
+        auto pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
 
         // create modified page object
         objectContext.StartModifiedIndirectObject(pageObjectID);
@@ -195,9 +195,9 @@ charta::EStatusCode PDFModifiedPage::WritePage()
             // write old annots, if any exist
             if (pageDictionaryObject->Exists("Annots"))
             {
-                PDFObjectCastPtr<PDFArray> anArray(
+                PDFObjectCastPtr<charta::PDFArray> anArray(
                     copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Annots"));
-                SingleValueContainerIterator<PDFObjectVector> refs = anArray->GetIterator();
+                auto refs = anArray->GetIterator();
                 while (refs.MoveNext())
                     copyingContext->CopyDirectObjectAsIs(refs.GetItem());
             }
@@ -235,16 +235,17 @@ charta::EStatusCode PDFModifiedPage::WritePage()
             if (pageContent->GetType() == PDFObject::ePDFObjectStream)
             {
                 // single content stream. must be a refrence which points to it
-                PDFObjectCastPtr<PDFIndirectObjectReference> ref(pageDictionaryObject->QueryDirectObject("Contents"));
+                PDFObjectCastPtr<charta::PDFIndirectObjectReference> ref(
+                    pageDictionaryObject->QueryDirectObject("Contents"));
                 objectContext.WriteIndirectObjectReference(ref->mObjectID, ref->mVersion);
             }
             else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
             {
-                auto anArray = std::static_pointer_cast<PDFArray>(pageContent);
+                auto anArray = std::static_pointer_cast<charta::PDFArray>(pageContent);
 
                 // multiple content streams
-                SingleValueContainerIterator<PDFObjectVector> refs = anArray->GetIterator();
-                PDFObjectCastPtr<PDFIndirectObjectReference> ref;
+                auto refs = anArray->GetIterator();
+                PDFObjectCastPtr<charta::PDFIndirectObjectReference> ref;
                 while (refs.MoveNext())
                 {
                     ref = refs.GetItem();
@@ -271,7 +272,7 @@ charta::EStatusCode PDFModifiedPage::WritePage()
         if (!pageDictionaryObject->Exists("Resources"))
         {
             // check if there's inherited dict. if so - write directly as a modified version
-            PDFObjectCastPtr<PDFDictionary> parentDict(
+            PDFObjectCastPtr<charta::PDFDictionary> parentDict(
                 pageDictionaryObject->Exists("Parent")
                     ? copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Parent")
                     : nullptr);
@@ -281,7 +282,7 @@ charta::EStatusCode PDFModifiedPage::WritePage()
             }
             else
             {
-                PDFObjectCastPtr<PDFDictionary> inheritedResources =
+                PDFObjectCastPtr<charta::PDFDictionary> inheritedResources =
                     findInheritedResources(copyingContext->GetSourceDocumentParser(), parentDict);
                 if (!inheritedResources)
                 {
@@ -298,11 +299,12 @@ charta::EStatusCode PDFModifiedPage::WritePage()
         {
             // resources may be direct, or indirect. if direct, write as is, adding the new form xobject, otherwise wait
             // till page object ends and write then
-            PDFObjectCastPtr<PDFIndirectObjectReference> resourceDictRef(
+            PDFObjectCastPtr<charta::PDFIndirectObjectReference> resourceDictRef(
                 pageDictionaryObject->QueryDirectObject("Resources"));
             if (!resourceDictRef)
             {
-                PDFObjectCastPtr<PDFDictionary> resourceDict(pageDictionaryObject->QueryDirectObject("Resources"));
+                PDFObjectCastPtr<charta::PDFDictionary> resourceDict(
+                    pageDictionaryObject->QueryDirectObject("Resources"));
                 formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(), resourceDict,
                                                                 objectContext, copyingContext);
             }
@@ -334,7 +336,7 @@ charta::EStatusCode PDFModifiedPage::WritePage()
                 objectContext.StartNewIndirectObject(newResourcesIndirect);
             else
                 objectContext.StartModifiedIndirectObject(resourcesIndirect);
-            PDFObjectCastPtr<PDFDictionary> resourceDict(
+            PDFObjectCastPtr<charta::PDFDictionary> resourceDict(
                 copyingContext->GetSourceDocumentParser()->ParseNewObject(resourcesIndirect));
             formResourcesNames = WriteModifiedResourcesDict(copyingContext->GetSourceDocumentParser(), resourceDict,
                                                             objectContext, copyingContext);
@@ -385,14 +387,13 @@ charta::EStatusCode PDFModifiedPage::WritePage()
     return status;
 }
 
-vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
-                                                           const std::shared_ptr<PDFDictionary> &inResourcesDictionary,
-                                                           ObjectsContext &inObjectContext,
-                                                           std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
+vector<string> PDFModifiedPage::WriteModifiedResourcesDict(
+    PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inResourcesDictionary,
+    ObjectsContext &inObjectContext, std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
 {
     vector<string> formResourcesNames;
 
-    MapIterator<PDFNameToPDFObjectMap> resourcesDictionaryIt = inResourcesDictionary->GetIterator();
+    auto resourcesDictionaryIt = inResourcesDictionary->GetIterator();
 
     // create modified page object
     DictionaryContext *dict = mWriter->GetObjectsContext().StartDictionary();
@@ -411,7 +412,7 @@ vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
     dict->WriteKey("XObject");
     DictionaryContext *xobjectDict = inObjectContext.StartDictionary();
 
-    PDFObjectCastPtr<PDFDictionary> existingXObjectDict(
+    PDFObjectCastPtr<charta::PDFDictionary> existingXObjectDict(
         inParser->QueryDictionaryObject(inResourcesDictionary, "XObject"));
     string imageObjectName;
     if (existingXObjectDict.GetPtr() != nullptr)
@@ -419,7 +420,7 @@ vector<string> PDFModifiedPage::WriteModifiedResourcesDict(PDFParser *inParser,
         // i'm having a very sophisticated algo here to create a new unique name.
         // i'm making sure it's different in one letter from any name, using a well known discrete math proof method
 
-        MapIterator<PDFNameToPDFObjectMap> itExisting = existingXObjectDict->GetIterator();
+        auto itExisting = existingXObjectDict->GetIterator();
         unsigned long i = 0;
         while (itExisting.MoveNext())
         {

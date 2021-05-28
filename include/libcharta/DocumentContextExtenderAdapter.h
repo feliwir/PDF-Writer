@@ -102,7 +102,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
                                                         DictionaryContext *inImageDictionaryContext,
                                                         ObjectsContext *inPDFWriterObjectContext,
                                                         charta::DocumentContext *inDocumentContext,
-                                                        TIFFImageHandler *inTIFFImageHandler)
+                                                        charta::TIFFImageHandler *inTIFFImageHandler)
     {
         (void)inImageXObjectID;
         (void)inImageDictionaryContext;
@@ -139,10 +139,9 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When creating XObjects from pages - before creating a particular page xobject
-    virtual charta::EStatusCode OnBeforeCreateXObjectFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                              ObjectsContext *inPDFWriterObjectContext,
-                                                              charta::DocumentContext *inDocumentContext,
-                                                              PDFDocumentHandler *inPDFDocumentHandler)
+    virtual charta::EStatusCode OnBeforeCreateXObjectFromPage(
+        std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary, ObjectsContext *inPDFWriterObjectContext,
+        charta::DocumentContext *inDocumentContext, PDFDocumentHandler *inPDFDocumentHandler)
     {
         (void)inPageObjectDictionary;
         (void)inPDFWriterObjectContext;
@@ -152,11 +151,10 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When creating XObjects from pages - after creating a particular page xobject
-    virtual charta::EStatusCode OnAfterCreateXObjectFromPage(PDFFormXObject *iPageObjectResultXObject,
-                                                             std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                             ObjectsContext *inPDFWriterObjectContext,
-                                                             charta::DocumentContext *inDocumentContext,
-                                                             PDFDocumentHandler *inPDFDocumentHandler)
+    virtual charta::EStatusCode OnAfterCreateXObjectFromPage(
+        PDFFormXObject *iPageObjectResultXObject, std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary,
+        ObjectsContext *inPDFWriterObjectContext, charta::DocumentContext *inDocumentContext,
+        PDFDocumentHandler *inPDFDocumentHandler)
     {
         (void)iPageObjectResultXObject;
         (void)inPageObjectDictionary;
@@ -167,10 +165,9 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
     }
 
     // When appending pages from PDF - before appending a particular page
-    virtual charta::EStatusCode OnBeforeCreatePageFromPage(std::shared_ptr<PDFDictionary> inPageObjectDictionary,
-                                                           ObjectsContext *inPDFWriterObjectContext,
-                                                           charta::DocumentContext *inDocumentContext,
-                                                           PDFDocumentHandler *inPDFDocumentHandler)
+    virtual charta::EStatusCode OnBeforeCreatePageFromPage(
+        std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary, ObjectsContext *inPDFWriterObjectContext,
+        charta::DocumentContext *inDocumentContext, PDFDocumentHandler *inPDFDocumentHandler)
     {
         (void)inPageObjectDictionary;
         (void)inPDFWriterObjectContext;
@@ -181,7 +178,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When appending pages from PDF - after appending a particular page
     virtual charta::EStatusCode OnAfterCreatePageFromPage(PDFPage &iPageObjectResultPage,
-                                                          std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                          std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary,
                                                           ObjectsContext *inPDFWriterObjectContext,
                                                           charta::DocumentContext *inDocumentContext,
                                                           PDFDocumentHandler *inPDFDocumentHandler)
@@ -196,7 +193,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When merging pages from PDF - before merging a particular page
     virtual charta::EStatusCode OnBeforeMergePageFromPage(PDFPage &inTargetPage,
-                                                          std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                          std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary,
                                                           ObjectsContext *inPDFWriterObjectContext,
                                                           charta::DocumentContext *inDocumentContext,
                                                           PDFDocumentHandler *inPDFDocumentHandler)
@@ -211,7 +208,7 @@ class DocumentContextExtenderAdapter : public IDocumentContextExtender
 
     // When merging pages from PDF - after merging a particular page
     virtual charta::EStatusCode OnAfterMergePageFromPage(PDFPage &inTargetPage,
-                                                         std::shared_ptr<PDFDictionary> inPageObjectDictionary,
+                                                         std::shared_ptr<charta::PDFDictionary> inPageObjectDictionary,
                                                          ObjectsContext *inPDFWriterObjectContext,
                                                          charta::DocumentContext *inDocumentContext,
                                                          PDFDocumentHandler *inPDFDocumentHandler)

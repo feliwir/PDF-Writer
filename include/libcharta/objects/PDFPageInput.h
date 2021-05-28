@@ -36,15 +36,17 @@
 
 class PDFObject;
 class PDFParser;
+namespace charta
+{
 class PDFArray;
-
+}
 class PDFPageInput
 {
   public:
     // simple constructor, not calling addref on inPageObject
     PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject);
     // constructors from a smart pointer or another page object, will call addref
-    PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<PDFDictionary> &inPageObject);
+    PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<charta::PDFDictionary> &inPageObject);
     PDFPageInput(const PDFPageInput &inOtherPage);
 
     // will call release on the input page object
@@ -61,11 +63,12 @@ class PDFPageInput
 
   private:
     PDFParser *mParser;
-    PDFObjectCastPtr<PDFDictionary> mPageObject;
+    PDFObjectCastPtr<charta::PDFDictionary> mPageObject;
 
-    std::shared_ptr<PDFObject> QueryInheritedValue(const std::shared_ptr<PDFDictionary> &inDictionary,
+    std::shared_ptr<PDFObject> QueryInheritedValue(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                    const std::string &inName);
-    void SetPDFRectangleFromPDFArray(const std::shared_ptr<PDFArray> &inPDFArray, PDFRectangle &outPDFRectangle);
+    void SetPDFRectangleFromPDFArray(const std::shared_ptr<charta::PDFArray> &inPDFArray,
+                                     PDFRectangle &outPDFRectangle);
 
     void AssertPageObjectValid();
     PDFRectangle GetBoxAndDefaultWithCrop(const std::string &inBoxName);

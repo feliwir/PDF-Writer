@@ -23,6 +23,8 @@
 #include "ObjectsBasicTypes.h"
 #include "PDFObject.h"
 
+namespace charta
+{
 class PDFIndirectObjectReference : public PDFObject
 {
   public:
@@ -32,8 +34,9 @@ class PDFIndirectObjectReference : public PDFObject
     };
 
     PDFIndirectObjectReference(ObjectIDType inObjectID, unsigned long inVersion);
-    virtual ~PDFIndirectObjectReference(void);
+    ~PDFIndirectObjectReference() = default;
 
     ObjectIDType mObjectID;
     unsigned long mVersion;
 };
+} // namespace charta

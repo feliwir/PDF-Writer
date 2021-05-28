@@ -48,7 +48,7 @@ EStatusCode TestPageSizeModification(PDFWriter *inPDFWriter)
     ObjectIDType thirdPageID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(2);
     auto thirdPageObject = copyingContext->GetSourceDocumentParser()->ParsePage(2);
 
-    MapIterator<PDFNameToPDFObjectMap> thirdPageObjectIt = thirdPageObject->GetIterator();
+    auto thirdPageObjectIt = thirdPageObject->GetIterator();
 
     inPDFWriter->GetObjectsContext().StartModifiedIndirectObject(thirdPageID);
     DictionaryContext *modifiedPageObject = inPDFWriter->GetObjectsContext().StartDictionary();

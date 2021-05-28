@@ -57,16 +57,18 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
     if (inObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         inOutput->Write((const uint8_t *)scIndirectStart, strlen(scIndirectStart));
-        if (mIteratedObjectIDs.find(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID) ==
+        if (mIteratedObjectIDs.find(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID) ==
             mIteratedObjectIDs.end())
         {
-            mIteratedObjectIDs.insert(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID);
-            auto pointedObject(
-                inParser.ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID));
+            mIteratedObjectIDs.insert(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID);
+            auto pointedObject(inParser.ParseNewObject(
+                std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID));
             if (!pointedObject)
             {
                 std::cout << "\nFailed to retreive object of ID ="
-                          << std::static_pointer_cast<PDFIndirectObjectReference>(inObject)->mObjectID << "\n";
+                          << std::static_pointer_cast<charta::PDFIndirectObjectReference>(inObject)->mObjectID << "\n";
                 return charta::eFailure;
             }
             return IterateObjectTypes(pointedObject, inParser, inOutput);
@@ -81,9 +83,9 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
     {
         primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
         ++mTabLevel;
-        PDFObjectCastPtr<PDFArray> anArray;
+        PDFObjectCastPtr<charta::PDFArray> anArray;
         anArray = inObject; // do assignment here, otherwise it's considered constructor...which won't addref
-        SingleValueContainerIterator<PDFObjectVector> it = anArray->GetIterator();
+        auto it = anArray->GetIterator();
         EStatusCode status = charta::eSuccess;
         while (it.MoveNext() && charta::eSuccess == status)
             status = IterateObjectTypes(it.GetItem(), inParser, inOutput);
@@ -94,9 +96,9 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
     {
         primitivesWriter.WriteKeyword(PDFObject::scPDFObjectTypeLabel(inObject->GetType()));
         ++mTabLevel;
-        PDFObjectCastPtr<PDFDictionary> aDictionary;
+        PDFObjectCastPtr<charta::PDFDictionary> aDictionary;
         aDictionary = inObject; // do assignment here, otherwise it's considered constructor...which won't addref
-        MapIterator<PDFNameToPDFObjectMap> it = aDictionary->GetIterator();
+        auto it = aDictionary->GetIterator();
 
         EStatusCode status = charta::eSuccess;
         while (it.MoveNext() && charta::eSuccess == status)

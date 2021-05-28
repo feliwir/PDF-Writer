@@ -409,11 +409,11 @@ void AbstractWrittenFont::WriteGlyphEncodingInfoState(ObjectsContext *inStateWri
 }
 
 EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader,
-                                                     const std::shared_ptr<PDFDictionary> &inState)
+                                                     const std::shared_ptr<charta::PDFDictionary> &inState)
 {
-    PDFObjectCastPtr<PDFDictionary> cidRepresentationState(
+    PDFObjectCastPtr<charta::PDFDictionary> cidRepresentationState(
         inStateReader->QueryDictionaryObject(inState, "mCIDRepresentation"));
-    PDFObjectCastPtr<PDFDictionary> ansiRepresentationState(
+    PDFObjectCastPtr<charta::PDFDictionary> ansiRepresentationState(
         inStateReader->QueryDictionaryObject(inState, "mANSIRepresentation"));
 
     delete mCIDRepresentation;
@@ -437,15 +437,16 @@ EStatusCode AbstractWrittenFont::ReadStateFromObject(PDFParser *inStateReader,
     return charta::eSuccess;
 }
 
-void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,
+void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader,
+                                               const std::shared_ptr<charta::PDFDictionary> &inState,
                                                WrittenFontRepresentation *inRepresentation)
 {
-    PDFObjectCastPtr<PDFArray> glyphIDToEncodedCharState(inState->QueryDirectObject("mGlyphIDToEncodedChar"));
+    PDFObjectCastPtr<charta::PDFArray> glyphIDToEncodedCharState(inState->QueryDirectObject("mGlyphIDToEncodedChar"));
 
-    SingleValueContainerIterator<PDFObjectVector> it = glyphIDToEncodedCharState->GetIterator();
+    auto it = glyphIDToEncodedCharState->GetIterator();
 
     PDFObjectCastPtr<PDFInteger> firstState;
-    PDFObjectCastPtr<PDFIndirectObjectReference> secondState;
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> secondState;
 
     inRepresentation->mGlyphIDToEncodedChar.clear();
 
@@ -468,15 +469,16 @@ void AbstractWrittenFont::ReadWrittenFontState(PDFParser *inStateReader, const s
 void AbstractWrittenFont::ReadGlyphEncodingInfoState(PDFParser *inStateReader, ObjectIDType inObjectID,
                                                      GlyphEncodingInfo &inGlyphEncodingInfo)
 {
-    PDFObjectCastPtr<PDFDictionary> glyphEncodingInfoState(inStateReader->ParseNewObject(inObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> glyphEncodingInfoState(inStateReader->ParseNewObject(inObjectID));
 
     PDFObjectCastPtr<PDFInteger> encodedCharacterState(glyphEncodingInfoState->QueryDirectObject("mEncodedCharacter"));
     inGlyphEncodingInfo.mEncodedCharacter = (uint16_t)encodedCharacterState->GetValue();
 
-    PDFObjectCastPtr<PDFArray> unicodeCharactersState(glyphEncodingInfoState->QueryDirectObject("mUnicodeCharacters"));
+    PDFObjectCastPtr<charta::PDFArray> unicodeCharactersState(
+        glyphEncodingInfoState->QueryDirectObject("mUnicodeCharacters"));
 
     inGlyphEncodingInfo.mUnicodeCharacters.clear();
-    SingleValueContainerIterator<PDFObjectVector> it = unicodeCharactersState->GetIterator();
+    auto it = unicodeCharactersState->GetIterator();
     PDFObjectCastPtr<PDFInteger> item;
     while (it.MoveNext())
     {

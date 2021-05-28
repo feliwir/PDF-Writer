@@ -354,7 +354,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 
         if (anObject->GetType() == PDFObject::ePDFObjectInteger)
         {
-            mLastXrefPosition = (long long)(std::static_pointer_cast<PDFInteger>(anObject)->GetValue());
+            mLastXrefPosition = (long long)(std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue());
 
             // find and read startxref keyword
             if (!GoBackTillToken())
@@ -413,7 +413,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
 }
 
 static const std::string scTrailer = "trailer";
-EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *outTrailer)
+EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<charta::PDFDictionary> *outTrailer)
 {
 
     EStatusCode status = charta::eSuccess;
@@ -441,7 +441,7 @@ EStatusCode PDFParser::ParseTrailerDictionary(std::shared_ptr<PDFDictionary> *ou
 
         // k. now that all is well, just parse the damn dictionary, which is actually...the easiest part.
         mObjectParser.ResetReadState(aTokenizer);
-        PDFObjectCastPtr<PDFDictionary> trailerDictionary(mObjectParser.ParseNewObject());
+        PDFObjectCastPtr<charta::PDFDictionary> trailerDictionary(mObjectParser.ParseNewObject());
         if (!trailerDictionary)
         {
             status = charta::eFailure;
@@ -686,7 +686,7 @@ XrefEntryInput *PDFParser::ExtendXrefTableToSize(XrefEntryInput *inXrefTable, Ob
     return newTable;
 }
 
-std::shared_ptr<PDFDictionary> PDFParser::GetTrailer()
+std::shared_ptr<charta::PDFDictionary> PDFParser::GetTrailer()
 {
     return mTrailer;
 }
@@ -799,7 +799,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
     do
     {
         // get catalogue, verify indirect reference
-        PDFObjectCastPtr<PDFIndirectObjectReference> catalogReference(mTrailer->QueryDirectObject("Root"));
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> catalogReference(mTrailer->QueryDirectObject("Root"));
         if (!catalogReference)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read catalog reference in trailer");
@@ -807,7 +807,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
             break;
         }
 
-        PDFObjectCastPtr<PDFDictionary> catalog(ParseNewObject(catalogReference->mObjectID));
+        PDFObjectCastPtr<charta::PDFDictionary> catalog(ParseNewObject(catalogReference->mObjectID));
         if (!catalog)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read catalog");
@@ -816,7 +816,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
         }
 
         // get pages, verify indirect reference
-        PDFObjectCastPtr<PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
+        PDFObjectCastPtr<charta::PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
         if (!pagesReference)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages reference in catalog");
@@ -824,7 +824,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
             break;
         }
 
-        PDFObjectCastPtr<PDFDictionary> pages(ParseNewObject(pagesReference->mObjectID));
+        PDFObjectCastPtr<charta::PDFDictionary> pages(ParseNewObject(pagesReference->mObjectID));
         if (!pages)
         {
             TRACE_LOG("PDFParser::ParsePagesObjectIDs, failed to read pages");
@@ -852,7 +852,7 @@ EStatusCode PDFParser::ParsePagesObjectIDs()
     return status;
 }
 
-EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, ObjectIDType inNodeObjectID)
+EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<charta::PDFDictionary> inPageNode, ObjectIDType inNodeObjectID)
 {
     unsigned long currentPageIndex = 0;
 
@@ -861,8 +861,8 @@ EStatusCode PDFParser::ParsePagesIDs(std::shared_ptr<PDFDictionary> inPageNode, 
 
 static const std::string scPage = "Page";
 static const std::string scPages = "Pages";
-EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPageNode, ObjectIDType inNodeObjectID,
-                                     unsigned long &ioCurrentPageIndex)
+EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<charta::PDFDictionary> &inPageNode,
+                                     ObjectIDType inNodeObjectID, unsigned long &ioCurrentPageIndex)
 {
     // recursion.
     // if this is a page, write it's node object ID in the current page index and +1
@@ -898,8 +898,8 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
             // a Page tree node
             auto pKids = inPageNode->QueryDirectObject("Kids");
             if ((pKids != nullptr) && pKids->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
-                pKids = ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(pKids)->mObjectID);
-            PDFObjectCastPtr<PDFArray> kidsObject(pKids);
+                pKids = ParseNewObject(std::static_pointer_cast<charta::PDFIndirectObjectReference>(pKids)->mObjectID);
+            PDFObjectCastPtr<charta::PDFArray> kidsObject(pKids);
             if (!kidsObject)
             {
                 TRACE_LOG("PDFParser::ParsePagesIDs, unable to find page kids array");
@@ -907,7 +907,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
                 break;
             }
 
-            SingleValueContainerIterator<PDFObjectVector> it = kidsObject->GetIterator();
+            auto it = kidsObject->GetIterator();
 
             while (it.MoveNext() && charta::eSuccess == status)
             {
@@ -927,8 +927,8 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
                     break;
                 }
 
-                PDFObjectCastPtr<PDFDictionary> pageNodeObject(
-                    ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID));
+                PDFObjectCastPtr<charta::PDFDictionary> pageNodeObject(ParseNewObject(
+                    std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID));
                 if (!pageNodeObject)
                 {
                     TRACE_LOG("PDFParser::ParsePagesIDs, unable to parse page node object from kids reference");
@@ -936,9 +936,10 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<PDFDictionary> &inPag
                     break;
                 }
 
-                status = ParsePagesIDs(pageNodeObject,
-                                       std::static_pointer_cast<PDFIndirectObjectReference>(it.GetItem())->mObjectID,
-                                       ioCurrentPageIndex);
+                status =
+                    ParsePagesIDs(pageNodeObject,
+                                  std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetItem())->mObjectID,
+                                  ioCurrentPageIndex);
             }
         }
         else
@@ -966,7 +967,7 @@ ObjectIDType PDFParser::GetPageObjectID(unsigned long inPageIndex)
     return mPagesObjectIDs[inPageIndex];
 }
 
-std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
+std::shared_ptr<charta::PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
 {
     if (mPagesCount <= inPageIndex)
         return nullptr;
@@ -977,7 +978,7 @@ std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
         return nullptr;
     }
 
-    PDFObjectCastPtr<PDFDictionary> pageObject(ParseNewObject(mPagesObjectIDs[inPageIndex]));
+    PDFObjectCastPtr<charta::PDFDictionary> pageObject(ParseNewObject(mPagesObjectIDs[inPageIndex]));
 
     if (!pageObject)
     {
@@ -996,7 +997,7 @@ std::shared_ptr<PDFDictionary> PDFParser::ParsePage(unsigned long inPageIndex)
     return nullptr;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_ptr<PDFDictionary> &inDictionary,
+std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                                             const std::string &inName)
 {
     auto anObject = inDictionary->QueryDirectObject(inName);
@@ -1007,14 +1008,15 @@ std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_pt
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         auto theActualObject =
-            ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(anObject)->mObjectID);
+            ParseNewObject(std::static_pointer_cast<charta::PDFIndirectObjectReference>(anObject)->mObjectID);
         return theActualObject;
     }
 
     return anObject;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<PDFArray> &inArray, unsigned long inIndex)
+std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
+                                                       unsigned long inIndex)
 {
     auto anObject(inArray->QueryObject(inIndex));
 
@@ -1024,14 +1026,14 @@ std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<PDF
     if (anObject->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
     {
         auto theActualObject =
-            ParseNewObject(std::static_pointer_cast<PDFIndirectObjectReference>(anObject)->mObjectID);
+            ParseNewObject(std::static_pointer_cast<charta::PDFIndirectObjectReference>(anObject)->mObjectID);
         return theActualObject;
     }
 
     return anObject;
 }
 
-EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &inTrailer)
+EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<charta::PDFDictionary> &inTrailer)
 {
     PDFObjectCastPtr<PDFInteger> previousPosition(inTrailer->QueryDirectObject("Prev"));
     if (!previousPosition)
@@ -1045,7 +1047,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &
     auto *aTable = new XrefEntryInput[mXrefSize];
     do
     {
-        std::shared_ptr<PDFDictionary> trailerP = nullptr;
+        std::shared_ptr<charta::PDFDictionary> trailerP = nullptr;
 
         XrefEntryInput *extendedTable = nullptr;
         ObjectIDType extendedTableSize;
@@ -1053,7 +1055,7 @@ EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &
                                             &extendedTableSize);
         if (status != charta::eSuccess)
             break;
-        std::shared_ptr<PDFDictionary> trailer(trailerP);
+        std::shared_ptr<charta::PDFDictionary> trailer(trailerP);
 
         if (trailer->Exists("Prev"))
         {
@@ -1080,7 +1082,8 @@ EStatusCode PDFParser::ParsePreviousXrefs(const std::shared_ptr<PDFDictionary> &
 }
 
 EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, XrefEntryInput *inXrefTable,
-                                                  ObjectIDType inXrefSize, std::shared_ptr<PDFDictionary> *outTrailer,
+                                                  ObjectIDType inXrefSize,
+                                                  std::shared_ptr<charta::PDFDictionary> *outTrailer,
                                                   XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     EStatusCode status = charta::eSuccess;
@@ -1105,7 +1108,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             // Parsing trailer. this is not really necessary at this point, but for faulty PDFs which first xref may
             // incorrectly skip 0 entry. A simple correction is possible, but it is required to know whether the
             // to-be-parsed xref is the first one, or not.
-            std::shared_ptr<PDFDictionary> trailerDictionary = nullptr;
+            std::shared_ptr<charta::PDFDictionary> trailerDictionary = nullptr;
             status = ParseTrailerDictionary(&trailerDictionary);
             if (status != charta::eSuccess)
                 break;
@@ -1143,7 +1146,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             *outTrailer = trailerDictionary;
         }
         else if (anObject->GetType() == PDFObject::ePDFObjectInteger &&
-                 std::static_pointer_cast<PDFInteger>(anObject)->GetValue() > 0)
+                 std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue() > 0)
         {
             // Xref stream case. make some validations, grab the xref stream object details, and parse it
 
@@ -1174,7 +1177,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
                 break;
             }
 
-            NotifyIndirectObjectStart(std::static_pointer_cast<PDFInteger>(anObject)->GetValue(),
+            NotifyIndirectObjectStart(std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue(),
                                       versionObject->GetValue());
 
             auto xrefStream = std::static_pointer_cast<PDFStreamInput>(mObjectParser.ParseNewObject());
@@ -1238,11 +1241,11 @@ EStatusCode PDFParser::ParseFileDirectory()
     {
         // this would be a normal xref case
         // jump lines till you get to a line where the token is "trailer". then parse.
-        std::shared_ptr<PDFDictionary> trailerP = nullptr;
+        std::shared_ptr<charta::PDFDictionary> trailerP = nullptr;
         status = ParseTrailerDictionary(&trailerP);
         if (status != charta::eSuccess)
             return status;
-        std::shared_ptr<PDFDictionary> trailer(
+        std::shared_ptr<charta::PDFDictionary> trailer(
             trailerP); // this should take care of the internally added ref...minor technicality
         mTrailer = trailer;
 
@@ -1251,10 +1254,11 @@ EStatusCode PDFParser::ParseFileDirectory()
             return status;
     }
     else if (anObject->GetType() == PDFObject::ePDFObjectInteger &&
-             std::static_pointer_cast<PDFInteger>(anObject)->GetValue() > 0)
+             std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue() > 0)
     {
         // Xref stream case
-        status = BuildXrefTableAndTrailerFromXrefStream(std::static_pointer_cast<PDFInteger>(anObject)->GetValue());
+        status =
+            BuildXrefTableAndTrailerFromXrefStream(std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue());
         if (status != charta::eSuccess)
             return status;
     }
@@ -1446,10 +1450,10 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
         }
 
-        std::shared_ptr<PDFDictionary> streamDictionary(inXrefStream->QueryStreamDictionary());
+        std::shared_ptr<charta::PDFDictionary> streamDictionary(inXrefStream->QueryStreamDictionary());
 
         // setup w array
-        PDFObjectCastPtr<PDFArray> wArray(QueryDictionaryObject(streamDictionary, "W"));
+        PDFObjectCastPtr<charta::PDFArray> wArray(QueryDictionaryObject(streamDictionary, "W"));
         if (!wArray)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, W array not available. failing");
@@ -1474,7 +1478,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
 
         // read the segments from the stream
-        PDFObjectCastPtr<PDFArray> subsectionsIndex(QueryDictionaryObject(streamDictionary, "Index"));
+        PDFObjectCastPtr<charta::PDFArray> subsectionsIndex(QueryDictionaryObject(streamDictionary, "Index"));
         MovePositionInStream(inXrefStream->GetStreamContentStart());
 
         if (!subsectionsIndex)
@@ -1508,7 +1512,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
         }
         else
         {
-            SingleValueContainerIterator<PDFObjectVector> segmentsIterator = subsectionsIndex->GetIterator();
+            auto segmentsIterator = subsectionsIndex->GetIterator();
             PDFObjectCastPtr<PDFInteger> segmentValue;
             while (segmentsIterator.MoveNext() && charta::eSuccess == status)
             {
@@ -1682,7 +1686,7 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
             break;
         }
 
-        std::shared_ptr<PDFDictionary> streamDictionary(objectStream->QueryStreamDictionary());
+        std::shared_ptr<charta::PDFDictionary> streamDictionary(objectStream->QueryStreamDictionary());
 
         PDFObjectCastPtr<PDFInteger> streamObjectsCount(QueryDictionaryObject(streamDictionary, "N"));
         if (!streamObjectsCount)
@@ -1836,7 +1840,7 @@ charta::IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<P
 
 charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream)
 {
-    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     charta::IByteReader *result = nullptr;
     EStatusCode status = charta::eSuccess;
 
@@ -1865,8 +1869,8 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
 
         if (filterObject->GetType() == PDFObject::ePDFObjectArray)
         {
-            auto filterObjectArray = std::static_pointer_cast<PDFArray>(filterObject);
-            PDFObjectCastPtr<PDFArray> decodeParams(QueryDictionaryObject(streamDictionary, "DecodeParms"));
+            auto filterObjectArray = std::static_pointer_cast<charta::PDFArray>(filterObject);
+            PDFObjectCastPtr<charta::PDFArray> decodeParams(QueryDictionaryObject(streamDictionary, "DecodeParms"));
             for (unsigned long i = 0; i < filterObjectArray->GetLength() && eSuccess == status; ++i)
             {
                 PDFObjectCastPtr<PDFName> filterObjectItem(filterObjectArray->QueryObject(i));
@@ -1885,11 +1889,12 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
                 }
                 else
                 {
-                    PDFObjectCastPtr<PDFDictionary> decodeParamsItem(QueryArrayObject(decodeParams, i));
+                    PDFObjectCastPtr<charta::PDFDictionary> decodeParamsItem(QueryArrayObject(decodeParams, i));
 
                     createStatus = CreateFilterForStream(
                         result, std::static_pointer_cast<PDFName>(filterObject),
-                        !decodeParamsItem ? nullptr : std::shared_ptr<PDFDictionary>(decodeParamsItem), inStream);
+                        !decodeParamsItem ? nullptr : std::shared_ptr<charta::PDFDictionary>(decodeParamsItem),
+                        inStream);
                 }
 
                 if (createStatus.first != eSuccess)
@@ -1934,7 +1939,7 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
 
 EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *inStream,
                                                            const std::shared_ptr<PDFName> &inFilterName,
-                                                           const std::shared_ptr<PDFDictionary> &inDecodeParams,
+                                                           const std::shared_ptr<charta::PDFDictionary> &inDecodeParams,
                                                            const std::shared_ptr<PDFStreamInput> &inPDFStream)
 {
     EStatusCode status = eSuccess;
@@ -2084,7 +2089,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStr
     return objectsParser;
 }
 
-PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFArray> inArrayOfStreams)
+PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<charta::PDFArray> inArrayOfStreams)
 {
     charta::IByteReader *readStream = new ArrayOfInputStreamsStream(std::move(inArrayOfStreams), this);
 
@@ -2099,7 +2104,7 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<PDFAr
 
 charta::IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
 {
-    std::shared_ptr<PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
+    std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     charta::IByteReader *result = nullptr;
     EStatusCode status = charta::eSuccess;
 

@@ -46,7 +46,7 @@ void addPageToNewTree(unsigned long inPageIndex, PDFWriter &inWriter,
 
     // now modify the page object to refer to the new parent
     auto pageDictionaryObject = modifiedFileParser.ParsePage(inPageIndex);
-    MapIterator<PDFNameToPDFObjectMap> pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
+    auto pageDictionaryObjectIt = pageDictionaryObject->GetIterator();
     ObjectsContext &objectContext = inWriter.GetObjectsContext();
 
     objectContext.StartModifiedIndirectObject(pageObjectId);
@@ -97,10 +97,10 @@ TEST(Modification, PageOrderModification)
     addPageToNewTree(0, pdfWriter, copyingContext);
 
     // delete previous page tree to allow override
-    PDFObjectCastPtr<PDFIndirectObjectReference> catalogReference(
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> catalogReference(
         modifiedFileParser.GetTrailer()->QueryDirectObject("Root"));
-    PDFObjectCastPtr<PDFDictionary> catalog(modifiedFileParser.ParseNewObject(catalogReference->mObjectID));
-    PDFObjectCastPtr<PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
+    PDFObjectCastPtr<charta::PDFDictionary> catalog(modifiedFileParser.ParseNewObject(catalogReference->mObjectID));
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> pagesReference(catalog->QueryDirectObject("Pages"));
     IndirectObjectsReferenceRegistry &objectsRegistry = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry();
 
     objectsRegistry.DeleteObject(pagesReference->mObjectID);

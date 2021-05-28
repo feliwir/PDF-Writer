@@ -9,11 +9,11 @@ PDFDictionaryIterator PDFArrayIterator::DictAt(int ndx)
 {
     if (mArray.GetPtr() == nullptr)
         return PDFDictionaryIterator(mParser);
-    PDFObjectCastPtr<PDFIndirectObjectReference> foundReference(mArray->QueryObject(ndx));
+    PDFObjectCastPtr<charta::PDFIndirectObjectReference> foundReference(mArray->QueryObject(ndx));
     if (!foundReference)
         return PDFDictionaryIterator(mParser);
 
-    PDFObjectCastPtr<PDFDictionary> catalog(mParser.ParseNewObject(foundReference->mObjectID));
+    PDFObjectCastPtr<charta::PDFDictionary> catalog(mParser.ParseNewObject(foundReference->mObjectID));
     if (!catalog)
         return PDFDictionaryIterator(mParser);
 

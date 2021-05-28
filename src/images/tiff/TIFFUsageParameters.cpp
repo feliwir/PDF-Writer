@@ -1,5 +1,5 @@
 /*
-   Source File : TiffUsageParameters.cpp
+   Source File : TIFFUsageParameters.cpp
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -18,15 +18,15 @@
 
 
 */
-#include "images/tiff/TiffUsageParameters.h"
+#include "images/tiff/TIFFUsageParameters.h"
 
-const TIFFBiLevelBWColorTreatment &TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment()
+const charta::TIFFBiLevelBWColorTreatment &charta::TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment()
 {
     static TIFFBiLevelBWColorTreatment default_tiff_bilevel_bwcolor_treatment(false, CMYKRGBColor::CMYKBlack());
     return default_tiff_bilevel_bwcolor_treatment;
 }
 
-const TIFFBiLevelGrayscaleColorTreatment &TIFFBiLevelGrayscaleColorTreatment::
+const charta::TIFFBiLevelGrayscaleColorTreatment &charta::TIFFBiLevelGrayscaleColorTreatment::
     DefaultTIFFBiLevelGrayscaleColorTreatment()
 {
     static TIFFBiLevelGrayscaleColorTreatment default_tiff_bilevel_grayscale_treatment(false, CMYKRGBColor::CMYKBlack(),
@@ -34,7 +34,7 @@ const TIFFBiLevelGrayscaleColorTreatment &TIFFBiLevelGrayscaleColorTreatment::
     return default_tiff_bilevel_grayscale_treatment;
 }
 
-const TIFFUsageParameters &TIFFUsageParameters::DefaultTIFFUsageParameters()
+const charta::TIFFUsageParameters &charta::TIFFUsageParameters::DefaultTIFFUsageParameters()
 {
     static TIFFUsageParameters default_tiff_usage_parameters(
         0, TIFFBiLevelBWColorTreatment::DefaultTIFFBiLevelBWColorTreatment(),

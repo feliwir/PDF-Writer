@@ -20,21 +20,21 @@
 */
 #include "objects/PDFArray.h"
 
-PDFArray::PDFArray() : PDFObject(eType)
+charta::PDFArray::PDFArray() : PDFObject(eType)
 {
 }
 
-void PDFArray::AppendObject(const std::shared_ptr<PDFObject> &inObject)
+void charta::PDFArray::AppendObject(const std::shared_ptr<PDFObject> &inObject)
 {
     mValues.push_back(inObject);
 }
 
-SingleValueContainerIterator<PDFObjectVector> PDFArray::GetIterator()
+SingleValueContainerIterator<std::vector<std::shared_ptr<PDFObject>>> charta::PDFArray::GetIterator()
 {
-    return SingleValueContainerIterator<PDFObjectVector>(mValues);
+    return {mValues};
 }
 
-std::shared_ptr<PDFObject> PDFArray::QueryObject(unsigned long i)
+std::shared_ptr<PDFObject> charta::PDFArray::QueryObject(unsigned long i)
 {
     if (mValues.size() <= i)
     {
@@ -44,7 +44,7 @@ std::shared_ptr<PDFObject> PDFArray::QueryObject(unsigned long i)
     return mValues[i];
 }
 
-unsigned long PDFArray::GetLength()
+unsigned long charta::PDFArray::GetLength()
 {
     return (unsigned long)mValues.size();
 }

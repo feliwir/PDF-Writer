@@ -26,8 +26,12 @@
 
 class ObjectsContext;
 class DictionaryContext;
-class PDFDictionary;
 class PDFParser;
+
+namespace charta
+{
+class PDFDictionary;
+}
 
 class AbstractWrittenFont : public IWrittenFont
 {
@@ -48,7 +52,8 @@ class AbstractWrittenFont : public IWrittenFont
     charta::EStatusCode WriteStateInDictionary(ObjectsContext *inStateWriter,
                                                DictionaryContext *inDerivedObjectDictionary);
     charta::EStatusCode WriteStateAfterDictionary(ObjectsContext *inStateWriter);
-    charta::EStatusCode ReadStateFromObject(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState);
+    charta::EStatusCode ReadStateFromObject(PDFParser *inStateReader,
+                                            const std::shared_ptr<charta::PDFDictionary> &inState);
 
   private:
     ObjectIDType mCidRepresentationObjectStateID;
@@ -81,7 +86,7 @@ class AbstractWrittenFont : public IWrittenFont
                                               ObjectsContext *inStateWriter, ObjectIDType inObjectID);
     void WriteGlyphEncodingInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectId,
                                      const GlyphEncodingInfo &inGlyphEncodingInfo);
-    void ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<PDFDictionary> &inState,
+    void ReadWrittenFontState(PDFParser *inStateReader, const std::shared_ptr<charta::PDFDictionary> &inState,
                               WrittenFontRepresentation *inRepresentation);
     void ReadGlyphEncodingInfoState(PDFParser *inStateReader, ObjectIDType inObjectID,
                                     GlyphEncodingInfo &inGlyphEncodingInfo);

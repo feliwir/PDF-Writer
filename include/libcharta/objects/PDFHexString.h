@@ -24,6 +24,9 @@
 
 #include <string>
 
+namespace charta
+{
+
 class PDFHexString : public PDFObject
 {
   public:
@@ -34,7 +37,7 @@ class PDFHexString : public PDFObject
 
     // Value is the hex charactes string
     PDFHexString(const std::string &inValue);
-    virtual ~PDFHexString(void);
+    ~PDFHexString() = default;
 
     const std::string &GetValue() const;
     operator std::string() const;
@@ -42,3 +45,4 @@ class PDFHexString : public PDFObject
   private:
     std::string mValue;
 };
+} // namespace charta

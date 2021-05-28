@@ -26,7 +26,8 @@
 #include "parsing/PDFParser.h"
 #include <utility>
 
-ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(std::shared_ptr<PDFArray> inArrayOfStreams, PDFParser *inParser)
+ArrayOfInputStreamsStream::ArrayOfInputStreamsStream(std::shared_ptr<charta::PDFArray> inArrayOfStreams,
+                                                     PDFParser *inParser)
 {
     mArray = std::move(inArrayOfStreams);
     mParser = inParser;

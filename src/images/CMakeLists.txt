@@ -3,5 +3,5 @@ target_sources(libcharta PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/jpeg/JPEGImageParser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/png/PNGImageHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TIFFImageHandler.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TiffUsageParameters.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/tiff/TIFFUsageParameters.cpp
 )

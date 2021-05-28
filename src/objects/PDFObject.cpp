@@ -54,7 +54,7 @@ PDFObject::EPDFObjectType PDFObject::GetType()
     return mType;
 }
 
-void PDFObject::SetMetadata(const std::string &inKey, IDeletable *inValue)
+void PDFObject::SetMetadata(const std::string &inKey, charta::IDeletable *inValue)
 {
     // delete old metadata
     DeleteMetadata(inKey);
@@ -62,7 +62,7 @@ void PDFObject::SetMetadata(const std::string &inKey, IDeletable *inValue)
     mMetadata.insert(StringToIDeletable::value_type(inKey, inValue));
 }
 
-IDeletable *PDFObject::GetMetadata(const std::string &inKey)
+charta::IDeletable *PDFObject::GetMetadata(const std::string &inKey)
 {
     auto it = mMetadata.find(inKey);
 
@@ -71,21 +71,21 @@ IDeletable *PDFObject::GetMetadata(const std::string &inKey)
     return it->second;
 }
 
-IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
+charta::IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
 {
     auto it = mMetadata.find(inKey);
 
     if (it == mMetadata.end())
         return nullptr;
 
-    IDeletable *result = it->second;
+    charta::IDeletable *result = it->second;
     mMetadata.erase(it);
     return result;
 }
 
 void PDFObject::DeleteMetadata(const std::string &inKey)
 {
-    IDeletable *result = DetachMetadata(inKey);
+    charta::IDeletable *result = DetachMetadata(inKey);
     if (result != nullptr)
         result->DeleteMe();
 }

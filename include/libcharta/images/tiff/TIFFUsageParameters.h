@@ -1,5 +1,5 @@
 /*
-   Source File : TiffUsageParameters.h
+   Source File : TIFFUsageParameters.h
 
 
    Copyright 2011 Gal Kahana PDFWriter
@@ -23,6 +23,8 @@
 #include "CMYKRGBColor.h"
 #include <stdint.h>
 
+namespace charta
+{
 // Options for TIFF image usage.
 // by default the image drawn would be the first page of the input tiff (either one page or multipage)
 // for bilevel images, will be drawn either as grayscale or black and white.
@@ -102,3 +104,4 @@ struct TIFFUsageParameters
     // default treatment is 0 page index, and defaults for black & white and Grayscale
     static const TIFFUsageParameters &DefaultTIFFUsageParameters();
 };
+} // namespace charta

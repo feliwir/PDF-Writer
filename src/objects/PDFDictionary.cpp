@@ -20,11 +20,11 @@
 */
 #include "objects/PDFDictionary.h"
 
-PDFDictionary::PDFDictionary() : PDFObject(eType)
+charta::PDFDictionary::PDFDictionary() : PDFObject(eType)
 {
 }
 
-std::shared_ptr<PDFObject> PDFDictionary::QueryDirectObject(const std::string &inName)
+std::shared_ptr<PDFObject> charta::PDFDictionary::QueryDirectObject(const std::string &inName)
 {
     auto key = std::make_shared<PDFName>(inName);
     auto it = mValues.find(key);
@@ -37,18 +37,20 @@ std::shared_ptr<PDFObject> PDFDictionary::QueryDirectObject(const std::string &i
     return it->second;
 }
 
-void PDFDictionary::Insert(const std::shared_ptr<PDFName> &inKeyObject, const std::shared_ptr<PDFObject> &inValueObject)
+void charta::PDFDictionary::Insert(const std::shared_ptr<PDFName> &inKeyObject,
+                                   const std::shared_ptr<PDFObject> &inValueObject)
 {
     mValues.insert({inKeyObject, inValueObject});
 }
 
-bool PDFDictionary::Exists(const std::string &inName)
+bool charta::PDFDictionary::Exists(const std::string &inName)
 {
     auto key = std::make_shared<PDFName>(inName);
     return mValues.find(key) != mValues.end();
 }
 
-MapIterator<PDFNameToPDFObjectMap> PDFDictionary::GetIterator()
+MapIterator<std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, charta::PDFNameLess>> charta::PDFDictionary::
+    GetIterator()
 {
-    return MapIterator<PDFNameToPDFObjectMap>(mValues);
+    return {mValues};
 }

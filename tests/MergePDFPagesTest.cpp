@@ -281,7 +281,7 @@ class MyPDFMergingHandler : public DocumentContextExtenderAdapter
     }
 
     EStatusCode OnAfterMergePageFromPage(PDFPage & /*inTargetPage*/,
-                                         std::shared_ptr<PDFDictionary> /*inPageObjectDictionary*/,
+                                         std::shared_ptr<charta::PDFDictionary> /*inPageObjectDictionary*/,
                                          ObjectsContext * /*inPDFWriterObjectContext*/,
                                          DocumentContext * /*inPDFWriterDocumentContext*/,
                                          PDFDocumentHandler * /*inPDFDocumentHandler*/) override

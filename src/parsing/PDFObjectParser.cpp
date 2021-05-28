@@ -121,7 +121,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
         // this could be an indirect reference in case this is a positive integer
         // and the next one is also, and then there's an "R" keyword
         if ((numberObject != nullptr) && (numberObject->GetType() == PDFObject::ePDFObjectInteger) &&
-            std::static_pointer_cast<PDFInteger>(numberObject)->GetValue() > 0)
+            std::static_pointer_cast<charta::PDFInteger>(numberObject)->GetValue() > 0)
         {
             // try parse version
             std::string numberToken;
@@ -137,7 +137,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
             auto versionObject = ParseNumber(numberToken);
             bool isReference = false;
             if ((versionObject == nullptr) || (versionObject->GetType() != PDFObject::ePDFObjectInteger) ||
-                std::static_pointer_cast<PDFInteger>(versionObject)->GetValue() <
+                std::static_pointer_cast<charta::PDFInteger>(versionObject)->GetValue() <
                     0) // k. failure to parse number, or no non-negative, cant be reference
             {
                 SaveTokenToBuffer(numberToken);
@@ -158,8 +158,8 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
 
             // if passed all these, then this is a reference
             return std::make_shared<PDFIndirectObjectReference>(
-                std::static_pointer_cast<PDFInteger>(numberObject)->GetValue(),
-                std::static_pointer_cast<PDFInteger>(versionObject)->GetValue());
+                std::static_pointer_cast<charta::PDFInteger>(numberObject)->GetValue(),
+                std::static_pointer_cast<charta::PDFInteger>(versionObject)->GetValue());
         }
 
         return numberObject;

@@ -40,18 +40,16 @@
 #include <list>
 #include <stdlib.h>
 
-using namespace charta;
-using namespace std;
+using PDFImageXObjectList = std::list<PDFImageXObject *>;
 
-using PDFImageXObjectList = list<PDFImageXObject *>;
-
-PNGImageHandler::PNGImageHandler()
+charta::PNGImageHandler::PNGImageHandler()
 {
     mObjectsContext = nullptr;
     mDocumentContext = nullptr;
 }
 
-void PNGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext)
+void charta::PNGImageHandler::SetOperationsContexts(DocumentContext *inDocumentContext,
+                                                    ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;
     mDocumentContext = inDocumentContext;
@@ -74,7 +72,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
     PDFImageXObjectList listOfImages;
     PDFImageXObject *imageXObject = nullptr;
     std::shared_ptr<PDFStream> imageStream = nullptr;
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -82,7 +80,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
         if (setjmp(png_jmpbuf(png_ptr)))
         {
             // reset failure pointer
-            status = eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -142,7 +140,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
 
         if (isAlpha)
         {
-            OutputStringBufferStream alphaWriteStream(&alphaComponentsData);
+            charta::OutputStringBufferStream alphaWriteStream(&alphaComponentsData);
 
             while (y-- > 0)
             {
@@ -209,8 +207,8 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             charta::IByteWriter *writerMaskStream = imageMaskStream->GetWriteStream();
 
             // write the alpha samples
-            InputStringBufferStream alphaWriteStream(&alphaComponentsData);
-            OutputStreamTraits traits(writerMaskStream);
+            charta::InputStringBufferStream alphaWriteStream(&alphaComponentsData);
+            charta::OutputStreamTraits traits(writerMaskStream);
             traits.CopyToOutputStream(&alphaWriteStream);
 
             inObjectsContext->EndPDFStream(imageMaskStream);
@@ -220,7 +218,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
             new PDFImageXObject(imageXObjectObjectId, 1 == colorComponents ? KProcsetImageB : KProcsetImageC);
     } while (false);
 
-    if (eFailure == status)
+    if (status == charta::eFailure)
     {
         delete imageXObject;
         imageXObject = nullptr;
@@ -232,7 +230,7 @@ PDFImageXObject *CreateImageXObjectForData(png_structp png_ptr, png_infop info_p
 PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList &inImageXObject,
                                                        ObjectIDType inFormXObjectID, png_uint_32 transformed_width,
                                                        png_uint_32 transformed_height,
-                                                       DocumentContext *inDocumentContext)
+                                                       charta::DocumentContext *inDocumentContext)
 {
     PDFFormXObject *formXObject = nullptr;
     do
@@ -252,7 +250,7 @@ PDFFormXObject *CreateImageFormXObjectFromImageXObject(const PDFImageXObjectList
             xobjectContentContext->Q();
         }
 
-        EStatusCode status = inDocumentContext->EndFormXObjectNoRelease(formXObject);
+        auto status = inDocumentContext->EndFormXObjectNoRelease(formXObject);
         if (status != charta::eSuccess)
         {
             TRACE_LOG("PNGImageHandler::CreateImageFormXObjectFromImageXObject. Unexpected Error, could not create "
@@ -294,14 +292,14 @@ void HandlePngWarning(png_structp /*png_ptr*/, png_const_charp warning_message)
 }
 
 PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *inPNGStream,
-                                              DocumentContext *inDocumentContext, ObjectsContext *inObjectsContext,
-                                              ObjectIDType inFormXObjectID)
+                                              charta::DocumentContext *inDocumentContext,
+                                              ObjectsContext *inObjectsContext, ObjectIDType inFormXObjectID)
 {
     // Start reading image to get dimension. we'll then create the form, and then the image
     PDFFormXObject *formXObject = nullptr;
     PDFImageXObject *imageXObject = nullptr;
     PDFImageXObjectList listOfImages;
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = charta::eSuccess;
     png_structp png_ptr = nullptr;
     png_infop info_ptr = nullptr;
     png_bytep row = nullptr;
@@ -317,7 +315,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *i
 
         if (setjmp(png_jmpbuf(png_ptr)))
         {
-            status = eFailure;
+            status = charta::eFailure;
             break;
         }
 
@@ -399,14 +397,14 @@ PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *i
             imageXObject = CreateImageXObjectForData(png_ptr, info_ptr, row, inObjectsContext);
             if (imageXObject == nullptr)
             {
-                status = eFailure;
+                status = charta::eFailure;
                 break;
             }
 
             listOfImages.push_back(imageXObject);
         }
 
-        if (eFailure == status)
+        if (status == charta::eFailure)
         {
             break;
         }
@@ -419,7 +417,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *i
                                                              transformed_height, inDocumentContext);
         if (formXObject == nullptr)
         {
-            status = eFailure;
+            status = charta::eFailure;
         }
     } while (false);
 
@@ -430,7 +428,7 @@ PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *i
     for (; it != listOfImages.end(); ++it)
         delete *it;
     listOfImages.clear();
-    if (status != eSuccess)
+    if (status != charta::eSuccess)
     {
         delete formXObject;
         formXObject = nullptr;
@@ -439,8 +437,8 @@ PDFFormXObject *CreateFormXObjectForPNGStream(charta::IByteReaderWithPosition *i
     return formXObject;
 }
 
-PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
-                                                                ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::PNGImageHandler::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
+                                                                        ObjectIDType inFormXObjectID)
 {
     PDFFormXObject *imageFormXObject = nullptr;
 
@@ -460,12 +458,13 @@ PDFFormXObject *PNGImageHandler::CreateFormXObjectFromPNGStream(charta::IByteRea
     return imageFormXObject;
 }
 
-std::pair<double, double> PNGImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inPNGStream)
+std::pair<double, double> charta::PNGImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inPNGStream)
 {
     return ReadImageInfo(inPNGStream).dimensions;
 }
 
-PNGImageHandler::PNGImageInfo PNGImageHandler::ReadImageInfo(charta::IByteReaderWithPosition *inPNGStream)
+charta::PNGImageHandler::PNGImageInfo charta::PNGImageHandler::ReadImageInfo(
+    charta::IByteReaderWithPosition *inPNGStream)
 {
     // reading as is set by internal reader (meaning, post transformations)
 

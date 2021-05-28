@@ -91,12 +91,11 @@
 #include <search.h>
 #include <stdlib.h>
 
-using namespace charta;
-
 #define PS_UNIT_SIZE 72.0F
 
 /* This type is of PDF color spaces. */
-using t2p_cs_t = enum {
+using t2p_cs_t = enum
+{
     T2P_CS_BILEVEL = 0x01,   /* Bilevel, black and white */
     T2P_CS_GRAY = 0x02,      /* Single channel */
     T2P_CS_RGB = 0x04,       /* Three channel tristimulus RGB */
@@ -109,16 +108,23 @@ using t2p_cs_t = enum {
 };
 
 /* This type is of PDF compression types.  */
-using t2p_compress_t = enum { T2P_COMPRESS_NONE = 0x00, T2P_COMPRESS_G4 = 0x01, T2P_COMPRESS_ZIP = 0x04 };
+using t2p_compress_t = enum
+{
+    T2P_COMPRESS_NONE = 0x00,
+    T2P_COMPRESS_G4 = 0x01,
+    T2P_COMPRESS_ZIP = 0x04
+};
 
 /* This type is whether TIFF image data can be used in PDF without transcoding. */
-using t2p_transcode_t = enum {
+using t2p_transcode_t = enum
+{
     T2P_TRANSCODE_RAW = 0x01,   /* The raw data from the input can be used without recompressing */
     T2P_TRANSCODE_ENCODE = 0x02 /* The data from the input is perhaps unencoded and reencoded */
 };
 
 /* This type is of information about the data samples of the input image. */
-using t2p_sample_t = enum {
+using t2p_sample_t = enum
+{
     T2P_SAMPLE_NOTHING = 0x0000,      /* The unencoded samples are normal for the output colorspace */
     T2P_SAMPLE_ABGR_TO_RGB = 0x0001,  /* The unencoded samples are the result of ReadRGBAImage */
     T2P_SAMPLE_RGBA_TO_RGB = 0x0002,  /* The unencoded samples are contiguous RGBA */
@@ -132,7 +138,8 @@ using t2p_sample_t = enum {
 };
 
 /* This type is of error status of the T2P struct. */
-using t2p_err_t = enum {
+using t2p_err_t = enum
+{
     T2P_ERR_OK = 0,   /* This is the value of mT2p->t2p_error when there is no error */
     T2P_ERR_ERROR = 1 /* This is the value of mT2p->t2p_error when there was an error */
 };
@@ -374,37 +381,38 @@ void ReportError(const char *inModel, const char *inFormat, va_list inParameters
     Trace::DefaultTrace().TraceToLog(buffer);
 }
 
-TIFFImageHandler::TIFFImageHandler() : mUserParameters(TIFFUsageParameters::DefaultTIFFUsageParameters())
+charta::TIFFImageHandler::TIFFImageHandler() : mUserParameters(TIFFUsageParameters::DefaultTIFFUsageParameters())
 {
     mT2p = nullptr;
     mExtender = nullptr;
 }
 
-TIFFImageHandler::~TIFFImageHandler()
+charta::TIFFImageHandler::~TIFFImageHandler()
 {
     DestroyConversionState();
 }
 
-void TIFFImageHandler::Reset()
+void charta::TIFFImageHandler::Reset()
 {
     DestroyConversionState();
     mT2p = nullptr;
     mExtender = nullptr;
 }
 
-void TIFFImageHandler::SetOperationsContexts(DocumentContext *inContainerDocumentContext,
-                                             ObjectsContext *inObjectsContext)
+void charta::TIFFImageHandler::SetOperationsContexts(DocumentContext *inContainerDocumentContext,
+                                                     ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;
     mContainerDocumentContext = inContainerDocumentContext;
 }
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
-                                                                const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile(
+    const std::string &inTIFFFilePath, const TIFFUsageParameters &inTIFFUsageParameters)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext not initialized "
+        TRACE_LOG("charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext not "
+                  "initialized "
                   "with an objects context");
         return nullptr;
     }
@@ -413,16 +421,15 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFFile(const std::strin
         inTIFFFilePath, mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID(), inTIFFUsageParameters);
 }
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
-                                                                ObjectIDType inFormXObjectID,
-                                                                const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile(
+    const std::string &inTIFFFilePath, ObjectIDType inFormXObjectID, const TIFFUsageParameters &inTIFFUsageParameters)
 
 {
     InputFile tiffFile;
 
     if (tiffFile.OpenFile(inTIFFFilePath) != charta::eSuccess)
     {
-        TRACE_LOG1("TIFFImageHandler::CreateFormXObjectFromTIFFFile. cannot open file for reading - %s",
+        TRACE_LOG1("charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile. cannot open file for reading - %s",
                    inTIFFFilePath.c_str());
         return nullptr;
     }
@@ -430,7 +437,7 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFFile(const std::strin
     return CreateFormXObjectFromTIFFStream(tiffFile.GetInputStream(), inFormXObjectID, inTIFFUsageParameters);
 }
 
-void TIFFImageHandler::InitializeConversionState()
+void charta::TIFFImageHandler::InitializeConversionState()
 {
 
     mT2p = new T2P();
@@ -441,7 +448,7 @@ void TIFFImageHandler::InitializeConversionState()
     mT2p->pdf_defaultcompression = T2P_COMPRESS_ZIP;
 }
 
-void TIFFImageHandler::DestroyConversionState()
+void charta::TIFFImageHandler::DestroyConversionState()
 {
     int i = 0;
 
@@ -471,7 +478,7 @@ void TIFFImageHandler::DestroyConversionState()
     }
 }
 
-PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
 {
     PDFFormXObject *imageFormXObject = nullptr;
     EStatusCode status;
@@ -486,9 +493,10 @@ PDFFormXObject *TIFFImageHandler::ConvertTiff2PDF(ObjectIDType inFormXObjectID)
 
         if (mT2p->pdf_page >= mT2p->tiff_pagecount)
         {
-            TRACE_LOG3("TIFFImageHandler::ConvertTiff2PDF, Requested tiff page %u where the tiff only has %u pages. "
-                       "Tiff file name - %s",
-                       mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
+            TRACE_LOG3(
+                "charta::TIFFImageHandler::ConvertTiff2PDF, Requested tiff page %u where the tiff only has %u pages. "
+                "Tiff file name - %s",
+                mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -564,7 +572,7 @@ static int t2p_cmp_t2p_page(const void *e1, const void *e2)
     return (((T2P_PAGE *)e1)->page_number - ((T2P_PAGE *)e2)->page_number);
 }
 
-EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
+charta::EStatusCode charta::TIFFImageHandler::ReadTopLevelTiffInformation()
 {
     EStatusCode status = charta::eSuccess;
     tdir_t directorycount = TIFFNumberOfDirectories(mT2p->input);
@@ -704,7 +712,7 @@ EStatusCode TIFFImageHandler::ReadTopLevelTiffInformation()
     return status;
 }
 
-EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
+charta::EStatusCode charta::TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 {
     EStatusCode status = charta::eSuccess;
     uint16 xuint16;
@@ -720,7 +728,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         TIFFGetField(mT2p->input, TIFFTAG_IMAGEWIDTH, &(mT2p->tiff_width));
         if (0 == mT2p->tiff_width)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero width",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero width",
                        mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
@@ -729,7 +737,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         TIFFGetField(mT2p->input, TIFFTAG_IMAGELENGTH, &(mT2p->tiff_length));
         if (0 == mT2p->tiff_length)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero length",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with zero length",
                        mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
@@ -737,7 +745,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 
         if (TIFFGetField(mT2p->input, TIFFTAG_COMPRESSION, &mT2p->tiff_compression) == 0)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no compression tag",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no compression tag",
                        mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
@@ -745,9 +753,10 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 
         if (TIFFIsCODECConfigured(mT2p->tiff_compression) == 0)
         {
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with compression type %u:  not "
-                       "configured",
-                       mT2p->inputFilePath.c_str(), mT2p->tiff_compression);
+            TRACE_LOG2(
+                "charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with compression type %u:  not "
+                "configured",
+                mT2p->inputFilePath.c_str(), mT2p->tiff_compression);
             status = charta::eFailure;
             break;
         }
@@ -761,12 +770,12 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         case 8:
             break;
         case 0:
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: Image %s has 0 bits per sample, assuming 1",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation: Image %s has 0 bits per sample, assuming 1",
                        mT2p->inputFilePath.c_str());
             mT2p->tiff_bitspersample = 1;
             break;
         default:
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u bits per sample",
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u bits per sample",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_bitspersample);
             status = charta::eFailure;
             break;
@@ -777,7 +786,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         TIFFGetFieldDefaulted(mT2p->input, TIFFTAG_SAMPLESPERPIXEL, &(mT2p->tiff_samplesperpixel));
         if (mT2p->tiff_samplesperpixel > 4)
         {
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u samples per pixel",
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with %u samples per pixel",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
             status = charta::eFailure;
             break;
@@ -785,8 +794,9 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
 
         if (mT2p->tiff_samplesperpixel == 0)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation: Image %s has 0 samples per pixel, assuming 1",
-                       mT2p->inputFilePath.c_str());
+            TRACE_LOG1(
+                "charta::TIFFImageHandler::ReadTIFFPageInformation: Image %s has 0 samples per pixel, assuming 1",
+                mT2p->inputFilePath.c_str());
             mT2p->tiff_samplesperpixel = 1;
         }
 
@@ -799,7 +809,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             case 4:
                 break;
             default:
-                TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation: No support for %s with sample format %u",
+                TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with sample format %u",
                            mT2p->inputFilePath.c_str(), xuint16);
                 status = charta::eFailure;
                 break;
@@ -811,9 +821,9 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         TIFFGetFieldDefaulted(mT2p->input, TIFFTAG_FILLORDER, &(mT2p->tiff_fillorder));
         if (TIFFGetField(mT2p->input, TIFFTAG_PHOTOMETRIC, &(mT2p->tiff_photometric)) == 0)
         {
-            TRACE_LOG1(
-                "TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no photometric interpretation tag",
-                mT2p->inputFilePath.c_str());
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation: No support for %s with no photometric "
+                       "interpretation tag",
+                       mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -867,29 +877,32 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                             mT2p->pdf_sample = T2P_SAMPLE_RGBA_TO_RGB;
                             break;
                         }
-                        TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, RGB image %s has 4 samples per pixel, "
-                                   "assuming RGBA",
-                                   mT2p->inputFilePath.c_str());
+                        TRACE_LOG1(
+                            "charta::TIFFImageHandler::ReadTIFFPageInformation, RGB image %s has 4 samples per pixel, "
+                            "assuming RGBA",
+                            mT2p->inputFilePath.c_str());
                         break;
                     }
                     mT2p->pdf_colorspace = T2P_CS_CMYK;
                     mT2p->pdf_switchdecode ^= 1;
-                    TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, RGB image %s has 4 samples per pixel, "
-                               "assuming CMYK",
-                               mT2p->inputFilePath.c_str());
+                    TRACE_LOG1(
+                        "charta::TIFFImageHandler::ReadTIFFPageInformation, RGB image %s has 4 samples per pixel, "
+                        "assuming CMYK",
+                        mT2p->inputFilePath.c_str());
                     break;
                 }
 
-                TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
-                           "per pixel",
-                           mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
+                TRACE_LOG2(
+                    "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
+                    "per pixel",
+                    mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
                 status = charta::eFailure;
                 break;
             }
 
-            TRACE_LOG2(
-                "TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples per pixel",
-                mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation, No support for RGB image %s with %u samples "
+                       "per pixel",
+                       mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
             status = charta::eFailure;
             break;
 
@@ -906,9 +919,9 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             {
                 if (xuint16 != INKSET_CMYK)
                 {
-                    TRACE_LOG1(
-                        "TIFFImageHandler::ReadTIFFPageInformation, No support for %s because its inkset is not CMYK",
-                        mT2p->inputFilePath.c_str());
+                    TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s because its "
+                               "inkset is not CMYK",
+                               mT2p->inputFilePath.c_str());
                     status = charta::eFailure;
                     break;
                 }
@@ -919,9 +932,9 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             }
             else
             {
-                TRACE_LOG2(
-                    "TIFFImageHandler::ReadTIFFPageInformation, No support for %s because it has %u samples per pixel",
-                    mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
+                TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s because it has %u "
+                           "samples per pixel",
+                           mT2p->inputFilePath.c_str(), mT2p->tiff_samplesperpixel);
                 status = charta::eFailure;
                 break;
             }
@@ -961,15 +974,16 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             break;
         case PHOTOMETRIC_LOGL:
         case PHOTOMETRIC_LOGLUV:
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric interpretation "
-                       "LogL/LogLuv",
-                       mT2p->inputFilePath.c_str());
+            TRACE_LOG1(
+                "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric interpretation "
+                "LogL/LogLuv",
+                mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         default:
-            TRACE_LOG1(
-                "TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric interpretation %u",
-                mT2p->inputFilePath.c_str());
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s with photometric "
+                       "interpretation %u",
+                       mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -981,7 +995,8 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
             switch (mT2p->tiff_planar)
             {
             case 0:
-                TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, Image %s has planar configuration 0, assuming 1",
+                TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation, Image %s has planar configuration 0, "
+                           "assuming 1",
                            mT2p->inputFilePath.c_str());
                 mT2p->tiff_planar = PLANARCONFIG_CONTIG;
             case PLANARCONFIG_CONTIG:
@@ -990,16 +1005,18 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
                 mT2p->pdf_sample = T2P_SAMPLE_PLANAR_SEPARATE_TO_CONTIG;
                 if (mT2p->tiff_bitspersample != 8)
                 {
-                    TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with separated planar "
-                               "configuration and %u bits per sample",
-                               mT2p->inputFilePath.c_str(), mT2p->tiff_bitspersample);
+                    TRACE_LOG2(
+                        "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s with separated planar "
+                        "configuration and %u bits per sample",
+                        mT2p->inputFilePath.c_str(), mT2p->tiff_bitspersample);
                     status = charta::eFailure;
                     break;
                 }
                 break;
             default:
-                TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, No support for %s with planar configuration %u",
-                           mT2p->inputFilePath.c_str(), mT2p->tiff_planar);
+                TRACE_LOG2(
+                    "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for %s with planar configuration %u",
+                    mT2p->inputFilePath.c_str(), mT2p->tiff_planar);
                 status = charta::eFailure;
                 break;
             }
@@ -1010,7 +1027,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
         TIFFGetFieldDefaulted(mT2p->input, TIFFTAG_ORIENTATION, &(mT2p->tiff_orientation));
         if (mT2p->tiff_orientation > 8)
         {
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, Image %s has orientation %u, assuming 0",
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation, Image %s has orientation %u, assuming 0",
                        mT2p->inputFilePath.c_str(), mT2p->tiff_orientation);
             mT2p->tiff_orientation = 0;
         }
@@ -1152,7 +1169,7 @@ EStatusCode TIFFImageHandler::ReadTIFFPageInformation() // t2p_read_tiff_data
     return status;
 }
 
-EStatusCode TIFFImageHandler::ReadPhotometricPalette()
+charta::EStatusCode charta::TIFFImageHandler::ReadPhotometricPalette()
 {
     EStatusCode status = charta::eSuccess;
     uint16 *r;
@@ -1163,9 +1180,10 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
     {
         if (mT2p->tiff_samplesperpixel != 1)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for palettized image %s with not one "
-                       "sample per pixel",
-                       mT2p->inputFilePath.c_str());
+            TRACE_LOG1(
+                "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for palettized image %s with not one "
+                "sample per pixel",
+                mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -1173,7 +1191,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
         mT2p->pdf_palettesize = 0x0001 << mT2p->tiff_bitspersample;
         if (TIFFGetField(mT2p->input, TIFFTAG_COLORMAP, &r, &g, &b) == 0)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
                        mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
@@ -1186,7 +1204,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
         mT2p->pdf_palette = (unsigned char *)_TIFFmalloc(mT2p->pdf_palettesize * 3);
         if (mT2p->pdf_palette == nullptr)
         {
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
                        "t2p_read_tiff_image, %s",
                        mT2p->pdf_palettesize, mT2p->inputFilePath.c_str());
             status = charta::eFailure;
@@ -1204,7 +1222,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPalette()
     return status;
 }
 
-EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
+charta::EStatusCode charta::TIFFImageHandler::ReadPhotometricPaletteCMYK()
 {
     EStatusCode status = charta::eSuccess;
     uint16 *r;
@@ -1216,9 +1234,10 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
     {
         if (mT2p->tiff_samplesperpixel != 1)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, No support for palettized CMYK image %s with not "
-                       "one sample per pixel",
-                       mT2p->inputFilePath.c_str());
+            TRACE_LOG1(
+                "charta::TIFFImageHandler::ReadTIFFPageInformation, No support for palettized CMYK image %s with not "
+                "one sample per pixel",
+                mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -1226,7 +1245,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
         mT2p->pdf_palettesize = 0x0001 << mT2p->tiff_bitspersample;
         if (TIFFGetField(mT2p->input, TIFFTAG_COLORMAP, &r, &g, &b, &a) == 0)
         {
-            TRACE_LOG1("TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
+            TRACE_LOG1("charta::TIFFImageHandler::ReadTIFFPageInformation, Palettized image %s has no color map",
                        mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
@@ -1239,7 +1258,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
         mT2p->pdf_palette = (unsigned char *)_TIFFmalloc(mT2p->pdf_palettesize * 4);
         if (mT2p->pdf_palette == nullptr)
         {
-            TRACE_LOG2("TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
+            TRACE_LOG2("charta::TIFFImageHandler::ReadTIFFPageInformation, Can't allocate %u bytes of memory for "
                        "t2p_read_tiff_image, %s",
                        mT2p->pdf_palettesize, mT2p->inputFilePath.c_str());
             status = charta::eFailure;
@@ -1262,7 +1281,7 @@ EStatusCode TIFFImageHandler::ReadPhotometricPaletteCMYK()
     This function composes the page size and image and tile locations on a page.
 */
 
-void TIFFImageHandler::ComposePDFPage()
+void charta::TIFFImageHandler::ComposePDFPage()
 {
 
     uint32 i = 0;
@@ -1420,7 +1439,7 @@ void TIFFImageHandler::ComposePDFPage()
     }
 }
 
-void TIFFImageHandler::ComposePDFPageOrient(T2P_BOX *boxp, uint16 orientation)
+void charta::TIFFImageHandler::ComposePDFPageOrient(T2P_BOX *boxp, uint16 orientation)
 {
 
     float m1[9];
@@ -1497,7 +1516,7 @@ void TIFFImageHandler::ComposePDFPageOrient(T2P_BOX *boxp, uint16 orientation)
     }
 }
 
-void TIFFImageHandler::ComposePDFPageOrientFlip(T2P_BOX *boxp, uint16 orientation)
+void charta::TIFFImageHandler::ComposePDFPageOrientFlip(T2P_BOX *boxp, uint16 orientation)
 {
     float m1[9];
     float f = 0.0;
@@ -1562,7 +1581,7 @@ static const std::string scRange = "Range";
 static const std::string scSize = "Size";
 static const std::string scBitsPerSample = "BitsPerSample";
 
-ObjectIDType TIFFImageHandler::WriteTransferFunction(int i)
+ObjectIDType charta::TIFFImageHandler::WriteTransferFunction(int i)
 {
     ObjectIDType transferFunctionID = mObjectsContext->StartNewIndirectObject();
     DictionaryContext *transferFunctionDictionary = mObjectsContext->StartDictionary();
@@ -1606,7 +1625,7 @@ static const std::string scExtGState = "ExtGState";
 static const std::string scIdentity = "Identity";
 static const std::string scTR = "TR";
 
-ObjectIDType TIFFImageHandler::WriteTransferFunctionsExtGState(const ObjectIDTypeList &inTransferFunctions)
+ObjectIDType charta::TIFFImageHandler::WriteTransferFunctionsExtGState(const ObjectIDTypeList &inTransferFunctions)
 {
     ObjectIDType gstateID = mObjectsContext->StartNewIndirectObject();
     DictionaryContext *gstateDictionary = mObjectsContext->StartDictionary();
@@ -1636,7 +1655,7 @@ ObjectIDType TIFFImageHandler::WriteTransferFunctionsExtGState(const ObjectIDTyp
     return gstateID;
 }
 
-ObjectIDType TIFFImageHandler::WritePaletteCS()
+ObjectIDType charta::TIFFImageHandler::WritePaletteCS()
 {
     ObjectIDType palleteID = mObjectsContext->StartNewIndirectObject();
     std::shared_ptr<PDFStream> paletteStream = mObjectsContext->StartPDFStream();
@@ -1648,7 +1667,7 @@ ObjectIDType TIFFImageHandler::WritePaletteCS()
 static const std::string scN = "N";
 static const std::string scAlternate = "Alternate";
 
-ObjectIDType TIFFImageHandler::WriteICCCS()
+ObjectIDType charta::TIFFImageHandler::WriteICCCS()
 {
     ObjectIDType ICCID = mObjectsContext->StartNewIndirectObject();
     DictionaryContext *ICCDictionary = mObjectsContext->StartDictionary();
@@ -1680,7 +1699,7 @@ static const std::string scDeviceCMYK = "DeviceCMYK";
 static const std::string scLab = "Lab";
 static const std::string scWhitePoint = "WhitePoint";
 
-void TIFFImageHandler::WriteXObjectCS(DictionaryContext *inContainerDictionary)
+void charta::TIFFImageHandler::WriteXObjectCS(DictionaryContext *inContainerDictionary)
 {
     float X_W = 1.0;
     float Y_W = 1.0;
@@ -1809,7 +1828,7 @@ static const std::string scCalGray = "CalGray";
 static const std::string scCalRGB = "CalRGB";
 static const std::string scGamma = "Gamma";
 static const std::string scMatrix = "Matrix";
-void TIFFImageHandler::WriteXObjectCALCS()
+void charta::TIFFImageHandler::WriteXObjectCALCS()
 {
 
     float X_W = 0.0;
@@ -1936,7 +1955,8 @@ static const std::string scName = "Name";
 static const std::string scBitsPerComponent = "BitsPerComponent";
 static const std::string scColorSpace = "ColorSpace";
 static const std::string scInterpolate = "Interpolate";
-PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
+
+PDFImageXObject *charta::TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
 {
     PDFImageXObject *imageXObject = nullptr;
     std::shared_ptr<PDFStream> imageStream = nullptr;
@@ -1968,7 +1988,8 @@ PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
             if (mExtender->OnTIFFImageXObjectWrite(imageXObjectID, imageContext, mObjectsContext,
                                                    mContainerDocumentContext, this) != charta::eSuccess)
             {
-                TRACE_LOG("TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared failure when "
+                TRACE_LOG("charta::TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared "
+                          "failure when "
                           "writing image xobject.");
                 break;
             }
@@ -1992,13 +2013,13 @@ PDFImageXObject *TIFFImageHandler::WriteTileImageXObject(int inTileIndex)
     return imageXObject;
 }
 
-bool TIFFImageHandler::TileIsRightEdge(int inTileIndex)
+bool charta::TIFFImageHandler::TileIsRightEdge(int inTileIndex)
 {
     return (((inTileIndex + 1) % mT2p->tiff_tiles[mT2p->pdf_page].tiles_tilecountx == 0) &&
             mT2p->tiff_tiles[mT2p->pdf_page].tiles_edgetilewidth != 0);
 }
 
-bool TIFFImageHandler::TileIsBottomEdge(int inTileIndex)
+bool charta::TIFFImageHandler::TileIsBottomEdge(int inTileIndex)
 {
     return (((inTileIndex + 1) > (int)(mT2p->tiff_tiles[mT2p->pdf_page].tiles_tilecount -
                                        mT2p->tiff_tiles[mT2p->pdf_page].tiles_tilecountx)) &&
@@ -2006,7 +2027,7 @@ bool TIFFImageHandler::TileIsBottomEdge(int inTileIndex)
 }
 
 static const std::string scDecode = "Decode";
-void TIFFImageHandler::WriteImageXObjectDecode(DictionaryContext *inImageDictionary)
+void charta::TIFFImageHandler::WriteImageXObjectDecode(DictionaryContext *inImageDictionary)
 {
     // Decode
 
@@ -2057,7 +2078,7 @@ static const std::string scPredictor = "Predictor";
 static const std::string scColors = "Colors";
 
 // tile index will be ignored if not tiles exist for this image
-void TIFFImageHandler::WriteImageXObjectFilter(DictionaryContext *inImageDictionary, int inTileIndex)
+void charta::TIFFImageHandler::WriteImageXObjectFilter(DictionaryContext *inImageDictionary, int inTileIndex)
 {
     DictionaryContext *decodeParmsDictionary;
 
@@ -2147,7 +2168,7 @@ void TIFFImageHandler::WriteImageXObjectFilter(DictionaryContext *inImageDiction
     }
 }
 
-void TIFFImageHandler::CalculateTiffTileSize(int inTileIndex)
+void charta::TIFFImageHandler::CalculateTiffTileSize(int inTileIndex)
 {
     uint16 edge = 0;
 
@@ -2234,7 +2255,8 @@ tsize_t GetSizeFromTIFFDataSize(T2P *inT2p)
     return inT2p->tiff_datasize;
 }
 
-EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inImageStream, int inTileIndex)
+charta::EStatusCode charta::TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inImageStream,
+                                                                 int inTileIndex)
 {
     EStatusCode status = charta::eSuccess;
     uint16 edge = 0;
@@ -2262,8 +2284,9 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             buffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
             if (buffer == nullptr)
             {
-                TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
-                           mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
+                TRACE_LOG2(
+                    "charta::TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
+                    mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
                 status = charta::eFailure;
                 break;
             }
@@ -2280,15 +2303,16 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
             buffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
             if (buffer == nullptr)
             {
-                TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
-                           mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
+                TRACE_LOG2(
+                    "charta::TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
+                    mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
                 status = charta::eFailure;
                 break;
             }
             read = TIFFReadEncodedTile(mT2p->input, inTileIndex, (tdata_t)&buffer[bufferoffset], mT2p->tiff_datasize);
             if (read == -1)
             {
-                TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s", inTileIndex,
+                TRACE_LOG2("charta::TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s", inTileIndex,
                            mT2p->inputFilePath.c_str());
                 status = charta::eFailure;
                 break;
@@ -2306,16 +2330,18 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                 buffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
                 if (buffer == nullptr)
                 {
-                    TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
-                               mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
+                    TRACE_LOG2(
+                        "charta::TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
+                        mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
                     status = charta::eFailure;
                     break;
                 }
                 samplebuffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
                 if (samplebuffer == nullptr)
                 {
-                    TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
-                               mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
+                    TRACE_LOG2(
+                        "charta::TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
+                        mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
                     status = charta::eFailure;
                     break;
                 }
@@ -2326,7 +2352,7 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                                                (tdata_t) & (samplebuffer[samplebufferoffset]), septilesize);
                     if (read == -1)
                     {
-                        TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s",
+                        TRACE_LOG2("charta::TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s",
                                    inTileIndex + i * tilecount, mT2p->inputFilePath.c_str());
                         _TIFFfree(samplebuffer);
                         _TIFFfree(buffer);
@@ -2345,8 +2371,9 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                 buffer = (unsigned char *)_TIFFmalloc(mT2p->tiff_datasize);
                 if (buffer == nullptr)
                 {
-                    TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
-                               mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
+                    TRACE_LOG2(
+                        "charta::TIFFImageHandler::WriteImageTileData, Can't allocate %u bytes of memory, for image %s",
+                        mT2p->tiff_datasize, mT2p->inputFilePath.c_str());
                     status = charta::eFailure;
                     break;
                 }
@@ -2354,8 +2381,8 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
                     TIFFReadEncodedTile(mT2p->input, inTileIndex, (tdata_t)&buffer[bufferoffset], mT2p->tiff_datasize);
                 if (read == -1)
                 {
-                    TRACE_LOG2("TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s", inTileIndex,
-                               mT2p->inputFilePath.c_str());
+                    TRACE_LOG2("charta::TIFFImageHandler::WriteImageTileData, Error on decoding tile %u of %s",
+                               inTileIndex, mT2p->inputFilePath.c_str());
                     _TIFFfree(buffer);
                     status = charta::eFailure;
                     break;
@@ -2415,8 +2442,8 @@ EStatusCode TIFFImageHandler::WriteImageTileData(std::shared_ptr<PDFStream> inIm
     return status;
 }
 
-void TIFFImageHandler::SamplePlanarSeparateToContig(unsigned char *inBuffer, unsigned char *inSamplebuffer,
-                                                    tsize_t inSamplebuffersize)
+void charta::TIFFImageHandler::SamplePlanarSeparateToContig(unsigned char *inBuffer, unsigned char *inSamplebuffer,
+                                                            tsize_t inSamplebuffersize)
 {
     tsize_t stride = 0;
     tsize_t i = 0;
@@ -2432,7 +2459,7 @@ void TIFFImageHandler::SamplePlanarSeparateToContig(unsigned char *inBuffer, uns
     }
 }
 
-tsize_t TIFFImageHandler::SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount)
+tsize_t charta::TIFFImageHandler::SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount)
 {
     uint32 i = 0;
     uint8 alpha = 0;
@@ -2450,7 +2477,7 @@ tsize_t TIFFImageHandler::SampleRGBAToRGB(tdata_t inData, uint32 inSampleCount)
     return (i * 3);
 }
 
-tsize_t TIFFImageHandler::SampleRGBAAToRGB(tdata_t inData, uint32 inSampleCount)
+tsize_t charta::TIFFImageHandler::SampleRGBAAToRGB(tdata_t inData, uint32 inSampleCount)
 {
     uint32 i;
     auto *data = static_cast<uint8_t *>(inData);
@@ -2465,7 +2492,7 @@ tsize_t TIFFImageHandler::SampleRGBAAToRGB(tdata_t inData, uint32 inSampleCount)
     return (i * 3);
 }
 
-tsize_t TIFFImageHandler::SampleLABSignedToUnsigned(tdata_t inBuffer, uint32 inSampleCount)
+tsize_t charta::TIFFImageHandler::SampleLABSignedToUnsigned(tdata_t inBuffer, uint32 inSampleCount)
 {
     uint32 i = 0;
 
@@ -2491,8 +2518,8 @@ tsize_t TIFFImageHandler::SampleLABSignedToUnsigned(tdata_t inBuffer, uint32 inS
     return (inSampleCount * 3);
 }
 
-void TIFFImageHandler::TileCollapseLeft(tdata_t inBuffer, tsize_t inScanWidth, uint32 inTileWidth,
-                                        uint32 inEdgeTileWidth, uint32 inTileLength)
+void charta::TIFFImageHandler::TileCollapseLeft(tdata_t inBuffer, tsize_t inScanWidth, uint32 inTileWidth,
+                                                uint32 inEdgeTileWidth, uint32 inTileLength)
 {
     tsize_t edgescanwidth = 0;
 
@@ -2503,7 +2530,7 @@ void TIFFImageHandler::TileCollapseLeft(tdata_t inBuffer, tsize_t inScanWidth, u
     }
 }
 
-PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
+PDFImageXObject *charta::TIFFImageHandler::WriteUntiledImageXObject()
 {
     PDFImageXObject *imageXObject = nullptr;
     std::shared_ptr<PDFStream> imageStream = nullptr;
@@ -2531,7 +2558,8 @@ PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
             if (mExtender->OnTIFFImageXObjectWrite(imageXObjectID, imageContext, mObjectsContext,
                                                    mContainerDocumentContext, this) != charta::eSuccess)
             {
-                TRACE_LOG("TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared failure when "
+                TRACE_LOG("charta::TIFFImageHandler::WriteTileImageXObject, unexpected failure. extender declared "
+                          "failure when "
                           "writing image xobject.");
                 break;
             }
@@ -2556,7 +2584,7 @@ PDFImageXObject *TIFFImageHandler::WriteUntiledImageXObject()
 }
 
 static const std::string scImageMask = "ImageMask";
-void TIFFImageHandler::WriteCommonImageDictionaryProperties(DictionaryContext *inImageContext)
+void charta::TIFFImageHandler::WriteCommonImageDictionaryProperties(DictionaryContext *inImageContext)
 {
     // type
     inImageContext->WriteKey(scType);
@@ -2599,7 +2627,7 @@ void TIFFImageHandler::WriteCommonImageDictionaryProperties(DictionaryContext *i
     }
 }
 
-void TIFFImageHandler::CalculateTiffSizeNoTiles()
+void charta::TIFFImageHandler::CalculateTiffSizeNoTiles()
 {
     if (mT2p->pdf_transcode == T2P_TRANSCODE_RAW &&
         (mT2p->pdf_compression == T2P_COMPRESS_G4 || mT2p->pdf_compression == T2P_COMPRESS_ZIP))
@@ -2617,7 +2645,7 @@ void TIFFImageHandler::CalculateTiffSizeNoTiles()
     }
 }
 
-EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageStream)
+charta::EStatusCode charta::TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageStream)
 {
     unsigned char *buffer = nullptr;
     unsigned char *samplebuffer = nullptr;
@@ -2849,7 +2877,7 @@ EStatusCode TIFFImageHandler::WriteImageData(std::shared_ptr<PDFStream> inImageS
     return status;
 }
 
-void TIFFImageHandler::SampleRealizePalette(unsigned char *inBuffer)
+void charta::TIFFImageHandler::SampleRealizePalette(unsigned char *inBuffer)
 {
     uint32 sample_count = 0;
     uint16 component_count = 0;
@@ -2869,7 +2897,7 @@ void TIFFImageHandler::SampleRealizePalette(unsigned char *inBuffer)
     }
 }
 
-tsize_t TIFFImageHandler::SampleABGRToRGB(tdata_t inData, uint32 inSampleCount)
+tsize_t charta::TIFFImageHandler::SampleABGRToRGB(tdata_t inData, uint32 inSampleCount)
 {
     uint32 i = 0;
     uint32 sample = 0;
@@ -2885,9 +2913,10 @@ tsize_t TIFFImageHandler::SampleABGRToRGB(tdata_t inData, uint32 inSampleCount)
     return (i * 3);
 }
 
-EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream, uint32 inImageWidth,
-                                                       uint32 inImageLength, unsigned char *inBuffer,
-                                                       ImageSizeProc inBufferSizeFunction)
+charta::EStatusCode charta::TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream> inPDFStream,
+                                                                       uint32 inImageWidth, uint32 inImageLength,
+                                                                       unsigned char *inBuffer,
+                                                                       ImageSizeProc inBufferSizeFunction)
 {
     EStatusCode status = charta::eSuccess;
     do
@@ -2951,8 +2980,8 @@ EStatusCode TIFFImageHandler::WriteImageBufferToStream(std::shared_ptr<PDFStream
     return status;
 }
 
-PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectList &inImages,
-                                                         ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectList &inImages,
+                                                                 ObjectIDType inFormXObjectID)
 {
     EStatusCode status = charta::eSuccess;
     auto it = inImages.begin();
@@ -3014,7 +3043,7 @@ PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectLi
         status = mContainerDocumentContext->EndFormXObjectNoRelease(xobjectForm);
         if (status != charta::eSuccess)
         {
-            TRACE_LOG1("TIFFImageHandler::WriteImagesFormXObject, Error in writing form XObject for image %s",
+            TRACE_LOG1("charta::TIFFImageHandler::WriteImagesFormXObject, Error in writing form XObject for image %s",
                        mT2p->inputFilePath.c_str());
             break;
         }
@@ -3030,7 +3059,7 @@ PDFFormXObject *TIFFImageHandler::WriteImagesFormXObject(const PDFImageXObjectLi
     return xobjectForm;
 }
 
-void TIFFImageHandler::AddImagesProcsets(PDFImageXObject *inImageXObject)
+void charta::TIFFImageHandler::AddImagesProcsets(PDFImageXObject *inImageXObject)
 {
     if (mT2p->pdf_colorspace == T2P_CS_BILEVEL || mT2p->pdf_colorspace == T2P_CS_GRAY)
     {
@@ -3046,7 +3075,7 @@ void TIFFImageHandler::AddImagesProcsets(PDFImageXObject *inImageXObject)
 
 static const char scSingleColorCMYKFormat[] = "%02X%02X%02X%02X ";
 static const char scSingleColorRGBFormat[] = "%02X%02X%02X ";
-void TIFFImageHandler::WriteIndexedCSForBiLevelColorMap()
+void charta::TIFFImageHandler::WriteIndexedCSForBiLevelColorMap()
 {
     unsigned long colorValuesPerComponent = 0x0001 << mT2p->tiff_bitspersample;
     unsigned long colorSpaceHighValue = colorValuesPerComponent - 1;
@@ -3114,17 +3143,18 @@ void TIFFImageHandler::WriteIndexedCSForBiLevelColorMap()
     mObjectsContext->EndArray(eTokenSeparatorEndLine);
 }
 
-void TIFFImageHandler::SetDocumentContextExtender(IDocumentContextExtender *inExtender)
+void charta::TIFFImageHandler::SetDocumentContextExtender(IDocumentContextExtender *inExtender)
 {
     mExtender = inExtender;
 }
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                  const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::TIFFImageHandler::CreateFormXObjectFromTIFFStream(
+    charta::IByteReaderWithPosition *inTIFFStream, const TIFFUsageParameters &inTIFFUsageParameters)
 {
     if (mObjectsContext == nullptr)
     {
-        TRACE_LOG("TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext not initialized "
+        TRACE_LOG("charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext not "
+                  "initialized "
                   "with an objects context");
         return nullptr;
     }
@@ -3195,9 +3225,9 @@ int STATIC_tiffMap(thandle_t, tdata_t *, toff_t *)
 
 void STATIC_tiffUnmap(thandle_t, tdata_t, toff_t){};
 
-PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                  ObjectIDType inFormXObjectID,
-                                                                  const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::TIFFImageHandler::CreateFormXObjectFromTIFFStream(
+    charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
+    const TIFFUsageParameters &inTIFFUsageParameters)
 {
 
     PDFFormXObject *imageFormXObject = nullptr;
@@ -3210,7 +3240,7 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteR
 
         if ((mObjectsContext == nullptr) || (mContainerDocumentContext == nullptr))
         {
-            TRACE_LOG("TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext or "
+            TRACE_LOG("charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile. Unexpected Error, mObjectsContext or "
                       "mContainerDocumentContext not initialized");
             break;
         }
@@ -3224,7 +3254,7 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteR
                            STATIC_streamSeek, STATIC_streamClose, STATIC_tiffSize, STATIC_tiffMap, STATIC_tiffUnmap);
         if (input == nullptr)
         {
-            TRACE_LOG("TIFFImageHandler::CreateFormXObjectFromTIFFFile. cannot open stream for reading");
+            TRACE_LOG("charta::TIFFImageHandler::CreateFormXObjectFromTIFFFile. cannot open stream for reading");
             break;
         }
 
@@ -3245,14 +3275,14 @@ PDFFormXObject *TIFFImageHandler::CreateFormXObjectFromTIFFStream(charta::IByteR
     return imageFormXObject;
 }
 
-std::pair<double, double> TIFFImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                unsigned long inImageIndex)
+std::pair<double, double> charta::TIFFImageHandler::ReadImageDimensions(charta::IByteReaderWithPosition *inTIFFStream,
+                                                                        unsigned long inImageIndex)
 {
     return ReadImageInfo(inTIFFStream, inImageIndex).dimensions;
 }
 
-TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                unsigned long inImageIndex)
+charta::TIFFImageHandler::TiffImageInfo charta::TIFFImageHandler::ReadImageInfo(
+    charta::IByteReaderWithPosition *inTIFFStream, unsigned long inImageIndex)
 {
     TIFF *input = nullptr;
     TiffImageInfo imageInfo;
@@ -3276,7 +3306,7 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(charta::IByteRea
                            STATIC_streamSeek, STATIC_streamClose, STATIC_tiffSize, STATIC_tiffMap, STATIC_tiffUnmap);
         if (input == nullptr)
         {
-            TRACE_LOG("TIFFImageHandler::ReadImageDimensions. cannot open stream for reading");
+            TRACE_LOG("charta::TIFFImageHandler::ReadImageDimensions. cannot open stream for reading");
             break;
         }
 
@@ -3291,9 +3321,10 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(charta::IByteRea
 
         if (mT2p->pdf_page >= mT2p->tiff_pagecount)
         {
-            TRACE_LOG3("TIFFImageHandler::ReadImageDimensions, Requested tiff page %u where the tiff only has %u "
-                       "pages. Tiff file name - %s",
-                       mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
+            TRACE_LOG3(
+                "charta::TIFFImageHandler::ReadImageDimensions, Requested tiff page %u where the tiff only has %u "
+                "pages. Tiff file name - %s",
+                mT2p->pdf_page, mT2p->tiff_pagecount, mT2p->inputFilePath.c_str());
             status = charta::eFailure;
             break;
         }
@@ -3314,7 +3345,7 @@ TIFFImageHandler::TiffImageInfo TIFFImageHandler::ReadImageInfo(charta::IByteRea
     return imageInfo;
 }
 
-unsigned long TIFFImageHandler::ReadImagePageCount(charta::IByteReaderWithPosition *inTIFFStream)
+unsigned long charta::TIFFImageHandler::ReadImagePageCount(charta::IByteReaderWithPosition *inTIFFStream)
 {
     TIFF *input = nullptr;
     unsigned long result = 0;
@@ -3334,7 +3365,7 @@ unsigned long TIFFImageHandler::ReadImagePageCount(charta::IByteReaderWithPositi
                            STATIC_streamSeek, STATIC_streamClose, STATIC_tiffSize, STATIC_tiffMap, STATIC_tiffUnmap);
         if (input == nullptr)
         {
-            TRACE_LOG("TIFFImageHandler::ReadImagePageCount. cannot open stream for reading");
+            TRACE_LOG("charta::TIFFImageHandler::ReadImagePageCount. cannot open stream for reading");
             break;
         }
 
