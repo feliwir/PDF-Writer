@@ -27,13 +27,13 @@
    respective actual objects...and not for anything else.
 */
 
-template <class T> std::shared_ptr<T> PDFObjectCast(std::shared_ptr<PDFObject> inOriginal)
+template <class T> std::shared_ptr<T> PDFObjectCast(std::shared_ptr<charta::PDFObject> inOriginal)
 {
     using namespace charta;
     if (!inOriginal)
         return nullptr;
 
-    if (inOriginal->GetType() == (PDFObject::EPDFObjectType)T::eType)
+    if (inOriginal->GetType() == (charta::PDFObject::EPDFObjectType)T::eType)
     {
         return std::static_pointer_cast<T>(inOriginal);
     }
@@ -53,12 +53,12 @@ template <class T> class PDFObjectCastPtr
     {
     }
 
-    PDFObjectCastPtr(std::shared_ptr<PDFObject> inPDFObject)
+    PDFObjectCastPtr(std::shared_ptr<charta::PDFObject> inPDFObject)
     {
         mValue = PDFObjectCast<T>(inPDFObject);
     }
 
-    PDFObjectCastPtr<T> &operator=(std::shared_ptr<PDFObject> inValue)
+    PDFObjectCastPtr<T> &operator=(std::shared_ptr<charta::PDFObject> inValue)
     {
         mValue = PDFObjectCast<T>(inValue);
         return *this;

@@ -21,6 +21,8 @@
 #pragma once
 #include "PDFObject.h"
 
+namespace charta
+{
 class PDFReal : public PDFObject
 {
   public:
@@ -30,11 +32,12 @@ class PDFReal : public PDFObject
     };
 
     PDFReal(double inValue);
-    virtual ~PDFReal(void);
+    virtual ~PDFReal() = default;
 
     double GetValue() const;
     operator double() const;
 
   private:
-    double mValue;
+    const double mValue;
 };
+} // namespace charta

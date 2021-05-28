@@ -30,9 +30,9 @@ class PDFParser;
 namespace charta
 {
 class IByteReader;
-};
-class PDFStreamInput;
 class PDFObject;
+class PDFStreamInput;
+}; // namespace charta
 
 class DecryptionHelper
 {
@@ -67,14 +67,14 @@ class DecryptionHelper
     std::string DecryptString(const std::string &inStringToDecrypt);
 
     void OnObjectStart(long long inObjectID, long long inGenerationNumber);
-    void OnObjectEnd(const std::shared_ptr<PDFObject> &inObject);
+    void OnObjectEnd(const std::shared_ptr<charta::PDFObject> &inObject);
     // this should be used by parser to grab a default filter for stream. will return null if a stream-specific filter
     // is to be used, or that there's no encryption expected for this stream
-    charta::IByteReader *CreateDefaultDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
+    charta::IByteReader *CreateDefaultDecryptionFilterForStream(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                                                 charta::IByteReader *inToWrapStream);
 
     // use this for creating a decryption filter for a stream that uses a stream-specific crypt filter
-    charta::IByteReader *CreateDecryptionFilterForStream(const std::shared_ptr<PDFStreamInput> &inStream,
+    charta::IByteReader *CreateDecryptionFilterForStream(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                                          charta::IByteReader *inToWrapStream,
                                                          const std::string &inCryptName);
 
@@ -132,7 +132,7 @@ class DecryptionHelper
 
     charta::IByteReader *CreateDecryptionReader(charta::IByteReader *inSourceStream, const ByteList &inEncryptionKey,
                                                 bool inUsingAES);
-    XCryptionCommon *GetCryptForStream(const std::shared_ptr<PDFStreamInput> &inStream);
+    XCryptionCommon *GetCryptForStream(const std::shared_ptr<charta::PDFStreamInput> &inStream);
 
     // Standard filter specific
     bool mFailedPasswordVerification;

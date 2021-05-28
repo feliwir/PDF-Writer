@@ -27,7 +27,6 @@
 namespace charta
 {
 class PDFDictionary;
-}
 
 class PDFStreamInput : public PDFObject
 {
@@ -37,14 +36,15 @@ class PDFStreamInput : public PDFObject
         eType = ePDFObjectStream
     };
 
-    PDFStreamInput(std::shared_ptr<charta::PDFDictionary> inStreamDictionary, long long inStreamContentStart);
+    PDFStreamInput(std::shared_ptr<PDFDictionary> inStreamDictionary, long long inStreamContentStart);
 
     // These two calls AddRef on both objects
-    std::shared_ptr<charta::PDFDictionary> QueryStreamDictionary();
+    std::shared_ptr<PDFDictionary> QueryStreamDictionary();
 
     long long GetStreamContentStart() const;
 
   private:
-    std::shared_ptr<charta::PDFDictionary> mDictionary;
+    std::shared_ptr<PDFDictionary> mDictionary;
     long long mStreamContentStart;
 };
+} // namespace charta

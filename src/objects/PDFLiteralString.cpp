@@ -20,19 +20,16 @@
 */
 #include "objects/PDFLiteralString.h"
 
-PDFLiteralString::PDFLiteralString(const std::string &inValue) : PDFObject(eType)
+charta::PDFLiteralString::PDFLiteralString(const std::string &inValue) : PDFObject(eType), mValue(inValue)
 {
-    mValue = inValue;
 }
 
-PDFLiteralString::~PDFLiteralString() = default;
-
-const std::string &PDFLiteralString::GetValue() const
+const std::string &charta::PDFLiteralString::GetValue() const
 {
     return mValue;
 }
 
-PDFLiteralString::operator std::string() const
+charta::PDFLiteralString::operator std::string() const
 {
     return mValue;
 }

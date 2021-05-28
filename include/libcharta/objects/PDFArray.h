@@ -38,16 +38,16 @@ class PDFArray : public PDFObject
     PDFArray(void);
 
     // Will add to end, calls AddRef
-    void AppendObject(const std::shared_ptr<PDFObject> &inObject);
+    void AppendObject(const std::shared_ptr<charta::PDFObject> &inObject);
 
     // Returns an object for iterating the array
-    SingleValueContainerIterator<std::vector<std::shared_ptr<PDFObject>>> GetIterator();
+    SingleValueContainerIterator<std::vector<std::shared_ptr<charta::PDFObject>>> GetIterator();
 
     // Returns object at a given index, calls AddRef
-    std::shared_ptr<PDFObject> QueryObject(unsigned long i);
+    std::shared_ptr<charta::PDFObject> QueryObject(unsigned long i);
     unsigned long GetLength();
 
   private:
-    std::vector<std::shared_ptr<PDFObject>> mValues;
+    std::vector<std::shared_ptr<charta::PDFObject>> mValues;
 };
 } // namespace charta

@@ -20,8 +20,6 @@
 */
 #include "objects/PDFNull.h"
 
-PDFNull::PDFNull() : PDFObject(eType)
+charta::PDFNull::PDFNull() : PDFObject(eType)
 {
 }
-
-PDFNull::~PDFNull() = default;

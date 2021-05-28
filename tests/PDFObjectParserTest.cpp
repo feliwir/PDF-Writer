@@ -106,11 +106,12 @@ class PDFObjectParserTestLogHelper
 template <class _resultObjectType> class ExpectedResult
 {
   private:
-    std::shared_ptr<PDFObject> mObject;
+    std::shared_ptr<charta::PDFObject> mObject;
     std::shared_ptr<_resultObjectType> mTypedObject;
 
   public:
-    ExpectedResult(std::shared_ptr<PDFObject> object) : mObject(object) // ParseNewObject constructs with refcount 1
+    ExpectedResult(std::shared_ptr<charta::PDFObject> object)
+        : mObject(object) // ParseNewObject constructs with refcount 1
     {
         mTypedObject = PDFObjectCast<_resultObjectType>(object); // addrefs if valid object
     }
@@ -150,7 +151,7 @@ EStatusCode ParseCommentedTokens(PDFObjectParser *objectParser, PDFObjectParserT
 {
     int failures = 0;
     InputInterfaceToStream input;
-    std::shared_ptr<PDFObject> object;
+    std::shared_ptr<charta::PDFObject> object;
 
     {
         input.setInput("(val%ami)");
@@ -177,7 +178,7 @@ EStatusCode ParseHexStringTokens(PDFObjectParser *objectParser, PDFObjectParserT
 {
     int failures = 0;
     InputInterfaceToStream input;
-    std::shared_ptr<PDFObject> object;
+    std::shared_ptr<charta::PDFObject> object;
 
     {
         input.setInput("<>");
@@ -250,7 +251,7 @@ EStatusCode ParseLiteralStringTokens(PDFObjectParser *objectParser, PDFObjectPar
 {
     int failures = 0;
     InputInterfaceToStream input;
-    std::shared_ptr<PDFObject> object;
+    std::shared_ptr<charta::PDFObject> object;
 
     {
         input.setInput("()");

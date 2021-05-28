@@ -588,7 +588,8 @@ EStatusCode ObjectsContext::ReadState(PDFParser *inStateReader, ObjectIDType inO
 
     PDFObjectCastPtr<charta::PDFDictionary> subsetFontsNamesSequance(
         inStateReader->QueryDictionaryObject(objectsContext, "mSubsetFontsNamesSequance"));
-    PDFObjectCastPtr<PDFLiteralString> sequanceString(subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
+    PDFObjectCastPtr<charta::PDFLiteralString> sequanceString(
+        subsetFontsNamesSequance->QueryDirectObject("mSequanceString"));
     mSubsetFontsNamesSequance.SetSequanceString(sequanceString->GetValue());
 
     PDFObjectCastPtr<charta::PDFIndirectObjectReference> referencesObject(

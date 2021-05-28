@@ -124,11 +124,11 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
     {
         if (it.GetValue()->GetType() == PDFObject::ePDFObjectIndirectObjectReference)
         {
-            auto image = std::static_pointer_cast<PDFStreamInput>(inParser->ParseNewObject(
+            auto image = std::static_pointer_cast<charta::PDFStreamInput>(inParser->ParseNewObject(
                 std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID));
             auto imageDictionary = image->QueryStreamDictionary();
 
-            PDFObjectCastPtr<PDFName> objectType = imageDictionary->QueryDirectObject("Subtype");
+            PDFObjectCastPtr<charta::PDFName> objectType = imageDictionary->QueryDirectObject("Subtype");
             if (!objectType || objectType->GetValue() != "Image")
                 continue;
 
@@ -137,7 +137,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
                 break;
 
             if (filters->GetType() == PDFObject::ePDFObjectName &&
-                std::static_pointer_cast<PDFName>(filters)->GetValue() == "DCTDecode")
+                std::static_pointer_cast<charta::PDFName>(filters)->GetValue() == "DCTDecode")
             {
                 imageObject = std::static_pointer_cast<charta::PDFIndirectObjectReference>(it.GetValue())->mObjectID;
                 break;
@@ -147,7 +147,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
 
             if (filtersArray->GetLength() == 1)
             {
-                PDFObjectCastPtr<PDFName> firstDecoder(filtersArray->QueryObject(0));
+                PDFObjectCastPtr<charta::PDFName> firstDecoder(filtersArray->QueryObject(0));
 
                 if (firstDecoder->GetValue() == "DCTDecode")
                 {
@@ -168,7 +168,8 @@ EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
     std::shared_ptr<PDFDocumentCopyingContext> modifiedFileContext = inWriter->CreatePDFCopyingContextForModifiedFile();
 
     // get image source dictionary
-    PDFObjectCastPtr<PDFStreamInput> imageStream(inWriter->GetModifiedFileParser().ParseNewObject(inImageObject));
+    PDFObjectCastPtr<charta::PDFStreamInput> imageStream(
+        inWriter->GetModifiedFileParser().ParseNewObject(inImageObject));
 
     auto imageDictionary(imageStream->QueryStreamDictionary());
 

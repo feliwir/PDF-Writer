@@ -23,7 +23,7 @@
 
 #include <string>
 
-class PDFSymbol : public PDFObject
+class PDFSymbol : public charta::PDFObject
 {
   public:
     enum EType

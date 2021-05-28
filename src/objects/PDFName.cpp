@@ -20,19 +20,16 @@
 */
 #include "objects/PDFName.h"
 
-PDFName::PDFName(const std::string &inValue) : PDFObject(eType)
+charta::PDFName::PDFName(const std::string &inValue) : PDFObject(eType), mValue(inValue)
 {
-    mValue = inValue;
 }
 
-PDFName::~PDFName() = default;
-
-const std::string &PDFName::GetValue() const
+const std::string &charta::PDFName::GetValue() const
 {
     return mValue;
 }
 
-PDFName::operator std::string() const
+charta::PDFName::operator std::string() const
 {
     return mValue;
 }

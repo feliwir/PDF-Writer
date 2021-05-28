@@ -29,80 +29,82 @@
 #include "parsing/PDFParser.h"
 #include <utility>
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, std::shared_ptr<PDFObject> inPageObject)
+charta::PDFPageInput::PDFPageInput(PDFParser *inParser, std::shared_ptr<charta::PDFObject> inPageObject)
     : mPageObject(std::move(inPageObject))
 {
     mParser = inParser;
     AssertPageObjectValid();
 }
 
-void PDFPageInput::AssertPageObjectValid()
+void charta::PDFPageInput::AssertPageObjectValid()
 {
     if (!mPageObject)
-        TRACE_LOG("PDFPageInput::AssertPageObjectValid, null page object or not a dictionary");
+        TRACE_LOG("charta::PDFPageInput::AssertPageObjectValid, null page object or not a dictionary");
 
-    PDFObjectCastPtr<PDFName> typeObject = mPageObject->QueryDirectObject("Type");
+    PDFObjectCastPtr<charta::PDFName> typeObject = mPageObject->QueryDirectObject("Type");
     if (!typeObject || typeObject->GetValue() != "Page")
     {
-        TRACE_LOG("PDFPageInput::AssertPageObjectValid, dictionar object provided is NOT a page object");
+        TRACE_LOG("charta::PDFPageInput::AssertPageObjectValid, dictionar object provided is NOT a page object");
         mPageObject = nullptr;
     }
 }
 
-PDFPageInput::PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<charta::PDFDictionary> &inPageObject)
+charta::PDFPageInput::PDFPageInput(PDFParser *inParser, const PDFObjectCastPtr<charta::PDFDictionary> &inPageObject)
 {
     mParser = inParser;
     mPageObject = inPageObject;
     AssertPageObjectValid();
 }
 
-PDFPageInput::PDFPageInput(const PDFPageInput &inOtherPage)
+charta::PDFPageInput::PDFPageInput(const PDFPageInput &inOtherPage)
 {
     mParser = inOtherPage.mParser;
     mPageObject = inOtherPage.mPageObject;
     AssertPageObjectValid();
 }
 
-PDFPageInput::~PDFPageInput() = default;
+charta::PDFPageInput::~PDFPageInput() = default;
 
-bool PDFPageInput::operator!()
+bool charta::PDFPageInput::operator!()
 {
     return !mPageObject;
 }
 
-int PDFPageInput::GetRotate()
+int charta::PDFPageInput::GetRotate()
 {
     int result = 0;
-    std::shared_ptr<PDFObject> rotation(QueryInheritedValue(mPageObject, "Rotate"));
+    std::shared_ptr<charta::PDFObject> rotation(QueryInheritedValue(mPageObject, "Rotate"));
     if (!rotation)
         return result;
 
     ParsedPrimitiveHelper helper(rotation);
     if (!helper.IsNumber())
     {
-        TRACE_LOG("PDFPageInput::GetRotate, Exception, pdf page rotation must be numeric value. defaulting to 0");
+        TRACE_LOG(
+            "charta::PDFPageInput::GetRotate, Exception, pdf page rotation must be numeric value. defaulting to 0");
     }
     else
     {
         result = static_cast<int>(helper.GetAsInteger());
         if ((result % 90) != 0)
         {
-            TRACE_LOG(
-                "PDFPageInput::GetRotate, Exception, pdf page rotation must be a multiple of 90. defaulting to 0");
+            TRACE_LOG("charta::PDFPageInput::GetRotate, Exception, pdf page rotation must be a multiple of 90. "
+                      "defaulting to 0");
             result = 0;
         }
     }
     return result;
 }
 
-PDFRectangle PDFPageInput::GetMediaBox()
+PDFRectangle charta::PDFPageInput::GetMediaBox()
 {
     PDFRectangle result;
 
     PDFObjectCastPtr<charta::PDFArray> mediaBox(QueryInheritedValue(mPageObject, "MediaBox"));
     if (!mediaBox || mediaBox->GetLength() != 4)
     {
-        TRACE_LOG("PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
+        TRACE_LOG(
+            "charta::PDFPageInput::GetMediaBox, Exception, pdf page does not have correct media box. defaulting to A4");
         result = charta::PagePresets::A4_Portrait;
     }
     else
@@ -113,7 +115,7 @@ PDFRectangle PDFPageInput::GetMediaBox()
     return result;
 }
 
-PDFRectangle PDFPageInput::GetCropBox()
+PDFRectangle charta::PDFPageInput::GetCropBox()
 {
     PDFRectangle result;
     PDFObjectCastPtr<charta::PDFArray> cropBox(QueryInheritedValue(mPageObject, "CropBox"));
@@ -125,12 +127,12 @@ PDFRectangle PDFPageInput::GetCropBox()
     return result;
 }
 
-PDFRectangle PDFPageInput::GetTrimBox()
+PDFRectangle charta::PDFPageInput::GetTrimBox()
 {
     return GetBoxAndDefaultWithCrop("TrimBox");
 }
 
-PDFRectangle PDFPageInput::GetBoxAndDefaultWithCrop(const std::string &inBoxName)
+PDFRectangle charta::PDFPageInput::GetBoxAndDefaultWithCrop(const std::string &inBoxName)
 {
     PDFRectangle result;
     PDFObjectCastPtr<charta::PDFArray> aBox(QueryInheritedValue(mPageObject, inBoxName));
@@ -142,19 +144,19 @@ PDFRectangle PDFPageInput::GetBoxAndDefaultWithCrop(const std::string &inBoxName
     return result;
 }
 
-PDFRectangle PDFPageInput::GetBleedBox()
+PDFRectangle charta::PDFPageInput::GetBleedBox()
 {
     return GetBoxAndDefaultWithCrop("BleedBox");
 }
 
-PDFRectangle PDFPageInput::GetArtBox()
+PDFRectangle charta::PDFPageInput::GetArtBox()
 {
     return GetBoxAndDefaultWithCrop("ArtBox");
 }
 
 static const std::string scParent = "Parent";
-std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
-                                                             const std::string &inName)
+std::shared_ptr<charta::PDFObject> charta::PDFPageInput::QueryInheritedValue(
+    const std::shared_ptr<charta::PDFDictionary> &inDictionary, const std::string &inName)
 {
     if (inDictionary->Exists(inName))
     {
@@ -170,13 +172,13 @@ std::shared_ptr<PDFObject> PDFPageInput::QueryInheritedValue(const std::shared_p
     return nullptr;
 }
 
-void PDFPageInput::SetPDFRectangleFromPDFArray(const std::shared_ptr<charta::PDFArray> &inPDFArray,
-                                               PDFRectangle &outPDFRectangle)
+void charta::PDFPageInput::SetPDFRectangleFromPDFArray(const std::shared_ptr<charta::PDFArray> &inPDFArray,
+                                                       PDFRectangle &outPDFRectangle)
 {
-    std::shared_ptr<PDFObject> lowerLeftX(inPDFArray->QueryObject(0));
-    std::shared_ptr<PDFObject> lowerLeftY(inPDFArray->QueryObject(1));
-    std::shared_ptr<PDFObject> upperRightX(inPDFArray->QueryObject(2));
-    std::shared_ptr<PDFObject> upperRightY(inPDFArray->QueryObject(3));
+    std::shared_ptr<charta::PDFObject> lowerLeftX(inPDFArray->QueryObject(0));
+    std::shared_ptr<charta::PDFObject> lowerLeftY(inPDFArray->QueryObject(1));
+    std::shared_ptr<charta::PDFObject> upperRightX(inPDFArray->QueryObject(2));
+    std::shared_ptr<charta::PDFObject> upperRightY(inPDFArray->QueryObject(3));
 
     outPDFRectangle.LowerLeftX = ParsedPrimitiveHelper(lowerLeftX).GetAsDouble();
     outPDFRectangle.LowerLeftY = ParsedPrimitiveHelper(lowerLeftY).GetAsDouble();

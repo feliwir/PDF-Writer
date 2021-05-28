@@ -42,8 +42,9 @@ class IByteWriter;
 class PDFArray;
 class PDFDictionary;
 class PDFIndirectObjectReference;
-} // namespace charta
+class PDFObject;
 class PDFStreamInput;
+} // namespace charta
 class DictionaryContext;
 class PageContentContext;
 class PDFPage;
@@ -51,7 +52,6 @@ class IDocumentContextExtender;
 class IPageEmbedInFormCommand;
 class IPDFParserExtender;
 class ICategoryServicesCommand;
-class PDFObject;
 
 typedef std::map<ObjectIDType, ObjectIDType> ObjectIDTypeToObjectIDTypeMap;
 typedef std::map<std::string, std::string> StringToStringMap;
@@ -195,8 +195,8 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     PDFParser *GetSourceDocumentParser();
     EStatusCodeAndObjectIDType GetCopiedObjectID(ObjectIDType inSourceObjectID);
     MapIterator<ObjectIDTypeToObjectIDTypeMap> GetCopiedObjectsMappingIterator();
-    EStatusCodeAndObjectIDTypeList CopyDirectObjectWithDeepCopy(std::shared_ptr<PDFObject> inObject);
-    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
+    EStatusCodeAndObjectIDTypeList CopyDirectObjectWithDeepCopy(std::shared_ptr<charta::PDFObject> inObject);
+    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<charta::PDFObject> inObject);
     charta::EStatusCode CopyNewObjectsForDirectObject(const ObjectIDTypeList &inReferencedObjects);
     void StopCopyingContext();
     void ReplaceSourceObjects(const ObjectIDTypeToObjectIDTypeMap &inSourceObjectsToNewTargetObjects);
@@ -231,7 +231,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::EStatusCode WritePageContentToSingleStream(charta::IByteWriter *inTargetStream,
                                                        std::shared_ptr<charta::PDFDictionary> inPageObject);
     charta::EStatusCode WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
-                                                    const std::shared_ptr<PDFStreamInput> &inSourceStream);
+                                                    const std::shared_ptr<charta::PDFStreamInput> &inSourceStream);
     charta::EStatusCode CopyResourcesIndirectObjects(std::shared_ptr<charta::PDFDictionary> inPage);
     void RegisterInDirectObjects(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                  ObjectIDTypeList &outNewObjects);
@@ -249,13 +249,13 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
                                                 ObjectIDType inPredefinedObjectId);
     charta::EStatusCode CopyInDirectObject(ObjectIDType inSourceObjectID, ObjectIDType inTargetObjectID);
 
-    charta::EStatusCode WriteObjectByType(const std::shared_ptr<PDFObject> &inObject, ETokenSeparator inSeparator,
-                                          IObjectWritePolicy *inWritePolicy);
+    charta::EStatusCode WriteObjectByType(const std::shared_ptr<charta::PDFObject> &inObject,
+                                          ETokenSeparator inSeparator, IObjectWritePolicy *inWritePolicy);
     charta::EStatusCode WriteArrayObject(const std::shared_ptr<charta::PDFArray> &inArray, ETokenSeparator inSeparator,
                                          IObjectWritePolicy *inWritePolicy);
     charta::EStatusCode WriteDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
                                               IObjectWritePolicy *inWritePolicy);
-    charta::EStatusCode WriteStreamObject(const std::shared_ptr<PDFStreamInput> &inStream,
+    charta::EStatusCode WriteStreamObject(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                           IObjectWritePolicy *inWritePolicy);
 
     EStatusCodeAndObjectIDType CreatePDFPageForPage(unsigned long inPageIndex);
@@ -265,28 +265,28 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::EStatusCode CopyPageContentToTargetPageRecoded(PDFPage &inPage,
                                                            std::shared_ptr<charta::PDFDictionary> inPageObject);
 
-    charta::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                            const std::shared_ptr<PDFStreamInput> &inContentSource);
+    charta::EStatusCode WritePDFStreamInputToContentContext(
+        PageContentContext *inContentContext, const std::shared_ptr<charta::PDFStreamInput> &inContentSource);
     charta::EStatusCode MergePDFPageForPage(PDFPage &inTargetPage, unsigned long inSourcePageIndex);
     charta::EStatusCode MergeResourcesToPage(PDFPage &inTargetPage, std::shared_ptr<charta::PDFDictionary> inPage,
                                              StringToStringMap &outMappedResourcesNames);
-    EStatusCodeAndObjectIDType CopyObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject);
-    charta::EStatusCode CopyDirectObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject,
+    EStatusCodeAndObjectIDType CopyObjectToIndirectObject(const std::shared_ptr<charta::PDFObject> &inObject);
+    charta::EStatusCode CopyDirectObjectToIndirectObject(const std::shared_ptr<charta::PDFObject> &inObject,
                                                          ObjectIDType inTargetObjectID);
     charta::EStatusCode MergePageContentToTargetPage(PDFPage &inTargetPage,
                                                      std::shared_ptr<charta::PDFDictionary> inSourcePage,
                                                      const StringToStringMap &inMappedResourcesNames);
-    charta::EStatusCode WritePDFStreamInputToContentContext(PageContentContext *inContentContext,
-                                                            const std::shared_ptr<PDFStreamInput> &inContentSource,
-                                                            const StringToStringMap &inMappedResourcesNames);
+    charta::EStatusCode WritePDFStreamInputToContentContext(
+        PageContentContext *inContentContext, const std::shared_ptr<charta::PDFStreamInput> &inContentSource,
+        const StringToStringMap &inMappedResourcesNames);
     charta::EStatusCode WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
-                                                    const std::shared_ptr<PDFStreamInput> &inSourceStream,
+                                                    const std::shared_ptr<charta::PDFStreamInput> &inSourceStream,
                                                     const StringToStringMap &inMappedResourcesNames);
-    charta::EStatusCode ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
+    charta::EStatusCode ScanStreamForResourcesTokens(const std::shared_ptr<charta::PDFStreamInput> &inSourceStream,
                                                      const StringToStringMap &inMappedResourcesNames,
                                                      ResourceTokenMarkerList &outResourceMarkers);
     charta::EStatusCode MergeAndReplaceResourcesTokens(charta::IByteWriter *inTargetStream,
-                                                       const std::shared_ptr<PDFStreamInput> &inSourceStream,
+                                                       const std::shared_ptr<charta::PDFStreamInput> &inSourceStream,
                                                        const StringToStringMap &inMappedResourcesNames,
                                                        const ResourceTokenMarkerList &inResourceMarkers);
 
@@ -322,6 +322,6 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     charta::EStatusCode MergePageContentToTargetXObject(PDFFormXObject *inTargetFormXObject,
                                                         std::shared_ptr<charta::PDFDictionary> inSourcePage,
                                                         const StringToStringMap &inMappedResourcesNames);
-    std::shared_ptr<PDFObject> FindPageResources(PDFParser *inParser,
-                                                 const std::shared_ptr<charta::PDFDictionary> &inDictionary);
+    std::shared_ptr<charta::PDFObject> FindPageResources(PDFParser *inParser,
+                                                         const std::shared_ptr<charta::PDFDictionary> &inDictionary);
 };

@@ -44,7 +44,7 @@ static const char *scIteratingStreamDict = "Stream . iterating stream dictionary
 static int mTabLevel = 0;
 static std::set<ObjectIDType> mIteratedObjectIDs;
 
-EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFParser &inParser,
+EStatusCode IterateObjectTypes(const std::shared_ptr<charta::PDFObject> &inObject, PDFParser &inParser,
                                charta::IByteWriter *inOutput)
 {
     PrimitiveObjectsWriter primitivesWriter;
@@ -113,7 +113,7 @@ EStatusCode IterateObjectTypes(const std::shared_ptr<PDFObject> &inObject, PDFPa
     if (inObject->GetType() == PDFObject::ePDFObjectStream)
     {
         inOutput->Write((const uint8_t *)scIteratingStreamDict, strlen(scIteratingStreamDict));
-        auto aDictionary(std::static_pointer_cast<PDFStreamInput>(inObject)->QueryStreamDictionary());
+        auto aDictionary(std::static_pointer_cast<charta::PDFStreamInput>(inObject)->QueryStreamDictionary());
         return IterateObjectTypes(aDictionary, inParser, inOutput);
     }
 

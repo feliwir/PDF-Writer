@@ -21,7 +21,7 @@
 #include "objects/PDFObject.h"
 #include "objects/IDeletable.h"
 
-const char *PDFObject::scPDFObjectTypeLabel(int index)
+const char *charta::PDFObject::scPDFObjectTypeLabel(int index)
 {
     static const char *labels[] = {"Boolean", "LiteralString", "HexString", "Null",       "Name",
                                    "Integer", "Real",          "Array",     "Dictionary", "IndirectObjectReference",
@@ -29,17 +29,17 @@ const char *PDFObject::scPDFObjectTypeLabel(int index)
     return labels[index];
 };
 
-PDFObject::PDFObject(EPDFObjectType inType)
+charta::PDFObject::PDFObject(EPDFObjectType inType)
 {
     mType = inType;
 }
 
-PDFObject::PDFObject(int inType)
+charta::PDFObject::PDFObject(int inType)
 {
     mType = (EPDFObjectType)inType;
 }
 
-PDFObject::~PDFObject()
+charta::PDFObject::~PDFObject()
 {
     auto it = mMetadata.begin();
     for (; it != mMetadata.end(); ++it)
@@ -49,12 +49,12 @@ PDFObject::~PDFObject()
     mMetadata.clear();
 }
 
-PDFObject::EPDFObjectType PDFObject::GetType()
+charta::PDFObject::EPDFObjectType charta::PDFObject::GetType()
 {
     return mType;
 }
 
-void PDFObject::SetMetadata(const std::string &inKey, charta::IDeletable *inValue)
+void charta::PDFObject::SetMetadata(const std::string &inKey, charta::IDeletable *inValue)
 {
     // delete old metadata
     DeleteMetadata(inKey);
@@ -62,7 +62,7 @@ void PDFObject::SetMetadata(const std::string &inKey, charta::IDeletable *inValu
     mMetadata.insert(StringToIDeletable::value_type(inKey, inValue));
 }
 
-charta::IDeletable *PDFObject::GetMetadata(const std::string &inKey)
+charta::IDeletable *charta::PDFObject::GetMetadata(const std::string &inKey)
 {
     auto it = mMetadata.find(inKey);
 
@@ -71,7 +71,7 @@ charta::IDeletable *PDFObject::GetMetadata(const std::string &inKey)
     return it->second;
 }
 
-charta::IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
+charta::IDeletable *charta::PDFObject::DetachMetadata(const std::string &inKey)
 {
     auto it = mMetadata.find(inKey);
 
@@ -83,7 +83,7 @@ charta::IDeletable *PDFObject::DetachMetadata(const std::string &inKey)
     return result;
 }
 
-void PDFObject::DeleteMetadata(const std::string &inKey)
+void charta::PDFObject::DeleteMetadata(const std::string &inKey)
 {
     charta::IDeletable *result = DetachMetadata(inKey);
     if (result != nullptr)

@@ -29,12 +29,14 @@
 #include <memory>
 #include <string>
 
+namespace charta
+{
 class PDFObject;
-
+}
 class ParsedPrimitiveHelper
 {
   public:
-    ParsedPrimitiveHelper(std::shared_ptr<PDFObject> inObject);
+    ParsedPrimitiveHelper(std::shared_ptr<charta::PDFObject> inObject);
 
     // numbers
     double GetAsDouble();
@@ -45,5 +47,5 @@ class ParsedPrimitiveHelper
     std::string ToString();
 
   private:
-    std::shared_ptr<PDFObject> mWrappedObject;
+    std::shared_ptr<charta::PDFObject> mWrappedObject;
 };

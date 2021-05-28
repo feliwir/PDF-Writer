@@ -39,7 +39,7 @@ std::string PDFDictionaryIterator::GetStrValue(const std::string &s)
 {
     if (mDictonary == nullptr)
         return std::string();
-    PDFObjectCastPtr<PDFLiteralString> foundReference(mDictonary->QueryDirectObject(s));
+    PDFObjectCastPtr<charta::PDFLiteralString> foundReference(mDictonary->QueryDirectObject(s));
     if (!foundReference)
         return std::string();
     return foundReference->GetValue();
@@ -54,7 +54,7 @@ bool PDFDictionaryIterator::WriteStreamToFile(charta::InputFile &pdfFile, const 
     if (!foundReference)
         return false;
 
-    PDFObjectCastPtr<PDFStreamInput> foundStreamInput(mParser.ParseNewObject(foundReference->mObjectID));
+    PDFObjectCastPtr<charta::PDFStreamInput> foundStreamInput(mParser.ParseNewObject(foundReference->mObjectID));
     if (!foundStreamInput)
         return false;
 

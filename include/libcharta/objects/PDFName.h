@@ -23,6 +23,8 @@
 
 #include <string>
 
+namespace charta
+{
 class PDFName : public PDFObject
 {
   public:
@@ -34,11 +36,12 @@ class PDFName : public PDFObject
     // value must be the already interpreted name - no initial slash, and all special charachters (with # definition)
     // interpreted
     PDFName(const std::string &inValue);
-    virtual ~PDFName(void);
+    virtual ~PDFName() = default;
 
     const std::string &GetValue() const;
     operator std::string() const;
 
   private:
-    std::string mValue;
+    const std::string mValue;
 };
+} // namespace charta

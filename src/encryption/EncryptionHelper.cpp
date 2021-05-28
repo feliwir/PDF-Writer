@@ -455,16 +455,16 @@ charta::EStatusCode EncryptionHelper::ReadState(PDFParser *inStateReader, Object
     PDFObjectCastPtr<charta::PDFBoolean> encryptMetaData = encryptionObjectState->QueryDirectObject("mEncryptMetaData");
     mEncryptMetaData = encryptMetaData->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> fileIDPart1 = encryptionObjectState->QueryDirectObject("mFileIDPart1");
+    PDFObjectCastPtr<charta::PDFLiteralString> fileIDPart1 = encryptionObjectState->QueryDirectObject("mFileIDPart1");
     mFileIDPart1 = XCryptionCommon::stringToByteList(fileIDPart1->GetValue());
 
-    PDFObjectCastPtr<PDFLiteralString> o = encryptionObjectState->QueryDirectObject("mO");
+    PDFObjectCastPtr<charta::PDFLiteralString> o = encryptionObjectState->QueryDirectObject("mO");
     mO = XCryptionCommon::stringToByteList(o->GetValue());
 
-    PDFObjectCastPtr<PDFLiteralString> u = encryptionObjectState->QueryDirectObject("mU");
+    PDFObjectCastPtr<charta::PDFLiteralString> u = encryptionObjectState->QueryDirectObject("mU");
     mU = XCryptionCommon::stringToByteList(u->GetValue());
 
-    PDFObjectCastPtr<PDFLiteralString> InitialEncryptionKey =
+    PDFObjectCastPtr<charta::PDFLiteralString> InitialEncryptionKey =
         encryptionObjectState->QueryDirectObject("InitialEncryptionKey");
     auto *defaultEncryption = new XCryptionCommon();
 

@@ -61,13 +61,13 @@ AbstractContentContext *PDFModifiedPage::StartContentContext()
 {
     if (mCurrentContext == nullptr)
     {
-        std::shared_ptr<PDFObject> page = mWriter->GetModifiedFileParser().ParsePage(mPageIndex);
+        auto page = mWriter->GetModifiedFileParser().ParsePage(mPageIndex);
         if (page == nullptr)
         {
             TRACE_LOG("AbstractContentContext::PDFModifiedPage, null page object");
             return nullptr;
         }
-        PDFRectangle mediaBox = PDFPageInput(&mWriter->GetModifiedFileParser(), page).GetMediaBox();
+        PDFRectangle mediaBox = charta::PDFPageInput(&mWriter->GetModifiedFileParser(), page).GetMediaBox();
         mCurrentContext = mWriter->StartFormXObject(mediaBox);
     }
     return mCurrentContext->GetContentContext();
@@ -125,7 +125,7 @@ vector<string> PDFModifiedPage::WriteNewResourcesDictionary(ObjectsContext &inOb
     return formResourcesNames;
 }
 
-std::shared_ptr<PDFObject> PDFModifiedPage::findInheritedResources(
+std::shared_ptr<charta::PDFObject> PDFModifiedPage::findInheritedResources(
     PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))
@@ -230,16 +230,16 @@ charta::EStatusCode PDFModifiedPage::WritePage()
                 objectContext.WriteNewIndirectObjectReference(newEncapsulatingObjectID);
             }
 
-            std::shared_ptr<PDFObject> pageContent(
+            std::shared_ptr<charta::PDFObject> pageContent(
                 copyingContext->GetSourceDocumentParser()->QueryDictionaryObject(pageDictionaryObject, "Contents"));
-            if (pageContent->GetType() == PDFObject::ePDFObjectStream)
+            if (pageContent->GetType() == charta::PDFObject::ePDFObjectStream)
             {
                 // single content stream. must be a refrence which points to it
                 PDFObjectCastPtr<charta::PDFIndirectObjectReference> ref(
                     pageDictionaryObject->QueryDirectObject("Contents"));
                 objectContext.WriteIndirectObjectReference(ref->mObjectID, ref->mVersion);
             }
-            else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
+            else if (pageContent->GetType() == charta::PDFObject::ePDFObjectArray)
             {
                 auto anArray = std::static_pointer_cast<charta::PDFArray>(pageContent);
 

@@ -24,17 +24,17 @@ charta::PDFArray::PDFArray() : PDFObject(eType)
 {
 }
 
-void charta::PDFArray::AppendObject(const std::shared_ptr<PDFObject> &inObject)
+void charta::PDFArray::AppendObject(const std::shared_ptr<charta::PDFObject> &inObject)
 {
     mValues.push_back(inObject);
 }
 
-SingleValueContainerIterator<std::vector<std::shared_ptr<PDFObject>>> charta::PDFArray::GetIterator()
+SingleValueContainerIterator<std::vector<std::shared_ptr<charta::PDFObject>>> charta::PDFArray::GetIterator()
 {
     return {mValues};
 }
 
-std::shared_ptr<PDFObject> charta::PDFArray::QueryObject(unsigned long i)
+std::shared_ptr<charta::PDFObject> charta::PDFArray::QueryObject(unsigned long i)
 {
     if (mValues.size() <= i)
     {

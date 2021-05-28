@@ -109,19 +109,19 @@ class PDFParser
     // done.
 
     // Creates a new object, use smart pointers to control ownership
-    std::shared_ptr<PDFObject> ParseNewObject(ObjectIDType inObjectId);
+    std::shared_ptr<charta::PDFObject> ParseNewObject(ObjectIDType inObjectId);
     ObjectIDType GetObjectsCount() const;
 
     // Query a dictinary object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct dictionary value, use PDFDictionary::QueryDirectObject [will AddRef automatically]
-    std::shared_ptr<PDFObject> QueryDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
-                                                     const std::string &inName);
+    std::shared_ptr<charta::PDFObject> QueryDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
+                                                             const std::string &inName);
 
     // Query an array object, if indirect, go and fetch the indirect object and return it instead
     // [if you want the direct array value, use the PDFArray direct access to the vector [and use AddRef, cause it
     // won't]
-    std::shared_ptr<PDFObject> QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
-                                                unsigned long inIndex);
+    std::shared_ptr<charta::PDFObject> QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
+                                                        unsigned long inIndex);
 
     unsigned long GetPagesCount() const;
     // don't be confused - pass number of pages here. returns the dictionary, and verifies that it's actually a page
@@ -134,30 +134,31 @@ class PDFParser
     // in the stream definition it will add them. delete the returned object when done.
     // Note that it DOES NOT setup the reading position of the file for reading the stream,
     // so if you want to read it, you have to also move the strem position, or use StartReadingFromStream instead
-    charta::IByteReader *CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream);
+    charta::IByteReader *CreateInputStreamReader(const std::shared_ptr<charta::PDFStreamInput> &inStream);
 
     /*
         Create a reader that will be able to read the stream, but without defiltering it.
         It will only decrypt it, if decryption is supported. This is ideal for copying
     */
-    charta::IByteReader *CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream);
+    charta::IByteReader *CreateInputStreamReaderForPlainCopying(
+        const std::shared_ptr<charta::PDFStreamInput> &inStream);
 
     // prepare parser so that you can read from the input stream object.
     // create filters and move the stream to the beginning of the stream position.
     // delete the result when done
-    charta::IByteReader *StartReadingFromStream(const std::shared_ptr<PDFStreamInput> &inStream);
+    charta::IByteReader *StartReadingFromStream(const std::shared_ptr<charta::PDFStreamInput> &inStream);
 
     // creates a PDFObjectParser object that you can use for reading objects
     // from the input stream. very userful for reading content streams for
     // interpreting them
-    PDFObjectParser *StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream);
+    PDFObjectParser *StartReadingObjectsFromStream(std::shared_ptr<charta::PDFStreamInput> inStream);
     // same, but for an array of streams, in case of page contents that are arrays. need to count as one
     PDFObjectParser *StartReadingObjectsFromStreams(std::shared_ptr<charta::PDFArray> inArrayOfStreams);
 
     /*
         Same as above, but reading only decrypts, but does not defiler. ideal for copying
     */
-    charta::IByteReader *StartReadingFromStreamForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream);
+    charta::IByteReader *StartReadingFromStreamForPlainCopying(const std::shared_ptr<charta::PDFStreamInput> &inStream);
 
     // use this to explictly free used objects. quite obviously this means that you'll have to parse the file again
     void ResetParser();
@@ -218,7 +219,7 @@ class PDFParser
                                                XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize);
     XrefEntryInput *ExtendXrefTableToSize(XrefEntryInput *inXrefTable, ObjectIDType inOldSize, ObjectIDType inNewSize);
     charta::EStatusCode ReadNextXrefEntry(uint8_t inBuffer[20]);
-    std::shared_ptr<PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
+    std::shared_ptr<charta::PDFObject> ParseExistingInDirectObject(ObjectIDType inObjectID);
     charta::EStatusCode SetupDecryptionHelper(const std::string &inPassword);
     charta::EStatusCode ParsePagesObjectIDs();
     charta::EStatusCode ParsePagesIDs(std::shared_ptr<charta::PDFDictionary> inPageNode, ObjectIDType inNodeObjectID);
@@ -230,7 +231,7 @@ class PDFParser
     charta::EStatusCode BuildXrefTableAndTrailerFromXrefStream(long long inXrefStreamObjectID);
     // an overload for cases where the xref stream object is already parsed
     charta::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                                const std::shared_ptr<PDFStreamInput> &inXrefStream,
+                                                const std::shared_ptr<charta::PDFStreamInput> &inXrefStream,
                                                 XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize);
     // an overload for cases where the position should hold a stream object, and it should be parsed
     charta::EStatusCode ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
@@ -246,18 +247,18 @@ class PDFParser
                                                    std::shared_ptr<charta::PDFDictionary> *outTrailer,
                                                    XrefEntryInput **outExtendedTable,
                                                    ObjectIDType *outExtendedTableSize);
-    std::shared_ptr<PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
+    std::shared_ptr<charta::PDFObject> ParseExistingInDirectStreamObject(ObjectIDType inObjectId);
     charta::EStatusCode ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeaderInfo, ObjectIDType inObjectsCount);
     void MovePositionInStream(long long inPosition);
     EStatusCodeAndIByteReader CreateFilterForStream(charta::IByteReader *inStream,
-                                                    const std::shared_ptr<PDFName> &inFilterName,
+                                                    const std::shared_ptr<charta::PDFName> &inFilterName,
                                                     const std::shared_ptr<charta::PDFDictionary> &inDecodeParams,
-                                                    const std::shared_ptr<PDFStreamInput> &inPDFStream);
+                                                    const std::shared_ptr<charta::PDFStreamInput> &inPDFStream);
 
     void NotifyIndirectObjectStart(long long inObjectID, long long inGenerationNumber);
-    void NotifyIndirectObjectEnd(const std::shared_ptr<PDFObject> &inObject);
+    void NotifyIndirectObjectEnd(const std::shared_ptr<charta::PDFObject> &inObject);
 
-    charta::IByteReader *WrapWithDecryptionFilter(const std::shared_ptr<PDFStreamInput> &inStream,
+    charta::IByteReader *WrapWithDecryptionFilter(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                                   charta::IByteReader *inToWrapStream);
 
     // Backward reading

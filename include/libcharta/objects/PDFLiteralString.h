@@ -24,6 +24,9 @@
 
 #include <string>
 
+namespace charta
+{
+
 class PDFLiteralString : public PDFObject
 {
   public:
@@ -34,11 +37,12 @@ class PDFLiteralString : public PDFObject
 
     // Value is the interpreted string (no enclosing paranthesis and escaped sequances as the result values)
     PDFLiteralString(const std::string &inValue);
-    virtual ~PDFLiteralString(void);
+    virtual ~PDFLiteralString() = default;
 
     const std::string &GetValue() const;
     operator std::string() const;
 
   private:
-    std::string mValue;
+    const std::string mValue;
 };
+} // namespace charta

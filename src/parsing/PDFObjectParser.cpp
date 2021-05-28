@@ -88,7 +88,7 @@ void PDFObjectParser::ResetReadState(const PDFParserTokenizer &inExternalTokeniz
 
 static const std::string scR = "R";
 static const std::string scStream = "stream";
-std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseNewObject()
 {
     std::string token;
 
@@ -183,8 +183,8 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseNewObject()
                 // yes, found a stream. record current position as the position where the stream starts.
                 // remove from the current stream position the size of the tokenizer buffer, which is "read", but
                 // not used
-                return std::make_shared<PDFStreamInput>(dictObject, mCurrentPositionProvider->GetCurrentPosition() -
-                                                                        mTokenizer.GetReadBufferSize());
+                return std::make_shared<charta::PDFStreamInput>(
+                    dictObject, mCurrentPositionProvider->GetCurrentPosition() - mTokenizer.GetReadBufferSize());
             }
             else
             {
@@ -230,7 +230,7 @@ bool PDFObjectParser::IsBoolean(const std::string &inToken)
     return (scTrue == inToken || scFalse == inToken);
 }
 
-std::shared_ptr<PDFObject> PDFObjectParser::ParseBoolean(const std::string &inToken)
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseBoolean(const std::string &inToken)
 {
     return std::make_shared<PDFBoolean>(scTrue == inToken);
 }
@@ -242,7 +242,7 @@ bool PDFObjectParser::IsLiteralString(const std::string &inToken)
 }
 
 static const char scRightParanthesis = ')';
-std::shared_ptr<PDFObject> PDFObjectParser::ParseLiteralString(const std::string &inToken)
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseLiteralString(const std::string &inToken)
 {
     std::stringbuf stringBuffer;
     uint8_t buffer;
@@ -351,7 +351,7 @@ bool PDFObjectParser::IsHexadecimalString(const std::string &inToken)
 }
 
 static const char scRightAngle = '>';
-std::shared_ptr<PDFObject> PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseHexadecimalString(const std::string &inToken)
 {
     // verify that last character is '>'
     if (inToken.at(inToken.size() - 1) != scRightAngle)
@@ -418,7 +418,7 @@ bool PDFObjectParser::IsName(const std::string &inToken)
 }
 
 static const char scSharp = '#';
-std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken)
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseName(const std::string &inToken)
 {
     EStatusCode status = charta::eSuccess;
     std::stringbuf stringBuffer;
@@ -473,7 +473,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseName(const std::string &inToken
     }
 
     if (charta::eSuccess == status)
-        return std::make_shared<PDFName>(stringBuffer.str());
+        return std::make_shared<charta::PDFName>(stringBuffer.str());
     return nullptr;
 }
 
@@ -518,7 +518,7 @@ bool PDFObjectParser::IsNumber(const std::string &inToken)
 
 using LongLong = BoxingBaseWithRW<long long>;
 
-std::shared_ptr<PDFObject> PDFObjectParser::ParseNumber(const std::string &inToken)
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseNumber(const std::string &inToken)
 {
     // once we know this is a number, then parsing is easy. just determine if it's a real or integer, so as to separate
     // classes for better accuracy
@@ -534,7 +534,7 @@ bool PDFObjectParser::IsArray(const std::string &inToken)
 }
 
 static const std::string scRightSquare = "]";
-std::shared_ptr<PDFObject> PDFObjectParser::ParseArray()
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseArray()
 {
     auto anArray = std::make_shared<PDFArray>();
     bool arrayEndEncountered = false;
@@ -591,7 +591,7 @@ bool PDFObjectParser::IsDictionary(const std::string &inToken)
 }
 
 static const std::string scDoubleRightAngle = ">>";
-std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
+std::shared_ptr<charta::PDFObject> PDFObjectParser::ParseDictionary()
 {
     auto aDictionary = std::make_shared<PDFDictionary>();
     bool dictionaryEndEncountered = false;
@@ -625,7 +625,7 @@ std::shared_ptr<PDFObject> PDFObjectParser::ParseDictionary()
                        token.substr(0, MAX_TRACE_SIZE - 200).c_str());
             break;
         }
-        auto name = std::static_pointer_cast<PDFName>(aKey);
+        auto name = std::static_pointer_cast<charta::PDFName>(aKey);
 
         // all good. i'm gonna be forgiving here and allow skipping duplicate keys. cause it happens
         if (!aDictionary->Exists(name->GetValue()))

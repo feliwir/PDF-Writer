@@ -407,7 +407,7 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWrit
 {
     EStatusCode status = charta::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
+    std::shared_ptr<charta::PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
 
     // for empty page, simply return
     if (!pageContent)
@@ -415,7 +415,8 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWrit
 
     if (pageContent->GetType() == PDFObject::ePDFObjectStream)
     {
-        status = WritePDFStreamInputToStream(inTargetStream, std::static_pointer_cast<PDFStreamInput>(pageContent));
+        status =
+            WritePDFStreamInputToStream(inTargetStream, std::static_pointer_cast<charta::PDFStreamInput>(pageContent));
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
@@ -430,7 +431,7 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWrit
                 TRACE_LOG("PDFDocumentHandler::WritePageContentToSingleStream, content stream array contains non-refs");
                 break;
             }
-            PDFObjectCastPtr<PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
+            PDFObjectCastPtr<charta::PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
             if (!contentStream)
             {
                 status = charta::eFailure;
@@ -459,8 +460,8 @@ EStatusCode PDFDocumentHandler::WritePageContentToSingleStream(charta::IByteWrit
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
-                                                            const std::shared_ptr<PDFStreamInput> &inSourceStream)
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(
+    charta::IByteWriter *inTargetStream, const std::shared_ptr<charta::PDFStreamInput> &inSourceStream)
 {
     charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
@@ -601,7 +602,7 @@ EStatusCode PDFDocumentHandler::CopyInDirectObject(ObjectIDType inSourceObjectID
     ObjectIDTypeList newObjectsToWrite;
     OutWritingPolicy writingPolicy(this, newObjectsToWrite);
 
-    std::shared_ptr<PDFObject> sourceObject = mParser->ParseNewObject(inSourceObjectID);
+    std::shared_ptr<charta::PDFObject> sourceObject = mParser->ParseNewObject(inSourceObjectID);
     if (!sourceObject)
     {
         XrefEntryInput *xrefEntry = mParser->GetXrefEntry(inSourceObjectID);
@@ -850,7 +851,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPagePassthrough(
 {
     EStatusCode status = charta::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(inPageObject, "Contents"));
+    std::shared_ptr<charta::PDFObject> pageContent(mParser->QueryDictionaryObject(inPageObject, "Contents"));
 
     // for empty page, do nothing
     if (!pageContent)
@@ -905,7 +906,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
 {
     EStatusCode status = charta::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
+    std::shared_ptr<charta::PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inPageObject), "Contents"));
 
     // for empty page, do nothing
     if (!pageContent)
@@ -915,7 +916,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
     if (pageContent->GetType() == PDFObject::ePDFObjectStream)
     {
         status = WritePDFStreamInputToContentContext(pageContentContext,
-                                                     std::static_pointer_cast<PDFStreamInput>(pageContent));
+                                                     std::static_pointer_cast<charta::PDFStreamInput>(pageContent));
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
@@ -931,7 +932,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
                     "PDFDocumentHandler::CopyPageContentToTargetPageRecoded, content stream array contains non-refs");
                 break;
             }
-            PDFObjectCastPtr<PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
+            PDFObjectCastPtr<charta::PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
             if (!contentStream)
             {
                 status = charta::eFailure;
@@ -962,7 +963,7 @@ EStatusCode PDFDocumentHandler::CopyPageContentToTargetPageRecoded(PDFPage &inPa
 }
 
 EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
-    PageContentContext *inContentContext, const std::shared_ptr<PDFStreamInput> &inContentSource)
+    PageContentContext *inContentContext, const std::shared_ptr<charta::PDFStreamInput> &inContentSource)
 {
     EStatusCode status = charta::eSuccess;
 
@@ -1388,7 +1389,7 @@ EStatusCode PDFDocumentHandler::MergeResourcesToPage(PDFPage &inTargetPage,
         auto it(procsets->GetIterator());
         while (it.MoveNext())
             inTargetPage.GetResourcesDictionary().AddProcsetResource(
-                std::static_pointer_cast<PDFName>(it.GetItem())->GetValue());
+                std::static_pointer_cast<charta::PDFName>(it.GetItem())->GetValue());
     }
 
     do
@@ -1540,7 +1541,8 @@ std::string PDFDocumentHandler::AsEncodedName(const std::string &inName)
     return aStringBuilder.ToString().substr(1); // return without initial forward slash
 }
 
-EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject)
+EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(
+    const std::shared_ptr<charta::PDFObject> &inObject)
 {
     EStatusCodeAndObjectIDType result;
     if (inObject->GetType() != PDFObject::ePDFObjectIndirectObjectReference)
@@ -1569,7 +1571,7 @@ EStatusCodeAndObjectIDType PDFDocumentHandler::CopyObjectToIndirectObject(const 
     return result;
 }
 
-EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(const std::shared_ptr<PDFObject> &inObject,
+EStatusCode PDFDocumentHandler::CopyDirectObjectToIndirectObject(const std::shared_ptr<charta::PDFObject> &inObject,
                                                                  ObjectIDType inTargetObjectID)
 {
     EStatusCode status;
@@ -1594,7 +1596,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
 {
     EStatusCode status = charta::eSuccess;
 
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
+    std::shared_ptr<charta::PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
 
     // for empty page, return now
     if (!pageContent)
@@ -1606,7 +1608,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
     if (pageContent->GetType() == PDFObject::ePDFObjectStream)
     {
         status = WritePDFStreamInputToContentContext(
-            pageContentContext, std::static_pointer_cast<PDFStreamInput>(pageContent), inMappedResourcesNames);
+            pageContentContext, std::static_pointer_cast<charta::PDFStreamInput>(pageContent), inMappedResourcesNames);
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
     {
@@ -1621,7 +1623,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
                 TRACE_LOG("PDFDocumentHandler::MergePageContentToTargetPage, content stream array contains non-refs");
                 break;
             }
-            PDFObjectCastPtr<PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
+            PDFObjectCastPtr<charta::PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
             if (!contentStream)
             {
                 status = charta::eFailure;
@@ -1647,7 +1649,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetPage(PDFPage &inTargetPa
 }
 
 EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
-    PageContentContext *inContentContext, const std::shared_ptr<PDFStreamInput> &inContentSource,
+    PageContentContext *inContentContext, const std::shared_ptr<charta::PDFStreamInput> &inContentSource,
     const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = charta::eSuccess;
@@ -1674,9 +1676,9 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToContentContext(
     return status;
 }
 
-EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter *inTargetStream,
-                                                            const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                            const StringToStringMap &inMappedResourcesNames)
+EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(
+    charta::IByteWriter *inTargetStream, const std::shared_ptr<charta::PDFStreamInput> &inSourceStream,
+    const StringToStringMap &inMappedResourcesNames)
 {
     // as oppose to regular copying, this copying has to replace name references that refer to mapped resources.
     // as such, the method of copying will be token by token, where each token is checked for being a resource
@@ -1698,9 +1700,9 @@ EStatusCode PDFDocumentHandler::WritePDFStreamInputToStream(charta::IByteWriter 
 }
 
 static const char scSlash = '/';
-EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                             const StringToStringMap &inMappedResourcesNames,
-                                                             ResourceTokenMarkerList &outResourceMarkers)
+EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(
+    const std::shared_ptr<charta::PDFStreamInput> &inSourceStream, const StringToStringMap &inMappedResourcesNames,
+    ResourceTokenMarkerList &outResourceMarkers)
 {
     charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
@@ -1739,10 +1741,9 @@ EStatusCode PDFDocumentHandler::ScanStreamForResourcesTokens(const std::shared_p
     return charta::eSuccess;
 }
 
-EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(charta::IByteWriter *inTargetStream,
-                                                               const std::shared_ptr<PDFStreamInput> &inSourceStream,
-                                                               const StringToStringMap &inMappedResourcesNames,
-                                                               const ResourceTokenMarkerList &inResourceMarkers)
+EStatusCode PDFDocumentHandler::MergeAndReplaceResourcesTokens(
+    charta::IByteWriter *inTargetStream, const std::shared_ptr<charta::PDFStreamInput> &inSourceStream,
+    const StringToStringMap &inMappedResourcesNames, const ResourceTokenMarkerList &inResourceMarkers)
 {
     charta::IByteReader *streamReader = mParser->CreateInputStreamReader(inSourceStream);
 
@@ -1865,7 +1866,8 @@ charta::EStatusCode PDFDocumentHandler::StartParserCopyingContext(PDFParser *inP
     return StartCopyingContext(inPDFParser);
 }
 
-EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CopyDirectObjectWithDeepCopy(std::shared_ptr<PDFObject> inObject)
+EStatusCodeAndObjectIDTypeList PDFDocumentHandler::CopyDirectObjectWithDeepCopy(
+    std::shared_ptr<charta::PDFObject> inObject)
 {
     ObjectIDTypeList notCopiedReferencedObjects;
     OutWritingPolicy writingPolicy(this, notCopiedReferencedObjects);
@@ -1902,7 +1904,7 @@ charta::IByteReaderWithPosition *PDFDocumentHandler::GetSourceDocumentStream()
 }
 
 // for modification scenarios, no need for deep copying. the following implement this path
-EStatusCode PDFDocumentHandler::CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject)
+EStatusCode PDFDocumentHandler::CopyDirectObjectAsIs(std::shared_ptr<charta::PDFObject> inObject)
 {
     InWritingPolicy writingPolicy(this);
     return WriteObjectByType(std::move(inObject), eTokenSeparatorEndLine, &writingPolicy);
@@ -1932,7 +1934,7 @@ void OutWritingPolicy::WriteReference(std::shared_ptr<charta::PDFIndirectObjectR
     mDocumentHandler->mObjectsContext->WriteNewIndirectObjectReference(itObjects->second, inSeparator);
 }
 
-EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObject> &inObject,
+EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<charta::PDFObject> &inObject,
                                                   ETokenSeparator inSeparator, IObjectWritePolicy *inWritePolicy)
 {
     EStatusCode status = charta::eSuccess;
@@ -1944,7 +1946,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectLiteralString: {
-        mObjectsContext->WriteLiteralString(std::static_pointer_cast<PDFLiteralString>(inObject)->GetValue(),
+        mObjectsContext->WriteLiteralString(std::static_pointer_cast<charta::PDFLiteralString>(inObject)->GetValue(),
                                             inSeparator);
         break;
     }
@@ -1958,7 +1960,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectName: {
-        mObjectsContext->WriteName(std::static_pointer_cast<PDFName>(inObject)->GetValue(), inSeparator);
+        mObjectsContext->WriteName(std::static_pointer_cast<charta::PDFName>(inObject)->GetValue(), inSeparator);
         break;
     }
     case PDFObject::ePDFObjectInteger: {
@@ -1987,7 +1989,7 @@ EStatusCode PDFDocumentHandler::WriteObjectByType(const std::shared_ptr<PDFObjec
         break;
     }
     case PDFObject::ePDFObjectStream: {
-        status = WriteStreamObject(std::static_pointer_cast<PDFStreamInput>(inObject), inWritePolicy);
+        status = WriteStreamObject(std::static_pointer_cast<charta::PDFStreamInput>(inObject), inWritePolicy);
         break;
     }
     }
@@ -2033,7 +2035,7 @@ EStatusCode PDFDocumentHandler::WriteDictionaryObject(const std::shared_ptr<char
     return charta::eSuccess;
 }
 
-EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<PDFStreamInput> &inStream,
+EStatusCode PDFDocumentHandler::WriteStreamObject(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                                   IObjectWritePolicy *inWritePolicy)
 {
     /*
@@ -2328,7 +2330,7 @@ EStatusCode PDFDocumentHandler::RegisterResourcesForForm(PDFFormXObject *inTarge
             auto it(procsets->GetIterator());
             while (it.MoveNext())
                 inTargetFormXObject->GetResourcesDictionary().AddProcsetResource(
-                    std::static_pointer_cast<PDFName>(it.GetItem())->GetValue());
+                    std::static_pointer_cast<charta::PDFName>(it.GetItem())->GetValue());
         }
 
         // ExtGState
@@ -2377,7 +2379,7 @@ class ResourceCopierTask : public IResourceWritingTask
 {
   public:
     ResourceCopierTask(PDFFormXObject *inFormXObject, PDFDocumentHandler *inCopier,
-                       std::shared_ptr<PDFObject> inObjectToCopy)
+                       std::shared_ptr<charta::PDFObject> inObjectToCopy)
     {
         mCopier = inCopier;
         mObjectToCopy = std::move(inObjectToCopy);
@@ -2408,7 +2410,7 @@ class ResourceCopierTask : public IResourceWritingTask
 
   private:
     PDFDocumentHandler *mCopier;
-    std::shared_ptr<PDFObject> mObjectToCopy;
+    std::shared_ptr<charta::PDFObject> mObjectToCopy;
     std::string mResourceName;
     PDFFormXObject *mFormXObject;
 };
@@ -2466,7 +2468,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *
                                                                 const StringToStringMap &inMappedResourcesNames)
 {
     EStatusCode status = charta::eSuccess;
-    std::shared_ptr<PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
+    std::shared_ptr<charta::PDFObject> pageContent(mParser->QueryDictionaryObject(std::move(inSourcePage), "Contents"));
 
     // for empty page, do nothing
     if (!pageContent)
@@ -2477,9 +2479,9 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *
 
     if (pageContent->GetType() == PDFObject::ePDFObjectStream)
     {
-        status =
-            WritePDFStreamInputToStream(inTargetFormXObject->GetContentStream()->GetWriteStream(),
-                                        std::static_pointer_cast<PDFStreamInput>(pageContent), inMappedResourcesNames);
+        status = WritePDFStreamInputToStream(inTargetFormXObject->GetContentStream()->GetWriteStream(),
+                                             std::static_pointer_cast<charta::PDFStreamInput>(pageContent),
+                                             inMappedResourcesNames);
         primitivesWriter.EndLine();
     }
     else if (pageContent->GetType() == PDFObject::ePDFObjectArray)
@@ -2496,7 +2498,7 @@ EStatusCode PDFDocumentHandler::MergePageContentToTargetXObject(PDFFormXObject *
                     "PDFDocumentHandler::MergePageContentToTargetXObject, content stream array contains non-refs");
                 break;
             }
-            PDFObjectCastPtr<PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
+            PDFObjectCastPtr<charta::PDFStreamInput> contentStream(mParser->ParseNewObject(refItem->mObjectID));
             if (!contentStream)
             {
                 status = charta::eFailure;
@@ -2548,7 +2550,7 @@ void PDFDocumentHandler::RegisterFormRelatedObjects(PDFFormXObject *inFormXObjec
     mDocumentContext->RegisterFormEndWritingTask(inFormXObject, new ObjectsCopyingTask(this, inObjectsToWrite));
 }
 
-std::shared_ptr<PDFObject> PDFDocumentHandler::FindPageResources(
+std::shared_ptr<charta::PDFObject> PDFDocumentHandler::FindPageResources(
     PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     if (inDictionary->Exists("Resources"))

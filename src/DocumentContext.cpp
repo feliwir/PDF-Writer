@@ -1720,22 +1720,22 @@ ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<cha
 void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
                                            const std::shared_ptr<charta::PDFDictionary> &inTrailerInfoState)
 {
-    PDFObjectCastPtr<PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
+    PDFObjectCastPtr<charta::PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> authorState(inTrailerInfoState->QueryDirectObject("Author"));
+    PDFObjectCastPtr<charta::PDFLiteralString> authorState(inTrailerInfoState->QueryDirectObject("Author"));
     mTrailerInformation.GetInfo().Author = authorState->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> subjectState(inTrailerInfoState->QueryDirectObject("Subject"));
+    PDFObjectCastPtr<charta::PDFLiteralString> subjectState(inTrailerInfoState->QueryDirectObject("Subject"));
     mTrailerInformation.GetInfo().Subject = subjectState->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> keywordsState(inTrailerInfoState->QueryDirectObject("Keywords"));
+    PDFObjectCastPtr<charta::PDFLiteralString> keywordsState(inTrailerInfoState->QueryDirectObject("Keywords"));
     mTrailerInformation.GetInfo().Keywords = keywordsState->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> creatorState(inTrailerInfoState->QueryDirectObject("Creator"));
+    PDFObjectCastPtr<charta::PDFLiteralString> creatorState(inTrailerInfoState->QueryDirectObject("Creator"));
     mTrailerInformation.GetInfo().Creator = creatorState->GetValue();
 
-    PDFObjectCastPtr<PDFLiteralString> producerState(inTrailerInfoState->QueryDirectObject("Producer"));
+    PDFObjectCastPtr<charta::PDFLiteralString> producerState(inTrailerInfoState->QueryDirectObject("Producer"));
     mTrailerInformation.GetInfo().Producer = producerState->GetValue();
 
     PDFObjectCastPtr<charta::PDFDictionary> creationDateState(inTrailerInfoState->QueryDirectObject("CreationDate"));
@@ -1751,8 +1751,8 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
         inTrailerInfoState->QueryDirectObject("mAdditionalInfoEntries"));
 
     auto it = additionalInfoState->GetIterator();
-    PDFObjectCastPtr<PDFName> keyState;
-    PDFObjectCastPtr<PDFLiteralString> valueState;
+    PDFObjectCastPtr<charta::PDFName> keyState;
+    PDFObjectCastPtr<charta::PDFLiteralString> valueState;
 
     mTrailerInformation.GetInfo().ClearAdditionalInfoEntries();
     while (it.MoveNext())
@@ -2504,7 +2504,7 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
 {
     // Reuse original encryption dict for new modified trailer. for sake of simplicity (with trailer using ref for
     // encrypt), make it indirect if not already
-    std::shared_ptr<PDFObject> encrypt(inModifiedFileParser->GetTrailer()->QueryDirectObject("Encrypt"));
+    std::shared_ptr<charta::PDFObject> encrypt(inModifiedFileParser->GetTrailer()->QueryDirectObject("Encrypt"));
     if (encrypt == nullptr)
         return;
 
@@ -2535,7 +2535,7 @@ bool DocumentContext::RequiresXrefStream(PDFParser *inModifiedFileParser)
     if (inModifiedFileParser->GetTrailer() == nullptr)
         return false;
 
-    PDFObjectCastPtr<PDFName> typeObject = inModifiedFileParser->GetTrailer()->QueryDirectObject("Type");
+    PDFObjectCastPtr<charta::PDFName> typeObject = inModifiedFileParser->GetTrailer()->QueryDirectObject("Type");
 
     if (!typeObject)
         return false;

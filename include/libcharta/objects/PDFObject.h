@@ -26,8 +26,7 @@
 namespace charta
 {
 class IDeletable;
-}
-typedef std::map<std::string, charta::IDeletable *> StringToIDeletable;
+using StringToIDeletable = std::map<std::string, charta::IDeletable *>;
 
 class PDFObject
 {
@@ -70,3 +69,4 @@ class PDFObject
     EPDFObjectType mType;
     StringToIDeletable mMetadata;
 };
+} // namespace charta

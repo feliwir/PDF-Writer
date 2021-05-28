@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     PDFRectangle mediaBox;
     if (parser.GetPagesCount() > 0)
     {
-        mediaBox = PDFPageInput(&parser, parser.ParsePage(0)).GetMediaBox();
+        mediaBox = charta::PDFPageInput(&parser, parser.ParsePage(0)).GetMediaBox();
     }
 
     std::cout << "Pages: " << parser.GetPagesCount() << std::endl;

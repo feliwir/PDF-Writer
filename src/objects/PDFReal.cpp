@@ -20,19 +20,16 @@
 */
 #include "objects/PDFReal.h"
 
-PDFReal::PDFReal(double inValue) : PDFObject(eType)
+charta::PDFReal::PDFReal(double inValue) : PDFObject(eType), mValue(inValue)
 {
-    mValue = inValue;
 }
 
-PDFReal::~PDFReal() = default;
-
-double PDFReal::GetValue() const
+double charta::PDFReal::GetValue() const
 {
     return mValue;
 }
 
-PDFReal::operator double() const
+charta::PDFReal::operator double() const
 {
     return mValue;
 }

@@ -30,7 +30,7 @@ namespace charta
 {
 struct PDFNameLess
 {
-    bool operator()(const std::shared_ptr<PDFName> left, const std::shared_ptr<PDFName> right) const
+    bool operator()(const std::shared_ptr<PDFName> left, const std::shared_ptr<charta::PDFName> right) const
     {
         return left->GetValue() < right->GetValue();
     }
@@ -47,14 +47,14 @@ class PDFDictionary : public PDFObject
     PDFDictionary();
 
     // AddRefs on both
-    void Insert(const std::shared_ptr<PDFName> &inKeyObject, const std::shared_ptr<PDFObject> &inValueObject);
+    void Insert(const std::shared_ptr<PDFName> &inKeyObject, const std::shared_ptr<charta::PDFObject> &inValueObject);
 
     bool Exists(const std::string &inName);
-    std::shared_ptr<PDFObject> QueryDirectObject(const std::string &inName);
+    std::shared_ptr<charta::PDFObject> QueryDirectObject(const std::string &inName);
 
-    MapIterator<std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess>> GetIterator();
+    MapIterator<std::map<std::shared_ptr<PDFName>, std::shared_ptr<charta::PDFObject>, PDFNameLess>> GetIterator();
 
   private:
-    std::map<std::shared_ptr<PDFName>, std::shared_ptr<PDFObject>, PDFNameLess> mValues;
+    std::map<std::shared_ptr<PDFName>, std::shared_ptr<charta::PDFObject>, PDFNameLess> mValues;
 };
 } // namespace charta

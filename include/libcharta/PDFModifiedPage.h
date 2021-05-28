@@ -32,12 +32,12 @@ class PDFDocumentCopyingContext;
 class ObjectsContext;
 class ResourcesDictionary;
 class PDFParser;
-class PDFObject;
 
 namespace charta
 {
 class PDFDictionary;
-}
+class PDFObject;
+} // namespace charta
 
 typedef std::vector<PDFFormXObject *> PDFFormXObjectVector;
 
@@ -74,6 +74,6 @@ class PDFModifiedPage
         ObjectsContext &inObjectContext, std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext);
     unsigned char GetDifferentChar(unsigned char);
     std::vector<std::string> WriteNewResourcesDictionary(ObjectsContext &inObjectContext);
-    std::shared_ptr<PDFObject> findInheritedResources(PDFParser *inParser,
-                                                      const std::shared_ptr<charta::PDFDictionary> &inDictionary);
+    std::shared_ptr<charta::PDFObject> findInheritedResources(
+        PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inDictionary);
 };

@@ -31,11 +31,11 @@
 #include <string>
 #include <utility>
 
-class PDFObject;
 namespace charta
 {
 class IByteReader;
-};
+class PDFObject;
+}; // namespace charta
 class IPDFParserExtender;
 class DecryptionHelper;
 
@@ -52,7 +52,7 @@ class PDFObjectParser
                        bool inOwnsStream = false);
 
     // the important bit - get next object in content stream
-    std::shared_ptr<PDFObject> ParseNewObject();
+    std::shared_ptr<charta::PDFObject> ParseNewObject();
 
     // calls this when changing underlying stream position
     void ResetReadState();
@@ -86,27 +86,27 @@ class PDFObjectParser
     void ReturnTokenToBuffer(std::string &inToken);
 
     bool IsBoolean(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseBoolean(const std::string &inToken);
+    std::shared_ptr<charta::PDFObject> ParseBoolean(const std::string &inToken);
 
     bool IsLiteralString(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseLiteralString(const std::string &inToken);
+    std::shared_ptr<charta::PDFObject> ParseLiteralString(const std::string &inToken);
 
     bool IsHexadecimalString(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseHexadecimalString(const std::string &inToken);
+    std::shared_ptr<charta::PDFObject> ParseHexadecimalString(const std::string &inToken);
 
     bool IsNull(const std::string &inToken);
 
     bool IsName(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseName(const std::string &inToken);
+    std::shared_ptr<charta::PDFObject> ParseName(const std::string &inToken);
 
     bool IsNumber(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseNumber(const std::string &inToken);
+    std::shared_ptr<charta::PDFObject> ParseNumber(const std::string &inToken);
 
     bool IsArray(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseArray();
+    std::shared_ptr<charta::PDFObject> ParseArray();
 
     bool IsDictionary(const std::string &inToken);
-    std::shared_ptr<PDFObject> ParseDictionary();
+    std::shared_ptr<charta::PDFObject> ParseDictionary();
 
     bool IsComment(const std::string &inToken);
 

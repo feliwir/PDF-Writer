@@ -21,6 +21,8 @@
 #pragma once
 #include "PDFObject.h"
 
+namespace charta
+{
 class PDFNull : public PDFObject
 {
   public:
@@ -29,6 +31,8 @@ class PDFNull : public PDFObject
         eType = ePDFObjectNull
     };
 
-    PDFNull(void);
-    virtual ~PDFNull(void);
+    PDFNull();
+    virtual ~PDFNull() = default;
 };
+
+} // namespace charta

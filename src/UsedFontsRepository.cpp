@@ -215,7 +215,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
     PDFObjectCastPtr<charta::PDFArray> optionalMetricsState(
         usedFontsRepositoryState->QueryDirectObject("mOptionaMetricsFiles"));
     auto it = optionalMetricsState->GetIterator();
-    PDFObjectCastPtr<PDFLiteralString> aStringValue;
+    PDFObjectCastPtr<charta::PDFLiteralString> aStringValue;
 
     while (it.MoveNext())
     {
@@ -236,7 +236,7 @@ EStatusCode UsedFontsRepository::ReadState(PDFParser *inStateReader, ObjectIDTyp
     PDFObjectCastPtr<charta::PDFArray> usedFontsState(usedFontsRepositoryState->QueryDirectObject("mUsedFonts"));
 
     it = usedFontsState->GetIterator();
-    PDFObjectCastPtr<PDFLiteralString> keyStringItem;
+    PDFObjectCastPtr<charta::PDFLiteralString> keyStringItem;
     PDFObjectCastPtr<PDFInteger> keyIndexItem;
     PDFObjectCastPtr<charta::PDFIndirectObjectReference> valueItem;
 

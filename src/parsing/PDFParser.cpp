@@ -350,7 +350,7 @@ EStatusCode PDFParser::ParseLastXrefPosition()
         mStream->SetPositionFromEnd(GetCurrentPositionFromEnd());
 
         mObjectParser.ResetReadState();
-        std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
+        std::shared_ptr<charta::PDFObject> anObject(mObjectParser.ParseNewObject());
 
         if (anObject->GetType() == PDFObject::ePDFObjectInteger)
         {
@@ -696,7 +696,7 @@ double PDFParser::GetPDFLevel() const
     return mPDFLevel;
 }
 
-std::shared_ptr<PDFObject> PDFParser::ParseNewObject(ObjectIDType inObjectId)
+std::shared_ptr<charta::PDFObject> PDFParser::ParseNewObject(ObjectIDType inObjectId)
 {
     if (inObjectId >= mXrefSize)
     {
@@ -719,7 +719,7 @@ ObjectIDType PDFParser::GetObjectsCount() const
 }
 
 static const std::string scObj = "obj";
-std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectObject(ObjectIDType inObjectID)
+std::shared_ptr<charta::PDFObject> PDFParser::ParseExistingInDirectObject(ObjectIDType inObjectID)
 {
     MovePositionInStream(mXrefTable[inObjectID].mObjectPosition);
 
@@ -872,7 +872,7 @@ EStatusCode PDFParser::ParsePagesIDs(const std::shared_ptr<charta::PDFDictionary
 
     do
     {
-        PDFObjectCastPtr<PDFName> objectType(inPageNode->QueryDirectObject("Type"));
+        PDFObjectCastPtr<charta::PDFName> objectType(inPageNode->QueryDirectObject("Type"));
         if (!objectType)
         {
             TRACE_LOG("PDFParser::ParsePagesIDs, can't read object type");
@@ -986,7 +986,7 @@ std::shared_ptr<charta::PDFDictionary> PDFParser::ParsePage(unsigned long inPage
         return nullptr;
     }
 
-    PDFObjectCastPtr<PDFName> objectType(pageObject->QueryDirectObject("Type"));
+    PDFObjectCastPtr<charta::PDFName> objectType(pageObject->QueryDirectObject("Type"));
 
     if (scPage == objectType->GetValue())
     {
@@ -997,8 +997,8 @@ std::shared_ptr<charta::PDFDictionary> PDFParser::ParsePage(unsigned long inPage
     return nullptr;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_ptr<charta::PDFDictionary> &inDictionary,
-                                                            const std::string &inName)
+std::shared_ptr<charta::PDFObject> PDFParser::QueryDictionaryObject(
+    const std::shared_ptr<charta::PDFDictionary> &inDictionary, const std::string &inName)
 {
     auto anObject = inDictionary->QueryDirectObject(inName);
 
@@ -1015,8 +1015,8 @@ std::shared_ptr<PDFObject> PDFParser::QueryDictionaryObject(const std::shared_pt
     return anObject;
 }
 
-std::shared_ptr<PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
-                                                       unsigned long inIndex)
+std::shared_ptr<charta::PDFObject> PDFParser::QueryArrayObject(const std::shared_ptr<charta::PDFArray> &inArray,
+                                                               unsigned long inIndex)
 {
     auto anObject(inArray->QueryObject(inIndex));
 
@@ -1093,7 +1093,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
     do
     {
         // take the object, so that we can check whether this is an Xref or an Xref stream
-        std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
+        std::shared_ptr<charta::PDFObject> anObject(mObjectParser.ParseNewObject());
         if (!anObject)
         {
             status = charta::eFailure;
@@ -1180,7 +1180,7 @@ EStatusCode PDFParser::ParsePreviousFileDirectory(long long inXrefPosition, Xref
             NotifyIndirectObjectStart(std::static_pointer_cast<charta::PDFInteger>(anObject)->GetValue(),
                                       versionObject->GetValue());
 
-            auto xrefStream = std::static_pointer_cast<PDFStreamInput>(mObjectParser.ParseNewObject());
+            auto xrefStream = std::static_pointer_cast<charta::PDFStreamInput>(mObjectParser.ParseNewObject());
             if (!xrefStream)
             {
                 TRACE_LOG("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failure to parse xref stream");
@@ -1230,7 +1230,7 @@ EStatusCode PDFParser::ParseFileDirectory()
     MovePositionInStream(mLastXrefPosition);
 
     // take the object, so that we can check whether this is an Xref or an Xref stream
-    std::shared_ptr<PDFObject> anObject(mObjectParser.ParseNewObject());
+    std::shared_ptr<charta::PDFObject> anObject(mObjectParser.ParseNewObject());
     if (!anObject)
     {
         return charta::eFailure;
@@ -1313,7 +1313,7 @@ EStatusCode PDFParser::BuildXrefTableAndTrailerFromXrefStream(long long inXrefSt
 
         NotifyIndirectObjectStart(inXrefStreamObjectID, versionObject->GetValue());
 
-        auto xrefStream = std::static_pointer_cast<PDFStreamInput>(mObjectParser.ParseNewObject());
+        auto xrefStream = std::static_pointer_cast<charta::PDFStreamInput>(mObjectParser.ParseNewObject());
         if (!xrefStream)
         {
             TRACE_LOG("PDFParser::BuildXrefTableAndTrailerFromXrefStream, failure to parse xref stream");
@@ -1409,7 +1409,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
             break;
         }
 
-        auto xrefStream = std::static_pointer_cast<PDFStreamInput>(mObjectParser.ParseNewObject());
+        auto xrefStream = std::static_pointer_cast<charta::PDFStreamInput>(mObjectParser.ParseNewObject());
         if (!xrefStream)
         {
             TRACE_LOG("PDFParser::ParseXrefFromXrefStream, failure to parse xref stream");
@@ -1425,7 +1425,7 @@ EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, Obje
 }
 
 EStatusCode PDFParser::ParseXrefFromXrefStream(XrefEntryInput *inXrefTable, ObjectIDType inXrefSize,
-                                               const std::shared_ptr<PDFStreamInput> &inXrefStream,
+                                               const std::shared_ptr<charta::PDFStreamInput> &inXrefStream,
                                                XrefEntryInput **outExtendedTable, ObjectIDType *outExtendedTableSize)
 {
     // 1. Setup the stream to read from the stream start location
@@ -1655,7 +1655,7 @@ EStatusCode PDFParser::ReadXrefSegmentValue(charta::IByteReader *inSource, int i
     return status;
 }
 
-std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
+std::shared_ptr<charta::PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectIDType inObjectId)
 {
     // parsing an object in an object stream requires the following:
     // 1. Setting the position to this object stream
@@ -1671,12 +1671,12 @@ std::shared_ptr<PDFObject> PDFParser::ParseExistingInDirectStreamObject(ObjectID
 
     InputStreamSkipperStream skipperStream;
     ObjectIDType objectStreamID;
-    std::shared_ptr<PDFObject> anObject = nullptr;
+    std::shared_ptr<charta::PDFObject> anObject = nullptr;
 
     do
     {
         objectStreamID = (ObjectIDType)mXrefTable[inObjectId].mObjectPosition;
-        PDFObjectCastPtr<PDFStreamInput> objectStream(ParseNewObject(objectStreamID));
+        PDFObjectCastPtr<charta::PDFStreamInput> objectStream(ParseNewObject(objectStreamID));
         if (!objectStream)
         {
             TRACE_LOG2("PDFParser::ParseExistingInDirectStreamObject, failed to parse object %ld. failed to find "
@@ -1776,7 +1776,7 @@ void PDFParser::NotifyIndirectObjectStart(long long inObjectID, long long inGene
     mDecryptionHelper.OnObjectStart(inObjectID, inGenerationNumber);
 }
 
-void PDFParser::NotifyIndirectObjectEnd(const std::shared_ptr<PDFObject> &inObject)
+void PDFParser::NotifyIndirectObjectEnd(const std::shared_ptr<charta::PDFObject> &inObject)
 {
     if (mParserExtender != nullptr)
         mParserExtender->OnObjectEnd(inObject);
@@ -1815,7 +1815,7 @@ EStatusCode PDFParser::ParseObjectStreamHeader(ObjectStreamHeaderEntry *inHeader
     return status;
 }
 
-charta::IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<PDFStreamInput> &inStream,
+charta::IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<charta::PDFStreamInput> &inStream,
                                                          charta::IByteReader *inToWrapStream)
 {
     if (IsEncrypted() && IsEncryptionSupported())
@@ -1838,7 +1838,7 @@ charta::IByteReader *PDFParser::WrapWithDecryptionFilter(const std::shared_ptr<P
     return inToWrapStream;
 }
 
-charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<charta::PDFStreamInput> &inStream)
 {
     std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     charta::IByteReader *result = nullptr;
@@ -1860,7 +1860,7 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
 
         result = WrapWithDecryptionFilter(inStream, result);
 
-        std::shared_ptr<PDFObject> filterObject(QueryDictionaryObject(streamDictionary, "Filter"));
+        std::shared_ptr<charta::PDFObject> filterObject(QueryDictionaryObject(streamDictionary, "Filter"));
         if (!filterObject)
         {
             // no filter, so stop here
@@ -1873,7 +1873,7 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
             PDFObjectCastPtr<charta::PDFArray> decodeParams(QueryDictionaryObject(streamDictionary, "DecodeParms"));
             for (unsigned long i = 0; i < filterObjectArray->GetLength() && eSuccess == status; ++i)
             {
-                PDFObjectCastPtr<PDFName> filterObjectItem(filterObjectArray->QueryObject(i));
+                PDFObjectCastPtr<charta::PDFName> filterObjectItem(filterObjectArray->QueryObject(i));
                 if (!filterObjectItem)
                 {
                     TRACE_LOG(
@@ -1892,7 +1892,7 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
                     PDFObjectCastPtr<charta::PDFDictionary> decodeParamsItem(QueryArrayObject(decodeParams, i));
 
                     createStatus = CreateFilterForStream(
-                        result, std::static_pointer_cast<PDFName>(filterObject),
+                        result, std::static_pointer_cast<charta::PDFName>(filterObject),
                         !decodeParamsItem ? nullptr : std::shared_ptr<charta::PDFDictionary>(decodeParamsItem),
                         inStream);
                 }
@@ -1910,7 +1910,7 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
             auto decodeParams =
                 std::static_pointer_cast<PDFDictionary>(QueryDictionaryObject(streamDictionary, "DecodeParms"));
 
-            auto createStatus = CreateFilterForStream(result, std::static_pointer_cast<PDFName>(filterObject),
+            auto createStatus = CreateFilterForStream(result, std::static_pointer_cast<charta::PDFName>(filterObject),
                                                       !decodeParams ? nullptr : decodeParams, inStream);
             if (createStatus.first != eSuccess)
             {
@@ -1938,9 +1938,9 @@ charta::IByteReader *PDFParser::CreateInputStreamReader(const std::shared_ptr<PD
 }
 
 EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *inStream,
-                                                           const std::shared_ptr<PDFName> &inFilterName,
+                                                           const std::shared_ptr<charta::PDFName> &inFilterName,
                                                            const std::shared_ptr<charta::PDFDictionary> &inDecodeParams,
-                                                           const std::shared_ptr<PDFStreamInput> &inPDFStream)
+                                                           const std::shared_ptr<charta::PDFStreamInput> &inPDFStream)
 {
     EStatusCode status = eSuccess;
     charta::IByteReader *result = nullptr;
@@ -2033,7 +2033,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *
 #endif
         else if (inFilterName->GetValue() == "Crypt")
         {
-            PDFObjectCastPtr<PDFName> cryptFilterName(QueryDictionaryObject(inDecodeParams, "Name"));
+            PDFObjectCastPtr<charta::PDFName> cryptFilterName(QueryDictionaryObject(inDecodeParams, "Name"));
 
             result =
                 mDecryptionHelper.CreateDecryptionFilterForStream(inPDFStream, inStream, cryptFilterName->GetValue());
@@ -2066,7 +2066,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *
     return EStatusCodeAndIByteReader(status, result);
 }
 
-charta::IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<charta::PDFStreamInput> &inStream)
 {
     charta::IByteReader *result = CreateInputStreamReader(inStream);
     if (result != nullptr)
@@ -2074,7 +2074,7 @@ charta::IByteReader *PDFParser::StartReadingFromStream(const std::shared_ptr<PDF
     return result;
 }
 
-PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<PDFStreamInput> inStream)
+PDFObjectParser *PDFParser::StartReadingObjectsFromStream(std::shared_ptr<charta::PDFStreamInput> inStream)
 {
     charta::IByteReader *readStream = StartReadingFromStream(std::move(inStream));
     if (readStream == nullptr)
@@ -2102,7 +2102,8 @@ PDFObjectParser *PDFParser::StartReadingObjectsFromStreams(std::shared_ptr<chart
     return objectsParser;
 }
 
-charta::IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(
+    const std::shared_ptr<charta::PDFStreamInput> &inStream)
 {
     std::shared_ptr<charta::PDFDictionary> streamDictionary(inStream->QueryStreamDictionary());
     charta::IByteReader *result = nullptr;
@@ -2133,7 +2134,8 @@ charta::IByteReader *PDFParser::CreateInputStreamReaderForPlainCopying(const std
     return result;
 }
 
-charta::IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(const std::shared_ptr<PDFStreamInput> &inStream)
+charta::IByteReader *PDFParser::StartReadingFromStreamForPlainCopying(
+    const std::shared_ptr<charta::PDFStreamInput> &inStream)
 {
     charta::IByteReader *result = CreateInputStreamReaderForPlainCopying(inStream);
     if (result != nullptr)

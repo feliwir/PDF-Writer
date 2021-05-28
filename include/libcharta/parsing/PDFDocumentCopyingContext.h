@@ -82,7 +82,7 @@ class PDFDocumentCopyingContext
        The internal state of the copying context will hold object references for them till you do, so that the reference
        IDs remain good.
     */
-    EStatusCodeAndObjectIDTypeList CopyDirectObjectWithDeepCopy(std::shared_ptr<PDFObject> inObject);
+    EStatusCodeAndObjectIDTypeList CopyDirectObjectWithDeepCopy(std::shared_ptr<charta::PDFObject> inObject);
     /*
         Call this ONLY with the result of CopyDirectObjectWithDeepCopy, to copy new objects that are reuqired for direct
        object. It is OK to merge a couple of results from multiple CopyDirectObject to a single list. MAKE SURE THERE
@@ -118,7 +118,7 @@ class PDFDocumentCopyingContext
     // the referenced object and uses new references.
     // This method is fitting file modification scenarios. CopyDirectObjectDeepCopy fits
     // importing scenarios.
-    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<PDFObject> inObject);
+    charta::EStatusCode CopyDirectObjectAsIs(std::shared_ptr<charta::PDFObject> inObject);
 
     // internal, release document context reference, to avoid re-releasing in destruction
     void ReleaseDocumentContextReference();

@@ -32,21 +32,21 @@
 #include "objects/PDFSymbol.h"
 #include <utility>
 
-ParsedPrimitiveHelper::ParsedPrimitiveHelper(std::shared_ptr<PDFObject> inObject)
+ParsedPrimitiveHelper::ParsedPrimitiveHelper(std::shared_ptr<charta::PDFObject> inObject)
 {
     mWrappedObject = std::move(inObject);
 }
 
 double ParsedPrimitiveHelper::GetAsDouble()
 {
-    if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
+    if (mWrappedObject->GetType() == charta::PDFObject::ePDFObjectInteger)
     {
         auto anInteger = std::static_pointer_cast<charta::PDFInteger>(mWrappedObject);
         return (double)anInteger->GetValue();
     }
-    if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
+    if (mWrappedObject->GetType() == charta::PDFObject::ePDFObjectReal)
     {
-        auto aReal = std::static_pointer_cast<PDFReal>(mWrappedObject);
+        auto aReal = std::static_pointer_cast<charta::PDFReal>(mWrappedObject);
         return aReal->GetValue();
     }
     return 0;
@@ -54,14 +54,14 @@ double ParsedPrimitiveHelper::GetAsDouble()
 
 long long ParsedPrimitiveHelper::GetAsInteger()
 {
-    if (mWrappedObject->GetType() == PDFObject::ePDFObjectInteger)
+    if (mWrappedObject->GetType() == charta::PDFObject::ePDFObjectInteger)
     {
         auto anInteger = std::static_pointer_cast<charta::PDFInteger>(mWrappedObject);
         return anInteger->GetValue();
     }
-    if (mWrappedObject->GetType() == PDFObject::ePDFObjectReal)
+    if (mWrappedObject->GetType() == charta::PDFObject::ePDFObjectReal)
     {
-        auto aReal = std::static_pointer_cast<PDFReal>(mWrappedObject);
+        auto aReal = std::static_pointer_cast<charta::PDFReal>(mWrappedObject);
         return (long long)aReal->GetValue();
     }
     return 0;
@@ -69,8 +69,8 @@ long long ParsedPrimitiveHelper::GetAsInteger()
 
 bool ParsedPrimitiveHelper::IsNumber()
 {
-    return mWrappedObject->GetType() == PDFObject::ePDFObjectInteger ||
-           mWrappedObject->GetType() == PDFObject::ePDFObjectReal;
+    return mWrappedObject->GetType() == charta::PDFObject::ePDFObjectInteger ||
+           mWrappedObject->GetType() == charta::PDFObject::ePDFObjectReal;
 }
 
 using LongLong = BoxingBaseWithRW<long long>;
@@ -82,29 +82,29 @@ std::string ParsedPrimitiveHelper::ToString()
 
     switch (mWrappedObject->GetType())
     {
-    case PDFObject::ePDFObjectName:
-        result = std::static_pointer_cast<PDFName>(mWrappedObject)->GetValue();
+    case charta::PDFObject::ePDFObjectName:
+        result = std::static_pointer_cast<charta::PDFName>(mWrappedObject)->GetValue();
         break;
-    case PDFObject::ePDFObjectLiteralString:
-        result = std::static_pointer_cast<PDFLiteralString>(mWrappedObject)->GetValue();
+    case charta::PDFObject::ePDFObjectLiteralString:
+        result = std::static_pointer_cast<charta::PDFLiteralString>(mWrappedObject)->GetValue();
         break;
-    case PDFObject::ePDFObjectHexString:
+    case charta::PDFObject::ePDFObjectHexString:
         result = std::static_pointer_cast<charta::PDFHexString>(mWrappedObject)->GetValue();
         break;
-    case PDFObject::ePDFObjectReal:
-        result = Double(std::static_pointer_cast<PDFReal>(mWrappedObject)->GetValue()).ToString();
+    case charta::PDFObject::ePDFObjectReal:
+        result = Double(std::static_pointer_cast<charta::PDFReal>(mWrappedObject)->GetValue()).ToString();
         break;
-    case PDFObject::ePDFObjectInteger:
+    case charta::PDFObject::ePDFObjectInteger:
         result = LongLong(std::static_pointer_cast<charta::PDFInteger>(mWrappedObject)->GetValue()).ToString();
         break;
-    case PDFObject::ePDFObjectSymbol:
+    case charta::PDFObject::ePDFObjectSymbol:
         result = std::static_pointer_cast<PDFSymbol>(mWrappedObject)->GetValue();
         break;
-    case PDFObject::ePDFObjectBoolean:
+    case charta::PDFObject::ePDFObjectBoolean:
         result = std::static_pointer_cast<charta::PDFBoolean>(mWrappedObject)->GetValue() ? "true" : "false";
         break;
     default:
-        result = PDFObject::scPDFObjectTypeLabel(mWrappedObject->GetType());
+        result = charta::PDFObject::scPDFObjectTypeLabel(mWrappedObject->GetType());
     }
     return result;
 }

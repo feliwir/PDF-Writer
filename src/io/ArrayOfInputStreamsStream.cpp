@@ -55,11 +55,11 @@ charta::IByteReader *ArrayOfInputStreamsStream::GetActiveStream()
     mCurrentStream = nullptr;
 
     // get next stream in array
-    PDFObjectCastPtr<PDFStreamInput> aStream;
+    PDFObjectCastPtr<charta::PDFStreamInput> aStream;
 
     while ((mCurrentStream == nullptr) && mCurrentIndex < mArray->GetLength())
     {
-        PDFObjectCastPtr<PDFStreamInput> aStream = mParser->QueryArrayObject(mArray, mCurrentIndex);
+        PDFObjectCastPtr<charta::PDFStreamInput> aStream = mParser->QueryArrayObject(mArray, mCurrentIndex);
         if (!!aStream)
         {
             mCurrentStream = mParser->StartReadingFromStream(aStream);
