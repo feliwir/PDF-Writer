@@ -51,47 +51,45 @@
 #include "parsing/PDFDocumentCopyingContext.h"
 #include "parsing/PDFParser.h"
 
-using namespace charta;
-
-DocumentContext::DocumentContext()
+charta::DocumentContext::DocumentContext()
 {
     mObjectsContext = nullptr;
     mParserExtender = nullptr;
     mModifiedDocumentIDExists = false;
 }
 
-DocumentContext::~DocumentContext()
+charta::DocumentContext::~DocumentContext()
 {
     Cleanup();
 }
 
-void DocumentContext::SetObjectsContext(ObjectsContext *inObjectsContext)
+void charta::DocumentContext::SetObjectsContext(ObjectsContext *inObjectsContext)
 {
     mObjectsContext = inObjectsContext;
     mJPEGImageHandler.SetOperationsContexts(this, mObjectsContext);
     mPDFDocumentHandler.SetOperationsContexts(this, mObjectsContext);
     mUsedFontsRepository.SetObjectsContext(mObjectsContext);
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     mTIFFImageHandler.SetOperationsContexts(this, mObjectsContext);
 #endif
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
     mPNGImageHandler.SetOperationsContexts(this, mObjectsContext);
 #endif
 }
 
-void DocumentContext::SetEmbedFonts(bool inEmbedFonts)
+void charta::DocumentContext::SetEmbedFonts(bool inEmbedFonts)
 {
     mUsedFontsRepository.SetEmbedFonts(inEmbedFonts);
 }
 
-void DocumentContext::SetOutputFileInformation(OutputFile *inOutputFile)
+void charta::DocumentContext::SetOutputFileInformation(OutputFile *inOutputFile)
 {
     // just save the output file path for the ID generation in the end
     mOutputFilePath = inOutputFile->GetFilePath();
     mModifiedDocumentIDExists = false;
 }
 
-void DocumentContext::AddDocumentContextExtender(IDocumentContextExtender *inExtender)
+void charta::DocumentContext::AddDocumentContextExtender(IDocumentContextExtender *inExtender)
 {
     mExtenders.insert(inExtender);
     mJPEGImageHandler.AddDocumentContextExtender(inExtender);
@@ -102,7 +100,7 @@ void DocumentContext::AddDocumentContextExtender(IDocumentContextExtender *inExt
         (*it)->AddDocumentContextExtender(inExtender);
 }
 
-void DocumentContext::RemoveDocumentContextExtender(IDocumentContextExtender *inExtender)
+void charta::DocumentContext::RemoveDocumentContextExtender(IDocumentContextExtender *inExtender)
 {
     mExtenders.erase(inExtender);
     mJPEGImageHandler.RemoveDocumentContextExtender(inExtender);
@@ -112,12 +110,12 @@ void DocumentContext::RemoveDocumentContextExtender(IDocumentContextExtender *in
         (*it)->RemoveDocumentContextExtender(inExtender);
 }
 
-TrailerInformation &DocumentContext::GetTrailerInformation()
+TrailerInformation &charta::DocumentContext::GetTrailerInformation()
 {
     return mTrailerInformation;
 }
 
-EStatusCode DocumentContext::WriteHeader(EPDFVersion inPDFVersion)
+charta::EStatusCode charta::DocumentContext::WriteHeader(EPDFVersion inPDFVersion)
 {
     if (mObjectsContext != nullptr)
     {
@@ -137,7 +135,7 @@ static const std::string scPDFVersion15 = "PDF-1.5";
 static const std::string scPDFVersion16 = "PDF-1.6";
 static const std::string scPDFVersion17 = "PDF-1.7";
 
-void DocumentContext::WriteHeaderComment(EPDFVersion inPDFVersion)
+void charta::DocumentContext::WriteHeaderComment(EPDFVersion inPDFVersion)
 {
     switch (inPDFVersion)
     {
@@ -174,16 +172,16 @@ static const uint8_t scBinaryBytesArray[] = {
     '%',  0xBD, 0xBE,
     0xBC, '\r', '\n'}; // might imply that i need a newline writer here....an underlying primitives-token context
 
-void DocumentContext::Write4BinaryBytes()
+void charta::DocumentContext::Write4BinaryBytes()
 {
     charta::IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
     freeContextOutput->Write(scBinaryBytesArray, 6);
     mObjectsContext->EndFreeContext();
 }
 
-EStatusCode DocumentContext::FinalizeNewPDF()
+charta::EStatusCode charta::DocumentContext::FinalizeNewPDF()
 {
-    EStatusCode status;
+    charta::EStatusCode status;
     long long xrefTablePosition;
 
     // this will finalize writing all renments of the file, like xref, trailer and whatever objects still accumulating
@@ -232,7 +230,7 @@ EStatusCode DocumentContext::FinalizeNewPDF()
 }
 
 static const std::string scStartXref = "startxref";
-void DocumentContext::WriteXrefReference(long long inXrefTablePosition)
+void charta::DocumentContext::WriteXrefReference(long long inXrefTablePosition)
 {
     mObjectsContext->WriteKeyword(scStartXref);
     mObjectsContext->WriteInteger(inXrefTablePosition, eTokenSeparatorEndLine);
@@ -240,7 +238,7 @@ void DocumentContext::WriteXrefReference(long long inXrefTablePosition)
 
 static const uint8_t scEOF[] = {'%', '%', 'E', 'O', 'F'};
 
-void DocumentContext::WriteFinalEOF()
+void charta::DocumentContext::WriteFinalEOF()
 {
     charta::IByteWriterWithPosition *freeContextOutput = mObjectsContext->StartFreeContext();
     freeContextOutput->Write(scEOF, 5);
@@ -254,23 +252,23 @@ static const std::string scRoot = "Root";
 static const std::string scEncrypt = "Encrypt";
 static const std::string scInfo = "Info";
 static const std::string scID = "ID";
-EStatusCode DocumentContext::WriteTrailerDictionary()
+charta::EStatusCode charta::DocumentContext::WriteTrailerDictionary()
 {
     DictionaryContext *dictionaryContext;
 
     mObjectsContext->WriteKeyword(scTrailer);
     dictionaryContext = mObjectsContext->StartDictionary();
 
-    EStatusCode status = WriteTrailerDictionaryValues(dictionaryContext);
+    charta::EStatusCode status = WriteTrailerDictionaryValues(dictionaryContext);
 
     mObjectsContext->EndDictionary(dictionaryContext);
 
     return status;
 }
 
-EStatusCode DocumentContext::WriteTrailerDictionaryValues(DictionaryContext *inDictionaryContext)
+charta::EStatusCode charta::DocumentContext::WriteTrailerDictionaryValues(DictionaryContext *inDictionaryContext)
 {
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = eSuccess;
 
     do
     {
@@ -296,8 +294,9 @@ EStatusCode DocumentContext::WriteTrailerDictionaryValues(DictionaryContext *inD
         }
         else
         {
-            TRACE_LOG("DocumentContext::WriteTrailerDictionaryValues, Unexpected Failure. Didn't find catalog object "
-                      "while writing trailer");
+            TRACE_LOG(
+                "charta::DocumentContext::WriteTrailerDictionaryValues, Unexpected Failure. Didn't find catalog object "
+                "while writing trailer");
             status = charta::eFailure;
             break;
         }
@@ -354,7 +353,7 @@ static const std::string scTrapped = "Trapped";
 static const std::string scTrue = "True";
 static const std::string scFalse = "False";
 
-void DocumentContext::WriteInfoDictionary()
+void charta::DocumentContext::WriteInfoDictionary()
 {
     InfoDictionary &infoDictionary = mTrailerInformation.GetInfo();
     if (infoDictionary.IsEmpty())
@@ -431,7 +430,7 @@ void DocumentContext::WriteInfoDictionary()
     mObjectsContext->EndIndirectObject();
 }
 
-void DocumentContext::WriteEncryptionDictionary()
+void charta::DocumentContext::WriteEncryptionDictionary()
 {
     if (!mEncryptionHelper.IsDocumentEncrypted())
         return;
@@ -443,12 +442,12 @@ void DocumentContext::WriteEncryptionDictionary()
     mTrailerInformation.SetEncrypt(encryptionDictionaryID);
 }
 
-CatalogInformation &DocumentContext::GetCatalogInformation()
+CatalogInformation &charta::DocumentContext::GetCatalogInformation()
 {
     return mCatalogInformation;
 }
 
-void DocumentContext::SetupEncryption(const EncryptionOptions &inEncryptionOptions, EPDFVersion inPDFVersion)
+void charta::DocumentContext::SetupEncryption(const EncryptionOptions &inEncryptionOptions, EPDFVersion inPDFVersion)
 {
     mObjectsContext->SetEncryptionHelper(&mEncryptionHelper);
     if (inEncryptionOptions.ShouldEncrypt)
@@ -463,7 +462,7 @@ void DocumentContext::SetupEncryption(const EncryptionOptions &inEncryptionOptio
         mEncryptionHelper.SetupNoEncryption();
 }
 
-void DocumentContext::SetupEncryption(PDFParser *inModifiedFileParser)
+void charta::DocumentContext::SetupEncryption(PDFParser *inModifiedFileParser)
 {
     mObjectsContext->SetEncryptionHelper(&mEncryptionHelper);
 
@@ -475,7 +474,7 @@ void DocumentContext::SetupEncryption(PDFParser *inModifiedFileParser)
         mEncryptionHelper.SetupNoEncryption();
 }
 
-bool DocumentContext::SupportsEncryption()
+bool charta::DocumentContext::SupportsEncryption()
 {
     return mEncryptionHelper.SupportsEncryption();
 }
@@ -483,7 +482,7 @@ bool DocumentContext::SupportsEncryption()
 static const std::string scType = "Type";
 static const std::string scCatalog = "Catalog";
 static const std::string scPages = "Pages";
-EStatusCode DocumentContext::WriteCatalogObjectOfNewPDF()
+charta::EStatusCode charta::DocumentContext::WriteCatalogObjectOfNewPDF()
 {
     return WriteCatalogObject(
         DocumentHasNewPages()
@@ -491,10 +490,10 @@ EStatusCode DocumentContext::WriteCatalogObjectOfNewPDF()
             : ObjectReference());
 }
 
-EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTreeRootObjectReference,
-                                                IDocumentContextExtender *inModifiedFileCopyContext)
+charta::EStatusCode charta::DocumentContext::WriteCatalogObject(const ObjectReference &inPageTreeRootObjectReference,
+                                                                IDocumentContextExtender *inModifiedFileCopyContext)
 {
-    EStatusCode status = charta::eSuccess;
+    charta::EStatusCode status = charta::eSuccess;
     ObjectIDType catalogID = mObjectsContext->StartNewIndirectObject();
     mTrailerInformation.SetRoot(catalogID); // set the catalog reference as root in the trailer
 
@@ -514,7 +513,8 @@ EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTre
     {
         status = (*it)->OnCatalogWrite(&mCatalogInformation, catalogContext, mObjectsContext, this);
         if (status != charta::eSuccess)
-            TRACE_LOG("DocumentContext::WriteCatalogObject, unexpected failure. extender declared failure when writing "
+            TRACE_LOG("charta::DocumentContext::WriteCatalogObject, unexpected failure. extender declared failure when "
+                      "writing "
                       "catalog.");
     }
 
@@ -522,7 +522,8 @@ EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTre
     {
         status = inModifiedFileCopyContext->OnCatalogWrite(&mCatalogInformation, catalogContext, mObjectsContext, this);
         if (status != charta::eSuccess)
-            TRACE_LOG("DocumentContext::WriteCatalogObject, unexpected failure. Copying extender declared failure when "
+            TRACE_LOG("charta::DocumentContext::WriteCatalogObject, unexpected failure. Copying extender declared "
+                      "failure when "
                       "writing catalog.");
     }
 
@@ -531,7 +532,7 @@ EStatusCode DocumentContext::WriteCatalogObject(const ObjectReference &inPageTre
     return status;
 }
 
-void DocumentContext::WritePagesTree()
+void charta::DocumentContext::WritePagesTree()
 {
     PageTree *pageTreeRoot = mCatalogInformation.GetPageTreeRoot(mObjectsContext->GetInDirectObjectsRegistry());
 
@@ -544,7 +545,7 @@ static const std::string scParent = "Parent";
 
 // Recursion to write a page tree node. the return result is the page nodes count, for
 // accumulation at higher levels
-int DocumentContext::WritePageTree(PageTree *inPageTreeToWrite)
+int charta::DocumentContext::WritePageTree(PageTree *inPageTreeToWrite)
 {
     DictionaryContext *pagesTreeContext;
 
@@ -632,7 +633,7 @@ static const std::string scTrimBox = "TrimBox";
 static const std::string scArtBox = "ArtBox";
 static const std::string scContents = "Contents";
 
-EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
+EStatusCodeAndObjectIDType charta::DocumentContext::WritePage(PDFPage &inPage)
 {
     EStatusCodeAndObjectIDType result;
 
@@ -700,7 +701,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
         result.first = WriteResourcesDictionary(inPage.GetResourcesDictionary());
         if (result.first != charta::eSuccess)
         {
-            TRACE_LOG("DocumentContext::WritePage, failed to write resources dictionary");
+            TRACE_LOG("charta::DocumentContext::WritePage, failed to write resources dictionary");
             break;
         }
 
@@ -745,15 +746,16 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
             result.first = (*it)->OnPageWrite(inPage, pageContext, mObjectsContext, this);
             if (result.first != charta::eSuccess)
             {
-                TRACE_LOG(
-                    "DocumentContext::WritePage, unexpected failure. extender declared failure when writing page.");
+                TRACE_LOG("charta::DocumentContext::WritePage, unexpected failure. extender declared failure when "
+                          "writing page.");
                 break;
             }
         }
         result.first = mObjectsContext->EndDictionary(pageContext);
         if (result.first != charta::eSuccess)
         {
-            TRACE_LOG("DocumentContext::WritePage, unexpected failure. Failed to end dictionary in page write.");
+            TRACE_LOG(
+                "charta::DocumentContext::WritePage, unexpected failure. Failed to end dictionary in page write.");
             break;
         }
         mObjectsContext->EndIndirectObject();
@@ -780,7 +782,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePage(PDFPage &inPage)
     return result;
 }
 
-EStatusCodeAndObjectIDType DocumentContext::WritePageAndRelease(PDFPage *inPage)
+EStatusCodeAndObjectIDType charta::DocumentContext::WritePageAndRelease(PDFPage *inPage)
 {
     EStatusCodeAndObjectIDType status = WritePage(*inPage);
     delete inPage;
@@ -788,7 +790,7 @@ EStatusCodeAndObjectIDType DocumentContext::WritePageAndRelease(PDFPage *inPage)
 }
 
 static const std::string scUnknown = "Unknown";
-std::string DocumentContext::GenerateMD5IDForFile()
+std::string charta::DocumentContext::GenerateMD5IDForFile()
 {
     MD5Generator md5;
 
@@ -825,12 +827,12 @@ std::string DocumentContext::GenerateMD5IDForFile()
     return md5.ToStringAsString();
 }
 
-bool DocumentContext::HasContentContext(PDFPage &inPage)
+bool charta::DocumentContext::HasContentContext(PDFPage &inPage)
 {
     return inPage.GetAssociatedContentContext() != nullptr;
 }
 
-PageContentContext *DocumentContext::StartPageContentContext(PDFPage &inPage)
+PageContentContext *charta::DocumentContext::StartPageContentContext(PDFPage &inPage)
 {
     if (inPage.GetAssociatedContentContext() == nullptr)
     {
@@ -839,14 +841,14 @@ PageContentContext *DocumentContext::StartPageContentContext(PDFPage &inPage)
     return inPage.GetAssociatedContentContext();
 }
 
-EStatusCode DocumentContext::PausePageContentContext(PageContentContext *inPageContext)
+charta::EStatusCode charta::DocumentContext::PausePageContentContext(PageContentContext *inPageContext)
 {
     return inPageContext->FinalizeCurrentStream();
 }
 
-EStatusCode DocumentContext::EndPageContentContext(PageContentContext *inPageContext)
+charta::EStatusCode charta::DocumentContext::EndPageContentContext(PageContentContext *inPageContext)
 {
-    EStatusCode status = inPageContext->FinalizeCurrentStream();
+    charta::EStatusCode status = inPageContext->FinalizeCurrentStream();
     inPageContext->GetAssociatedPage().DisassociateContentContext();
     delete inPageContext;
     return status;
@@ -861,9 +863,10 @@ static const std::string scYStep = "YStep";
 static const std::string scBBox = "BBox";
 static const std::string scMatrix = "Matrix";
 
-PDFTiledPattern *DocumentContext::StartTiledPattern(int inPaintType, int inTilingType,
-                                                    const PDFRectangle &inBoundingBox, double inXStep, double inYStep,
-                                                    ObjectIDType inObjectID, const double *inMatrix)
+PDFTiledPattern *charta::DocumentContext::StartTiledPattern(int inPaintType, int inTilingType,
+                                                            const PDFRectangle &inBoundingBox, double inXStep,
+                                                            double inYStep, ObjectIDType inObjectID,
+                                                            const double *inMatrix)
 {
     PDFTiledPattern *aPatternObject = nullptr;
     do
@@ -923,9 +926,9 @@ PDFTiledPattern *DocumentContext::StartTiledPattern(int inPaintType, int inTilin
     return aPatternObject;
 }
 
-PDFTiledPattern *DocumentContext::StartTiledPattern(int inPaintType, int inTilingType,
-                                                    const PDFRectangle &inBoundingBox, double inXStep, double inYStep,
-                                                    const double *inMatrix)
+PDFTiledPattern *charta::DocumentContext::StartTiledPattern(int inPaintType, int inTilingType,
+                                                            const PDFRectangle &inBoundingBox, double inXStep,
+                                                            double inYStep, const double *inMatrix)
 {
     ObjectIDType objectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
     return StartTiledPattern(inPaintType, inTilingType, inBoundingBox, inXStep, inYStep, objectID, inMatrix);
@@ -939,8 +942,9 @@ static const std::string scGroup = "Group";
 static const std::string scS = "S";
 static const std::string scTransparency = "Transparency";
 
-PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBoundingBox, ObjectIDType inFormXObjectID,
-                                                  const double *inMatrix, const bool inUseTransparencyGroup)
+PDFFormXObject *charta::DocumentContext::StartFormXObject(const PDFRectangle &inBoundingBox,
+                                                          ObjectIDType inFormXObjectID, const double *inMatrix,
+                                                          const bool inUseTransparencyGroup)
 {
     PDFFormXObject *aFormXObject = nullptr;
     do
@@ -990,14 +994,15 @@ PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBounding
         xobjectContext->WriteNewObjectReferenceValue(formXObjectResourcesDictionaryID);
 
         auto it = mExtenders.begin();
-        EStatusCode status = charta::eSuccess;
+        charta::EStatusCode status = charta::eSuccess;
         for (; it != mExtenders.end() && charta::eSuccess == status; ++it)
         {
             if ((*it)->OnFormXObjectWrite(inFormXObjectID, formXObjectResourcesDictionaryID, xobjectContext,
                                           mObjectsContext, this) != charta::eSuccess)
             {
-                TRACE_LOG("DocumentContext::StartFormXObject, unexpected failure. extender declared failure when "
-                          "writing form xobject.");
+                TRACE_LOG(
+                    "charta::DocumentContext::StartFormXObject, unexpected failure. extender declared failure when "
+                    "writing form xobject.");
                 status = charta::eFailure;
                 break;
             }
@@ -1013,14 +1018,14 @@ PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBounding
     return aFormXObject;
 }
 
-PDFFormXObject *DocumentContext::StartFormXObject(const PDFRectangle &inBoundingBox, const double *inMatrix,
-                                                  const bool inUseTransparencyGroup)
+PDFFormXObject *charta::DocumentContext::StartFormXObject(const PDFRectangle &inBoundingBox, const double *inMatrix,
+                                                          const bool inUseTransparencyGroup)
 {
     ObjectIDType formXObjectID = mObjectsContext->GetInDirectObjectsRegistry().AllocateNewObjectID();
     return StartFormXObject(inBoundingBox, formXObjectID, inMatrix, inUseTransparencyGroup);
 }
 
-EStatusCode DocumentContext::EndFormXObjectNoRelease(PDFFormXObject *inFormXObject)
+charta::EStatusCode charta::DocumentContext::EndFormXObjectNoRelease(PDFFormXObject *inFormXObject)
 {
     mObjectsContext->EndPDFStream(inFormXObject->GetContentStream());
 
@@ -1032,7 +1037,7 @@ EStatusCode DocumentContext::EndFormXObjectNoRelease(PDFFormXObject *inFormXObje
     // now write writing tasks
     auto it = mFormEndTasks.find(inFormXObject);
 
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = eSuccess;
     if (it != mFormEndTasks.end())
     {
         auto itTasks = it->second.begin();
@@ -1049,7 +1054,7 @@ EStatusCode DocumentContext::EndFormXObjectNoRelease(PDFFormXObject *inFormXObje
     return status;
 }
 
-EStatusCode DocumentContext::EndTiledPattern(PDFTiledPattern *inTiledPattern)
+charta::EStatusCode charta::DocumentContext::EndTiledPattern(PDFTiledPattern *inTiledPattern)
 {
     mObjectsContext->EndPDFStream(inTiledPattern->GetContentStream());
 
@@ -1061,7 +1066,7 @@ EStatusCode DocumentContext::EndTiledPattern(PDFTiledPattern *inTiledPattern)
     // now write writing tasks
     auto it = mTiledPatternEndTasks.find(inTiledPattern);
 
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = eSuccess;
     if (it != mTiledPatternEndTasks.end())
     {
         auto itTasks = it->second.begin();
@@ -1078,22 +1083,22 @@ EStatusCode DocumentContext::EndTiledPattern(PDFTiledPattern *inTiledPattern)
     return status;
 }
 
-EStatusCode DocumentContext::EndTiledPatternAndRelease(PDFTiledPattern *inTiledPattern)
+charta::EStatusCode charta::DocumentContext::EndTiledPatternAndRelease(PDFTiledPattern *inTiledPattern)
 {
-    EStatusCode status = EndTiledPattern(inTiledPattern);
+    charta::EStatusCode status = EndTiledPattern(inTiledPattern);
     delete inTiledPattern;
 
     return status;
 }
 
-EStatusCode DocumentContext::EndFormXObject(PDFFormXObject *inFormXObject)
+charta::EStatusCode charta::DocumentContext::EndFormXObject(PDFFormXObject *inFormXObject)
 {
     return EndFormXObjectNoRelease(inFormXObject);
 }
 
-EStatusCode DocumentContext::EndFormXObjectAndRelease(PDFFormXObject *inFormXObject)
+charta::EStatusCode charta::DocumentContext::EndFormXObjectAndRelease(PDFFormXObject *inFormXObject)
 {
-    EStatusCode status = EndFormXObjectNoRelease(inFormXObject);
+    charta::EStatusCode status = EndFormXObjectNoRelease(inFormXObject);
     delete inFormXObject; // will also delete the stream becuase the form XObject owns it
 
     return status;
@@ -1107,9 +1112,9 @@ static const std::string scColorSpaces = "ColorSpace";
 static const std::string scPatterns = "Pattern";
 static const std::string scShadings = "Shading";
 static const std::string scProperties = "Properties";
-EStatusCode DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inResourcesDictionary)
+charta::EStatusCode charta::DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inResourcesDictionary)
 {
-    EStatusCode status = charta::eSuccess;
+    charta::EStatusCode status = charta::eSuccess;
 
     do
     {
@@ -1177,8 +1182,9 @@ EStatusCode DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inRes
                 (*itExtenders)->OnResourcesWrite(&(inResourcesDictionary), resourcesContext, mObjectsContext, this);
             if (status != charta::eSuccess)
             {
-                TRACE_LOG("DocumentContext::WriteResourcesDictionary, unexpected failure. extender declared failure "
-                          "when writing resources.");
+                TRACE_LOG(
+                    "charta::DocumentContext::WriteResourcesDictionary, unexpected failure. extender declared failure "
+                    "when writing resources.");
                 break;
             }
         }
@@ -1189,12 +1195,12 @@ EStatusCode DocumentContext::WriteResourcesDictionary(ResourcesDictionary &inRes
     return status;
 }
 
-EStatusCode DocumentContext::WriteResourceDictionary(ResourcesDictionary *inResourcesDictionary,
-                                                     DictionaryContext *inResourcesCategoryDictionary,
-                                                     const std::string &inResourceDictionaryLabel,
-                                                     MapIterator<ObjectIDTypeToStringMap> inMapping)
+charta::EStatusCode charta::DocumentContext::WriteResourceDictionary(ResourcesDictionary *inResourcesDictionary,
+                                                                     DictionaryContext *inResourcesCategoryDictionary,
+                                                                     const std::string &inResourceDictionaryLabel,
+                                                                     MapIterator<ObjectIDTypeToStringMap> inMapping)
 {
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = eSuccess;
 
     auto itWriterTasks =
         mResourcesTasks.find(ResourcesDictionaryAndString(inResourcesDictionary, inResourceDictionaryLabel));
@@ -1231,14 +1237,15 @@ EStatusCode DocumentContext::WriteResourceDictionary(ResourcesDictionary *inReso
             }
 
             auto it = mExtenders.begin();
-            EStatusCode status = charta::eSuccess;
+            charta::EStatusCode status = charta::eSuccess;
             for (; it != mExtenders.end() && eSuccess == status; ++it)
             {
                 status =
                     (*it)->OnResourceDictionaryWrite(resourceContext, inResourceDictionaryLabel, mObjectsContext, this);
                 if (status != charta::eSuccess)
                 {
-                    TRACE_LOG("DocumentContext::WriteResourceDictionary, unexpected failure. extender declared failure "
+                    TRACE_LOG("charta::DocumentContext::WriteResourceDictionary, unexpected failure. extender declared "
+                              "failure "
                               "when writing a resource dictionary.");
                     break;
                 }
@@ -1252,99 +1259,99 @@ EStatusCode DocumentContext::WriteResourceDictionary(ResourcesDictionary *inReso
     return status;
 }
 
-bool DocumentContext::IsIdentityMatrix(const double *inMatrix)
+bool charta::DocumentContext::IsIdentityMatrix(const double *inMatrix)
 {
     return inMatrix[0] == 1 && inMatrix[1] == 0 && inMatrix[2] == 0 && inMatrix[3] == 1 && inMatrix[4] == 0 &&
            inMatrix[5] == 0;
 }
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath)
+PDFImageXObject *charta::DocumentContext::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGFile(inJPGFilePath);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGFile(inJPGFilePath);
 }
 
-#ifndef PDFHUMMUS_NO_PNG
-PDFFormXObject *DocumentContext::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
-                                                                ObjectIDType inFormXObjectId)
+#ifndef LIBCHARTA_NO_PNG
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream,
+                                                                        ObjectIDType inFormXObjectId)
 {
     return mPNGImageHandler.CreateFormXObjectFromPNGStream(inPNGStream, inFormXObjectId);
 }
 #endif
 
-JPEGImageHandler &DocumentContext::GetJPEGImageHandler()
+charta::JPEGImageHandler &charta::DocumentContext::GetJPEGImageHandler()
 {
     return mJPEGImageHandler;
 }
 
-#ifndef PDFHUMMUS_NO_TIFF
-TIFFImageHandler &DocumentContext::GetTIFFImageHandler()
+#ifndef LIBCHARTA_NO_TIFF
+charta::TIFFImageHandler &charta::DocumentContext::GetTIFFImageHandler()
 {
     return mTIFFImageHandler;
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
-                                                               const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
+                                                                       const TIFFUsageParameters &inTIFFUsageParameters)
 {
 
     return mTIFFImageHandler.CreateFormXObjectFromTIFFFile(inTIFFFilePath, inTIFFUsageParameters);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
-                                                               ObjectIDType inFormXObjectID,
-                                                               const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
+                                                                       ObjectIDType inFormXObjectID,
+                                                                       const TIFFUsageParameters &inTIFFUsageParameters)
 {
     return mTIFFImageHandler.CreateFormXObjectFromTIFFFile(inTIFFFilePath, inFormXObjectID, inTIFFUsageParameters);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                 const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromTIFFStream(
+    charta::IByteReaderWithPosition *inTIFFStream, const TIFFUsageParameters &inTIFFUsageParameters)
 {
     return mTIFFImageHandler.CreateFormXObjectFromTIFFStream(inTIFFStream, inTIFFUsageParameters);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromTIFFStream(charta::IByteReaderWithPosition *inTIFFStream,
-                                                                 ObjectIDType inFormXObjectID,
-                                                                 const TIFFUsageParameters &inTIFFUsageParameters)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromTIFFStream(
+    charta::IByteReaderWithPosition *inTIFFStream, ObjectIDType inFormXObjectID,
+    const TIFFUsageParameters &inTIFFUsageParameters)
 {
     return mTIFFImageHandler.CreateFormXObjectFromTIFFStream(inTIFFStream, inFormXObjectID, inTIFFUsageParameters);
 }
 
 #endif
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath,
-                                                                ObjectIDType inImageXObjectID)
+PDFImageXObject *charta::DocumentContext::CreateImageXObjectFromJPGFile(const std::string &inJPGFilePath,
+                                                                        ObjectIDType inImageXObjectID)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGFile(inJPGFilePath, inImageXObjectID);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath,
-                                                              ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromJPGFile(const std::string &inJPGFilePath,
+                                                                      ObjectIDType inFormXObjectID)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGFile(inJPGFilePath, inFormXObjectID);
 }
 
-PDFUsedFont *DocumentContext::GetFontForFile(const std::string &inFontFilePath, long inFontIndex)
+PDFUsedFont *charta::DocumentContext::GetFontForFile(const std::string &inFontFilePath, long inFontIndex)
 {
     return mUsedFontsRepository.GetFontForFile(inFontFilePath, inFontIndex);
 }
 
-EStatusCode DocumentContext::WriteUsedFontsDefinitions()
+charta::EStatusCode charta::DocumentContext::WriteUsedFontsDefinitions()
 {
     return mUsedFontsRepository.WriteUsedFontsDefinitions();
 }
 
-PDFUsedFont *DocumentContext::GetFontForFile(const std::string &inFontFilePath,
-                                             const std::string &inAdditionalMeticsFilePath, long inFontIndex)
+PDFUsedFont *charta::DocumentContext::GetFontForFile(const std::string &inFontFilePath,
+                                                     const std::string &inAdditionalMeticsFilePath, long inFontIndex)
 {
     return mUsedFontsRepository.GetFontForFile(inFontFilePath, inAdditionalMeticsFilePath, inFontIndex);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::CreateFormXObjectsFromPDF(
     const std::string &inPDFFilePath, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
     EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
@@ -1354,7 +1361,7 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
                                                          inCopyAdditionalObjects, inPredefinedFormIDs);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::CreateFormXObjectsFromPDF(
     const std::string &inPDFFilePath, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
     const PDFRectangle &inCropBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
@@ -1363,18 +1370,17 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
                                                          inTransformationMatrix, inCopyAdditionalObjects,
                                                          inPredefinedFormIDs);
 }
-EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(const std::string &inPDFFilePath,
-                                                                      const PDFParsingOptions &inParsingOptions,
-                                                                      const PDFPageRange &inPageRange,
-                                                                      const ObjectIDTypeList &inCopyAdditionalObjects)
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::AppendPDFPagesFromPDF(
+    const std::string &inPDFFilePath, const PDFParsingOptions &inParsingOptions, const PDFPageRange &inPageRange,
+    const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     return mPDFDocumentHandler.AppendPDFPagesFromPDF(inPDFFilePath, inParsingOptions, inPageRange,
                                                      inCopyAdditionalObjects);
 }
 
-EStatusCode DocumentContext::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
+charta::EStatusCode charta::DocumentContext::WriteState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
-    EStatusCode status;
+    charta::EStatusCode status;
 
     do
     {
@@ -1435,7 +1441,7 @@ EStatusCode DocumentContext::WriteState(ObjectsContext *inStateWriter, ObjectIDT
     return status;
 }
 
-void DocumentContext::WriteReferenceState(ObjectsContext *inStateWriter, const ObjectReference &inReference)
+void charta::DocumentContext::WriteReferenceState(ObjectsContext *inStateWriter, const ObjectReference &inReference)
 {
     DictionaryContext *referenceContext = inStateWriter->StartDictionary();
 
@@ -1448,7 +1454,7 @@ void DocumentContext::WriteReferenceState(ObjectsContext *inStateWriter, const O
     inStateWriter->EndDictionary(referenceContext);
 }
 
-void DocumentContext::WriteTrailerState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
+void charta::DocumentContext::WriteTrailerState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
     inStateWriter->StartNewIndirectObject(inObjectID);
 
@@ -1479,7 +1485,7 @@ void DocumentContext::WriteTrailerState(ObjectsContext *inStateWriter, ObjectIDT
     WriteTrailerInfoState(inStateWriter, infoDictionaryID);
 }
 
-void DocumentContext::WriteTrailerInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
+void charta::DocumentContext::WriteTrailerInfoState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
     inStateWriter->StartNewIndirectObject(inObjectID);
     DictionaryContext *infoDictionary = inStateWriter->StartDictionary();
@@ -1529,7 +1535,7 @@ void DocumentContext::WriteTrailerInfoState(ObjectsContext *inStateWriter, Objec
     inStateWriter->EndIndirectObject();
 }
 
-void DocumentContext::WriteDateState(ObjectsContext *inStateWriter, const PDFDate &inDate)
+void charta::DocumentContext::WriteDateState(ObjectsContext *inStateWriter, const PDFDate &inDate)
 {
     DictionaryContext *dateDictionary = inStateWriter->StartDictionary();
 
@@ -1566,7 +1572,7 @@ void DocumentContext::WriteDateState(ObjectsContext *inStateWriter, const PDFDat
     inStateWriter->EndDictionary(dateDictionary);
 }
 
-void DocumentContext::WriteCatalogInformationState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
+void charta::DocumentContext::WriteCatalogInformationState(ObjectsContext *inStateWriter, ObjectIDType inObjectID)
 {
     ObjectIDType rootNodeID = 0;
     if (mCatalogInformation.GetCurrentPageTreeNode() != nullptr)
@@ -1595,7 +1601,8 @@ void DocumentContext::WriteCatalogInformationState(ObjectsContext *inStateWriter
     inStateWriter->EndIndirectObject();
 }
 
-void DocumentContext::WritePageTreeState(ObjectsContext *inStateWriter, ObjectIDType inObjectID, PageTree *inPageTree)
+void charta::DocumentContext::WritePageTreeState(ObjectsContext *inStateWriter, ObjectIDType inObjectID,
+                                                 PageTree *inPageTree)
 {
     ObjectIDTypeList kidsObjectIDs;
 
@@ -1649,7 +1656,7 @@ void DocumentContext::WritePageTreeState(ObjectsContext *inStateWriter, ObjectID
     }
 }
 
-EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
+charta::EStatusCode charta::DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType inObjectID)
 {
     PDFObjectCastPtr<charta::PDFDictionary> documentState(inStateReader->ParseNewObject(inObjectID));
 
@@ -1678,7 +1685,7 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
 
     PDFObjectCastPtr<charta::PDFIndirectObjectReference> usedFontsInformationStateID(
         documentState->QueryDirectObject("mUsedFontsRepository"));
-    EStatusCode status = mUsedFontsRepository.ReadState(inStateReader, usedFontsInformationStateID->mObjectID);
+    charta::EStatusCode status = mUsedFontsRepository.ReadState(inStateReader, usedFontsInformationStateID->mObjectID);
     if (status != eSuccess)
         return status;
 
@@ -1687,8 +1694,8 @@ EStatusCode DocumentContext::ReadState(PDFParser *inStateReader, ObjectIDType in
     return mEncryptionHelper.ReadState(inStateReader, encrytpionStateID->mObjectID);
 }
 
-void DocumentContext::ReadTrailerState(PDFParser *inStateReader,
-                                       const std::shared_ptr<charta::PDFDictionary> &inTrailerState)
+void charta::DocumentContext::ReadTrailerState(PDFParser *inStateReader,
+                                               const std::shared_ptr<charta::PDFDictionary> &inTrailerState)
 {
     PDFObjectCastPtr<PDFInteger> prevState(inTrailerState->QueryDirectObject("mPrev"));
     mTrailerInformation.SetPrev(prevState->GetValue());
@@ -1709,7 +1716,8 @@ void DocumentContext::ReadTrailerState(PDFParser *inStateReader,
     mTrailerInformation.SetInfoDictionaryReference(GetReferenceFromState(infoDictionaryReferenceState));
 }
 
-ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<charta::PDFDictionary> &inDictionary)
+ObjectReference charta::DocumentContext::GetReferenceFromState(
+    const std::shared_ptr<charta::PDFDictionary> &inDictionary)
 {
     PDFObjectCastPtr<PDFInteger> objectID(inDictionary->QueryDirectObject("ObjectID"));
     PDFObjectCastPtr<PDFInteger> generationNumber(inDictionary->QueryDirectObject("GenerationNumber"));
@@ -1717,8 +1725,8 @@ ObjectReference DocumentContext::GetReferenceFromState(const std::shared_ptr<cha
     return ObjectReference((ObjectIDType)(objectID->GetValue()), (unsigned long)generationNumber->GetValue());
 }
 
-void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
-                                           const std::shared_ptr<charta::PDFDictionary> &inTrailerInfoState)
+void charta::DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
+                                                   const std::shared_ptr<charta::PDFDictionary> &inTrailerInfoState)
 {
     PDFObjectCastPtr<charta::PDFLiteralString> titleState(inTrailerInfoState->QueryDirectObject("Title"));
     mTrailerInformation.GetInfo().Title = titleState->GetValue();
@@ -1765,7 +1773,7 @@ void DocumentContext::ReadTrailerInfoState(PDFParser * /*inStateReader*/,
     }
 }
 
-void DocumentContext::ReadDateState(const std::shared_ptr<charta::PDFDictionary> &inDateState, PDFDate &inDate)
+void charta::DocumentContext::ReadDateState(const std::shared_ptr<charta::PDFDictionary> &inDateState, PDFDate &inDate)
 {
     PDFObjectCastPtr<PDFInteger> yearState(inDateState->QueryDirectObject("Year"));
     inDate.Year = (int)yearState->GetValue();
@@ -1795,7 +1803,7 @@ void DocumentContext::ReadDateState(const std::shared_ptr<charta::PDFDictionary>
     inDate.MinuteFromUTC = (int)minuteFromUTCState->GetValue();
 }
 
-void DocumentContext::ReadCatalogInformationState(
+void charta::DocumentContext::ReadCatalogInformationState(
     PDFParser *inStateReader, const std::shared_ptr<charta::PDFDictionary> &inCatalogInformationState)
 {
     PDFObjectCastPtr<charta::PDFIndirectObjectReference> pageTreeRootState(
@@ -1825,9 +1833,9 @@ void DocumentContext::ReadCatalogInformationState(
     ReadPageTreeState(inStateReader, pageTreeState, rootNode);
 }
 
-void DocumentContext::ReadPageTreeState(PDFParser *inStateReader,
-                                        const std::shared_ptr<charta::PDFDictionary> &inPageTreeState,
-                                        PageTree *inPageTree)
+void charta::DocumentContext::ReadPageTreeState(PDFParser *inStateReader,
+                                                const std::shared_ptr<charta::PDFDictionary> &inPageTreeState,
+                                                PageTree *inPageTree)
 {
     PDFObjectCastPtr<charta::PDFBoolean> isLeafParentState(inPageTreeState->QueryDirectObject("mIsLeafParent"));
     bool isLeafParent = isLeafParentState->GetValue();
@@ -1867,8 +1875,8 @@ void DocumentContext::ReadPageTreeState(PDFParser *inStateReader,
     }
 }
 
-std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(const std::string &inFilePath,
-                                                                                    const PDFParsingOptions &inOptions)
+std::shared_ptr<charta::PDFDocumentCopyingContext> charta::DocumentContext::CreatePDFCopyingContext(
+    const std::string &inFilePath, const PDFParsingOptions &inOptions)
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
@@ -1879,7 +1887,8 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
     return context;
 }
 
-EStatusCode DocumentContext::AttachURLLinktoCurrentPage(const std::string &inURL, const PDFRectangle &inLinkClickArea)
+charta::EStatusCode charta::DocumentContext::AttachURLLinktoCurrentPage(const std::string &inURL,
+                                                                        const PDFRectangle &inLinkClickArea)
 {
     EStatusCodeAndObjectIDType writeResult = WriteAnnotationAndLinkForURL(inURL, inLinkClickArea);
 
@@ -1899,8 +1908,9 @@ static const std::string scA = "A";
 static const std::string scBS = "BS";
 static const std::string scAction = "Action";
 static const std::string scURI = "URI";
-EStatusCodeAndObjectIDType DocumentContext::WriteAnnotationAndLinkForURL(const std::string &inURL,
-                                                                         const PDFRectangle &inLinkClickArea)
+
+EStatusCodeAndObjectIDType charta::DocumentContext::WriteAnnotationAndLinkForURL(const std::string &inURL,
+                                                                                 const PDFRectangle &inLinkClickArea)
 {
     EStatusCodeAndObjectIDType result(charta::eFailure, 0);
 
@@ -1911,9 +1921,10 @@ EStatusCodeAndObjectIDType DocumentContext::WriteAnnotationAndLinkForURL(const s
         BoolAndString encodedResult = encoding.Encode(inURL);
         if (!encodedResult.first)
         {
-            TRACE_LOG1("DocumentContext::WriteAnnotationAndLinkForURL, unable to encode string to Ascii7. make sure "
-                       "that all charachters are valid URLs [should be ascii 7 compatible]. URL - %s",
-                       inURL.c_str());
+            TRACE_LOG1(
+                "charta::DocumentContext::WriteAnnotationAndLinkForURL, unable to encode string to Ascii7. make sure "
+                "that all charachters are valid URLs [should be ascii 7 compatible]. URL - %s",
+                inURL.c_str());
             break;
         }
 
@@ -1970,48 +1981,48 @@ EStatusCodeAndObjectIDType DocumentContext::WriteAnnotationAndLinkForURL(const s
     return result;
 }
 
-void DocumentContext::RegisterAnnotationReferenceForNextPageWrite(ObjectIDType inAnnotationReference)
+void charta::DocumentContext::RegisterAnnotationReferenceForNextPageWrite(ObjectIDType inAnnotationReference)
 {
     mAnnotations.insert(inAnnotationReference);
 }
 
-ObjectIDTypeSet &DocumentContext::GetAnnotations()
+ObjectIDTypeSet &charta::DocumentContext::GetAnnotations()
 {
     return mAnnotations;
 }
 
-EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
-                                                 const PDFParsingOptions &inParsingOptions,
-                                                 const PDFPageRange &inPageRange,
-                                                 const ObjectIDTypeList &inCopyAdditionalObjects)
+charta::EStatusCode charta::DocumentContext::MergePDFPagesToPage(PDFPage &inPage, const std::string &inPDFFilePath,
+                                                                 const PDFParsingOptions &inParsingOptions,
+                                                                 const PDFPageRange &inPageRange,
+                                                                 const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     return mPDFDocumentHandler.MergePDFPagesToPage(inPage, inPDFFilePath, inParsingOptions, inPageRange,
                                                    inCopyAdditionalObjects);
 }
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
+PDFImageXObject *charta::DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGStream(inJPGStream);
 }
 
-PDFImageXObject *DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
-                                                                  ObjectIDType inImageXObjectID)
+PDFImageXObject *charta::DocumentContext::CreateImageXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+                                                                          ObjectIDType inImageXObjectID)
 {
     return mJPEGImageHandler.CreateImageXObjectFromJPGStream(inJPGStream, inImageXObjectID);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGStream(inJPGStream);
 }
 
-PDFFormXObject *DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
-                                                                ObjectIDType inFormXObjectID)
+PDFFormXObject *charta::DocumentContext::CreateFormXObjectFromJPGStream(charta::IByteReaderWithPosition *inJPGStream,
+                                                                        ObjectIDType inFormXObjectID)
 {
     return mJPEGImageHandler.CreateFormXObjectFromJPGStream(inJPGStream, inFormXObjectID);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::CreateFormXObjectsFromPDF(
     charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
     const PDFPageRange &inPageRange, EPDFPageBox inPageBoxToUseAsFormBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
@@ -2021,7 +2032,7 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
                                                          inCopyAdditionalObjects, inPredefinedFormIDs);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::CreateFormXObjectsFromPDF(
     charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
     const PDFPageRange &inPageRange, const PDFRectangle &inCropBox, const double *inTransformationMatrix,
     const ObjectIDTypeList &inCopyAdditionalObjects, const ObjectIDTypeList &inPredefinedFormIDs)
@@ -2031,25 +2042,25 @@ EStatusCodeAndObjectIDTypeList DocumentContext::CreateFormXObjectsFromPDF(
                                                          inPredefinedFormIDs);
 }
 
-EStatusCodeAndObjectIDTypeList DocumentContext::AppendPDFPagesFromPDF(charta::IByteReaderWithPosition *inPDFStream,
-                                                                      const PDFParsingOptions &inParsingOptions,
-                                                                      const PDFPageRange &inPageRange,
-                                                                      const ObjectIDTypeList &inCopyAdditionalObjects)
+EStatusCodeAndObjectIDTypeList charta::DocumentContext::AppendPDFPagesFromPDF(
+    charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inParsingOptions,
+    const PDFPageRange &inPageRange, const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     return mPDFDocumentHandler.AppendPDFPagesFromPDF(inPDFStream, inParsingOptions, inPageRange,
                                                      inCopyAdditionalObjects);
 }
 
-EStatusCode DocumentContext::MergePDFPagesToPage(PDFPage &inPage, charta::IByteReaderWithPosition *inPDFStream,
-                                                 const PDFParsingOptions &inParsingOptions,
-                                                 const PDFPageRange &inPageRange,
-                                                 const ObjectIDTypeList &inCopyAdditionalObjects)
+charta::EStatusCode charta::DocumentContext::MergePDFPagesToPage(PDFPage &inPage,
+                                                                 charta::IByteReaderWithPosition *inPDFStream,
+                                                                 const PDFParsingOptions &inParsingOptions,
+                                                                 const PDFPageRange &inPageRange,
+                                                                 const ObjectIDTypeList &inCopyAdditionalObjects)
 {
     return mPDFDocumentHandler.MergePDFPagesToPage(inPage, inPDFStream, inParsingOptions, inPageRange,
                                                    inCopyAdditionalObjects);
 }
 
-std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(
+std::shared_ptr<charta::PDFDocumentCopyingContext> charta::DocumentContext::CreatePDFCopyingContext(
     charta::IByteReaderWithPosition *inPDFStream, const PDFParsingOptions &inOptions)
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
@@ -2061,23 +2072,22 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
     return context;
 }
 
-void DocumentContext::Cleanup()
+void charta::DocumentContext::Cleanup()
 {
     // DO NOT NULL MOBJECTSCONTEXT. EVER
 
     mTrailerInformation.Reset();
     mCatalogInformation.Reset();
     mJPEGImageHandler.Reset();
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     mTIFFImageHandler.Reset();
 #endif
     mUsedFontsRepository.Reset();
     mOutputFilePath.clear();
     mExtenders.clear();
     mAnnotations.clear();
-    auto it = mCopyingContexts.begin();
-    for (; it != mCopyingContexts.end(); ++it)
-        (*it)->ReleaseDocumentContextReference();
+    for (auto &copyingContext : mCopyingContexts)
+        copyingContext->ReleaseDocumentContextReference();
     mCopyingContexts.clear();
     mModifiedDocumentIDExists = false;
 
@@ -2092,13 +2102,11 @@ void DocumentContext::Cleanup()
 
     mResourcesTasks.clear();
 
-    auto itFormEnd = mFormEndTasks.begin();
-
-    for (; itFormEnd != mFormEndTasks.end(); ++itFormEnd)
+    for (auto &formEndTask : mFormEndTasks)
     {
-        auto itEndWritingTasks = itFormEnd->second.begin();
-        for (; itEndWritingTasks != itFormEnd->second.end(); ++itEndWritingTasks)
-            delete *itEndWritingTasks;
+        auto itEndWritingTasks = formEndTask.second;
+        for (auto &endWritingTask : itEndWritingTasks)
+            delete endWritingTask;
     }
     mFormEndTasks.clear();
 
@@ -2119,23 +2127,23 @@ void DocumentContext::Cleanup()
     mTiledPatternEndTasks.clear();
 }
 
-void DocumentContext::SetParserExtender(IPDFParserExtender *inParserExtender)
+void charta::DocumentContext::SetParserExtender(charta::IPDFParserExtender *inParserExtender)
 {
     mParserExtender = inParserExtender;
     mPDFDocumentHandler.SetParserExtender(inParserExtender);
 }
 
-void DocumentContext::RegisterCopyingContext(PDFDocumentCopyingContext *inCopyingContext)
+void charta::DocumentContext::RegisterCopyingContext(PDFDocumentCopyingContext *inCopyingContext)
 {
     mCopyingContexts.insert(inCopyingContext);
 }
 
-void DocumentContext::UnRegisterCopyingContext(PDFDocumentCopyingContext *inCopyingContext)
+void charta::DocumentContext::UnRegisterCopyingContext(PDFDocumentCopyingContext *inCopyingContext)
 {
     mCopyingContexts.erase(inCopyingContext);
 }
 
-EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
+charta::EStatusCode charta::DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
 {
     // setup trailer and save original document ID
 
@@ -2171,7 +2179,7 @@ EStatusCode DocumentContext::SetupModifiedFile(PDFParser *inModifiedFileParser)
 class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
 {
   public:
-    ModifiedDocCatalogWriterExtension(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
+    ModifiedDocCatalogWriterExtension(std::shared_ptr<charta::PDFDocumentCopyingContext> inCopyingContext,
                                       bool inRequiredVersionUpdate, EPDFVersion inPDFVersion)
     {
         mModifiedDocumentCopyingContext = inCopyingContext;
@@ -2205,7 +2213,7 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
         if (!catalogDict)
         {
             // no catalog. not cool but possible. call quits
-            return eSuccess;
+            return charta::eSuccess;
         }
 
         // copy all elements that were not already written. in other words - overriden
@@ -2218,18 +2226,19 @@ class ModifiedDocCatalogWriterExtension : public DocumentContextExtenderAdapter
             }
         }
 
-        return eSuccess;
+        return charta::eSuccess;
     }
 
   private:
-    std::shared_ptr<PDFDocumentCopyingContext> mModifiedDocumentCopyingContext;
+    std::shared_ptr<charta::PDFDocumentCopyingContext> mModifiedDocumentCopyingContext;
     bool mRequiresVersionUpdate;
     EPDFVersion mPDFVersion;
 };
 
-EStatusCode DocumentContext::FinalizeModifiedPDF(PDFParser *inModifiedFileParser, EPDFVersion inModifiedPDFVersion)
+charta::EStatusCode charta::DocumentContext::FinalizeModifiedPDF(PDFParser *inModifiedFileParser,
+                                                                 EPDFVersion inModifiedPDFVersion)
 {
-    EStatusCode status;
+    charta::EStatusCode status;
     long long xrefTablePosition;
 
     do
@@ -2320,7 +2329,7 @@ EStatusCode DocumentContext::FinalizeModifiedPDF(PDFParser *inModifiedFileParser
     return status;
 }
 
-ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inModifiedFileParser)
+ObjectReference charta::DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inModifiedFileParser)
 {
     ObjectReference rootObject;
 
@@ -2331,7 +2340,8 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
             inModifiedFileParser->GetTrailer()->QueryDirectObject("Root"));
         if (!catalogReference)
         {
-            TRACE_LOG("DocumentContext::GetOriginalDocumentPageTreeRoot, failed to read catalog reference in trailer");
+            TRACE_LOG("charta::DocumentContext::GetOriginalDocumentPageTreeRoot, failed to read catalog reference in "
+                      "trailer");
             break;
         }
 
@@ -2339,7 +2349,7 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
             inModifiedFileParser->ParseNewObject(catalogReference->mObjectID));
         if (!catalog)
         {
-            TRACE_LOG("DocumentContext::GetOriginalDocumentPageTreeRoot, failed to read catalog");
+            TRACE_LOG("charta::DocumentContext::GetOriginalDocumentPageTreeRoot, failed to read catalog");
             break;
         }
 
@@ -2366,7 +2376,7 @@ ObjectReference DocumentContext::GetOriginalDocumentPageTreeRoot(PDFParser *inMo
     return rootObject;
 }
 
-bool DocumentContext::DocumentHasNewPages()
+bool charta::DocumentContext::DocumentHasNewPages()
 {
     // the best way to check if there are new pages created is to check if there's at least one leaf
 
@@ -2389,7 +2399,7 @@ bool DocumentContext::DocumentHasNewPages()
     return hasLeafs;
 }
 
-ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFileParser)
+ObjectIDType charta::DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFileParser)
 {
     // writing a combined page tree looks like this
     // first, we allocate a new root object that will contain both new and old pages
@@ -2428,10 +2438,11 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     auto pageTreeIt = originalTreeRootObject->GetIterator();
     PDFDocumentCopyingContext aCopyingContext;
 
-    EStatusCode status = aCopyingContext.Start(inModifiedFileParser, this, mObjectsContext);
+    charta::EStatusCode status = aCopyingContext.Start(inModifiedFileParser, this, mObjectsContext);
     if (status != eSuccess)
     {
-        TRACE_LOG("DocumentContext::WriteCombinedPageTree, Unable to copy original page tree. this probably means that "
+        TRACE_LOG("charta::DocumentContext::WriteCombinedPageTree, Unable to copy original page tree. this probably "
+                  "means that "
                   "the original file is protected - and is therefore unsupported for such activity as adding pages");
         return 0;
     }
@@ -2483,13 +2494,13 @@ ObjectIDType DocumentContext::WriteCombinedPageTree(PDFParser *inModifiedFilePar
     return newPageRootTreeID;
 }
 
-bool DocumentContext::IsRequiredVersionHigherThanPDFVersion(PDFParser *inModifiedFileParser,
-                                                            EPDFVersion inModifiedPDFVersion)
+bool charta::DocumentContext::IsRequiredVersionHigherThanPDFVersion(PDFParser *inModifiedFileParser,
+                                                                    EPDFVersion inModifiedPDFVersion)
 {
     return (EPDFVersion)((size_t)(inModifiedFileParser->GetPDFLevel() * 10)) < inModifiedPDFVersion;
 }
 
-bool DocumentContext::DoExtendersRequireCatalogUpdate(PDFParser *inModifiedFileParser)
+bool charta::DocumentContext::DoExtendersRequireCatalogUpdate(PDFParser *inModifiedFileParser)
 {
     bool isUpdateRequired = false;
 
@@ -2500,7 +2511,7 @@ bool DocumentContext::DoExtendersRequireCatalogUpdate(PDFParser *inModifiedFileP
     return isUpdateRequired;
 }
 
-void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
+void charta::DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
 {
     // Reuse original encryption dict for new modified trailer. for sake of simplicity (with trailer using ref for
     // encrypt), make it indirect if not already
@@ -2529,7 +2540,7 @@ void DocumentContext::CopyEncryptionDictionary(PDFParser *inModifiedFileParser)
     }
 }
 
-bool DocumentContext::RequiresXrefStream(PDFParser *inModifiedFileParser)
+bool charta::DocumentContext::RequiresXrefStream(PDFParser *inModifiedFileParser)
 {
     // modification requires xref stream if the original document uses one...so just ask trailer
     if (inModifiedFileParser->GetTrailer() == nullptr)
@@ -2543,9 +2554,9 @@ bool DocumentContext::RequiresXrefStream(PDFParser *inModifiedFileParser)
     return typeObject->GetValue() == "XRef";
 }
 
-EStatusCode DocumentContext::WriteXrefStream(long long &outXrefPosition)
+charta::EStatusCode charta::DocumentContext::WriteXrefStream(long long &outXrefPosition)
 {
-    EStatusCode status = eSuccess;
+    charta::EStatusCode status = eSuccess;
 
     do
     {
@@ -2578,7 +2589,8 @@ EStatusCode DocumentContext::WriteXrefStream(long long &outXrefPosition)
     return status;
 }
 
-std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingContext(PDFParser *inPDFParser)
+std::shared_ptr<charta::PDFDocumentCopyingContext> charta::DocumentContext::CreatePDFCopyingContext(
+    PDFParser *inPDFParser)
 {
     auto context = std::make_shared<PDFDocumentCopyingContext>();
 
@@ -2589,22 +2601,23 @@ std::shared_ptr<PDFDocumentCopyingContext> DocumentContext::CreatePDFCopyingCont
     return context;
 }
 
-std::string DocumentContext::AddExtendedResourceMapping(PDFPage &inPage, const std::string &inResourceCategoryName,
-                                                        IResourceWritingTask *inWritingTask)
+std::string charta::DocumentContext::AddExtendedResourceMapping(PDFPage &inPage,
+                                                                const std::string &inResourceCategoryName,
+                                                                IResourceWritingTask *inWritingTask)
 {
     return AddExtendedResourceMapping(&inPage.GetResourcesDictionary(), inResourceCategoryName, inWritingTask);
 }
 
-std::string DocumentContext::AddExtendedResourceMapping(PDFTiledPattern *inPattern,
-                                                        const std::string &inResourceCategoryName,
-                                                        IResourceWritingTask *inWritingTask)
+std::string charta::DocumentContext::AddExtendedResourceMapping(PDFTiledPattern *inPattern,
+                                                                const std::string &inResourceCategoryName,
+                                                                IResourceWritingTask *inWritingTask)
 {
     return AddExtendedResourceMapping(&inPattern->GetResourcesDictionary(), inResourceCategoryName, inWritingTask);
 }
 
-std::string DocumentContext::AddExtendedResourceMapping(ResourcesDictionary *inResourceDictionary,
-                                                        const std::string &inResourceCategoryName,
-                                                        IResourceWritingTask *inWritingTask)
+std::string charta::DocumentContext::AddExtendedResourceMapping(ResourcesDictionary *inResourceDictionary,
+                                                                const std::string &inResourceCategoryName,
+                                                                IResourceWritingTask *inWritingTask)
 {
     // do two things. first is to include this writing task as part of the tasks to write
     // second is to allocate a name for this resource from the resource category in the relevant dictionary
@@ -2640,21 +2653,22 @@ std::string DocumentContext::AddExtendedResourceMapping(ResourcesDictionary *inR
         newResourceName = inResourceDictionary->AddPropertyMapping(0);
     else
     {
-        TRACE_LOG1(
-            "DocumentContext::AddExtendedResourceMapping:, unidentified category for registering a resource writer %s",
-            inResourceCategoryName.c_str());
+        TRACE_LOG1("charta::DocumentContext::AddExtendedResourceMapping:, unidentified category for registering a "
+                   "resource writer %s",
+                   inResourceCategoryName.c_str());
     }
     return newResourceName;
 }
 
-std::string DocumentContext::AddExtendedResourceMapping(PDFFormXObject *inFormXObject,
-                                                        const std::string &inResourceCategoryName,
-                                                        IResourceWritingTask *inWritingTask)
+std::string charta::DocumentContext::AddExtendedResourceMapping(PDFFormXObject *inFormXObject,
+                                                                const std::string &inResourceCategoryName,
+                                                                IResourceWritingTask *inWritingTask)
 {
     return AddExtendedResourceMapping(&inFormXObject->GetResourcesDictionary(), inResourceCategoryName, inWritingTask);
 }
 
-void DocumentContext::RegisterFormEndWritingTask(PDFFormXObject *inFormXObject, IFormEndWritingTask *inWritingTask)
+void charta::DocumentContext::RegisterFormEndWritingTask(PDFFormXObject *inFormXObject,
+                                                         IFormEndWritingTask *inWritingTask)
 {
     auto it = mFormEndTasks.find(inFormXObject);
 
@@ -2669,7 +2683,7 @@ void DocumentContext::RegisterFormEndWritingTask(PDFFormXObject *inFormXObject, 
     it->second.push_back(inWritingTask);
 }
 
-void DocumentContext::RegisterPageEndWritingTask(PDFPage &inPage, IPageEndWritingTask *inWritingTask)
+void charta::DocumentContext::RegisterPageEndWritingTask(PDFPage &inPage, IPageEndWritingTask *inWritingTask)
 {
     auto it = mPageEndTasks.find(&inPage);
 
@@ -2682,8 +2696,8 @@ void DocumentContext::RegisterPageEndWritingTask(PDFPage &inPage, IPageEndWritin
     it->second.push_back(inWritingTask);
 }
 
-void DocumentContext::RegisterTiledPatternEndWritingTask(PDFTiledPattern *inPattern,
-                                                         ITiledPatternEndWritingTask *inWritingTask)
+void charta::DocumentContext::RegisterTiledPatternEndWritingTask(PDFTiledPattern *inPattern,
+                                                                 ITiledPatternEndWritingTask *inWritingTask)
 {
     auto it = mTiledPatternEndTasks.find(inPattern);
 
@@ -2698,9 +2712,9 @@ void DocumentContext::RegisterTiledPatternEndWritingTask(PDFTiledPattern *inPatt
     it->second.push_back(inWritingTask);
 }
 
-std::pair<double, double> DocumentContext::GetImageDimensions(charta::IByteReaderWithPosition *inImageStream,
-                                                              unsigned long inImageIndex,
-                                                              const PDFParsingOptions &inOptions)
+std::pair<double, double> charta::DocumentContext::GetImageDimensions(charta::IByteReaderWithPosition *inImageStream,
+                                                                      unsigned long inImageIndex,
+                                                                      const PDFParsingOptions &inOptions)
 {
     double imageWidth = 0.0;
     double imageHeight = 0.0;
@@ -2736,7 +2750,7 @@ std::pair<double, double> DocumentContext::GetImageDimensions(charta::IByteReade
         imageHeight = dimensions.second;
         break;
     }
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     case eTIFF: {
         TIFFImageHandler hummusTiffHandler;
 
@@ -2747,7 +2761,7 @@ std::pair<double, double> DocumentContext::GetImageDimensions(charta::IByteReade
         break;
     }
 #endif
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
     case ePNG: {
         PNGImageHandler hummusPngHandler;
 
@@ -2770,11 +2784,11 @@ std::pair<double, double> DocumentContext::GetImageDimensions(charta::IByteReade
     return std::pair<double, double>(imageWidth, imageHeight);
 }
 
-std::pair<double, double> DocumentContext::GetImageDimensions(const std::string &inImageFile,
-                                                              unsigned long inImageIndex,
-                                                              const PDFParsingOptions &inOptions)
+std::pair<double, double> charta::DocumentContext::GetImageDimensions(const std::string &inImageFile,
+                                                                      unsigned long inImageIndex,
+                                                                      const PDFParsingOptions &inOptions)
 {
-    HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
+    charta::HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
 
     if (imageInformation.imageHeight == -1 || imageInformation.imageWidth == -1)
     {
@@ -2815,7 +2829,7 @@ std::pair<double, double> DocumentContext::GetImageDimensions(const std::string 
             imageHeight = dimensions.second;
             break;
         }
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
         case eTIFF: {
             TIFFImageHandler hummusTiffHandler;
 
@@ -2833,7 +2847,7 @@ std::pair<double, double> DocumentContext::GetImageDimensions(const std::string 
             break;
         }
 #endif
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
         case ePNG: {
             PNGImageHandler hummusPngHandler;
 
@@ -2871,8 +2885,8 @@ static const uint8_t scMagicTIFFLittleEndianTiff[] = {0x49, 0x49, 0x2A, 0x00};
 static const uint8_t scMagicTIFFLittleEndianBigTiff[] = {0x49, 0x49, 0x2B, 0x00};
 static const uint8_t scMagicPng[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
-charta::EHummusImageType DocumentContext::GetImageType(charta::IByteReaderWithPosition *inImageStream,
-                                                       unsigned long /*inImageIndex*/)
+charta::EHummusImageType charta::DocumentContext::GetImageType(charta::IByteReaderWithPosition *inImageStream,
+                                                               unsigned long /*inImageIndex*/)
 {
     // The types of images that are discovered here are those familiar to Hummus - JPG, TIFF and PDF.
     // PDF is recognized by starting with "%PDF"
@@ -2913,10 +2927,11 @@ charta::EHummusImageType DocumentContext::GetImageType(charta::IByteReaderWithPo
     return imageType;
 }
 
-charta::EHummusImageType DocumentContext::GetImageType(const std::string &inImageFile, unsigned long inImageIndex)
+charta::EHummusImageType charta::DocumentContext::GetImageType(const std::string &inImageFile,
+                                                               unsigned long inImageIndex)
 {
 
-    HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
+    charta::HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
 
     if (imageInformation.imageType == eUndefined)
     {
@@ -2964,7 +2979,8 @@ charta::EHummusImageType DocumentContext::GetImageType(const std::string &inImag
     return imageInformation.imageType;
 }
 
-unsigned long DocumentContext::GetImagePagesCount(const std::string &inImageFile, const PDFParsingOptions &inOptions)
+unsigned long charta::DocumentContext::GetImagePagesCount(const std::string &inImageFile,
+                                                          const PDFParsingOptions &inOptions)
 {
     unsigned long result = 0;
 
@@ -2985,13 +3001,13 @@ unsigned long DocumentContext::GetImagePagesCount(const std::string &inImageFile
         result = pdfParser.GetPagesCount();
         break;
     }
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
     case ePNG:
 #endif
     case eJPG: {
         result = 1;
     }
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     case eTIFF: {
         TIFFImageHandler hummusTiffHandler;
 
@@ -3012,10 +3028,11 @@ unsigned long DocumentContext::GetImagePagesCount(const std::string &inImageFile
     return result;
 }
 
-EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, unsigned long inImageIndex,
-                                               ObjectIDType inObjectID, const PDFParsingOptions &inParsingOptions)
+charta::EStatusCode charta::DocumentContext::WriteFormForImage(const std::string &inImagePath,
+                                                               unsigned long inImageIndex, ObjectIDType inObjectID,
+                                                               const PDFParsingOptions &inParsingOptions)
 {
-    EStatusCode status = eFailure;
+    charta::EStatusCode status = eFailure;
     EHummusImageType imageType = GetImageType(inImagePath, inImageIndex);
 
     switch (imageType)
@@ -3036,7 +3053,7 @@ EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, u
         delete form;
         break;
     }
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     case eTIFF: {
         TIFFUsageParameters params;
         params.PageIndex = (uint32_t)inImageIndex;
@@ -3047,7 +3064,7 @@ EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, u
         break;
     }
 #endif
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
     case ePNG: {
         InputFile inputFile;
         if (inputFile.OpenFile(inImagePath) != eSuccess)
@@ -3068,23 +3085,24 @@ EStatusCode DocumentContext::WriteFormForImage(const std::string &inImagePath, u
     return status;
 }
 
-HummusImageInformation &DocumentContext::GetImageInformationStructFor(const std::string &inImageFile,
-                                                                      unsigned long inImageIndex)
+charta::HummusImageInformation &charta::DocumentContext::GetImageInformationStructFor(const std::string &inImageFile,
+                                                                                      unsigned long inImageIndex)
 {
     auto it = mImagesInformation.find(StringAndULongPair(inImageFile, inImageIndex));
 
     if (it == mImagesInformation.end())
         it = mImagesInformation
                  .insert(StringAndULongPairToHummusImageInformationMap::value_type(
-                     StringAndULongPair(inImageFile, inImageIndex), HummusImageInformation()))
+                     StringAndULongPair(inImageFile, inImageIndex), charta::HummusImageInformation()))
                  .first;
 
     return it->second;
 }
 
-ObjectIDTypeAndBool DocumentContext::RegisterImageForDrawing(const std::string &inImageFile, unsigned long inImageIndex)
+ObjectIDTypeAndBool charta::DocumentContext::RegisterImageForDrawing(const std::string &inImageFile,
+                                                                     unsigned long inImageIndex)
 {
-    HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
+    charta::HummusImageInformation &imageInformation = GetImageInformationStructFor(inImageFile, inImageIndex);
     bool firstTime;
 
     if (imageInformation.writtenObjectID == 0)

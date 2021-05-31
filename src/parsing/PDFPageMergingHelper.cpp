@@ -33,7 +33,7 @@ PDFPageMergingHelper::PDFPageMergingHelper(PDFPage *inPage)
 
 PDFPageMergingHelper::~PDFPageMergingHelper() = default;
 
-EStatusCode PDFPageMergingHelper::MergePageContent(std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext,
+EStatusCode PDFPageMergingHelper::MergePageContent(std::shared_ptr<charta::PDFDocumentCopyingContext> inCopyingContext,
                                                    unsigned long inPageIndex)
 {
     return inCopyingContext->MergePDFPageToPage(*mPage, inPageIndex);
@@ -42,43 +42,25 @@ EStatusCode PDFPageMergingHelper::MergePageContent(std::shared_ptr<PDFDocumentCo
 EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, const std::string &inPDFFilePath,
                                                    unsigned long inPageIndex)
 {
-    EStatusCode status = eSuccess;
+    auto copyingContext = inWriter->CreatePDFCopyingContext(inPDFFilePath);
 
-    do
+    if (copyingContext == nullptr)
     {
-        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = inWriter->CreatePDFCopyingContext(inPDFFilePath);
+        return eFailure;
+    }
 
-        if (copyingContext == nullptr)
-        {
-            status = eFailure;
-            break;
-        }
-
-        status = MergePageContent(copyingContext, inPageIndex);
-
-    } while (false);
-
-    return status;
+    return MergePageContent(copyingContext, inPageIndex);
 }
 
 EStatusCode PDFPageMergingHelper::MergePageContent(PDFWriter *inWriter, charta::IByteReaderWithPosition *inPDFStream,
                                                    unsigned long inPageIndex)
 {
-    EStatusCode status = eSuccess;
+    auto copyingContext = inWriter->CreatePDFCopyingContext(inPDFStream);
 
-    do
+    if (copyingContext == nullptr)
     {
-        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = inWriter->CreatePDFCopyingContext(inPDFStream);
+        return eFailure;
+    }
 
-        if (copyingContext == nullptr)
-        {
-            status = eFailure;
-            break;
-        }
-
-        status = MergePageContent(copyingContext, inPageIndex);
-
-    } while (false);
-
-    return status;
+    return MergePageContent(copyingContext, inPageIndex);
 }

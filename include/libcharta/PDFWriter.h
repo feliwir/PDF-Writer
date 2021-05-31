@@ -179,7 +179,7 @@ class PDFWriter
                                                    ObjectIDType inFormXObjectID);
 
     // tiff
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     PDFFormXObject *CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
                                                   const charta::TIFFUsageParameters &inTIFFUsageParameters =
                                                       charta::TIFFUsageParameters::DefaultTIFFUsageParameters());
@@ -196,7 +196,7 @@ class PDFWriter
 #endif
 
     // png
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
     PDFFormXObject *CreateFormXObjectFromPNGFile(const std::string &inPNGFilePath);
     PDFFormXObject *CreateFormXObjectFromPNGFile(const std::string &inPNGFilePath, ObjectIDType inFormXObjectID);
     PDFFormXObject *CreateFormXObjectFromPNGStream(charta::IByteReaderWithPosition *inPNGStream);
@@ -258,15 +258,15 @@ class PDFWriter
 
     // Copying context, allowing for a continous flow of copying from multiple sources PDFs (create one per source) to
     // target PDF
-    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(
+    std::shared_ptr<charta::PDFDocumentCopyingContext> CreatePDFCopyingContext(
         const std::string &inPDFFilePath,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
-    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContext(
+    std::shared_ptr<charta::PDFDocumentCopyingContext> CreatePDFCopyingContext(
         charta::IByteReaderWithPosition *inPDFStream,
         const PDFParsingOptions &inOptions = PDFParsingOptions::DefaultPDFParsingOptions());
 
     // for modified file path, create a copying context for the modified file
-    std::shared_ptr<PDFDocumentCopyingContext> CreatePDFCopyingContextForModifiedFile();
+    std::shared_ptr<charta::PDFDocumentCopyingContext> CreatePDFCopyingContextForModifiedFile();
 
     // some public image info services, for users of hummus
     std::pair<double, double> GetImageDimensions(

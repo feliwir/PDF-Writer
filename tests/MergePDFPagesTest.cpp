@@ -365,7 +365,7 @@ EStatusCode MergePagesUsingCopyingContext()
     if (status != charta::eSuccess)
         return status;
 
-    std::shared_ptr<PDFDocumentCopyingContext> copyingContext =
+    auto copyingContext =
         pdfWriter.CreatePDFCopyingContext(RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/BasicTIFFImagesTest.pdf"));
     if (copyingContext == nullptr)
         return charta::eFailure;

@@ -19,7 +19,7 @@
 
 */
 
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
 
 #include "PDFPage.h"
 #include "PDFWriter.h"

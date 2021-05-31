@@ -19,7 +19,7 @@
 
 */
 
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
 
 #include "PDFFormXObject.h"
 #include "PDFPage.h"

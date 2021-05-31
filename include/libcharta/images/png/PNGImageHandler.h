@@ -20,7 +20,7 @@
 */
 #pragma once
 
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
 #include "ObjectsBasicTypes.h"
 
 #include <utility>

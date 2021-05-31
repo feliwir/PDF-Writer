@@ -670,7 +670,7 @@ void PDFObjectParser::SetDecryptionHelper(DecryptionHelper *inDecryptionHelper)
     mDecryptionHelper = inDecryptionHelper;
 }
 
-void PDFObjectParser::SetParserExtender(IPDFParserExtender *inParserExtender)
+void PDFObjectParser::SetParserExtender(charta::IPDFParserExtender *inParserExtender)
 {
     mParserExtender = inParserExtender;
 }

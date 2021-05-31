@@ -19,7 +19,7 @@
 
 */
 
-#ifndef PDFHUMMUS_NO_DCT
+#ifndef LIBCHARTA_NO_DCT
 
 #include "PDFFormXObject.h"
 #include "PDFImageXObject.h"

@@ -212,7 +212,7 @@ class PDFDocumentHandler : public DocumentContextExtenderAdapter
     void RegisterFormRelatedObjects(PDFFormXObject *inFormXObject, const ObjectIDTypeList &inObjectsToWrite);
 
     // Extendibility
-    void SetParserExtender(IPDFParserExtender *inParserExtender);
+    void SetParserExtender(charta::IPDFParserExtender *inParserExtender);
 
   private:
     ObjectsContext *mObjectsContext;

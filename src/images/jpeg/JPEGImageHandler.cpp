@@ -41,8 +41,6 @@ charta::JPEGImageHandler::JPEGImageHandler()
     mDocumentContext = nullptr;
 }
 
-charta::JPEGImageHandler::~JPEGImageHandler() = default;
-
 void charta::JPEGImageHandler::Reset()
 {
     mImagesInformationMap.clear();

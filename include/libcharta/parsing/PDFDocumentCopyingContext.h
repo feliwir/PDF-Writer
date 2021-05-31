@@ -35,7 +35,6 @@ class IPDFParserExtender;
 namespace charta
 {
 class DocumentContext;
-}
 
 class PDFDocumentCopyingContext
 {
@@ -45,11 +44,11 @@ class PDFDocumentCopyingContext
 
     charta::EStatusCode Start(const std::string &inPDFFilePath, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
-                              IPDFParserExtender *inParserExtender);
+                              charta::IPDFParserExtender *inParserExtender);
 
     charta::EStatusCode Start(charta::IByteReaderWithPosition *inPDFStream, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext, const PDFParsingOptions &inOptions,
-                              IPDFParserExtender *inParserExtender);
+                              charta::IPDFParserExtender *inParserExtender);
 
     charta::EStatusCode Start(PDFParser *inPDFParser, charta::DocumentContext *inDocumentContext,
                               ObjectsContext *inObjectsContext);
@@ -127,3 +126,4 @@ class PDFDocumentCopyingContext
     charta::DocumentContext *mDocumentContext;
     PDFDocumentHandler mDocumentHandler;
 };
+} // namespace charta

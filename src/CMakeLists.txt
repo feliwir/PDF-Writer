@@ -1,26 +1,26 @@
-option(PDFWRITER_SUPPORT_JPG "Wether or not JPEG/DCT support is enabled" TRUE)
-option(PDFWRITER_SUPPORT_PNG "Wether or not PNG support is enabled" TRUE)
-option(PDFWRITER_SUPPORT_TIFF "Wether or not TIFF support is enabled" TRUE)
+option(LIBCHARTA_SUPPORT_JPG "Wether or not JPEG/DCT support is enabled" TRUE)
+option(LIBCHARTA_SUPPORT_PNG "Wether or not PNG support is enabled" TRUE)
+option(LIBCHARTA_SUPPORT_TIFF "Wether or not TIFF support is enabled" TRUE)
 
 find_package(ZLIB REQUIRED)
 find_package(Freetype REQUIRED)
 
-if(PDFWRITER_SUPPORT_JPG)
+if(LIBCHARTA_SUPPORT_JPG)
     find_package(JPEG REQUIRED)
 else()
-	add_definitions(-DPDFHUMMUS_NO_DCT=1)
+	add_definitions(-DLIBCHARTA_NO_DCT=1)
 endif()
 
-if(PDFWRITER_SUPPORT_TIFF)
+if(LIBCHARTA_SUPPORT_TIFF)
     find_package(TIFF REQUIRED)
 else()
-	add_definitions(-DPDFHUMMUS_NO_TIFF=1)
+	add_definitions(-DLIBCHARTA_NO_TIFF=1)
 endif()
 
-if(PDFWRITER_SUPPORT_PNG)
+if(LIBCHARTA_SUPPORT_PNG)
     find_package(PNG REQUIRED)
 else()
-	add_definitions(-DPDFHUMMUS_NO_PNG=1)
+	add_definitions(-DLIBCHARTA_NO_PNG=1)
 endif()
 
 set(LIBCHARTA_SOURCE

@@ -19,7 +19,7 @@
 
  */
 
-#ifndef PDFHUMMUS_NO_DCT
+#ifndef LIBCHARTA_NO_DCT
 
 #include "DictionaryContext.h"
 #include "ObjectsContext.h"
@@ -165,7 +165,7 @@ ObjectIDType FindDCTDecodedImageObject(PDFParser *inParser)
 EStatusCode ModifyImageObject(PDFWriter *inWriter, ObjectIDType inImageObject)
 {
     EStatusCode status = eSuccess;
-    std::shared_ptr<PDFDocumentCopyingContext> modifiedFileContext = inWriter->CreatePDFCopyingContextForModifiedFile();
+    auto modifiedFileContext = inWriter->CreatePDFCopyingContextForModifiedFile();
 
     // get image source dictionary
     PDFObjectCastPtr<charta::PDFStreamInput> imageStream(

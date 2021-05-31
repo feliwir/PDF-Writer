@@ -1882,7 +1882,7 @@ EStatusCode PDFDocumentHandler::CopyNewObjectsForDirectObject(const ObjectIDType
     return WriteNewObjects(inReferencedObjects);
 }
 
-void PDFDocumentHandler::SetParserExtender(IPDFParserExtender *inParserExtender)
+void PDFDocumentHandler::SetParserExtender(charta::IPDFParserExtender *inParserExtender)
 {
     mParser->SetParserExtender(inParserExtender);
 }

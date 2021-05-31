@@ -39,10 +39,10 @@ namespace charta
 {
 class PDFArray;
 class PDFDictionary;
+class IPDFParserExtender;
 } // namespace charta
 class PDFStreamInput;
 class PDFName;
-class IPDFParserExtender;
 
 typedef std::pair<charta::EStatusCode, charta::IByteReader *> EStatusCodeAndIByteReader;
 
@@ -174,7 +174,7 @@ class PDFParser
     bool IsEncryptionSupported();
 
     // set extender for parser, to enhance parsing capabilities
-    void SetParserExtender(IPDFParserExtender *inParserExtender);
+    void SetParserExtender(charta::IPDFParserExtender *inParserExtender);
 
     // advanced, direct xref access
     ObjectIDType GetXrefSize() const;
@@ -204,7 +204,7 @@ class PDFParser
     XrefEntryInput *mXrefTable;
     unsigned long mPagesCount;
     ObjectIDType *mPagesObjectIDs;
-    IPDFParserExtender *mParserExtender;
+    charta::IPDFParserExtender *mParserExtender;
     bool mAllowExtendingSegments;
 
     charta::EStatusCode ParseHeaderLine();

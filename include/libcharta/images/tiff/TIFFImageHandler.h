@@ -72,7 +72,7 @@
 */
 #pragma once
 
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
 
 #include "EStatusCode.h"
 #include "ObjectsBasicTypes.h"

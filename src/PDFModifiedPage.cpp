@@ -162,7 +162,7 @@ charta::EStatusCode PDFModifiedPage::WritePage()
         ObjectIDType newEncapsulatingObjectID = 0;
 
         // create a copying context, so we can copy the page dictionary, and modify its contents + resources dict
-        std::shared_ptr<PDFDocumentCopyingContext> copyingContext = mWriter->CreatePDFCopyingContextForModifiedFile();
+        auto copyingContext = mWriter->CreatePDFCopyingContextForModifiedFile();
 
         // get the page object
         ObjectIDType pageObjectID = copyingContext->GetSourceDocumentParser()->GetPageObjectID(mPageIndex);
@@ -389,7 +389,7 @@ charta::EStatusCode PDFModifiedPage::WritePage()
 
 vector<string> PDFModifiedPage::WriteModifiedResourcesDict(
     PDFParser *inParser, const std::shared_ptr<charta::PDFDictionary> &inResourcesDictionary,
-    ObjectsContext &inObjectContext, std::shared_ptr<PDFDocumentCopyingContext> inCopyingContext)
+    ObjectsContext &inObjectContext, std::shared_ptr<charta::PDFDocumentCopyingContext> inCopyingContext)
 {
     vector<string> formResourcesNames;
 

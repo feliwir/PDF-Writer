@@ -46,7 +46,6 @@ class JPEGImageHandler
 {
   public:
     JPEGImageHandler();
-    ~JPEGImageHandler(void);
 
     // use this for retrieving image information for JPEG (useful for deciphering JPG dimensions tags)
     BoolAndJPEGImageInformation RetrieveImageInformation(const std::string &inJPGFilePath);

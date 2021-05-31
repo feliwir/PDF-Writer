@@ -224,7 +224,7 @@ PDFFormXObject *PDFWriter::CreateFormXObjectFromJPGFile(const std::string &inJPG
     return mDocumentContext.CreateFormXObjectFromJPGFile(inJPGFilePath);
 }
 
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
 PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFFile(const std::string &inTIFFFilePath,
                                                          const TIFFUsageParameters &inTIFFUsageParameters)
 {
@@ -253,7 +253,7 @@ PDFFormXObject *PDFWriter::CreateFormXObjectFromTIFFStream(charta::IByteReaderWi
 
 #endif
 
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
 PDFFormXObject *PDFWriter::CreateFormXObjectFromPNGFile(const std::string &inPNGFilePath)
 {
     return CreateFormXObjectFromPNGFile(inPNGFilePath,

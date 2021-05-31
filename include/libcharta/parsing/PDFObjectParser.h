@@ -35,8 +35,8 @@ namespace charta
 {
 class IByteReader;
 class PDFObject;
-}; // namespace charta
 class IPDFParserExtender;
+}; // namespace charta
 class DecryptionHelper;
 
 typedef std::pair<bool, uint8_t> BoolAndByte;
@@ -62,7 +62,7 @@ class PDFObjectParser
     void ResetReadState(const PDFParserTokenizer &inExternalTokenizer);
 
     void SetDecryptionHelper(DecryptionHelper *inDecryptionHelper);
-    void SetParserExtender(IPDFParserExtender *inParserExtender);
+    void SetParserExtender(charta::IPDFParserExtender *inParserExtender);
 
     // helper method for others who need to parse encoded pdf data
     std::string DecodeHexString(const std::string &inStringToDecode);
@@ -77,7 +77,7 @@ class PDFObjectParser
     std::list<std::string> mTokenBuffer;
     charta::IByteReader *mStream;
     IReadPositionProvider *mCurrentPositionProvider;
-    IPDFParserExtender *mParserExtender;
+    charta::IPDFParserExtender *mParserExtender;
     DecryptionHelper *mDecryptionHelper;
     bool mOwnsStream;
 

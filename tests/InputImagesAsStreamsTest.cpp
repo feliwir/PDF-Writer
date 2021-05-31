@@ -56,7 +56,7 @@ TEST(CustomStreams, InputImagesAsStreams)
     }
 
     // TIFF image
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     {
         PDFPage page;
         page.SetMediaBox(charta::PagePresets::A4_Portrait);

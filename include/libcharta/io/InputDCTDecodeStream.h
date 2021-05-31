@@ -20,7 +20,7 @@
  */
 #pragma once
 
-#ifndef PDFHUMMUS_NO_DCT
+#ifndef LIBCHARTA_NO_DCT
 
 #include "EStatusCode.h"
 #include "IByteReader.h"

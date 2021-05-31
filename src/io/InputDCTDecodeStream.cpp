@@ -23,7 +23,7 @@
 
 #include <string.h>
 
-#ifndef PDFHUMMUS_NO_DCT
+#ifndef LIBCHARTA_NO_DCT
 
 using namespace charta;
 

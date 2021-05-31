@@ -2025,7 +2025,7 @@ EStatusCodeAndIByteReader PDFParser::CreateFilterForStream(charta::IByteReader *
         {
             result = new InputAscii85DecodeStream(inStream);
         }
-#ifndef PDFHUMMUS_NO_DCT
+#ifndef LIBCHARTA_NO_DCT
         else if (inFilterName->GetValue() == "DCTDecode")
         {
             result = new InputDCTDecodeStream(inStream);
@@ -2182,7 +2182,7 @@ bool PDFParser::IsEncrypted()
     return mDecryptionHelper.IsEncrypted();
 }
 
-void PDFParser::SetParserExtender(IPDFParserExtender *inParserExtender)
+void PDFParser::SetParserExtender(charta::IPDFParserExtender *inParserExtender)
 {
     mParserExtender = inParserExtender;
     mObjectParser.SetParserExtender(inParserExtender);

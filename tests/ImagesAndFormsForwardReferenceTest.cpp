@@ -70,7 +70,7 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
     pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(formXObjectID));
     pageContentContext->Q();
 
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     pageContentContext->q();
     ObjectIDType tiffFormXObjectID = pdfWriter.GetObjectsContext().GetInDirectObjectsRegistry().AllocateNewObjectID();
     pageContentContext->Do(page.GetResourcesDictionary().AddFormXObjectMapping(tiffFormXObjectID));
@@ -99,7 +99,7 @@ TEST(PDFImages, ImagesAndFormsForwardReferenceTest)
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/otherStage.JPG"), formXObjectID);
     ASSERT_NE(formXObject, nullptr);
 
-#ifndef PDFHUMMUS_NO_TIFF
+#ifndef LIBCHARTA_NO_TIFF
     PDFFormXObject *tiffFormXObject = pdfWriter.CreateFormXObjectFromTIFFFile(
         RelativeURLToLocalPath(PDFWRITE_SOURCE_PATH, "data/images/tiff/jim___ah.tif"), tiffFormXObjectID);
     ASSERT_NE(tiffFormXObject, nullptr);

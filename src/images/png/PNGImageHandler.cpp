@@ -18,7 +18,7 @@
 
 
 */
-#ifndef PDFHUMMUS_NO_PNG
+#ifndef LIBCHARTA_NO_PNG
 
 #include "images/png/PNGImageHandler.h"
 #include "DictionaryContext.h"
